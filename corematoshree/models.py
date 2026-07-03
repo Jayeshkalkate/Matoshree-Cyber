@@ -250,7 +250,7 @@ class FAQ(models.Model):
 # ==========================
 class BusinessInfo(models.Model):
     business_name = models.CharField(max_length=200)
-    logo = models.ImageField(upload_to="logo/")
+    logo = models.ImageField(upload_to="logo/", blank=True, null=True)
     welcome_message = models.TextField()
 
     address = models.TextField()
