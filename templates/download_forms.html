@@ -1,0 +1,475 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<!-- Page-specific styles for Download Forms -->
+<style>
+  /* ===== PAGE HERO ===== */
+  .page-hero {
+    background: linear-gradient(145deg, var(--primary), var(--primary-light));
+    padding: 70px 0 60px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+  .page-hero::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(0,212,255,0.06) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .page-hero::after {
+    content: "";
+    position: absolute;
+    bottom: -40%;
+    left: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(255,107,53,0.05) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .page-hero .container {
+    position: relative;
+    z-index: 1;
+  }
+  .page-hero .breadcrumb {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 16px;
+    letter-spacing: 0.3px;
+  }
+  .page-hero .breadcrumb a {
+    color: rgba(255,255,255,0.6);
+    transition: var(--transition);
+  }
+  .page-hero .breadcrumb a:hover {
+    color: var(--secondary);
+  }
+  .page-hero .breadcrumb .current {
+    color: var(--secondary);
+  }
+  .page-hero h1 {
+    font-size: 3.2rem;
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -1px;
+    margin-bottom: 12px;
+  }
+  .page-hero h1 span {
+    color: var(--secondary);
+  }
+  .page-hero p {
+    font-size: 1.15rem;
+    color: rgba(255,255,255,0.7);
+    max-width: 620px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* ===== DOWNLOADS SECTION ===== */
+  .downloads-section {
+    padding: 70px 0 60px;
+    background: var(--gray-light);
+  }
+
+  .search-wrap {
+    display: flex;
+    align-items: center;
+    background: var(--white);
+    border-radius: 40px;
+    padding: 0.3rem 0.3rem 0.3rem 1.2rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray);
+    transition: var(--transition);
+    max-width: 480px;
+    margin: 0 auto 2.5rem;
+  }
+  .search-wrap:focus-within {
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 4px rgba(0,212,255,0.15);
+  }
+  .search-wrap i {
+    color: var(--gray-dark);
+    font-size: 0.95rem;
+  }
+  .search-wrap input {
+    border: none;
+    background: transparent;
+    padding: 0.7rem 0.5rem;
+    font-size: 0.95rem;
+    font-family: "Inter", sans-serif;
+    width: 100%;
+    outline: none;
+    color: var(--text-dark);
+  }
+  .search-wrap input::placeholder {
+    color: var(--gray-dark);
+    opacity: 0.6;
+  }
+  .search-wrap button {
+    background: var(--secondary);
+    border: none;
+    color: var(--primary);
+    padding: 0.5rem 1.2rem;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition);
+    white-space: nowrap;
+  }
+  .search-wrap button:hover {
+    background: #00e5ff;
+    transform: scale(1.02);
+  }
+
+  /* Form List */
+  .form-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 1.5rem;
+  }
+  @media (max-width: 700px) {
+    .form-list {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .form-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.7rem 0.8rem 0.7rem 1rem;
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--gray);
+    transition: var(--transition);
+    gap: 0.5rem;
+  }
+  .form-item:hover {
+    background: var(--gray-light);
+    border-color: var(--secondary);
+    box-shadow: var(--shadow-sm);
+  }
+  .form-item .form-name {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .form-item .form-name i {
+    color: var(--gray-dark);
+    font-size: 0.85rem;
+    opacity: 0.7;
+  }
+  .form-item .form-category {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.2rem 0.7rem;
+    border-radius: 30px;
+    background: var(--gray);
+    color: var(--text-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  .btn-download {
+    background: transparent;
+    border: 1.5px solid var(--secondary);
+    color: var(--secondary);
+    padding: 0.3rem 1rem;
+    border-radius: 40px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    white-space: nowrap;
+    font-family: "Inter", sans-serif;
+    text-decoration: none;
+  }
+  .btn-download i {
+    font-size: 0.8rem;
+  }
+  .btn-download:hover {
+    background: var(--secondary);
+    color: var(--primary);
+    border-color: var(--secondary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,212,255,0.3);
+  }
+  .btn-download:active {
+    transform: scale(0.96);
+  }
+
+  /* No results */
+  .no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 2rem 0;
+    color: var(--gray-dark);
+    font-size: 1rem;
+    display: none;
+  }
+  .no-results i {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.5rem;
+    opacity: 0.5;
+  }
+
+  /* ===== FOOTER NOTE ===== */
+  .footer-note {
+    margin-top: 3rem;
+    padding: 1.5rem 0 0.5rem;
+    border-top: 1px solid var(--gray);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--gray-dark);
+  }
+  .footer-note i {
+    color: var(--secondary);
+    margin-right: 0.3rem;
+  }
+  .footer-note .badge {
+    background: var(--gray);
+    padding: 0.2rem 0.9rem;
+    border-radius: 30px;
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: var(--text-dark);
+  }
+
+  /* ===== CTA BANNER (optional) ===== */
+  .cta-banner {
+    padding: 60px 0;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    text-align: center;
+    border-top: 2px solid rgba(0,212,255,0.1);
+    border-bottom: 2px solid rgba(0,212,255,0.1);
+  }
+  .cta-banner .container {
+    max-width: 720px;
+  }
+  .cta-banner h2 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+  .cta-banner h2 span {
+    color: var(--secondary);
+  }
+  .cta-banner p {
+    color: rgba(255,255,255,0.7);
+    font-size: 1.05rem;
+    margin-bottom: 24px;
+  }
+  .cta-banner .cta-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .page-hero h1 {
+      font-size: 2.2rem;
+    }
+    .page-hero p {
+      font-size: 1rem;
+    }
+    .search-wrap {
+      max-width: 100%;
+    }
+    .form-item {
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      padding: 0.6rem 0.7rem;
+    }
+    .form-item .form-name {
+      font-size: 0.9rem;
+      flex: 1 1 100%;
+    }
+    .btn-download {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.8rem;
+    }
+    .cta-banner h2 {
+      font-size: 1.8rem;
+    }
+    .cta-banner .cta-buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+    .cta-banner .cta-buttons .btn-primary,
+    .cta-banner .cta-buttons .btn-whatsapp {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .form-list {
+      grid-template-columns: 1fr;
+      gap: 0.8rem;
+    }
+  }
+
+  /* Utility */
+  .hidden-item {
+    display: none !important;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- ===== PAGE HERO ===== -->
+<section class="page-hero">
+  <div class="container">
+    <h1>Download <span>Government Forms</span></h1>
+    <p>Access and download official forms for various services.</p>
+  </div>
+</section>
+
+<!-- ===== DOWNLOADS SECTION ===== -->
+<section class="downloads-section">
+  <div class="container">
+    <!-- Search Bar -->
+    <div class="search-wrap" id="searchWrap">
+      <i class="fas fa-search"></i>
+      <input type="text" id="searchInput" placeholder="Search forms by name..." aria-label="Search forms">
+      <button id="searchClear" aria-label="Clear search">Clear</button>
+    </div>
+
+    <!-- Forms List -->
+    <div class="form-list" id="formList">
+      {% for form in forms %}
+        <div class="form-item" data-form="{{ form.title|lower }}">
+          <span class="form-name">
+            <i class="fas fa-file-pdf"></i> {{ form.title }}
+          </span>
+          <span class="form-category">{{ form.category|default:"General" }}</span>
+          <a href="{{ form.pdf.url }}" class="btn-download" download>
+            <i class="fas fa-download"></i> PDF
+          </a>
+        </div>
+      {% empty %}
+        <p style="grid-column: 1/-1; text-align:center; padding:40px; color:var(--gray-dark);">
+          No forms available.
+        </p>
+      {% endfor %}
+    </div>
+
+    <!-- No Results Message -->
+    <div class="no-results" id="noResults">
+      <i class="fas fa-file-alt"></i>
+      <p>No forms match your search.</p>
+    </div>
+
+    <!-- Footer Note -->
+    <div class="footer-note">
+      <span>
+        <i class="fas fa-check-circle" style="color: #1e8e3e;"></i> All forms are official and up-to-date.
+      </span>
+      <span class="badge">
+        <i class="far fa-clock"></i> Updated: {{ "now"|date:"F Y" }}
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA BANNER ===== -->
+<section class="cta-banner">
+  <div class="container">
+    <h2>Need Assistance with <span>Forms?</span></h2>
+    <p>We're here to help you fill, print, and submit your documents.</p>
+    <div class="cta-buttons">
+      <a href="{% url 'home' %}#contact" class="btn-primary">
+        <i class="fas fa-phone"></i> Contact Us
+      </a>
+      <a href="https://wa.me/919876543210?text=Hello%2C%20I%20need%20help%20with%20government%20forms." target="_blank" class="btn-whatsapp">
+        <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  (function() {
+    const searchInput = document.getElementById('searchInput');
+    const clearBtn = document.getElementById('searchClear');
+    const formItems = document.querySelectorAll('.form-item');
+    const noResults = document.getElementById('noResults');
+
+    // Function to filter forms
+    function filterForms(query) {
+      const q = query.trim().toLowerCase();
+      let visibleCount = 0;
+
+      formItems.forEach(item => {
+        const formName = item.getAttribute('data-form') || item.innerText.toLowerCase();
+        const matches = !q || formName.includes(q);
+        if (matches) {
+          item.classList.remove('hidden-item');
+          visibleCount++;
+        } else {
+          item.classList.add('hidden-item');
+        }
+      });
+
+      // Show/hide no results
+      if (visibleCount === 0 && q !== '') {
+        noResults.style.display = 'block';
+      } else {
+        noResults.style.display = 'none';
+      }
+    }
+
+    // Event listeners
+    searchInput.addEventListener('input', function() {
+      filterForms(this.value);
+    });
+
+    clearBtn.addEventListener('click', function() {
+      searchInput.value = '';
+      filterForms('');
+      searchInput.focus();
+    });
+
+    // Initial state: show all
+    filterForms('');
+
+    // Also handle Enter key
+    searchInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        filterForms(this.value);
+      }
+    });
+
+    console.log('📄 Download forms page ready.');
+  })();
+</script>
+{% endblock %}

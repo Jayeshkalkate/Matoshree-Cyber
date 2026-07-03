@@ -1,0 +1,864 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+
+    <style>
+        /* ----- Reset & Base (scoped) ----- */
+        .reviews-page {
+            font-family: "Inter", sans-serif;
+            background: #f6f9fe;
+            padding: 2rem 1.5rem;
+            color: #0b1b33;
+        }
+
+        .reviews-page .page-wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* ----- Header ----- */
+        .reviews-page .page-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .reviews-page .page-header h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            letter-spacing: -0.02em;
+        }
+
+        .reviews-page .page-header h1 i {
+            color: #f5b342;
+            font-size: 2.2rem;
+        }
+
+        .reviews-page .page-header .subhead {
+            color: #5b6f87;
+            font-size: 1.05rem;
+            margin-top: 0.4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ----- Rating Summary ----- */
+        .reviews-page .rating-summary {
+            background: #ffffff;
+            border-radius: 1.5rem;
+            padding: 1.8rem 2rem;
+            box-shadow: 0 4px 16px rgba(0, 20, 50, 0.06);
+            border: 1px solid #e9eef4;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem 3rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .reviews-page .rating-big {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .reviews-page .rating-number {
+            font-size: 3.2rem;
+            font-weight: 800;
+            color: #0b1b33;
+            line-height: 1;
+        }
+
+        .reviews-page .rating-number sup {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #6f85a0;
+            top: -0.8rem;
+        }
+
+        .reviews-page .rating-stars-big {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .reviews-page .rating-stars-big .stars {
+            font-size: 1.6rem;
+            letter-spacing: 2px;
+            color: #f5b342;
+        }
+
+        .reviews-page .rating-stars-big .count {
+            font-size: 0.9rem;
+            color: #5b6f87;
+        }
+
+        .reviews-page .rating-bars {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .reviews-page .rating-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.85rem;
+        }
+
+        .reviews-page .rating-bar-row .star-label {
+            width: 3.2rem;
+            color: #1a2b44;
+            font-weight: 500;
+            text-align: right;
+        }
+
+        .reviews-page .rating-bar-row .bar-track {
+            flex: 1;
+            height: 6px;
+            background: #e9eef4;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .reviews-page .rating-bar-row .bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: #f5b342;
+        }
+
+        .reviews-page .rating-bar-row .bar-percent {
+            width: 2.4rem;
+            color: #5b6f87;
+            font-weight: 500;
+        }
+
+        /* ----- Filter / Sort ----- */
+        .reviews-page .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.8rem;
+            gap: 0.8rem;
+        }
+
+        .reviews-page .filter-row .reviews-count {
+            font-size: 0.95rem;
+            color: #5b6f87;
+        }
+
+        .reviews-page .filter-row .reviews-count strong {
+            color: #0b1b33;
+        }
+
+        .reviews-page .sort-options {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .reviews-page .sort-btn {
+            background: transparent;
+            border: 1.5px solid #dce3ed;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #1a2b44;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: "Inter", sans-serif;
+        }
+
+        .reviews-page .sort-btn:hover {
+            background: #e8f0fe;
+            border-color: #0a66c2;
+        }
+
+        .reviews-page .sort-btn.active {
+            background: #0a66c2;
+            border-color: #0a66c2;
+            color: #fff;
+        }
+
+        /* ----- Reviews Grid ----- */
+        .reviews-page .reviews-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        @media (max-width: 750px) {
+            .reviews-page .reviews-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .reviews-page .review-card {
+            background: #ffffff;
+            border-radius: 1.2rem;
+            padding: 1.6rem 1.8rem;
+            box-shadow: 0 4px 12px rgba(0, 20, 50, 0.04);
+            border: 1px solid #eef3f9;
+            transition: box-shadow 0.2s, transform 0.15s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .reviews-page .review-card:hover {
+            box-shadow: 0 8px 28px rgba(0, 20, 50, 0.07);
+            transform: translateY(-2px);
+        }
+
+        .reviews-page .review-card .stars {
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            color: #f5b342;
+            margin-bottom: 0.5rem;
+        }
+
+        .reviews-page .review-card .stars .empty-star {
+            color: #dce3ed;
+        }
+
+        .reviews-page .review-card .review-text {
+            font-size: 0.98rem;
+            line-height: 1.7;
+            color: #1a2b44;
+            margin-bottom: 0.8rem;
+            flex: 1;
+        }
+
+        .reviews-page .review-card .review-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            border-top: 1px solid #f0f4fa;
+            padding-top: 0.8rem;
+            margin-top: 0.2rem;
+        }
+
+        .reviews-page .review-card .customer-name {
+            font-weight: 700;
+            color: #0b1b33;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .reviews-page .review-card .customer-name .initials {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            background: #0a66c2;
+            color: #fff;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .reviews-page .review-card .review-date {
+            font-size: 0.78rem;
+            color: #8a9bb0;
+        }
+
+        .reviews-page .review-card .verified-badge {
+            font-size: 0.7rem;
+            color: #1e8e3e;
+            background: #e6f4ea;
+            padding: 0.1rem 0.6rem;
+            border-radius: 30px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* ----- Submit Review Form ----- */
+        .reviews-page .submit-section {
+            background: #ffffff;
+            border-radius: 1.5rem;
+            padding: 2rem 2.2rem;
+            border: 1px solid #e9eef4;
+            box-shadow: 0 4px 16px rgba(0, 20, 50, 0.04);
+            margin-top: 1rem;
+        }
+
+        .reviews-page .submit-section h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .reviews-page .submit-section h2 i {
+            color: #f5b342;
+        }
+
+        .reviews-page .submit-section .form-subhead {
+            color: #5b6f87;
+            font-size: 0.95rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .reviews-page .review-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem 1.5rem;
+        }
+
+        @media (max-width: 600px) {
+            .reviews-page .review-form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .reviews-page .review-form .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .reviews-page .review-form label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #1a2b44;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .reviews-page .review-form label .required {
+            color: #d93c3c;
+        }
+
+        .reviews-page .review-form input,
+        .reviews-page .review-form textarea,
+        .reviews-page .review-form select {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            font-family: "Inter", sans-serif;
+            font-size: 0.95rem;
+            border: 1.5px solid #dce3ed;
+            border-radius: 12px;
+            background: #fafcff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            color: #0b1b33;
+        }
+
+        .reviews-page .review-form input:focus,
+        .reviews-page .review-form textarea:focus,
+        .reviews-page .review-form select:focus {
+            outline: none;
+            border-color: #0a66c2;
+            box-shadow: 0 0 0 4px rgba(10, 102, 194, 0.08);
+            background: #ffffff;
+        }
+
+        .reviews-page .review-form textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .reviews-page .review-form .error-message {
+            color: #d93c3c;
+            font-size: 0.8rem;
+            margin-top: 0.2rem;
+            font-weight: 500;
+        }
+
+        .reviews-page .review-form .star-select {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            padding: 0.3rem 0;
+            flex-wrap: wrap;
+        }
+
+        .reviews-page .review-form .star-select .star-option {
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #dce3ed;
+            transition: color 0.15s;
+            background: none;
+            border: none;
+            padding: 0 0.1rem;
+            font-family: "Inter", sans-serif;
+            line-height: 1;
+        }
+
+        .reviews-page .review-form .star-select .star-option.active,
+        .reviews-page .review-form .star-select .star-option:hover {
+            color: #f5b342;
+        }
+
+        .reviews-page .review-form .star-select .star-option:hover ~ .star-option {
+            color: #dce3ed;
+        }
+
+        .reviews-page .review-form .star-select .star-label {
+            font-size: 0.9rem;
+            color: #5b6f87;
+            margin-left: 0.3rem;
+        }
+
+        .reviews-page .btn-submit {
+            background: #0a66c2;
+            color: #fff;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 1rem;
+            font-family: "Inter", sans-serif;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            justify-self: start;
+        }
+
+        .reviews-page .btn-submit:hover {
+            background: #0854a3;
+        }
+
+        .reviews-page .btn-submit:active {
+            transform: scale(0.97);
+        }
+
+        .reviews-page .btn-submit i {
+            font-size: 0.95rem;
+        }
+
+        /* ----- Form feedback ----- */
+        .reviews-page .form-feedback {
+            margin-top: 1rem;
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            display: none;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 500;
+        }
+
+        .reviews-page .form-feedback.success {
+            display: flex;
+            background: #e6f4ea;
+            color: #1e6f3a;
+            border-left: 4px solid #1e8e3e;
+        }
+
+        .reviews-page .form-feedback.error {
+            display: flex;
+            background: #fde8e8;
+            color: #a03a3a;
+            border-left: 4px solid #d93c3c;
+        }
+
+        .reviews-page .form-feedback i {
+            font-size: 1.2rem;
+        }
+
+        /* ----- Footer ----- */
+        .reviews-page .footer-note {
+            margin-top: 2.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #5b6f87;
+        }
+
+        .reviews-page .footer-note i {
+            color: #0a66c2;
+            margin-right: 0.2rem;
+        }
+
+        .reviews-page .footer-note .badge {
+            background: #eef3f9;
+            padding: 0.2rem 0.9rem;
+            border-radius: 30px;
+            font-weight: 500;
+            font-size: 0.8rem;
+            color: #1a2b44;
+        }
+
+        /* ----- Responsive ----- */
+        @media (max-width: 650px) {
+            .reviews-page {
+                padding: 1rem 0.8rem;
+            }
+            .reviews-page .page-header h1 {
+                font-size: 1.8rem;
+            }
+            .reviews-page .rating-summary {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+                padding: 1.5rem;
+            }
+            .reviews-page .rating-big {
+                justify-content: center;
+            }
+            .reviews-page .rating-number {
+                font-size: 2.6rem;
+            }
+            .reviews-page .rating-bars {
+                min-width: unset;
+            }
+            .reviews-page .filter-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.5rem;
+            }
+            .reviews-page .sort-options {
+                flex-wrap: wrap;
+            }
+            .reviews-page .review-card {
+                padding: 1.2rem 1.2rem;
+            }
+            .reviews-page .submit-section {
+                padding: 1.5rem 1.2rem;
+            }
+            .reviews-page .btn-submit {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .reviews-page .review-card .review-footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+{% endblock extra_head %}
+
+{% block content %}
+<div class="reviews-page">
+    <div class="page-wrapper">
+
+        <!-- ===== HEADER ===== -->
+        <div class="page-header">
+            <h1><i class="fas fa-star"></i> Customer Reviews</h1>
+            <p class="subhead">
+                Real feedback from customers who have used our services. See why they
+                trust us.
+            </p>
+        </div>
+
+        <!-- ===== RATING SUMMARY ===== -->
+        <div class="rating-summary">
+            <div class="rating-big">
+                <div class="rating-number">
+                    {{ rating_summary.average|floatformat:1|default:"4.8" }}<sup>/5</sup>
+                </div>
+                <div class="rating-stars-big">
+                    <div class="stars">
+                        {% with full=rating_summary.average|floatformat:0|add:0 %}
+                            {% for i in "12345"|make_list %}
+                                {% if forloop.counter <= full %}
+                                    <i class="fas fa-star"></i>
+                                {% elif forloop.counter == full|add:1 and rating_summary.average|floatformat:1|slice:"-1:" == "5" %}
+                                    <i class="fas fa-star-half-alt"></i>
+                                {% else %}
+                                    <i class="fas fa-star empty-star"></i>
+                                {% endif %}
+                            {% endfor %}
+                        {% endwith %}
+                    </div>
+                    <span class="count">
+                        Based on <strong>{{ rating_summary.total|default:0 }}</strong> customer reviews
+                    </span>
+                </div>
+            </div>
+
+            <div class="rating-bars">
+                {% for star, percent in rating_summary.distribution.items %}
+                <div class="rating-bar-row">
+                    <span class="star-label">{{ star }} ★</span>
+                    <div class="bar-track">
+                        <div class="bar-fill" style="width: {{ percent }}%"></div>
+                    </div>
+                    <span class="bar-percent">{{ percent|floatformat:1 }}%</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- ===== FILTER / SORT ===== -->
+        <div class="filter-row">
+            <span class="reviews-count"><strong>{{ reviews|length }}</strong> customer reviews</span>
+            <div class="sort-options">
+                <button class="sort-btn active" data-sort="newest">
+                    <i class="far fa-clock"></i> Newest
+                </button>
+                <button class="sort-btn" data-sort="highest">
+                    <i class="fas fa-sort-amount-down"></i> Highest
+                </button>
+                <button class="sort-btn" data-sort="lowest">
+                    <i class="fas fa-sort-amount-up"></i> Lowest
+                </button>
+            </div>
+        </div>
+
+        <!-- ===== REVIEWS GRID ===== -->
+        <div class="reviews-grid" id="reviewsGrid">
+            {% for review in reviews %}
+            <div class="review-card" data-rating="{{ review.rating }}" data-date="{{ review.created_at|date:'Y-m-d' }}">
+                <div class="stars">
+                    {% for i in "12345"|make_list %}
+                        {% if forloop.counter <= review.rating %}
+                            <i class="fas fa-star"></i>
+                        {% else %}
+                            <i class="fas fa-star empty-star"></i>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <p class="review-text">{{ review.review }}</p>
+                <div class="review-footer">
+                    <span class="customer-name">
+                        <span class="initials">
+                            {{ review.customer_name|slice:":1" }}{% if review.customer_name|slice:"1:2" %}{{ review.customer_name|slice:"1:2" }}{% endif %}
+                        </span>
+                        {{ review.customer_name }}
+                        {% if review.is_verified %}
+                        <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>
+                        {% endif %}
+                    </span>
+                    <span class="review-date"><i class="far fa-calendar-alt"></i> {{ review.created_at|date:"d M Y" }}</span>
+                </div>
+            </div>
+            {% empty %}
+            <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: #5b6f87;">
+                <i class="fas fa-comment-slash" style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
+                <p>No reviews yet. Be the first to share your experience!</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- ===== SUBMIT REVIEW SECTION ===== -->
+        <div class="submit-section">
+            <h2><i class="fas fa-pen-fancy"></i> Share Your Experience</h2>
+            <p class="form-subhead">
+                We value your feedback. Let us know how we did!
+            </p>
+
+            <form class="review-form" id="reviewForm" method="post" action="{% url 'submit_review' %}" novalidate>
+                {% csrf_token %}
+
+                {{ form.non_field_errors }}
+
+                <div>
+                    <label for="{{ form.customer_name.id_for_label }}">Full Name <span class="required">*</span></label>
+                    {{ form.customer_name }}
+                    {% if form.customer_name.errors %}
+                    <div class="error-message">{{ form.customer_name.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label for="{{ form.email.id_for_label }}">Email <span class="required">*</span></label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                    <div class="error-message">{{ form.email.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="full-width">
+                    <label>Rating <span class="required">*</span></label>
+                    <div class="star-select" id="starSelect">
+                        <button type="button" class="star-option" data-value="1">★</button>
+                        <button type="button" class="star-option" data-value="2">★</button>
+                        <button type="button" class="star-option" data-value="3">★</button>
+                        <button type="button" class="star-option" data-value="4">★</button>
+                        <button type="button" class="star-option" data-value="5">★</button>
+                        <span class="star-label" id="starLabel">Select a rating</span>
+                    </div>
+                    {{ form.rating }}
+                    {% if form.rating.errors %}
+                    <div class="error-message">{{ form.rating.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="full-width">
+                    <label for="{{ form.review.id_for_label }}">Your Review <span class="required">*</span></label>
+                    {{ form.review }}
+                    {% if form.review.errors %}
+                    <div class="error-message">{{ form.review.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="full-width">
+                    <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> Submit Review</button>
+                </div>
+            </form>
+
+            <div id="formFeedback" class="form-feedback">
+                <i class="fas fa-check-circle"></i>
+                <span id="feedbackMessage">Thank you for your review!</span>
+            </div>
+        </div>
+
+        <!-- ===== FOOTER ===== -->
+        <div class="footer-note">
+            <span>
+                <i class="fas fa-shield-alt"></i> All reviews are from genuine customers.
+            </span>
+            <span class="badge">
+                <i class="far fa-comments"></i> {{ rating_summary.total|default:0 }} reviews and counting
+            </span>
+        </div>
+
+    </div>
+    <!-- end page-wrapper -->
+</div>
+{% endblock content %}
+
+{% block extra_scripts %}
+<script>
+    (function() {
+        "use strict";
+
+        // ----- Star selection for form -----
+        const starOptions = document.querySelectorAll(".star-option");
+        const starLabel = document.getElementById("starLabel");
+        const ratingInput = document.getElementById("{{ form.rating.id_for_label }}");
+
+        // Pre-select rating if a value exists (e.g., after form error)
+        const existingRating = ratingInput.value;
+        if (existingRating) {
+            starOptions.forEach((btn) => {
+                if (btn.dataset.value === existingRating) {
+                    btn.classList.add("active");
+                    const labels = ["", "Terrible", "Poor", "Average", "Good", "Excellent"];
+                    starLabel.textContent = labels[parseInt(existingRating)] || "Select a rating";
+                }
+            });
+        }
+
+        starOptions.forEach((btn) => {
+            btn.addEventListener("click", function() {
+                const val = parseInt(this.dataset.value);
+                // Update active state
+                starOptions.forEach((b) => b.classList.remove("active"));
+                this.classList.add("active");
+                // Update label
+                const labels = ["", "Terrible", "Poor", "Average", "Good", "Excellent"];
+                starLabel.textContent = labels[val] || "Select a rating";
+                ratingInput.value = val;
+                // Clear any previous error styling
+                document.getElementById("starSelect").style.border = "none";
+            });
+        });
+
+        // ----- Form submission (client-side validation) -----
+        const form = document.getElementById("reviewForm");
+        const feedback = document.getElementById("formFeedback");
+        const feedbackMsg = document.getElementById("feedbackMessage");
+
+        form.addEventListener("submit", function(e) {
+            // Client-side validation is optional since we have server-side,
+            // but we keep it for a better UX.
+
+            const name = document.getElementById("{{ form.customer_name.id_for_label }}").value.trim();
+            const email = document.getElementById("{{ form.email.id_for_label }}").value.trim();
+            const rating = ratingInput.value;
+            const comment = document.getElementById("{{ form.review.id_for_label }}").value.trim();
+
+            let errors = [];
+            if (!name) errors.push("Name is required.");
+            if (!email) errors.push("Email is required.");
+            if (!rating) errors.push("Please select a rating.");
+            if (!comment) errors.push("Please write your review.");
+
+            if (errors.length > 0) {
+                e.preventDefault(); // prevent submission
+                feedback.className = "form-feedback error";
+                feedbackMsg.textContent = "⚠️ " + errors.join(" ");
+                feedback.style.display = "flex";
+                return;
+            }
+
+            // If all valid, the form will submit normally.
+            // We can optionally show a "submitting" state, but the server will handle.
+        });
+
+        // If there are form errors from server, they will be displayed inline.
+        // Also, we can show a success message if the page loads with a success parameter.
+        // For simplicity, we'll handle success via the server redirect with a message.
+        // But we can check for a success flag in the URL or context.
+        // We'll just keep the client feedback for demo.
+
+        // ----- Sort functionality -----
+        const sortBtns = document.querySelectorAll(".sort-btn");
+        const grid = document.getElementById("reviewsGrid");
+
+        function sortReviews(criteria) {
+            const cards = Array.from(grid.querySelectorAll(".review-card"));
+            if (cards.length === 0) return;
+
+            cards.sort((a, b) => {
+                const ratingA = parseInt(a.dataset.rating);
+                const ratingB = parseInt(b.dataset.rating);
+                const dateA = new Date(a.dataset.date);
+                const dateB = new Date(b.dataset.date);
+
+                if (criteria === "newest") {
+                    return dateB - dateA;
+                } else if (criteria === "highest") {
+                    return ratingB - ratingA;
+                } else if (criteria === "lowest") {
+                    return ratingA - ratingB;
+                }
+                return 0;
+            });
+
+            cards.forEach((card) => grid.appendChild(card));
+
+            sortBtns.forEach((btn) => {
+                btn.classList.toggle("active", btn.dataset.sort === criteria);
+            });
+        }
+
+        sortBtns.forEach((btn) => {
+            btn.addEventListener("click", function() {
+                sortReviews(this.dataset.sort);
+            });
+        });
+
+        // Optionally, set default sort to "newest" on page load
+        // (already active by default)
+
+    })();
+</script>
+{% endblock extra_scripts %}

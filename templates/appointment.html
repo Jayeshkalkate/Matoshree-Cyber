@@ -1,0 +1,545 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<!-- Page-specific styles for Appointment -->
+<style>
+  /* ===== APPOINTMENT CARD ===== */
+  .appointment-wrapper {
+    padding: 60px 0 70px;
+    background: var(--gray-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+  }
+
+  .appointment-card {
+    max-width: 640px;
+    width: 100%;
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 2.5rem 2.5rem 2.8rem;
+    transition: transform 0.2s ease;
+    border: 1px solid rgba(0,0,0,0.04);
+  }
+
+  @media (max-width: 500px) {
+    .appointment-card {
+      padding: 1.8rem 1.2rem 2rem;
+      border-radius: var(--radius-sm);
+    }
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.3rem;
+  }
+  .card-header i {
+    font-size: 2rem;
+    color: var(--secondary);
+    background: rgba(0,212,255,0.12);
+    padding: 0.5rem;
+    border-radius: 14px;
+  }
+  .card-header h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: -0.02em;
+  }
+
+  .subhead {
+    color: var(--gray-dark);
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+    border-left: 3px solid var(--secondary);
+    padding-left: 0.9rem;
+    line-height: 1.5;
+  }
+
+  /* ===== FORM ELEMENTS ===== */
+  .form-group {
+    margin-bottom: 1.6rem;
+  }
+  .form-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+  }
+  .form-group label i {
+    color: var(--secondary);
+    font-size: 1rem;
+    width: 1.2rem;
+    text-align: center;
+  }
+  .form-group label .required-star {
+    color: var(--accent);
+    font-weight: 700;
+    margin-left: 0.1rem;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    font-family: "Inter", sans-serif;
+    border: 1.5px solid var(--gray);
+    border-radius: var(--radius-sm);
+    background: var(--gray-light);
+    transition: var(--transition);
+    color: var(--text-dark);
+  }
+  .form-control:focus {
+    outline: none;
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 4px rgba(0,212,255,0.15);
+    background: var(--white);
+  }
+  .form-control::placeholder {
+    color: var(--gray-dark);
+    opacity: 0.6;
+  }
+
+  select.form-control {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23475569' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.8rem;
+    appearance: none;
+  }
+
+  input[type="date"].form-control,
+  input[type="time"].form-control {
+    min-height: 3.2rem;
+    padding-right: 1rem;
+  }
+  input[type="date"].form-control::-webkit-calendar-picker-indicator,
+  input[type="time"].form-control::-webkit-calendar-picker-indicator {
+    opacity: 0.6;
+    padding: 0.2rem;
+    cursor: pointer;
+  }
+
+  /* Mobile input with country code */
+  .mobile-input-wrapper {
+    display: flex;
+    align-items: center;
+    background: var(--gray-light);
+    border: 1.5px solid var(--gray);
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+    overflow: hidden;
+  }
+  .mobile-input-wrapper:focus-within {
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 4px rgba(0,212,255,0.15);
+    background: var(--white);
+  }
+  .country-code {
+    padding: 0 0 0 1rem;
+    font-weight: 600;
+    color: var(--primary);
+    font-size: 1rem;
+    background: transparent;
+    white-space: nowrap;
+    border-right: 1.5px solid var(--gray);
+    padding-right: 0.8rem;
+    line-height: 3.2rem;
+    user-select: none;
+  }
+  .mobile-input-wrapper input {
+    border: none;
+    background: transparent;
+    padding: 0.8rem 1rem 0.8rem 0.8rem;
+    font-size: 1rem;
+    font-family: "Inter", sans-serif;
+    width: 100%;
+    color: var(--text-dark);
+    outline: none;
+  }
+  .mobile-input-wrapper input::placeholder {
+    color: var(--gray-dark);
+    opacity: 0.6;
+  }
+
+  /* Error states */
+  .form-group.error .form-control,
+  .form-group.error .mobile-input-wrapper {
+    border-color: var(--accent);
+  }
+  .form-group.error .form-control:focus,
+  .form-group.error .mobile-input-wrapper:focus-within {
+    box-shadow: 0 0 0 4px rgba(255,107,53,0.15);
+  }
+  .error-message {
+    display: none;
+    color: var(--accent);
+    font-size: 0.85rem;
+    margin-top: 0.4rem;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .form-group.error .error-message {
+    display: flex;
+  }
+
+  /* ===== BOOK BUTTON ===== */
+  .btn-book {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: "Inter", sans-serif;
+    color: var(--primary);
+    background: var(--secondary);
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-top: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0,212,255,0.3);
+  }
+  .btn-book i {
+    font-size: 1.1rem;
+  }
+  .btn-book:hover {
+    background: #00e5ff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,212,255,0.4);
+  }
+  .btn-book:active {
+    transform: scale(0.98);
+  }
+  .btn-book:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* ===== FOOTER NOTE ===== */
+  .footer-note {
+    margin-top: 2rem;
+    font-size: 0.85rem;
+    color: var(--gray-dark);
+    text-align: center;
+    border-top: 1px solid var(--gray);
+    padding-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .footer-note i {
+    color: var(--secondary);
+    opacity: 0.7;
+  }
+  .footer-note span {
+    background: var(--gray);
+    padding: 0.2rem 0.7rem;
+    border-radius: 20px;
+    font-weight: 500;
+    color: var(--primary);
+    font-size: 0.8rem;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 480px) {
+    .card-header h1 {
+      font-size: 1.4rem;
+    }
+    .card-header i {
+      font-size: 1.5rem;
+      padding: 0.4rem;
+    }
+    .subhead {
+      font-size: 0.85rem;
+    }
+    .btn-book {
+      font-size: 1rem;
+      padding: 0.9rem;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- ===== APPOINTMENT SECTION ===== -->
+<section class="appointment-wrapper">
+  <div class="appointment-card" id="appointmentCard">
+    <!-- Header -->
+    <div class="card-header">
+      <i class="fas fa-calendar-check"></i>
+      <h1>Book an Appointment</h1>
+    </div>
+    <div class="subhead">
+      Select your service, choose a date &amp; time, and we’ll confirm your
+      visit.
+    </div>
+
+    <!-- ===== FORM ===== -->
+    <form method="post" action="{% url 'appointment' %}" novalidate id="appointmentForm">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+
+      <!-- Full Name -->
+      <div class="form-group" id="nameGroup">
+        <label for="{{ form.full_name.id_for_label }}">
+          <i class="fas fa-user"></i> Full Name <span class="required-star">*</span>
+        </label>
+        {{ form.full_name }}
+        {% if form.full_name.errors %}
+          <div class="error-message">{{ form.full_name.errors }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Phone -->
+      <div class="form-group" id="phoneGroup">
+        <label for="{{ form.phone.id_for_label }}">
+          <i class="fas fa-phone"></i> Phone Number <span class="required-star">*</span>
+        </label>
+        <div class="mobile-input-wrapper">
+          <span class="country-code">+91</span>
+          {{ form.phone }}
+        </div>
+        {% if form.phone.errors %}
+          <div class="error-message">{{ form.phone.errors }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="{{ form.email.id_for_label }}">
+          <i class="fas fa-envelope"></i> Email Address
+        </label>
+        {{ form.email }}
+        {% if form.email.errors %}
+          <div class="error-message">{{ form.email.errors }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Service -->
+      <div class="form-group" id="serviceGroup">
+        <label for="{{ form.service.id_for_label }}">
+          <i class="fas fa-concierge-bell"></i> Service <span class="required-star">*</span>
+        </label>
+        {{ form.service }}
+        {% if form.service.errors %}
+          <div class="error-message">{{ form.service.errors }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Date -->
+      <div class="form-group" id="dateGroup">
+        <label for="{{ form.appointment_date.id_for_label }}">
+          <i class="fas fa-calendar-day"></i> Appointment Date <span class="required-star">*</span>
+        </label>
+        {{ form.appointment_date }}
+        {% if form.appointment_date.errors %}
+          <div class="error-message">{{ form.appointment_date.errors }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Time -->
+      <div class="form-group" id="timeGroup">
+        <label for="{{ form.appointment_time.id_for_label }}">
+          <i class="fas fa-clock"></i> Appointment Time <span class="required-star">*</span>
+        </label>
+        {{ form.appointment_time }}
+        {% if form.appointment_time.errors %}
+          <div class="error-message">{{ form.appointment_time.errors }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Message -->
+      <div class="form-group">
+        <label for="{{ form.message.id_for_label }}">
+          <i class="fas fa-comment"></i> Additional Message
+        </label>
+        {{ form.message }}
+        {% if form.message.errors %}
+          <div class="error-message">{{ form.message.errors }}</div>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="btn-book" id="bookBtn">
+        <i class="fas fa-paper-plane"></i> Book Appointment
+      </button>
+    </form>
+
+    <!-- Footer Note -->
+    <div class="footer-note">
+      <i class="fas fa-shield-alt"></i>
+      Your details are secure.
+      <span><i class="far fa-clock"></i> 9:00 AM – 5:00 PM</span>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  (function() {
+    "use strict";
+
+    // DOM refs
+    const form = document.getElementById("appointmentForm");
+    const fullName = document.getElementById("{{ form.full_name.id_for_label }}");
+    const phone = document.getElementById("{{ form.phone.id_for_label }}");
+    const service = document.getElementById("{{ form.service.id_for_label }}");
+    const dateInput = document.getElementById("{{ form.appointment_date.id_for_label }}");
+    const timeInput = document.getElementById("{{ form.appointment_time.id_for_label }}");
+    const bookBtn = document.getElementById("bookBtn");
+
+    const nameGroup = document.getElementById("nameGroup");
+    const phoneGroup = document.getElementById("phoneGroup");
+    const serviceGroup = document.getElementById("serviceGroup");
+    const dateGroup = document.getElementById("dateGroup");
+    const timeGroup = document.getElementById("timeGroup");
+
+    // Set min date to today (future dates only)
+    function setMinDate() {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, "0");
+      const day = String(today.getDate()).padStart(2, "0");
+      dateInput.min = `${year}-${month}-${day}`;
+    }
+    setMinDate();
+
+    // Clear all error states
+    function clearErrors() {
+      [nameGroup, phoneGroup, serviceGroup, dateGroup, timeGroup].forEach(g => g.classList.remove("error"));
+    }
+
+    // Set error on a group
+    function setError(group) {
+      group.classList.add("error");
+    }
+
+    // Validate form
+    function validateForm() {
+      let isValid = true;
+      clearErrors();
+
+      // 1. Full Name
+      if (!fullName.value.trim()) {
+        setError(nameGroup);
+        isValid = false;
+      }
+
+      // 2. Phone: exactly 10 digits
+      const phoneVal = phone.value.trim();
+      if (!/^[0-9]{10}$/.test(phoneVal)) {
+        setError(phoneGroup);
+        isValid = false;
+      }
+
+      // 3. Service
+      if (!service.value) {
+        setError(serviceGroup);
+        isValid = false;
+      }
+
+      // 4. Date (required and future)
+      const dateVal = dateInput.value;
+      if (!dateVal) {
+        setError(dateGroup);
+        isValid = false;
+      } else {
+        const selected = new Date(dateVal);
+        const today = new Date();
+        today.setHours(0,0,0,0);
+        if (selected < today) {
+          setError(dateGroup);
+          isValid = false;
+        }
+      }
+
+      // 5. Time (required)
+      if (!timeInput.value) {
+        setError(timeGroup);
+        isValid = false;
+      }
+
+      return isValid;
+    }
+
+    // Phone input: only digits, max 10
+    phone.addEventListener("input", function() {
+      this.value = this.value.replace(/\D/g, "").slice(0, 10);
+      if (phoneGroup.classList.contains("error") && /^[0-9]{10}$/.test(this.value)) {
+        phoneGroup.classList.remove("error");
+      }
+    });
+
+    // Clear errors on change/focus
+    fullName.addEventListener("input", function() {
+      if (this.value.trim() && nameGroup.classList.contains("error")) {
+        nameGroup.classList.remove("error");
+      }
+    });
+    service.addEventListener("change", function() {
+      if (this.value) serviceGroup.classList.remove("error");
+    });
+    dateInput.addEventListener("change", function() {
+      if (this.value) {
+        const selected = new Date(this.value);
+        const today = new Date();
+        today.setHours(0,0,0,0);
+        if (selected >= today) {
+          dateGroup.classList.remove("error");
+        }
+      }
+    });
+    timeInput.addEventListener("change", function() {
+      if (this.value) timeGroup.classList.remove("error");
+    });
+
+    // Form submission
+    form.addEventListener("submit", function(e) {
+      if (!validateForm()) {
+        e.preventDefault();
+        const firstError = document.querySelector(".form-group.error");
+        if (firstError) {
+          firstError.scrollIntoView({ behavior: "smooth", block: "center" });
+          const input = firstError.querySelector("input, select, textarea");
+          if (input) input.focus();
+        }
+        return;
+      }
+      // Disable button to prevent double submit
+      bookBtn.disabled = true;
+      bookBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Booking…';
+    });
+
+    // Prevent past dates on blur
+    dateInput.addEventListener("blur", function() {
+      if (this.value) {
+        const selected = new Date(this.value);
+        const today = new Date();
+        today.setHours(0,0,0,0);
+        if (selected < today) {
+          this.value = "";
+          setError(dateGroup);
+        }
+      }
+    });
+
+    console.log("📅 Appointment page ready — future dates only, 10-digit mobile validation.");
+  })();
+</script>
+{% endblock %}
