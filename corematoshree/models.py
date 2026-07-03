@@ -79,10 +79,17 @@ class Appointment(models.Model):
         ordering = ["-created_at"]
 
     def clean(self):
+        if self.appointment_date is None:
+            return
+        
         if self.appointment_date < timezone.localdate():
             raise ValidationError(
                 {"appointment_date": "Appointment date cannot be in the past."}
             )
+            
+        # Optional: Add time validation
+        if self.appointment_time is None:
+            return
 
     def __str__(self):
         return f"{self.full_name} - {self.service.name}"

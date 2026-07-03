@@ -48,6 +48,15 @@ from .models import (
     ServiceCharge, RequiredDocument, FAQ, BusinessInfo
 )
 
+from django.contrib.auth import get_user_model
+from .models import (
+    Service, Announcement, JobNotification, GovernmentScheme,
+    Appointment, Contact, DownloadForm, Review, Gallery,
+    ServiceCharge, RequiredDocument, FAQ, BusinessInfo,
+)
+
+User = get_user_model()  # Add this after imports
+
 # =============================================================================
 # HELPERS / CONTEXT
 # =============================================================================
@@ -241,7 +250,9 @@ def admin_dashboard(request):
 @login_required
 @user_passes_test(is_superadmin)
 def superadmin_dashboard(request):
-    # Reuse all data from admin_dashboard
+    # ==============================================================
+    # FETCH ALL DATA (same as admin_dashboard, plus users)
+    # ==============================================================
     services = Service.objects.all().order_by('name')
     appointments = Appointment.objects.all().order_by('-appointment_date')
     contacts = Contact.objects.all().order_by('-created_at')
@@ -249,9 +260,11 @@ def superadmin_dashboard(request):
     jobs = JobNotification.objects.all().order_by('-last_date')
     schemes = GovernmentScheme.objects.all().order_by('-last_date')
     forms_list = DownloadForm.objects.all().order_by('-uploaded_at')
-    users = User.objects.all().order_by('username')
+    users = User.objects.all().order_by('username')   # <-- extra for superadmin
 
-    # Forms (same as admin)
+    # ==============================================================
+    # INITIALISE FORMS (for add actions)
+    # ==============================================================
     service_form = ServiceForm()
     announcement_form = AnnouncementForm()
     job_form = JobNotificationForm()
@@ -260,16 +273,168 @@ def superadmin_dashboard(request):
     contact_form = ContactFormDashboard()
     download_form = DownloadFormForm()
 
-    # Handle POST
+    # ==============================================================
+    # HANDLE POST REQUESTS (ADD / EDIT / DELETE / USER ROLE UPDATE)
+    # ==============================================================
     if request.method == 'POST':
         action = request.POST.get('action')
         model_type = request.POST.get('model_type')
         obj_id = request.POST.get('id')
 
-        # ---- Same add/edit/delete logic as admin_dashboard ----
-        # (copy the entire if/elif block from admin_dashboard)
-        # Add this extra block for user role update:
-        if action == 'edit_user':
+        # ---- ADD ----
+        if action == 'add':
+            if model_type == 'service':
+                form = ServiceForm(request.POST)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Service added.')
+                else:
+                    messages.error(request, 'Error adding service. Check fields.')
+
+            elif model_type == 'announcement':
+                form = AnnouncementForm(request.POST)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Announcement added.')
+                else:
+                    messages.error(request, 'Error adding announcement.')
+
+            elif model_type == 'job':
+                form = JobNotificationForm(request.POST)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Job notification added.')
+                else:
+                    messages.error(request, 'Error adding job.')
+
+            elif model_type == 'scheme':
+                form = GovernmentSchemeForm(request.POST)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Scheme added.')
+                else:
+                    messages.error(request, 'Error adding scheme.')
+
+            elif model_type == 'appointment':
+                form = AppointmentForm(request.POST)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Appointment added.')
+                else:
+                    messages.error(request, 'Error adding appointment.')
+
+            elif model_type == 'contact':
+                form = ContactFormDashboard(request.POST)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Contact added.')
+                else:
+                    messages.error(request, 'Error adding contact.')
+
+            elif model_type == 'form':
+                form = DownloadFormForm(request.POST, request.FILES)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Download form uploaded.')
+                else:
+                    messages.error(request, 'Error uploading form.')
+
+            return redirect('superadmin_dashboard')
+
+        # ---- EDIT ----
+        elif action == 'edit':
+            if model_type == 'service' and obj_id:
+                instance = get_object_or_404(Service, id=obj_id)
+                form = ServiceForm(request.POST, instance=instance)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Service updated.')
+                else:
+                    messages.error(request, 'Error updating service.')
+
+            elif model_type == 'announcement' and obj_id:
+                instance = get_object_or_404(Announcement, id=obj_id)
+                form = AnnouncementForm(request.POST, instance=instance)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Announcement updated.')
+                else:
+                    messages.error(request, 'Error updating announcement.')
+
+            elif model_type == 'job' and obj_id:
+                instance = get_object_or_404(JobNotification, id=obj_id)
+                form = JobNotificationForm(request.POST, instance=instance)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Job updated.')
+                else:
+                    messages.error(request, 'Error updating job.')
+
+            elif model_type == 'scheme' and obj_id:
+                instance = get_object_or_404(GovernmentScheme, id=obj_id)
+                form = GovernmentSchemeForm(request.POST, instance=instance)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Scheme updated.')
+                else:
+                    messages.error(request, 'Error updating scheme.')
+
+            elif model_type == 'appointment' and obj_id:
+                instance = get_object_or_404(Appointment, id=obj_id)
+                form = AppointmentForm(request.POST, instance=instance)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Appointment updated.')
+                else:
+                    messages.error(request, 'Error updating appointment.')
+
+            elif model_type == 'contact' and obj_id:
+                instance = get_object_or_404(Contact, id=obj_id)
+                form = ContactFormDashboard(request.POST, instance=instance)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Contact updated.')
+                else:
+                    messages.error(request, 'Error updating contact.')
+
+            elif model_type == 'form' and obj_id:
+                instance = get_object_or_404(DownloadForm, id=obj_id)
+                form = DownloadFormForm(request.POST, request.FILES, instance=instance)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Form updated.')
+                else:
+                    messages.error(request, 'Error updating form.')
+
+            return redirect('superadmin_dashboard')
+
+        # ---- DELETE ----
+        elif action == 'delete':
+            if model_type == 'service' and obj_id:
+                get_object_or_404(Service, id=obj_id).delete()
+                messages.success(request, 'Service deleted.')
+            elif model_type == 'announcement' and obj_id:
+                get_object_or_404(Announcement, id=obj_id).delete()
+                messages.success(request, 'Announcement deleted.')
+            elif model_type == 'job' and obj_id:
+                get_object_or_404(JobNotification, id=obj_id).delete()
+                messages.success(request, 'Job deleted.')
+            elif model_type == 'scheme' and obj_id:
+                get_object_or_404(GovernmentScheme, id=obj_id).delete()
+                messages.success(request, 'Scheme deleted.')
+            elif model_type == 'appointment' and obj_id:
+                get_object_or_404(Appointment, id=obj_id).delete()
+                messages.success(request, 'Appointment deleted.')
+            elif model_type == 'contact' and obj_id:
+                get_object_or_404(Contact, id=obj_id).delete()
+                messages.success(request, 'Contact deleted.')
+            elif model_type == 'form' and obj_id:
+                get_object_or_404(DownloadForm, id=obj_id).delete()
+                messages.success(request, 'Form deleted.')
+            return redirect('superadmin_dashboard')
+
+        # ---- USER ROLE UPDATE (superadmin only) ----
+        elif action == 'edit_user':
             user_id = request.POST.get('user_id')
             new_role = request.POST.get('new_role')
             if user_id and new_role:
@@ -279,8 +444,9 @@ def superadmin_dashboard(request):
                 messages.success(request, f"User {user.username} role updated to {new_role}.")
             return redirect('superadmin_dashboard')
 
-        # ... (add the rest of the logic from admin_dashboard)
-
+    # ==============================================================
+    # CONTEXT (pass all data to the template)
+    # ==============================================================
     context = {
         'services': services,
         'appointments': appointments,
@@ -289,7 +455,8 @@ def superadmin_dashboard(request):
         'jobs': jobs,
         'schemes': schemes,
         'forms_list': forms_list,
-        'users': users,
+        'users': users,   # <-- for user management section
+
         'service_form': service_form,
         'announcement_form': announcement_form,
         'job_form': job_form,
@@ -297,6 +464,7 @@ def superadmin_dashboard(request):
         'appointment_form': appointment_form,
         'contact_form': contact_form,
         'download_form': download_form,
+
         'business': get_business(),
     }
     return render(request, 'superadmindashboard.html', context)
