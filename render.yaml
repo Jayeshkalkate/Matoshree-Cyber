@@ -1,11 +1,52 @@
 services:
   - type: web
-    name: your-app-name
-    env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn project_name.wsgi:application
+    name: matoshree
+    runtime: python
+
+    plan: free
+
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
+      python manage.py migrate
+
+    startCommand: gunicorn Matoshree.wsgi:application
+
     envVars:
       - key: SECRET_KEY
-        sync: false
+        generateValue: true
+
       - key: DEBUG
         value: "False"
+
+      - key: DATABASE_URL
+        fromDatabase:
+          name: matoshree-db
+          property: connectionString
+
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com"
+
+      - key: BASE_URL
+        value: "https://matoshree.onrender.com"
+
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+
+      - key: CLOUDINARY_API_KEY
+        sync: false
+
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+
+      - key: EMAIL_HOST_USER
+        sync: false
+
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+
+databases:
+  - name: matoshree-db
+    databaseName: matoshree
+    user: matoshree
+    plan: free
