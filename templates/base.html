@@ -489,12 +489,18 @@
                             <a href="{% url 'superadmin_dashboard' %}">Super Admin</a>
                         {% endif %}
                         <a href="{% url 'profile' %}">Profile</a>
-                        <a href="{% url 'logout' %}">Logout</a>
+                        {% comment %} <a href="{% url 'logout' %}">Logout</a> {% endcomment %}
                     {% else %}
                         <a href="{% url 'login' %}">Login</a>
                         <a href="{% url 'register' %}">Register</a>
                     {% endif %}
                 </div>
+                <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                   {% csrf_token %}
+                   <button type="submit" style="background:none; border:none; color:rgba(255,255,255,0.75); cursor:pointer; font-weight:500; padding:8px 18px; font-size:0.95rem;">
+                        Logout
+                   </button>
+                </form>
             </nav>
         </div>
     </header>
