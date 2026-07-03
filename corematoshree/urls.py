@@ -2,6 +2,19 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
 
+
+
+from django.http import HttpResponse
+import traceback
+
+def debug_view(request):
+    try:
+        from .models import BusinessInfo
+        info = BusinessInfo.objects.first()
+        return HttpResponse(f"BusinessInfo: {info}")
+    except Exception as e:
+        return HttpResponse(f"Error: {e}\n{traceback.format_exc()}", content_type="text/plain")
+
 urlpatterns = [
 
     # Home
