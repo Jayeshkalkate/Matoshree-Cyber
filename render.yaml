@@ -1,45 +1,53 @@
-# render.yaml
 services:
   - type: web
     name: matoshree-cyber
     runtime: python
-    plan: free  # or starter, professional, etc.
-    region: oregon  # choose your preferred region
-    buildCommand: |
-      pip install -r requirements.txt
+    plan: free
+    region: oregon
+
+    buildCommand: >
+      pip install -r requirements.txt &&
+      python manage.py migrate --noinput &&
       python manage.py collectstatic --noinput
-      python manage.py migrate
-    startCommand: gunicorn Matoshree.wsgi:application
+
+    startCommand: gunicorn matoshree.wsgi:application
+
     envVars:
       - key: DATABASE_URL
         fromDatabase:
           name: matoshree-db
           property: connectionString
+
       - key: SECRET_KEY
-        generateValue: true  # automatically generates a random secret
+        generateValue: true
+
       - key: DEBUG
         value: "False"
+
       - key: ALLOWED_HOSTS
         value: "matoshree-cyber.onrender.com,localhost,127.0.0.1"
+
       - key: BASE_URL
         value: "https://matoshree-cyber.onrender.com"
+
       - key: CLOUDINARY_CLOUD_NAME
-        sync: false  # set manually in Render dashboard
+        sync: false
+
       - key: CLOUDINARY_API_KEY
         sync: false
+
       - key: CLOUDINARY_API_SECRET
         sync: false
+
       - key: EMAIL_HOST_USER
         sync: false
+
       - key: EMAIL_HOST_PASSWORD
         sync: false
 
-  - type: postgresql
-    name: matoshree-db
+databases:
+  - name: matoshree-db
+    databaseName: matoshree_db
+    user: matoshree_db
     plan: free
     region: oregon
-    databaseName: matoshree_db
-    user: matoshree_user
-    ipAllowList: []  # only accessible from internal services
-
-    
