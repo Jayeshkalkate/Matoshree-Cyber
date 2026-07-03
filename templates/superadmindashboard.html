@@ -11,1791 +11,1084 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap"
-      rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap"
+    rel="stylesheet"
     />
     <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
+    <!-- Bootstrap 5 (for modals / collapse) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-      /* ----- Reset & Base ----- */
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: "Inter", sans-serif;
-        background: #f1f5f9;
-        color: #0b1b33;
-        display: flex;
-        min-height: 100vh;
-      }
-
-      /* ----- Sidebar ----- */
-      .sidebar {
-        width: 260px;
-        background: #0b1b33;
-        color: #dce3ed;
-        display: flex;
-        flex-direction: column;
-        padding: 1.5rem 0;
-        position: sticky;
-        top: 0;
-        height: 100vh;
-        overflow-y: auto;
-        flex-shrink: 0;
-        transition: transform 0.3s ease;
-        z-index: 100;
-      }
-
-      .sidebar .logo {
-        padding: 0 1.5rem 2rem;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        font-size: 1.4rem;
-        font-weight: 700;
-        color: #fff;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        margin-bottom: 1.5rem;
-      }
-
-      .sidebar .logo i {
-        color: #4dabf7;
-      }
-
-      .sidebar nav {
-        flex: 1;
-      }
-
-      .sidebar nav ul {
-        list-style: none;
-        padding: 0 0.8rem;
-      }
-
-      .sidebar nav ul li {
-        margin-bottom: 0.2rem;
-      }
-
-      .sidebar nav ul li a {
-        display: flex;
-        align-items: center;
-        gap: 0.8rem;
-        padding: 0.7rem 1rem;
-        border-radius: 10px;
-        color: #a8bbd1;
-        text-decoration: none;
-        font-weight: 500;
-        font-size: 0.95rem;
-        transition: all 0.2s;
-      }
-
-      .sidebar nav ul li a i {
-        width: 1.4rem;
-        font-size: 1.1rem;
-        text-align: center;
-      }
-
-      .sidebar nav ul li a:hover {
-        background: rgba(255, 255, 255, 0.06);
-        color: #fff;
-      }
-
-      .sidebar nav ul li a.active {
-        background: #1a3a5c;
-        color: #fff;
-      }
-
-      .sidebar .logout-btn {
-        margin: 1.5rem 0.8rem 0;
-        padding: 0.7rem 1rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
-        color: #a8bbd1;
-        display: flex;
-        align-items: center;
-        gap: 0.8rem;
-        cursor: pointer;
-        border-radius: 10px;
-        transition: 0.2s;
-        text-decoration: none;
-        font-weight: 500;
-      }
-
-      .sidebar .logout-btn:hover {
-        background: rgba(255, 255, 255, 0.06);
-        color: #fff;
-      }
-
-      /* ----- Main Content ----- */
-      .main-content {
-        flex: 1;
-        padding: 1.5rem 2rem 2rem;
-        overflow-y: auto;
-      }
-
-      /* Top bar */
-      .top-bar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 1rem;
-        margin-bottom: 2rem;
-      }
-
-      .top-bar h2 {
-        font-size: 1.6rem;
-        font-weight: 700;
-        color: #0b1b33;
-      }
-
-      .top-bar .user-info {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-      }
-
-      .top-bar .user-info span {
-        font-weight: 500;
-      }
-
-      .top-bar .user-info .avatar {
-        width: 40px;
-        height: 40px;
-        background: #0a66c2;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #fff;
-        font-weight: 700;
-      }
-
-      .hamburger {
-        display: none;
-        background: none;
-        border: none;
-        font-size: 1.6rem;
-        color: #0b1b33;
-        cursor: pointer;
-      }
-
-      /* ----- Stats Cards ----- */
-      .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 1.2rem;
-        margin-bottom: 2rem;
-      }
-
-      .stat-card {
-        background: #fff;
-        padding: 1.2rem 1.5rem;
-        border-radius: 1rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-        border: 1px solid #e9eef4;
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-      }
-
-      .stat-card .icon {
-        width: 48px;
-        height: 48px;
-        background: #e8f0fe;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #0a66c2;
-        font-size: 1.4rem;
-      }
-
-      .stat-card .info h4 {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #0b1b33;
-      }
-
-      .stat-card .info p {
-        color: #6f85a0;
-        font-size: 0.85rem;
-      }
-
-      /* ----- Section containers (hidden by default) ----- */
-      .section {
-        display: none;
-        animation: fadeIn 0.3s ease;
-      }
-
-      .section.active {
-        display: block;
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
+        /* ----- Reset & Base ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        to {
-          opacity: 1;
-          transform: translateY(0);
+        body {
+            font-family: "Inter", sans-serif;
+            background: #f1f5f9;
+            color: #0b1b33;
+            display: flex;
+            min-height: 100vh;
         }
-      }
 
-      .section-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 0.8rem;
-        margin-bottom: 1.5rem;
-      }
-
-      .section-header h3 {
-        font-size: 1.4rem;
-        font-weight: 700;
-      }
-
-      .btn-primary {
-        background: #0a66c2;
-        color: #fff;
-        border: none;
-        padding: 0.5rem 1.2rem;
-        border-radius: 40px;
-        font-weight: 600;
-        font-size: 0.9rem;
-        cursor: pointer;
-        transition: background 0.2s;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        font-family: "Inter", sans-serif;
-      }
-
-      .btn-primary:hover {
-        background: #0854a3;
-      }
-
-      .btn-danger {
-        background: #d93c3c;
-        color: #fff;
-        border: none;
-        padding: 0.3rem 0.8rem;
-        border-radius: 30px;
-        font-weight: 600;
-        font-size: 0.8rem;
-        cursor: pointer;
-        transition: background 0.2s;
-      }
-
-      .btn-danger:hover {
-        background: #b52e2e;
-      }
-
-      .btn-success {
-        background: #1e8e3e;
-        color: #fff;
-        border: none;
-        padding: 0.3rem 0.8rem;
-        border-radius: 30px;
-        font-weight: 600;
-        font-size: 0.8rem;
-        cursor: pointer;
-        transition: background 0.2s;
-      }
-
-      .btn-success:hover {
-        background: #167231;
-      }
-
-      .btn-outline {
-        background: transparent;
-        border: 1.5px solid #dce3ed;
-        padding: 0.3rem 0.9rem;
-        border-radius: 30px;
-        font-weight: 600;
-        font-size: 0.8rem;
-        cursor: pointer;
-        transition: all 0.2s;
-        color: #1a2b44;
-      }
-
-      .btn-outline:hover {
-        background: #e8f0fe;
-        border-color: #0a66c2;
-      }
-
-      /* Tables */
-      .table-wrap {
-        overflow-x: auto;
-        background: #fff;
-        border-radius: 1rem;
-        border: 1px solid #e9eef4;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.95rem;
-      }
-
-      th {
-        text-align: left;
-        padding: 0.9rem 1.2rem;
-        background: #f8faff;
-        font-weight: 600;
-        color: #1a2b44;
-        border-bottom: 1px solid #e9eef4;
-      }
-
-      td {
-        padding: 0.8rem 1.2rem;
-        border-bottom: 1px solid #eef3f9;
-        vertical-align: middle;
-      }
-
-      tr:last-child td {
-        border-bottom: none;
-      }
-
-      .badge-status {
-        padding: 0.2rem 0.7rem;
-        border-radius: 30px;
-        font-size: 0.75rem;
-        font-weight: 600;
-      }
-
-      .badge-status.pending {
-        background: #fde8b3;
-        color: #8a6d00;
-      }
-      .badge-status.confirmed {
-        background: #cce5ff;
-        color: #004c9e;
-      }
-      .badge-status.completed {
-        background: #c8f0d4;
-        color: #0a6b2a;
-      }
-      .badge-status.cancelled {
-        background: #fde0e0;
-        color: #a03a3a;
-      }
-
-      /* Forms inside admin */
-      .admin-form {
-        background: #fff;
-        padding: 1.5rem;
-        border-radius: 1rem;
-        border: 1px solid #e9eef4;
-        margin-bottom: 1.5rem;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem 1.5rem;
-      }
-
-      .admin-form .full-width {
-        grid-column: 1 / -1;
-      }
-
-      .admin-form label {
-        font-weight: 600;
-        font-size: 0.9rem;
-        color: #1a2b44;
-        display: block;
-        margin-bottom: 0.2rem;
-      }
-
-      .admin-form input,
-      .admin-form select,
-      .admin-form textarea {
-        width: 100%;
-        padding: 0.6rem 1rem;
-        border: 1.5px solid #dce3ed;
-        border-radius: 10px;
-        font-family: "Inter", sans-serif;
-        font-size: 0.95rem;
-        background: #fafcff;
-        transition: border-color 0.2s;
-      }
-
-      .admin-form input:focus,
-      .admin-form select:focus,
-      .admin-form textarea:focus {
-        outline: none;
-        border-color: #0a66c2;
-        box-shadow: 0 0 0 4px rgba(10, 102, 194, 0.06);
-      }
-
-      .admin-form textarea {
-        resize: vertical;
-        min-height: 70px;
-      }
-
-      .admin-form .form-actions {
-        grid-column: 1 / -1;
-        display: flex;
-        gap: 0.8rem;
-        justify-content: flex-end;
-      }
-
-      /* Responsive */
-      @media (max-width: 992px) {
+        /* ----- Sidebar ----- */
         .sidebar {
-          transform: translateX(-100%);
-          position: fixed;
-          height: 100%;
-          width: 280px;
+            width: 260px;
+            background: #0b1b33;
+            color: #dce3ed;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+            z-index: 100;
         }
-        .sidebar.open {
-          transform: translateX(0);
+        .sidebar .logo {
+            padding: 0 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 1.5rem;
         }
-        .hamburger {
-          display: block;
+        .sidebar .logo i {
+            color: #4dabf7;
         }
-        .main-content {
-          padding: 1rem;
+        .sidebar nav {
+            flex: 1;
         }
-        .admin-form {
-          grid-template-columns: 1fr;
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0 0.8rem;
         }
-      }
+        .sidebar nav ul li {
+            margin-bottom: 0.2rem;
+        }
+        .sidebar nav ul li a {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.7rem 1rem;
+            border-radius: 10px;
+            color: #a8bbd1;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+        .sidebar nav ul li a i {
+            width: 1.4rem;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+        .sidebar nav ul li a:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+        }
+        .sidebar nav ul li a.active {
+            background: #1a3a5c;
+            color: #fff;
+        }
+        .sidebar .logout-btn {
+            margin: 1.5rem 0.8rem 0;
+            padding: 0.7rem 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            color: #a8bbd1;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: 0.2s;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .sidebar .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+        }
 
-      @media (max-width: 600px) {
-        .stats-grid {
-          grid-template-columns: 1fr 1fr;
+        /* ----- Main Content ----- */
+        .main-content {
+            flex: 1;
+            padding: 1.5rem 2rem 2rem;
+            overflow-y: auto;
+        }
+
+        /* Top bar */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
         .top-bar h2 {
-          font-size: 1.3rem;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #0b1b33;
+        }
+        .top-bar .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .top-bar .user-info span {
+            font-weight: 500;
+        }
+        .top-bar .user-info .avatar {
+            width: 40px;
+            height: 40px;
+            background: #0a66c2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+        }
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            color: #0b1b33;
+            cursor: pointer;
+        }
+
+        /* ----- Stats Cards ----- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: #fff;
+            padding: 1.2rem 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid #e9eef4;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
         .stat-card .icon {
-          width: 40px;
-          height: 40px;
-          font-size: 1.1rem;
+            width: 48px;
+            height: 48px;
+            background: #e8f0fe;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0a66c2;
+            font-size: 1.4rem;
         }
         .stat-card .info h4 {
-          font-size: 1.2rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0b1b33;
         }
-      }
-
-      /* Helper: quick list */
-      .list-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.6rem 1rem;
-        background: #f8faff;
-        border-radius: 10px;
-        margin-bottom: 0.5rem;
-        border: 1px solid #eef3f9;
-      }
-
-      .list-item .info {
-        display: flex;
-        flex-direction: column;
-        gap: 0.1rem;
-      }
-
-      .list-item .info .title {
-        font-weight: 600;
-      }
-
-      .list-item .info .sub {
-        font-size: 0.85rem;
-        color: #6f85a0;
-      }
-
-      /* Scrollable sidebar on mobile */
-      @media (max-width: 992px) {
-        body {
-          overflow-x: hidden;
+        .stat-card .info p {
+            color: #6f85a0;
+            font-size: 0.85rem;
         }
-        .sidebar {
-          overflow-y: auto;
-        }
-      }
 
-      /* Small tweaks */
-      .mt-2 {
-        margin-top: 1rem;
-      }
-      .mb-2 {
-        margin-bottom: 1rem;
-      }
-      .flex {
-        display: flex;
-        gap: 0.8rem;
-        flex-wrap: wrap;
-      }
+        /* ----- Section containers ----- */
+        .section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .section.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-header h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .btn-primary {
+            background: #0a66c2;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-family: "Inter", sans-serif;
+        }
+        .btn-primary:hover {
+            background: #0854a3;
+        }
+        .btn-primary.btn-sm {
+            padding: 0.25rem 0.8rem;
+            font-size: 0.8rem;
+        }
+        .btn-danger {
+            background: #d93c3c;
+            color: #fff;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-danger:hover {
+            background: #b52e2e;
+        }
+        .btn-success {
+            background: #1e8e3e;
+            color: #fff;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-success:hover {
+            background: #167231;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid #dce3ed;
+            padding: 0.3rem 0.9rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #1a2b44;
+        }
+        .btn-outline:hover {
+            background: #e8f0fe;
+            border-color: #0a66c2;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            background: #fff;
+            border-radius: 1rem;
+            border: 1px solid #e9eef4;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        th {
+            text-align: left;
+            padding: 0.9rem 1.2rem;
+            background: #f8faff;
+            font-weight: 600;
+            color: #1a2b44;
+            border-bottom: 1px solid #e9eef4;
+        }
+        td {
+            padding: 0.8rem 1.2rem;
+            border-bottom: 1px solid #eef3f9;
+            vertical-align: middle;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge-status {
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .badge-status.pending {
+            background: #fde8b3;
+            color: #8a6d00;
+        }
+        .badge-status.confirmed {
+            background: #cce5ff;
+            color: #004c9e;
+        }
+        .badge-status.completed {
+            background: #c8f0d4;
+            color: #0a6b2a;
+        }
+        .badge-status.cancelled {
+            background: #fde0e0;
+            color: #a03a3a;
+        }
+
+        .admin-form {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: 1px solid #e9eef4;
+            margin-bottom: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem 1.5rem;
+        }
+        .admin-form .full-width {
+            grid-column: 1 / -1;
+        }
+        .admin-form label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #1a2b44;
+            display: block;
+            margin-bottom: 0.2rem;
+        }
+        .admin-form input,
+        .admin-form select,
+        .admin-form textarea {
+            width: 100%;
+            padding: 0.6rem 1rem;
+            border: 1.5px solid #dce3ed;
+            border-radius: 10px;
+            font-family: "Inter", sans-serif;
+            font-size: 0.95rem;
+            background: #fafcff;
+            transition: border-color 0.2s;
+        }
+        .admin-form input:focus,
+        .admin-form select:focus,
+        .admin-form textarea:focus {
+            outline: none;
+            border-color: #0a66c2;
+            box-shadow: 0 0 0 4px rgba(10, 102, 194, 0.06);
+        }
+        .admin-form textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+        .admin-form .form-actions {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 0.8rem;
+            justify-content: flex-end;
+        }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem 1rem;
+            background: #f8faff;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            border: 1px solid #eef3f9;
+        }
+        .list-item .info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+        .list-item .info .title {
+            font-weight: 600;
+        }
+        .list-item .info .sub {
+            font-size: 0.85rem;
+            color: #6f85a0;
+        }
+
+        /* ---- User management extras ---- */
+        .role-badge {
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .role-badge.superadmin {
+            background: #0b1b33;
+            color: #fff;
+        }
+        .role-badge.admin {
+            background: #0a66c2;
+            color: #fff;
+        }
+        .role-badge.user {
+            background: #dce3ed;
+            color: #1a2b44;
+        }
+
+        .form-select-sm {
+            padding: 0.2rem 0.6rem;
+            font-size: 0.8rem;
+            border-radius: 30px;
+            border: 1.5px solid #dce3ed;
+            background: #fafcff;
+            font-family: "Inter", sans-serif;
+        }
+
+        /* ----- Responsive ----- */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                height: 100%;
+                width: 280px;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .hamburger {
+                display: block;
+            }
+            .main-content {
+                padding: 1rem;
+            }
+            .admin-form {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 600px) {
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .top-bar h2 {
+                font-size: 1.3rem;
+            }
+            .stat-card .icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+            .stat-card .info h4 {
+                font-size: 1.2rem;
+            }
+        }
+
+        .mt-2 {
+            margin-top: 1rem;
+        }
+        .mb-2 {
+            margin-bottom: 1rem;
+        }
+        .flex {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
     </style>
 </head>
 <body>
+
     <!-- ===== SIDEBAR ===== -->
     <aside class="sidebar" id="sidebar">
-      <div class="logo"><i class="fas fa-laptop"></i> CyberAdmin</div>
-      <nav>
-        <ul>
-          <li>
-            <a href="#" class="active" data-section="dashboard"
-              ><i class="fas fa-tachometer-alt"></i> Dashboard</a
-            >
-          </li>
-          <li>
-            <a href="#" data-section="services"
-              ><i class="fas fa-concierge-bell"></i> Manage Services</a
-            >
-          </li>
-          <li>
-            <a href="#" data-section="prices"
-              ><i class="fas fa-coins"></i> Update Prices</a
-            >
-          </li>
-          <li>
-            <a href="#" data-section="announcements"
-              ><i class="fas fa-bullhorn"></i> Announcements</a
-            >
-          </li>
-          <li>
-            <a href="#" data-section="jobs"
-              ><i class="fas fa-briefcase"></i> Job Notifications</a
-            >
-          </li>
-          <li>
-            <a href="#" data-section="schemes"
-              ><i class="fas fa-hand-holding-heart"></i> Gov. Schemes</a
-            >
-          </li>
-          <li>
-            <a href="#" data-section="appointments"
-              ><i class="fas fa-calendar-check"></i> Appointments</a
-            >
-          </li>
-          <li>
-            <a href="#" data-section="inquiries"
-              ><i class="fas fa-envelope"></i> Inquiries</a
-            >
-          </li>
-          <li>
-            <a href="#" data-section="forms"
-              ><i class="fas fa-file-pdf"></i> Upload Forms</a
-            >
-          </li>
-          <li>
-            <a href="#" data-section="gallery"
-              ><i class="fas fa-images"></i> Gallery</a
-            >
-          </li>
-          <li>
-            <a href="#" data-section="settings"
-              ><i class="fas fa-cog"></i> Settings</a
-            >
-          </li>
-        </ul>
-      </nav>
-      <a href="{% url 'logout' %}" class="logout-btn">
-        <i class="fas fa-sign-out-alt"></i> Logout
-      </a>
+        <div class="logo"><i class="fas fa-laptop"></i> CyberAdmin</div>
+        <nav>
+            <ul>
+                <li><a href="#" class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="#" data-section="services"><i class="fas fa-concierge-bell"></i> Manage Services</a></li>
+                <li><a href="#" data-section="prices"><i class="fas fa-coins"></i> Update Prices</a></li>
+                <li><a href="#" data-section="announcements"><i class="fas fa-bullhorn"></i> Announcements</a></li>
+                <li><a href="#" data-section="jobs"><i class="fas fa-briefcase"></i> Job Notifications</a></li>
+                <li><a href="#" data-section="schemes"><i class="fas fa-hand-holding-heart"></i> Gov. Schemes</a></li>
+                <li><a href="#" data-section="appointments"><i class="fas fa-calendar-check"></i> Appointments</a></li>
+                <li><a href="#" data-section="inquiries"><i class="fas fa-envelope"></i> Inquiries</a></li>
+                <li><a href="#" data-section="forms"><i class="fas fa-file-pdf"></i> Upload Forms</a></li>
+                <li><a href="#" data-section="users"><i class="fas fa-users"></i> Users</a></li>
+                <li><a href="#" data-section="gallery"><i class="fas fa-images"></i> Gallery</a></li>
+                <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> Settings</a></li>
+            </ul>
+        </nav>
+        <a href="{% url 'logout' %}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </aside>
 
     <!-- ===== MAIN CONTENT ===== -->
     <main class="main-content">
-      <!-- Top Bar -->
-      <div class="top-bar">
-        <div style="display: flex; align-items: center; gap: 0.8rem">
-          <button class="hamburger" id="hamburgerBtn">
-            <i class="fas fa-bars"></i>
-          </button>
-          <h2 id="pageTitle">Dashboard</h2>
-        </div>
-        <div class="user-info">
-          <span>Super Admin</span>
-          <div class="avatar">SA</div>
-        </div>
-      </div>
 
-      <!-- ============================================ -->
-      <!-- SECTION: DASHBOARD (default active)          -->
-      <!-- ============================================ -->
-      <div id="section-dashboard" class="section active">
-        <div class="stats-grid" id="statsGrid">
-          <div class="stat-card">
-            <div class="icon"><i class="fas fa-concierge-bell"></i></div>
-            <div class="info">
-              <h4 id="statServices">6</h4>
-              <p>Services</p>
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div style="display:flex; align-items:center; gap:0.8rem">
+                <button class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></button>
+                <h2 id="pageTitle">Dashboard</h2>
             </div>
-          </div>
-          <div class="stat-card">
-            <div class="icon"><i class="fas fa-calendar-check"></i></div>
-            <div class="info">
-              <h4 id="statAppointments">8</h4>
-              <p>Appointments</p>
+            <div class="user-info">
+                <span>Super Admin</span>
+                <div class="avatar">SA</div>
             </div>
-          </div>
-          <div class="stat-card">
-            <div class="icon"><i class="fas fa-envelope"></i></div>
-            <div class="info">
-              <h4 id="statInquiries">3</h4>
-              <p>Inquiries</p>
+        </div>
+
+        <!-- ========================================================== -->
+        <!-- SECTION: DASHBOARD                                         -->
+        <!-- ========================================================== -->
+        <div id="section-dashboard" class="section active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="icon"><i class="fas fa-concierge-bell"></i></div>
+                    <div class="info">
+                        <h4>{{ services.count }}</h4>
+                        <p>Services</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon"><i class="fas fa-calendar-check"></i></div>
+                    <div class="info">
+                        <h4>{{ appointments.count }}</h4>
+                        <p>Appointments</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon"><i class="fas fa-envelope"></i></div>
+                    <div class="info">
+                        <h4>{{ contacts.count }}</h4>
+                        <p>Inquiries</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon"><i class="fas fa-file-pdf"></i></div>
+                    <div class="info">
+                        <h4>{{ forms_list.count }}</h4>
+                        <p>Forms</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon"><i class="fas fa-users"></i></div>
+                    <div class="info">
+                        <h4>{{ users.count }}</h4>
+                        <p>Users</p>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="stat-card">
-            <div class="icon"><i class="fas fa-file-pdf"></i></div>
-            <div class="info">
-              <h4 id="statForms">12</h4>
-              <p>Forms</p>
+
+            <div style="background:#fff; border-radius:1rem; padding:1.5rem; border:1px solid #e9eef4;">
+                <h4 style="margin-bottom:0.8rem;"><i class="fas fa-clock" style="color:#0a66c2"></i> Recent Activity</h4>
+                <ul style="list-style:none; padding:0">
+                    {% if appointments %}
+                    {% for appt in appointments|slice:":5" %}
+                    <li style="display:flex; justify-content:space-between; padding:0.5rem 0; border-bottom:1px solid #f0f4fa;">
+                        <span><i class="fas fa-calendar-check" style="color:#0a66c2"></i> {{ appt.full_name }} – {{ appt.service.name }}</span>
+                        <span style="color:#6f85a0; font-size:0.85rem;">{{ appt.created_at|date:"d M, H:i" }}</span>
+                    </li>
+                    {% endfor %}
+                    {% else %}
+                    <li style="color:#6f85a0; padding:0.5rem 0;">No recent activity.</li>
+                    {% endif %}
+                </ul>
             </div>
-          </div>
         </div>
 
-        <div
-          style="
-            background: #fff;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            border: 1px solid #e9eef4;
-          "
-        >
-          <h4 style="margin-bottom: 0.8rem">
-            <i class="fas fa-clock" style="color: #0a66c2"></i> Recent Activity
-          </h4>
-          <ul style="list-style: none; padding: 0">
-            <li
-              style="
-                display: flex;
-                justify-content: space-between;
-                padding: 0.5rem 0;
-                border-bottom: 1px solid #f0f4fa;
-              "
-            >
-              <span
-                ><i class="fas fa-plus-circle" style="color: #1e8e3e"></i> Added
-                new service "Income Tax Filing"</span
-              >
-              <span style="color: #6f85a0; font-size: 0.85rem"
-                >Today, 10:30 AM</span
-              >
-            </li>
-            <li
-              style="
-                display: flex;
-                justify-content: space-between;
-                padding: 0.5rem 0;
-                border-bottom: 1px solid #f0f4fa;
-              "
-            >
-              <span
-                ><i class="fas fa-check-circle" style="color: #0a66c2"></i>
-                Confirmed appointment #A12 for Priya</span
-              >
-              <span style="color: #6f85a0; font-size: 0.85rem"
-                >Today, 09:15 AM</span
-              >
-            </li>
-            <li
-              style="
-                display: flex;
-                justify-content: space-between;
-                padding: 0.5rem 0;
-                border-bottom: 1px solid #f0f4fa;
-              "
-            >
-              <span
-                ><i class="fas fa-upload" style="color: #0a66c2"></i> Uploaded
-                "Scholarship Form 2026"</span
-              >
-              <span style="color: #6f85a0; font-size: 0.85rem"
-                >Yesterday, 4:20 PM</span
-              >
-            </li>
-            <li
-              style="
-                display: flex;
-                justify-content: space-between;
-                padding: 0.5rem 0;
-              "
-            >
-              <span
-                ><i class="fas fa-reply" style="color: #0a66c2"></i> Replied to
-                inquiry from Amit</span
-              >
-              <span style="color: #6f85a0; font-size: 0.85rem"
-                >Yesterday, 2:00 PM</span
-              >
-            </li>
-          </ul>
-        </div>
-      </div>
+        <!-- ========================================================== -->
+        <!-- SECTION: MANAGE SERVICES                                   -->
+        <!-- ========================================================== -->
+        <div id="section-services" class="section">
+            <div class="section-header">
+                <h3><i class="fas fa-concierge-bell" style="color:#0a66c2"></i> Manage Services</h3>
+                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addServiceForm">Add Service</button>
+            </div>
 
-      <!-- ============================================ -->
-      <!-- SECTION: MANAGE SERVICES                      -->
-      <!-- ============================================ -->
-      <div id="section-services" class="section">
-        <div class="section-header">
-          <h3>
-            <i class="fas fa-concierge-bell" style="color: #0a66c2"></i> Manage
-            Services
-          </h3>
-          <button class="btn-primary" id="addServiceBtn">
-            <i class="fas fa-plus"></i> Add Service
-          </button>
+            <!-- Add Service Form -->
+            <div class="collapse admin-form" id="addServiceForm">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="add">
+                    <input type="hidden" name="model_type" value="service">
+                    {{ service_form.as_p }}
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Save</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>#</th><th>Name</th><th>Category</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody>
+                        {% for service in services %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ service.name }}</td>
+                            <td>{{ service.category }}</td>
+                            <td><span class="badge-status {% if service.active %}confirmed{% else %}cancelled{% endif %}">{{ service.active|yesno:"Active,Inactive" }}</span></td>
+                            <td>
+                                <button class="btn-primary btn-sm" onclick="editService('{{ service.id }}', '{{ service.name }}', '{{ service.category }}', '{{ service.description|escapejs }}', '{{ service.active|yesno:"true,false" }}', '{{ service.icon }}')"><i class="fas fa-edit"></i></button>
+                                <form method="post" style="display:inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="model_type" value="service">
+                                    <input type="hidden" name="id" value="{{ service.id }}">
+                                    <button type="submit" class="btn-danger" onclick="return confirm('Delete this service?')"><i class="fas fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}<tr><td colspan="5">No services.</td></tr>{% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Inline edit form for services -->
+            <div class="admin-form" id="editServiceForm" style="display:none; margin-top:1rem;">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="edit">
+                    <input type="hidden" name="model_type" value="service">
+                    <input type="hidden" name="id" id="editServiceId">
+                    <div>
+                        <label>Service Name *</label>
+                        <input type="text" name="name" id="editSvcName" required>
+                    </div>
+                    <div>
+                        <label>Category</label>
+                        <select name="category" id="editSvcCategory">
+                            <option value="Government">Government</option>
+                            <option value="Financial">Financial</option>
+                            <option value="Printing">Printing</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="full-width">
+                        <label>Description</label>
+                        <textarea name="description" id="editSvcDesc" rows="2"></textarea>
+                    </div>
+                    <div>
+                        <label>Status</label>
+                        <select name="active" id="editSvcStatus">
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Icon</label>
+                        <input type="text" name="icon" id="editSvcIcon" placeholder="e.g. fa-print">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-outline" onclick="document.getElementById('editServiceForm').style.display='none'">Cancel</button>
+                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Update</button>
+                    </div>
+                </form>
+            </div>
         </div>
 
-        <!-- Add Service Form -->
-        <div class="admin-form" id="serviceForm" style="display: none">
-          <div>
-            <label>Service Name *</label>
-            <input
-              type="text"
-              id="svcName"
-              placeholder="e.g. PAN Card Assistance"
-            />
-          </div>
-          <div>
-            <label>Category</label>
-            <select id="svcCategory">
-              <option value="Government">Government</option>
-              <option value="Financial">Financial</option>
-              <option value="Printing">Printing</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div class="full-width">
-            <label>Description</label>
-            <textarea
-              id="svcDesc"
-              placeholder="Brief description of the service"
-            ></textarea>
-          </div>
-          <div>
-            <label>Status</label>
-            <select id="svcStatus">
-              <option value="Active">Active</option>
-              <option value="Inactive">Inactive</option>
-            </select>
-          </div>
-          <div class="form-actions">
-            <button class="btn-outline" onclick="hideServiceForm()">
-              Cancel
-            </button>
-            <button class="btn-primary" id="saveServiceBtn">
-              <i class="fas fa-save"></i> Save
-            </button>
-          </div>
+        <!-- ========================================================== -->
+        <!-- SECTION: UPDATE PRICES                                     -->
+        <!-- ========================================================== -->
+        <div id="section-prices" class="section">
+            <div class="section-header">
+                <h3><i class="fas fa-coins" style="color:#0a66c2"></i> Update Service Charges</h3>
+            </div>
+            <p style="color:#6f85a0;">Coming soon – manage service charges here.</p>
         </div>
 
-        <!-- Service List -->
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Service</th>
-                <th>Category</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="serviceTableBody">
-              <!-- Rows inserted by JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
+        <!-- ========================================================== -->
+        <!-- SECTION: ANNOUNCEMENTS                                     -->
+        <!-- ========================================================== -->
+        <div id="section-announcements" class="section">
+            <div class="section-header">
+                <h3><i class="fas fa-bullhorn" style="color:#0a66c2"></i> Announcements</h3>
+                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addAnnouncementForm">Add Announcement</button>
+            </div>
 
-      <!-- ============================================ -->
-      <!-- SECTION: UPDATE PRICES                        -->
-      <!-- ============================================ -->
-      <div id="section-prices" class="section">
-        <div class="section-header">
-          <h3>
-            <i class="fas fa-coins" style="color: #0a66c2"></i> Update Service
-            Charges
-          </h3>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Service</th>
-                <th>Old Price (₹)</th>
-                <th>New Price (₹)</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="priceTableBody">
-              <!-- Rows inserted by JS -->
-            </tbody>
-          </table>
-        </div>
-        <div
-          style="
-            margin-top: 1rem;
-            display: flex;
-            gap: 0.8rem;
-            align-items: center;
-          "
-        >
-          <input
-            type="text"
-            id="newPriceService"
-            placeholder="Service name"
-            style="
-              padding: 0.5rem 1rem;
-              border: 1.5px solid #dce3ed;
-              border-radius: 10px;
-              flex: 1;
-            "
-          />
-          <input
-            type="number"
-            id="newPriceOld"
-            placeholder="Old price"
-            style="
-              padding: 0.5rem 1rem;
-              border: 1.5px solid #dce3ed;
-              border-radius: 10px;
-              width: 120px;
-            "
-          />
-          <input
-            type="number"
-            id="newPriceNew"
-            placeholder="New price"
-            style="
-              padding: 0.5rem 1rem;
-              border: 1.5px solid #dce3ed;
-              border-radius: 10px;
-              width: 120px;
-            "
-          />
-          <button class="btn-primary" id="addPriceBtn">
-            <i class="fas fa-plus"></i> Add
-          </button>
-        </div>
-      </div>
+            <div class="collapse admin-form" id="addAnnouncementForm">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="add">
+                    <input type="hidden" name="model_type" value="announcement">
+                    {{ announcement_form.as_p }}
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Save</button>
+                    </div>
+                </form>
+            </div>
 
-      <!-- ============================================ -->
-      <!-- SECTION: ANNOUNCEMENTS                        -->
-      <!-- ============================================ -->
-      <div id="section-announcements" class="section">
-        <div class="section-header">
-          <h3>
-            <i class="fas fa-bullhorn" style="color: #0a66c2"></i> Post
-            Announcements
-          </h3>
+            <div id="announcementList">
+                {% for ann in announcements %}
+                <div class="list-item">
+                    <div class="info">
+                        <span class="title">{{ ann.title }}</span>
+                        <span class="sub">{{ ann.description|truncatechars:60 }} – {{ ann.category }}</span>
+                    </div>
+                    <form method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="model_type" value="announcement">
+                        <input type="hidden" name="id" value="{{ ann.id }}">
+                        <button type="submit" class="btn-danger" onclick="return confirm('Delete this announcement?')"><i class="fas fa-times"></i></button>
+                    </form>
+                </div>
+                {% empty %}<p style="color:#6f85a0;">No announcements.</p>{% endfor %}
+            </div>
         </div>
-        <div class="admin-form">
-          <div class="full-width">
-            <label>Title *</label>
-            <input type="text" id="annTitle" placeholder="Announcement title" />
-          </div>
-          <div class="full-width">
-            <label>Message *</label>
-            <textarea id="annMessage" placeholder="Details..."></textarea>
-          </div>
-          <div>
-            <label>Category</label>
-            <select id="annCategory">
-              <option value="scheme">Scheme</option>
-              <option value="recruitment">Recruitment</option>
-              <option value="scholarship">Scholarship</option>
-              <option value="holiday">Bank Holiday</option>
-              <option value="notice">Important Notice</option>
-            </select>
-          </div>
-          <div>
-            <label>Urgent</label>
-            <select id="annUrgent">
-              <option value="false">No</option>
-              <option value="true">Yes</option>
-            </select>
-          </div>
-          <div class="form-actions">
-            <button class="btn-primary" id="postAnnBtn">
-              <i class="fas fa-paper-plane"></i> Post
-            </button>
-          </div>
-        </div>
-        <div id="announcementList"></div>
-      </div>
 
-      <!-- ============================================ -->
-      <!-- SECTION: JOB NOTIFICATIONS                    -->
-      <!-- ============================================ -->
-      <div id="section-jobs" class="section">
-        <div class="section-header">
-          <h3>
-            <i class="fas fa-briefcase" style="color: #0a66c2"></i> Job
-            Notifications
-          </h3>
-          <button class="btn-primary" id="showJobFormBtn">
-            <i class="fas fa-plus"></i> Add Job
-          </button>
-        </div>
-        <div class="admin-form" id="jobForm" style="display: none">
-          <div>
-            <label>Job Title *</label><input type="text" id="jobTitle" />
-          </div>
-          <div>
-            <label>Organization</label><input type="text" id="jobOrg" />
-          </div>
-          <div>
-            <label>Last Date</label><input type="date" id="jobLastDate" />
-          </div>
-          <div class="full-width">
-            <label>Description</label><textarea id="jobDesc"></textarea>
-          </div>
-          <div class="form-actions">
-            <button class="btn-outline" onclick="hideJobForm()">Cancel</button>
-            <button class="btn-primary" id="saveJobBtn">
-              <i class="fas fa-save"></i> Save
-            </button>
-          </div>
-        </div>
-        <div id="jobList"></div>
-      </div>
+        <!-- ========================================================== -->
+        <!-- SECTION: JOB NOTIFICATIONS                                 -->
+        <!-- ========================================================== -->
+        <div id="section-jobs" class="section">
+            <div class="section-header">
+                <h3><i class="fas fa-briefcase" style="color:#0a66c2"></i> Job Notifications</h3>
+                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addJobForm">Add Job</button>
+            </div>
 
-      <!-- ============================================ -->
-      <!-- SECTION: GOVERNMENT SCHEMES                   -->
-      <!-- ============================================ -->
-      <div id="section-schemes" class="section">
-        <div class="section-header">
-          <h3>
-            <i class="fas fa-hand-holding-heart" style="color: #0a66c2"></i>
-            Government Schemes
-          </h3>
-          <button class="btn-primary" id="showSchemeFormBtn">
-            <i class="fas fa-plus"></i> Add Scheme
-          </button>
-        </div>
-        <div class="admin-form" id="schemeForm" style="display: none">
-          <div>
-            <label>Scheme Name *</label><input type="text" id="schemeName" />
-          </div>
-          <div>
-            <label>Eligibility</label
-            ><input type="text" id="schemeEligibility" />
-          </div>
-          <div class="full-width">
-            <label>Description</label><textarea id="schemeDesc"></textarea>
-          </div>
-          <div>
-            <label>Last Date</label><input type="date" id="schemeLastDate" />
-          </div>
-          <div class="form-actions">
-            <button class="btn-outline" onclick="hideSchemeForm()">
-              Cancel
-            </button>
-            <button class="btn-primary" id="saveSchemeBtn">
-              <i class="fas fa-save"></i> Save
-            </button>
-          </div>
-        </div>
-        <div id="schemeList"></div>
-      </div>
+            <div class="collapse admin-form" id="addJobForm">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="add">
+                    <input type="hidden" name="model_type" value="job">
+                    {{ job_form.as_p }}
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Save</button>
+                    </div>
+                </form>
+            </div>
 
-      <!-- ============================================ -->
-      <!-- SECTION: APPOINTMENTS                         -->
-      <!-- ============================================ -->
-      <div id="section-appointments" class="section">
-        <div class="section-header">
-          <h3>
-            <i class="fas fa-calendar-check" style="color: #0a66c2"></i>
-            Appointments
-          </h3>
+            <div id="jobList">
+                {% for job in jobs %}
+                <div class="list-item">
+                    <div class="info">
+                        <span class="title">{{ job.title }}</span>
+                        <span class="sub">{{ job.organization }} – Last Date: {{ job.last_date|date:"d M Y" }}</span>
+                    </div>
+                    <form method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="model_type" value="job">
+                        <input type="hidden" name="id" value="{{ job.id }}">
+                        <button type="submit" class="btn-danger" onclick="return confirm('Delete this job?')"><i class="fas fa-times"></i></button>
+                    </form>
+                </div>
+                {% empty %}<p style="color:#6f85a0;">No jobs.</p>{% endfor %}
+            </div>
         </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Customer</th>
-                <th>Service</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="appointmentTableBody">
-              <!-- Rows inserted by JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
 
-      <!-- ============================================ -->
-      <!-- SECTION: INQUIRIES                            -->
-      <!-- ============================================ -->
-      <div id="section-inquiries" class="section">
-        <div class="section-header">
-          <h3>
-            <i class="fas fa-envelope" style="color: #0a66c2"></i> Customer
-            Inquiries
-          </h3>
-        </div>
-        <div id="inquiryList"></div>
-      </div>
+        <!-- ========================================================== -->
+        <!-- SECTION: GOVERNMENT SCHEMES                                -->
+        <!-- ========================================================== -->
+        <div id="section-schemes" class="section">
+            <div class="section-header">
+                <h3><i class="fas fa-hand-holding-heart" style="color:#0a66c2"></i> Government Schemes</h3>
+                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addSchemeForm">Add Scheme</button>
+            </div>
 
-      <!-- ============================================ -->
-      <!-- SECTION: UPLOAD FORMS                         -->
-      <!-- ============================================ -->
-      <div id="section-forms" class="section">
-        <div class="section-header">
-          <h3>
-            <i class="fas fa-file-pdf" style="color: #0a66c2"></i> Upload Forms
-          </h3>
-          <button class="btn-primary" id="showFormUploadBtn">
-            <i class="fas fa-upload"></i> Upload Form
-          </button>
-        </div>
-        <div class="admin-form" id="formUpload" style="display: none">
-          <div>
-            <label>Form Name *</label><input type="text" id="formName" />
-          </div>
-          <div>
-            <label>Category</label>
-            <select id="formCategory">
-              <option value="Scholarship">Scholarship</option>
-              <option value="Income">Income</option>
-              <option value="Caste">Caste</option>
-              <option value="Pension">Pension</option>
-              <option value="Farmer">Farmer</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div>
-            <label>Status</label>
-            <select id="formStatus">
-              <option value="Available">Available</option>
-              <option value="Unavailable">Unavailable</option>
-            </select>
-          </div>
-          <div class="full-width">
-            <label>PDF File (dummy)</label>
-            <input
-              type="text"
-              id="formFile"
-              placeholder="e.g. scholarship-2026.pdf"
-            />
-          </div>
-          <div class="form-actions">
-            <button class="btn-outline" onclick="hideFormUpload()">
-              Cancel
-            </button>
-            <button class="btn-primary" id="saveFormBtn">
-              <i class="fas fa-save"></i> Upload
-            </button>
-          </div>
-        </div>
-        <div id="formList"></div>
-      </div>
+            <div class="collapse admin-form" id="addSchemeForm">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="add">
+                    <input type="hidden" name="model_type" value="scheme">
+                    {{ scheme_form.as_p }}
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Save</button>
+                    </div>
+                </form>
+            </div>
 
-      <!-- ============================================ -->
-      <!-- SECTION: GALLERY (placeholder)                -->
-      <!-- ============================================ -->
-      <div id="section-gallery" class="section">
-        <div class="section-header">
-          <h3>
-            <i class="fas fa-images" style="color: #0a66c2"></i> Manage Gallery
-          </h3>
+            <div id="schemeList">
+                {% for scheme in schemes %}
+                <div class="list-item">
+                    <div class="info">
+                        <span class="title">{{ scheme.title }}</span>
+                        <span class="sub">{{ scheme.description|truncatechars:50 }} – Eligibility: {{ scheme.eligibility|default:"N/A" }}</span>
+                    </div>
+                    <form method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="model_type" value="scheme">
+                        <input type="hidden" name="id" value="{{ scheme.id }}">
+                        <button type="submit" class="btn-danger" onclick="return confirm('Delete this scheme?')"><i class="fas fa-times"></i></button>
+                    </form>
+                </div>
+                {% empty %}<p style="color:#6f85a0;">No schemes.</p>{% endfor %}
+            </div>
         </div>
-        <p style="color: #6f85a0">
-          Upload and manage images for your website gallery (coming soon).
-        </p>
-      </div>
 
-      <!-- ============================================ -->
-      <!-- SECTION: SETTINGS (placeholder)               -->
-      <!-- ============================================ -->
-      <div id="section-settings" class="section">
-        <div class="section-header">
-          <h3>
-            <i class="fas fa-cog" style="color: #0a66c2"></i> Website Settings
-          </h3>
+        <!-- ========================================================== -->
+        <!-- SECTION: APPOINTMENTS                                      -->
+        <!-- ========================================================== -->
+        <div id="section-appointments" class="section">
+            <div class="section-header">
+                <h3><i class="fas fa-calendar-check" style="color:#0a66c2"></i> Appointments</h3>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Customer</th><th>Service</th><th>Date</th><th>Time</th><th>Status</th><th>Action</th></tr></thead>
+                    <tbody>
+                        {% for appt in appointments %}
+                        <tr>
+                            <td>{{ appt.full_name }}</td>
+                            <td>{{ appt.service.name }}</td>
+                            <td>{{ appt.appointment_date }}</td>
+                            <td>{{ appt.appointment_time|time:"H:i" }}</td>
+                            <td><span class="badge-status {{ appt.status|lower }}">{{ appt.status }}</span></td>
+                            <td>
+                                <form method="post" style="display:inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="model_type" value="appointment">
+                                    <input type="hidden" name="id" value="{{ appt.id }}">
+                                    <button type="submit" class="btn-danger" onclick="return confirm('Delete this appointment?')"><i class="fas fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}<tr><td colspan="6">No appointments.</td></tr>{% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <p style="color: #6f85a0">
-          Configure general settings, business hours, contact info, and more
-          (coming soon).
-        </p>
-      </div>
+
+        <!-- ========================================================== -->
+        <!-- SECTION: INQUIRIES                                         -->
+        <!-- ========================================================== -->
+        <div id="section-inquiries" class="section">
+            <div class="section-header">
+                <h3><i class="fas fa-envelope" style="color:#0a66c2"></i> Customer Inquiries</h3>
+            </div>
+            <div id="inquiryList">
+                {% for contact in contacts %}
+                <div class="list-item" style="flex-direction:column; align-items:stretch; gap:0.5rem;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+                        <div><strong>{{ contact.name }}</strong> ({{ contact.email }})</div>
+                        <span style="font-size:0.8rem; color:{% if contact.replied %}#1e8e3e{% else %}#d93c3c{% endif %};">
+                            {{ contact.replied|yesno:"Resolved,Pending" }}
+                        </span>
+                    </div>
+                    <div style="font-size:0.95rem;">Q: {{ contact.message|truncatechars:80 }}</div>
+                    {% if contact.replied %}
+                    <div style="background:#eef3f9; padding:0.4rem 0.8rem; border-radius:8px; font-size:0.9rem;">Replied</div>
+                    {% else %}
+                    <form method="post" style="margin-top:0.2rem;">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="edit">
+                        <input type="hidden" name="model_type" value="contact">
+                        <input type="hidden" name="id" value="{{ contact.id }}">
+                        <div style="display:flex; gap:0.5rem;">
+                            <input type="text" name="reply" placeholder="Write reply..." style="flex:1; padding:0.3rem 0.8rem; border:1.5px solid #dce3ed; border-radius:30px; font-size:0.85rem;">
+                            <button type="submit" class="btn-primary" style="padding:0.3rem 1rem; font-size:0.8rem;"><i class="fas fa-reply"></i> Reply</button>
+                        </div>
+                    </form>
+                    {% endif %}
+                </div>
+                {% empty %}<p style="color:#6f85a0;">No inquiries.</p>{% endfor %}
+            </div>
+        </div>
+
+        <!-- ========================================================== -->
+        <!-- SECTION: UPLOAD FORMS                                      -->
+        <!-- ========================================================== -->
+        <div id="section-forms" class="section">
+            <div class="section-header">
+                <h3><i class="fas fa-file-pdf" style="color:#0a66c2"></i> Upload Forms</h3>
+                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addFormUpload">Upload Form</button>
+            </div>
+
+            <div class="collapse admin-form" id="addFormUpload">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="add">
+                    <input type="hidden" name="model_type" value="form">
+                    {{ download_form.as_p }}
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary"><i class="fas fa-upload"></i> Upload</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="formList">
+                {% for f in forms_list %}
+                <div class="list-item">
+                    <div class="info">
+                        <span class="title">{{ f.title }}</span>
+                        <span class="sub">{{ f.category }} – {{ f.pdf.name }}</span>
+                    </div>
+                    <form method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="model_type" value="form">
+                        <input type="hidden" name="id" value="{{ f.id }}">
+                        <button type="submit" class="btn-danger" onclick="return confirm('Delete this form?')"><i class="fas fa-times"></i></button>
+                    </form>
+                </div>
+                {% empty %}<p style="color:#6f85a0;">No forms uploaded.</p>{% endfor %}
+            </div>
+        </div>
+
+        <!-- ========================================================== -->
+        <!-- SECTION: USER MANAGEMENT (SUPER ADMIN ONLY)               -->
+        <!-- ========================================================== -->
+        <div id="section-users" class="section">
+            <div class="section-header">
+                <h3><i class="fas fa-users" style="color:#0a66c2"></i> User Management</h3>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Staff</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td><strong>{{ user.username }}</strong></td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                <span class="role-badge {{ user.role }}">
+                                    {{ user.get_role_display }}
+                                </span>
+                            </td>
+                            <td>{{ user.is_staff|yesno:"Yes,No" }}</td>
+                            <td>
+                                <form method="post" style="display:flex; gap:0.4rem; align-items:center; flex-wrap:wrap;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="edit_user">
+                                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                                    <select name="new_role" class="form-select-sm">
+                                        <option value="user" {% if user.role == 'user' %}selected{% endif %}>User</option>
+                                        <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+                                        <option value="superadmin" {% if user.role == 'superadmin' %}selected{% endif %}>Super Admin</option>
+                                    </select>
+                                    <button type="submit" class="btn-primary btn-sm"><i class="fas fa-sync-alt"></i> Update</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="5">No users found.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ========================================================== -->
+        <!-- SECTION: GALLERY                                           -->
+        <!-- ========================================================== -->
+        <div id="section-gallery" class="section">
+            <div class="section-header">
+                <h3><i class="fas fa-images" style="color:#0a66c2"></i> Manage Gallery</h3>
+            </div>
+            <p style="color:#6f85a0;">Upload and manage images for your website gallery (coming soon).</p>
+        </div>
+
+        <!-- ========================================================== -->
+        <!-- SECTION: SETTINGS                                          -->
+        <!-- ========================================================== -->
+        <div id="section-settings" class="section">
+            <div class="section-header">
+                <h3><i class="fas fa-cog" style="color:#0a66c2"></i> Website Settings</h3>
+            </div>
+            <p style="color:#6f85a0;">Configure general settings, business hours, contact info, and more (coming soon).</p>
+        </div>
+
     </main>
 
-    <!-- ===== SCRIPTS ===== -->
-    <script>
-      (function () {
-        "use strict";
-
-        // -------------------- SIDEBAR NAV --------------------
-        const navLinks = document.querySelectorAll(".sidebar nav ul li a");
-        const sections = document.querySelectorAll(".section");
-        const pageTitle = document.getElementById("pageTitle");
-
-        function showSection(sectionId) {
-          sections.forEach((sec) => sec.classList.remove("active"));
-          const target = document.getElementById("section-" + sectionId);
-          if (target) target.classList.add("active");
-
-          // Update active link
-          navLinks.forEach((link) => link.classList.remove("active"));
-          navLinks.forEach((link) => {
-            if (link.dataset.section === sectionId)
-              link.classList.add("active");
-          });
-
-          // Update title
-          const titles = {
-            dashboard: "Dashboard",
-            services: "Manage Services",
-            prices: "Update Prices",
-            announcements: "Announcements",
-            jobs: "Job Notifications",
-            schemes: "Government Schemes",
-            appointments: "Appointments",
-            inquiries: "Inquiries",
-            forms: "Upload Forms",
-            gallery: "Gallery",
-            settings: "Settings",
-          };
-          pageTitle.textContent = titles[sectionId] || "Dashboard";
-
-          // Close sidebar on mobile
-          document.getElementById("sidebar").classList.remove("open");
-        }
-
-        navLinks.forEach((link) => {
-          link.addEventListener("click", function (e) {
-            e.preventDefault();
-            const section = this.dataset.section;
-            showSection(section);
-          });
-        });
-
-        // Hamburger
-        document
-          .getElementById("hamburgerBtn")
-          .addEventListener("click", function () {
-            document.getElementById("sidebar").classList.toggle("open");
-          });
-
-        // -------------------- DATA STORE --------------------
-        // In-memory arrays
-        let services = [
-          {
-            id: 1,
-            name: "Aadhaar Services",
-            category: "Government",
-            status: "Active",
-            desc: "Aadhaar print, update, etc.",
-          },
-          {
-            id: 2,
-            name: "PAN Card Assistance",
-            category: "Government",
-            status: "Active",
-            desc: "Online PAN application",
-          },
-          {
-            id: 3,
-            name: "Passport Application",
-            category: "Government",
-            status: "Active",
-            desc: "Passport form filling",
-          },
-          {
-            id: 4,
-            name: "Printing & Scanning",
-            category: "Printing",
-            status: "Active",
-            desc: "B&W and color printing",
-          },
-          {
-            id: 5,
-            name: "Income Tax Filing",
-            category: "Financial",
-            status: "Active",
-            desc: "ITR filing assistance",
-          },
-          {
-            id: 6,
-            name: "Scholarship Form Fill",
-            category: "Government",
-            status: "Active",
-            desc: "Scholarship applications",
-          },
-        ];
-
-        let prices = [
-          { service: "Printout (B&W)", old: 5, new: 6 },
-          { service: "Photocopy", old: 2, new: 3 },
-          { service: "Aadhaar Print", old: 30, new: 35 },
-          { service: "PAN Card Form", old: 150, new: 150 },
-        ];
-
-        let announcements = [
-          {
-            title: "PM Kisan Registration Open",
-            message: "New registrations started.",
-            category: "scheme",
-            urgent: true,
-            date: "2026-07-02",
-          },
-          {
-            title: "Independence Day Holiday",
-            message: "Closed on 15 Aug.",
-            category: "holiday",
-            urgent: false,
-            date: "2026-06-25",
-          },
-        ];
-
-        let jobs = [
-          {
-            title: "SSC Recruitment 2026",
-            org: "SSC",
-            lastDate: "2026-08-20",
-            desc: "2500+ vacancies",
-          },
-          {
-            title: "Railway Apprentice",
-            org: "Railways",
-            lastDate: "2026-07-30",
-            desc: "Apply online",
-          },
-        ];
-
-        let schemes = [
-          {
-            name: "PM Kisan",
-            eligibility: "Farmers",
-            desc: "Income support",
-            lastDate: "2026-08-31",
-          },
-          {
-            name: "Ayushman Bharat",
-            eligibility: "Low income families",
-            desc: "Health insurance",
-            lastDate: "",
-          },
-        ];
-
-        let appointments = [
-          {
-            customer: "Rahul Sharma",
-            service: "PAN Card",
-            date: "2026-08-10",
-            time: "10:00 AM",
-            status: "Pending",
-          },
-          {
-            customer: "Priya Patil",
-            service: "Passport",
-            date: "2026-08-11",
-            time: "2:00 PM",
-            status: "Confirmed",
-          },
-          {
-            customer: "Amit Mehta",
-            service: "Aadhaar",
-            date: "2026-08-12",
-            time: "11:30 AM",
-            status: "Completed",
-          },
-          {
-            customer: "Sneha Reddy",
-            service: "Income Tax",
-            date: "2026-08-13",
-            time: "3:00 PM",
-            status: "Pending",
-          },
-        ];
-
-        let inquiries = [
-          {
-            id: 1,
-            name: "Amit Kumar",
-            email: "amit@example.com",
-            question: "What documents for PM Kisan?",
-            reply: "",
-            resolved: false,
-          },
-          {
-            id: 2,
-            name: "Sita Devi",
-            email: "sita@example.com",
-            question: "Scholarship last date?",
-            reply: "",
-            resolved: false,
-          },
-          {
-            id: 3,
-            name: "Ravi Singh",
-            email: "ravi@example.com",
-            question: "Do you offer passport services?",
-            reply: "Yes, we assist with passport applications.",
-            resolved: true,
-          },
-        ];
-
-        let formsList = [
-          {
-            name: "Pre-Matric Scholarship",
-            category: "Scholarship",
-            status: "Available",
-            file: "pre-matric.pdf",
-          },
-          {
-            name: "Income Certificate",
-            category: "Income",
-            status: "Available",
-            file: "income-cert.pdf",
-          },
-          {
-            name: "SC Certificate",
-            category: "Caste",
-            status: "Available",
-            file: "sc-cert.pdf",
-          },
-        ];
-
-        // -------------------- RENDER FUNCTIONS --------------------
-        function renderServices() {
-          const tbody = document.getElementById("serviceTableBody");
-          tbody.innerHTML = services
-            .map(
-              (s, idx) => `
-                        <tr>
-                            <td>${idx + 1}</td>
-                            <td>${s.name}</td>
-                            <td>${s.category}</td>
-                            <td><span class="badge-status ${s.status === "Active" ? "confirmed" : "cancelled"}">${s.status}</span></td>
-                            <td>
-                                <button class="btn-danger" onclick="deleteService(${s.id})"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                    `,
-            )
-            .join("");
-          // Update stats
-          document.getElementById("statServices").textContent = services.length;
-        }
-
-        function renderPrices() {
-          const tbody = document.getElementById("priceTableBody");
-          tbody.innerHTML = prices
-            .map(
-              (p, idx) => `
-                        <tr>
-                            <td>${p.service}</td>
-                            <td>₹${p.old}</td>
-                            <td>₹${p.new}</td>
-                            <td><button class="btn-danger" onclick="deletePrice(${idx})"><i class="fas fa-trash"></i></button></td>
-                        </tr>
-                    `,
-            )
-            .join("");
-        }
-
-        function renderAnnouncements() {
-          const container = document.getElementById("announcementList");
-          if (announcements.length === 0) {
-            container.innerHTML =
-              '<p style="color:#6f85a0;">No announcements posted.</p>';
-            return;
-          }
-          container.innerHTML = announcements
-            .map(
-              (a, idx) => `
-                        <div class="list-item">
-                            <div class="info">
-                                <span class="title">${a.urgent ? "🔴 " : ""}${a.title}</span>
-                                <span class="sub">${a.message} (${a.category}) – ${a.date}</span>
-                            </div>
-                            <button class="btn-danger" onclick="deleteAnnouncement(${idx})"><i class="fas fa-times"></i></button>
-                        </div>
-                    `,
-            )
-            .join("");
-        }
-
-        function renderJobs() {
-          const container = document.getElementById("jobList");
-          if (jobs.length === 0) {
-            container.innerHTML =
-              '<p style="color:#6f85a0;">No job notifications added.</p>';
-            return;
-          }
-          container.innerHTML = jobs
-            .map(
-              (j, idx) => `
-                        <div class="list-item">
-                            <div class="info">
-                                <span class="title">${j.title}</span>
-                                <span class="sub">${j.org} – Last Date: ${j.lastDate} – ${j.desc}</span>
-                            </div>
-                            <button class="btn-danger" onclick="deleteJob(${idx})"><i class="fas fa-times"></i></button>
-                        </div>
-                    `,
-            )
-            .join("");
-        }
-
-        function renderSchemes() {
-          const container = document.getElementById("schemeList");
-          if (schemes.length === 0) {
-            container.innerHTML =
-              '<p style="color:#6f85a0;">No schemes added.</p>';
-            return;
-          }
-          container.innerHTML = schemes
-            .map(
-              (s, idx) => `
-                        <div class="list-item">
-                            <div class="info">
-                                <span class="title">${s.name}</span>
-                                <span class="sub">Eligibility: ${s.eligibility} – ${s.desc} ${s.lastDate ? "Last Date: " + s.lastDate : ""}</span>
-                            </div>
-                            <button class="btn-danger" onclick="deleteScheme(${idx})"><i class="fas fa-times"></i></button>
-                        </div>
-                    `,
-            )
-            .join("");
-        }
-
-        function renderAppointments() {
-          const tbody = document.getElementById("appointmentTableBody");
-          tbody.innerHTML = appointments
-            .map(
-              (a, idx) => `
-                        <tr>
-                            <td>${a.customer}</td>
-                            <td>${a.service}</td>
-                            <td>${a.date}</td>
-                            <td>${a.time}</td>
-                            <td><span class="badge-status ${a.status.toLowerCase()}">${a.status}</span></td>
-                            <td>
-                                <button class="btn-success" onclick="updateAppointmentStatus(${idx}, 'Confirmed')">Confirm</button>
-                                <button class="btn-danger" onclick="updateAppointmentStatus(${idx}, 'Cancelled')">Cancel</button>
-                            </td>
-                        </tr>
-                    `,
-            )
-            .join("");
-          document.getElementById("statAppointments").textContent =
-            appointments.length;
-        }
-
-        function renderInquiries() {
-          const container = document.getElementById("inquiryList");
-          if (inquiries.length === 0) {
-            container.innerHTML = '<p style="color:#6f85a0;">No inquiries.</p>';
-            return;
-          }
-          container.innerHTML = inquiries
-            .map(
-              (inq, idx) => `
-                        <div class="list-item" style="flex-direction:column; align-items:stretch; gap:0.5rem;">
-                            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
-                                <div><strong>${inq.name}</strong> (${inq.email})</div>
-                                <span style="font-size:0.8rem; color:${inq.resolved ? "#1e8e3e" : "#d93c3c"};">
-                                    ${inq.resolved ? "✅ Resolved" : "⏳ Pending"}
-                                </span>
-                            </div>
-                            <div style="font-size:0.95rem;">Q: ${inq.question}</div>
-                            ${inq.reply ? `<div style="background:#eef3f9; padding:0.4rem 0.8rem; border-radius:8px; font-size:0.9rem;">Reply: ${inq.reply}</div>` : ""}
-                            <div style="display:flex; gap:0.5rem; margin-top:0.2rem;">
-                                <input type="text" id="replyInput_${idx}" placeholder="Write reply..." style="flex:1; padding:0.3rem 0.8rem; border:1.5px solid #dce3ed; border-radius:30px; font-size:0.85rem;" />
-                                <button class="btn-primary" onclick="replyInquiry(${idx})" style="padding:0.3rem 1rem; font-size:0.8rem;"><i class="fas fa-reply"></i> Reply</button>
-                            </div>
-                        </div>
-                    `,
-            )
-            .join("");
-          // Update stats
-          document.getElementById("statInquiries").textContent =
-            inquiries.filter((i) => !i.resolved).length;
-        }
-
-        function renderForms() {
-          const container = document.getElementById("formList");
-          if (formsList.length === 0) {
-            container.innerHTML =
-              '<p style="color:#6f85a0;">No forms uploaded.</p>';
-            return;
-          }
-          container.innerHTML = formsList
-            .map(
-              (f, idx) => `
-                        <div class="list-item">
-                            <div class="info">
-                                <span class="title">${f.name}</span>
-                                <span class="sub">${f.category} – ${f.status} – ${f.file}</span>
-                            </div>
-                            <button class="btn-danger" onclick="deleteForm(${idx})"><i class="fas fa-times"></i></button>
-                        </div>
-                    `,
-            )
-            .join("");
-          document.getElementById("statForms").textContent = formsList.length;
-        }
-
-        // Global functions for inline onclick
-        window.deleteService = function (id) {
-          if (confirm("Delete this service?")) {
-            services = services.filter((s) => s.id !== id);
-            renderServices();
-          }
-        };
-
-        window.deletePrice = function (idx) {
-          if (confirm("Delete this price entry?")) {
-            prices.splice(idx, 1);
-            renderPrices();
-          }
-        };
-
-        window.deleteAnnouncement = function (idx) {
-          if (confirm("Delete this announcement?")) {
-            announcements.splice(idx, 1);
-            renderAnnouncements();
-          }
-        };
-
-        window.deleteJob = function (idx) {
-          if (confirm("Delete this job?")) {
-            jobs.splice(idx, 1);
-            renderJobs();
-          }
-        };
-
-        window.deleteScheme = function (idx) {
-          if (confirm("Delete this scheme?")) {
-            schemes.splice(idx, 1);
-            renderSchemes();
-          }
-        };
-
-        window.updateAppointmentStatus = function (idx, status) {
-          appointments[idx].status = status;
-          renderAppointments();
-        };
-
-        window.replyInquiry = function (idx) {
-          const input = document.getElementById("replyInput_" + idx);
-          const reply = input.value.trim();
-          if (!reply) return alert("Please enter a reply.");
-          inquiries[idx].reply = reply;
-          inquiries[idx].resolved = true;
-          renderInquiries();
-        };
-
-        window.deleteForm = function (idx) {
-          if (confirm("Delete this form?")) {
-            formsList.splice(idx, 1);
-            renderForms();
-          }
-        };
-
-        // Hide forms
-        window.hideServiceForm = function () {
-          document.getElementById("serviceForm").style.display = "none";
-        };
-        window.hideJobForm = function () {
-          document.getElementById("jobForm").style.display = "none";
-        };
-        window.hideSchemeForm = function () {
-          document.getElementById("schemeForm").style.display = "none";
-        };
-        window.hideFormUpload = function () {
-          document.getElementById("formUpload").style.display = "none";
-        };
-
-        // -------------------- ADD/SAVE EVENTS --------------------
-        // Add Service
-        document
-          .getElementById("addServiceBtn")
-          .addEventListener("click", function () {
-            const form = document.getElementById("serviceForm");
-            form.style.display =
-              form.style.display === "none" ? "grid" : "none";
-          });
-
-        document
-          .getElementById("saveServiceBtn")
-          .addEventListener("click", function () {
-            const name = document.getElementById("svcName").value.trim();
-            if (!name) return alert("Service name is required.");
-            const newService = {
-              id: Date.now(),
-              name: name,
-              category: document.getElementById("svcCategory").value,
-              status: document.getElementById("svcStatus").value,
-              desc: document.getElementById("svcDesc").value.trim(),
-            };
-            services.push(newService);
-            renderServices();
-            document.getElementById("svcName").value = "";
-            document.getElementById("svcDesc").value = "";
-            document.getElementById("serviceForm").style.display = "none";
-            alert("Service added!");
-          });
-
-        // Add Price
-        document
-          .getElementById("addPriceBtn")
-          .addEventListener("click", function () {
-            const service = document
-              .getElementById("newPriceService")
-              .value.trim();
-            const old = parseFloat(
-              document.getElementById("newPriceOld").value,
-            );
-            const newp = parseFloat(
-              document.getElementById("newPriceNew").value,
-            );
-            if (!service || isNaN(old) || isNaN(newp))
-              return alert("Fill all fields correctly.");
-            prices.push({ service, old, new: newp });
-            renderPrices();
-            document.getElementById("newPriceService").value = "";
-            document.getElementById("newPriceOld").value = "";
-            document.getElementById("newPriceNew").value = "";
-          });
-
-        // Post Announcement
-        document
-          .getElementById("postAnnBtn")
-          .addEventListener("click", function () {
-            const title = document.getElementById("annTitle").value.trim();
-            const message = document.getElementById("annMessage").value.trim();
-            if (!title || !message)
-              return alert("Title and message are required.");
-            const newAnn = {
-              title,
-              message,
-              category: document.getElementById("annCategory").value,
-              urgent: document.getElementById("annUrgent").value === "true",
-              date: new Date().toISOString().slice(0, 10),
-            };
-            announcements.unshift(newAnn);
-            renderAnnouncements();
-            document.getElementById("annTitle").value = "";
-            document.getElementById("annMessage").value = "";
-            alert("Announcement posted!");
-          });
-
-        // Job
-        document
-          .getElementById("showJobFormBtn")
-          .addEventListener("click", function () {
-            const form = document.getElementById("jobForm");
-            form.style.display =
-              form.style.display === "none" ? "grid" : "none";
-          });
-        document
-          .getElementById("saveJobBtn")
-          .addEventListener("click", function () {
-            const title = document.getElementById("jobTitle").value.trim();
-            if (!title) return alert("Job title required.");
-            const newJob = {
-              title,
-              org: document.getElementById("jobOrg").value.trim(),
-              lastDate: document.getElementById("jobLastDate").value,
-              desc: document.getElementById("jobDesc").value.trim(),
-            };
-            jobs.push(newJob);
-            renderJobs();
-            document.getElementById("jobTitle").value = "";
-            document.getElementById("jobOrg").value = "";
-            document.getElementById("jobLastDate").value = "";
-            document.getElementById("jobDesc").value = "";
-            document.getElementById("jobForm").style.display = "none";
-            alert("Job added!");
-          });
-
-        // Scheme
-        document
-          .getElementById("showSchemeFormBtn")
-          .addEventListener("click", function () {
-            const form = document.getElementById("schemeForm");
-            form.style.display =
-              form.style.display === "none" ? "grid" : "none";
-          });
-        document
-          .getElementById("saveSchemeBtn")
-          .addEventListener("click", function () {
-            const name = document.getElementById("schemeName").value.trim();
-            if (!name) return alert("Scheme name required.");
-            const newScheme = {
-              name,
-              eligibility: document
-                .getElementById("schemeEligibility")
-                .value.trim(),
-              desc: document.getElementById("schemeDesc").value.trim(),
-              lastDate: document.getElementById("schemeLastDate").value,
-            };
-            schemes.push(newScheme);
-            renderSchemes();
-            document.getElementById("schemeName").value = "";
-            document.getElementById("schemeEligibility").value = "";
-            document.getElementById("schemeDesc").value = "";
-            document.getElementById("schemeLastDate").value = "";
-            document.getElementById("schemeForm").style.display = "none";
-            alert("Scheme added!");
-          });
-
-        // Form Upload
-        document
-          .getElementById("showFormUploadBtn")
-          .addEventListener("click", function () {
-            const form = document.getElementById("formUpload");
-            form.style.display =
-              form.style.display === "none" ? "grid" : "none";
-          });
-        document
-          .getElementById("saveFormBtn")
-          .addEventListener("click", function () {
-            const name = document.getElementById("formName").value.trim();
-            const file = document.getElementById("formFile").value.trim();
-            if (!name || !file)
-              return alert("Form name and file name are required.");
-            const newForm = {
-              name,
-              category: document.getElementById("formCategory").value,
-              status: document.getElementById("formStatus").value,
-              file,
-            };
-            formsList.push(newForm);
-            renderForms();
-            document.getElementById("formName").value = "";
-            document.getElementById("formFile").value = "";
-            document.getElementById("formUpload").style.display = "none";
-            alert("Form uploaded!");
-          });
-
-        // -------------------- INITIAL RENDER --------------------
-        renderServices();
-        renderPrices();
-        renderAnnouncements();
-        renderJobs();
-        renderSchemes();
-        renderAppointments();
-        renderInquiries();
-        renderForms();
-
-        // Default section: dashboard (already active)
-        // Set page title
-        pageTitle.textContent = "Dashboard";
-
-        // Expose showSection for console debugging (optional)
-        window.showSection = showSection;
-      })();
+    <!-- ===== Bootstrap JS ===== -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
     </script>
+
+    <script>
+        (function() {
+            "use strict";
+
+            // ----- Sidebar navigation -----
+            const navLinks = document.querySelectorAll(".sidebar nav ul li a");
+            const sections = document.querySelectorAll(".section");
+            const pageTitle = document.getElementById("pageTitle");
+
+            function showSection(sectionId) {
+                sections.forEach(sec => sec.classList.remove("active"));
+                const target = document.getElementById("section-" + sectionId);
+                if (target) target.classList.add("active");
+
+                navLinks.forEach(link => link.classList.remove("active"));
+                navLinks.forEach(link => {
+                    if (link.dataset.section === sectionId) link.classList.add("active");
+                });
+
+                const titles = {
+                    dashboard: "Dashboard",
+                    services: "Manage Services",
+                    prices: "Update Prices",
+                    announcements: "Announcements",
+                    jobs: "Job Notifications",
+                    schemes: "Government Schemes",
+                    appointments: "Appointments",
+                    inquiries: "Inquiries",
+                    forms: "Upload Forms",
+                    users: "User Management",
+                    gallery: "Gallery",
+                    settings: "Settings",
+                };
+                pageTitle.textContent = titles[sectionId] || "Dashboard";
+                document.getElementById("sidebar").classList.remove("open");
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    showSection(this.dataset.section);
+                });
+            });
+
+            // ----- Hamburger toggle -----
+            document.getElementById("hamburgerBtn").addEventListener("click", function() {
+                document.getElementById("sidebar").classList.toggle("open");
+            });
+
+            // ----- Edit service: populate inline edit form -----
+            window.editService = function(id, name, category, description, active, icon) {
+                document.getElementById("editServiceId").value = id;
+                document.getElementById("editSvcName").value = name;
+                document.getElementById("editSvcCategory").value = category;
+                document.getElementById("editSvcDesc").value = description;
+                document.getElementById("editSvcStatus").value = active === 'true' ? 'true' : 'false';
+                document.getElementById("editSvcIcon").value = icon || '';
+                document.getElementById("editServiceForm").style.display = "grid";
+                document.getElementById("editServiceForm").scrollIntoView({ behavior: 'smooth' });
+            };
+
+            // ----- Cancel edit service -----
+            document.querySelector("#editServiceForm .btn-outline").addEventListener("click", function() {
+                document.getElementById("editServiceForm").style.display = "none";
+            });
+
+            // ----- Start with dashboard active -----
+            showSection("dashboard");
+
+        })();
+    </script>
+
 </body>
 </html>
+

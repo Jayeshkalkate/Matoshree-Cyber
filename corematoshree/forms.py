@@ -172,3 +172,44 @@ class ReviewForm(forms.ModelForm):
             )
 
         return rating
+    
+# ------------------------------
+# Dashboard ModelForms
+# ------------------------------
+from .models import Service, Announcement, JobNotification, GovernmentScheme, Appointment, Contact, DownloadForm
+
+class ServiceForm(forms.ModelForm):
+    class Meta:
+        model = Service
+        fields = ['name', 'category', 'description', 'active', 'icon']
+
+class AnnouncementForm(forms.ModelForm):
+    class Meta:
+        model = Announcement
+        fields = ['title', 'category', 'description']
+
+class JobNotificationForm(forms.ModelForm):
+    class Meta:
+        model = JobNotification
+        fields = ['title', 'organization', 'last_date', 'apply_link', 'description']
+
+class GovernmentSchemeForm(forms.ModelForm):
+    class Meta:
+        model = GovernmentScheme
+        fields = ['title', 'description', 'eligibility', 'last_date']
+
+class AppointmentForm(forms.ModelForm):
+    class Meta:
+        model = Appointment
+        fields = ['full_name', 'phone', 'email', 'service', 'appointment_date', 'appointment_time', 'message', 'status']
+
+class ContactFormDashboard(forms.ModelForm):
+    class Meta:
+        model = Contact
+        fields = ['name', 'email', 'phone', 'subject', 'message', 'replied']
+
+class DownloadFormForm(forms.ModelForm):
+    class Meta:
+        model = DownloadForm
+        fields = ['title', 'category', 'pdf']
+        
