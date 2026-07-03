@@ -535,14 +535,23 @@
     </footer>
 
     <!-- ===== FLOATING WHATSAPP ===== -->
-    {% with whatsapp_number= business.whatsapp|default:"919876543210"|cut:"+" %}
+    {% comment %} {% with whatsapp_number= business.whatsapp|default:"919876543210"|cut:"+" %}
     <a href="https://wa.me/{{ business.whatsapp|default:'919876543210'|cut:'+' }}?text=Hello"
        target="_blank"
        class="whatsapp-float"
        aria-label="Chat on WhatsApp">
        <i class="fab fa-whatsapp"></i>
     </a>
-    {% endwith %}
+    {% endwith %} {% endcomment %}
+
+    
+    <!-- ===== FLOATING WHATSAPP ===== -->
+    <a href="https://wa.me/{{ business.whatsapp|default:'919876543210'|cut:'+' }}?text=Hello"
+       target="_blank"
+       class="whatsapp-float"
+       aria-label="Chat on WhatsApp">
+       <i class="fab fa-whatsapp"></i>
+    </a>
 
     <!-- ===== SCRIPTS ===== -->
     <script>
