@@ -1,5 +1,8 @@
-{% extends "base.html" %} {% load i18n %} {% load static %} {% block extra_head
-%}
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block extra_head %}
 <!-- Page-specific styles for Appointment -->
 <style>
   /* ===== APPOINTMENT CARD ===== */
@@ -272,7 +275,9 @@
     }
   }
 </style>
-{% endblock %} {% block content %}
+{% endblock extra_head %}
+
+{% block content %}
 <!-- ===== APPOINTMENT SECTION ===== -->
 <section class="appointment-wrapper">
   <div class="appointment-card" id="appointmentCard">
@@ -282,8 +287,7 @@
       <h1>{% trans "Book an Appointment" %}</h1>
     </div>
     <div class="subhead">
-      {% trans "Select your service, choose a date &amp; time, and we’ll confirm
-      your visit." %}
+      {% trans "Select your service, choose a date &amp; time, and we’ll confirm your visit." %}
     </div>
 
     <!-- ===== FORM ===== -->
@@ -293,7 +297,8 @@
       novalidate
       id="appointmentForm"
     >
-      {% csrf_token %} {{ form.non_field_errors }}
+      {% csrf_token %}
+      {{ form.non_field_errors }}
 
       <!-- Full Name -->
       <div class="form-group" id="nameGroup">
@@ -301,7 +306,8 @@
           <i class="fas fa-user"></i> {% trans "Full Name" %}
           <span class="required-star">*</span>
         </label>
-        {{ form.full_name }} {% if form.full_name.errors %}
+        {{ form.full_name }}
+        {% if form.full_name.errors %}
         <div class="error-message">{{ form.full_name.errors }}</div>
         {% endif %}
       </div>
@@ -326,7 +332,8 @@
         <label for="{{ form.email.id_for_label }}">
           <i class="fas fa-envelope"></i> {% trans "Email Address" %}
         </label>
-        {{ form.email }} {% if form.email.errors %}
+        {{ form.email }}
+        {% if form.email.errors %}
         <div class="error-message">{{ form.email.errors }}</div>
         {% endif %}
       </div>
@@ -337,7 +344,8 @@
           <i class="fas fa-concierge-bell"></i> {% trans "Service" %}
           <span class="required-star">*</span>
         </label>
-        {{ form.service }} {% if form.service.errors %}
+        {{ form.service }}
+        {% if form.service.errors %}
         <div class="error-message">{{ form.service.errors }}</div>
         {% endif %}
       </div>
@@ -348,7 +356,8 @@
           <i class="fas fa-calendar-day"></i> {% trans "Appointment Date" %}
           <span class="required-star">*</span>
         </label>
-        {{ form.appointment_date }} {% if form.appointment_date.errors %}
+        {{ form.appointment_date }}
+        {% if form.appointment_date.errors %}
         <div class="error-message">{{ form.appointment_date.errors }}</div>
         {% endif %}
       </div>
@@ -359,7 +368,8 @@
           <i class="fas fa-clock"></i> {% trans "Appointment Time" %}
           <span class="required-star">*</span>
         </label>
-        {{ form.appointment_time }} {% if form.appointment_time.errors %}
+        {{ form.appointment_time }}
+        {% if form.appointment_time.errors %}
         <div class="error-message">{{ form.appointment_time.errors }}</div>
         {% endif %}
       </div>
@@ -369,7 +379,8 @@
         <label for="{{ form.message.id_for_label }}">
           <i class="fas fa-comment"></i> {% trans "Additional Message" %}
         </label>
-        {{ form.message }} {% if form.message.errors %}
+        {{ form.message }}
+        {% if form.message.errors %}
         <div class="error-message">{{ form.message.errors }}</div>
         {% endif %}
       </div>
@@ -387,24 +398,20 @@
     </div>
   </div>
 </section>
-{% endblock %} {% block extra_scripts %}
+{% endblock content %}
+
+{% block extra_scripts %}
 <script>
   (function () {
     "use strict";
 
     // DOM refs
     const form = document.getElementById("appointmentForm");
-    const fullName = document.getElementById(
-      "{{ form.full_name.id_for_label }}",
-    );
+    const fullName = document.getElementById("{{ form.full_name.id_for_label }}");
     const phone = document.getElementById("{{ form.phone.id_for_label }}");
     const service = document.getElementById("{{ form.service.id_for_label }}");
-    const dateInput = document.getElementById(
-      "{{ form.appointment_date.id_for_label }}",
-    );
-    const timeInput = document.getElementById(
-      "{{ form.appointment_time.id_for_label }}",
-    );
+    const dateInput = document.getElementById("{{ form.appointment_date.id_for_label }}");
+    const timeInput = document.getElementById("{{ form.appointment_time.id_for_label }}");
     const bookBtn = document.getElementById("bookBtn");
 
     const nameGroup = document.getElementById("nameGroup");
@@ -426,7 +433,7 @@
     // Clear all error states
     function clearErrors() {
       [nameGroup, phoneGroup, serviceGroup, dateGroup, timeGroup].forEach((g) =>
-        g.classList.remove("error"),
+        g.classList.remove("error")
       );
     }
 
@@ -486,10 +493,7 @@
     // Phone input: only digits, max 10
     phone.addEventListener("input", function () {
       this.value = this.value.replace(/\D/g, "").slice(0, 10);
-      if (
-        phoneGroup.classList.contains("error") &&
-        /^[0-9]{10}$/.test(this.value)
-      ) {
+      if (phoneGroup.classList.contains("error") && /^[0-9]{10}$/.test(this.value)) {
         phoneGroup.classList.remove("error");
       }
     });
@@ -531,8 +535,7 @@
       }
       // Disable button to prevent double submit
       bookBtn.disabled = true;
-      bookBtn.innerHTML =
-        '<i class="fas fa-spinner fa-spin"></i> {% trans "Booking…"|escapejs %}';
+      bookBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {% trans "Booking…"|escapejs %}';
     });
 
     // Prevent past dates on blur
@@ -548,9 +551,7 @@
       }
     });
 
-    console.log(
-      "📅 Appointment page ready — future dates only, 10-digit mobile validation.",
-    );
+    console.log("📅 Appointment page ready — future dates only, 10-digit mobile validation.");
   })();
 </script>
-{% endblock %}
+{% endblock extra_scripts %}
