@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-04 15:21+0530\n"
+"POT-Creation-Date: 2026-07-04 16:37+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,8 +23,8 @@ msgstr ""
 #: .\corematoshree\forms.py:258 .\corematoshree\forms.py:272
 #: .\corematoshree\forms.py:331 .\corematoshree\models.py:95
 #: .\corematoshree\models.py:151 .\corematoshree\models.py:191
-#: .\corematoshree\models.py:480 .\templates\contactus.html:349
-#: .\templates\customer_reviews.html:713
+#: .\corematoshree\models.py:480 .\templates\contactus.html:360
+#: .\templates\customer_reviews.html:722
 #: .\templates\superadmindashboard.html:1060
 msgid "Email"
 msgstr ""
@@ -34,13 +34,13 @@ msgstr ""
 #: .\corematoshree\forms.py:257 .\corematoshree\forms.py:273
 #: .\corematoshree\forms.py:329 .\corematoshree\models.py:24
 #: .\corematoshree\models.py:90 .\corematoshree\models.py:154
-#: .\corematoshree\models.py:470 .\templates\contactus.html:327
+#: .\corematoshree\models.py:470 .\templates\contactus.html:338
 msgid "Phone"
 msgstr ""
 
 #: .\corematoshree\forms.py:24 .\corematoshree\forms.py:54
 #: .\corematoshree\forms.py:328 .\corematoshree\models.py:29
-#: .\corematoshree\models.py:467 .\templates\contactus.html:317
+#: .\corematoshree\models.py:467 .\templates\contactus.html:324
 msgid "Address"
 msgstr ""
 
@@ -73,29 +73,29 @@ msgstr ""
 
 #: .\corematoshree\forms.py:74 .\corematoshree\forms.py:92
 #: .\corematoshree\forms.py:274 .\corematoshree\models.py:159
-#: .\templates\contactus.html:286
+#: .\templates\contactus.html:290
 msgid "Subject"
 msgstr ""
 
 #: .\corematoshree\forms.py:75 .\corematoshree\forms.py:262
 #: .\corematoshree\forms.py:275 .\corematoshree\models.py:110
-#: .\corematoshree\models.py:163 .\templates\contactus.html:292
+#: .\corematoshree\models.py:163 .\templates\contactus.html:298
 msgid "Message"
 msgstr ""
 
 #: .\corematoshree\forms.py:80 .\corematoshree\forms.py:169
-#: .\corematoshree\forms.py:177 .\templates\contactus.html:268
+#: .\corematoshree\forms.py:177 .\templates\contactus.html:266
 msgid "Your Name"
 msgstr ""
 
 #: .\corematoshree\forms.py:84 .\corematoshree\forms.py:136
 #: .\corematoshree\forms.py:170 .\corematoshree\forms.py:181
-#: .\templates\appointment.html:331 .\templates\contactus.html:274
+#: .\templates\appointment.html:327 .\templates\contactus.html:274
 msgid "Email Address"
 msgstr ""
 
 #: .\corematoshree\forms.py:88 .\corematoshree\forms.py:132
-#: .\templates\appointment.html:316 .\templates\contactus.html:280
+#: .\templates\appointment.html:312 .\templates\contactus.html:282
 msgid "Phone Number"
 msgstr ""
 
@@ -105,7 +105,7 @@ msgstr ""
 
 #: .\corematoshree\forms.py:117 .\corematoshree\forms.py:128
 #: .\corematoshree\forms.py:256 .\corematoshree\models.py:86
-#: .\templates\appointment.html:305 .\templates\customer_reviews.html:703
+#: .\templates\appointment.html:301 .\templates\customer_reviews.html:713
 msgid "Full Name"
 msgstr ""
 
@@ -113,9 +113,9 @@ msgstr ""
 #: .\corematoshree\forms.py:297 .\corematoshree\models.py:101
 #: .\corematoshree\models.py:296 .\corematoshree\models.py:318
 #: .\templates\admindashboard.html:306 .\templates\admindashboard.html:336
-#: .\templates\admindashboard.html:477 .\templates\appointment.html:341
-#: .\templates\required_document.html:209 .\templates\service_charges.html:397
-#: .\templates\service_charges.html:416
+#: .\templates\admindashboard.html:477 .\templates\appointment.html:337
+#: .\templates\required_document.html:205 .\templates\service_charges.html:410
+#: .\templates\service_charges.html:442
 #: .\templates\superadmindashboard.html:766
 #: .\templates\superadmindashboard.html:796
 #: .\templates\superadmindashboard.html:947
@@ -123,16 +123,16 @@ msgid "Service"
 msgstr ""
 
 #: .\corematoshree\forms.py:121 .\corematoshree\forms.py:260
-#: .\corematoshree\models.py:104 .\templates\appointment.html:352
+#: .\corematoshree\models.py:104 .\templates\appointment.html:348
 msgid "Appointment Date"
 msgstr ""
 
 #: .\corematoshree\forms.py:122 .\corematoshree\forms.py:261
-#: .\corematoshree\models.py:107 .\templates\appointment.html:363
+#: .\corematoshree\models.py:107 .\templates\appointment.html:359
 msgid "Appointment Time"
 msgstr ""
 
-#: .\corematoshree\forms.py:123 .\templates\appointment.html:374
+#: .\corematoshree\forms.py:123 .\templates\appointment.html:370
 msgid "Additional Message"
 msgstr ""
 
@@ -146,7 +146,7 @@ msgid "Review"
 msgstr ""
 
 #: .\corematoshree\forms.py:172 .\corematoshree\models.py:199
-#: .\templates\customer_reviews.html:722
+#: .\templates\customer_reviews.html:730
 msgid "Rating"
 msgstr ""
 
@@ -256,7 +256,7 @@ msgid "Welcome Message"
 msgstr ""
 
 #: .\corematoshree\forms.py:330 .\corematoshree\models.py:475
-#: .\templates\contactus.html:336
+#: .\templates\contactus.html:347
 msgid "WhatsApp"
 msgstr ""
 
@@ -265,7 +265,7 @@ msgid "Google Map"
 msgstr ""
 
 #: .\corematoshree\forms.py:333 .\corematoshree\models.py:487
-#: .\templates\contactus.html:359
+#: .\templates\contactus.html:370
 msgid "Business Hours"
 msgstr ""
 
@@ -278,7 +278,7 @@ msgstr ""
 msgid "Admin"
 msgstr ""
 
-#: .\corematoshree\models.py:15 .\templates\base.html:922
+#: .\corematoshree\models.py:15 .\templates\base.html:489
 #: .\templates\superadmindashboard.html:588
 #: .\templates\superadmindashboard.html:1085
 msgid "Super Admin"
@@ -334,7 +334,7 @@ msgstr ""
 msgid "Appointment date cannot be in the past."
 msgstr ""
 
-#: .\corematoshree\models.py:176 .\templates\base.html:911
+#: .\corematoshree\models.py:176 .\templates\base.html:478
 msgid "Contact"
 msgstr ""
 
@@ -380,9 +380,8 @@ msgstr ""
 
 #: .\corematoshree\models.py:251 .\templates\admindashboard.html:135
 #: .\templates\admindashboard.html:358 .\templates\admindashboard.html:656
-#: .\templates\announcements.html:393 .\templates\base.html:905
-#: .\templates\government_schemes.html:879 .\templates\homepage.html:907
-#: .\templates\superadmindashboard.html:564
+#: .\templates\announcements.html:388 .\templates\base.html:472
+#: .\templates\homepage.html:919 .\templates\superadmindashboard.html:564
 #: .\templates\superadmindashboard.html:820
 #: .\templates\superadmindashboard.html:1189
 msgid "Announcements"
@@ -421,7 +420,7 @@ msgid "Service Charge"
 msgstr ""
 
 #: .\corematoshree\models.py:306 .\templates\admindashboard.html:288
-#: .\templates\base.html:893 .\templates\service_charges.html:395
+#: .\templates\base.html:460 .\templates\service_charges.html:408
 #: .\templates\superadmindashboard.html:748
 msgid "Service Charges"
 msgstr ""
@@ -430,11 +429,11 @@ msgstr ""
 msgid "Document Name"
 msgstr ""
 
-#: .\corematoshree\models.py:326 .\templates\required_document.html:210
+#: .\corematoshree\models.py:326 .\templates\required_document.html:206
 msgid "Required Document"
 msgstr ""
 
-#: .\corematoshree\models.py:327 .\templates\base.html:891
+#: .\corematoshree\models.py:327 .\templates\base.html:458
 msgid "Required Documents"
 msgstr ""
 
@@ -446,12 +445,13 @@ msgstr ""
 msgid "Download Form"
 msgstr ""
 
-#: .\corematoshree\models.py:355 .\templates\base.html:892
+#: .\corematoshree\models.py:355 .\templates\base.html:459
 msgid "Download Forms"
 msgstr ""
 
 #: .\corematoshree\models.py:389 .\templates\admindashboard.html:434
-#: .\templates\admindashboard.html:658 .\templates\base.html:906
+#: .\templates\admindashboard.html:658 .\templates\base.html:473
+#: .\templates\government_schemes.html:265
 #: .\templates\superadmindashboard.html:900
 #: .\templates\superadmindashboard.html:1191
 msgid "Government Schemes"
@@ -467,7 +467,7 @@ msgstr ""
 
 #: .\corematoshree\models.py:425 .\templates\admindashboard.html:136
 #: .\templates\admindashboard.html:396 .\templates\admindashboard.html:657
-#: .\templates\base.html:907 .\templates\superadmindashboard.html:565
+#: .\templates\base.html:474 .\templates\superadmindashboard.html:565
 #: .\templates\superadmindashboard.html:860
 #: .\templates\superadmindashboard.html:1190
 msgid "Job Notifications"
@@ -481,7 +481,7 @@ msgstr ""
 msgid "Answer"
 msgstr ""
 
-#: .\corematoshree\models.py:443 .\templates\base.html:903
+#: .\corematoshree\models.py:443 .\templates\base.html:470
 msgid "FAQ"
 msgstr ""
 
@@ -497,338 +497,231 @@ msgstr ""
 msgid "Business Information"
 msgstr ""
 
-#: .\templates\aboutus.html:707 .\templates\base.html:883
+#: .\templates\aboutus.html:702 .\templates\base.html:450
+#: .\templates\government_schemes.html:263
 msgid "Home"
 msgstr ""
 
-#: .\templates\aboutus.html:709
+#: .\templates\aboutus.html:704
 msgid "About Us"
 msgstr ""
 
-#: .\templates\aboutus.html:711 .\templates\base.html:884
+#: .\templates\aboutus.html:706 .\templates\base.html:451
 msgid "About"
 msgstr ""
 
-#: .\templates\aboutus.html:711
+#: .\templates\aboutus.html:706
 msgid "CyberTech"
 msgstr ""
 
-#: .\templates\aboutus.html:713
-msgid ""
-"Your trusted partner for digital services, government applications, and "
-"document solutions — built on experience, integrity, and customer care."
-msgstr ""
-
-#: .\templates\aboutus.html:722
+#: .\templates\aboutus.html:719
 msgid "Who"
 msgstr ""
 
-#: .\templates\aboutus.html:722
+#: .\templates\aboutus.html:719
 msgid "We Are"
 msgstr ""
 
-#: .\templates\aboutus.html:724
+#: .\templates\aboutus.html:721
 msgid "Trusted Cyber Café &amp; Digital Service Center"
 msgstr ""
 
-#: .\templates\aboutus.html:727
+#: .\templates\aboutus.html:724
 msgid "CyberTech Digital Services"
 msgstr ""
 
-#: .\templates\aboutus.html:727
-msgid ""
-"is a trusted cyber café and digital service center dedicated to providing "
-"fast, reliable, and affordable online services. We help customers with "
-"government applications, printing, scanning, document services, and various "
-"digital solutions under one roof."
-msgstr ""
-
-#: .\templates\aboutus.html:730
-msgid ""
-"Our mission is to bridge the digital divide by making essential online "
-"services accessible to everyone — from students and job seekers to business "
-"owners and senior citizens."
-msgstr ""
-
-#: .\templates\aboutus.html:736
+#: .\templates\aboutus.html:739
 msgid "Years of Excellence"
 msgstr ""
 
-#: .\templates\aboutus.html:740 .\templates\government_schemes.html:743
-#: .\templates\homepage.html:767
+#: .\templates\aboutus.html:743 .\templates\homepage.html:771
 msgid "Happy Customers"
 msgstr ""
 
-#: .\templates\aboutus.html:744
+#: .\templates\aboutus.html:747
 msgid "Services Offered"
 msgstr ""
 
-#: .\templates\aboutus.html:755
-msgid "8+ Years of Experience"
-msgstr ""
-
-#: .\templates\aboutus.html:757
+#: .\templates\aboutus.html:762
 msgid "Decades of"
 msgstr ""
 
-#: .\templates\aboutus.html:757
+#: .\templates\aboutus.html:762
 msgid "Digital Service"
 msgstr ""
 
-#: .\templates\aboutus.html:757
-msgid "Excellence"
-msgstr ""
-
-#: .\templates\aboutus.html:759
+#: .\templates\aboutus.html:766
 msgid ""
-"We have over <strong>8 years of experience</strong> in providing digital and "
-"online services. Our experienced staff ensures every service is completed "
-"accurately and efficiently. From government form submissions to document "
-"processing, we've handled thousands of applications with precision."
+"We have over <strong>8 years of experience</strong> in\n"
+"        providing digital and online services. Our experienced staff "
+"ensures\n"
+"        every service is completed accurately and efficiently. From "
+"government\n"
+"        form submissions to document processing, we've handled thousands of\n"
+"        applications with precision."
 msgstr ""
 
-#: .\templates\aboutus.html:762
-msgid ""
-"Our team stays updated with the latest government portals, application "
-"procedures, and digital tools to ensure you get the best possible service "
-"every time."
-msgstr ""
-
-#: .\templates\aboutus.html:769
-msgid ""
-"We combine technical expertise with a customer-first approach to deliver "
-"results you can count on."
-msgstr ""
-
-#: .\templates\aboutus.html:774
+#: .\templates\aboutus.html:788
 msgid "Your Trusted Digital Partner"
 msgstr ""
 
-#: .\templates\aboutus.html:775
+#: .\templates\aboutus.html:789
 msgid "Reliable · Fast · Transparent · Secure"
 msgstr ""
 
-#: .\templates\aboutus.html:784 .\templates\gallery.html:403
-#: .\templates\government_schemes.html:768
-#: .\templates\government_schemes.html:793 .\templates\homepage.html:791
-#: .\templates\homepage.html:822 .\templates\service_charges.html:406
-#: .\templates\services.html:432
+#: .\templates\aboutus.html:799 .\templates\gallery.html:403
+#: .\templates\homepage.html:797 .\templates\homepage.html:830
+#: .\templates\service_charges.html:422 .\templates\services.html:453
 msgid "Our"
 msgstr ""
 
-#: .\templates\aboutus.html:784
+#: .\templates\aboutus.html:799
 msgid "Complete"
 msgstr ""
 
-#: .\templates\aboutus.html:784
-msgid "Service List"
-msgstr ""
-
-#: .\templates\aboutus.html:786
-msgid ""
-"Everything you need, all under one roof — from government applications to "
-"document services."
-msgstr ""
-
-#: .\templates\aboutus.html:792
+#: .\templates\aboutus.html:810
 msgid "Online Government Applications"
 msgstr ""
 
-#: .\templates\aboutus.html:796
+#: .\templates\aboutus.html:814
 msgid "Aadhaar Assistance"
 msgstr ""
 
-#: .\templates\aboutus.html:800
+#: .\templates\aboutus.html:818
 msgid "PAN Card Services"
 msgstr ""
 
-#: .\templates\aboutus.html:804
+#: .\templates\aboutus.html:822
 msgid "Passport Application Support"
 msgstr ""
 
-#: .\templates\aboutus.html:808
+#: .\templates\aboutus.html:826
 msgid "Printing (B&amp;W &amp; Color)"
 msgstr ""
 
-#: .\templates\aboutus.html:812
+#: .\templates\aboutus.html:830
 msgid "Photocopy (Xerox)"
 msgstr ""
 
-#: .\templates\aboutus.html:816
+#: .\templates\aboutus.html:834
 msgid "Document Scanning"
 msgstr ""
 
-#: .\templates\aboutus.html:820
+#: .\templates\aboutus.html:838
 msgid "Email &amp; Internet Services"
 msgstr ""
 
-#: .\templates\aboutus.html:824
+#: .\templates\aboutus.html:842
 msgid "Resume / Biodata Creation"
 msgstr ""
 
-#: .\templates\aboutus.html:828 .\templates\government_schemes.html:723
-#: .\templates\homepage.html:747
+#: .\templates\aboutus.html:846 .\templates\homepage.html:750
 msgid "Lamination"
 msgstr ""
 
-#: .\templates\aboutus.html:832
+#: .\templates\aboutus.html:850
 msgid "Passport-size Photo Printing"
 msgstr ""
 
-#: .\templates\aboutus.html:836
+#: .\templates\aboutus.html:854
 msgid "Online Bill Payments"
 msgstr ""
 
-#: .\templates\aboutus.html:840
+#: .\templates\aboutus.html:858
 msgid "Exam &amp; Admission Form Filling"
 msgstr ""
 
-#: .\templates\aboutus.html:844
+#: .\templates\aboutus.html:862
 msgid "Document Attestation &amp; Notary"
 msgstr ""
 
-#: .\templates\aboutus.html:848
+#: .\templates\aboutus.html:866
 msgid "Digital Signature &amp; e-Sign"
 msgstr ""
 
-#: .\templates\aboutus.html:852
+#: .\templates\aboutus.html:870
 msgid "Cloud Storage &amp; Data Transfer"
 msgstr ""
 
-#: .\templates\aboutus.html:862
+#: .\templates\aboutus.html:880
 msgid "Why"
 msgstr ""
 
-#: .\templates\aboutus.html:862
+#: .\templates\aboutus.html:880
 msgid "Trust Us"
 msgstr ""
 
-#: .\templates\aboutus.html:864
-msgid ""
-"We are committed to providing honest, secure, and customer-friendly services."
-msgstr ""
-
-#: .\templates\aboutus.html:870
+#: .\templates\aboutus.html:889
 msgid "Experienced Staff"
 msgstr ""
 
-#: .\templates\aboutus.html:872
-msgid ""
-"Our team has deep knowledge of government portals and digital tools to "
-"handle every application with care."
-msgstr ""
-
-#: .\templates\aboutus.html:877
+#: .\templates\aboutus.html:897
 msgid "Fast &amp; Accurate Service"
 msgstr ""
 
-#: .\templates\aboutus.html:879
-msgid ""
-"We value your time. Our processes are optimized for speed without "
-"compromising on accuracy or quality."
-msgstr ""
-
-#: .\templates\aboutus.html:884
+#: .\templates\aboutus.html:905
 msgid "Transparent Pricing"
 msgstr ""
 
-#: .\templates\aboutus.html:886
-msgid ""
-"No hidden charges, no surprise fees. We believe in clear, upfront pricing so "
-"you know exactly what to expect."
-msgstr ""
-
-#: .\templates\aboutus.html:891
+#: .\templates\aboutus.html:913
 msgid "Customer Satisfaction"
 msgstr ""
 
-#: .\templates\aboutus.html:893
-msgid ""
-"Your happiness is our priority. We go the extra mile to ensure every "
-"customer walks away satisfied."
-msgstr ""
-
-#: .\templates\aboutus.html:898
+#: .\templates\aboutus.html:921
 msgid "Data Privacy &amp; Security"
 msgstr ""
 
-#: .\templates\aboutus.html:900
-msgid ""
-"We treat your personal information with the utmost confidentiality. Your "
-"data is safe with us."
-msgstr ""
-
-#: .\templates\aboutus.html:905
+#: .\templates\aboutus.html:929
 msgid "Friendly Customer Support"
 msgstr ""
 
-#: .\templates\aboutus.html:907
-msgid ""
-"From the moment you walk in to the completion of your service, we offer "
-"warm, helpful support at every step."
-msgstr ""
-
-#: .\templates\aboutus.html:919
+#: .\templates\aboutus.html:945
 msgid "Authorized"
 msgstr ""
 
-#: .\templates\aboutus.html:919
+#: .\templates\aboutus.html:945
 msgid "Service Provider"
 msgstr ""
 
-#: .\templates\aboutus.html:921
+#: .\templates\aboutus.html:948
 msgid "Officially recognized for excellence in digital services"
 msgstr ""
 
-#: .\templates\aboutus.html:926
+#: .\templates\aboutus.html:953
 msgid "XYZ Digital Services"
 msgstr ""
 
-#: .\templates\aboutus.html:930
+#: .\templates\aboutus.html:957
 msgid "ABC Government Service Center"
 msgstr ""
 
-#: .\templates\aboutus.html:934
+#: .\templates\aboutus.html:961
 msgid "Registration No.: 123456789"
 msgstr ""
 
-#: .\templates\aboutus.html:939
-msgid ""
-"This section is displayed only when official authorization is valid and "
-"verifiable."
-msgstr ""
-
-#: .\templates\aboutus.html:948 .\templates\gallery.html:465
-#: .\templates\jobs.html:428
+#: .\templates\aboutus.html:977 .\templates\gallery.html:465
+#: .\templates\jobs.html:464
 msgid "Ready to"
 msgstr ""
 
-#: .\templates\aboutus.html:948 .\templates\gallery.html:465
+#: .\templates\aboutus.html:977 .\templates\gallery.html:465
 msgid "Experience"
 msgstr ""
 
-#: .\templates\aboutus.html:948
-msgid "the Difference?"
-msgstr ""
-
-#: .\templates\aboutus.html:949 .\templates\gallery.html:466
-msgid "Visit us today or reach out to get started with any of our services."
-msgstr ""
-
-#: .\templates\aboutus.html:952 .\templates\announcements.html:478
+#: .\templates\aboutus.html:986 .\templates\announcements.html:475
 #: .\templates\download_forms.html:431 .\templates\gallery.html:469
-#: .\templates\government_schemes.html:702 .\templates\homepage.html:726
-#: .\templates\jobs.html:434 .\templates\required_document.html:257
-#: .\templates\service_charges.html:466 .\templates\services.html:494
+#: .\templates\government_schemes.html:324 .\templates\homepage.html:729
+#: .\templates\jobs.html:473 .\templates\required_document.html:260
+#: .\templates\service_charges.html:511 .\templates\services.html:538
 msgid "Contact Us"
 msgstr ""
 
-#: .\templates\aboutus.html:959 .\templates\announcements.html:485
-#: .\templates\base.html:995 .\templates\contactus.html:489
+#: .\templates\aboutus.html:993 .\templates\announcements.html:482
+#: .\templates\base.html:562 .\templates\contactus.html:502
 #: .\templates\download_forms.html:438 .\templates\gallery.html:476
-#: .\templates\government_schemes.html:868 .\templates\homepage.html:896
-#: .\templates\jobs.html:437 .\templates\required_document.html:264
-#: .\templates\service_charges.html:469 .\templates\services.html:497
+#: .\templates\government_schemes.html:331 .\templates\homepage.html:908
+#: .\templates\jobs.html:481 .\templates\required_document.html:267
+#: .\templates\service_charges.html:519 .\templates\services.html:546
 msgid "Chat on WhatsApp"
 msgstr ""
 
@@ -842,7 +735,7 @@ msgstr ""
 
 #: .\templates\admindashboard.html:132 .\templates\admindashboard.html:154
 #: .\templates\admindashboard.html:653 .\templates\admindashboard.html:665
-#: .\templates\base.html:919 .\templates\superadmindashboard.html:561
+#: .\templates\base.html:486 .\templates\superadmindashboard.html:561
 #: .\templates\superadmindashboard.html:585
 #: .\templates\superadmindashboard.html:1186
 #: .\templates\superadmindashboard.html:1199
@@ -881,9 +774,9 @@ msgid "Upload Forms"
 msgstr ""
 
 #: .\templates\admindashboard.html:141 .\templates\admindashboard.html:662
-#: .\templates\base.html:897 .\templates\gallery.html:403
-#: .\templates\gallery.html:416 .\templates\government_schemes.html:793
-#: .\templates\homepage.html:822 .\templates\superadmindashboard.html:571
+#: .\templates\base.html:464 .\templates\gallery.html:403
+#: .\templates\gallery.html:416 .\templates\homepage.html:830
+#: .\templates\superadmindashboard.html:571
 #: .\templates\superadmindashboard.html:1196
 msgid "Gallery"
 msgstr ""
@@ -894,17 +787,15 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: .\templates\admindashboard.html:145 .\templates\base.html:927
+#: .\templates\admindashboard.html:145 .\templates\base.html:494
 #: .\templates\superadmindashboard.html:575
 msgid "Logout"
 msgstr ""
 
-#: .\templates\admindashboard.html:167 .\templates\base.html:888
-#: .\templates\government_schemes.html:746
-#: .\templates\government_schemes.html:768 .\templates\homepage.html:771
-#: .\templates\homepage.html:791 .\templates\services.html:430
-#: .\templates\services.html:432 .\templates\services.html:437
-#: .\templates\superadmindashboard.html:602
+#: .\templates\admindashboard.html:167 .\templates\base.html:455
+#: .\templates\homepage.html:775 .\templates\homepage.html:797
+#: .\templates\services.html:451 .\templates\services.html:453
+#: .\templates\services.html:461 .\templates\superadmindashboard.html:602
 msgid "Services"
 msgstr ""
 
@@ -956,7 +847,8 @@ msgstr ""
 msgid "Service Name"
 msgstr ""
 
-#: .\templates\admindashboard.html:256 .\templates\superadmindashboard.html:714
+#: .\templates\admindashboard.html:256 .\templates\government_schemes.html:267
+#: .\templates\superadmindashboard.html:714
 msgid "Government"
 msgstr ""
 
@@ -998,7 +890,7 @@ msgid "Add Charge"
 msgstr ""
 
 #: .\templates\admindashboard.html:306 .\templates\admindashboard.html:344
-#: .\templates\service_charges.html:417
+#: .\templates\service_charges.html:443
 #: .\templates\superadmindashboard.html:766
 #: .\templates\superadmindashboard.html:804
 msgid "Charge (₹)"
@@ -1159,126 +1051,116 @@ msgstr ""
 msgid "Save Settings"
 msgstr ""
 
-#: .\templates\announcements.html:394
+#: .\templates\announcements.html:389
 msgid "Stay informed with the latest updates from our centre."
 msgstr ""
 
-#: .\templates\announcements.html:404
+#: .\templates\announcements.html:399
 msgid "All"
 msgstr ""
 
-#: .\templates\announcements.html:429 .\templates\download_forms.html:385
+#: .\templates\announcements.html:424 .\templates\download_forms.html:385
 msgid "General"
 msgstr ""
 
-#: .\templates\announcements.html:432
+#: .\templates\announcements.html:427
 msgid "Urgent"
 msgstr ""
 
-#: .\templates\announcements.html:443
+#: .\templates\announcements.html:438
 msgid "No announcements available at the moment."
 msgstr ""
 
-#: .\templates\announcements.html:451
+#: .\templates\announcements.html:446
 msgid "No announcements match the selected filter."
 msgstr ""
 
 #: .\templates\announcements.html:457
-msgid "Stay updated with our latest announcements."
+#, python-format
+msgid ""
+"<span id=\"announcementCount\">%(counter)s</span> active notice {%% plural "
+"%%} <span id=\"announcementCount\">%(counter)s</span> active notices"
 msgstr ""
 
-#: .\templates\announcements.html:461
-#, python-format
-msgid "<span id=\"announcementCount\">%(counter)s</span> active notice"
-msgid_plural "<span id=\"announcementCount\">%(counter)s</span> active notices"
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\templates\announcements.html:474
+#: .\templates\announcements.html:469
 msgid "Have Questions?"
 msgstr ""
 
-#: .\templates\announcements.html:474
+#: .\templates\announcements.html:469
 msgid "Reach Out"
 msgstr ""
 
-#: .\templates\announcements.html:475
+#: .\templates\announcements.html:471
 msgid "We're here to help with any of your digital service needs."
 msgstr ""
 
-#: .\templates\announcements.html:506 .\templates\government_schemes.html:891
-#: .\templates\homepage.html:919
+#: .\templates\announcements.html:501 .\templates\homepage.html:933
 msgid "No announcements available."
 msgstr ""
 
-#: .\templates\appointment.html:287
+#: .\templates\appointment.html:282
 msgid "Book an Appointment"
 msgstr ""
 
-#: .\templates\appointment.html:290
-msgid ""
-"Select your service, choose a date &amp; time, and we’ll confirm your visit."
-msgstr ""
-
-#: .\templates\appointment.html:382 .\templates\base.html:912
+#: .\templates\appointment.html:378 .\templates\base.html:479
 msgid "Book Appointment"
 msgstr ""
 
-#: .\templates\appointment.html:389
+#: .\templates\appointment.html:385
 msgid "Your details are secure."
 msgstr ""
 
-#: .\templates\appointment.html:390
+#: .\templates\appointment.html:386
 msgid "9:00 AM – 5:00 PM"
 msgstr ""
 
-#: .\templates\appointment.html:540
+#: .\templates\appointment.html:535
 msgid "Booking…"
 msgstr ""
 
-#: .\templates\base.html:442
+#: .\templates\base.html:9
 msgid ""
 "Matoshree – Cyber Café & Digital Services. Reliable, fast, and affordable "
 "digital solutions."
 msgstr ""
 
-#: .\templates\base.html:444
+#: .\templates\base.html:11
 msgid "Matoshree – Cyber Café & Digital Services"
 msgstr ""
 
-#: .\templates\base.html:871
+#: .\templates\base.html:438
 msgid "Matoshree Logo"
 msgstr ""
 
-#: .\templates\base.html:877
+#: .\templates\base.html:444
 msgid "Toggle navigation"
 msgstr ""
 
-#: .\templates\base.html:890
+#: .\templates\base.html:457
 msgid "All Services"
 msgstr ""
 
-#: .\templates\base.html:901
+#: .\templates\base.html:468
 msgid "Resources"
 msgstr ""
 
-#: .\templates\base.html:904 .\templates\customer_reviews.html:578
+#: .\templates\base.html:471 .\templates\customer_reviews.html:573
 msgid "Customer Reviews"
 msgstr ""
 
-#: .\templates\base.html:924
+#: .\templates\base.html:491
 msgid "Profile"
 msgstr ""
 
-#: .\templates\base.html:930
+#: .\templates\base.html:497 .\templates\login.html:65
 msgid "Login"
 msgstr ""
 
-#: .\templates\base.html:931
+#: .\templates\base.html:498
 msgid "Register"
 msgstr ""
 
-#: .\templates\base.html:978
+#: .\templates\base.html:545
 #, python-format
 msgid ""
 "\n"
@@ -1286,229 +1168,191 @@ msgid ""
 "                "
 msgstr ""
 
-#: .\templates\base.html:983
+#: .\templates\base.html:550
 msgid "Facebook"
 msgstr ""
 
-#: .\templates\base.html:984
+#: .\templates\base.html:551
 msgid "Instagram"
 msgstr ""
 
-#: .\templates\base.html:985
+#: .\templates\base.html:552
 msgid "YouTube"
 msgstr ""
 
-#: .\templates\base.html:986
+#: .\templates\base.html:553
 msgid "Twitter"
 msgstr ""
 
-#: .\templates\contactus.html:231
+#: .\templates\contactus.html:226
 msgid "Get in"
 msgstr ""
 
-#: .\templates\contactus.html:231
+#: .\templates\contactus.html:227
 msgid "Touch"
 msgstr ""
 
-#: .\templates\contactus.html:242
-msgid ""
-"We're here to help. Send us a message and we'll get back to you promptly."
-msgstr ""
-
-#: .\templates\contactus.html:258
+#: .\templates\contactus.html:255
 msgid "Send a Message"
 msgstr ""
 
-#: .\templates\contactus.html:307
+#: .\templates\contactus.html:314
 msgid "Send Message"
 msgstr ""
 
-#: .\templates\contactus.html:319
-#, python-format
-msgid "%(name)s"
-msgstr ""
-
-#: .\templates\contactus.html:320
-#, python-format
-msgid "%(address)s"
-msgstr ""
-
-#: .\templates\contactus.html:342
+#: .\templates\contactus.html:353
 msgid "Chat with Us"
 msgstr ""
 
-#: .\templates\contactus.html:365
+#: .\templates\contactus.html:375
 msgid "Monday"
 msgstr ""
 
-#: .\templates\contactus.html:366 .\templates\contactus.html:370
-#: .\templates\contactus.html:374 .\templates\contactus.html:378
-#: .\templates\contactus.html:382 .\templates\contactus.html:386
+#: .\templates\contactus.html:376 .\templates\contactus.html:380
+#: .\templates\contactus.html:384 .\templates\contactus.html:388
+#: .\templates\contactus.html:392 .\templates\contactus.html:396
 msgid "9:00 AM – 8:00 PM"
 msgstr ""
 
-#: .\templates\contactus.html:369
+#: .\templates\contactus.html:379
 msgid "Tuesday"
 msgstr ""
 
-#: .\templates\contactus.html:373
+#: .\templates\contactus.html:383
 msgid "Wednesday"
 msgstr ""
 
-#: .\templates\contactus.html:377
+#: .\templates\contactus.html:387
 msgid "Thursday"
 msgstr ""
 
-#: .\templates\contactus.html:381
+#: .\templates\contactus.html:391
 msgid "Friday"
 msgstr ""
 
-#: .\templates\contactus.html:385
+#: .\templates\contactus.html:395
 msgid "Saturday"
 msgstr ""
 
-#: .\templates\contactus.html:389
+#: .\templates\contactus.html:399
 msgid "Sunday"
 msgstr ""
 
-#: .\templates\contactus.html:390
+#: .\templates\contactus.html:400
 msgid "10:00 AM – 2:00 PM"
 msgstr ""
 
-#: .\templates\contactus.html:431
+#: .\templates\contactus.html:441
 msgid "We're just a"
 msgstr ""
 
-#: .\templates\contactus.html:431
+#: .\templates\contactus.html:442
 msgid "click"
 msgstr ""
 
-#: .\templates\contactus.html:431
-msgid "away!"
-msgstr ""
-
-#: .\templates\contactus.html:440
-msgid ""
-"Reach out to us for any queries or to book a service. We respond promptly."
-msgstr ""
-
-#: .\templates\contactus.html:466 .\templates\government_schemes.html:860
-#: .\templates\homepage.html:893
+#: .\templates\contactus.html:479 .\templates\homepage.html:905
 msgid "Call Now"
 msgstr ""
 
-#: .\templates\customer_reviews.html:580
+#: .\templates\customer_reviews.html:599
+#, python-format
 msgid ""
-"Real feedback from customers who have used our services. See why they trust "
-"us."
+" Based on\n"
+"            <strong>%(total)s</strong> customer reviews "
 msgstr ""
 
-#: .\templates\customer_reviews.html:605
+#: .\templates\customer_reviews.html:621
 #, python-format
 msgid ""
 "\n"
-"              Based on <strong>%(total)s</strong> customer reviews\n"
-"            "
+"        <strong>%(count)s</strong> customer reviews "
 msgstr ""
 
-#: .\templates\customer_reviews.html:628
-#, python-format
-msgid ""
-"\n"
-"          <strong>%(count)s</strong> customer reviews\n"
-"        "
-msgstr ""
-
-#: .\templates\customer_reviews.html:634
+#: .\templates\customer_reviews.html:626
 msgid "Newest"
 msgstr ""
 
-#: .\templates\customer_reviews.html:637
+#: .\templates\customer_reviews.html:629
 msgid "Highest"
 msgstr ""
 
-#: .\templates\customer_reviews.html:640
+#: .\templates\customer_reviews.html:632
 msgid "Lowest"
 msgstr ""
 
-#: .\templates\customer_reviews.html:670
+#: .\templates\customer_reviews.html:663
 msgid "Verified"
 msgstr ""
 
-#: .\templates\customer_reviews.html:679
+#: .\templates\customer_reviews.html:687
 msgid "No reviews yet. Be the first to share your experience!"
 msgstr ""
 
-#: .\templates\customer_reviews.html:686
+#: .\templates\customer_reviews.html:696
 msgid "Share Your Experience"
 msgstr ""
 
-#: .\templates\customer_reviews.html:688
+#: .\templates\customer_reviews.html:699
 msgid "We value your feedback. Let us know how we did!"
 msgstr ""
 
-#: .\templates\customer_reviews.html:729 .\templates\customer_reviews.html:807
-#: .\templates\customer_reviews.html:819
+#: .\templates\customer_reviews.html:738 .\templates\customer_reviews.html:815
+#: .\templates\customer_reviews.html:827
 msgid "Select a rating"
 msgstr ""
 
-#: .\templates\customer_reviews.html:739
+#: .\templates\customer_reviews.html:748
 msgid "Your Review"
 msgstr ""
 
-#: .\templates\customer_reviews.html:749
+#: .\templates\customer_reviews.html:757
 msgid "Submit Review"
 msgstr ""
 
-#: .\templates\customer_reviews.html:756
+#: .\templates\customer_reviews.html:765
 msgid "Thank you for your review!"
 msgstr ""
 
-#: .\templates\customer_reviews.html:763
-msgid "All reviews are from genuine customers."
-msgstr ""
-
-#: .\templates\customer_reviews.html:767
+#: .\templates\customer_reviews.html:778
 #, python-format
 msgid ""
-"\n"
-"          %(total)s reviews and counting\n"
-"        "
+" %(total)s\n"
+"        reviews and counting "
 msgstr ""
 
-#: .\templates\customer_reviews.html:786
+#: .\templates\customer_reviews.html:794
 msgid "Terrible"
 msgstr ""
 
-#: .\templates\customer_reviews.html:787
+#: .\templates\customer_reviews.html:795
 msgid "Poor"
 msgstr ""
 
-#: .\templates\customer_reviews.html:788
+#: .\templates\customer_reviews.html:796
 msgid "Average"
 msgstr ""
 
-#: .\templates\customer_reviews.html:789
+#: .\templates\customer_reviews.html:797
 msgid "Good"
 msgstr ""
 
-#: .\templates\customer_reviews.html:790
+#: .\templates\customer_reviews.html:798
 msgid "Excellent"
 msgstr ""
 
-#: .\templates\customer_reviews.html:844
+#: .\templates\customer_reviews.html:852
 msgid "Name is required."
 msgstr ""
 
-#: .\templates\customer_reviews.html:845
+#: .\templates\customer_reviews.html:853
 msgid "Email is required."
 msgstr ""
 
-#: .\templates\customer_reviews.html:846
+#: .\templates\customer_reviews.html:854
 msgid "Please select a rating."
 msgstr ""
 
-#: .\templates\customer_reviews.html:847
+#: .\templates\customer_reviews.html:855
 msgid "Please write your review."
 msgstr ""
 
@@ -1634,8 +1478,7 @@ msgstr ""
 msgid "All Images"
 msgstr ""
 
-#: .\templates\gallery.html:438 .\templates\government_schemes.html:801
-#: .\templates\homepage.html:830
+#: .\templates\gallery.html:438 .\templates\homepage.html:838
 msgid "No images available."
 msgstr ""
 
@@ -1660,19 +1503,63 @@ msgstr ""
 msgid "Our Services?"
 msgstr ""
 
-#: .\templates\government_schemes.html:691 .\templates\homepage.html:714
+#: .\templates\gallery.html:466
+msgid "Visit us today or reach out to get started with any of our services."
+msgstr ""
+
+#: .\templates\government_schemes.html:267
+msgid "Schemes"
+msgstr ""
+
+#: .\templates\government_schemes.html:269
+msgid ""
+"Explore the latest government schemes and initiatives designed to benefit "
+"citizens, businesses, and communities."
+msgstr ""
+
+#: .\templates\government_schemes.html:289
+msgid "Eligibility:"
+msgstr ""
+
+#: .\templates\government_schemes.html:296 .\templates\jobs.html:438
+msgid "Last Date:"
+msgstr ""
+
+#: .\templates\government_schemes.html:305
+msgid "No government schemes available at the moment."
+msgstr ""
+
+#: .\templates\government_schemes.html:307
+msgid "Please check back later for updates."
+msgstr ""
+
+#: .\templates\government_schemes.html:318
+msgid "Need Help Applying for"
+msgstr ""
+
+#: .\templates\government_schemes.html:318
+msgid "Schemes?"
+msgstr ""
+
+#: .\templates\government_schemes.html:320
+msgid ""
+"We assist with scheme applications, document verification, and form filling. "
+"Let us guide you through the process."
+msgstr ""
+
+#: .\templates\homepage.html:715
 msgid "Fast, Reliable &amp;"
 msgstr ""
 
-#: .\templates\government_schemes.html:691 .\templates\homepage.html:714
+#: .\templates\homepage.html:716
 msgid "Affordable"
 msgstr ""
 
-#: .\templates\government_schemes.html:691 .\templates\homepage.html:714
+#: .\templates\homepage.html:716
 msgid "Cyber Services"
 msgstr ""
 
-#: .\templates\government_schemes.html:693 .\templates\homepage.html:716
+#: .\templates\homepage.html:719
 #, python-format
 msgid ""
 "\n"
@@ -1683,343 +1570,369 @@ msgid ""
 "        "
 msgstr ""
 
-#: .\templates\government_schemes.html:699 .\templates\homepage.html:723
+#: .\templates\homepage.html:726
 msgid "Explore Services"
 msgstr ""
 
-#: .\templates\government_schemes.html:708 .\templates\homepage.html:732
+#: .\templates\homepage.html:735
 msgid "Online Forms"
 msgstr ""
 
-#: .\templates\government_schemes.html:711 .\templates\homepage.html:735
+#: .\templates\homepage.html:738
 msgid "Aadhaar Services"
 msgstr ""
 
-#: .\templates\government_schemes.html:714 .\templates\homepage.html:738
+#: .\templates\homepage.html:741
 msgid "PAN Card"
 msgstr ""
 
-#: .\templates\government_schemes.html:717 .\templates\homepage.html:741
+#: .\templates\homepage.html:744
 msgid "Passport"
 msgstr ""
 
-#: .\templates\government_schemes.html:720 .\templates\homepage.html:744
+#: .\templates\homepage.html:747
 msgid "Printing &amp; Scan"
 msgstr ""
 
-#: .\templates\government_schemes.html:734 .\templates\homepage.html:758
+#: .\templates\homepage.html:761
 msgid "Welcome to"
 msgstr ""
 
-#: .\templates\government_schemes.html:736 .\templates\homepage.html:760
+#: .\templates\homepage.html:764
 msgid "Your One-Stop Digital Service Hub"
 msgstr ""
 
-#: .\templates\government_schemes.html:738 .\templates\homepage.html:762
+#: .\templates\homepage.html:766
 msgid ""
 "We are a trusted cyber service provider offering a wide range of digital "
 "solutions to individuals and businesses."
 msgstr ""
 
-#: .\templates\government_schemes.html:750 .\templates\homepage.html:775
+#: .\templates\homepage.html:779
 msgid "Customer Rating"
 msgstr ""
 
-#: .\templates\government_schemes.html:756 .\templates\homepage.html:781
+#: .\templates\homepage.html:785
 msgid "Trusted &amp; Secure"
 msgstr ""
 
-#: .\templates\government_schemes.html:758 .\templates\homepage.html:782
+#: .\templates\homepage.html:787
 msgid ""
 "Your data is safe with us. Professional, confidential, and reliable service "
 "every time."
 msgstr ""
 
-#: .\templates\government_schemes.html:769 .\templates\homepage.html:792
+#: .\templates\homepage.html:799
 msgid "Comprehensive digital solutions tailored to your needs"
 msgstr ""
 
-#: .\templates\government_schemes.html:782 .\templates\homepage.html:805
+#: .\templates\homepage.html:813
 msgid "No services available."
 msgstr ""
 
-#: .\templates\government_schemes.html:794 .\templates\homepage.html:823
-msgid "Take a look at our work and facilities"
-msgstr ""
-
-#: .\templates\government_schemes.html:812 .\templates\homepage.html:847
-msgid "What Our"
-msgstr ""
-
-#: .\templates\government_schemes.html:812 .\templates\homepage.html:847
-msgid "Customers Say"
-msgstr ""
-
-#: .\templates\government_schemes.html:813 .\templates\homepage.html:848
-msgid "Real feedback from our valued clients"
-msgstr ""
-
-#: .\templates\government_schemes.html:823 .\templates\homepage.html:858
-msgid "No reviews yet."
-msgstr ""
-
-#: .\templates\government_schemes.html:834 .\templates\homepage.html:875
-msgid "Business Timings"
-msgstr ""
-
-#: .\templates\government_schemes.html:839 .\templates\homepage.html:879
-msgid "Monday – Saturday: 9:00 AM – 8:00 PM"
-msgstr ""
-
-#: .\templates\government_schemes.html:839 .\templates\homepage.html:879
-msgid "Sunday: 10:00 AM – 2:00 PM"
-msgstr ""
-
-#: .\templates\government_schemes.html:844 .\templates\homepage.html:883
-#: .\templates\services.html:489
-msgid "Get in Touch"
-msgstr ""
-
-#: .\templates\government_schemes.html:852 .\templates\homepage.html:889
-msgid "Call us for inquiries, support, or to place an order."
-msgstr ""
-
-#: .\templates\government_schemes.html:879 .\templates\homepage.html:907
-msgid "Recent"
-msgstr ""
-
-#: .\templates\government_schemes.html:880 .\templates\homepage.html:908
-msgid "Stay updated with the latest news, offers, and important notices"
-msgstr ""
-
-#: .\templates\government_schemes.html:902 .\templates\homepage.html:936
-msgid "Find Us"
-msgstr ""
-
-#: .\templates\government_schemes.html:902 .\templates\homepage.html:936
-msgid "Here"
-msgstr ""
-
-#: .\templates\government_schemes.html:918 .\templates\homepage.html:942
-msgid "Get Directions"
-msgstr ""
-
-#: .\templates\homepage.html:812
+#: .\templates\homepage.html:820
 msgid "View All Services"
 msgstr ""
 
-#: .\templates\homepage.html:837
+#: .\templates\homepage.html:831
+msgid "Take a look at our work and facilities"
+msgstr ""
+
+#: .\templates\homepage.html:845
 msgid "View Full Gallery"
 msgstr ""
 
-#: .\templates\homepage.html:865
+#: .\templates\homepage.html:855
+msgid "What Our"
+msgstr ""
+
+#: .\templates\homepage.html:855
+msgid "Customers Say"
+msgstr ""
+
+#: .\templates\homepage.html:856
+msgid "Real feedback from our valued clients"
+msgstr ""
+
+#: .\templates\homepage.html:866
+msgid "No reviews yet."
+msgstr ""
+
+#: .\templates\homepage.html:873
 msgid "Read All Reviews"
 msgstr ""
 
-#: .\templates\homepage.html:926
+#: .\templates\homepage.html:883
+msgid "Business Timings"
+msgstr ""
+
+#: .\templates\homepage.html:888
+msgid "Monday – Saturday: 9:00 AM – 8:00 PM"
+msgstr ""
+
+#: .\templates\homepage.html:889
+msgid "Sunday: 10:00 AM – 2:00 PM"
+msgstr ""
+
+#: .\templates\homepage.html:894 .\templates\services.html:527
+msgid "Get in Touch"
+msgstr ""
+
+#: .\templates\homepage.html:901
+msgid "Call us for inquiries, support, or to place an order."
+msgstr ""
+
+#: .\templates\homepage.html:919
+msgid "Recent"
+msgstr ""
+
+#: .\templates\homepage.html:921
+msgid "Stay updated with the latest news, offers, and important notices"
+msgstr ""
+
+#: .\templates\homepage.html:940
 msgid "View All Announcements"
 msgstr ""
 
-#: .\templates\jobs.html:381
+#: .\templates\homepage.html:950
+msgid "Find Us"
+msgstr ""
+
+#: .\templates\homepage.html:950
+msgid "Here"
+msgstr ""
+
+#: .\templates\homepage.html:961
+msgid "Get Directions"
+msgstr ""
+
+#: .\templates\jobs.html:398
 msgid "Jobs"
 msgstr ""
 
-#: .\templates\jobs.html:383
+#: .\templates\jobs.html:400
 msgid "Current"
 msgstr ""
 
-#: .\templates\jobs.html:383
+#: .\templates\jobs.html:400
 msgid "Job Openings"
 msgstr ""
 
-#: .\templates\jobs.html:384
-msgid "Explore opportunities to work with us or our partner organizations."
-msgstr ""
-
-#: .\templates\jobs.html:392
+#: .\templates\jobs.html:412
 msgid "Available"
 msgstr ""
 
-#: .\templates\jobs.html:392
+#: .\templates\jobs.html:412
 msgid "Positions"
 msgstr ""
 
-#: .\templates\jobs.html:393
-msgid "Check out the latest openings and apply before the deadline."
-msgstr ""
-
-#: .\templates\jobs.html:408
-msgid "Last Date:"
-msgstr ""
-
-#: .\templates\jobs.html:411
+#: .\templates\jobs.html:446
 msgid "Apply Now"
 msgstr ""
 
-#: .\templates\jobs.html:418
+#: .\templates\jobs.html:453
 msgid "No job openings available at the moment."
 msgstr ""
 
-#: .\templates\jobs.html:428
+#: .\templates\jobs.html:464
 msgid "join"
 msgstr ""
 
-#: .\templates\jobs.html:428
-msgid "our team?"
+#: .\templates\login.html:4
+msgid "Login – Cyber Café"
 msgstr ""
 
-#: .\templates\jobs.html:430
-msgid ""
-"Have questions about a role or want to send us your CV? Reach out to us "
-"anytime."
+#: .\templates\login.html:14
+msgid "Welcome Back"
 msgstr ""
 
-#: .\templates\required_document.html:195
+#: .\templates\login.html:15
+msgid "Sign in to your account"
+msgstr ""
+
+#: .\templates\login.html:58
+msgid "Remember me"
+msgstr ""
+
+#: .\templates\login.html:60
+msgid "Forgot password?"
+msgstr ""
+
+#: .\templates\login.html:73
+msgid "Don't have an account?"
+msgstr ""
+
+#: .\templates\login.html:74
+msgid "Register now"
+msgstr ""
+
+#: .\templates\password_change.html:4
+msgid "Change Password – Cyber Café"
+msgstr ""
+
+#: .\templates\password_change.html:14 .\templates\password_change.html:57
+#: .\templates\profile.html:66
+msgid "Change Password"
+msgstr ""
+
+#: .\templates\password_change.html:15
+msgid "Update your password to keep your account secure"
+msgstr ""
+
+#: .\templates\password_change.html:66
+msgid "Back to Profile"
+msgstr ""
+
+#: .\templates\password_change_done.html:4
+msgid "Password Changed – Cyber Café"
+msgstr ""
+
+#: .\templates\password_change_done.html:14
+msgid "Password Changed!"
+msgstr ""
+
+#: .\templates\password_change_done.html:15
+msgid "Your password has been updated successfully."
+msgstr ""
+
+#: .\templates\password_change_done.html:20
+msgid "Return to Profile"
+msgstr ""
+
+#: .\templates\password_change_done.html:23
+msgid "Go to Dashboard"
+msgstr ""
+
+#: .\templates\profile.html:4
+msgid "My Profile – Cyber Café"
+msgstr ""
+
+#: .\templates\profile.html:14
+msgid "My Profile"
+msgstr ""
+
+#: .\templates\profile.html:15
+msgid "Update your personal information"
+msgstr ""
+
+#: .\templates\profile.html:57
+msgid "Update Profile"
+msgstr ""
+
+#: .\templates\register.html:4
+msgid "Register – Cyber Café"
+msgstr ""
+
+#: .\templates\register.html:14
+msgid "Create Account"
+msgstr ""
+
+#: .\templates\register.html:15
+msgid "Join us to access exclusive services"
+msgstr ""
+
+#: .\templates\register.html:57
+msgid "Sign Up"
+msgstr ""
+
+#: .\templates\register.html:65
+msgid "Already have an account?"
+msgstr ""
+
+#: .\templates\register.html:66
+msgid "Log in"
+msgstr ""
+
+#: .\templates\register.html:72
+msgid "By registering, you agree to our"
+msgstr ""
+
+#: .\templates\register.html:73
+msgid "Terms of Service"
+msgstr ""
+
+#: .\templates\register.html:74
+msgid "and"
+msgstr ""
+
+#: .\templates\register.html:75
+msgid "Privacy Policy"
+msgstr ""
+
+#: .\templates\required_document.html:190
 msgid "Required"
 msgstr ""
 
-#: .\templates\required_document.html:195
+#: .\templates\required_document.html:190
 msgid "Documents"
 msgstr ""
 
-#: .\templates\required_document.html:197
-msgid ""
-"Know exactly what to bring before you visit. Save time and get your services "
-"done faster."
-msgstr ""
-
-#: .\templates\required_document.html:227
+#: .\templates\required_document.html:223
 msgid "No documents listed."
 msgstr ""
 
-#: .\templates\required_document.html:243
+#: .\templates\required_document.html:239
 msgid "Important:"
 msgstr ""
 
-#: .\templates\required_document.html:243
-msgid ""
-"Requirements may vary based on service type and government guidelines. "
-"Please contact us for the most up-to-date document checklist before your "
-"visit."
-msgstr ""
-
-#: .\templates\required_document.html:253
+#: .\templates\required_document.html:252
 msgid "Need Help Preparing"
 msgstr ""
 
-#: .\templates\required_document.html:253
+#: .\templates\required_document.html:252
 msgid "Documents?"
 msgstr ""
 
-#: .\templates\required_document.html:254
-msgid "We assist with document checking, photocopying, and attestation."
-msgstr ""
-
-#: .\templates\service_charges.html:397
+#: .\templates\service_charges.html:410
 msgid "Charges"
 msgstr ""
 
-#: .\templates\service_charges.html:398
-msgid ""
-"Transparent pricing for all our services. Know the cost before you come in."
-msgstr ""
-
-#: .\templates\service_charges.html:406
+#: .\templates\service_charges.html:422
 msgid "Price List"
 msgstr ""
 
-#: .\templates\service_charges.html:407
-msgid "All charges are inclusive of service fees unless stated otherwise."
-msgstr ""
-
-#: .\templates\service_charges.html:434
+#: .\templates\service_charges.html:467
 msgid "No service charges available."
 msgstr ""
 
-#: .\templates\service_charges.html:448
+#: .\templates\service_charges.html:482
 msgid "Important Notes"
 msgstr ""
 
-#: .\templates\service_charges.html:450
-msgid "Prices are subject to change without prior notice."
-msgstr ""
-
-#: .\templates\service_charges.html:451
-msgid "GST (if applicable) will be added to the final bill."
-msgstr ""
-
-#: .\templates\service_charges.html:452
-msgid "Discounts may be available for bulk orders or regular customers."
-msgstr ""
-
-#: .\templates\service_charges.html:453
-msgid "For exact pricing, please contact our support team."
-msgstr ""
-
-#: .\templates\service_charges.html:462
+#: .\templates\service_charges.html:502
 msgid "Need"
 msgstr ""
 
-#: .\templates\service_charges.html:462
+#: .\templates\service_charges.html:502
 msgid "clarification"
 msgstr ""
 
-#: .\templates\service_charges.html:462
-msgid "on pricing?"
-msgstr ""
-
-#: .\templates\service_charges.html:463
-msgid ""
-"We're here to help. Reach out to us for any questions about our charges or "
-"services."
-msgstr ""
-
-#: .\templates\services.html:433
-msgid ""
-"Comprehensive digital, banking, government, and document services — all "
-"under one roof, delivered with speed and care."
-msgstr ""
-
-#: .\templates\services.html:441
+#: .\templates\services.html:465
 msgid "Satisfaction"
 msgstr ""
 
-#: .\templates\services.html:445
+#: .\templates\services.html:469
 msgid "Support"
 msgstr ""
 
-#: .\templates\services.html:455
+#: .\templates\services.html:479
 msgid "Explore Our"
 msgstr ""
 
-#: .\templates\services.html:455
+#: .\templates\services.html:479
 msgid "Solutions"
 msgstr ""
 
-#: .\templates\services.html:456
-msgid "From digital banking to government paperwork — we've got you covered."
-msgstr ""
-
-#: .\templates\services.html:472
+#: .\templates\services.html:506
 msgid "Learn More"
 msgstr ""
 
-#: .\templates\services.html:479
-msgid "No services listed at the moment. Please check back soon."
-msgstr ""
-
-#: .\templates\services.html:490
+#: .\templates\services.html:530
 msgid "Need help with any"
 msgstr ""
 
-#: .\templates\services.html:490
+#: .\templates\services.html:530
 msgid "service"
-msgstr ""
-
-#: .\templates\services.html:491
-msgid ""
-"Our expert team is ready to assist you. Reach out for fast, reliable, and "
-"friendly support — we're here to help."
 msgstr ""
 
 #: .\templates\superadmindashboard.html:9

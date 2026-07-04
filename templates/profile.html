@@ -1,5 +1,9 @@
-{% load i18n %} {% extends "base.html" %} {% block title %}My Profile – Cyber
-Café{% endblock %} {% block content %}
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "My Profile – Cyber Café" %}{% endblock %}
+
+{% block content %}
 <div class="container py-5">
   <div class="row justify-content-center">
     <div class="col-md-8 col-lg-6">
@@ -7,55 +11,50 @@ Café{% endblock %} {% block content %}
         <div class="card-body p-4 p-md-5">
           <div class="text-center mb-4">
             <i class="fas fa-user-circle fa-3x text-primary mb-3"></i>
-            <h2 class="fw-bold">My Profile</h2>
-            <p class="text-muted">Update your personal information</p>
+            <h2 class="fw-bold">{% trans "My Profile" %}</h2>
+            <p class="text-muted">{% trans "Update your personal information" %}</p>
           </div>
 
           {% if form.non_field_errors %}
           <div class="alert alert-danger" role="alert">
-            {% for error in form.non_field_errors %} {{ error }} {% endfor %}
+            {% for error in form.non_field_errors %}{{ error }}{% endfor %}
           </div>
           {% endif %}
 
           <form method="post" novalidate>
-            {% csrf_token %} {% for field in form %}
+            {% csrf_token %}
+            {% for field in form %}
             <div class="mb-3">
-              <label
-                for="{{ field.id_for_label }}"
-                class="form-label fw-semibold"
-              >
-                {{ field.label }} {% if field.field.required %}
-                <span class="text-danger">*</span>
-                {% endif %}
+              <label for="{{ field.id_for_label }}" class="form-label fw-semibold">
+                {{ field.label }}
+                {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
               </label>
 
               {% if field.field.widget.input_type == 'password' %}
               <div class="input-group">
                 {{ field }}
-                <button
-                  class="btn btn-outline-secondary toggle-password"
-                  type="button"
-                  data-target="{{ field.id_for_label }}"
-                >
+                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="{{ field.id_for_label }}">
                   <i class="fas fa-eye"></i>
                 </button>
               </div>
-              {% else %} {{ field }} {% endif %} {% if field.help_text %}
-              <small class="form-text text-muted">{{ field.help_text }}</small>
-              {% endif %} {% if field.errors %}
-              <div class="invalid-feedback d-block">
-                {% for error in field.errors %} {{ error }} {% endfor %}
-              </div>
+              {% else %}
+                {{ field }}
+              {% endif %}
+
+              {% if field.help_text %}
+                <small class="form-text text-muted">{{ field.help_text }}</small>
+              {% endif %}
+              {% if field.errors %}
+                <div class="invalid-feedback d-block">
+                  {% for error in field.errors %}{{ error }}{% endfor %}
+                </div>
               {% endif %}
             </div>
             {% endfor %}
 
             <div class="d-grid gap-2">
-              <button
-                type="submit"
-                class="btn btn-primary btn-lg rounded-pill fw-semibold"
-              >
-                <i class="fas fa-save me-2"></i> Update Profile
+              <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-semibold">
+                <i class="fas fa-save me-2"></i> {% trans "Update Profile" %}
               </button>
             </div>
           </form>
@@ -63,11 +62,8 @@ Café{% endblock %} {% block content %}
           <hr class="my-4" />
 
           <div class="text-center">
-            <a
-              href="{% url 'password_change' %}"
-              class="btn btn-outline-secondary rounded-pill px-4"
-            >
-              <i class="fas fa-key me-2"></i> Change Password
+            <a href="{% url 'password_change' %}" class="btn btn-outline-secondary rounded-pill px-4">
+              <i class="fas fa-key me-2"></i> {% trans "Change Password" %}
             </a>
           </div>
         </div>
@@ -77,7 +73,6 @@ Café{% endblock %} {% block content %}
 </div>
 
 <style>
-  /* Same styling as register.html */
   .card {
     background: #ffffff;
     transition: transform 0.2s ease;
@@ -94,9 +89,7 @@ Café{% endblock %} {% block content %}
     border: 1.5px solid #e2e8f0;
     border-radius: 0.5rem;
     font-size: 1rem;
-    transition:
-      border-color 0.2s,
-      box-shadow 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
 
   input[type="text"]:focus,
@@ -114,12 +107,10 @@ Café{% endblock %} {% block content %}
     border-color: #e2e8f0;
     color: #64748b;
   }
-
   .input-group .toggle-password:hover {
     background: #e9edf2;
     color: #0b1b33;
   }
-
   .input-group input {
     border-radius: 0.5rem 0 0 0.5rem;
     border-right: none;
@@ -129,7 +120,6 @@ Café{% endblock %} {% block content %}
     font-size: 0.875rem;
     margin-top: 0.25rem;
   }
-
   .form-text {
     font-size: 0.8rem;
     margin-top: 0.25rem;
@@ -143,14 +133,12 @@ Café{% endblock %} {% block content %}
 </style>
 
 <script>
-  // Toggle password visibility (if any password field exists)
   document.querySelectorAll(".toggle-password").forEach((button) => {
     button.addEventListener("click", function () {
       const targetId = this.getAttribute("data-target");
       const input = document.getElementById(targetId);
       if (input) {
-        const type =
-          input.getAttribute("type") === "password" ? "text" : "password";
+        const type = input.getAttribute("type") === "password" ? "text" : "password";
         input.setAttribute("type", type);
         this.querySelector("i").classList.toggle("fa-eye");
         this.querySelector("i").classList.toggle("fa-eye-slash");
