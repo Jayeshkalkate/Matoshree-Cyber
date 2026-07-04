@@ -1,3 +1,4 @@
+{% load i18n %}
 {% extends "base.html" %}
 {% load static %}
 
@@ -19,7 +20,11 @@
     right: -20%;
     width: 700px;
     height: 700px;
-    background: radial-gradient(circle, rgba(0,212,255,0.06) 0%, transparent 70%);
+    background: radial-gradient(
+      circle,
+      rgba(0, 212, 255, 0.06) 0%,
+      transparent 70%
+    );
     border-radius: 50%;
     pointer-events: none;
   }
@@ -30,7 +35,11 @@
     left: -10%;
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(255,107,53,0.05) 0%, transparent 70%);
+    background: radial-gradient(
+      circle,
+      rgba(255, 107, 53, 0.05) 0%,
+      transparent 70%
+    );
     border-radius: 50%;
     pointer-events: none;
   }
@@ -42,14 +51,14 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    color: rgba(255,255,255,0.5);
+    color: rgba(255, 255, 255, 0.5);
     font-size: 0.85rem;
     font-weight: 500;
     margin-bottom: 16px;
     letter-spacing: 0.3px;
   }
   .page-hero .breadcrumb a {
-    color: rgba(255,255,255,0.6);
+    color: rgba(255, 255, 255, 0.6);
     transition: var(--transition);
   }
   .page-hero .breadcrumb a:hover {
@@ -70,7 +79,7 @@
   }
   .page-hero p {
     font-size: 1.15rem;
-    color: rgba(255,255,255,0.7);
+    color: rgba(255, 255, 255, 0.7);
     max-width: 620px;
     margin: 0 auto;
     line-height: 1.7;
@@ -166,7 +175,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.9);
+    background: rgba(0, 0, 0, 0.9);
     z-index: 9999;
     justify-content: center;
     align-items: center;
@@ -180,7 +189,7 @@
     max-width: 90%;
     max-height: 80%;
     border-radius: var(--radius-sm);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
     object-fit: contain;
   }
   .lightbox .close-btn {
@@ -205,7 +214,7 @@
     text-align: center;
     margin-top: 20px;
     max-width: 80%;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.5);
     padding: 8px 20px;
     border-radius: 50px;
     backdrop-filter: blur(4px);
@@ -214,7 +223,7 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(255,255,255,0.15);
+    background: rgba(255, 255, 255, 0.15);
     border: none;
     color: var(--white);
     font-size: 2.5rem;
@@ -225,7 +234,7 @@
     backdrop-filter: blur(4px);
   }
   .lightbox .nav-btn:hover {
-    background: rgba(255,255,255,0.3);
+    background: rgba(255, 255, 255, 0.3);
   }
   .lightbox .nav-btn.prev {
     left: 20px;
@@ -235,8 +244,14 @@
   }
 
   @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 
   /* ===== NOTE BOX ===== */
@@ -283,8 +298,8 @@
     padding: 60px 0;
     background: linear-gradient(135deg, var(--primary), var(--primary-light));
     text-align: center;
-    border-top: 2px solid rgba(0,212,255,0.1);
-    border-bottom: 2px solid rgba(0,212,255,0.1);
+    border-top: 2px solid rgba(0, 212, 255, 0.1);
+    border-bottom: 2px solid rgba(0, 212, 255, 0.1);
   }
   .cta-banner .container {
     max-width: 720px;
@@ -300,7 +315,7 @@
     color: var(--secondary);
   }
   .cta-banner p {
-    color: rgba(255,255,255,0.7);
+    color: rgba(255, 255, 255, 0.7);
     font-size: 1.05rem;
     margin-bottom: 24px;
   }
@@ -385,10 +400,9 @@
 <!-- ===== PAGE HERO ===== -->
 <section class="page-hero">
   <div class="container">
-    <h1>Our <span>Gallery</span></h1>
+    <h1>{% trans "Our" %} <span>{% trans "Gallery" %}</span></h1>
     <p>
-      Take a visual tour of our cyber café, facilities, equipment, and
-      achievements.
+      {% trans "Take a visual tour of our cyber café, facilities, equipment, and achievements." %}
     </p>
   </div>
 </section>
@@ -399,19 +413,30 @@
     <div class="category">
       <div class="category-header">
         <div class="icon"><i class="fas fa-images"></i></div>
-        <h2>Gallery</h2>
-        <span class="badge">All Images</span>
+        <h2>{% trans "Gallery" %}</h2>
+        <span class="badge">{% trans "All Images" %}</span>
       </div>
       <div class="gallery-grid">
         {% for image in images %}
-          <div class="gallery-item" data-caption="{{ image.title }}">
-            <img src="{{ image.image.url }}" alt="{{ image.title }}" loading="lazy" />
-            <div class="caption">{{ image.title }}</div>
-          </div>
+        <div class="gallery-item" data-caption="{{ image.title }}">
+          <img
+            src="{{ image.image.url }}"
+            alt="{{ image.title }}"
+            loading="lazy"
+          />
+          <div class="caption">{{ image.title }}</div>
+        </div>
         {% empty %}
-          <p style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--gray-dark);">
-            No images available.
-          </p>
+        <p
+          style="
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 40px;
+            color: var(--gray-dark);
+          "
+        >
+          {% trans "No images available." %}
+        </p>
         {% endfor %}
       </div>
     </div>
@@ -422,13 +447,13 @@
 <section class="gallery-note">
   <div class="container">
     <div class="note-box">
-      <h4><i class="fas fa-info-circle"></i> About Our Gallery</h4>
+      <h4><i class="fas fa-info-circle"></i> {% trans "About Our Gallery" %}</h4>
       <p>
-        <i class="fas fa-check-circle"></i> All images are from our actual cyber café and service center.
-        <br>
-        <i class="fas fa-check-circle"></i> We regularly update our gallery to showcase our latest facilities and events.
-        <br>
-        <i class="fas fa-check-circle"></i> Click on any image to view it in full size.
+        <i class="fas fa-check-circle"></i> {% trans "All images are from our actual cyber café and service center." %}
+        <br />
+        <i class="fas fa-check-circle"></i> {% trans "We regularly update our gallery to showcase our latest facilities and events." %}
+        <br />
+        <i class="fas fa-check-circle"></i> {% trans "Click on any image to view it in full size." %}
       </p>
     </div>
   </div>
@@ -437,14 +462,18 @@
 <!-- ===== CTA BANNER ===== -->
 <section class="cta-banner">
   <div class="container">
-    <h2>Ready to <span>Experience</span> Our Services?</h2>
-    <p>Visit us today or reach out to get started with any of our services.</p>
+    <h2>{% trans "Ready to" %} <span>{% trans "Experience" %}</span> {% trans "Our Services?" %}</h2>
+    <p>{% trans "Visit us today or reach out to get started with any of our services." %}</p>
     <div class="cta-buttons">
       <a href="{% url 'home' %}#contact" class="btn-primary">
-        <i class="fas fa-phone"></i> Contact Us
+        <i class="fas fa-phone"></i> {% trans "Contact Us" %}
       </a>
-      <a href="https://wa.me/919876543210?text=Hello%2C%20I%20want%20to%20visit%20your%20cyber%20cafe." target="_blank" class="btn-whatsapp">
-        <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+      <a
+        href="https://wa.me/919876543210?text=Hello%2C%20I%20want%20to%20visit%20your%20cyber%20cafe."
+        target="_blank"
+        class="btn-whatsapp"
+      >
+        <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
       </a>
     </div>
   </div>
@@ -456,7 +485,7 @@
   <button class="nav-btn prev" id="lightbox-prev">
     <i class="fas fa-chevron-left"></i>
   </button>
-  <img class="lightbox-content" id="lightbox-img" src="" alt="Gallery Image" />
+  <img class="lightbox-content" id="lightbox-img" src="" alt="{% trans "Gallery Image" %}" />
   <button class="nav-btn next" id="lightbox-next">
     <i class="fas fa-chevron-right"></i>
   </button>
@@ -467,14 +496,14 @@
 {% block extra_scripts %}
 <!-- Lightbox and gallery JavaScript -->
 <script>
-  (function() {
-    const galleryItems = document.querySelectorAll('.gallery-item');
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    const lightboxCaption = document.getElementById('lightbox-caption');
-    const closeBtn = document.getElementById('lightbox-close');
-    const prevBtn = document.getElementById('lightbox-prev');
-    const nextBtn = document.getElementById('lightbox-next');
+  (function () {
+    const galleryItems = document.querySelectorAll(".gallery-item");
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+    const lightboxCaption = document.getElementById("lightbox-caption");
+    const closeBtn = document.getElementById("lightbox-close");
+    const prevBtn = document.getElementById("lightbox-prev");
+    const nextBtn = document.getElementById("lightbox-next");
 
     let currentIndex = 0;
     const itemsArray = Array.from(galleryItems);
@@ -482,25 +511,27 @@
     function openLightbox(index) {
       const item = itemsArray[index];
       if (!item) return;
-      const img = item.querySelector('img');
-      const caption = item.getAttribute('data-caption') ||
-                      item.querySelector('.caption')?.textContent ||
-                      '';
+      const img = item.querySelector("img");
+      const caption =
+        item.getAttribute("data-caption") ||
+        item.querySelector(".caption")?.textContent ||
+        "";
       lightboxImg.src = img.src;
       lightboxImg.alt = img.alt;
       lightboxCaption.textContent = caption;
       currentIndex = index;
-      lightbox.classList.add('open');
-      document.body.style.overflow = 'hidden';
+      lightbox.classList.add("open");
+      document.body.style.overflow = "hidden";
     }
 
     function closeLightbox() {
-      lightbox.classList.remove('open');
-      document.body.style.overflow = '';
+      lightbox.classList.remove("open");
+      document.body.style.overflow = "";
     }
 
     function showPrev() {
-      const newIndex = (currentIndex - 1 + itemsArray.length) % itemsArray.length;
+      const newIndex =
+        (currentIndex - 1 + itemsArray.length) % itemsArray.length;
       openLightbox(newIndex);
     }
 
@@ -511,32 +542,32 @@
 
     // Attach click events to gallery items
     galleryItems.forEach((item, index) => {
-      item.addEventListener('click', () => openLightbox(index));
+      item.addEventListener("click", () => openLightbox(index));
     });
 
     // Lightbox controls
-    closeBtn.addEventListener('click', closeLightbox);
-    prevBtn.addEventListener('click', showPrev);
-    nextBtn.addEventListener('click', showNext);
+    closeBtn.addEventListener("click", closeLightbox);
+    prevBtn.addEventListener("click", showPrev);
+    nextBtn.addEventListener("click", showNext);
 
     // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-      if (!lightbox.classList.contains('open')) return;
-      if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowLeft') showPrev();
-      if (e.key === 'ArrowRight') showNext();
+    document.addEventListener("keydown", (e) => {
+      if (!lightbox.classList.contains("open")) return;
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowLeft") showPrev();
+      if (e.key === "ArrowRight") showNext();
     });
 
     // Click on overlay background to close
-    lightbox.addEventListener('click', (e) => {
+    lightbox.addEventListener("click", (e) => {
       if (e.target === lightbox) closeLightbox();
     });
 
     // Ensure that if there are no items, lightbox controls don't error
     if (itemsArray.length === 0) {
       // Disable navigation buttons or hide lightbox
-      prevBtn.style.display = 'none';
-      nextBtn.style.display = 'none';
+      prevBtn.style.display = "none";
+      nextBtn.style.display = "none";
     }
   })();
 </script>

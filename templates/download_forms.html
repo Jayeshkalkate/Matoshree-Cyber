@@ -1,3 +1,4 @@
+{% load i18n %}
 {% extends "base.html" %}
 {% load static %}
 
@@ -19,7 +20,11 @@
     right: -20%;
     width: 700px;
     height: 700px;
-    background: radial-gradient(circle, rgba(0,212,255,0.06) 0%, transparent 70%);
+    background: radial-gradient(
+      circle,
+      rgba(0, 212, 255, 0.06) 0%,
+      transparent 70%
+    );
     border-radius: 50%;
     pointer-events: none;
   }
@@ -30,7 +35,11 @@
     left: -10%;
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(255,107,53,0.05) 0%, transparent 70%);
+    background: radial-gradient(
+      circle,
+      rgba(255, 107, 53, 0.05) 0%,
+      transparent 70%
+    );
     border-radius: 50%;
     pointer-events: none;
   }
@@ -42,14 +51,14 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    color: rgba(255,255,255,0.5);
+    color: rgba(255, 255, 255, 0.5);
     font-size: 0.85rem;
     font-weight: 500;
     margin-bottom: 16px;
     letter-spacing: 0.3px;
   }
   .page-hero .breadcrumb a {
-    color: rgba(255,255,255,0.6);
+    color: rgba(255, 255, 255, 0.6);
     transition: var(--transition);
   }
   .page-hero .breadcrumb a:hover {
@@ -70,7 +79,7 @@
   }
   .page-hero p {
     font-size: 1.15rem;
-    color: rgba(255,255,255,0.7);
+    color: rgba(255, 255, 255, 0.7);
     max-width: 620px;
     margin: 0 auto;
     line-height: 1.7;
@@ -96,7 +105,7 @@
   }
   .search-wrap:focus-within {
     border-color: var(--secondary);
-    box-shadow: 0 0 0 4px rgba(0,212,255,0.15);
+    box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.15);
   }
   .search-wrap i {
     color: var(--gray-dark);
@@ -209,7 +218,7 @@
     color: var(--primary);
     border-color: var(--secondary);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,212,255,0.3);
+    box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
   }
   .btn-download:active {
     transform: scale(0.96);
@@ -262,8 +271,8 @@
     padding: 60px 0;
     background: linear-gradient(135deg, var(--primary), var(--primary-light));
     text-align: center;
-    border-top: 2px solid rgba(0,212,255,0.1);
-    border-bottom: 2px solid rgba(0,212,255,0.1);
+    border-top: 2px solid rgba(0, 212, 255, 0.1);
+    border-bottom: 2px solid rgba(0, 212, 255, 0.1);
   }
   .cta-banner .container {
     max-width: 720px;
@@ -279,7 +288,7 @@
     color: var(--secondary);
   }
   .cta-banner p {
-    color: rgba(255,255,255,0.7);
+    color: rgba(255, 255, 255, 0.7);
     font-size: 1.05rem;
     margin-bottom: 24px;
   }
@@ -346,8 +355,8 @@
 <!-- ===== PAGE HERO ===== -->
 <section class="page-hero">
   <div class="container">
-    <h1>Download <span>Government Forms</span></h1>
-    <p>Access and download official forms for various services.</p>
+    <h1>{% trans "Download" %} <span>{% trans "Government Forms" %}</span></h1>
+    <p>{% trans "Access and download official forms for various services." %}</p>
   </div>
 </section>
 
@@ -357,42 +366,56 @@
     <!-- Search Bar -->
     <div class="search-wrap" id="searchWrap">
       <i class="fas fa-search"></i>
-      <input type="text" id="searchInput" placeholder="Search forms by name..." aria-label="Search forms">
-      <button id="searchClear" aria-label="Clear search">Clear</button>
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="{% trans "Search forms by name..." %}"
+        aria-label="{% trans "Search forms" %}"
+      />
+      <button id="searchClear" aria-label="{% trans "Clear search" %}">{% trans "Clear" %}</button>
     </div>
 
     <!-- Forms List -->
     <div class="form-list" id="formList">
       {% for form in forms %}
-        <div class="form-item" data-form="{{ form.title|lower }}">
-          <span class="form-name">
-            <i class="fas fa-file-pdf"></i> {{ form.title }}
-          </span>
-          <span class="form-category">{{ form.category|default:"General" }}</span>
-          <a href="{{ form.pdf.url }}" class="btn-download" download>
-            <i class="fas fa-download"></i> PDF
-          </a>
-        </div>
+      <div class="form-item" data-form="{{ form.title|lower }}">
+        <span class="form-name">
+          <i class="fas fa-file-pdf"></i> {{ form.title }}
+        </span>
+        <span class="form-category">{{ form.category|default:_("General") }}</span>
+        <a href="{{ form.pdf.url }}" class="btn-download" download>
+          <i class="fas fa-download"></i> {% trans "PDF" %}
+        </a>
+      </div>
       {% empty %}
-        <p style="grid-column: 1/-1; text-align:center; padding:40px; color:var(--gray-dark);">
-          No forms available.
-        </p>
+      <p
+        style="
+          grid-column: 1/-1;
+          text-align: center;
+          padding: 40px;
+          color: var(--gray-dark);
+        "
+      >
+        {% trans "No forms available." %}
+      </p>
       {% endfor %}
     </div>
 
     <!-- No Results Message -->
     <div class="no-results" id="noResults">
       <i class="fas fa-file-alt"></i>
-      <p>No forms match your search.</p>
+      <p>{% trans "No forms match your search." %}</p>
     </div>
 
     <!-- Footer Note -->
     <div class="footer-note">
       <span>
-        <i class="fas fa-check-circle" style="color: #1e8e3e;"></i> All forms are official and up-to-date.
+        <i class="fas fa-check-circle" style="color: #1e8e3e"></i> {% trans "All forms are official and up-to-date." %}
       </span>
       <span class="badge">
-        <i class="far fa-clock"></i> Updated: {{ "now"|date:"F Y" }}
+        <i class="far fa-clock"></i>
+        {% now "F Y" as current_month_year %}
+        {% blocktrans %}Updated: {{ current_month_year }}{% endblocktrans %}
       </span>
     </div>
   </div>
@@ -401,14 +424,18 @@
 <!-- ===== CTA BANNER ===== -->
 <section class="cta-banner">
   <div class="container">
-    <h2>Need Assistance with <span>Forms?</span></h2>
-    <p>We're here to help you fill, print, and submit your documents.</p>
+    <h2>{% trans "Need Assistance with" %} <span>{% trans "Forms?" %}</span></h2>
+    <p>{% trans "We're here to help you fill, print, and submit your documents." %}</p>
     <div class="cta-buttons">
       <a href="{% url 'home' %}#contact" class="btn-primary">
-        <i class="fas fa-phone"></i> Contact Us
+        <i class="fas fa-phone"></i> {% trans "Contact Us" %}
       </a>
-      <a href="https://wa.me/919876543210?text=Hello%2C%20I%20need%20help%20with%20government%20forms." target="_blank" class="btn-whatsapp">
-        <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+      <a
+        href="https://wa.me/919876543210?text=Hello%2C%20I%20need%20help%20with%20government%20forms."
+        target="_blank"
+        class="btn-whatsapp"
+      >
+        <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
       </a>
     </div>
   </div>
@@ -417,59 +444,60 @@
 
 {% block extra_scripts %}
 <script>
-  (function() {
-    const searchInput = document.getElementById('searchInput');
-    const clearBtn = document.getElementById('searchClear');
-    const formItems = document.querySelectorAll('.form-item');
-    const noResults = document.getElementById('noResults');
+  (function () {
+    const searchInput = document.getElementById("searchInput");
+    const clearBtn = document.getElementById("searchClear");
+    const formItems = document.querySelectorAll(".form-item");
+    const noResults = document.getElementById("noResults");
 
     // Function to filter forms
     function filterForms(query) {
       const q = query.trim().toLowerCase();
       let visibleCount = 0;
 
-      formItems.forEach(item => {
-        const formName = item.getAttribute('data-form') || item.innerText.toLowerCase();
+      formItems.forEach((item) => {
+        const formName =
+          item.getAttribute("data-form") || item.innerText.toLowerCase();
         const matches = !q || formName.includes(q);
         if (matches) {
-          item.classList.remove('hidden-item');
+          item.classList.remove("hidden-item");
           visibleCount++;
         } else {
-          item.classList.add('hidden-item');
+          item.classList.add("hidden-item");
         }
       });
 
       // Show/hide no results
-      if (visibleCount === 0 && q !== '') {
-        noResults.style.display = 'block';
+      if (visibleCount === 0 && q !== "") {
+        noResults.style.display = "block";
       } else {
-        noResults.style.display = 'none';
+        noResults.style.display = "none";
       }
     }
 
     // Event listeners
-    searchInput.addEventListener('input', function() {
+    searchInput.addEventListener("input", function () {
       filterForms(this.value);
     });
 
-    clearBtn.addEventListener('click', function() {
-      searchInput.value = '';
-      filterForms('');
+    clearBtn.addEventListener("click", function () {
+      searchInput.value = "";
+      filterForms("");
       searchInput.focus();
     });
 
     // Initial state: show all
-    filterForms('');
+    filterForms("");
 
     // Also handle Enter key
-    searchInput.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') {
+    searchInput.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
         e.preventDefault();
         filterForms(this.value);
       }
     });
 
-    console.log('📄 Download forms page ready.');
+    console.log("📄 Download forms page ready.");
   })();
 </script>
 {% endblock %}

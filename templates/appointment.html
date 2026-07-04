@@ -1,3 +1,4 @@
+{% load i18n %}
 {% extends "base.html" %}
 {% load static %}
 
@@ -22,7 +23,7 @@
     box-shadow: var(--shadow);
     padding: 2.5rem 2.5rem 2.8rem;
     transition: transform 0.2s ease;
-    border: 1px solid rgba(0,0,0,0.04);
+    border: 1px solid rgba(0, 0, 0, 0.04);
   }
 
   @media (max-width: 500px) {
@@ -41,7 +42,7 @@
   .card-header i {
     font-size: 2rem;
     color: var(--secondary);
-    background: rgba(0,212,255,0.12);
+    background: rgba(0, 212, 255, 0.12);
     padding: 0.5rem;
     border-radius: 14px;
   }
@@ -100,7 +101,7 @@
   .form-control:focus {
     outline: none;
     border-color: var(--secondary);
-    box-shadow: 0 0 0 4px rgba(0,212,255,0.15);
+    box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.15);
     background: var(--white);
   }
   .form-control::placeholder {
@@ -141,7 +142,7 @@
   }
   .mobile-input-wrapper:focus-within {
     border-color: var(--secondary);
-    box-shadow: 0 0 0 4px rgba(0,212,255,0.15);
+    box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.15);
     background: var(--white);
   }
   .country-code {
@@ -178,7 +179,7 @@
   }
   .form-group.error .form-control:focus,
   .form-group.error .mobile-input-wrapper:focus-within {
-    box-shadow: 0 0 0 4px rgba(255,107,53,0.15);
+    box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.15);
   }
   .error-message {
     display: none;
@@ -210,7 +211,7 @@
     justify-content: center;
     gap: 0.6rem;
     margin-top: 0.5rem;
-    box-shadow: 0 4px 12px rgba(0,212,255,0.3);
+    box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
   }
   .btn-book i {
     font-size: 1.1rem;
@@ -218,7 +219,7 @@
   .btn-book:hover {
     background: #00e5ff;
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0,212,255,0.4);
+    box-shadow: 0 8px 24px rgba(0, 212, 255, 0.4);
   }
   .btn-book:active {
     transform: scale(0.98);
@@ -283,108 +284,110 @@
     <!-- Header -->
     <div class="card-header">
       <i class="fas fa-calendar-check"></i>
-      <h1>Book an Appointment</h1>
+      <h1>{% trans "Book an Appointment" %}</h1>
     </div>
     <div class="subhead">
-      Select your service, choose a date &amp; time, and we’ll confirm your
-      visit.
+      {% trans "Select your service, choose a date &amp; time, and we’ll confirm your visit." %}
     </div>
 
     <!-- ===== FORM ===== -->
-    <form method="post" action="{% url 'appointment' %}" novalidate id="appointmentForm">
-      {% csrf_token %}
-      {{ form.non_field_errors }}
+    <form
+      method="post"
+      action="{% url 'appointment' %}"
+      novalidate
+      id="appointmentForm"
+    >
+      {% csrf_token %} {{ form.non_field_errors }}
 
       <!-- Full Name -->
       <div class="form-group" id="nameGroup">
         <label for="{{ form.full_name.id_for_label }}">
-          <i class="fas fa-user"></i> Full Name <span class="required-star">*</span>
+          <i class="fas fa-user"></i> {% trans "Full Name" %}
+          <span class="required-star">*</span>
         </label>
-        {{ form.full_name }}
-        {% if form.full_name.errors %}
-          <div class="error-message">{{ form.full_name.errors }}</div>
+        {{ form.full_name }} {% if form.full_name.errors %}
+        <div class="error-message">{{ form.full_name.errors }}</div>
         {% endif %}
       </div>
 
       <!-- Phone -->
       <div class="form-group" id="phoneGroup">
         <label for="{{ form.phone.id_for_label }}">
-          <i class="fas fa-phone"></i> Phone Number <span class="required-star">*</span>
+          <i class="fas fa-phone"></i> {% trans "Phone Number" %}
+          <span class="required-star">*</span>
         </label>
         <div class="mobile-input-wrapper">
           <span class="country-code">+91</span>
           {{ form.phone }}
         </div>
         {% if form.phone.errors %}
-          <div class="error-message">{{ form.phone.errors }}</div>
+        <div class="error-message">{{ form.phone.errors }}</div>
         {% endif %}
       </div>
 
       <!-- Email -->
       <div class="form-group">
         <label for="{{ form.email.id_for_label }}">
-          <i class="fas fa-envelope"></i> Email Address
+          <i class="fas fa-envelope"></i> {% trans "Email Address" %}
         </label>
-        {{ form.email }}
-        {% if form.email.errors %}
-          <div class="error-message">{{ form.email.errors }}</div>
+        {{ form.email }} {% if form.email.errors %}
+        <div class="error-message">{{ form.email.errors }}</div>
         {% endif %}
       </div>
 
       <!-- Service -->
       <div class="form-group" id="serviceGroup">
         <label for="{{ form.service.id_for_label }}">
-          <i class="fas fa-concierge-bell"></i> Service <span class="required-star">*</span>
+          <i class="fas fa-concierge-bell"></i> {% trans "Service" %}
+          <span class="required-star">*</span>
         </label>
-        {{ form.service }}
-        {% if form.service.errors %}
-          <div class="error-message">{{ form.service.errors }}</div>
+        {{ form.service }} {% if form.service.errors %}
+        <div class="error-message">{{ form.service.errors }}</div>
         {% endif %}
       </div>
 
       <!-- Date -->
       <div class="form-group" id="dateGroup">
         <label for="{{ form.appointment_date.id_for_label }}">
-          <i class="fas fa-calendar-day"></i> Appointment Date <span class="required-star">*</span>
+          <i class="fas fa-calendar-day"></i> {% trans "Appointment Date" %}
+          <span class="required-star">*</span>
         </label>
-        {{ form.appointment_date }}
-        {% if form.appointment_date.errors %}
-          <div class="error-message">{{ form.appointment_date.errors }}</div>
+        {{ form.appointment_date }} {% if form.appointment_date.errors %}
+        <div class="error-message">{{ form.appointment_date.errors }}</div>
         {% endif %}
       </div>
 
       <!-- Time -->
       <div class="form-group" id="timeGroup">
         <label for="{{ form.appointment_time.id_for_label }}">
-          <i class="fas fa-clock"></i> Appointment Time <span class="required-star">*</span>
+          <i class="fas fa-clock"></i> {% trans "Appointment Time" %}
+          <span class="required-star">*</span>
         </label>
-        {{ form.appointment_time }}
-        {% if form.appointment_time.errors %}
-          <div class="error-message">{{ form.appointment_time.errors }}</div>
+        {{ form.appointment_time }} {% if form.appointment_time.errors %}
+        <div class="error-message">{{ form.appointment_time.errors }}</div>
         {% endif %}
       </div>
 
       <!-- Message -->
       <div class="form-group">
         <label for="{{ form.message.id_for_label }}">
-          <i class="fas fa-comment"></i> Additional Message
+          <i class="fas fa-comment"></i> {% trans "Additional Message" %}
         </label>
-        {{ form.message }}
-        {% if form.message.errors %}
-          <div class="error-message">{{ form.message.errors }}</div>
+        {{ form.message }} {% if form.message.errors %}
+        <div class="error-message">{{ form.message.errors }}</div>
         {% endif %}
       </div>
 
       <button type="submit" class="btn-book" id="bookBtn">
-        <i class="fas fa-paper-plane"></i> Book Appointment
+        <i class="fas fa-paper-plane"></i> {% trans "Book Appointment" %}
       </button>
     </form>
 
     <!-- Footer Note -->
     <div class="footer-note">
       <i class="fas fa-shield-alt"></i>
-      Your details are secure.
-      <span><i class="far fa-clock"></i> 9:00 AM – 5:00 PM</span>
+      {% trans "Your details are secure." %}
+      <span><i class="far fa-clock"></i> {% trans "9:00 AM – 5:00 PM" %}</span>
     </div>
   </div>
 </section>
@@ -392,16 +395,22 @@
 
 {% block extra_scripts %}
 <script>
-  (function() {
+  (function () {
     "use strict";
 
     // DOM refs
     const form = document.getElementById("appointmentForm");
-    const fullName = document.getElementById("{{ form.full_name.id_for_label }}");
+    const fullName = document.getElementById(
+      "{{ form.full_name.id_for_label }}",
+    );
     const phone = document.getElementById("{{ form.phone.id_for_label }}");
     const service = document.getElementById("{{ form.service.id_for_label }}");
-    const dateInput = document.getElementById("{{ form.appointment_date.id_for_label }}");
-    const timeInput = document.getElementById("{{ form.appointment_time.id_for_label }}");
+    const dateInput = document.getElementById(
+      "{{ form.appointment_date.id_for_label }}",
+    );
+    const timeInput = document.getElementById(
+      "{{ form.appointment_time.id_for_label }}",
+    );
     const bookBtn = document.getElementById("bookBtn");
 
     const nameGroup = document.getElementById("nameGroup");
@@ -422,7 +431,9 @@
 
     // Clear all error states
     function clearErrors() {
-      [nameGroup, phoneGroup, serviceGroup, dateGroup, timeGroup].forEach(g => g.classList.remove("error"));
+      [nameGroup, phoneGroup, serviceGroup, dateGroup, timeGroup].forEach((g) =>
+        g.classList.remove("error"),
+      );
     }
 
     // Set error on a group
@@ -462,7 +473,7 @@
       } else {
         const selected = new Date(dateVal);
         const today = new Date();
-        today.setHours(0,0,0,0);
+        today.setHours(0, 0, 0, 0);
         if (selected < today) {
           setError(dateGroup);
           isValid = false;
@@ -479,38 +490,41 @@
     }
 
     // Phone input: only digits, max 10
-    phone.addEventListener("input", function() {
+    phone.addEventListener("input", function () {
       this.value = this.value.replace(/\D/g, "").slice(0, 10);
-      if (phoneGroup.classList.contains("error") && /^[0-9]{10}$/.test(this.value)) {
+      if (
+        phoneGroup.classList.contains("error") &&
+        /^[0-9]{10}$/.test(this.value)
+      ) {
         phoneGroup.classList.remove("error");
       }
     });
 
     // Clear errors on change/focus
-    fullName.addEventListener("input", function() {
+    fullName.addEventListener("input", function () {
       if (this.value.trim() && nameGroup.classList.contains("error")) {
         nameGroup.classList.remove("error");
       }
     });
-    service.addEventListener("change", function() {
+    service.addEventListener("change", function () {
       if (this.value) serviceGroup.classList.remove("error");
     });
-    dateInput.addEventListener("change", function() {
+    dateInput.addEventListener("change", function () {
       if (this.value) {
         const selected = new Date(this.value);
         const today = new Date();
-        today.setHours(0,0,0,0);
+        today.setHours(0, 0, 0, 0);
         if (selected >= today) {
           dateGroup.classList.remove("error");
         }
       }
     });
-    timeInput.addEventListener("change", function() {
+    timeInput.addEventListener("change", function () {
       if (this.value) timeGroup.classList.remove("error");
     });
 
     // Form submission
-    form.addEventListener("submit", function(e) {
+    form.addEventListener("submit", function (e) {
       if (!validateForm()) {
         e.preventDefault();
         const firstError = document.querySelector(".form-group.error");
@@ -523,15 +537,15 @@
       }
       // Disable button to prevent double submit
       bookBtn.disabled = true;
-      bookBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Booking…';
+      bookBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {% trans "Booking…"|escapejs %}';
     });
 
     // Prevent past dates on blur
-    dateInput.addEventListener("blur", function() {
+    dateInput.addEventListener("blur", function () {
       if (this.value) {
         const selected = new Date(this.value);
         const today = new Date();
-        today.setHours(0,0,0,0);
+        today.setHours(0, 0, 0, 0);
         if (selected < today) {
           this.value = "";
           setError(dateGroup);
@@ -539,7 +553,9 @@
       }
     });
 
-    console.log("📅 Appointment page ready — future dates only, 10-digit mobile validation.");
+    console.log(
+      "📅 Appointment page ready — future dates only, 10-digit mobile validation.",
+    );
   })();
 </script>
 {% endblock %}

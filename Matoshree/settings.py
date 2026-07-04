@@ -58,8 +58,9 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
-
     "django.contrib.sessions.middleware.SessionMiddleware",
+    'django.middleware.locale.LocaleMiddleware',
+    
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -144,16 +145,29 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # ---------------------------------------------------
-# Internationalization
+# Languages
 # ---------------------------------------------------
 
+# ---------- Internationalization ----------
+USE_I18N = True
+USE_L10N = True
+USE_TZ = True
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "Asia/Kolkata"
 
-USE_I18N = True
+# ---------- Available languages ----------
+LANGUAGES = [
+    ('en', 'English'),
+    ('mr', 'Marathi'),
+    ('hi', 'Hindi'),
+    ('gu', 'Gujarati'),
+    ('ah', 'Ahirani'),
+]
 
-USE_TZ = True
+# ---------- Path where translation files will be stored ----------
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
 
 # ---------------------------------------------------
 # Static Files
@@ -188,6 +202,8 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", "default@example.com")
 
 # ---------------------------------------------------
 # Authentication

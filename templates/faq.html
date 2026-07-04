@@ -1,524 +1,552 @@
+{% load i18n %}
 {% extends "base.html" %}
 {% load static %}
 
 {% block extra_head %}
-    <!-- Google Font & Font Awesome -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
+<!-- Google Font & Font Awesome -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap"
+  rel="stylesheet"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+/>
 
-    <style>
-        /* ----- Reset & Base (scoped) ----- */
-        .faq-page {
-            font-family: "Inter", sans-serif;
-            background: #f4f8fe;
-            color: #0b1b33;
-            padding: 2rem 0;
-        }
+<style>
+  /* ----- Reset & Base (scoped) ----- */
+  .faq-page {
+    font-family: "Inter", sans-serif;
+    background: #f4f8fe;
+    color: #0b1b33;
+    padding: 2rem 0;
+  }
 
-        .faq-page .container {
-            max-width: 820px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
+  .faq-page .container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
 
-        /* ----- Header / Hero ----- */
-        .faq-page .page-hero {
-            text-align: center;
-            margin-bottom: 2.5rem;
-        }
+  /* ----- Header / Hero ----- */
+  .faq-page .page-hero {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
 
-        .faq-page .breadcrumb {
-            font-size: 0.85rem;
-            color: #5b6f87;
-            margin-bottom: 0.5rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
+  .faq-page .breadcrumb {
+    font-size: 0.85rem;
+    color: #5b6f87;
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
 
-        .faq-page .breadcrumb a {
-            color: #0a66c2;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+  .faq-page .breadcrumb a {
+    color: #0a66c2;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
 
-        .faq-page .breadcrumb a:hover {
-            color: #0854a3;
-            text-decoration: underline;
-        }
+  .faq-page .breadcrumb a:hover {
+    color: #0854a3;
+    text-decoration: underline;
+  }
 
-        .faq-page .breadcrumb .current {
-            color: #0b1b33;
-            font-weight: 600;
-        }
+  .faq-page .breadcrumb .current {
+    color: #0b1b33;
+    font-weight: 600;
+  }
 
-        .faq-page .breadcrumb i {
-            font-size: 0.5rem;
-            color: #9aabbd;
-        }
+  .faq-page .breadcrumb i {
+    font-size: 0.5rem;
+    color: #9aabbd;
+  }
 
-        .faq-page .page-hero h1 {
-            font-size: 2.4rem;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            letter-spacing: -0.02em;
-            margin-bottom: 0.5rem;
-        }
+  .faq-page .page-hero h1 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
 
-        .faq-page .page-hero h1 i {
-            color: #0a66c2;
-            font-size: 2.2rem;
-        }
+  .faq-page .page-hero h1 i {
+    color: #0a66c2;
+    font-size: 2.2rem;
+  }
 
-        .faq-page .page-hero h1 span {
-            color: #0a66c2;
-        }
+  .faq-page .page-hero h1 span {
+    color: #0a66c2;
+  }
 
-        .faq-page .page-hero .subhead {
-            color: #5b6f87;
-            font-size: 1.05rem;
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
+  .faq-page .page-hero .subhead {
+    color: #5b6f87;
+    font-size: 1.05rem;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
 
-        /* ----- Search Bar ----- */
-        .faq-page .search-container {
-            margin-bottom: 2rem;
-            display: flex;
-            align-items: center;
-            background: #ffffff;
-            border-radius: 40px;
-            padding: 0.2rem 0.2rem 0.2rem 1.5rem;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-            border: 1px solid #dce3ed;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
+  /* ----- Search Bar ----- */
+  .faq-page .search-container {
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 40px;
+    padding: 0.2rem 0.2rem 0.2rem 1.5rem;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid #dce3ed;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
 
-        .faq-page .search-container:focus-within {
-            border-color: #0a66c2;
-            box-shadow: 0 0 0 4px rgba(10, 102, 194, 0.08);
-        }
+  .faq-page .search-container:focus-within {
+    border-color: #0a66c2;
+    box-shadow: 0 0 0 4px rgba(10, 102, 194, 0.08);
+  }
 
-        .faq-page .search-container i {
-            color: #7a8aa0;
-            font-size: 1rem;
-        }
+  .faq-page .search-container i {
+    color: #7a8aa0;
+    font-size: 1rem;
+  }
 
-        .faq-page .search-container input {
-            border: none;
-            background: transparent;
-            padding: 0.8rem 0.8rem;
-            font-size: 1rem;
-            font-family: "Inter", sans-serif;
-            width: 100%;
-            outline: none;
-            color: #0b1b33;
-        }
+  .faq-page .search-container input {
+    border: none;
+    background: transparent;
+    padding: 0.8rem 0.8rem;
+    font-size: 1rem;
+    font-family: "Inter", sans-serif;
+    width: 100%;
+    outline: none;
+    color: #0b1b33;
+  }
 
-        .faq-page .search-container input::placeholder {
-            color: #9aabbd;
-        }
+  .faq-page .search-container input::placeholder {
+    color: #9aabbd;
+  }
 
-        .faq-page .search-container .clear-btn {
-            background: transparent;
-            border: none;
-            color: #7a8aa0;
-            cursor: pointer;
-            padding: 0.4rem 0.6rem;
-            font-size: 1rem;
-            display: none;
-            transition: color 0.2s;
-        }
+  .faq-page .search-container .clear-btn {
+    background: transparent;
+    border: none;
+    color: #7a8aa0;
+    cursor: pointer;
+    padding: 0.4rem 0.6rem;
+    font-size: 1rem;
+    display: none;
+    transition: color 0.2s;
+  }
 
-        .faq-page .search-container .clear-btn.visible {
-            display: inline-block;
-        }
+  .faq-page .search-container .clear-btn.visible {
+    display: inline-block;
+  }
 
-        .faq-page .search-container .clear-btn:hover {
-            color: #0b1b33;
-        }
+  .faq-page .search-container .clear-btn:hover {
+    color: #0b1b33;
+  }
 
-        .faq-page .search-container button[type="submit"] {
-            background: #0a66c2;
-            border: none;
-            color: #fff;
-            padding: 0.5rem 1.4rem;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: background 0.2s;
-            white-space: nowrap;
-            font-family: "Inter", sans-serif;
-        }
+  .faq-page .search-container button[type="submit"] {
+    background: #0a66c2;
+    border: none;
+    color: #fff;
+    padding: 0.5rem 1.4rem;
+    border-radius: 40px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+    font-family: "Inter", sans-serif;
+  }
 
-        .faq-page .search-container button[type="submit"]:hover {
-            background: #0854a3;
-        }
+  .faq-page .search-container button[type="submit"]:hover {
+    background: #0854a3;
+  }
 
-        @media (max-width: 480px) {
-            .faq-page .search-container {
-                padding-left: 1rem;
-            }
-            .faq-page .search-container button[type="submit"] {
-                padding: 0.4rem 1rem;
-                font-size: 0.8rem;
-            }
-        }
+  @media (max-width: 480px) {
+    .faq-page .search-container {
+      padding-left: 1rem;
+    }
+    .faq-page .search-container button[type="submit"] {
+      padding: 0.4rem 1rem;
+      font-size: 0.8rem;
+    }
+  }
 
-        /* ----- FAQ Accordion ----- */
-        .faq-page .faq-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
+  /* ----- FAQ Accordion ----- */
+  .faq-page .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
 
-        .faq-page .faq-item {
-            background: #ffffff;
-            border-radius: 1rem;
-            border: 1px solid #e9eef4;
-            box-shadow: 0 2px 8px rgba(0, 20, 50, 0.03);
-            transition: box-shadow 0.2s, border-color 0.2s;
-            overflow: hidden;
-        }
+  .faq-page .faq-item {
+    background: #ffffff;
+    border-radius: 1rem;
+    border: 1px solid #e9eef4;
+    box-shadow: 0 2px 8px rgba(0, 20, 50, 0.03);
+    transition:
+      box-shadow 0.2s,
+      border-color 0.2s;
+    overflow: hidden;
+  }
 
-        .faq-page .faq-item:hover {
-            border-color: #d0ddee;
-            box-shadow: 0 4px 16px rgba(0, 20, 50, 0.05);
-        }
+  .faq-page .faq-item:hover {
+    border-color: #d0ddee;
+    box-shadow: 0 4px 16px rgba(0, 20, 50, 0.05);
+  }
 
-        /* Hide default marker for <summary> and style custom */
-        .faq-page .faq-item summary {
-            list-style: none;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1.2rem 1.8rem;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 1.05rem;
-            color: #0b1b33;
-            transition: background 0.15s;
-            gap: 1rem;
-            user-select: none;
-        }
+  /* Hide default marker for <summary> and style custom */
+  .faq-page .faq-item summary {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 1.8rem;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: #0b1b33;
+    transition: background 0.15s;
+    gap: 1rem;
+    user-select: none;
+  }
 
-        .faq-page .faq-item summary::-webkit-details-marker {
-            display: none;
-        }
+  .faq-page .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
 
-        .faq-page .faq-item summary .question-icon {
-            color: #0a66c2;
-            margin-right: 0.5rem;
-            font-size: 1.1rem;
-            flex-shrink: 0;
-        }
+  .faq-page .faq-item summary .question-icon {
+    color: #0a66c2;
+    margin-right: 0.5rem;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
 
-        .faq-page .faq-item summary .toggle-icon {
-            font-size: 1.2rem;
-            color: #7a8aa0;
-            transition: transform 0.25s ease;
-            flex-shrink: 0;
-        }
+  .faq-page .faq-item summary .toggle-icon {
+    font-size: 1.2rem;
+    color: #7a8aa0;
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+  }
 
-        .faq-page .faq-item[open] summary .toggle-icon {
-            transform: rotate(180deg);
-            color: #0a66c2;
-        }
+  .faq-page .faq-item[open] summary .toggle-icon {
+    transform: rotate(180deg);
+    color: #0a66c2;
+  }
 
-        .faq-page .faq-item summary:hover {
-            background: #f8faff;
-        }
+  .faq-page .faq-item summary:hover {
+    background: #f8faff;
+  }
 
-        .faq-page .faq-item .answer {
-            padding: 0 1.8rem 1.5rem 1.8rem;
-            color: #1a2b44;
-            line-height: 1.7;
-            font-size: 0.98rem;
-        }
+  .faq-page .faq-item .answer {
+    padding: 0 1.8rem 1.5rem 1.8rem;
+    color: #1a2b44;
+    line-height: 1.7;
+    font-size: 0.98rem;
+  }
 
-        .faq-page .faq-item .answer ul {
-            padding-left: 1.5rem;
-            margin: 0.3rem 0 0.5rem;
-        }
+  .faq-page .faq-item .answer ul {
+    padding-left: 1.5rem;
+    margin: 0.3rem 0 0.5rem;
+  }
 
-        .faq-page .faq-item .answer ul li {
-            margin-bottom: 0.2rem;
-        }
+  .faq-page .faq-item .answer ul li {
+    margin-bottom: 0.2rem;
+  }
 
-        .faq-page .faq-item .answer strong {
-            color: #0b1b33;
-        }
+  .faq-page .faq-item .answer strong {
+    color: #0b1b33;
+  }
 
-        /* ----- No results ----- */
-        .faq-page .no-results {
-            text-align: center;
-            padding: 2.5rem 0;
-            color: #6f85a0;
-            display: none;
-        }
+  /* ----- No results ----- */
+  .faq-page .no-results {
+    text-align: center;
+    padding: 2.5rem 0;
+    color: #6f85a0;
+    display: none;
+  }
 
-        .faq-page .no-results i {
-            font-size: 2.5rem;
-            opacity: 0.5;
-            margin-bottom: 0.5rem;
-            display: block;
-        }
+  .faq-page .no-results i {
+    font-size: 2.5rem;
+    opacity: 0.5;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
 
-        /* ----- Footer note ----- */
-        .faq-page .faq-footer {
-            margin-top: 2.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #e2e8f0;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
-            color: #5b6f87;
-        }
+  /* ----- Footer note ----- */
+  .faq-page .faq-footer {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #5b6f87;
+  }
 
-        .faq-page .faq-footer i {
-            color: #0a66c2;
-            margin-right: 0.2rem;
-        }
+  .faq-page .faq-footer i {
+    color: #0a66c2;
+    margin-right: 0.2rem;
+  }
 
-        .faq-page .faq-footer .badge {
-            background: #eef3f9;
-            padding: 0.2rem 0.9rem;
-            border-radius: 30px;
-            font-weight: 500;
-            font-size: 0.8rem;
-            color: #1a2b44;
-        }
+  .faq-page .faq-footer .badge {
+    background: #eef3f9;
+    padding: 0.2rem 0.9rem;
+    border-radius: 30px;
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: #1a2b44;
+  }
 
-        /* ----- Responsive ----- */
-        @media (max-width: 650px) {
-            .faq-page {
-                padding: 1rem 0;
-            }
-            .faq-page .page-hero h1 {
-                font-size: 1.8rem;
-            }
-            .faq-page .faq-item summary {
-                padding: 1rem 1.2rem;
-                font-size: 0.95rem;
-            }
-            .faq-page .faq-item .answer {
-                padding: 0 1.2rem 1.2rem 1.2rem;
-            }
-            .faq-page .faq-footer {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.3rem;
-            }
-        }
+  /* ----- Responsive ----- */
+  @media (max-width: 650px) {
+    .faq-page {
+      padding: 1rem 0;
+    }
+    .faq-page .page-hero h1 {
+      font-size: 1.8rem;
+    }
+    .faq-page .faq-item summary {
+      padding: 1rem 1.2rem;
+      font-size: 0.95rem;
+    }
+    .faq-page .faq-item .answer {
+      padding: 0 1.2rem 1.2rem 1.2rem;
+    }
+    .faq-page .faq-footer {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.3rem;
+    }
+  }
 
-        @media (max-width: 400px) {
-            .faq-page .faq-item summary .question-icon {
-                display: none;
-            }
-            .faq-page .search-container input {
-                font-size: 0.9rem;
-            }
-        }
-    </style>
+  @media (max-width: 400px) {
+    .faq-page .faq-item summary .question-icon {
+      display: none;
+    }
+    .faq-page .search-container input {
+      font-size: 0.9rem;
+    }
+  }
+</style>
 {% endblock extra_head %}
 
 {% block content %}
 <div class="faq-page">
-    <div class="container">
-        <!-- ===== PAGE HERO ===== -->
-        <div class="page-hero">
-            <h1>
-                <i class="fas fa-question-circle"></i>
-                Frequently Asked <span>Questions</span>
-            </h1>
-            <p class="subhead">
-                Find quick answers to common questions about our services, documents,
-                and charges.
-            </p>
-        </div>
-
-        <!-- ===== SEARCH ===== -->
-        <div class="search-container" role="search">
-            <i class="fas fa-search"></i>
-            <input
-                type="text"
-                id="searchInput"
-                placeholder="Search for questions..."
-                aria-label="Search FAQs"
-                autocomplete="off"
-            />
-            <button
-                type="button"
-                class="clear-btn"
-                id="clearSearch"
-                aria-label="Clear search"
-            >
-                <i class="fas fa-times-circle"></i>
-            </button>
-            <button type="submit" id="searchSubmit" aria-label="Submit search">
-                <i class="fas fa-arrow-right"></i>
-            </button>
-        </div>
-
-        <!-- ===== FAQ LIST ===== -->
-        <div class="faq-list" id="faqList">
-            {% for faq in faqs %}
-            <details class="faq-item" data-question="{{ faq.question|lower }}" data-answer="{{ faq.answer|lower|striptags }}">
-                <summary>
-                    <span>
-                        <i class="fas fa-question-circle question-icon"></i>
-                        {{ faq.question }}
-                    </span>
-                    <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
-                </summary>
-                <div class="answer">
-                    {{ faq.answer|linebreaksbr }}
-                </div>
-            </details>
-            {% empty %}
-            <div class="faq-item" style="text-align: center; padding: 2rem; color: #5b6f87; border: none; box-shadow: none;">
-                <i class="fas fa-comment-slash" style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
-                <p>No FAQs have been added yet. Please check back later.</p>
-            </div>
-            {% endfor %}
-        </div>
-
-        <!-- ===== NO RESULTS MESSAGE ===== -->
-        <div class="no-results" id="noResults">
-            <i class="fas fa-search-minus"></i>
-            <p>No questions match your search. Try a different keyword.</p>
-        </div>
-
-        <!-- ===== FOOTER NOTE ===== -->
-        <div class="faq-footer">
-            <span>
-                <i class="fas fa-lightbulb"></i> Can't find what you need?
-                <a href="{% url 'home' %}#contact" style="color: #0a66c2; text-decoration: none; font-weight: 600;">
-                    Contact us
-                </a>
-            </span>
-            <span class="badge">
-                <i class="fas fa-file-alt"></i> {{ faqs|length }} answers
-            </span>
-        </div>
+  <div class="container">
+    <!-- ===== PAGE HERO ===== -->
+    <div class="page-hero">
+      <h1>
+        <i class="fas fa-question-circle"></i>
+        {% trans "Frequently Asked" %} <span>{% trans "Questions" %}</span>
+      </h1>
+      <p class="subhead">
+        {% trans "Find quick answers to common questions about our services, documents, and charges." %}
+      </p>
     </div>
+
+    <!-- ===== SEARCH ===== -->
+    <div class="search-container" role="search">
+      <i class="fas fa-search"></i>
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="{% trans "Search for questions..." %}"
+        aria-label="{% trans "Search FAQs" %}"
+        autocomplete="off"
+      />
+      <button
+        type="button"
+        class="clear-btn"
+        id="clearSearch"
+        aria-label="{% trans "Clear search" %}"
+      >
+        <i class="fas fa-times-circle"></i>
+      </button>
+      <button type="submit" id="searchSubmit" aria-label="{% trans "Submit search" %}">
+        <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+
+    <!-- ===== FAQ LIST ===== -->
+    <div class="faq-list" id="faqList">
+      {% for faq in faqs %}
+      <details
+        class="faq-item"
+        data-question="{{ faq.question|lower }}"
+        data-answer="{{ faq.answer|lower|striptags }}"
+      >
+        <summary>
+          <span>
+            <i class="fas fa-question-circle question-icon"></i>
+            {{ faq.question }}
+          </span>
+          <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
+        </summary>
+        <div class="answer">{{ faq.answer|linebreaksbr }}</div>
+      </details>
+      {% empty %}
+      <div
+        class="faq-item"
+        style="
+          text-align: center;
+          padding: 2rem;
+          color: #5b6f87;
+          border: none;
+          box-shadow: none;
+        "
+      >
+        <i
+          class="fas fa-comment-slash"
+          style="font-size: 2rem; display: block; margin-bottom: 0.5rem"
+        ></i>
+        <p>{% trans "No FAQs have been added yet. Please check back later." %}</p>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- ===== NO RESULTS MESSAGE ===== -->
+    <div class="no-results" id="noResults">
+      <i class="fas fa-search-minus"></i>
+      <p>{% trans "No questions match your search. Try a different keyword." %}</p>
+    </div>
+
+    <!-- ===== FOOTER NOTE ===== -->
+    <div class="faq-footer">
+      <span>
+        <i class="fas fa-lightbulb"></i> {% trans "Can't find what you need?" %}
+        <a
+          href="{% url 'home' %}#contact"
+          style="color: #0a66c2; text-decoration: none; font-weight: 600"
+        >
+          {% trans "Contact us" %}
+        </a>
+      </span>
+      <span class="badge">
+        <i class="fas fa-file-alt"></i>
+        {% blocktrans count counter=faqs|length %}
+          {{ counter }} answer
+        {% plural %}
+          {{ counter }} answers
+        {% endblocktrans %}
+      </span>
+    </div>
+  </div>
 </div>
 {% endblock content %}
 
 {% block extra_scripts %}
 <script>
-    (function() {
-        "use strict";
+  (function () {
+    "use strict";
 
-        const searchInput = document.getElementById('searchInput');
-        const clearBtn = document.getElementById('clearSearch');
-        const searchSubmit = document.getElementById('searchSubmit');
-        const faqItems = document.querySelectorAll('.faq-item');
-        const noResults = document.getElementById('noResults');
-        const faqList = document.getElementById('faqList');
+    const searchInput = document.getElementById("searchInput");
+    const clearBtn = document.getElementById("clearSearch");
+    const searchSubmit = document.getElementById("searchSubmit");
+    const faqItems = document.querySelectorAll(".faq-item");
+    const noResults = document.getElementById("noResults");
+    const faqList = document.getElementById("faqList");
 
-        // Helper: filter FAQs
-        function filterFAQs(query) {
-            const q = query.trim().toLowerCase();
-            let visibleCount = 0;
+    // Helper: filter FAQs
+    function filterFAQs(query) {
+      const q = query.trim().toLowerCase();
+      let visibleCount = 0;
 
-            faqItems.forEach(function(item) {
-                // Skip the "no FAQs" placeholder if it exists (it has no data-* attributes)
-                if (!item.dataset.question) {
-                    // If it's the placeholder, we keep it visible only if there are no real FAQs and search is empty
-                    // But we handle that separately.
-                    return;
-                }
-
-                const question = item.dataset.question || '';
-                const answer = item.dataset.answer || '';
-                // Also search in the summary text (just in case)
-                const summarySpan = item.querySelector('summary span');
-                const summaryText = summarySpan ? summarySpan.textContent.toLowerCase() : '';
-
-                const match = !q ||
-                    question.includes(q) ||
-                    answer.includes(q) ||
-                    summaryText.includes(q);
-
-                if (match) {
-                    item.style.display = 'block';
-                    visibleCount++;
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-
-            // Show/hide no results
-            if (visibleCount === 0 && q !== '' && faqItems.length > 0) {
-                noResults.style.display = 'block';
-            } else {
-                noResults.style.display = 'none';
-            }
-
-            // Toggle clear button visibility
-            if (q.length > 0) {
-                clearBtn.classList.add('visible');
-            } else {
-                clearBtn.classList.remove('visible');
-            }
+      faqItems.forEach(function (item) {
+        // Skip the "no FAQs" placeholder if it exists (it has no data-* attributes)
+        if (!item.dataset.question) {
+          // If it's the placeholder, we keep it visible only if there are no real FAQs and search is empty
+          // But we handle that separately.
+          return;
         }
 
-        // Event: input
-        searchInput.addEventListener('input', function() {
-            filterFAQs(this.value);
-        });
+        const question = item.dataset.question || "";
+        const answer = item.dataset.answer || "";
+        // Also search in the summary text (just in case)
+        const summarySpan = item.querySelector("summary span");
+        const summaryText = summarySpan
+          ? summarySpan.textContent.toLowerCase()
+          : "";
 
-        // Event: clear
-        clearBtn.addEventListener('click', function() {
-            searchInput.value = '';
-            filterFAQs('');
-            searchInput.focus();
-        });
+        const match =
+          !q ||
+          question.includes(q) ||
+          answer.includes(q) ||
+          summaryText.includes(q);
 
-        // Event: submit button (just triggers search, but we already do on input)
-        searchSubmit.addEventListener('click', function(e) {
-            e.preventDefault();
-            filterFAQs(searchInput.value);
-        });
-
-        // Also trigger on Enter key (but input event already does that)
-        searchInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                filterFAQs(this.value);
-            }
-        });
-
-        // Initial: show all (clear any hidden)
-        filterFAQs('');
-
-        // If there are no real FAQ items (only placeholder), hide no-results initially
-        const realItems = document.querySelectorAll('.faq-item[data-question]');
-        if (realItems.length === 0) {
-            noResults.style.display = 'none';
+        if (match) {
+          item.style.display = "block";
+          visibleCount++;
+        } else {
+          item.style.display = "none";
         }
+      });
 
-        // Ensure the clear button is hidden initially
-        clearBtn.classList.remove('visible');
+      // Show/hide no results
+      if (visibleCount === 0 && q !== "" && faqItems.length > 0) {
+        noResults.style.display = "block";
+      } else {
+        noResults.style.display = "none";
+      }
 
-    })();
+      // Toggle clear button visibility
+      if (q.length > 0) {
+        clearBtn.classList.add("visible");
+      } else {
+        clearBtn.classList.remove("visible");
+      }
+    }
+
+    // Event: input
+    searchInput.addEventListener("input", function () {
+      filterFAQs(this.value);
+    });
+
+    // Event: clear
+    clearBtn.addEventListener("click", function () {
+      searchInput.value = "";
+      filterFAQs("");
+      searchInput.focus();
+    });
+
+    // Event: submit button (just triggers search, but we already do on input)
+    searchSubmit.addEventListener("click", function (e) {
+      e.preventDefault();
+      filterFAQs(searchInput.value);
+    });
+
+    // Also trigger on Enter key (but input event already does that)
+    searchInput.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        filterFAQs(this.value);
+      }
+    });
+
+    // Initial: show all (clear any hidden)
+    filterFAQs("");
+
+    // If there are no real FAQ items (only placeholder), hide no-results initially
+    const realItems = document.querySelectorAll(".faq-item[data-question]");
+    if (realItems.length === 0) {
+      noResults.style.display = "none";
+    }
+
+    // Ensure the clear button is hidden initially
+    clearBtn.classList.remove("visible");
+  })();
 </script>
 {% endblock extra_scripts %}

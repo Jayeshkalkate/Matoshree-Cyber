@@ -1,4 +1,4 @@
-{% comment %} {% extends "base.html" %} {% endcomment %}
+{% load i18n %}
 {% load static %}
 
 <!doctype html>
@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Dashboard – Cyber Café</title>
+    <title>{% trans "Admin Dashboard – Cyber Café" %}</title>
 
     <!-- Google Fonts & Font Awesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -126,23 +126,23 @@
 <body>
     <!-- ===== SIDEBAR ===== -->
     <aside class="sidebar" id="sidebar">
-      <div class="logo"><i class="fas fa-laptop"></i> CyberAdmin</div>
+      <div class="logo"><i class="fas fa-laptop"></i> {% trans "CyberAdmin" %}</div>
       <nav>
         <ul>
-          <li><a href="#" class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-          <li><a href="#" data-section="services"><i class="fas fa-concierge-bell"></i> Manage Services</a></li>
-          <li><a href="#" data-section="prices"><i class="fas fa-coins"></i> Update Prices</a></li>
-          <li><a href="#" data-section="announcements"><i class="fas fa-bullhorn"></i> Announcements</a></li>
-          <li><a href="#" data-section="jobs"><i class="fas fa-briefcase"></i> Job Notifications</a></li>
-          <li><a href="#" data-section="schemes"><i class="fas fa-hand-holding-heart"></i> Gov. Schemes</a></li>
-          <li><a href="#" data-section="appointments"><i class="fas fa-calendar-check"></i> Appointments</a></li>
-          <li><a href="#" data-section="inquiries"><i class="fas fa-envelope"></i> Inquiries</a></li>
-          <li><a href="#" data-section="forms"><i class="fas fa-file-pdf"></i> Upload Forms</a></li>
-          <li><a href="#" data-section="gallery"><i class="fas fa-images"></i> Gallery</a></li>
-          <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> Settings</a></li>
+          <li><a href="#" class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> {% trans "Dashboard" %}</a></li>
+          <li><a href="#" data-section="services"><i class="fas fa-concierge-bell"></i> {% trans "Manage Services" %}</a></li>
+          <li><a href="#" data-section="prices"><i class="fas fa-coins"></i> {% trans "Update Prices" %}</a></li>
+          <li><a href="#" data-section="announcements"><i class="fas fa-bullhorn"></i> {% trans "Announcements" %}</a></li>
+          <li><a href="#" data-section="jobs"><i class="fas fa-briefcase"></i> {% trans "Job Notifications" %}</a></li>
+          <li><a href="#" data-section="schemes"><i class="fas fa-hand-holding-heart"></i> {% trans "Gov. Schemes" %}</a></li>
+          <li><a href="#" data-section="appointments"><i class="fas fa-calendar-check"></i> {% trans "Appointments" %}</a></li>
+          <li><a href="#" data-section="inquiries"><i class="fas fa-envelope"></i> {% trans "Inquiries" %}</a></li>
+          <li><a href="#" data-section="forms"><i class="fas fa-file-pdf"></i> {% trans "Upload Forms" %}</a></li>
+          <li><a href="#" data-section="gallery"><i class="fas fa-images"></i> {% trans "Gallery" %}</a></li>
+          <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> {% trans "Settings" %}</a></li>
         </ul>
       </nav>
-      <a href="{% url 'logout' %}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      <a href="{% url 'logout' %}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> {% trans "Logout" %}</a>
     </aside>
 
     <!-- ===== MAIN CONTENT ===== -->
@@ -151,10 +151,10 @@
       <div class="top-bar">
         <div style="display:flex; align-items:center; gap:0.8rem">
           <button class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></button>
-          <h2 id="pageTitle">Dashboard</h2>
+          <h2 id="pageTitle">{% trans "Dashboard" %}</h2>
         </div>
         <div class="user-info">
-          <span>Admin</span>
+          <span>{% trans "Admin" %}</span>
           <div class="avatar">A</div>
         </div>
       </div>
@@ -164,23 +164,23 @@
         <div class="stats-grid">
           <div class="stat-card">
             <div class="icon"><i class="fas fa-concierge-bell"></i></div>
-            <div class="info"><h4>{{ services.count }}</h4><p>Services</p></div>
+            <div class="info"><h4>{{ services.count }}</h4><p>{% trans "Services" %}</p></div>
           </div>
           <div class="stat-card">
             <div class="icon"><i class="fas fa-calendar-check"></i></div>
-            <div class="info"><h4>{{ appointments.count }}</h4><p>Appointments</p></div>
+            <div class="info"><h4>{{ appointments.count }}</h4><p>{% trans "Appointments" %}</p></div>
           </div>
           <div class="stat-card">
             <div class="icon"><i class="fas fa-envelope"></i></div>
-            <div class="info"><h4>{{ contacts.count }}</h4><p>Inquiries</p></div>
+            <div class="info"><h4>{{ contacts.count }}</h4><p>{% trans "Inquiries" %}</p></div>
           </div>
           <div class="stat-card">
             <div class="icon"><i class="fas fa-file-pdf"></i></div>
-            <div class="info"><h4>{{ forms_list.count }}</h4><p>Forms</p></div>
+            <div class="info"><h4>{{ forms_list.count }}</h4><p>{% trans "Forms" %}</p></div>
           </div>
         </div>
         <div style="background:#fff; border-radius:1rem; padding:1.5rem; border:1px solid #e9eef4;">
-          <h4 style="margin-bottom:0.8rem;"><i class="fas fa-clock" style="color:#0a66c2"></i> Recent Activity</h4>
+          <h4 style="margin-bottom:0.8rem;"><i class="fas fa-clock" style="color:#0a66c2"></i> {% trans "Recent Activity" %}</h4>
           <ul style="list-style:none; padding:0">
             {% for appt in appointments|slice:":5" %}
               <li style="display:flex; justify-content:space-between; padding:0.5rem 0; border-bottom:1px solid #f0f4fa;">
@@ -188,7 +188,7 @@
                 <span style="color:#6f85a0; font-size:0.85rem;">{{ appt.created_at|date:"d M, H:i" }}</span>
               </li>
             {% empty %}
-              <li style="color:#6f85a0; padding:0.5rem 0;">No recent activity.</li>
+              <li style="color:#6f85a0; padding:0.5rem 0;">{% trans "No recent activity." %}</li>
             {% endfor %}
           </ul>
         </div>
@@ -197,8 +197,8 @@
       <!-- ===== MANAGE SERVICES ===== -->
       <div id="section-services" class="section">
         <div class="section-header">
-          <h3><i class="fas fa-concierge-bell" style="color:#0a66c2"></i> Manage Services</h3>
-          <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addServiceForm">Add Service</button>
+          <h3><i class="fas fa-concierge-bell" style="color:#0a66c2"></i> {% trans "Manage Services" %}</h3>
+          <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addServiceForm">{% trans "Add Service" %}</button>
         </div>
 
         <div class="collapse admin-form" id="addServiceForm">
@@ -208,21 +208,21 @@
             <input type="hidden" name="model_type" value="service">
             {{ service_form.as_p }}
             <div class="form-actions">
-              <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Save</button>
+              <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save" %}</button>
             </div>
           </form>
         </div>
 
         <div class="table-wrap">
           <table>
-            <thead><tr><th>#</th><th>Name</th><th>Category</th><th>Status</th><th>Actions</th></tr></thead>
+            <thead><tr><th>#</th><th>{% trans "Name" %}</th><th>{% trans "Category" %}</th><th>{% trans "Status" %}</th><th>{% trans "Actions" %}</th></tr></thead>
             <tbody>
               {% for service in services %}
               <tr>
                 <td>{{ forloop.counter }}</td>
                 <td>{{ service.name }}</td>
                 <td>{{ service.category }}</td>
-                <td><span class="badge-status {% if service.active %}confirmed{% else %}cancelled{% endif %}">{{ service.active|yesno:"Active,Inactive" }}</span></td>
+                <td><span class="badge-status {% if service.active %}confirmed{% else %}cancelled{% endif %}">{{ service.active|yesno:_("Active,Inactive") }}</span></td>
                 <td>
                   <button class="btn-primary btn-sm" onclick="editService('{{ service.id }}', '{{ service.name|escapejs }}', '{{ service.category|escapejs }}', '{{ service.description|escapejs }}', '{{ service.active|yesno:"true,false" }}', '{{ service.icon|escapejs }}')"><i class="fas fa-edit"></i></button>
                   <form method="post" style="display:inline;">
@@ -230,11 +230,11 @@
                     <input type="hidden" name="action" value="delete">
                     <input type="hidden" name="model_type" value="service">
                     <input type="hidden" name="id" value="{{ service.id }}">
-                    <button type="submit" class="btn-danger" onclick="return confirm('Delete this service?')"><i class="fas fa-trash"></i></button>
+                    <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this service?"|escapejs %}')"><i class="fas fa-trash"></i></button>
                   </form>
                 </td>
               </tr>
-              {% empty %}<tr><td colspan="5">No services.</td></tr>{% endfor %}
+              {% empty %}<tr><td colspan="5">{% trans "No services." %}</td></tr>{% endfor %}
             </tbody>
           </table>
         </div>
@@ -247,36 +247,36 @@
             <input type="hidden" name="model_type" value="service">
             <input type="hidden" name="id" id="editServiceId">
             <div>
-              <label>Service Name *</label>
+              <label>{% trans "Service Name" %} *</label>
               <input type="text" name="name" id="editSvcName" required>
             </div>
             <div>
-              <label>Category</label>
+              <label>{% trans "Category" %}</label>
               <select name="category" id="editSvcCategory">
-                <option value="Government">Government</option>
-                <option value="Financial">Financial</option>
-                <option value="Printing">Printing</option>
-                <option value="Other">Other</option>
+                <option value="Government">{% trans "Government" %}</option>
+                <option value="Financial">{% trans "Financial" %}</option>
+                <option value="Printing">{% trans "Printing" %}</option>
+                <option value="Other">{% trans "Other" %}</option>
               </select>
             </div>
             <div class="full-width">
-              <label>Description</label>
+              <label>{% trans "Description" %}</label>
               <textarea name="description" id="editSvcDesc" rows="2"></textarea>
             </div>
             <div>
-              <label>Status</label>
+              <label>{% trans "Status" %}</label>
               <select name="active" id="editSvcStatus">
-                <option value="true">Active</option>
-                <option value="false">Inactive</option>
+                <option value="true">{% trans "Active" %}</option>
+                <option value="false">{% trans "Inactive" %}</option>
               </select>
             </div>
             <div>
-              <label>Icon</label>
-              <input type="text" name="icon" id="editSvcIcon" placeholder="e.g. fa-print">
+              <label>{% trans "Icon" %}</label>
+              <input type="text" name="icon" id="editSvcIcon" placeholder="{% trans "e.g. fa-print" %}">
             </div>
             <div class="form-actions">
-              <button type="button" class="btn-outline" onclick="document.getElementById('editServiceForm').style.display='none'">Cancel</button>
-              <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Update</button>
+              <button type="button" class="btn-outline" onclick="document.getElementById('editServiceForm').style.display='none'">{% trans "Cancel" %}</button>
+              <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
             </div>
           </form>
         </div>
@@ -285,8 +285,8 @@
       <!-- ===== UPDATE PRICES (Service Charges) ===== -->
       <div id="section-prices" class="section">
         <div class="section-header">
-          <h3><i class="fas fa-coins" style="color:#0a66c2"></i> Service Charges</h3>
-          <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addChargeForm">Add Charge</button>
+          <h3><i class="fas fa-coins" style="color:#0a66c2"></i> {% trans "Service Charges" %}</h3>
+          <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addChargeForm">{% trans "Add Charge" %}</button>
         </div>
 
         <div class="collapse admin-form" id="addChargeForm">
@@ -296,14 +296,14 @@
             <input type="hidden" name="model_type" value="servicecharge">
             {{ servicecharge_form.as_p }}
             <div class="form-actions">
-              <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Save</button>
+              <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save" %}</button>
             </div>
           </form>
         </div>
 
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Service</th><th>Charge (₹)</th><th>Actions</th></tr></thead>
+            <thead><tr><th>{% trans "Service" %}</th><th>{% trans "Charge (₹)" %}</th><th>{% trans "Actions" %}</th></tr></thead>
             <tbody>
               {% for charge in servicecharges %}
               <tr>
@@ -316,11 +316,11 @@
                     <input type="hidden" name="action" value="delete">
                     <input type="hidden" name="model_type" value="servicecharge">
                     <input type="hidden" name="id" value="{{ charge.id }}">
-                    <button type="submit" class="btn-danger" onclick="return confirm('Delete this charge?')"><i class="fas fa-trash"></i></button>
+                    <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this charge?"|escapejs %}')"><i class="fas fa-trash"></i></button>
                   </form>
                 </td>
               </tr>
-              {% empty %}<tr><td colspan="3">No charges defined.</td></tr>{% endfor %}
+              {% empty %}<tr><td colspan="3">{% trans "No charges defined." %}</td></tr>{% endfor %}
             </tbody>
           </table>
         </div>
@@ -333,7 +333,7 @@
             <input type="hidden" name="model_type" value="servicecharge">
             <input type="hidden" name="id" id="editChargeId">
             <div>
-              <label>Service</label>
+              <label>{% trans "Service" %}</label>
               <select name="service" id="editChargeService" class="form-control">
                 {% for service in services %}
                   <option value="{{ service.id }}">{{ service.name }}</option>
@@ -341,12 +341,12 @@
               </select>
             </div>
             <div>
-              <label>Charge (₹)</label>
+              <label>{% trans "Charge (₹)" %}</label>
               <input type="number" step="0.01" name="charge" id="editChargeAmount" required>
             </div>
             <div class="form-actions">
-              <button type="button" class="btn-outline" onclick="document.getElementById('editChargeForm').style.display='none'">Cancel</button>
-              <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Update</button>
+              <button type="button" class="btn-outline" onclick="document.getElementById('editChargeForm').style.display='none'">{% trans "Cancel" %}</button>
+              <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
             </div>
           </form>
         </div>
@@ -355,8 +355,8 @@
       <!-- ===== ANNOUNCEMENTS ===== -->
       <div id="section-announcements" class="section">
         <div class="section-header">
-          <h3><i class="fas fa-bullhorn" style="color:#0a66c2"></i> Announcements</h3>
-          <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addAnnouncementForm">Add Announcement</button>
+          <h3><i class="fas fa-bullhorn" style="color:#0a66c2"></i> {% trans "Announcements" %}</h3>
+          <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addAnnouncementForm">{% trans "Add Announcement" %}</button>
         </div>
 
         <div class="collapse admin-form" id="addAnnouncementForm">
@@ -366,7 +366,7 @@
             <input type="hidden" name="model_type" value="announcement">
             {{ announcement_form.as_p }}
             <div class="form-actions">
-              <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Save</button>
+              <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save" %}</button>
             </div>
           </form>
         </div>
@@ -383,18 +383,18 @@
               <input type="hidden" name="action" value="delete">
               <input type="hidden" name="model_type" value="announcement">
               <input type="hidden" name="id" value="{{ ann.id }}">
-              <button type="submit" class="btn-danger" onclick="return confirm('Delete this announcement?')"><i class="fas fa-times"></i></button>
+              <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this announcement?"|escapejs %}')"><i class="fas fa-times"></i></button>
             </form>
           </div>
-          {% empty %}<p style="color:#6f85a0;">No announcements.</p>{% endfor %}
+          {% empty %}<p style="color:#6f85a0;">{% trans "No announcements." %}</p>{% endfor %}
         </div>
       </div>
 
       <!-- ===== JOB NOTIFICATIONS ===== -->
       <div id="section-jobs" class="section">
         <div class="section-header">
-          <h3><i class="fas fa-briefcase" style="color:#0a66c2"></i> Job Notifications</h3>
-          <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addJobForm">Add Job</button>
+          <h3><i class="fas fa-briefcase" style="color:#0a66c2"></i> {% trans "Job Notifications" %}</h3>
+          <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addJobForm">{% trans "Add Job" %}</button>
         </div>
 
         <div class="collapse admin-form" id="addJobForm">
@@ -404,7 +404,7 @@
             <input type="hidden" name="model_type" value="job">
             {{ job_form.as_p }}
             <div class="form-actions">
-              <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Save</button>
+              <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save" %}</button>
             </div>
           </form>
         </div>
@@ -414,25 +414,25 @@
           <div class="list-item">
             <div class="info">
               <span class="title"><i class="fas fa-{{ job.icon|default:'briefcase' }}"></i> {{ job.title }}</span>
-              <span class="sub">{{ job.organization }} – Last Date: {{ job.last_date|date:"d M Y" }}</span>
+              <span class="sub">{% blocktrans with org=job.organization date=job.last_date|date:"d M Y" %}{{ org }} – Last Date: {{ date }}{% endblocktrans %}</span>
             </div>
             <form method="post" style="display:inline;">
               {% csrf_token %}
               <input type="hidden" name="action" value="delete">
               <input type="hidden" name="model_type" value="job">
               <input type="hidden" name="id" value="{{ job.id }}">
-              <button type="submit" class="btn-danger" onclick="return confirm('Delete this job?')"><i class="fas fa-times"></i></button>
+              <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this job?"|escapejs %}')"><i class="fas fa-times"></i></button>
             </form>
           </div>
-          {% empty %}<p style="color:#6f85a0;">No jobs.</p>{% endfor %}
+          {% empty %}<p style="color:#6f85a0;">{% trans "No jobs." %}</p>{% endfor %}
         </div>
       </div>
 
       <!-- ===== GOVERNMENT SCHEMES ===== -->
       <div id="section-schemes" class="section">
         <div class="section-header">
-          <h3><i class="fas fa-hand-holding-heart" style="color:#0a66c2"></i> Government Schemes</h3>
-          <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addSchemeForm">Add Scheme</button>
+          <h3><i class="fas fa-hand-holding-heart" style="color:#0a66c2"></i> {% trans "Government Schemes" %}</h3>
+          <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addSchemeForm">{% trans "Add Scheme" %}</button>
         </div>
 
         <div class="collapse admin-form" id="addSchemeForm">
@@ -442,7 +442,7 @@
             <input type="hidden" name="model_type" value="scheme">
             {{ scheme_form.as_p }}
             <div class="form-actions">
-              <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Save</button>
+              <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save" %}</button>
             </div>
           </form>
         </div>
@@ -452,7 +452,7 @@
           <div class="list-item">
             <div class="info">
               <span class="title">{{ scheme.title }}</span>
-              <span class="sub">{{ scheme.description|truncatechars:80 }} – Eligibility: {{ scheme.eligibility|default:"N/A" }}</span>
+              <span class="sub">{% blocktrans with desc=scheme.description|truncatechars:80 elig=scheme.eligibility|default:"N/A" %}{{ desc }} – Eligibility: {{ elig }}{% endblocktrans %}</span>
               {% if scheme.image %}
                 <img src="{{ scheme.image.url }}" alt="{{ scheme.title }}">
               {% endif %}
@@ -462,19 +462,19 @@
               <input type="hidden" name="action" value="delete">
               <input type="hidden" name="model_type" value="scheme">
               <input type="hidden" name="id" value="{{ scheme.id }}">
-              <button type="submit" class="btn-danger" onclick="return confirm('Delete this scheme?')"><i class="fas fa-times"></i></button>
+              <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this scheme?"|escapejs %}')"><i class="fas fa-times"></i></button>
             </form>
           </div>
-          {% empty %}<p style="color:#6f85a0;">No schemes.</p>{% endfor %}
+          {% empty %}<p style="color:#6f85a0;">{% trans "No schemes." %}</p>{% endfor %}
         </div>
       </div>
 
       <!-- ===== APPOINTMENTS ===== -->
       <div id="section-appointments" class="section">
-        <div class="section-header"><h3><i class="fas fa-calendar-check" style="color:#0a66c2"></i> Appointments</h3></div>
+        <div class="section-header"><h3><i class="fas fa-calendar-check" style="color:#0a66c2"></i> {% trans "Appointments" %}</h3></div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Customer</th><th>Service</th><th>Date</th><th>Time</th><th>Status</th><th>Action</th></tr></thead>
+            <thead><tr><th>{% trans "Customer" %}</th><th>{% trans "Service" %}</th><th>{% trans "Date" %}</th><th>{% trans "Time" %}</th><th>{% trans "Status" %}</th><th>{% trans "Action" %}</th></tr></thead>
             <tbody>
               {% for appt in appointments %}
               <tr>
@@ -489,11 +489,11 @@
                     <input type="hidden" name="action" value="delete">
                     <input type="hidden" name="model_type" value="appointment">
                     <input type="hidden" name="id" value="{{ appt.id }}">
-                    <button type="submit" class="btn-danger" onclick="return confirm('Delete this appointment?')"><i class="fas fa-trash"></i></button>
+                    <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this appointment?"|escapejs %}')"><i class="fas fa-trash"></i></button>
                   </form>
                 </td>
               </tr>
-              {% empty %}<tr><td colspan="6">No appointments.</td></tr>{% endfor %}
+              {% empty %}<tr><td colspan="6">{% trans "No appointments." %}</td></tr>{% endfor %}
             </tbody>
           </table>
         </div>
@@ -501,19 +501,19 @@
 
       <!-- ===== INQUIRIES (Contacts) ===== -->
       <div id="section-inquiries" class="section">
-        <div class="section-header"><h3><i class="fas fa-envelope" style="color:#0a66c2"></i> Customer Inquiries</h3></div>
+        <div class="section-header"><h3><i class="fas fa-envelope" style="color:#0a66c2"></i> {% trans "Customer Inquiries" %}</h3></div>
         <div id="inquiryList">
           {% for contact in contacts %}
           <div class="list-item" style="flex-direction:column; align-items:stretch; gap:0.5rem;">
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
               <div><strong>{{ contact.name }}</strong> ({{ contact.email }})</div>
               <span style="font-size:0.8rem; color:{% if contact.replied %}#1e8e3e{% else %}#d93c3c{% endif %};">
-                {{ contact.replied|yesno:"Resolved,Pending" }}
+                {{ contact.replied|yesno:_("Resolved,Pending") }}
               </span>
             </div>
-            <div style="font-size:0.95rem;">Q: {{ contact.message|truncatechars:80 }}</div>
+            <div style="font-size:0.95rem;">{% trans "Q:" %} {{ contact.message|truncatechars:80 }}</div>
             {% if contact.replied %}
-              <div style="background:#eef3f9; padding:0.4rem 0.8rem; border-radius:8px; font-size:0.9rem;">Replied</div>
+              <div style="background:#eef3f9; padding:0.4rem 0.8rem; border-radius:8px; font-size:0.9rem;">{% trans "Replied" %}</div>
             {% else %}
               <form method="post" style="margin-top:0.2rem;">
                 {% csrf_token %}
@@ -521,21 +521,21 @@
                 <input type="hidden" name="model_type" value="contact">
                 <input type="hidden" name="id" value="{{ contact.id }}">
                 <div style="display:flex; gap:0.5rem;">
-                  <input type="text" name="reply" placeholder="Write reply..." style="flex:1; padding:0.3rem 0.8rem; border:1.5px solid #dce3ed; border-radius:30px; font-size:0.85rem;">
-                  <button type="submit" class="btn-primary" style="padding:0.3rem 1rem; font-size:0.8rem;"><i class="fas fa-reply"></i> Reply</button>
+                  <input type="text" name="reply" placeholder="{% trans "Write reply..." %}" style="flex:1; padding:0.3rem 0.8rem; border:1.5px solid #dce3ed; border-radius:30px; font-size:0.85rem;">
+                  <button type="submit" class="btn-primary" style="padding:0.3rem 1rem; font-size:0.8rem;"><i class="fas fa-reply"></i> {% trans "Reply" %}</button>
                 </div>
               </form>
             {% endif %}
           </div>
-          {% empty %}<p style="color:#6f85a0;">No inquiries.</p>{% endfor %}
+          {% empty %}<p style="color:#6f85a0;">{% trans "No inquiries." %}</p>{% endfor %}
         </div>
       </div>
 
       <!-- ===== UPLOAD FORMS ===== -->
       <div id="section-forms" class="section">
         <div class="section-header">
-          <h3><i class="fas fa-file-pdf" style="color:#0a66c2"></i> Upload Forms</h3>
-          <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addFormUpload">Upload Form</button>
+          <h3><i class="fas fa-file-pdf" style="color:#0a66c2"></i> {% trans "Upload Forms" %}</h3>
+          <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addFormUpload">{% trans "Upload Form" %}</button>
         </div>
 
         <div class="collapse admin-form" id="addFormUpload">
@@ -545,7 +545,7 @@
             <input type="hidden" name="model_type" value="form">
             {{ download_form.as_p }}
             <div class="form-actions">
-              <button type="submit" class="btn-primary"><i class="fas fa-upload"></i> Upload</button>
+              <button type="submit" class="btn-primary"><i class="fas fa-upload"></i> {% trans "Upload" %}</button>
             </div>
           </form>
         </div>
@@ -562,18 +562,18 @@
               <input type="hidden" name="action" value="delete">
               <input type="hidden" name="model_type" value="form">
               <input type="hidden" name="id" value="{{ f.id }}">
-              <button type="submit" class="btn-danger" onclick="return confirm('Delete this form?')"><i class="fas fa-times"></i></button>
+              <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this form?"|escapejs %}')"><i class="fas fa-times"></i></button>
             </form>
           </div>
-          {% empty %}<p style="color:#6f85a0;">No forms uploaded.</p>{% endfor %}
+          {% empty %}<p style="color:#6f85a0;">{% trans "No forms uploaded." %}</p>{% endfor %}
         </div>
       </div>
 
       <!-- ===== GALLERY ===== -->
       <div id="section-gallery" class="section">
         <div class="section-header">
-          <h3><i class="fas fa-images" style="color:#0a66c2"></i> Manage Gallery</h3>
-          <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addGalleryForm">Add Image</button>
+          <h3><i class="fas fa-images" style="color:#0a66c2"></i> {% trans "Manage Gallery" %}</h3>
+          <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addGalleryForm">{% trans "Add Image" %}</button>
         </div>
 
         <div class="collapse admin-form" id="addGalleryForm">
@@ -583,7 +583,7 @@
             <input type="hidden" name="model_type" value="gallery">
             {{ gallery_form.as_p }}
             <div class="form-actions">
-              <button type="submit" class="btn-primary"><i class="fas fa-upload"></i> Upload</button>
+              <button type="submit" class="btn-primary"><i class="fas fa-upload"></i> {% trans "Upload" %}</button>
             </div>
           </form>
         </div>
@@ -598,11 +598,11 @@
               <input type="hidden" name="action" value="delete">
               <input type="hidden" name="model_type" value="gallery">
               <input type="hidden" name="id" value="{{ img.id }}">
-              <button type="submit" class="btn-danger" onclick="return confirm('Delete this image?')" style="padding:2px 6px; font-size:0.7rem;"><i class="fas fa-times"></i></button>
+              <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this image?"|escapejs %}')" style="padding:2px 6px; font-size:0.7rem;"><i class="fas fa-times"></i></button>
             </form>
           </div>
           {% empty %}
-          <p style="grid-column:1/-1; color:#6f85a0;">No images uploaded yet.</p>
+          <p style="grid-column:1/-1; color:#6f85a0;">{% trans "No images uploaded yet." %}</p>
           {% endfor %}
         </div>
       </div>
@@ -610,7 +610,7 @@
       <!-- ===== SETTINGS (BusinessInfo) ===== -->
       <div id="section-settings" class="section">
         <div class="section-header">
-          <h3><i class="fas fa-cog" style="color:#0a66c2"></i> Website Settings</h3>
+          <h3><i class="fas fa-cog" style="color:#0a66c2"></i> {% trans "Website Settings" %}</h3>
         </div>
         <div class="admin-form">
           <form method="post" enctype="multipart/form-data">
@@ -620,7 +620,7 @@
             <input type="hidden" name="id" value="{{ business_info.id }}">
             {{ businessinfo_form.as_p }}
             <div class="form-actions">
-              <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Save Settings</button>
+              <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save Settings" %}</button>
             </div>
           </form>
         </div>
@@ -650,19 +650,19 @@
           });
 
           const titles = {
-            dashboard: "Dashboard",
-            services: "Manage Services",
-            prices: "Update Prices",
-            announcements: "Announcements",
-            jobs: "Job Notifications",
-            schemes: "Government Schemes",
-            appointments: "Appointments",
-            inquiries: "Inquiries",
-            forms: "Upload Forms",
-            gallery: "Gallery",
-            settings: "Settings",
+            dashboard: "{% trans "Dashboard" %}",
+            services: "{% trans "Manage Services" %}",
+            prices: "{% trans "Update Prices" %}",
+            announcements: "{% trans "Announcements" %}",
+            jobs: "{% trans "Job Notifications" %}",
+            schemes: "{% trans "Government Schemes" %}",
+            appointments: "{% trans "Appointments" %}",
+            inquiries: "{% trans "Inquiries" %}",
+            forms: "{% trans "Upload Forms" %}",
+            gallery: "{% trans "Gallery" %}",
+            settings: "{% trans "Settings" %}",
           };
-          pageTitle.textContent = titles[sectionId] || "Dashboard";
+          pageTitle.textContent = titles[sectionId] || "{% trans "Dashboard" %}";
           document.getElementById("sidebar").classList.remove("open");
         }
 
