@@ -130,7 +130,6 @@
     cursor: pointer;
   }
 
-  /* Mobile input with country code */
   .mobile-input-wrapper {
     display: flex;
     align-items: center;
@@ -172,7 +171,6 @@
     opacity: 0.6;
   }
 
-  /* Error states */
   .form-group.error .form-control,
   .form-group.error .mobile-input-wrapper {
     border-color: var(--accent);
@@ -193,7 +191,6 @@
     display: flex;
   }
 
-  /* ===== BOOK BUTTON ===== */
   .btn-book {
     width: 100%;
     padding: 1rem;
@@ -230,7 +227,6 @@
     transform: none;
   }
 
-  /* ===== FOOTER NOTE ===== */
   .footer-note {
     margin-top: 2rem;
     font-size: 0.85rem;
@@ -257,7 +253,6 @@
     font-size: 0.8rem;
   }
 
-  /* ===== RESPONSIVE ===== */
   @media (max-width: 480px) {
     .card-header h1 {
       font-size: 1.4rem;
@@ -291,12 +286,7 @@
     </div>
 
     <!-- ===== FORM ===== -->
-    <form
-      method="post"
-      action="{% url 'appointment' %}"
-      novalidate
-      id="appointmentForm"
-    >
+    <form method="post" action="{% url 'appointment' %}" novalidate id="appointmentForm">
       {% csrf_token %}
       {{ form.non_field_errors }}
 
@@ -308,7 +298,7 @@
         </label>
         {{ form.full_name }}
         {% if form.full_name.errors %}
-        <div class="error-message">{{ form.full_name.errors }}</div>
+          <div class="error-message">{{ form.full_name.errors }}</div>
         {% endif %}
       </div>
 
@@ -323,7 +313,7 @@
           {{ form.phone }}
         </div>
         {% if form.phone.errors %}
-        <div class="error-message">{{ form.phone.errors }}</div>
+          <div class="error-message">{{ form.phone.errors }}</div>
         {% endif %}
       </div>
 
@@ -334,7 +324,7 @@
         </label>
         {{ form.email }}
         {% if form.email.errors %}
-        <div class="error-message">{{ form.email.errors }}</div>
+          <div class="error-message">{{ form.email.errors }}</div>
         {% endif %}
       </div>
 
@@ -346,7 +336,7 @@
         </label>
         {{ form.service }}
         {% if form.service.errors %}
-        <div class="error-message">{{ form.service.errors }}</div>
+          <div class="error-message">{{ form.service.errors }}</div>
         {% endif %}
       </div>
 
@@ -358,7 +348,7 @@
         </label>
         {{ form.appointment_date }}
         {% if form.appointment_date.errors %}
-        <div class="error-message">{{ form.appointment_date.errors }}</div>
+          <div class="error-message">{{ form.appointment_date.errors }}</div>
         {% endif %}
       </div>
 
@@ -370,7 +360,7 @@
         </label>
         {{ form.appointment_time }}
         {% if form.appointment_time.errors %}
-        <div class="error-message">{{ form.appointment_time.errors }}</div>
+          <div class="error-message">{{ form.appointment_time.errors }}</div>
         {% endif %}
       </div>
 
@@ -381,7 +371,7 @@
         </label>
         {{ form.message }}
         {% if form.message.errors %}
-        <div class="error-message">{{ form.message.errors }}</div>
+          <div class="error-message">{{ form.message.errors }}</div>
         {% endif %}
       </div>
 
