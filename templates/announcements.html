@@ -1,8 +1,5 @@
-{% load i18n %}
-{% extends "base.html" %}
-{% load static %}
-
-{% block extra_head %}
+{% extends "base.html" %} {% load i18n %} {% load static %} {% block extra_head
+%}
 <!-- Page-specific styles for Announcements -->
 <style>
   /* ===== PAGE HERO ===== */
@@ -384,9 +381,7 @@
     display: none !important;
   }
 </style>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <!-- ===== PAGE HERO ===== -->
 <section class="page-hero">
   <div class="container">
@@ -454,15 +449,15 @@
     <!-- Footer Note -->
     <div class="footer-note">
       <span>
-        <i class="fas fa-bell"></i> {% trans "Stay updated with our latest announcements." %}
+        <i class="fas fa-bell"></i> {% trans "Stay updated with our latest
+        announcements." %}
       </span>
       <span class="badge" id="countBadge">
         <i class="far fa-bell"></i>
         {% blocktrans count counter=announcements|length trimmed %}
-          <span id="announcementCount">{{ counter }}</span> active notice
-        {% plural %}
-          <span id="announcementCount">{{ counter }}</span> active notices
-        {% endblocktrans %}
+        <span id="announcementCount">{{ counter }}</span> active notice {%
+        plural %} <span id="announcementCount">{{ counter }}</span> active
+        notices {% endblocktrans %}
       </span>
     </div>
   </div>
@@ -472,7 +467,9 @@
 <section class="cta-banner">
   <div class="container">
     <h2>{% trans "Have Questions?" %} <span>{% trans "Reach Out" %}</span></h2>
-    <p>{% trans "We're here to help with any of your digital service needs." %}</p>
+    <p>
+      {% trans "We're here to help with any of your digital service needs." %}
+    </p>
     <div class="cta-buttons">
       <a href="{% url 'home' %}#contact" class="btn-primary">
         <i class="fas fa-phone"></i> {% trans "Contact Us" %}
@@ -487,9 +484,7 @@
     </div>
   </div>
 </section>
-{% endblock %}
-
-{% block extra_scripts %}
+{% endblock %} {% block extra_scripts %}
 <script>
   (function () {
     // Get all announcement cards and filter buttons container

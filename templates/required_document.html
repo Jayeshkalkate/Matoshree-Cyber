@@ -1,8 +1,5 @@
-{% load i18n %}
-{% extends "base.html" %}
-{% load static %}
-
-{% block extra_head %}
+{% extends "base.html" %} {% load i18n %} {% load static %} {% block extra_head
+%}
 <!-- Page-specific styles for Required Documents -->
 <style>
   /* ===== PAGE HERO ===== */
@@ -186,15 +183,14 @@
     }
   }
 </style>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <!-- ===== PAGE HERO ===== -->
 <section class="page-hero">
   <div class="container">
     <h1>{% trans "Required" %} <span>{% trans "Documents" %}</span></h1>
     <p>
-      {% trans "Know exactly what to bring before you visit. Save time and get your services done faster." %}
+      {% trans "Know exactly what to bring before you visit. Save time and get
+      your services done faster." %}
     </p>
   </div>
 </section>
@@ -240,7 +236,9 @@
     <div class="box">
       <p>
         <i class="fas fa-info-circle"></i>
-        <strong>{% trans "Important:" %}</strong> {% trans "Requirements may vary based on service type and government guidelines. Please contact us for the most up-to-date document checklist before your visit." %}
+        <strong>{% trans "Important:" %}</strong> {% trans "Requirements may
+        vary based on service type and government guidelines. Please contact us
+        for the most up-to-date document checklist before your visit." %}
       </p>
     </div>
   </div>
@@ -250,8 +248,13 @@
 <section class="cta-banner">
   <div class="container">
     <hr />
-    <h2>{% trans "Need Help Preparing" %} <span>{% trans "Documents?" %}</span></h2>
-    <p>{% trans "We assist with document checking, photocopying, and attestation." %}</p>
+    <h2>
+      {% trans "Need Help Preparing" %} <span>{% trans "Documents?" %}</span>
+    </h2>
+    <p>
+      {% trans "We assist with document checking, photocopying, and
+      attestation." %}
+    </p>
     <div class="cta-buttons">
       <a href="{% url 'home' %}#contact" class="btn-primary">
         <i class="fas fa-phone"></i> {% trans "Contact Us" %}
@@ -268,9 +271,7 @@
     </div>
   </div>
 </section>
-{% endblock %}
-
-{% block extra_scripts %}
+{% endblock %} {% block extra_scripts %}
 <!-- Page-specific JS if needed -->
 <script>
   console.log("Required Documents page loaded.");

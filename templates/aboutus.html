@@ -1,8 +1,5 @@
-{% load i18n %}
-{% extends "base.html" %}
-{% load static %}
-
-{% block extra_head %}
+{% extends "base.html" %} {% load i18n %} {% load static %} {% block extra_head
+%}
 <!-- Font Awesome & Google Fonts (if not already in base) -->
 <link
   rel="stylesheet"
@@ -697,9 +694,7 @@
     }
   }
 </style>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <!-- ===== PAGE HERO ===== -->
 <section class="page-hero">
   <div class="container">
@@ -710,7 +705,9 @@
     </div>
     <h1>{% trans "About" %} <span>{% trans "CyberTech" %}</span></h1>
     <p>
-      {% trans "Your trusted partner for digital services, government applications, and document solutions — built on experience, integrity, and customer care." %}
+      {% trans "Your trusted partner for digital services, government
+      applications, and document solutions — built on experience, integrity, and
+      customer care." %}
     </p>
   </div>
 </section>
@@ -724,10 +721,16 @@
         {% trans "Trusted Cyber Café &amp; Digital Service Center" %}
       </div>
       <p>
-        <strong>{% trans "CyberTech Digital Services" %}</strong> {% trans "is a trusted cyber café and digital service center dedicated to providing fast, reliable, and affordable online services. We help customers with government applications, printing, scanning, document services, and various digital solutions under one roof." %}
+        <strong>{% trans "CyberTech Digital Services" %}</strong> {% trans "is a
+        trusted cyber café and digital service center dedicated to providing
+        fast, reliable, and affordable online services. We help customers with
+        government applications, printing, scanning, document services, and
+        various digital solutions under one roof." %}
       </p>
       <p>
-        {% trans "Our mission is to bridge the digital divide by making essential online services accessible to everyone — from students and job seekers to business owners and senior citizens." %}
+        {% trans "Our mission is to bridge the digital divide by making
+        essential online services accessible to everyone — from students and job
+        seekers to business owners and senior citizens." %}
       </p>
     </div>
     <div class="about-intro-stats">
@@ -752,21 +755,32 @@
   <div class="container">
     <div class="experience-content">
       <div class="exp-badge">
-        <i class="fas fa-award" style="margin-right: 6px"></i> {% trans "8+ Years of Experience" %}
+        <i class="fas fa-award" style="margin-right: 6px"></i> {% trans "8+
+        Years of Experience" %}
       </div>
-      <h2>{% trans "Decades of" %} <span>{% trans "Digital Service" %}</span> {% trans "Excellence" %}</h2>
+      <h2>
+        {% trans "Decades of" %} <span>{% trans "Digital Service" %}</span> {%
+        trans "Excellence" %}
+      </h2>
       <p>
-        {% blocktrans %}We have over <strong>8 years of experience</strong> in providing digital and online services. Our experienced staff ensures every service is completed accurately and efficiently. From government form submissions to document processing, we've handled thousands of applications with precision.{% endblocktrans %}
+        {% blocktrans %}We have over <strong>8 years of experience</strong> in
+        providing digital and online services. Our experienced staff ensures
+        every service is completed accurately and efficiently. From government
+        form submissions to document processing, we've handled thousands of
+        applications with precision.{% endblocktrans %}
       </p>
       <p>
-        {% trans "Our team stays updated with the latest government portals, application procedures, and digital tools to ensure you get the best possible service every time." %}
+        {% trans "Our team stays updated with the latest government portals,
+        application procedures, and digital tools to ensure you get the best
+        possible service every time." %}
       </p>
       <div class="highlight-text">
         <i
           class="fas fa-check-circle"
           style="color: var(--secondary); margin-right: 10px"
         ></i>
-        {% trans "We combine technical expertise with a customer-first approach to deliver results you can count on." %}
+        {% trans "We combine technical expertise with a customer-first approach
+        to deliver results you can count on." %}
       </div>
     </div>
     <div class="experience-image">
@@ -781,9 +795,13 @@
 <section class="services-list">
   <div class="container">
     <div class="section-header">
-      <h2>{% trans "Our" %} <span>{% trans "Complete" %}</span> {% trans "Service List" %}</h2>
+      <h2>
+        {% trans "Our" %} <span>{% trans "Complete" %}</span> {% trans "Service
+        List" %}
+      </h2>
       <p>
-        {% trans "Everything you need, all under one roof — from government applications to document services." %}
+        {% trans "Everything you need, all under one roof — from government
+        applications to document services." %}
       </p>
     </div>
     <div class="services-grid-about">
@@ -861,7 +879,8 @@
     <div class="section-header">
       <h2>{% trans "Why" %} <span>{% trans "Trust Us" %}</span></h2>
       <p>
-        {% trans "We are committed to providing honest, secure, and customer-friendly services." %}
+        {% trans "We are committed to providing honest, secure, and
+        customer-friendly services." %}
       </p>
     </div>
     <div class="trust-grid">
@@ -869,42 +888,48 @@
         <div class="icon"><i class="fas fa-user-tie"></i></div>
         <h4>{% trans "Experienced Staff" %}</h4>
         <p>
-          {% trans "Our team has deep knowledge of government portals and digital tools to handle every application with care." %}
+          {% trans "Our team has deep knowledge of government portals and
+          digital tools to handle every application with care." %}
         </p>
       </div>
       <div class="trust-card">
         <div class="icon"><i class="fas fa-bolt"></i></div>
         <h4>{% trans "Fast &amp; Accurate Service" %}</h4>
         <p>
-          {% trans "We value your time. Our processes are optimized for speed without compromising on accuracy or quality." %}
+          {% trans "We value your time. Our processes are optimized for speed
+          without compromising on accuracy or quality." %}
         </p>
       </div>
       <div class="trust-card">
         <div class="icon"><i class="fas fa-tag"></i></div>
         <h4>{% trans "Transparent Pricing" %}</h4>
         <p>
-          {% trans "No hidden charges, no surprise fees. We believe in clear, upfront pricing so you know exactly what to expect." %}
+          {% trans "No hidden charges, no surprise fees. We believe in clear,
+          upfront pricing so you know exactly what to expect." %}
         </p>
       </div>
       <div class="trust-card">
         <div class="icon"><i class="fas fa-smile"></i></div>
         <h4>{% trans "Customer Satisfaction" %}</h4>
         <p>
-          {% trans "Your happiness is our priority. We go the extra mile to ensure every customer walks away satisfied." %}
+          {% trans "Your happiness is our priority. We go the extra mile to
+          ensure every customer walks away satisfied." %}
         </p>
       </div>
       <div class="trust-card">
         <div class="icon"><i class="fas fa-lock"></i></div>
         <h4>{% trans "Data Privacy &amp; Security" %}</h4>
         <p>
-          {% trans "We treat your personal information with the utmost confidentiality. Your data is safe with us." %}
+          {% trans "We treat your personal information with the utmost
+          confidentiality. Your data is safe with us." %}
         </p>
       </div>
       <div class="trust-card">
         <div class="icon"><i class="fas fa-headset"></i></div>
         <h4>{% trans "Friendly Customer Support" %}</h4>
         <p>
-          {% trans "From the moment you walk in to the completion of your service, we offer warm, helpful support at every step." %}
+          {% trans "From the moment you walk in to the completion of your
+          service, we offer warm, helpful support at every step." %}
         </p>
       </div>
     </div>
@@ -916,7 +941,9 @@
   <div class="container">
     <div class="authorized-badge">
       <div class="badge-icon"><i class="fas fa-certificate"></i></div>
-      <h3>{% trans "Authorized" %} <span>{% trans "Service Provider" %}</span></h3>
+      <h3>
+        {% trans "Authorized" %} <span>{% trans "Service Provider" %}</span>
+      </h3>
       <div class="sub">
         {% trans "Officially recognized for excellence in digital services" %}
       </div>
@@ -936,7 +963,8 @@
       </div>
       <div class="note">
         <i class="fas fa-info-circle"></i>
-        {% trans "This section is displayed only when official authorization is valid and verifiable." %}
+        {% trans "This section is displayed only when official authorization is
+        valid and verifiable." %}
       </div>
     </div>
   </div>
@@ -945,8 +973,14 @@
 <!-- ===== CTA BANNER ===== -->
 <section class="cta-banner">
   <div class="container">
-    <h2>{% trans "Ready to" %} <span>{% trans "Experience" %}</span> {% trans "the Difference?" %}</h2>
-    <p>{% trans "Visit us today or reach out to get started with any of our services." %}</p>
+    <h2>
+      {% trans "Ready to" %} <span>{% trans "Experience" %}</span> {% trans "the
+      Difference?" %}
+    </h2>
+    <p>
+      {% trans "Visit us today or reach out to get started with any of our
+      services." %}
+    </p>
     <div class="cta-buttons">
       <a href="{% url 'home' %}#contact" class="btn-primary">
         <i class="fas fa-phone"></i> {% trans "Contact Us" %}
@@ -961,9 +995,7 @@
     </div>
   </div>
 </section>
-{% endblock %}
-
-{% block extra_scripts %}
+{% endblock %} {% block extra_scripts %}
 <!-- Page-specific JS if needed -->
 <script>
   // Any page-specific JavaScript can go here.

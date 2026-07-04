@@ -1,8 +1,5 @@
-{% load i18n %}
-{% extends "base.html" %}
-{% load static %}
-
-{% block extra_head %}
+{% extends "base.html" %} {% load i18n %} {% load static %} {% block extra_head
+%}
 <style>
   /* ===== CONTACT PAGE SPECIFIC ===== */
   .contact-section {
@@ -206,9 +203,7 @@
     }
   }
 </style>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <!-- Page Hero -->
 <section
   class="page-hero"
@@ -228,7 +223,8 @@
         margin-bottom: 12px;
       "
     >
-      {% trans "Get in" %} <span style="color: var(--secondary)">{% trans "Touch" %}</span>
+      {% trans "Get in" %}
+      <span style="color: var(--secondary)">{% trans "Touch" %}</span>
     </h1>
     <p
       style="
@@ -239,7 +235,8 @@
         line-height: 1.7;
       "
     >
-      {% trans "We're here to help. Send us a message and we'll get back to you promptly." %}
+      {% trans "We're here to help. Send us a message and we'll get back to you
+      promptly." %}
     </p>
   </div>
 </section>
@@ -265,31 +262,41 @@
         >
           {% csrf_token %} {{ form.non_field_errors }}
           <div class="form-group">
-            <label for="{{ form.name.id_for_label }}">{% trans "Your Name" %} *</label>
+            <label for="{{ form.name.id_for_label }}"
+              >{% trans "Your Name" %} *</label
+            >
             {{ form.name }} {% if form.name.errors %}
             <div class="error-message">{{ form.name.errors }}</div>
             {% endif %}
           </div>
           <div class="form-group">
-            <label for="{{ form.email.id_for_label }}">{% trans "Email Address" %} *</label>
+            <label for="{{ form.email.id_for_label }}"
+              >{% trans "Email Address" %} *</label
+            >
             {{ form.email }} {% if form.email.errors %}
             <div class="error-message">{{ form.email.errors }}</div>
             {% endif %}
           </div>
           <div class="form-group">
-            <label for="{{ form.phone.id_for_label }}">{% trans "Phone Number" %} *</label>
+            <label for="{{ form.phone.id_for_label }}"
+              >{% trans "Phone Number" %} *</label
+            >
             {{ form.phone }} {% if form.phone.errors %}
             <div class="error-message">{{ form.phone.errors }}</div>
             {% endif %}
           </div>
           <div class="form-group">
-            <label for="{{ form.subject.id_for_label }}">{% trans "Subject" %} *</label>
+            <label for="{{ form.subject.id_for_label }}"
+              >{% trans "Subject" %} *</label
+            >
             {{ form.subject }} {% if form.subject.errors %}
             <div class="error-message">{{ form.subject.errors }}</div>
             {% endif %}
           </div>
           <div class="form-group">
-            <label for="{{ form.message.id_for_label }}">{% trans "Message" %} *</label>
+            <label for="{{ form.message.id_for_label }}"
+              >{% trans "Message" %} *</label
+            >
             {{ form.message }} {% if form.message.errors %}
             <div class="error-message">{{ form.message.errors }}</div>
             {% endif %}
@@ -316,8 +323,12 @@
           <div class="content">
             <h4>{% trans "Address" %}</h4>
             <p>
-              {% blocktrans with name=business.business_name|default:"CyberTech Digital Services" %}{{ name }}{% endblocktrans %}<br />
-              {% blocktrans with address=business.address|linebreaksbr|default:"Shop No. 12, Main Road, Pune, Maharashtra – 411001" %}{{ address }}{% endblocktrans %}
+              {% blocktrans with name=business.business_name|default:"CyberTech
+              Digital Services" %}{{ name }}{% endblocktrans %}<br />
+              {% blocktrans with
+              address=business.address|linebreaksbr|default:"Shop No. 12, Main
+              Road, Pune, Maharashtra – 411001" %}{{ address }}{% endblocktrans
+              %}
             </p>
           </div>
         </div>
@@ -357,39 +368,38 @@
         <br />
         <div class="hours-block">
           <h3><i class="fas fa-clock"></i> {% trans "Business Hours" %}</h3>
-          {% if business.business_hours %}
-            {{ business.business_hours|linebreaks }}
-          {% else %}
-            <table class="hours-table">
-              <tr>
-                <td>{% trans "Monday" %}</td>
-                <td>{% trans "9:00 AM – 8:00 PM" %}</td>
-              </tr>
-              <tr>
-                <td>{% trans "Tuesday" %}</td>
-                <td>{% trans "9:00 AM – 8:00 PM" %}</td>
-              </tr>
-              <tr>
-                <td>{% trans "Wednesday" %}</td>
-                <td>{% trans "9:00 AM – 8:00 PM" %}</td>
-              </tr>
-              <tr>
-                <td>{% trans "Thursday" %}</td>
-                <td>{% trans "9:00 AM – 8:00 PM" %}</td>
-              </tr>
-              <tr>
-                <td>{% trans "Friday" %}</td>
-                <td>{% trans "9:00 AM – 8:00 PM" %}</td>
-              </tr>
-              <tr>
-                <td>{% trans "Saturday" %}</td>
-                <td>{% trans "9:00 AM – 8:00 PM" %}</td>
-              </tr>
-              <tr class="highlight">
-                <td>{% trans "Sunday" %}</td>
-                <td>{% trans "10:00 AM – 2:00 PM" %}</td>
-              </tr>
-            </table>
+          {% if business.business_hours %} {{ business.business_hours|linebreaks
+          }} {% else %}
+          <table class="hours-table">
+            <tr>
+              <td>{% trans "Monday" %}</td>
+              <td>{% trans "9:00 AM – 8:00 PM" %}</td>
+            </tr>
+            <tr>
+              <td>{% trans "Tuesday" %}</td>
+              <td>{% trans "9:00 AM – 8:00 PM" %}</td>
+            </tr>
+            <tr>
+              <td>{% trans "Wednesday" %}</td>
+              <td>{% trans "9:00 AM – 8:00 PM" %}</td>
+            </tr>
+            <tr>
+              <td>{% trans "Thursday" %}</td>
+              <td>{% trans "9:00 AM – 8:00 PM" %}</td>
+            </tr>
+            <tr>
+              <td>{% trans "Friday" %}</td>
+              <td>{% trans "9:00 AM – 8:00 PM" %}</td>
+            </tr>
+            <tr>
+              <td>{% trans "Saturday" %}</td>
+              <td>{% trans "9:00 AM – 8:00 PM" %}</td>
+            </tr>
+            <tr class="highlight">
+              <td>{% trans "Sunday" %}</td>
+              <td>{% trans "10:00 AM – 2:00 PM" %}</td>
+            </tr>
+          </table>
           {% endif %}
         </div>
       </div>
@@ -428,7 +438,9 @@
         margin-bottom: 8px;
       "
     >
-      {% trans "We're just a" %} <span style="color: var(--secondary)">{% trans "click" %}</span> {% trans "away!" %}
+      {% trans "We're just a" %}
+      <span style="color: var(--secondary)">{% trans "click" %}</span> {% trans
+      "away!" %}
     </h2>
     <p
       style="
@@ -437,7 +449,8 @@
         margin-bottom: 24px;
       "
     >
-      {% trans "Reach out to us for any queries or to book a service. We respond promptly." %}
+      {% trans "Reach out to us for any queries or to book a service. We respond
+      promptly." %}
     </p>
     <div
       class="cta-buttons"
