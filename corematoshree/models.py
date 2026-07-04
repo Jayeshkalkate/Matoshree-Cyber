@@ -3,7 +3,7 @@ from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
-    
+
 # ==========================
 # User
 # ==========================
@@ -19,7 +19,7 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
-    
+
 # ==========================
 # Validators
 # ==========================
@@ -27,7 +27,6 @@ phone_validator = RegexValidator(
     regex=r'^\+?1?\d{10,15}$',
     message="Enter a valid phone number (10-15 digits)."
 )
-
 
 # ==========================
 # Services
@@ -45,7 +44,6 @@ class Service(models.Model):
 
     def __str__(self):
         return self.name
-
 
 # ==========================
 # Appointment
@@ -81,19 +79,15 @@ class Appointment(models.Model):
     def clean(self):
         if self.appointment_date is None:
             return
-        
         if self.appointment_date < timezone.localdate():
             raise ValidationError(
                 {"appointment_date": "Appointment date cannot be in the past."}
             )
-            
-        # Optional: Add time validation
         if self.appointment_time is None:
             return
 
     def __str__(self):
         return f"{self.full_name} - {self.service.name}"
-
 
 # ==========================
 # Contact
@@ -116,13 +110,12 @@ class Contact(models.Model):
     def __str__(self):
         return self.name
 
-
 # ==========================
 # Reviews
 # ==========================
 class Review(models.Model):
     customer_name = models.CharField(max_length=100)
-    email = models.EmailField(blank=True, null=True)   # <-- NEW FIELD
+    email = models.EmailField(blank=True, null=True)
     review = models.TextField()
     rating = models.PositiveSmallIntegerField(default=5)
     approved = models.BooleanField(default=True)
@@ -133,7 +126,6 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.customer_name} ({self.rating}/5)"
-
 
 # ==========================
 # Announcements
@@ -158,7 +150,6 @@ class Announcement(models.Model):
     def __str__(self):
         return self.title
 
-
 # ==========================
 # Gallery
 # ==========================
@@ -178,7 +169,6 @@ class Gallery(models.Model):
     def __str__(self):
         return self.title
 
-
 # ==========================
 # Service Charges
 # ==========================
@@ -189,7 +179,6 @@ class ServiceCharge(models.Model):
     def __str__(self):
         return f"{self.service.name} - ₹{self.charge}"
 
-
 # ==========================
 # Required Documents
 # ==========================
@@ -199,7 +188,6 @@ class RequiredDocument(models.Model):
 
     def __str__(self):
         return f"{self.service.name} - {self.document_name}"
-
 
 # ==========================
 # Download Forms
@@ -213,7 +201,6 @@ class DownloadForm(models.Model):
     def __str__(self):
         return self.title
 
-
 # ==========================
 # Government Schemes
 # ==========================
@@ -222,10 +209,10 @@ class GovernmentScheme(models.Model):
     description = models.TextField()
     eligibility = models.TextField(blank=True)
     last_date = models.DateField(null=True, blank=True)
+    image = models.ImageField(upload_to='schemes/', blank=True, null=True)   # NEW FIELD
 
     def __str__(self):
         return self.title
-
 
 # ==========================
 # Job Notifications
@@ -236,10 +223,10 @@ class JobNotification(models.Model):
     last_date = models.DateField()
     apply_link = models.URLField(blank=True)
     description = models.TextField()
+    icon = models.CharField(max_length=50, default='briefcase', help_text="Font Awesome icon (e.g. 'fa-briefcase')")   # NEW FIELD
 
     def __str__(self):
         return self.title
-
 
 # ==========================
 # FAQs
@@ -251,7 +238,6 @@ class FAQ(models.Model):
     def __str__(self):
         return self.question
 
-
 # ==========================
 # Business Information (Singleton)
 # ==========================
@@ -259,31 +245,22 @@ class BusinessInfo(models.Model):
     business_name = models.CharField(max_length=200)
     logo = models.ImageField(upload_to="logo/", blank=True, null=True)
     welcome_message = models.TextField()
-
     address = models.TextField()
-
     phone = models.CharField(
         max_length=15,
         validators=[phone_validator]
     )
-
     whatsapp = models.CharField(
         max_length=15,
         validators=[phone_validator]
     )
-
     email = models.EmailField()
-
     google_map = models.TextField(
         help_text="Paste Google Maps Embed Code"
     )
-
     business_hours = models.TextField()
 
     def save(self, *args, **kwargs):
-        """
-        Enforce singleton: if an instance already exists, update it instead of creating a new one.
-        """
         if not self.pk:
             existing = BusinessInfo.objects.first()
             if existing:
@@ -292,9 +269,6 @@ class BusinessInfo(models.Model):
 
     @classmethod
     def get_instance(cls):
-        """
-        Retrieve the singleton instance. If none exists, create a blank one.
-        """
         instance = cls.objects.first()
         if not instance:
             instance = cls()

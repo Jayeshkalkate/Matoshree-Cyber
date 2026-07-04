@@ -106,6 +106,9 @@ DATABASES = {
     )
 }
 
+# Force connection age to 0 to avoid stale connections (especially for PostgreSQL)
+DATABASES['default']['CONN_MAX_AGE'] = 0
+
 # ---------------------------------------------------
 # Cloudinary Storage
 # ---------------------------------------------------
@@ -218,7 +221,7 @@ if not DEBUG:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
     SECURE_HSTS_PRELOAD = True
-    
+
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
     USE_X_FORWARDED_HOST = True
@@ -228,4 +231,3 @@ if not DEBUG:
 # ---------------------------------------------------
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-

@@ -76,121 +76,57 @@
     line-height: 1.7;
   }
 
-  /* ===== DOCUMENTS GRID ===== */
+  /* ===== DOCUMENTS TABLE ===== */
   .docs-section {
     padding: 70px 0 80px;
     background: var(--gray-light);
   }
   .docs-section .container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 28px;
+    max-width: 900px;
+    margin: 0 auto;
   }
-  .doc-card {
+  .table-wrap {
     background: var(--white);
     border-radius: var(--radius);
-    padding: 24px 22px 22px;
     box-shadow: var(--shadow-sm);
-    transition: var(--transition);
-    border-left: 6px solid var(--secondary);
-    display: flex;
-    flex-direction: column;
+    overflow-x: auto;
+    border: 1px solid var(--gray);
   }
-  .doc-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow);
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
   }
-  .doc-card .card-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 14px;
-  }
-  .doc-card .card-header .icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.4rem;
-    color: var(--white);
-    flex-shrink: 0;
-    background: var(--secondary);
-  }
-  .doc-card .card-header h3 {
-    font-size: 1.2rem;
-    font-weight: 700;
+  th {
+    text-align: left;
+    padding: 0.9rem 1.2rem;
+    background: var(--gray-light);
+    font-weight: 600;
     color: var(--primary);
-    margin: 0;
+    border-bottom: 2px solid var(--gray);
   }
-  .doc-card ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    flex: 1;
-  }
-  .doc-card ul li {
-    padding: 5px 0;
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    font-size: 0.93rem;
-    color: var(--text-dark);
+  td {
+    padding: 0.8rem 1.2rem;
     border-bottom: 1px solid var(--gray);
+    vertical-align: middle;
   }
-  .doc-card ul li:last-child {
+  tr:last-child td {
     border-bottom: none;
   }
-  .doc-card ul li i {
+  tr:hover {
+    background: #f8faff;
+  }
+  .service-name {
+    font-weight: 600;
+    color: var(--primary);
+  }
+  .doc-name {
+    color: var(--text-dark);
+  }
+  .doc-name i {
     color: var(--secondary);
-    font-size: 0.8rem;
-    margin-top: 5px;
-    flex-shrink: 0;
+    margin-right: 8px;
   }
-  .doc-card .note {
-    margin-top: 14px;
-    font-size: 0.8rem;
-    color: var(--gray-dark);
-    background: var(--gray-light);
-    padding: 8px 12px;
-    border-radius: var(--radius-sm);
-    border-left: 3px solid var(--accent);
-  }
-  .doc-card .note i {
-    color: var(--accent);
-    margin-right: 6px;
-  }
-
-  /* ===== COLOR THEMES ===== */
-  .doc-card.color-1 { border-left-color: #1e88e5; }
-  .doc-card.color-1 .icon { background: #1e88e5; }
-  .doc-card.color-2 { border-left-color: #43a047; }
-  .doc-card.color-2 .icon { background: #43a047; }
-  .doc-card.color-3 { border-left-color: #fdd835; }
-  .doc-card.color-3 .icon { background: #fdd835; color: var(--primary); }
-  .doc-card.color-4 { border-left-color: #e53935; }
-  .doc-card.color-4 .icon { background: #e53935; }
-  .doc-card.color-5 { border-left-color: #8e24aa; }
-  .doc-card.color-5 .icon { background: #8e24aa; }
-  .doc-card.color-6 { border-left-color: #fb8c00; }
-  .doc-card.color-6 .icon { background: #fb8c00; }
-  .doc-card.color-7 { border-left-color: #00897b; }
-  .doc-card.color-7 .icon { background: #00897b; }
-  .doc-card.color-8 { border-left-color: #d81b60; }
-  .doc-card.color-8 .icon { background: #d81b60; }
-  .doc-card.color-9 { border-left-color: #6d4c41; }
-  .doc-card.color-9 .icon { background: #6d4c41; }
-  .doc-card.color-10 { border-left-color: #1565c0; }
-  .doc-card.color-10 .icon { background: #1565c0; }
-  .doc-card.color-11 { border-left-color: #2e7d32; }
-  .doc-card.color-11 .icon { background: #2e7d32; }
-  .doc-card.color-12 { border-left-color: #ef6c00; }
-  .doc-card.color-12 .icon { background: #ef6c00; }
-  .doc-card.color-13 { border-left-color: #4a148c; }
-  .doc-card.color-13 .icon { background: #4a148c; }
-  .doc-card.color-14 { border-left-color: #bf360c; }
-  .doc-card.color-14 .icon { background: #bf360c; }
 
   /* ===== DISCLAIMER ===== */
   .disclaimer {
@@ -230,11 +166,10 @@
       font-size: 1rem;
     }
     .docs-section .container {
-      grid-template-columns: 1fr;
-      gap: 20px;
+      padding: 0 1rem;
     }
-    .doc-card .card-header h3 {
-      font-size: 1.1rem;
+    th, td {
+      padding: 0.6rem 0.8rem;
     }
     .disclaimer .box {
       padding: 18px 16px;
@@ -255,35 +190,33 @@
   </div>
 </section>
 
-<!-- ===== DOCUMENTS GRID ===== -->
+<!-- ===== DOCUMENTS TABLE ===== -->
 <section class="docs-section">
   <div class="container">
-    {% for service in services %}
-      <div class="doc-card color-{{ forloop.counter }}">
-        <div class="card-header">
-          <div class="icon">
-            <i class="fas fa-{{ service.icon|default:'file-alt' }}"></i>
-          </div>
-          <h3>{{ service.name }}</h3>
-        </div>
-        <ul>
-          {% for doc in service.requireddocument_set.all %}
-            <li><i class="fas fa-check-circle"></i> {{ doc.document_name }}</li>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Required Document</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for doc in documents %}
+          <tr>
+            <td class="service-name">{{ doc.service.name }}</td>
+            <td class="doc-name"><i class="fas fa-check-circle"></i> {{ doc.document_name }}</td>
+          </tr>
           {% empty %}
-            <li><i class="fas fa-info-circle"></i> No documents listed.</li>
+          <tr>
+            <td colspan="2" style="text-align:center; color:#6f85a0; padding:2rem;">
+              No documents listed.
+            </td>
+          </tr>
           {% endfor %}
-        </ul>
-        {% if service.note %}
-          <div class="note">
-            <i class="fas fa-info-circle"></i> {{ service.note }}
-          </div>
-        {% endif %}
-      </div>
-    {% empty %}
-      <p style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--gray-dark);">
-        No services available.
-      </p>
-    {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 </section>
 

@@ -66,6 +66,7 @@
 
       .btn-primary { background:#0a66c2; color:#fff; border:none; padding:0.5rem 1.2rem; border-radius:40px; font-weight:600; font-size:0.9rem; cursor:pointer; transition:background 0.2s; display:inline-flex; align-items:center; gap:0.4rem; font-family:"Inter", sans-serif; }
       .btn-primary:hover { background:#0854a3; }
+      .btn-primary.btn-sm { padding:0.25rem 0.8rem; font-size:0.8rem; }
       .btn-danger { background:#d93c3c; color:#fff; border:none; padding:0.3rem 0.8rem; border-radius:30px; font-weight:600; font-size:0.8rem; cursor:pointer; transition:background 0.2s; }
       .btn-danger:hover { background:#b52e2e; }
       .btn-success { background:#1e8e3e; color:#fff; border:none; padding:0.3rem 0.8rem; border-radius:30px; font-weight:600; font-size:0.8rem; cursor:pointer; transition:background 0.2s; }
@@ -93,10 +94,18 @@
       .admin-form textarea { resize:vertical; min-height:70px; }
       .admin-form .form-actions { grid-column:1 / -1; display:flex; gap:0.8rem; justify-content:flex-end; }
 
-      .list-item { display:flex; justify-content:space-between; align-items:center; padding:0.6rem 1rem; background:#f8faff; border-radius:10px; margin-bottom:0.5rem; border:1px solid #eef3f9; }
-      .list-item .info { display:flex; flex-direction:column; gap:0.1rem; }
+      .list-item { display:flex; justify-content:space-between; align-items:center; padding:0.6rem 1rem; background:#f8faff; border-radius:10px; margin-bottom:0.5rem; border:1px solid #eef3f9; flex-wrap:wrap; gap:0.5rem; }
+      .list-item .info { display:flex; flex-direction:column; gap:0.1rem; flex:1; }
       .list-item .info .title { font-weight:600; }
       .list-item .info .sub { font-size:0.85rem; color:#6f85a0; }
+      .list-item .info img { max-height:50px; border-radius:4px; margin-top:4px; }
+
+      /* Gallery grid */
+      .gallery-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(150px,1fr)); gap:1rem; margin-top:1rem; }
+      .gallery-item { position:relative; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1); background:#fff; }
+      .gallery-item img { width:100%; height:120px; object-fit:cover; display:block; }
+      .gallery-item .caption { padding:0.5rem; font-size:0.8rem; text-align:center; }
+      .gallery-item .delete-btn { position:absolute; top:4px; right:4px; }
 
       @media (max-width:992px) {
         .sidebar { transform:translateX(-100%); position:fixed; height:100%; width:280px; }
@@ -214,7 +223,7 @@
                 <td>{{ service.category }}</td>
                 <td><span class="badge-status {% if service.active %}confirmed{% else %}cancelled{% endif %}">{{ service.active|yesno:"Active,Inactive" }}</span></td>
                 <td>
-                  <button class="btn-edit" onclick="editService('{{ service.id }}', '{{ service.name|escapejs }}', '{{ service.category|escapejs }}', '{{ service.description|escapejs }}', '{{ service.active|yesno:"true,false" }}', '{{ service.icon|escapejs }}')">Edit</button>
+                  <button class="btn-primary btn-sm" onclick="editService('{{ service.id }}', '{{ service.name|escapejs }}', '{{ service.category|escapejs }}', '{{ service.description|escapejs }}', '{{ service.active|yesno:"true,false" }}', '{{ service.icon|escapejs }}')"><i class="fas fa-edit"></i></button>
                   <form method="post" style="display:inline;">
                     {% csrf_token %}
                     <input type="hidden" name="action" value="delete">
@@ -272,11 +281,74 @@
         </div>
       </div>
 
-      <!-- ===== UPDATE PRICES (placeholder) ===== -->
+      <!-- ===== UPDATE PRICES (Service Charges) ===== -->
       <div id="section-prices" class="section">
-        <div class="section-header"><h3><i class="fas fa-coins" style="color:#0a66c2"></i> Update Service Charges</h3></div>
-        <p style="color:#6f85a0;">Manage service charges here.</p>
-        <!-- You can later add a table with forms for ServiceCharge -->
+        <div class="section-header">
+          <h3><i class="fas fa-coins" style="color:#0a66c2"></i> Service Charges</h3>
+          <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addChargeForm">Add Charge</button>
+        </div>
+
+        <div class="collapse admin-form" id="addChargeForm">
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="add">
+            <input type="hidden" name="model_type" value="servicecharge">
+            {{ servicecharge_form.as_p }}
+            <div class="form-actions">
+              <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Save</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Service</th><th>Charge (₹)</th><th>Actions</th></tr></thead>
+            <tbody>
+              {% for charge in servicecharges %}
+              <tr>
+                <td>{{ charge.service.name }}</td>
+                <td>₹ {{ charge.charge }}</td>
+                <td>
+                  <button class="btn-primary btn-sm" onclick="editCharge('{{ charge.id }}', '{{ charge.service.id }}', '{{ charge.charge }}')"><i class="fas fa-edit"></i></button>
+                  <form method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="model_type" value="servicecharge">
+                    <input type="hidden" name="id" value="{{ charge.id }}">
+                    <button type="submit" class="btn-danger" onclick="return confirm('Delete this charge?')"><i class="fas fa-trash"></i></button>
+                  </form>
+                </td>
+              </tr>
+              {% empty %}<tr><td colspan="3">No charges defined.</td></tr>{% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Inline edit form for charges -->
+        <div class="admin-form" id="editChargeForm" style="display:none; margin-top:1rem;">
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="edit">
+            <input type="hidden" name="model_type" value="servicecharge">
+            <input type="hidden" name="id" id="editChargeId">
+            <div>
+              <label>Service</label>
+              <select name="service" id="editChargeService" class="form-control">
+                {% for service in services %}
+                  <option value="{{ service.id }}">{{ service.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div>
+              <label>Charge (₹)</label>
+              <input type="number" step="0.01" name="charge" id="editChargeAmount" required>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn-outline" onclick="document.getElementById('editChargeForm').style.display='none'">Cancel</button>
+              <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Update</button>
+            </div>
+          </form>
+        </div>
       </div>
 
       <!-- ===== ANNOUNCEMENTS ===== -->
@@ -340,7 +412,7 @@
           {% for job in jobs %}
           <div class="list-item">
             <div class="info">
-              <span class="title">{{ job.title }}</span>
+              <span class="title"><i class="fas fa-{{ job.icon|default:'briefcase' }}"></i> {{ job.title }}</span>
               <span class="sub">{{ job.organization }} – Last Date: {{ job.last_date|date:"d M Y" }}</span>
             </div>
             <form method="post" style="display:inline;">
@@ -363,7 +435,7 @@
         </div>
 
         <div class="collapse admin-form" id="addSchemeForm">
-          <form method="post">
+          <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="hidden" name="action" value="add">
             <input type="hidden" name="model_type" value="scheme">
@@ -379,7 +451,10 @@
           <div class="list-item">
             <div class="info">
               <span class="title">{{ scheme.title }}</span>
-              <span class="sub">{{ scheme.description|truncatechars:50 }} – Eligibility: {{ scheme.eligibility|default:"N/A" }}</span>
+              <span class="sub">{{ scheme.description|truncatechars:80 }} – Eligibility: {{ scheme.eligibility|default:"N/A" }}</span>
+              {% if scheme.image %}
+                <img src="{{ scheme.image.url }}" alt="{{ scheme.title }}">
+              {% endif %}
             </div>
             <form method="post" style="display:inline;">
               {% csrf_token %}
@@ -493,16 +568,61 @@
         </div>
       </div>
 
-      <!-- ===== GALLERY (placeholder) ===== -->
+      <!-- ===== GALLERY ===== -->
       <div id="section-gallery" class="section">
-        <div class="section-header"><h3><i class="fas fa-images" style="color:#0a66c2"></i> Manage Gallery</h3></div>
-        <p style="color:#6f85a0;">Upload and manage images for your website gallery (coming soon).</p>
+        <div class="section-header">
+          <h3><i class="fas fa-images" style="color:#0a66c2"></i> Manage Gallery</h3>
+          <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addGalleryForm">Add Image</button>
+        </div>
+
+        <div class="collapse admin-form" id="addGalleryForm">
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="add">
+            <input type="hidden" name="model_type" value="gallery">
+            {{ gallery_form.as_p }}
+            <div class="form-actions">
+              <button type="submit" class="btn-primary"><i class="fas fa-upload"></i> Upload</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="gallery-grid">
+          {% for img in gallery_images %}
+          <div class="gallery-item">
+            <img src="{{ img.image.url }}" alt="{{ img.title }}">
+            <div class="caption">{{ img.title }}</div>
+            <form method="post" class="delete-btn">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="delete">
+              <input type="hidden" name="model_type" value="gallery">
+              <input type="hidden" name="id" value="{{ img.id }}">
+              <button type="submit" class="btn-danger" onclick="return confirm('Delete this image?')" style="padding:2px 6px; font-size:0.7rem;"><i class="fas fa-times"></i></button>
+            </form>
+          </div>
+          {% empty %}
+          <p style="grid-column:1/-1; color:#6f85a0;">No images uploaded yet.</p>
+          {% endfor %}
+        </div>
       </div>
 
-      <!-- ===== SETTINGS (placeholder) ===== -->
+      <!-- ===== SETTINGS (BusinessInfo) ===== -->
       <div id="section-settings" class="section">
-        <div class="section-header"><h3><i class="fas fa-cog" style="color:#0a66c2"></i> Website Settings</h3></div>
-        <p style="color:#6f85a0;">Configure general settings, business hours, contact info, and more (coming soon).</p>
+        <div class="section-header">
+          <h3><i class="fas fa-cog" style="color:#0a66c2"></i> Website Settings</h3>
+        </div>
+        <div class="admin-form">
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="edit">
+            <input type="hidden" name="model_type" value="businessinfo">
+            <input type="hidden" name="id" value="{{ business_info.id }}">
+            {{ businessinfo_form.as_p }}
+            <div class="form-actions">
+              <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Save Settings</button>
+            </div>
+          </form>
+        </div>
       </div>
     </main>
 
@@ -563,7 +683,7 @@
           document.getElementById("editSvcCategory").value = category;
           document.getElementById("editSvcDesc").value = description;
           document.getElementById("editSvcStatus").value = active === 'true' ? 'true' : 'false';
-          document.getElementById("editSvcIcon").value = icon;
+          document.getElementById("editSvcIcon").value = icon || '';
           document.getElementById("editServiceForm").style.display = "grid";
           document.getElementById("editServiceForm").scrollIntoView({ behavior: 'smooth' });
         };
@@ -571,6 +691,20 @@
         // Cancel edit
         document.querySelector("#editServiceForm .btn-outline").addEventListener("click", function() {
           document.getElementById("editServiceForm").style.display = "none";
+        });
+
+        // Edit charge: populate inline form
+        window.editCharge = function(id, serviceId, charge) {
+          document.getElementById("editChargeId").value = id;
+          document.getElementById("editChargeService").value = serviceId;
+          document.getElementById("editChargeAmount").value = charge;
+          document.getElementById("editChargeForm").style.display = "grid";
+          document.getElementById("editChargeForm").scrollIntoView({ behavior: 'smooth' });
+        };
+
+        // Cancel edit charge
+        document.querySelector("#editChargeForm .btn-outline").addEventListener("click", function() {
+          document.getElementById("editChargeForm").style.display = "none";
         });
 
         // Show dashboard by default
