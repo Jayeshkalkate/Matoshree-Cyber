@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load static %}
 {% block extra_head %}
+
 <style>
   /* ===== CONTACT PAGE SPECIFIC ===== */
   .contact-section {
@@ -205,7 +206,9 @@
     }
   }
 </style>
-{% endblock %} {% block content %}
+{% endblock %}
+
+{% block content %}
 <!-- Page Hero -->
 <section
   class="page-hero"
@@ -237,8 +240,7 @@
         line-height: 1.7;
       "
     >
-      {% trans "We're here to help. Send us a message and we'll get back to you
-      promptly." %}
+      {% trans "We're here to help. Send us a message and we'll get back to you promptly." %}
     </p>
   </div>
 </section>
@@ -250,69 +252,38 @@
       <!-- Left: Form -->
       <div class="contact-form-wrapper">
         <h2>
-          <i
-            class="fas fa-paper-plane"
-            style="color: var(--secondary); margin-right: 10px"
-          ></i>
+          <i class="fas fa-paper-plane" style="color: var(--secondary); margin-right: 10px"></i>
           {% trans "Send a Message" %}
         </h2>
-        <form
-          action="{% url 'contact' %}"
-          method="post"
-          class="contact-form"
-          novalidate
-        >
-          {% csrf_token %} {{ form.non_field_errors }}
+        <form action="{% url 'contact' %}" method="post" class="contact-form" novalidate>
+          {% csrf_token %}
+          {{ form.non_field_errors }}
           <div class="form-group">
-            <label for="{{ form.name.id_for_label }}"
-              >{% trans "Your Name" %} *</label
-            >
-            {{ form.name }} {% if form.name.errors %}
-            <div class="error-message">{{ form.name.errors }}</div>
-            {% endif %}
+            <label for="{{ form.name.id_for_label }}">{% trans "Your Name" %} *</label>
+            {{ form.name }}
+            {% if form.name.errors %}<div class="error-message">{{ form.name.errors }}</div>{% endif %}
           </div>
           <div class="form-group">
-            <label for="{{ form.email.id_for_label }}"
-              >{% trans "Email Address" %} *</label
-            >
-            {{ form.email }} {% if form.email.errors %}
-            <div class="error-message">{{ form.email.errors }}</div>
-            {% endif %}
+            <label for="{{ form.email.id_for_label }}">{% trans "Email Address" %} *</label>
+            {{ form.email }}
+            {% if form.email.errors %}<div class="error-message">{{ form.email.errors }}</div>{% endif %}
           </div>
           <div class="form-group">
-            <label for="{{ form.phone.id_for_label }}"
-              >{% trans "Phone Number" %} *</label
-            >
-            {{ form.phone }} {% if form.phone.errors %}
-            <div class="error-message">{{ form.phone.errors }}</div>
-            {% endif %}
+            <label for="{{ form.phone.id_for_label }}">{% trans "Phone Number" %} *</label>
+            {{ form.phone }}
+            {% if form.phone.errors %}<div class="error-message">{{ form.phone.errors }}</div>{% endif %}
           </div>
           <div class="form-group">
-            <label for="{{ form.subject.id_for_label }}"
-              >{% trans "Subject" %} *</label
-            >
-            {{ form.subject }} {% if form.subject.errors %}
-            <div class="error-message">{{ form.subject.errors }}</div>
-            {% endif %}
+            <label for="{{ form.subject.id_for_label }}">{% trans "Subject" %} *</label>
+            {{ form.subject }}
+            {% if form.subject.errors %}<div class="error-message">{{ form.subject.errors }}</div>{% endif %}
           </div>
           <div class="form-group">
-            <label for="{{ form.message.id_for_label }}"
-              >{% trans "Message" %} *</label
-            >
-            {{ form.message }} {% if form.message.errors %}
-            <div class="error-message">{{ form.message.errors }}</div>
-            {% endif %}
+            <label for="{{ form.message.id_for_label }}">{% trans "Message" %} *</label>
+            {{ form.message }}
+            {% if form.message.errors %}<div class="error-message">{{ form.message.errors }}</div>{% endif %}
           </div>
-          <button
-            type="submit"
-            class="btn-primary"
-            style="
-              width: 100%;
-              justify-content: center;
-              padding: 16px;
-              font-size: 1.1rem;
-            "
-          >
+          <button type="submit" class="btn-primary" style="width:100%; justify-content:center; padding:16px; font-size:1.1rem;">
             <i class="fas fa-paper-plane"></i> {% trans "Send Message" %}
           </button>
         </form>
@@ -325,12 +296,8 @@
           <div class="content">
             <h4>{% trans "Address" %}</h4>
             <p>
-              {% blocktrans with name=business.business_name|default:"CyberTech
-              Digital Services" %}{{ name }}{% endblocktrans %}<br />
-              {% blocktrans with
-              address=business.address|linebreaksbr|default:"Shop No. 12, Main
-              Road, Pune, Maharashtra – 411001" %}{{ address }}{% endblocktrans
-              %}
+              {% blocktrans with name=business.business_name|default:"CyberTech Digital Services" %}{{ name }}{% endblocktrans %}<br />
+              {% blocktrans with address=business.address|linebreaksbr|default:"Shop No. 12, Main Road, Pune, Maharashtra – 411001" %}{{ address }}{% endblocktrans %}
             </p>
           </div>
         </div>
@@ -338,20 +305,14 @@
           <div class="icon"><i class="fas fa-phone-alt"></i></div>
           <div class="content">
             <h4>{% trans "Phone" %}</h4>
-            <a href="tel:{{ business.phone|default:'+919876543210' }}"
-              >{{ business.phone|default:'+91 98765 43210' }}</a
-            >
+            <a href="tel:{{ business.phone|default:'+919876543210' }}">{{ business.phone|default:'+91 98765 43210' }}</a>
           </div>
         </div>
         <div class="info-block">
           <div class="icon"><i class="fab fa-whatsapp"></i></div>
           <div class="content">
             <h4>{% trans "WhatsApp" %}</h4>
-            <a
-              href="https://wa.me/{{ business.whatsapp|default:'919876543210'|cut:'+' }}?text=Hello%2C%20I%20would%20like%20to%20know%20about%20your%20services."
-              target="_blank"
-              class="whatsapp-link"
-            >
+            <a href="https://wa.me/{{ business.whatsapp|default:'919876543210'|cut:'+' }}?text=Hello%2C%20I%20would%20like%20to%20know%20about%20your%20services." target="_blank" class="whatsapp-link">
               <i class="fab fa-whatsapp"></i> {% trans "Chat with Us" %}
             </a>
           </div>
@@ -360,48 +321,25 @@
           <div class="icon"><i class="fas fa-envelope"></i></div>
           <div class="content">
             <h4>{% trans "Email" %}</h4>
-            <a
-              href="mailto:{{ business.email|default:'support@cybertech.com' }}"
-              >{{ business.email|default:'support@cybertech.com' }}</a
-            >
+            <a href="mailto:{{ business.email|default:'support@cybertech.com' }}">{{ business.email|default:'support@cybertech.com' }}</a>
           </div>
         </div>
 
         <br />
         <div class="hours-block">
           <h3><i class="fas fa-clock"></i> {% trans "Business Hours" %}</h3>
-          {% if business.business_hours %} {{ business.business_hours|linebreaks
-          }} {% else %}
-          <table class="hours-table">
-            <tr>
-              <td>{% trans "Monday" %}</td>
-              <td>{% trans "9:00 AM – 8:00 PM" %}</td>
-            </tr>
-            <tr>
-              <td>{% trans "Tuesday" %}</td>
-              <td>{% trans "9:00 AM – 8:00 PM" %}</td>
-            </tr>
-            <tr>
-              <td>{% trans "Wednesday" %}</td>
-              <td>{% trans "9:00 AM – 8:00 PM" %}</td>
-            </tr>
-            <tr>
-              <td>{% trans "Thursday" %}</td>
-              <td>{% trans "9:00 AM – 8:00 PM" %}</td>
-            </tr>
-            <tr>
-              <td>{% trans "Friday" %}</td>
-              <td>{% trans "9:00 AM – 8:00 PM" %}</td>
-            </tr>
-            <tr>
-              <td>{% trans "Saturday" %}</td>
-              <td>{% trans "9:00 AM – 8:00 PM" %}</td>
-            </tr>
-            <tr class="highlight">
-              <td>{% trans "Sunday" %}</td>
-              <td>{% trans "10:00 AM – 2:00 PM" %}</td>
-            </tr>
-          </table>
+          {% if business.business_hours %}
+            {{ business.business_hours|linebreaks }}
+          {% else %}
+            <table class="hours-table">
+              <tr><td>{% trans "Monday" %}</td><td>{% trans "9:00 AM – 8:00 PM" %}</td></tr>
+              <tr><td>{% trans "Tuesday" %}</td><td>{% trans "9:00 AM – 8:00 PM" %}</td></tr>
+              <tr><td>{% trans "Wednesday" %}</td><td>{% trans "9:00 AM – 8:00 PM" %}</td></tr>
+              <tr><td>{% trans "Thursday" %}</td><td>{% trans "9:00 AM – 8:00 PM" %}</td></tr>
+              <tr><td>{% trans "Friday" %}</td><td>{% trans "9:00 AM – 8:00 PM" %}</td></tr>
+              <tr><td>{% trans "Saturday" %}</td><td>{% trans "9:00 AM – 8:00 PM" %}</td></tr>
+              <tr class="highlight"><td>{% trans "Sunday" %}</td><td>{% trans "10:00 AM – 2:00 PM" %}</td></tr>
+            </table>
           {% endif %}
         </div>
       </div>
@@ -409,98 +347,25 @@
 
     <!-- Map -->
     <div class="map-block">
-      {{ business.google_map|safe|default:'<iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.2613173278896!2d73.8567444!3d18.5204303!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTjCsDMxJzEzLjUiTiA3M8KwNTEnMjQuMyJF!5e0!3m2!1sen!2sin!4v1647527588784!5m2!1sen!2sin"
-        allowfullscreen=""
-        loading="lazy"
-      ></iframe
-      >' }}
+      {{ business.google_map|safe|default:'<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.2613173278896!2d73.8567444!3d18.5204303!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTjCsDMxJzEzLjUiTiA3M8KwNTEnMjQuMyJF!5e0!3m2!1sen!2sin!4v1647527588784!5m2!1sen!2sin" allowfullscreen="" loading="lazy"></iframe>' }}
     </div>
   </div>
 </section>
 
 <!-- CTA Banner -->
-<section
-  class="cta-banner"
-  style="
-    padding: 60px 0;
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
-    text-align: center;
-    border-top: 2px solid rgba(0, 212, 255, 0.1);
-    border-bottom: 2px solid rgba(0, 212, 255, 0.1);
-  "
->
+<section class="cta-banner" style="padding: 60px 0; background: linear-gradient(135deg, var(--primary), var(--primary-light)); text-align: center; border-top: 2px solid rgba(0, 212, 255, 0.1); border-bottom: 2px solid rgba(0, 212, 255, 0.1);">
   <div class="container" style="max-width: 720px">
-    <h2
-      style="
-        font-size: 2.2rem;
-        font-weight: 800;
-        color: #fff;
-        letter-spacing: -0.5px;
-        margin-bottom: 8px;
-      "
-    >
-      {% trans "We're just a" %}
-      <span style="color: var(--secondary)">{% trans "click" %}</span> {% trans
-      "away!" %}
+    <h2 style="font-size: 2.2rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; margin-bottom: 8px;">
+      {% trans "We're just a" %} <span style="color: var(--secondary)">{% trans "click" %}</span> {% trans "away!" %}
     </h2>
-    <p
-      style="
-        color: rgba(255, 255, 255, 0.7);
-        font-size: 1.05rem;
-        margin-bottom: 24px;
-      "
-    >
-      {% trans "Reach out to us for any queries or to book a service. We respond
-      promptly." %}
+    <p style="color: rgba(255,255,255,0.7); font-size: 1.05rem; margin-bottom: 24px;">
+      {% trans "Reach out to us for any queries or to book a service. We respond promptly." %}
     </p>
-    <div
-      class="cta-buttons"
-      style="display: flex; justify-content: center; flex-wrap: wrap; gap: 16px"
-    >
-      <a
-        href="tel:{{ business.phone|default:'+919876543210' }}"
-        class="btn-primary"
-        style="
-          display: inline-flex;
-          align-items: center;
-          gap: 10px;
-          background: var(--secondary);
-          color: var(--primary);
-          font-weight: 700;
-          padding: 14px 36px;
-          border-radius: 50px;
-          border: none;
-          font-size: 1rem;
-          cursor: pointer;
-          transition: var(--transition);
-          box-shadow: 0 8px 30px rgba(0, 212, 255, 0.35);
-          text-decoration: none;
-        "
-      >
+    <div class="cta-buttons" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 16px">
+      <a href="tel:{{ business.phone|default:'+919876543210' }}" class="btn-primary" style="display: inline-flex; align-items: center; gap: 10px; background: var(--secondary); color: var(--primary); font-weight: 700; padding: 14px 36px; border-radius: 50px; border: none; font-size: 1rem; cursor: pointer; transition: var(--transition); box-shadow: 0 8px 30px rgba(0, 212, 255, 0.35); text-decoration: none;">
         <i class="fas fa-phone"></i> {% trans "Call Now" %}
       </a>
-      <a
-        href="https://wa.me/{{ business.whatsapp|default:'919876543210'|cut:'+' }}?text=Hello%2C%20I%20would%20like%20to%20know%20about%20your%20services."
-        target="_blank"
-        class="btn-whatsapp"
-        style="
-          display: inline-flex;
-          align-items: center;
-          gap: 12px;
-          background: #25d366;
-          color: #fff;
-          font-weight: 700;
-          padding: 14px 32px;
-          border-radius: 50px;
-          border: none;
-          font-size: 1rem;
-          cursor: pointer;
-          transition: var(--transition);
-          box-shadow: 0 8px 30px rgba(37, 211, 102, 0.35);
-          text-decoration: none;
-        "
-      >
+      <a href="https://wa.me/{{ business.whatsapp|default:'919876543210'|cut:'+' }}?text=Hello%2C%20I%20would%20like%20to%20know%20about%20your%20services." target="_blank" class="btn-whatsapp" style="display: inline-flex; align-items: center; gap: 12px; background: #25d366; color: #fff; font-weight: 700; padding: 14px 32px; border-radius: 50px; border: none; font-size: 1rem; cursor: pointer; transition: var(--transition); box-shadow: 0 8px 30px rgba(37, 211, 102, 0.35); text-decoration: none;">
         <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
       </a>
     </div>

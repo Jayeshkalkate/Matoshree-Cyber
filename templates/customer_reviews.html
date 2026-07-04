@@ -5,14 +5,8 @@
 <!-- Google Fonts & Font Awesome -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-  href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap"
-  rel="stylesheet"
-/>
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
 <style>
   /* ----- Reset & Base (scoped) ----- */
@@ -219,9 +213,7 @@
     padding: 1.6rem 1.8rem;
     box-shadow: 0 4px 12px rgba(0, 20, 50, 0.04);
     border: 1px solid #eef3f9;
-    transition:
-      box-shadow 0.2s,
-      transform 0.15s;
+    transition: box-shadow 0.2s, transform 0.15s;
     display: flex;
     flex-direction: column;
   }
@@ -367,9 +359,7 @@
     border: 1.5px solid #dce3ed;
     border-radius: 12px;
     background: #fafcff;
-    transition:
-      border-color 0.2s,
-      box-shadow 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s;
     color: #0b1b33;
   }
 
@@ -439,9 +429,7 @@
     font-size: 1rem;
     font-family: "Inter", sans-serif;
     cursor: pointer;
-    transition:
-      background 0.2s,
-      transform 0.1s;
+    transition: background 0.2s, transform 0.1s;
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
@@ -567,15 +555,16 @@
     }
   }
 </style>
-{% endblock extra_head %} {% block content %}
+{% endblock extra_head %}
+
+{% block content %}
 <div class="reviews-page">
   <div class="page-wrapper">
     <!-- ===== HEADER ===== -->
     <div class="page-header">
       <h1><i class="fas fa-star"></i> {% trans "Customer Reviews" %}</h1>
       <p class="subhead">
-        {% trans "Real feedback from customers who have used our services. See
-        why they trust us." %}
+        {% trans "Real feedback from customers who have used our services. See why they trust us." %}
       </p>
     </div>
 
@@ -587,19 +576,20 @@
         </div>
         <div class="rating-stars-big">
           <div class="stars">
-            {% with full=rating_summary.average|floatformat:0|add:0 %} {% for i
-            in "12345"|make_list %} {% if forloop.counter <= full %}
-            <i class="fas fa-star"></i>
-            {% elif forloop.counter == full|add:1 and
-            rating_summary.average|floatformat:1|slice:"-1:" == "5" %}
-            <i class="fas fa-star-half-alt"></i>
-            {% else %}
-            <i class="fas fa-star empty-star"></i>
-            {% endif %} {% endfor %} {% endwith %}
+            {% with full=rating_summary.average|floatformat:0|add:0 %}
+              {% for i in "12345"|make_list %}
+                {% if forloop.counter <= full %}
+                  <i class="fas fa-star"></i>
+                {% elif forloop.counter == full|add:1 and rating_summary.average|floatformat:1|slice:"-1:" == "5" %}
+                  <i class="fas fa-star-half-alt"></i>
+                {% else %}
+                  <i class="fas fa-star empty-star"></i>
+                {% endif %}
+              {% endfor %}
+            {% endwith %}
           </div>
           <span class="count">
-            {% blocktrans with total=rating_summary.total|default:0 %} Based on
-            <strong>{{ total }}</strong> customer reviews {% endblocktrans %}
+            {% blocktrans with total=rating_summary.total|default:0 %} Based on <strong>{{ total }}</strong> customer reviews {% endblocktrans %}
           </span>
         </div>
       </div>
@@ -621,111 +611,70 @@
     <div class="filter-row">
       <span class="reviews-count">
         {% blocktrans with count=reviews|length %}
-        <strong>{{ count }}</strong> customer reviews {% endblocktrans %}
+        <strong>{{ count }}</strong> customer reviews
+        {% endblocktrans %}
       </span>
       <div class="sort-options">
-        <button class="sort-btn active" data-sort="newest">
-          <i class="far fa-clock"></i> {% trans "Newest" %}
-        </button>
-        <button class="sort-btn" data-sort="highest">
-          <i class="fas fa-sort-amount-down"></i> {% trans "Highest" %}
-        </button>
-        <button class="sort-btn" data-sort="lowest">
-          <i class="fas fa-sort-amount-up"></i> {% trans "Lowest" %}
-        </button>
+        <button class="sort-btn active" data-sort="newest"><i class="far fa-clock"></i> {% trans "Newest" %}</button>
+        <button class="sort-btn" data-sort="highest"><i class="fas fa-sort-amount-down"></i> {% trans "Highest" %}</button>
+        <button class="sort-btn" data-sort="lowest"><i class="fas fa-sort-amount-up"></i> {% trans "Lowest" %}</button>
       </div>
     </div>
 
     <!-- ===== REVIEWS GRID ===== -->
     <div class="reviews-grid" id="reviewsGrid">
       {% for review in reviews %}
-      <div
-        class="review-card"
-        data-rating="{{ review.rating }}"
-        data-date="{{ review.created_at|date:'Y-m-d' }}"
-      >
+      <div class="review-card" data-rating="{{ review.rating }}" data-date="{{ review.created_at|date:'Y-m-d' }}">
         <div class="stars">
-          {% for i in "12345"|make_list %} {% if forloop.counter <=
-          review.rating %}
-          <i class="fas fa-star"></i>
-          {% else %}
-          <i class="fas fa-star empty-star"></i>
-          {% endif %} {% endfor %}
+          {% for i in "12345"|make_list %}
+            {% if forloop.counter <= review.rating %}
+              <i class="fas fa-star"></i>
+            {% else %}
+              <i class="fas fa-star empty-star"></i>
+            {% endif %}
+          {% endfor %}
         </div>
         <p class="review-text">{{ review.review }}</p>
         <div class="review-footer">
           <span class="customer-name">
             <span class="initials">
-              {{ review.customer_name|slice:":1" }}{% if
-              review.customer_name|slice:"1:2" %}{{
-              review.customer_name|slice:"1:2" }}{% endif %}
+              {{ review.customer_name|slice:":1" }}{% if review.customer_name|slice:"1:2" %}{{ review.customer_name|slice:"1:2" }}{% endif %}
             </span>
-            {{ review.customer_name }} {% if review.is_verified %}
-            <span class="verified-badge"
-              ><i class="fas fa-check-circle"></i> {% trans "Verified" %}</span
-            >
+            {{ review.customer_name }}
+            {% if review.is_verified %}
+              <span class="verified-badge"><i class="fas fa-check-circle"></i> {% trans "Verified" %}</span>
             {% endif %}
           </span>
-          <span class="review-date"
-            ><i class="far fa-calendar-alt"></i> {{ review.created_at|date:"d M
-            Y" }}</span
-          >
+          <span class="review-date"><i class="far fa-calendar-alt"></i> {{ review.created_at|date:"d M Y" }}</span>
         </div>
       </div>
       {% empty %}
-      <div
-        style="
-          grid-column: 1 / -1;
-          text-align: center;
-          padding: 2rem;
-          color: #5b6f87;
-        "
-      >
-        <i
-          class="fas fa-comment-slash"
-          style="font-size: 2rem; display: block; margin-bottom: 0.5rem"
-        ></i>
-        <p>
-          {% trans "No reviews yet. Be the first to share your experience!" %}
-        </p>
+      <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: #5b6f87;">
+        <i class="fas fa-comment-slash" style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
+        <p>{% trans "No reviews yet. Be the first to share your experience!" %}</p>
       </div>
       {% endfor %}
     </div>
 
     <!-- ===== SUBMIT REVIEW SECTION ===== -->
     <div class="submit-section">
-      <h2>
-        <i class="fas fa-pen-fancy"></i> {% trans "Share Your Experience" %}
-      </h2>
-      <p class="form-subhead">
-        {% trans "We value your feedback. Let us know how we did!" %}
-      </p>
+      <h2><i class="fas fa-pen-fancy"></i> {% trans "Share Your Experience" %}</h2>
+      <p class="form-subhead">{% trans "We value your feedback. Let us know how we did!" %}</p>
 
-      <form
-        class="review-form"
-        id="reviewForm"
-        method="post"
-        action="{% url 'submit_review' %}"
-        novalidate
-      >
-        {% csrf_token %} {{ form.non_field_errors }}
+      <form class="review-form" id="reviewForm" method="post" action="{% url 'submit_review' %}" novalidate>
+        {% csrf_token %}
+        {{ form.non_field_errors }}
 
         <div>
-          <label for="{{ form.customer_name.id_for_label }}">
-            {% trans "Full Name" %} <span class="required">*</span>
-          </label>
-          {{ form.customer_name }} {% if form.customer_name.errors %}
-          <div class="error-message">{{ form.customer_name.errors }}</div>
-          {% endif %}
+          <label for="{{ form.customer_name.id_for_label }}">{% trans "Full Name" %} <span class="required">*</span></label>
+          {{ form.customer_name }}
+          {% if form.customer_name.errors %}<div class="error-message">{{ form.customer_name.errors }}</div>{% endif %}
         </div>
 
         <div>
-          <label for="{{ form.email.id_for_label }}">
-            {% trans "Email" %} <span class="required">*</span>
-          </label>
-          {{ form.email }} {% if form.email.errors %}
-          <div class="error-message">{{ form.email.errors }}</div>
-          {% endif %}
+          <label for="{{ form.email.id_for_label }}">{% trans "Email" %} <span class="required">*</span></label>
+          {{ form.email }}
+          {% if form.email.errors %}<div class="error-message">{{ form.email.errors }}</div>{% endif %}
         </div>
 
         <div class="full-width">
@@ -736,63 +685,46 @@
             <button type="button" class="star-option" data-value="3">★</button>
             <button type="button" class="star-option" data-value="4">★</button>
             <button type="button" class="star-option" data-value="5">★</button>
-            <span class="star-label" id="starLabel"
-              >{% trans "Select a rating" %}</span
-            >
+            <span class="star-label" id="starLabel">{% trans "Select a rating" %}</span>
           </div>
-          {{ form.rating }} {% if form.rating.errors %}
-          <div class="error-message">{{ form.rating.errors }}</div>
-          {% endif %}
+          {{ form.rating }}
+          {% if form.rating.errors %}<div class="error-message">{{ form.rating.errors }}</div>{% endif %}
         </div>
 
         <div class="full-width">
-          <label for="{{ form.review.id_for_label }}">
-            {% trans "Your Review" %} <span class="required">*</span>
-          </label>
-          {{ form.review }} {% if form.review.errors %}
-          <div class="error-message">{{ form.review.errors }}</div>
-          {% endif %}
+          <label for="{{ form.review.id_for_label }}">{% trans "Your Review" %} <span class="required">*</span></label>
+          {{ form.review }}
+          {% if form.review.errors %}<div class="error-message">{{ form.review.errors }}</div>{% endif %}
         </div>
 
         <div class="full-width">
-          <button type="submit" class="btn-submit">
-            <i class="fas fa-paper-plane"></i> {% trans "Submit Review" %}
-          </button>
+          <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> {% trans "Submit Review" %}</button>
         </div>
       </form>
 
       <div id="formFeedback" class="form-feedback">
         <i class="fas fa-check-circle"></i>
-        <span id="feedbackMessage"
-          >{% trans "Thank you for your review!" %}</span
-        >
+        <span id="feedbackMessage">{% trans "Thank you for your review!" %}</span>
       </div>
     </div>
 
     <!-- ===== FOOTER ===== -->
     <div class="footer-note">
-      <span>
-        <i class="fas fa-shield-alt"></i> {% trans "All reviews are from genuine
-        customers." %}
-      </span>
-      <span class="badge">
-        <i class="far fa-comments"></i>
-        {% blocktrans with total=rating_summary.total|default:0 %} {{ total }}
-        reviews and counting {% endblocktrans %}
-      </span>
+      <span><i class="fas fa-shield-alt"></i> {% trans "All reviews are from genuine customers." %}</span>
+      <span class="badge"><i class="far fa-comments"></i> {% blocktrans with total=rating_summary.total|default:0 %}{{ total }} reviews and counting{% endblocktrans %}</span>
     </div>
   </div>
-  <!-- end page-wrapper -->
 </div>
-{% endblock content %} {% block extra_scripts %}
+{% endblock content %}
+
+{% block extra_scripts %}
 <script>
   (function () {
     "use strict";
 
     // ----- Translation-aware rating labels -----
-    // We use Django's translation tags to populate the label array.
     const ratingLabels = [
-      "",  // index 0 not used
+      "",
       "{% trans "Terrible"|escapejs %}",
       "{% trans "Poor"|escapejs %}",
       "{% trans "Average"|escapejs %}",
@@ -800,14 +732,11 @@
       "{% trans "Excellent"|escapejs %}"
     ];
 
-    // ----- Star selection for form -----
+    // ----- Star selection -----
     const starOptions = document.querySelectorAll(".star-option");
     const starLabel = document.getElementById("starLabel");
-    const ratingInput = document.getElementById(
-      "{{ form.rating.id_for_label }}",
-    );
+    const ratingInput = document.getElementById("{{ form.rating.id_for_label }}");
 
-    // Pre-select rating if a value exists (e.g., after form error)
     const existingRating = ratingInput.value;
     if (existingRating) {
       starOptions.forEach((btn) => {
@@ -822,33 +751,24 @@
     starOptions.forEach((btn) => {
       btn.addEventListener("click", function () {
         const val = parseInt(this.dataset.value);
-        // Update active state
         starOptions.forEach((b) => b.classList.remove("active"));
         this.classList.add("active");
-        // Update label using translated array
         starLabel.textContent = ratingLabels[val] || "{% trans "Select a rating"|escapejs %}";
         ratingInput.value = val;
-        // Clear any previous error styling
         document.getElementById("starSelect").style.border = "none";
       });
     });
 
-    // ----- Form submission (client-side validation) -----
+    // ----- Form validation -----
     const form = document.getElementById("reviewForm");
     const feedback = document.getElementById("formFeedback");
     const feedbackMsg = document.getElementById("feedbackMessage");
 
     form.addEventListener("submit", function (e) {
-      const name = document
-        .getElementById("{{ form.customer_name.id_for_label }}")
-        .value.trim();
-      const email = document
-        .getElementById("{{ form.email.id_for_label }}")
-        .value.trim();
+      const name = document.getElementById("{{ form.customer_name.id_for_label }}").value.trim();
+      const email = document.getElementById("{{ form.email.id_for_label }}").value.trim();
       const rating = ratingInput.value;
-      const comment = document
-        .getElementById("{{ form.review.id_for_label }}")
-        .value.trim();
+      const comment = document.getElementById("{{ form.review.id_for_label }}").value.trim();
 
       let errors = [];
       if (!name) errors.push("{% trans "Name is required."|escapejs %}");
@@ -879,13 +799,9 @@
         const dateA = new Date(a.dataset.date);
         const dateB = new Date(b.dataset.date);
 
-        if (criteria === "newest") {
-          return dateB - dateA;
-        } else if (criteria === "highest") {
-          return ratingB - ratingA;
-        } else if (criteria === "lowest") {
-          return ratingA - ratingB;
-        }
+        if (criteria === "newest") return dateB - dateA;
+        else if (criteria === "highest") return ratingB - ratingA;
+        else if (criteria === "lowest") return ratingA - ratingB;
         return 0;
       });
 
@@ -902,7 +818,6 @@
       });
     });
 
-    // default: newest already active
   })();
 </script>
 {% endblock extra_scripts %}
