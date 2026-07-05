@@ -793,34 +793,34 @@ def jobs(request):
     })
 
 
-@login_required
-@user_passes_test(is_admin)
-def dashboard_services(request):
-    services = Service.objects.all().order_by('name')
-    form = ServiceForm()
-    if request.method == 'POST':
-        if 'add' in request.POST:
-            form = ServiceForm(request.POST)
-            if form.is_valid():
-                form.save()
-                messages.success(request, 'Service added.')
-                return redirect('dashboard_services')
-        elif 'delete' in request.POST:
-            service_id = request.POST.get('service_id')
-            service = get_object_or_404(Service, id=service_id)
-            service.delete()
-            messages.success(request, 'Service deleted.')
-            return redirect('dashboard_services')
-        elif 'edit' in request.POST:
-            service_id = request.POST.get('service_id')
-            service = get_object_or_404(Service, id=service_id)
-            form = ServiceForm(request.POST, instance=service)
-            if form.is_valid():
-                form.save()
-                messages.success(request, 'Service updated.')
-                return redirect('dashboard_services')
-    context = {
-        'services': services,
-        'form': form,
-    }
-    return render(request, 'dashboard_services.html', context)
+# @login_required
+# @user_passes_test(is_admin)
+# def dashboard_services(request):
+#     services = Service.objects.all().order_by('name')
+#     form = ServiceForm()
+#     if request.method == 'POST':
+#         if 'add' in request.POST:
+#             form = ServiceForm(request.POST)
+#             if form.is_valid():
+#                 form.save()
+#                 messages.success(request, 'Service added.')
+#                 return redirect('dashboard_services')
+#         elif 'delete' in request.POST:
+#             service_id = request.POST.get('service_id')
+#             service = get_object_or_404(Service, id=service_id)
+#             service.delete()
+#             messages.success(request, 'Service deleted.')
+#             return redirect('dashboard_services')
+#         elif 'edit' in request.POST:
+#             service_id = request.POST.get('service_id')
+#             service = get_object_or_404(Service, id=service_id)
+#             form = ServiceForm(request.POST, instance=service)
+#             if form.is_valid():
+#                 form.save()
+#                 messages.success(request, 'Service updated.')
+#                 return redirect('dashboard_services')
+#     context = {
+#         'services': services,
+#         'form': form,
+#     }
+#     return render(request, 'dashboard_services.html', context)

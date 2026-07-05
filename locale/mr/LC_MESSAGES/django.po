@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-04 16:37+0530\n"
+"POT-Creation-Date: 2026-07-05 17:41+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,140 +23,140 @@ msgstr ""
 #: .\corematoshree\forms.py:258 .\corematoshree\forms.py:272
 #: .\corematoshree\forms.py:331 .\corematoshree\models.py:95
 #: .\corematoshree\models.py:151 .\corematoshree\models.py:191
-#: .\corematoshree\models.py:480 .\templates\contactus.html:360
-#: .\templates\customer_reviews.html:722
+#: .\corematoshree\models.py:480 .\templates\contactus.html:323
+#: .\templates\customer_reviews.html:675
 #: .\templates\superadmindashboard.html:1060
 msgid "Email"
-msgstr ""
+msgstr "ईमेल"
 
 #: .\corematoshree\forms.py:19 .\corematoshree\forms.py:53
 #: .\corematoshree\forms.py:73 .\corematoshree\forms.py:118
 #: .\corematoshree\forms.py:257 .\corematoshree\forms.py:273
 #: .\corematoshree\forms.py:329 .\corematoshree\models.py:24
 #: .\corematoshree\models.py:90 .\corematoshree\models.py:154
-#: .\corematoshree\models.py:470 .\templates\contactus.html:338
+#: .\corematoshree\models.py:470 .\templates\contactus.html:307
 msgid "Phone"
-msgstr ""
+msgstr "फोन"
 
 #: .\corematoshree\forms.py:24 .\corematoshree\forms.py:54
 #: .\corematoshree\forms.py:328 .\corematoshree\models.py:29
-#: .\corematoshree\models.py:467 .\templates\contactus.html:324
+#: .\corematoshree\models.py:467 .\templates\contactus.html:297
 msgid "Address"
-msgstr ""
+msgstr "पत्ता"
 
 #: .\corematoshree\forms.py:33 .\templates\superadmindashboard.html:1059
 msgid "Username"
-msgstr ""
+msgstr "वापरकर्तानाव"
 
 #: .\corematoshree\forms.py:34
 msgid "Password"
-msgstr ""
+msgstr "पासवर्ड"
 
 #: .\corematoshree\forms.py:35
 msgid "Confirm Password"
-msgstr ""
+msgstr "पासवर्डची पुष्टी करा"
 
 #: .\corematoshree\forms.py:50
 msgid "First Name"
-msgstr ""
+msgstr "नाव"
 
 #: .\corematoshree\forms.py:51
 msgid "Last Name"
-msgstr ""
+msgstr "आडनाव"
 
 #: .\corematoshree\forms.py:71 .\corematoshree\forms.py:209
 #: .\corematoshree\forms.py:271 .\corematoshree\models.py:49
 #: .\corematoshree\models.py:147 .\templates\admindashboard.html:218
 #: .\templates\superadmindashboard.html:676
 msgid "Name"
-msgstr ""
+msgstr "नाव"
 
 #: .\corematoshree\forms.py:74 .\corematoshree\forms.py:92
 #: .\corematoshree\forms.py:274 .\corematoshree\models.py:159
-#: .\templates\contactus.html:290
+#: .\templates\contactus.html:277
 msgid "Subject"
-msgstr ""
+msgstr "विषय"
 
 #: .\corematoshree\forms.py:75 .\corematoshree\forms.py:262
 #: .\corematoshree\forms.py:275 .\corematoshree\models.py:110
-#: .\corematoshree\models.py:163 .\templates\contactus.html:298
+#: .\corematoshree\models.py:163 .\templates\contactus.html:282
 msgid "Message"
-msgstr ""
+msgstr "संदेश"
 
 #: .\corematoshree\forms.py:80 .\corematoshree\forms.py:169
-#: .\corematoshree\forms.py:177 .\templates\contactus.html:266
+#: .\corematoshree\forms.py:177 .\templates\contactus.html:262
 msgid "Your Name"
-msgstr ""
+msgstr "तुमचे नाव"
 
 #: .\corematoshree\forms.py:84 .\corematoshree\forms.py:136
 #: .\corematoshree\forms.py:170 .\corematoshree\forms.py:181
-#: .\templates\appointment.html:327 .\templates\contactus.html:274
+#: .\templates\appointment.html:323 .\templates\contactus.html:267
 msgid "Email Address"
-msgstr ""
+msgstr "ईमेल पत्ता"
 
 #: .\corematoshree\forms.py:88 .\corematoshree\forms.py:132
-#: .\templates\appointment.html:312 .\templates\contactus.html:282
+#: .\templates\appointment.html:308 .\templates\contactus.html:272
 msgid "Phone Number"
-msgstr ""
+msgstr "फोन नंबर"
 
 #: .\corematoshree\forms.py:97
 msgid "Write your message..."
-msgstr ""
+msgstr "तुमचा संदेश लिहा..."
 
 #: .\corematoshree\forms.py:117 .\corematoshree\forms.py:128
 #: .\corematoshree\forms.py:256 .\corematoshree\models.py:86
-#: .\templates\appointment.html:301 .\templates\customer_reviews.html:713
+#: .\templates\appointment.html:296 .\templates\customer_reviews.html:669
 msgid "Full Name"
-msgstr ""
+msgstr "पूर्ण नाव"
 
 #: .\corematoshree\forms.py:120 .\corematoshree\forms.py:259
 #: .\corematoshree\forms.py:297 .\corematoshree\models.py:101
 #: .\corematoshree\models.py:296 .\corematoshree\models.py:318
 #: .\templates\admindashboard.html:306 .\templates\admindashboard.html:336
-#: .\templates\admindashboard.html:477 .\templates\appointment.html:337
-#: .\templates\required_document.html:205 .\templates\service_charges.html:410
-#: .\templates\service_charges.html:442
+#: .\templates\admindashboard.html:477 .\templates\appointment.html:334
+#: .\templates\required_document.html:207 .\templates\service_charges.html:412
+#: .\templates\service_charges.html:444
 #: .\templates\superadmindashboard.html:766
 #: .\templates\superadmindashboard.html:796
 #: .\templates\superadmindashboard.html:947
 msgid "Service"
-msgstr ""
+msgstr "सेवा"
 
 #: .\corematoshree\forms.py:121 .\corematoshree\forms.py:260
-#: .\corematoshree\models.py:104 .\templates\appointment.html:348
+#: .\corematoshree\models.py:104 .\templates\appointment.html:346
 msgid "Appointment Date"
-msgstr ""
+msgstr "भेटीची तारीख"
 
 #: .\corematoshree\forms.py:122 .\corematoshree\forms.py:261
-#: .\corematoshree\models.py:107 .\templates\appointment.html:359
+#: .\corematoshree\models.py:107 .\templates\appointment.html:358
 msgid "Appointment Time"
-msgstr ""
+msgstr "भेटीची वेळ"
 
 #: .\corematoshree\forms.py:123 .\templates\appointment.html:370
 msgid "Additional Message"
-msgstr ""
+msgstr "अतिरिक्त संदेश"
 
 #: .\corematoshree\forms.py:152
 msgid "Additional Message (Optional)"
-msgstr ""
+msgstr "अतिरिक्त संदेश (पर्यायी)"
 
 #: .\corematoshree\forms.py:171 .\corematoshree\models.py:196
 #: .\corematoshree\models.py:213
 msgid "Review"
-msgstr ""
+msgstr "पुनरावलोकन करा"
 
 #: .\corematoshree\forms.py:172 .\corematoshree\models.py:199
-#: .\templates\customer_reviews.html:730
+#: .\templates\customer_reviews.html:681
 msgid "Rating"
-msgstr ""
+msgstr "रेटिंग"
 
 #: .\corematoshree\forms.py:186
 msgid "Write your review..."
-msgstr ""
+msgstr "तुमचे पुनरावलोकन लिहा..."
 
 #: .\corematoshree\forms.py:198
 msgid "Rating must be between 1 and 5."
-msgstr ""
+msgstr "रेटिंग १ ते ५ दरम्यान असणे आवश्यक आहे."
 
 #: .\corematoshree\forms.py:210 .\corematoshree\forms.py:222
 #: .\corematoshree\forms.py:285 .\corematoshree\forms.py:311
@@ -166,26 +166,29 @@ msgstr ""
 #: .\templates\superadmindashboard.html:676
 #: .\templates\superadmindashboard.html:712
 msgid "Category"
-msgstr ""
+msgstr "श्रेणी"
 
 #: .\corematoshree\forms.py:211 .\corematoshree\forms.py:223
 #: .\corematoshree\forms.py:235 .\corematoshree\forms.py:245
 #: .\corematoshree\models.py:57 .\corematoshree\models.py:241
 #: .\corematoshree\models.py:369 .\corematoshree\models.py:414
-#: .\templates\admindashboard.html:263 .\templates\superadmindashboard.html:721
+#: .\templates\admindashboard.html:263
+#: .\templates\superadmindashboard.html:721
 msgid "Description"
-msgstr ""
+msgstr "वर्णन"
 
 #: .\corematoshree\forms.py:212 .\corematoshree\models.py:61
-#: .\templates\admindashboard.html:269 .\templates\superadmindashboard.html:727
+#: .\templates\admindashboard.html:269
+#: .\templates\superadmindashboard.html:727
 msgid "Active"
-msgstr ""
+msgstr "सक्रिय"
 
 #: .\corematoshree\forms.py:213 .\corematoshree\forms.py:236
 #: .\corematoshree\models.py:65 .\corematoshree\models.py:417
-#: .\templates\admindashboard.html:274 .\templates\superadmindashboard.html:732
+#: .\templates\admindashboard.html:274
+#: .\templates\superadmindashboard.html:732
 msgid "Icon"
-msgstr ""
+msgstr "चिन्ह"
 
 #: .\corematoshree\forms.py:221 .\corematoshree\forms.py:231
 #: .\corematoshree\forms.py:244 .\corematoshree\forms.py:284
@@ -193,1267 +196,1382 @@ msgstr ""
 #: .\corematoshree\models.py:269 .\corematoshree\models.py:337
 #: .\corematoshree\models.py:365 .\corematoshree\models.py:399
 msgid "Title"
-msgstr ""
+msgstr "शीर्षक"
 
 #: .\corematoshree\forms.py:232 .\corematoshree\models.py:403
 msgid "Organization"
-msgstr ""
+msgstr "संघटना"
 
 #: .\corematoshree\forms.py:233 .\corematoshree\forms.py:247
 #: .\corematoshree\models.py:376 .\corematoshree\models.py:407
 msgid "Last Date"
-msgstr ""
+msgstr "शेवटची तारीख"
 
 #: .\corematoshree\forms.py:234 .\corematoshree\models.py:410
 msgid "Apply Link"
-msgstr ""
+msgstr "लिंक लागू करा"
 
 #: .\corematoshree\forms.py:246 .\corematoshree\models.py:372
 msgid "Eligibility"
-msgstr ""
+msgstr "पात्रता"
 
 #: .\corematoshree\forms.py:248 .\corematoshree\forms.py:312
 #: .\corematoshree\models.py:278 .\corematoshree\models.py:381
+#: .\venv\Lib\site-packages\django\db\models\fields\files.py:420
 msgid "Image"
-msgstr ""
+msgstr "प्रतिमा"
 
 #: .\corematoshree\forms.py:263 .\corematoshree\models.py:114
 #: .\templates\admindashboard.html:218 .\templates\admindashboard.html:267
-#: .\templates\admindashboard.html:477 .\templates\superadmindashboard.html:676
+#: .\templates\admindashboard.html:477
+#: .\templates\superadmindashboard.html:676
 #: .\templates\superadmindashboard.html:725
 #: .\templates\superadmindashboard.html:947
 msgid "Status"
-msgstr ""
+msgstr "स्थिती"
 
 #: .\corematoshree\forms.py:276 .\corematoshree\models.py:166
-#: .\templates\admindashboard.html:516 .\templates\superadmindashboard.html:990
+#: .\templates\admindashboard.html:516
+#: .\templates\superadmindashboard.html:990
 msgid "Replied"
-msgstr ""
+msgstr "उत्तर दिले"
 
 #: .\corematoshree\forms.py:286 .\corematoshree\models.py:345
 #: .\templates\download_forms.html:387
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #: .\corematoshree\forms.py:298 .\corematoshree\models.py:299
 msgid "Charge"
-msgstr ""
+msgstr "चार्ज करा"
 
 #: .\corematoshree\forms.py:315
 msgid "Image Title"
-msgstr ""
+msgstr "प्रतिमा शीर्षक"
 
 #: .\corematoshree\forms.py:325 .\corematoshree\models.py:454
 msgid "Business Name"
-msgstr ""
+msgstr "व्यवसायाचे नाव"
 
 #: .\corematoshree\forms.py:326 .\corematoshree\models.py:458
 msgid "Logo"
-msgstr ""
+msgstr "लोगो"
 
 #: .\corematoshree\forms.py:327 .\corematoshree\models.py:464
 msgid "Welcome Message"
-msgstr ""
+msgstr "स्वागत संदेश"
 
 #: .\corematoshree\forms.py:330 .\corematoshree\models.py:475
-#: .\templates\contactus.html:347
+#: .\templates\contactus.html:314
 msgid "WhatsApp"
-msgstr ""
+msgstr "व्हॉट्सॲप"
 
 #: .\corematoshree\forms.py:332 .\corematoshree\models.py:483
 msgid "Google Map"
-msgstr ""
+msgstr "गुगल मॅप"
 
 #: .\corematoshree\forms.py:333 .\corematoshree\models.py:487
-#: .\templates\contactus.html:370
+#: .\templates\contactus.html:330
 msgid "Business Hours"
-msgstr ""
+msgstr "व्यवसायाचे तास"
 
 #: .\corematoshree\models.py:13 .\templates\superadmindashboard.html:1083
 msgid "User"
-msgstr ""
+msgstr "वापरकर्ता"
 
 #: .\corematoshree\models.py:14 .\templates\admindashboard.html:157
 #: .\templates\superadmindashboard.html:1084
 msgid "Admin"
-msgstr ""
+msgstr "ॲडमिन"
 
-#: .\corematoshree\models.py:15 .\templates\base.html:489
+#: .\corematoshree\models.py:15 .\templates\base.html:490
 #: .\templates\superadmindashboard.html:588
 #: .\templates\superadmindashboard.html:1085
 msgid "Super Admin"
-msgstr ""
+msgstr "सुपर ॲडमिन"
 
 #: .\corematoshree\models.py:18 .\templates\superadmindashboard.html:1061
 msgid "Role"
-msgstr ""
+msgstr "भूमिका"
 
 #: .\corematoshree\models.py:41
 msgid "Enter a valid phone number (10-15 digits)."
-msgstr ""
+msgstr "वैध फोन नंबर प्रविष्ट करा (10-15 अंक)."
 
 #: .\corematoshree\models.py:68
 msgid "Font Awesome icon class (e.g., 'fa-print')"
-msgstr ""
+msgstr "फॉन्ट अप्रतिम चिन्ह वर्ग (उदा. 'फा-प्रिंट')"
 
 #: .\corematoshree\models.py:79
 msgid "Pending"
-msgstr ""
+msgstr "प्रलंबित"
 
 #: .\corematoshree\models.py:80
 msgid "Confirmed"
-msgstr ""
+msgstr "पुष्टी केली"
 
 #: .\corematoshree\models.py:81
 msgid "Completed"
-msgstr ""
+msgstr "पूर्ण झाले"
 
 #: .\corematoshree\models.py:82
 msgid "Cancelled"
-msgstr ""
+msgstr "रद्द केले"
 
 #: .\corematoshree\models.py:120 .\corematoshree\models.py:170
 #: .\corematoshree\models.py:207 .\corematoshree\models.py:244
 msgid "Created At"
-msgstr ""
+msgstr "येथे तयार केले"
 
 #: .\corematoshree\models.py:126
 msgid "Appointment"
-msgstr ""
+msgstr "नियुक्ती"
 
 #: .\corematoshree\models.py:127 .\templates\admindashboard.html:138
 #: .\templates\admindashboard.html:171 .\templates\admindashboard.html:474
-#: .\templates\admindashboard.html:659 .\templates\superadmindashboard.html:567
+#: .\templates\admindashboard.html:659
+#: .\templates\superadmindashboard.html:567
 #: .\templates\superadmindashboard.html:609
 #: .\templates\superadmindashboard.html:943
 #: .\templates\superadmindashboard.html:1192
 msgid "Appointments"
-msgstr ""
+msgstr "भेटी"
 
 #: .\corematoshree\models.py:134
 msgid "Appointment date cannot be in the past."
-msgstr ""
+msgstr "भेटीची तारीख भूतकाळातील असू शकत नाही."
 
-#: .\corematoshree\models.py:176 .\templates\base.html:478
+#: .\corematoshree\models.py:176 .\templates\base.html:479
 msgid "Contact"
-msgstr ""
+msgstr "संपर्क करा"
 
 #: .\corematoshree\models.py:177
 msgid "Contacts"
-msgstr ""
+msgstr "संपर्क"
 
 #: .\corematoshree\models.py:187
 msgid "Customer Name"
-msgstr ""
+msgstr "ग्राहकाचे नाव"
 
 #: .\corematoshree\models.py:203
 msgid "Approved"
-msgstr ""
+msgstr "मंजूर"
 
 #: .\corematoshree\models.py:214
 msgid "Reviews"
-msgstr ""
+msgstr "पुनरावलोकने"
 
 #: .\corematoshree\models.py:224 .\corematoshree\models.py:388
 msgid "Government Scheme"
-msgstr ""
+msgstr "सरकारी योजना"
 
 #: .\corematoshree\models.py:225
 msgid "Recruitment"
-msgstr ""
+msgstr "भरती"
 
 #: .\corematoshree\models.py:226
 msgid "Scholarship"
-msgstr ""
+msgstr "शिष्यवृत्ती"
 
 #: .\corematoshree\models.py:227
 msgid "Holiday"
-msgstr ""
+msgstr "सुट्टी"
 
 #: .\corematoshree\models.py:228
 msgid "Notice"
-msgstr ""
+msgstr "लक्ष द्या"
 
 #: .\corematoshree\models.py:250
 msgid "Announcement"
-msgstr ""
+msgstr "घोषणा"
 
 #: .\corematoshree\models.py:251 .\templates\admindashboard.html:135
 #: .\templates\admindashboard.html:358 .\templates\admindashboard.html:656
-#: .\templates\announcements.html:388 .\templates\base.html:472
+#: .\templates\announcements.html:393 .\templates\base.html:473
 #: .\templates\homepage.html:919 .\templates\superadmindashboard.html:564
 #: .\templates\superadmindashboard.html:820
 #: .\templates\superadmindashboard.html:1189
 msgid "Announcements"
-msgstr ""
+msgstr "घोषणा"
 
 #: .\corematoshree\models.py:261
 msgid "Cyber Cafe"
-msgstr ""
+msgstr "सायबर कॅफे"
 
 #: .\corematoshree\models.py:262
 msgid "Customers"
-msgstr ""
+msgstr "ग्राहक"
 
 #: .\corematoshree\models.py:263
 msgid "Certificates"
-msgstr ""
+msgstr "प्रमाणपत्रे"
 
 #: .\corematoshree\models.py:264
 msgid "Equipment"
-msgstr ""
+msgstr "उपकरणे"
 
 #: .\corematoshree\models.py:265
 msgid "Office"
-msgstr ""
+msgstr "कार्यालय"
 
 #: .\corematoshree\models.py:283 .\templates\gallery.html:488
 msgid "Gallery Image"
-msgstr ""
+msgstr "गॅलरी प्रतिमा"
 
 #: .\corematoshree\models.py:284
 msgid "Gallery Images"
-msgstr ""
+msgstr "गॅलरी प्रतिमा"
 
 #: .\corematoshree\models.py:305
 msgid "Service Charge"
-msgstr ""
+msgstr "सेवा शुल्क"
 
 #: .\corematoshree\models.py:306 .\templates\admindashboard.html:288
-#: .\templates\base.html:460 .\templates\service_charges.html:408
+#: .\templates\base.html:461 .\templates\service_charges.html:410
 #: .\templates\superadmindashboard.html:748
 msgid "Service Charges"
-msgstr ""
+msgstr "सेवा शुल्क"
 
 #: .\corematoshree\models.py:321
 msgid "Document Name"
-msgstr ""
+msgstr "दस्तऐवजाचे नाव"
 
-#: .\corematoshree\models.py:326 .\templates\required_document.html:206
+#: .\corematoshree\models.py:326 .\templates\required_document.html:208
 msgid "Required Document"
-msgstr ""
+msgstr "आवश्यक कागदपत्र"
 
-#: .\corematoshree\models.py:327 .\templates\base.html:458
+#: .\corematoshree\models.py:327 .\templates\base.html:459
 msgid "Required Documents"
-msgstr ""
+msgstr "आवश्यक कागदपत्रे"
 
 #: .\corematoshree\models.py:349
 msgid "Uploaded At"
-msgstr ""
+msgstr "येथे अपलोड केले"
 
 #: .\corematoshree\models.py:354
 msgid "Download Form"
-msgstr ""
+msgstr "फॉर्म डाउनलोड करा"
 
-#: .\corematoshree\models.py:355 .\templates\base.html:459
+#: .\corematoshree\models.py:355 .\templates\base.html:460
 msgid "Download Forms"
-msgstr ""
+msgstr "फॉर्म डाउनलोड करा"
 
 #: .\corematoshree\models.py:389 .\templates\admindashboard.html:434
-#: .\templates\admindashboard.html:658 .\templates\base.html:473
+#: .\templates\admindashboard.html:658 .\templates\base.html:474
 #: .\templates\government_schemes.html:265
 #: .\templates\superadmindashboard.html:900
 #: .\templates\superadmindashboard.html:1191
 msgid "Government Schemes"
-msgstr ""
+msgstr "सरकारी योजना"
 
 #: .\corematoshree\models.py:420
 msgid "Font Awesome icon (e.g. 'fa-briefcase')"
-msgstr ""
+msgstr "फॉन्ट अप्रतिम चिन्ह (उदा. 'फा-ब्रीफकेस')"
 
 #: .\corematoshree\models.py:424
 msgid "Job Notification"
-msgstr ""
+msgstr "नोकरीची सूचना"
 
 #: .\corematoshree\models.py:425 .\templates\admindashboard.html:136
 #: .\templates\admindashboard.html:396 .\templates\admindashboard.html:657
-#: .\templates\base.html:474 .\templates\superadmindashboard.html:565
+#: .\templates\base.html:475 .\templates\superadmindashboard.html:565
 #: .\templates\superadmindashboard.html:860
 #: .\templates\superadmindashboard.html:1190
 msgid "Job Notifications"
-msgstr ""
+msgstr "नोकरी सूचना"
 
 #: .\corematoshree\models.py:435
 msgid "Question"
-msgstr ""
+msgstr "प्रश्न"
 
 #: .\corematoshree\models.py:439
 msgid "Answer"
-msgstr ""
+msgstr "उत्तर द्या"
 
-#: .\corematoshree\models.py:443 .\templates\base.html:470
+#: .\corematoshree\models.py:443 .\templates\base.html:471
 msgid "FAQ"
-msgstr ""
+msgstr "वारंवार विचारले जाणारे प्रश्न"
 
 #: .\corematoshree\models.py:444
 msgid "FAQs"
-msgstr ""
+msgstr "वारंवार विचारले जाणारे प्रश्न"
 
 #: .\corematoshree\models.py:484
 msgid "Paste Google Maps Embed Code"
-msgstr ""
+msgstr "Google नकाशे एम्बेड कोड पेस्ट करा"
 
 #: .\corematoshree\models.py:506 .\corematoshree\models.py:507
 msgid "Business Information"
-msgstr ""
+msgstr "व्यवसाय माहिती"
 
-#: .\templates\aboutus.html:702 .\templates\base.html:450
+#: .\templates\aboutus.html:704 .\templates\base.html:451
 #: .\templates\government_schemes.html:263
 msgid "Home"
-msgstr ""
-
-#: .\templates\aboutus.html:704
-msgid "About Us"
-msgstr ""
-
-#: .\templates\aboutus.html:706 .\templates\base.html:451
-msgid "About"
-msgstr ""
+msgstr "घर"
 
 #: .\templates\aboutus.html:706
+msgid "About Us"
+msgstr "आमच्याबद्दल"
+
+#: .\templates\aboutus.html:708 .\templates\base.html:452
+msgid "About"
+msgstr "बद्दल"
+
+#: .\templates\aboutus.html:708
 msgid "CyberTech"
-msgstr ""
-
-#: .\templates\aboutus.html:719
-msgid "Who"
-msgstr ""
-
-#: .\templates\aboutus.html:719
-msgid "We Are"
-msgstr ""
+msgstr "सायबरटेक"
 
 #: .\templates\aboutus.html:721
+msgid "Who"
+msgstr "WHO"
+
+#: .\templates\aboutus.html:721
+msgid "We Are"
+msgstr "आम्ही आहोत"
+
+#: .\templates\aboutus.html:723
 msgid "Trusted Cyber Café &amp; Digital Service Center"
-msgstr ""
+msgstr "विश्वसनीय सायबर कॅफे &amp; डिजिटल सेवा केंद्र"
 
-#: .\templates\aboutus.html:724
+#: .\templates\aboutus.html:726
 msgid "CyberTech Digital Services"
-msgstr ""
+msgstr "सायबरटेक डिजिटल सेवा"
 
-#: .\templates\aboutus.html:739
+#: .\templates\aboutus.html:741
 msgid "Years of Excellence"
-msgstr ""
+msgstr "उत्कृष्टतेची वर्षे"
 
-#: .\templates\aboutus.html:743 .\templates\homepage.html:771
+#: .\templates\aboutus.html:745 .\templates\homepage.html:771
 msgid "Happy Customers"
-msgstr ""
+msgstr "आनंदी ग्राहक"
 
-#: .\templates\aboutus.html:747
+#: .\templates\aboutus.html:749
 msgid "Services Offered"
-msgstr ""
+msgstr "ऑफर केलेल्या सेवा"
 
-#: .\templates\aboutus.html:762
+#: .\templates\aboutus.html:764
 msgid "Decades of"
-msgstr ""
+msgstr "च्या दशके"
 
-#: .\templates\aboutus.html:762
+#: .\templates\aboutus.html:764
 msgid "Digital Service"
-msgstr ""
+msgstr "डिजिटल सेवा"
 
-#: .\templates\aboutus.html:766
+#: .\templates\aboutus.html:768
 msgid ""
 "We have over <strong>8 years of experience</strong> in\n"
-"        providing digital and online services. Our experienced staff "
-"ensures\n"
-"        every service is completed accurately and efficiently. From "
-"government\n"
+"        providing digital and online services. Our experienced staff ensures\n"
+"        every service is completed accurately and efficiently. From government\n"
 "        form submissions to document processing, we've handled thousands of\n"
 "        applications with precision."
 msgstr ""
+"आमच्याकडे <strong>8 वर्षांचा अनुभव</strong> आहे\n"
+"        डिजिटल आणि ऑनलाइन सेवा प्रदान करणे. आमचे अनुभवी कर्मचारी खात्री देतात\n"
+"        प्रत्येक सेवा अचूक आणि कार्यक्षमतेने पूर्ण केली जाते. सरकारकडून\n"
+"        दस्तऐवज प्रक्रियेसाठी फॉर्म सबमिशन, आम्ही हजारो हाताळले आहेत\n"
+"        अचूकतेसह अनुप्रयोग."
 
-#: .\templates\aboutus.html:788
+#: .\templates\aboutus.html:790
 msgid "Your Trusted Digital Partner"
-msgstr ""
+msgstr "तुमचा विश्वासार्ह डिजिटल भागीदार"
 
-#: .\templates\aboutus.html:789
+#: .\templates\aboutus.html:791
 msgid "Reliable · Fast · Transparent · Secure"
-msgstr ""
+msgstr "विश्वसनीय · जलद · पारदर्शक · सुरक्षित"
 
-#: .\templates\aboutus.html:799 .\templates\gallery.html:403
+#: .\templates\aboutus.html:801 .\templates\gallery.html:403
 #: .\templates\homepage.html:797 .\templates\homepage.html:830
-#: .\templates\service_charges.html:422 .\templates\services.html:453
+#: .\templates\service_charges.html:424 .\templates\services.html:455
 msgid "Our"
-msgstr ""
+msgstr "आमचे"
 
-#: .\templates\aboutus.html:799
+#: .\templates\aboutus.html:801
 msgid "Complete"
-msgstr ""
+msgstr "पूर्ण"
 
-#: .\templates\aboutus.html:810
+#: .\templates\aboutus.html:812
 msgid "Online Government Applications"
-msgstr ""
+msgstr "ऑनलाइन सरकारी अर्ज"
 
-#: .\templates\aboutus.html:814
+#: .\templates\aboutus.html:816
 msgid "Aadhaar Assistance"
-msgstr ""
+msgstr "आधार सहाय्य"
 
-#: .\templates\aboutus.html:818
+#: .\templates\aboutus.html:820
 msgid "PAN Card Services"
-msgstr ""
+msgstr "पॅन कार्ड सेवा"
 
-#: .\templates\aboutus.html:822
+#: .\templates\aboutus.html:824
 msgid "Passport Application Support"
-msgstr ""
+msgstr "पासपोर्ट अर्ज समर्थन"
 
-#: .\templates\aboutus.html:826
+#: .\templates\aboutus.html:828
 msgid "Printing (B&amp;W &amp; Color)"
-msgstr ""
+msgstr "मुद्रण (B&amp;W &amp; रंग)"
 
-#: .\templates\aboutus.html:830
+#: .\templates\aboutus.html:832
 msgid "Photocopy (Xerox)"
-msgstr ""
+msgstr "फोटोकॉपी (झेरॉक्स)"
 
-#: .\templates\aboutus.html:834
+#: .\templates\aboutus.html:836
 msgid "Document Scanning"
-msgstr ""
+msgstr "दस्तऐवज स्कॅनिंग"
 
-#: .\templates\aboutus.html:838
+#: .\templates\aboutus.html:840
 msgid "Email &amp; Internet Services"
-msgstr ""
+msgstr "ईमेल &amp; इंटरनेट सेवा"
 
-#: .\templates\aboutus.html:842
+#: .\templates\aboutus.html:844
 msgid "Resume / Biodata Creation"
-msgstr ""
+msgstr "रेझ्युमे / बायोडेटा निर्मिती"
 
-#: .\templates\aboutus.html:846 .\templates\homepage.html:750
+#: .\templates\aboutus.html:848 .\templates\homepage.html:750
 msgid "Lamination"
-msgstr ""
+msgstr "लॅमिनेशन"
 
-#: .\templates\aboutus.html:850
+#: .\templates\aboutus.html:852
 msgid "Passport-size Photo Printing"
-msgstr ""
+msgstr "पासपोर्ट-आकाराचे फोटो प्रिंटिंग"
 
-#: .\templates\aboutus.html:854
+#: .\templates\aboutus.html:856
 msgid "Online Bill Payments"
-msgstr ""
+msgstr "ऑनलाइन बिल पेमेंट"
 
-#: .\templates\aboutus.html:858
+#: .\templates\aboutus.html:860
 msgid "Exam &amp; Admission Form Filling"
-msgstr ""
+msgstr "परीक्षा &amp; प्रवेश अर्ज भरणे"
 
-#: .\templates\aboutus.html:862
+#: .\templates\aboutus.html:864
 msgid "Document Attestation &amp; Notary"
-msgstr ""
+msgstr "दस्तऐवज प्रमाणीकरण &amp; नोटरी"
 
-#: .\templates\aboutus.html:866
+#: .\templates\aboutus.html:868
 msgid "Digital Signature &amp; e-Sign"
-msgstr ""
+msgstr "डिजिटल स्वाक्षरी &amp; ई-चिन्ह"
 
-#: .\templates\aboutus.html:870
+#: .\templates\aboutus.html:872
 msgid "Cloud Storage &amp; Data Transfer"
-msgstr ""
+msgstr "क्लाउड स्टोरेज &amp; डेटा ट्रान्सफर"
 
-#: .\templates\aboutus.html:880
+#: .\templates\aboutus.html:882
 msgid "Why"
-msgstr ""
+msgstr "का"
 
-#: .\templates\aboutus.html:880
+#: .\templates\aboutus.html:882
 msgid "Trust Us"
-msgstr ""
+msgstr "आमच्यावर विश्वास ठेवा"
 
-#: .\templates\aboutus.html:889
+#: .\templates\aboutus.html:891
 msgid "Experienced Staff"
-msgstr ""
+msgstr "अनुभवी कर्मचारी"
 
-#: .\templates\aboutus.html:897
+#: .\templates\aboutus.html:899
 msgid "Fast &amp; Accurate Service"
-msgstr ""
+msgstr "जलद &amp; अचूक सेवा"
 
-#: .\templates\aboutus.html:905
+#: .\templates\aboutus.html:907
 msgid "Transparent Pricing"
-msgstr ""
+msgstr "पारदर्शक किंमत"
 
-#: .\templates\aboutus.html:913
+#: .\templates\aboutus.html:915
 msgid "Customer Satisfaction"
-msgstr ""
+msgstr "ग्राहक समाधान"
 
-#: .\templates\aboutus.html:921
+#: .\templates\aboutus.html:923
 msgid "Data Privacy &amp; Security"
-msgstr ""
+msgstr "डेटा गोपनीयता &amp; सुरक्षा"
 
-#: .\templates\aboutus.html:929
+#: .\templates\aboutus.html:931
 msgid "Friendly Customer Support"
-msgstr ""
+msgstr "अनुकूल ग्राहक समर्थन"
 
-#: .\templates\aboutus.html:945
+#: .\templates\aboutus.html:947
 msgid "Authorized"
-msgstr ""
+msgstr "अधिकृत"
 
-#: .\templates\aboutus.html:945
+#: .\templates\aboutus.html:947
 msgid "Service Provider"
-msgstr ""
+msgstr "सेवा प्रदाता"
 
-#: .\templates\aboutus.html:948
+#: .\templates\aboutus.html:950
 msgid "Officially recognized for excellence in digital services"
-msgstr ""
+msgstr "डिजिटल सेवांमधील उत्कृष्टतेसाठी अधिकृतपणे मान्यताप्राप्त"
 
-#: .\templates\aboutus.html:953
+#: .\templates\aboutus.html:955
 msgid "XYZ Digital Services"
-msgstr ""
+msgstr "XYZ डिजिटल सेवा"
 
-#: .\templates\aboutus.html:957
+#: .\templates\aboutus.html:959
 msgid "ABC Government Service Center"
-msgstr ""
+msgstr "ABC सरकारी सेवा केंद्र"
 
-#: .\templates\aboutus.html:961
+#: .\templates\aboutus.html:963
 msgid "Registration No.: 123456789"
-msgstr ""
+msgstr "नोंदणी क्रमांक: १२३४५६७८९"
 
-#: .\templates\aboutus.html:977 .\templates\gallery.html:465
-#: .\templates\jobs.html:464
+#: .\templates\aboutus.html:979 .\templates\gallery.html:465
+#: .\templates\jobs.html:466
 msgid "Ready to"
-msgstr ""
+msgstr "तयार आहे"
 
-#: .\templates\aboutus.html:977 .\templates\gallery.html:465
+#: .\templates\aboutus.html:979 .\templates\gallery.html:465
 msgid "Experience"
-msgstr ""
+msgstr "अनुभव"
 
-#: .\templates\aboutus.html:986 .\templates\announcements.html:475
+#: .\templates\aboutus.html:988 .\templates\announcements.html:470
 #: .\templates\download_forms.html:431 .\templates\gallery.html:469
 #: .\templates\government_schemes.html:324 .\templates\homepage.html:729
-#: .\templates\jobs.html:473 .\templates\required_document.html:260
-#: .\templates\service_charges.html:511 .\templates\services.html:538
+#: .\templates\jobs.html:475 .\templates\required_document.html:262
+#: .\templates\service_charges.html:513 .\templates\services.html:540
 msgid "Contact Us"
-msgstr ""
+msgstr "आमच्याशी संपर्क साधा"
 
-#: .\templates\aboutus.html:993 .\templates\announcements.html:482
-#: .\templates\base.html:562 .\templates\contactus.html:502
+#: .\templates\aboutus.html:995 .\templates\announcements.html:473
+#: .\templates\base.html:563 .\templates\contactus.html:369
 #: .\templates\download_forms.html:438 .\templates\gallery.html:476
 #: .\templates\government_schemes.html:331 .\templates\homepage.html:908
-#: .\templates\jobs.html:481 .\templates\required_document.html:267
-#: .\templates\service_charges.html:519 .\templates\services.html:546
+#: .\templates\jobs.html:483 .\templates\required_document.html:269
+#: .\templates\service_charges.html:521 .\templates\services.html:548
 msgid "Chat on WhatsApp"
-msgstr ""
+msgstr "व्हॉट्सॲपवर चॅट करा"
 
 #: .\templates\admindashboard.html:9
 msgid "Admin Dashboard – Cyber Café"
-msgstr ""
+msgstr "ॲडमिन डॅशबोर्ड - सायबर कॅफे"
 
-#: .\templates\admindashboard.html:129 .\templates\superadmindashboard.html:558
+#: .\templates\admindashboard.html:129
+#: .\templates\superadmindashboard.html:558
 msgid "CyberAdmin"
-msgstr ""
+msgstr "सायबर ॲडमिन"
 
 #: .\templates\admindashboard.html:132 .\templates\admindashboard.html:154
 #: .\templates\admindashboard.html:653 .\templates\admindashboard.html:665
-#: .\templates\base.html:486 .\templates\superadmindashboard.html:561
+#: .\templates\base.html:487 .\templates\superadmindashboard.html:561
 #: .\templates\superadmindashboard.html:585
 #: .\templates\superadmindashboard.html:1186
 #: .\templates\superadmindashboard.html:1199
 msgid "Dashboard"
-msgstr ""
+msgstr "डॅशबोर्ड"
 
 #: .\templates\admindashboard.html:133 .\templates\admindashboard.html:200
-#: .\templates\admindashboard.html:654 .\templates\superadmindashboard.html:562
+#: .\templates\admindashboard.html:654
+#: .\templates\superadmindashboard.html:562
 #: .\templates\superadmindashboard.html:657
 #: .\templates\superadmindashboard.html:1187
 msgid "Manage Services"
-msgstr ""
+msgstr "सेवा व्यवस्थापित करा"
 
 #: .\templates\admindashboard.html:134 .\templates\admindashboard.html:655
 #: .\templates\superadmindashboard.html:563
 #: .\templates\superadmindashboard.html:1188
 msgid "Update Prices"
-msgstr ""
+msgstr "किमती अपडेट करा"
 
-#: .\templates\admindashboard.html:137 .\templates\superadmindashboard.html:566
+#: .\templates\admindashboard.html:137
+#: .\templates\superadmindashboard.html:566
 msgid "Gov. Schemes"
-msgstr ""
+msgstr "शासकीय योजना"
 
 #: .\templates\admindashboard.html:139 .\templates\admindashboard.html:175
-#: .\templates\admindashboard.html:660 .\templates\superadmindashboard.html:568
+#: .\templates\admindashboard.html:660
+#: .\templates\superadmindashboard.html:568
 #: .\templates\superadmindashboard.html:616
 #: .\templates\superadmindashboard.html:1193
 msgid "Inquiries"
-msgstr ""
+msgstr "चौकशी"
 
 #: .\templates\admindashboard.html:140 .\templates\admindashboard.html:537
-#: .\templates\admindashboard.html:661 .\templates\superadmindashboard.html:569
+#: .\templates\admindashboard.html:661
+#: .\templates\superadmindashboard.html:569
 #: .\templates\superadmindashboard.html:1013
 #: .\templates\superadmindashboard.html:1194
 msgid "Upload Forms"
-msgstr ""
+msgstr "फॉर्म अपलोड करा"
 
 #: .\templates\admindashboard.html:141 .\templates\admindashboard.html:662
-#: .\templates\base.html:464 .\templates\gallery.html:403
+#: .\templates\base.html:465 .\templates\gallery.html:403
 #: .\templates\gallery.html:416 .\templates\homepage.html:830
 #: .\templates\superadmindashboard.html:571
 #: .\templates\superadmindashboard.html:1196
 msgid "Gallery"
-msgstr ""
+msgstr "गॅलरी"
 
 #: .\templates\admindashboard.html:142 .\templates\admindashboard.html:663
 #: .\templates\superadmindashboard.html:572
 #: .\templates\superadmindashboard.html:1197
 msgid "Settings"
-msgstr ""
+msgstr "सेटिंग्ज"
 
-#: .\templates\admindashboard.html:145 .\templates\base.html:494
+#: .\templates\admindashboard.html:145 .\templates\base.html:495
 #: .\templates\superadmindashboard.html:575
 msgid "Logout"
-msgstr ""
+msgstr "लॉगआउट करा"
 
-#: .\templates\admindashboard.html:167 .\templates\base.html:455
+#: .\templates\admindashboard.html:167 .\templates\base.html:456
 #: .\templates\homepage.html:775 .\templates\homepage.html:797
-#: .\templates\services.html:451 .\templates\services.html:453
-#: .\templates\services.html:461 .\templates\superadmindashboard.html:602
+#: .\templates\services.html:453 .\templates\services.html:455
+#: .\templates\services.html:463 .\templates\superadmindashboard.html:602
 msgid "Services"
-msgstr ""
+msgstr "सेवा"
 
-#: .\templates\admindashboard.html:179 .\templates\superadmindashboard.html:623
+#: .\templates\admindashboard.html:179
+#: .\templates\superadmindashboard.html:623
 msgid "Forms"
-msgstr ""
+msgstr "फॉर्म"
 
-#: .\templates\admindashboard.html:183 .\templates\superadmindashboard.html:636
+#: .\templates\admindashboard.html:183
+#: .\templates\superadmindashboard.html:636
 msgid "Recent Activity"
-msgstr ""
+msgstr "अलीकडील क्रियाकलाप"
 
-#: .\templates\admindashboard.html:191 .\templates\superadmindashboard.html:646
+#: .\templates\admindashboard.html:191
+#: .\templates\superadmindashboard.html:646
 msgid "No recent activity."
-msgstr ""
+msgstr "कोणतीही अलीकडील क्रियाकलाप नाही."
 
-#: .\templates\admindashboard.html:201 .\templates\superadmindashboard.html:658
+#: .\templates\admindashboard.html:201
+#: .\templates\superadmindashboard.html:658
 msgid "Add Service"
-msgstr ""
+msgstr "सेवा जोडा"
 
 #: .\templates\admindashboard.html:211 .\templates\admindashboard.html:299
 #: .\templates\admindashboard.html:369 .\templates\admindashboard.html:407
-#: .\templates\admindashboard.html:445 .\templates\superadmindashboard.html:669
+#: .\templates\admindashboard.html:445
+#: .\templates\superadmindashboard.html:669
 #: .\templates\superadmindashboard.html:759
 #: .\templates\superadmindashboard.html:831
 #: .\templates\superadmindashboard.html:871
 #: .\templates\superadmindashboard.html:911
 msgid "Save"
-msgstr ""
+msgstr "जतन करा"
 
 #: .\templates\admindashboard.html:218 .\templates\admindashboard.html:306
 #: .\templates\superadmindashboard.html:676
 #: .\templates\superadmindashboard.html:766
 msgid "Actions"
-msgstr ""
+msgstr "क्रिया"
 
-#: .\templates\admindashboard.html:225 .\templates\superadmindashboard.html:683
+#: .\templates\admindashboard.html:225
+#: .\templates\superadmindashboard.html:683
 msgid "Active,Inactive"
-msgstr ""
+msgstr "सक्रिय, निष्क्रिय"
 
-#: .\templates\admindashboard.html:233 .\templates\superadmindashboard.html:691
+#: .\templates\admindashboard.html:233
+#: .\templates\superadmindashboard.html:691
 msgid "Delete this service?"
-msgstr ""
+msgstr "ही सेवा हटवायची?"
 
-#: .\templates\admindashboard.html:237 .\templates\superadmindashboard.html:695
+#: .\templates\admindashboard.html:237
+#: .\templates\superadmindashboard.html:695
 msgid "No services."
-msgstr ""
+msgstr "सेवा नाहीत."
 
-#: .\templates\admindashboard.html:250 .\templates\superadmindashboard.html:708
+#: .\templates\admindashboard.html:250
+#: .\templates\superadmindashboard.html:708
 msgid "Service Name"
-msgstr ""
+msgstr "सेवेचे नाव"
 
 #: .\templates\admindashboard.html:256 .\templates\government_schemes.html:267
 #: .\templates\superadmindashboard.html:714
 msgid "Government"
-msgstr ""
+msgstr "सरकार"
 
-#: .\templates\admindashboard.html:257 .\templates\superadmindashboard.html:715
+#: .\templates\admindashboard.html:257
+#: .\templates\superadmindashboard.html:715
 msgid "Financial"
-msgstr ""
+msgstr "आर्थिक"
 
-#: .\templates\admindashboard.html:258 .\templates\superadmindashboard.html:716
+#: .\templates\admindashboard.html:258
+#: .\templates\superadmindashboard.html:716
 msgid "Printing"
-msgstr ""
+msgstr "छपाई"
 
-#: .\templates\admindashboard.html:259 .\templates\superadmindashboard.html:717
+#: .\templates\admindashboard.html:259
+#: .\templates\superadmindashboard.html:717
 msgid "Other"
-msgstr ""
+msgstr "इतर"
 
-#: .\templates\admindashboard.html:270 .\templates\superadmindashboard.html:728
+#: .\templates\admindashboard.html:270
+#: .\templates\superadmindashboard.html:728
 msgid "Inactive"
-msgstr ""
+msgstr "निष्क्रिय"
 
-#: .\templates\admindashboard.html:275 .\templates\superadmindashboard.html:733
+#: .\templates\admindashboard.html:275
+#: .\templates\superadmindashboard.html:733
 msgid "e.g. fa-print"
-msgstr ""
+msgstr "उदा. fa-print"
 
 #: .\templates\admindashboard.html:278 .\templates\admindashboard.html:348
 #: .\templates\superadmindashboard.html:736
 #: .\templates\superadmindashboard.html:808
 msgid "Cancel"
-msgstr ""
+msgstr "रद्द करा"
 
 #: .\templates\admindashboard.html:279 .\templates\admindashboard.html:349
 #: .\templates\superadmindashboard.html:737
 #: .\templates\superadmindashboard.html:809
 #: .\templates\superadmindashboard.html:1087
 msgid "Update"
-msgstr ""
+msgstr "अपडेट करा"
 
-#: .\templates\admindashboard.html:289 .\templates\superadmindashboard.html:749
+#: .\templates\admindashboard.html:289
+#: .\templates\superadmindashboard.html:749
 msgid "Add Charge"
-msgstr ""
+msgstr "शुल्क जोडा"
 
 #: .\templates\admindashboard.html:306 .\templates\admindashboard.html:344
-#: .\templates\service_charges.html:443
+#: .\templates\service_charges.html:445
 #: .\templates\superadmindashboard.html:766
 #: .\templates\superadmindashboard.html:804
 msgid "Charge (₹)"
-msgstr ""
+msgstr "शुल्क (₹)"
 
-#: .\templates\admindashboard.html:319 .\templates\superadmindashboard.html:779
+#: .\templates\admindashboard.html:319
+#: .\templates\superadmindashboard.html:779
 msgid "Delete this charge?"
-msgstr ""
+msgstr "हे शुल्क हटवायचे?"
 
-#: .\templates\admindashboard.html:323 .\templates\superadmindashboard.html:783
+#: .\templates\admindashboard.html:323
+#: .\templates\superadmindashboard.html:783
 msgid "No charges defined."
-msgstr ""
+msgstr "कोणतेही शुल्क परिभाषित केलेले नाही."
 
-#: .\templates\admindashboard.html:359 .\templates\superadmindashboard.html:821
+#: .\templates\admindashboard.html:359
+#: .\templates\superadmindashboard.html:821
 msgid "Add Announcement"
-msgstr ""
+msgstr "घोषणा जोडा"
 
-#: .\templates\admindashboard.html:386 .\templates\superadmindashboard.html:848
+#: .\templates\admindashboard.html:386
+#: .\templates\superadmindashboard.html:848
 msgid "Delete this announcement?"
-msgstr ""
+msgstr "ही घोषणा हटवायची?"
 
-#: .\templates\admindashboard.html:389 .\templates\superadmindashboard.html:851
+#: .\templates\admindashboard.html:389
+#: .\templates\superadmindashboard.html:851
 msgid "No announcements."
-msgstr ""
+msgstr "कोणत्याही घोषणा नाहीत."
 
-#: .\templates\admindashboard.html:397 .\templates\superadmindashboard.html:861
+#: .\templates\admindashboard.html:397
+#: .\templates\superadmindashboard.html:861
 msgid "Add Job"
-msgstr ""
+msgstr "नोकरी जोडा"
 
-#: .\templates\admindashboard.html:417 .\templates\superadmindashboard.html:881
+#: .\templates\admindashboard.html:417
+#: .\templates\superadmindashboard.html:881
 #, python-format
 msgid "%(org)s – Last Date: %(date)s"
-msgstr ""
+msgstr "%(org)s – शेवटची तारीख: %(तारीख)s"
 
-#: .\templates\admindashboard.html:424 .\templates\superadmindashboard.html:888
+#: .\templates\admindashboard.html:424
+#: .\templates\superadmindashboard.html:888
 msgid "Delete this job?"
-msgstr ""
+msgstr "ही नोकरी हटवायची?"
 
-#: .\templates\admindashboard.html:427 .\templates\superadmindashboard.html:891
+#: .\templates\admindashboard.html:427
+#: .\templates\superadmindashboard.html:891
 msgid "No jobs."
-msgstr ""
+msgstr "नोकऱ्या नाहीत."
 
-#: .\templates\admindashboard.html:435 .\templates\superadmindashboard.html:901
+#: .\templates\admindashboard.html:435
+#: .\templates\superadmindashboard.html:901
 msgid "Add Scheme"
-msgstr ""
+msgstr "योजना जोडा"
 
-#: .\templates\admindashboard.html:455 .\templates\superadmindashboard.html:921
+#: .\templates\admindashboard.html:455
+#: .\templates\superadmindashboard.html:921
 #, python-format
 msgid "%(desc)s – Eligibility: %(elig)s"
-msgstr ""
+msgstr "%(desc)s – पात्रता: %(elig)s"
 
-#: .\templates\admindashboard.html:465 .\templates\superadmindashboard.html:931
+#: .\templates\admindashboard.html:465
+#: .\templates\superadmindashboard.html:931
 msgid "Delete this scheme?"
-msgstr ""
+msgstr "ही योजना हटवायची?"
 
-#: .\templates\admindashboard.html:468 .\templates\superadmindashboard.html:934
+#: .\templates\admindashboard.html:468
+#: .\templates\superadmindashboard.html:934
 msgid "No schemes."
-msgstr ""
+msgstr "योजना नाहीत."
 
-#: .\templates\admindashboard.html:477 .\templates\superadmindashboard.html:947
+#: .\templates\admindashboard.html:477
+#: .\templates\superadmindashboard.html:947
 msgid "Customer"
-msgstr ""
+msgstr "ग्राहक"
 
-#: .\templates\admindashboard.html:477 .\templates\superadmindashboard.html:947
+#: .\templates\admindashboard.html:477
+#: .\templates\superadmindashboard.html:947
 msgid "Date"
-msgstr ""
+msgstr "तारीख"
 
-#: .\templates\admindashboard.html:477 .\templates\superadmindashboard.html:947
+#: .\templates\admindashboard.html:477
+#: .\templates\superadmindashboard.html:947
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2534
 msgid "Time"
-msgstr ""
+msgstr "वेळ"
 
-#: .\templates\admindashboard.html:477 .\templates\superadmindashboard.html:947
+#: .\templates\admindashboard.html:477
+#: .\templates\superadmindashboard.html:947
 #: .\templates\superadmindashboard.html:1063
 msgid "Action"
-msgstr ""
+msgstr "कृती"
 
-#: .\templates\admindashboard.html:492 .\templates\superadmindashboard.html:962
+#: .\templates\admindashboard.html:492
+#: .\templates\superadmindashboard.html:962
 msgid "Delete this appointment?"
-msgstr ""
+msgstr "ही भेट हटवायची?"
 
-#: .\templates\admindashboard.html:496 .\templates\superadmindashboard.html:966
+#: .\templates\admindashboard.html:496
+#: .\templates\superadmindashboard.html:966
 msgid "No appointments."
-msgstr ""
+msgstr "भेटी नाहीत."
 
-#: .\templates\admindashboard.html:504 .\templates\superadmindashboard.html:977
+#: .\templates\admindashboard.html:504
+#: .\templates\superadmindashboard.html:977
 msgid "Customer Inquiries"
-msgstr ""
+msgstr "ग्राहक चौकशी"
 
-#: .\templates\admindashboard.html:511 .\templates\superadmindashboard.html:985
+#: .\templates\admindashboard.html:511
+#: .\templates\superadmindashboard.html:985
 msgid "Resolved,Pending"
-msgstr ""
+msgstr "निराकरण, प्रलंबित"
 
-#: .\templates\admindashboard.html:514 .\templates\superadmindashboard.html:988
+#: .\templates\admindashboard.html:514
+#: .\templates\superadmindashboard.html:988
 msgid "Q:"
-msgstr ""
+msgstr "प्रश्न:"
 
-#: .\templates\admindashboard.html:524 .\templates\superadmindashboard.html:998
+#: .\templates\admindashboard.html:524
+#: .\templates\superadmindashboard.html:998
 msgid "Write reply..."
-msgstr ""
+msgstr "उत्तर लिहा..."
 
-#: .\templates\admindashboard.html:525 .\templates\superadmindashboard.html:999
+#: .\templates\admindashboard.html:525
+#: .\templates\superadmindashboard.html:999
 msgid "Reply"
-msgstr ""
+msgstr "उत्तर द्या"
 
 #: .\templates\admindashboard.html:530
 #: .\templates\superadmindashboard.html:1004
 msgid "No inquiries."
-msgstr ""
+msgstr "चौकशी नाही."
 
 #: .\templates\admindashboard.html:538
 #: .\templates\superadmindashboard.html:1014
 msgid "Upload Form"
-msgstr ""
+msgstr "फॉर्म अपलोड करा"
 
 #: .\templates\admindashboard.html:548 .\templates\admindashboard.html:586
 #: .\templates\superadmindashboard.html:1024
 #: .\templates\superadmindashboard.html:1115
 msgid "Upload"
-msgstr ""
+msgstr "अपलोड करा"
 
 #: .\templates\admindashboard.html:565
 #: .\templates\superadmindashboard.html:1041
 msgid "Delete this form?"
-msgstr ""
+msgstr "हा फॉर्म हटवायचा?"
 
 #: .\templates\admindashboard.html:568
 #: .\templates\superadmindashboard.html:1044
 msgid "No forms uploaded."
-msgstr ""
+msgstr "कोणतेही फॉर्म अपलोड केलेले नाहीत."
 
 #: .\templates\admindashboard.html:575
 #: .\templates\superadmindashboard.html:1104
 msgid "Manage Gallery"
-msgstr ""
+msgstr "गॅलरी व्यवस्थापित करा"
 
 #: .\templates\admindashboard.html:576
 #: .\templates\superadmindashboard.html:1105
 msgid "Add Image"
-msgstr ""
+msgstr "प्रतिमा जोडा"
 
 #: .\templates\admindashboard.html:601
 #: .\templates\superadmindashboard.html:1130
 msgid "Delete this image?"
-msgstr ""
+msgstr "ही इमेज हटवायची?"
 
 #: .\templates\admindashboard.html:605
 #: .\templates\superadmindashboard.html:1134
 msgid "No images uploaded yet."
-msgstr ""
+msgstr "अद्याप कोणतीही प्रतिमा अपलोड केलेली नाही."
 
 #: .\templates\admindashboard.html:613
 #: .\templates\superadmindashboard.html:1144
 msgid "Website Settings"
-msgstr ""
+msgstr "वेबसाइट सेटिंग्ज"
 
 #: .\templates\admindashboard.html:623
 #: .\templates\superadmindashboard.html:1154
 msgid "Save Settings"
-msgstr ""
+msgstr "सेटिंग्ज सेव्ह करा"
 
-#: .\templates\announcements.html:389
+#: .\templates\announcements.html:394
 msgid "Stay informed with the latest updates from our centre."
-msgstr ""
+msgstr "आमच्या केंद्रावरील नवीनतम अद्यतनांसह माहिती मिळवा."
 
-#: .\templates\announcements.html:399
+#: .\templates\announcements.html:404
 msgid "All"
-msgstr ""
+msgstr "सर्व"
 
-#: .\templates\announcements.html:424 .\templates\download_forms.html:385
+#: .\templates\announcements.html:421 .\templates\download_forms.html:385
 msgid "General"
-msgstr ""
+msgstr "सामान्य"
 
-#: .\templates\announcements.html:427
+#: .\templates\announcements.html:424
 msgid "Urgent"
-msgstr ""
+msgstr "अर्जंट"
 
-#: .\templates\announcements.html:438
+#: .\templates\announcements.html:435
 msgid "No announcements available at the moment."
-msgstr ""
+msgstr "याक्षणी कोणत्याही घोषणा उपलब्ध नाहीत."
 
-#: .\templates\announcements.html:446
+#: .\templates\announcements.html:443
 msgid "No announcements match the selected filter."
-msgstr ""
+msgstr "निवडलेल्या फिल्टरशी कोणत्याही घोषणा जुळत नाहीत."
 
-#: .\templates\announcements.html:457
+#: .\templates\announcements.html:449
+msgid "Stay updated with our latest announcements."
+msgstr "आमच्या नवीनतम घोषणांसह अद्यतनित रहा."
+
+#: .\templates\announcements.html:453
 #, python-format
-msgid ""
-"<span id=\"announcementCount\">%(counter)s</span> active notice {%% plural "
-"%%} <span id=\"announcementCount\">%(counter)s</span> active notices"
-msgstr ""
+msgid "<span id=\"announcementCount\">%(counter)s</span> active notice"
+msgid_plural "<span id=\"announcementCount\">%(counter)s</span> active notices"
+msgstr[0] ""
+msgstr[1] ""
 
-#: .\templates\announcements.html:469
+#: .\templates\announcements.html:466
 msgid "Have Questions?"
-msgstr ""
+msgstr "प्रश्न आहेत?"
 
-#: .\templates\announcements.html:469
+#: .\templates\announcements.html:466
 msgid "Reach Out"
-msgstr ""
+msgstr "पोहोचा"
 
-#: .\templates\announcements.html:471
+#: .\templates\announcements.html:467
 msgid "We're here to help with any of your digital service needs."
 msgstr ""
+"तुमच्या कोणत्याही डिजिटल सेवेच्या गरजा पूर्ण करण्यासाठी आम्ही येथे आहोत."
 
-#: .\templates\announcements.html:501 .\templates\homepage.html:933
+#: .\templates\announcements.html:491 .\templates\homepage.html:933
 msgid "No announcements available."
-msgstr ""
+msgstr "कोणत्याही घोषणा उपलब्ध नाहीत."
 
 #: .\templates\appointment.html:282
 msgid "Book an Appointment"
-msgstr ""
+msgstr "अपॉइंटमेंट बुक करा"
 
-#: .\templates\appointment.html:378 .\templates\base.html:479
+#: .\templates\appointment.html:285
+msgid ""
+"Select your service, choose a date &amp; time, and we’ll confirm your visit."
+msgstr ""
+"तुमची सेवा निवडा, तारीख निवडा &amp; वेळ, आणि आम्ही तुमच्या भेटीची पुष्टी "
+"करू."
+
+#: .\templates\appointment.html:379 .\templates\base.html:480
 msgid "Book Appointment"
-msgstr ""
-
-#: .\templates\appointment.html:385
-msgid "Your details are secure."
-msgstr ""
+msgstr "बुक अपॉइंटमेंट"
 
 #: .\templates\appointment.html:386
-msgid "9:00 AM – 5:00 PM"
-msgstr ""
+msgid "Your details are secure."
+msgstr "तुमचे तपशील सुरक्षित आहेत."
 
-#: .\templates\appointment.html:535
+#: .\templates\appointment.html:387
+msgid "9:00 AM – 5:00 PM"
+msgstr "सकाळी 9:00 ते संध्याकाळी 5:00"
+
+#: .\templates\appointment.html:528
 msgid "Booking…"
-msgstr ""
+msgstr "बुकिंग…"
 
 #: .\templates\base.html:9
 msgid ""
 "Matoshree – Cyber Café & Digital Services. Reliable, fast, and affordable "
 "digital solutions."
 msgstr ""
+"मातोश्री - सायबर कॅफे आणि डिजिटल सेवा. विश्वसनीय, जलद आणि परवडणारे डिजिटल "
+"उपाय."
 
 #: .\templates\base.html:11
 msgid "Matoshree – Cyber Café & Digital Services"
-msgstr ""
+msgstr "मातोश्री - सायबर कॅफे आणि डिजिटल सेवा"
 
-#: .\templates\base.html:438
+#: .\templates\base.html:439
 msgid "Matoshree Logo"
-msgstr ""
+msgstr "मातोश्री लोगो"
 
-#: .\templates\base.html:444
+#: .\templates\base.html:445
 msgid "Toggle navigation"
-msgstr ""
+msgstr "नेव्हिगेशन टॉगल करा"
 
-#: .\templates\base.html:457
+#: .\templates\base.html:458
 msgid "All Services"
-msgstr ""
+msgstr "सर्व सेवा"
 
-#: .\templates\base.html:468
+#: .\templates\base.html:469
 msgid "Resources"
-msgstr ""
+msgstr "संसाधने"
 
-#: .\templates\base.html:471 .\templates\customer_reviews.html:573
+#: .\templates\base.html:472 .\templates\customer_reviews.html:565
 msgid "Customer Reviews"
-msgstr ""
+msgstr "ग्राहक पुनरावलोकने"
 
-#: .\templates\base.html:491
+#: .\templates\base.html:492
 msgid "Profile"
-msgstr ""
+msgstr "प्रोफाइल"
 
-#: .\templates\base.html:497 .\templates\login.html:65
+#: .\templates\base.html:498 .\templates\login.html:65
 msgid "Login"
-msgstr ""
+msgstr "लॉगिन करा"
 
-#: .\templates\base.html:498
+#: .\templates\base.html:499
 msgid "Register"
-msgstr ""
+msgstr "नोंदणी करा"
 
-#: .\templates\base.html:545
+#: .\templates\base.html:546
 #, python-format
 msgid ""
 "\n"
 "                    &copy; %(year)s %(name)s. All rights reserved.\n"
 "                "
-msgstr ""
-
-#: .\templates\base.html:550
-msgid "Facebook"
-msgstr ""
+msgstr "&कॉपी; %(वर्ष) %(नाव)से. सर्व हक्क राखीव."
 
 #: .\templates\base.html:551
-msgid "Instagram"
-msgstr ""
+msgid "Facebook"
+msgstr "फेसबुक"
 
 #: .\templates\base.html:552
-msgid "YouTube"
-msgstr ""
+msgid "Instagram"
+msgstr "इंस्टाग्राम"
 
 #: .\templates\base.html:553
+msgid "YouTube"
+msgstr "YouTube"
+
+#: .\templates\base.html:554
 msgid "Twitter"
-msgstr ""
+msgstr "ट्विटर"
 
-#: .\templates\contactus.html:226
+#: .\templates\contactus.html:231
 msgid "Get in"
-msgstr ""
+msgstr "आत जा"
 
-#: .\templates\contactus.html:227
+#: .\templates\contactus.html:232
 msgid "Touch"
-msgstr ""
+msgstr "स्पर्श करा"
 
-#: .\templates\contactus.html:255
-msgid "Send a Message"
-msgstr ""
-
-#: .\templates\contactus.html:314
-msgid "Send Message"
-msgstr ""
-
-#: .\templates\contactus.html:353
-msgid "Chat with Us"
-msgstr ""
-
-#: .\templates\contactus.html:375
-msgid "Monday"
-msgstr ""
-
-#: .\templates\contactus.html:376 .\templates\contactus.html:380
-#: .\templates\contactus.html:384 .\templates\contactus.html:388
-#: .\templates\contactus.html:392 .\templates\contactus.html:396
-msgid "9:00 AM – 8:00 PM"
-msgstr ""
-
-#: .\templates\contactus.html:379
-msgid "Tuesday"
-msgstr ""
-
-#: .\templates\contactus.html:383
-msgid "Wednesday"
-msgstr ""
-
-#: .\templates\contactus.html:387
-msgid "Thursday"
-msgstr ""
-
-#: .\templates\contactus.html:391
-msgid "Friday"
-msgstr ""
-
-#: .\templates\contactus.html:395
-msgid "Saturday"
-msgstr ""
-
-#: .\templates\contactus.html:399
-msgid "Sunday"
-msgstr ""
-
-#: .\templates\contactus.html:400
-msgid "10:00 AM – 2:00 PM"
-msgstr ""
-
-#: .\templates\contactus.html:441
-msgid "We're just a"
-msgstr ""
-
-#: .\templates\contactus.html:442
-msgid "click"
-msgstr ""
-
-#: .\templates\contactus.html:479 .\templates\homepage.html:905
-msgid "Call Now"
-msgstr ""
-
-#: .\templates\customer_reviews.html:599
-#, python-format
+#: .\templates\contactus.html:243
 msgid ""
-" Based on\n"
-"            <strong>%(total)s</strong> customer reviews "
+"We're here to help. Send us a message and we'll get back to you promptly."
 msgstr ""
+"आम्ही मदत करण्यासाठी येथे आहोत. आम्हाला एक संदेश पाठवा आणि आम्ही त्वरित "
+"तुमच्याकडे परत येऊ."
 
-#: .\templates\customer_reviews.html:621
+#: .\templates\contactus.html:256
+msgid "Send a Message"
+msgstr "एक संदेश पाठवा"
+
+#: .\templates\contactus.html:287
+msgid "Send Message"
+msgstr "संदेश पाठवा"
+
+#: .\templates\contactus.html:299
+#, python-format
+msgid "%(name)s"
+msgstr "%(नाव)से"
+
+#: .\templates\contactus.html:300
+#, python-format
+msgid "%(address)s"
+msgstr "%(पत्ता)से"
+
+#: .\templates\contactus.html:316
+msgid "Chat with Us"
+msgstr "आमच्याशी गप्पा मारा"
+
+#: .\templates\contactus.html:335
+#: .\venv\Lib\site-packages\django\utils\dates.py:7
+msgid "Monday"
+msgstr "सोमवार"
+
+#: .\templates\contactus.html:335 .\templates\contactus.html:336
+#: .\templates\contactus.html:337 .\templates\contactus.html:338
+#: .\templates\contactus.html:339 .\templates\contactus.html:340
+msgid "9:00 AM – 8:00 PM"
+msgstr "सकाळी ९:०० ते रात्री ८:००"
+
+#: .\templates\contactus.html:336
+#: .\venv\Lib\site-packages\django\utils\dates.py:8
+msgid "Tuesday"
+msgstr "मंगळवार"
+
+#: .\templates\contactus.html:337
+#: .\venv\Lib\site-packages\django\utils\dates.py:9
+msgid "Wednesday"
+msgstr "बुधवार"
+
+#: .\templates\contactus.html:338
+#: .\venv\Lib\site-packages\django\utils\dates.py:10
+msgid "Thursday"
+msgstr "गुरुवार"
+
+#: .\templates\contactus.html:339
+#: .\venv\Lib\site-packages\django\utils\dates.py:11
+msgid "Friday"
+msgstr "शुक्रवार"
+
+#: .\templates\contactus.html:340
+#: .\venv\Lib\site-packages\django\utils\dates.py:12
+msgid "Saturday"
+msgstr "शनिवार"
+
+#: .\templates\contactus.html:341
+#: .\venv\Lib\site-packages\django\utils\dates.py:13
+msgid "Sunday"
+msgstr "रविवार"
+
+#: .\templates\contactus.html:341
+msgid "10:00 AM – 2:00 PM"
+msgstr "सकाळी 10:00 ते दुपारी 2:00 पर्यंत"
+
+#: .\templates\contactus.html:359
+msgid "We're just a"
+msgstr "आम्ही फक्त ए"
+
+#: .\templates\contactus.html:359
+msgid "click"
+msgstr "क्लिक करा"
+
+#: .\templates\contactus.html:359
+msgid "away!"
+msgstr "दूर"
+
+#: .\templates\contactus.html:362
+msgid ""
+"Reach out to us for any queries or to book a service. We respond promptly."
+msgstr ""
+"कोणत्याही प्रश्नांसाठी किंवा सेवा बुक करण्यासाठी आमच्याशी संपर्क साधा. आम्ही"
+" त्वरित प्रतिसाद देतो."
+
+#: .\templates\contactus.html:366 .\templates\homepage.html:905
+msgid "Call Now"
+msgstr "आता कॉल करा"
+
+#: .\templates\customer_reviews.html:567
+msgid ""
+"Real feedback from customers who have used our services. See why they trust "
+"us."
+msgstr ""
+"आमच्या सेवा वापरलेल्या ग्राहकांकडून वास्तविक अभिप्राय. त्यांचा आमच्यावर "
+"विश्वास का आहे ते पहा."
+
+#: .\templates\customer_reviews.html:592
+#, python-format
+msgid " Based on <strong>%(total)s</strong> customer reviews "
+msgstr "<strong>%(एकूण)s</strong> ग्राहक पुनरावलोकनांवर आधारित"
+
+#: .\templates\customer_reviews.html:613
 #, python-format
 msgid ""
 "\n"
-"        <strong>%(count)s</strong> customer reviews "
-msgstr ""
+"        <strong>%(count)s</strong> customer reviews\n"
+"        "
+msgstr "<strong>%(गणना)s</strong> ग्राहक पुनरावलोकने"
 
-#: .\templates\customer_reviews.html:626
+#: .\templates\customer_reviews.html:618
 msgid "Newest"
-msgstr ""
+msgstr "सर्वात नवीन"
 
-#: .\templates\customer_reviews.html:629
+#: .\templates\customer_reviews.html:619
 msgid "Highest"
-msgstr ""
+msgstr "सर्वोच्च"
 
-#: .\templates\customer_reviews.html:632
+#: .\templates\customer_reviews.html:620
 msgid "Lowest"
-msgstr ""
+msgstr "सर्वात कमी"
 
-#: .\templates\customer_reviews.html:663
+#: .\templates\customer_reviews.html:645
 msgid "Verified"
-msgstr ""
+msgstr "सत्यापित"
 
-#: .\templates\customer_reviews.html:687
+#: .\templates\customer_reviews.html:654
 msgid "No reviews yet. Be the first to share your experience!"
-msgstr ""
+msgstr "अद्याप कोणतीही पुनरावलोकने नाहीत. तुमचा अनुभव शेअर करणारे पहिले व्हा!"
 
-#: .\templates\customer_reviews.html:696
+#: .\templates\customer_reviews.html:661
 msgid "Share Your Experience"
-msgstr ""
+msgstr "तुमचा अनुभव शेअर करा"
 
-#: .\templates\customer_reviews.html:699
+#: .\templates\customer_reviews.html:662
 msgid "We value your feedback. Let us know how we did!"
 msgstr ""
+"आम्ही तुमच्या अभिप्रायाला महत्त्व देतो. आम्ही कसे केले ते आम्हाला कळवा!"
 
-#: .\templates\customer_reviews.html:738 .\templates\customer_reviews.html:815
-#: .\templates\customer_reviews.html:827
+#: .\templates\customer_reviews.html:688 .\templates\customer_reviews.html:746
+#: .\templates\customer_reviews.html:756
 msgid "Select a rating"
-msgstr ""
+msgstr "रेटिंग निवडा"
 
-#: .\templates\customer_reviews.html:748
+#: .\templates\customer_reviews.html:695
 msgid "Your Review"
-msgstr ""
+msgstr "तुमचे पुनरावलोकन"
 
-#: .\templates\customer_reviews.html:757
+#: .\templates\customer_reviews.html:701
 msgid "Submit Review"
-msgstr ""
+msgstr "पुनरावलोकन सबमिट करा"
 
-#: .\templates\customer_reviews.html:765
+#: .\templates\customer_reviews.html:707
 msgid "Thank you for your review!"
-msgstr ""
+msgstr "आपल्या पुनरावलोकनाबद्दल धन्यवाद!"
 
-#: .\templates\customer_reviews.html:778
+#: .\templates\customer_reviews.html:713
+msgid "All reviews are from genuine customers."
+msgstr "सर्व पुनरावलोकने अस्सल ग्राहकांकडून आहेत."
+
+#: .\templates\customer_reviews.html:714
 #, python-format
-msgid ""
-" %(total)s\n"
-"        reviews and counting "
-msgstr ""
+msgid "%(total)s reviews and counting"
+msgstr "%(एकूण) परीक्षणे आणि मोजणी"
 
-#: .\templates\customer_reviews.html:794
+#: .\templates\customer_reviews.html:728
 msgid "Terrible"
-msgstr ""
+msgstr "भयंकर"
 
-#: .\templates\customer_reviews.html:795
+#: .\templates\customer_reviews.html:729
 msgid "Poor"
-msgstr ""
+msgstr "गरीब"
 
-#: .\templates\customer_reviews.html:796
+#: .\templates\customer_reviews.html:730
 msgid "Average"
-msgstr ""
+msgstr "सरासरी"
 
-#: .\templates\customer_reviews.html:797
+#: .\templates\customer_reviews.html:731
 msgid "Good"
-msgstr ""
+msgstr "चांगले"
 
-#: .\templates\customer_reviews.html:798
+#: .\templates\customer_reviews.html:732
 msgid "Excellent"
-msgstr ""
+msgstr "उत्कृष्ट"
 
-#: .\templates\customer_reviews.html:852
+#: .\templates\customer_reviews.html:774
 msgid "Name is required."
-msgstr ""
+msgstr "नाव आवश्यक आहे."
 
-#: .\templates\customer_reviews.html:853
+#: .\templates\customer_reviews.html:775
 msgid "Email is required."
-msgstr ""
+msgstr "ईमेल आवश्यक आहे."
 
-#: .\templates\customer_reviews.html:854
+#: .\templates\customer_reviews.html:776
 msgid "Please select a rating."
-msgstr ""
+msgstr "कृपया रेटिंग निवडा."
 
-#: .\templates\customer_reviews.html:855
+#: .\templates\customer_reviews.html:777
 msgid "Please write your review."
-msgstr ""
+msgstr "कृपया तुमचे पुनरावलोकन लिहा."
 
 #: .\templates\download_forms.html:358
 msgid "Download"
-msgstr ""
+msgstr "डाउनलोड करा"
 
 #: .\templates\download_forms.html:358
 msgid "Government Forms"
-msgstr ""
+msgstr "सरकारी फॉर्म"
 
 #: .\templates\download_forms.html:359
 msgid "Access and download official forms for various services."
-msgstr ""
+msgstr "विविध सेवांसाठी अधिकृत फॉर्ममध्ये प्रवेश करा आणि डाउनलोड करा."
 
 #: .\templates\download_forms.html:372
 msgid "Search forms by name..."
-msgstr ""
+msgstr "नावाने फॉर्म शोधा..."
 
 #: .\templates\download_forms.html:373
 msgid "Search forms"
-msgstr ""
+msgstr "शोध फॉर्म"
 
 #: .\templates\download_forms.html:375 .\templates\faq.html:375
 msgid "Clear search"
-msgstr ""
+msgstr "शोध साफ करा"
 
 #: .\templates\download_forms.html:375
+#: .\venv\Lib\site-packages\django\forms\widgets.py:528
 msgid "Clear"
-msgstr ""
+msgstr "साफ"
 
 #: .\templates\download_forms.html:399
 msgid "No forms available."
-msgstr ""
+msgstr "कोणतेही फॉर्म उपलब्ध नाहीत."
 
 #: .\templates\download_forms.html:407
 msgid "No forms match your search."
-msgstr ""
+msgstr "तुमच्या शोधाशी कोणतेही फॉर्म जुळत नाहीत."
 
 #: .\templates\download_forms.html:413
 msgid "All forms are official and up-to-date."
-msgstr ""
+msgstr "सर्व फॉर्म अधिकृत आणि अद्ययावत आहेत."
 
 #: .\templates\download_forms.html:418
 #, python-format
 msgid "Updated: %(current_month_year)s"
-msgstr ""
+msgstr "अद्यतनित: %(current_month_year)s"
 
 #: .\templates\download_forms.html:427
 msgid "Need Assistance with"
-msgstr ""
+msgstr "सह मदत हवी आहे"
 
 #: .\templates\download_forms.html:427
 msgid "Forms?"
-msgstr ""
+msgstr "फॉर्म?"
 
 #: .\templates\download_forms.html:428
 msgid "We're here to help you fill, print, and submit your documents."
 msgstr ""
+"तुमचे दस्तऐवज भरण्यासाठी, मुद्रित करण्यासाठी आणि सबमिट करण्यात मदत "
+"करण्यासाठी आम्ही येथे आहोत."
 
 #: .\templates\faq.html:354
 msgid "Frequently Asked"
-msgstr ""
+msgstr "वारंवार विचारले जाणारे"
 
 #: .\templates\faq.html:354
 msgid "Questions"
-msgstr ""
+msgstr "प्रश्न"
 
 #: .\templates\faq.html:357
 msgid ""
 "Find quick answers to common questions about our services, documents, and "
 "charges."
 msgstr ""
+"आमच्या सेवा, दस्तऐवज आणि शुल्कांबद्दल सामान्य प्रश्नांची द्रुत उत्तरे शोधा."
 
 #: .\templates\faq.html:367
 msgid "Search for questions..."
-msgstr ""
+msgstr "प्रश्न शोधा..."
 
 #: .\templates\faq.html:368
 msgid "Search FAQs"
-msgstr ""
+msgstr "FAQ शोधा"
 
 #: .\templates\faq.html:379
 msgid "Submit search"
-msgstr ""
+msgstr "शोध सबमिट करा"
 
 #: .\templates\faq.html:416
 msgid "No FAQs have been added yet. Please check back later."
-msgstr ""
+msgstr "अद्याप कोणतेही FAQ जोडलेले नाहीत. कृपया नंतर परत तपासा."
 
 #: .\templates\faq.html:424
 msgid "No questions match your search. Try a different keyword."
-msgstr ""
+msgstr "तुमच्या शोधाशी कोणतेही प्रश्न जुळत नाहीत. भिन्न कीवर्ड वापरून पहा."
 
 #: .\templates\faq.html:430
 msgid "Can't find what you need?"
-msgstr ""
+msgstr "आपल्याला आवश्यक असलेले शोधू शकत नाही?"
 
 #: .\templates\faq.html:435
 msgid "Contact us"
-msgstr ""
+msgstr "आमच्याशी संपर्क साधा"
 
 #: .\templates\faq.html:440
 #, python-format
@@ -1473,490 +1591,1771 @@ msgid ""
 "Take a visual tour of our cyber café, facilities, equipment, and "
 "achievements."
 msgstr ""
+"आमच्या सायबर कॅफे, सुविधा, उपकरणे आणि उपलब्धी यांचा व्हिज्युअल फेरफटका मारा."
 
 #: .\templates\gallery.html:417
 msgid "All Images"
-msgstr ""
+msgstr "सर्व प्रतिमा"
 
 #: .\templates\gallery.html:438 .\templates\homepage.html:838
 msgid "No images available."
-msgstr ""
+msgstr "कोणतीही प्रतिमा उपलब्ध नाही."
 
 #: .\templates\gallery.html:450
 msgid "About Our Gallery"
-msgstr ""
+msgstr "आमच्या गॅलरीबद्दल"
 
 #: .\templates\gallery.html:452
 msgid "All images are from our actual cyber café and service center."
-msgstr ""
+msgstr "सर्व प्रतिमा आमच्या वास्तविक सायबर कॅफे आणि सेवा केंद्रातील आहेत."
 
 #: .\templates\gallery.html:454
 msgid ""
-"We regularly update our gallery to showcase our latest facilities and events."
+"We regularly update our gallery to showcase our latest facilities and "
+"events."
 msgstr ""
+"आम्ही आमच्या नवीनतम सुविधा आणि कार्यक्रम प्रदर्शित करण्यासाठी आमची गॅलरी "
+"नियमितपणे अद्यतनित करतो."
 
 #: .\templates\gallery.html:456
 msgid "Click on any image to view it in full size."
-msgstr ""
+msgstr "कोणत्याही प्रतिमा पूर्ण आकारात पाहण्यासाठी त्यावर क्लिक करा."
 
 #: .\templates\gallery.html:465
 msgid "Our Services?"
-msgstr ""
+msgstr "आमच्या सेवा?"
 
 #: .\templates\gallery.html:466
 msgid "Visit us today or reach out to get started with any of our services."
 msgstr ""
+"आजच आम्हाला भेट द्या किंवा आमच्या कोणत्याही सेवेसह प्रारंभ करण्यासाठी संपर्क"
+" साधा."
 
 #: .\templates\government_schemes.html:267
 msgid "Schemes"
-msgstr ""
+msgstr "योजना"
 
 #: .\templates\government_schemes.html:269
 msgid ""
 "Explore the latest government schemes and initiatives designed to benefit "
 "citizens, businesses, and communities."
 msgstr ""
+"नागरिकांना, व्यवसायांना आणि समुदायांच्या फायद्यासाठी डिझाइन केलेल्या नवीनतम "
+"सरकारी योजना आणि उपक्रम एक्सप्लोर करा."
 
 #: .\templates\government_schemes.html:289
 msgid "Eligibility:"
-msgstr ""
+msgstr "पात्रता:"
 
-#: .\templates\government_schemes.html:296 .\templates\jobs.html:438
+#: .\templates\government_schemes.html:296 .\templates\jobs.html:440
 msgid "Last Date:"
-msgstr ""
+msgstr "शेवटची तारीख:"
 
 #: .\templates\government_schemes.html:305
 msgid "No government schemes available at the moment."
-msgstr ""
+msgstr "सध्या कोणत्याही सरकारी योजना उपलब्ध नाहीत."
 
 #: .\templates\government_schemes.html:307
 msgid "Please check back later for updates."
-msgstr ""
+msgstr "कृपया अद्यतनांसाठी नंतर परत तपासा."
 
 #: .\templates\government_schemes.html:318
 msgid "Need Help Applying for"
-msgstr ""
+msgstr "अर्ज करण्यासाठी मदत हवी आहे"
 
 #: .\templates\government_schemes.html:318
 msgid "Schemes?"
-msgstr ""
+msgstr "योजना?"
 
 #: .\templates\government_schemes.html:320
 msgid ""
-"We assist with scheme applications, document verification, and form filling. "
-"Let us guide you through the process."
+"We assist with scheme applications, document verification, and form filling."
+" Let us guide you through the process."
 msgstr ""
+"आम्ही योजना अर्ज, दस्तऐवज पडताळणी आणि फॉर्म भरण्यात मदत करतो. आम्हाला या "
+"प्रक्रियेत मार्गदर्शन करूया."
 
 #: .\templates\homepage.html:715
 msgid "Fast, Reliable &amp;"
-msgstr ""
+msgstr "जलद, विश्वासार्ह &amp;"
 
 #: .\templates\homepage.html:716
 msgid "Affordable"
-msgstr ""
+msgstr "परवडणारे"
 
 #: .\templates\homepage.html:716
 msgid "Cyber Services"
-msgstr ""
+msgstr "सायबर सेवा"
 
 #: .\templates\homepage.html:719
 #, python-format
 msgid ""
 "\n"
-"          Welcome to %(name)s! We provide fast, reliable, and affordable "
-"online services such as document printing, online applications, Aadhaar "
-"updates, PAN card services, photocopying, and more. Committed to serving you "
-"with quality and convenience.\n"
+"          Welcome to %(name)s! We provide fast, reliable, and affordable online services such as document printing, online applications, Aadhaar updates, PAN card services, photocopying, and more. Committed to serving you with quality and convenience.\n"
 "        "
 msgstr ""
+"%(name)s मध्ये आपले स्वागत आहे! आम्ही दस्तऐवज छपाई, ऑनलाइन अर्ज, आधार अपडेट,"
+" पॅन कार्ड सेवा, फोटोकॉपी आणि बरेच काही यासारख्या जलद, विश्वासार्ह आणि "
+"स्वस्त ऑनलाइन सेवा प्रदान करतो. दर्जेदार आणि सुविधेसह तुमची सेवा करण्यास "
+"वचनबद्ध."
 
 #: .\templates\homepage.html:726
 msgid "Explore Services"
-msgstr ""
+msgstr "सेवा एक्सप्लोर करा"
 
 #: .\templates\homepage.html:735
 msgid "Online Forms"
-msgstr ""
+msgstr "ऑनलाइन फॉर्म"
 
 #: .\templates\homepage.html:738
 msgid "Aadhaar Services"
-msgstr ""
+msgstr "आधार सेवा"
 
 #: .\templates\homepage.html:741
 msgid "PAN Card"
-msgstr ""
+msgstr "पॅन कार्ड"
 
 #: .\templates\homepage.html:744
 msgid "Passport"
-msgstr ""
+msgstr "पासपोर्ट"
 
 #: .\templates\homepage.html:747
 msgid "Printing &amp; Scan"
-msgstr ""
+msgstr "छपाई &amp; स्कॅन करा"
 
 #: .\templates\homepage.html:761
 msgid "Welcome to"
-msgstr ""
+msgstr "मध्ये आपले स्वागत आहे"
 
 #: .\templates\homepage.html:764
 msgid "Your One-Stop Digital Service Hub"
-msgstr ""
+msgstr "तुमचे वन-स्टॉप डिजिटल सर्व्हिस हब"
 
 #: .\templates\homepage.html:766
 msgid ""
 "We are a trusted cyber service provider offering a wide range of digital "
 "solutions to individuals and businesses."
 msgstr ""
+"आम्ही एक विश्वासू सायबर सेवा प्रदाता आहोत जे व्यक्ती आणि व्यवसायांना डिजिटल "
+"सोल्यूशन्सची विस्तृत श्रेणी देतात."
 
 #: .\templates\homepage.html:779
 msgid "Customer Rating"
-msgstr ""
+msgstr "ग्राहक रेटिंग"
 
 #: .\templates\homepage.html:785
 msgid "Trusted &amp; Secure"
-msgstr ""
+msgstr "विश्वसनीय &amp; सुरक्षित"
 
 #: .\templates\homepage.html:787
 msgid ""
 "Your data is safe with us. Professional, confidential, and reliable service "
 "every time."
 msgstr ""
+"तुमचा डेटा आमच्याकडे सुरक्षित आहे. प्रत्येक वेळी व्यावसायिक, गोपनीय आणि "
+"विश्वासार्ह सेवा."
 
 #: .\templates\homepage.html:799
 msgid "Comprehensive digital solutions tailored to your needs"
-msgstr ""
+msgstr "तुमच्या गरजेनुसार तयार केलेले सर्वसमावेशक डिजिटल उपाय"
 
 #: .\templates\homepage.html:813
 msgid "No services available."
-msgstr ""
+msgstr "कोणत्याही सेवा उपलब्ध नाहीत."
 
 #: .\templates\homepage.html:820
 msgid "View All Services"
-msgstr ""
+msgstr "सर्व सेवा पहा"
 
 #: .\templates\homepage.html:831
 msgid "Take a look at our work and facilities"
-msgstr ""
+msgstr "आमचे काम आणि सुविधा पहा"
 
 #: .\templates\homepage.html:845
 msgid "View Full Gallery"
-msgstr ""
+msgstr "संपूर्ण गॅलरी पहा"
 
 #: .\templates\homepage.html:855
 msgid "What Our"
-msgstr ""
+msgstr "काय आमचे"
 
 #: .\templates\homepage.html:855
 msgid "Customers Say"
-msgstr ""
+msgstr "ग्राहक म्हणतात"
 
 #: .\templates\homepage.html:856
 msgid "Real feedback from our valued clients"
-msgstr ""
+msgstr "आमच्या मौल्यवान ग्राहकांकडून वास्तविक अभिप्राय"
 
 #: .\templates\homepage.html:866
 msgid "No reviews yet."
-msgstr ""
+msgstr "अद्याप कोणतीही पुनरावलोकने नाहीत."
 
 #: .\templates\homepage.html:873
 msgid "Read All Reviews"
-msgstr ""
+msgstr "सर्व पुनरावलोकने वाचा"
 
 #: .\templates\homepage.html:883
 msgid "Business Timings"
-msgstr ""
+msgstr "व्यवसायाच्या वेळा"
 
 #: .\templates\homepage.html:888
 msgid "Monday – Saturday: 9:00 AM – 8:00 PM"
-msgstr ""
+msgstr "सोमवार - शनिवार: सकाळी 9:00 ते रात्री 8:00"
 
 #: .\templates\homepage.html:889
 msgid "Sunday: 10:00 AM – 2:00 PM"
-msgstr ""
+msgstr "रविवार: सकाळी 10:00 ते दुपारी 2:00"
 
-#: .\templates\homepage.html:894 .\templates\services.html:527
+#: .\templates\homepage.html:894 .\templates\services.html:529
 msgid "Get in Touch"
-msgstr ""
+msgstr "संपर्कात रहा"
 
 #: .\templates\homepage.html:901
 msgid "Call us for inquiries, support, or to place an order."
-msgstr ""
+msgstr "चौकशी, समर्थन किंवा ऑर्डर देण्यासाठी आम्हाला कॉल करा."
 
 #: .\templates\homepage.html:919
 msgid "Recent"
-msgstr ""
+msgstr "अलीकडील"
 
 #: .\templates\homepage.html:921
 msgid "Stay updated with the latest news, offers, and important notices"
-msgstr ""
+msgstr "ताज्या बातम्या, ऑफर आणि महत्त्वाच्या सूचनांसह अपडेट रहा"
 
 #: .\templates\homepage.html:940
 msgid "View All Announcements"
-msgstr ""
+msgstr "सर्व घोषणा पहा"
 
 #: .\templates\homepage.html:950
 msgid "Find Us"
-msgstr ""
+msgstr "आम्हाला शोधा"
 
 #: .\templates\homepage.html:950
 msgid "Here"
-msgstr ""
+msgstr "येथे"
 
 #: .\templates\homepage.html:961
 msgid "Get Directions"
-msgstr ""
+msgstr "दिशानिर्देश मिळवा"
 
-#: .\templates\jobs.html:398
+#: .\templates\jobs.html:400
 msgid "Jobs"
-msgstr ""
+msgstr "नोकऱ्या"
 
-#: .\templates\jobs.html:400
+#: .\templates\jobs.html:402
 msgid "Current"
-msgstr ""
+msgstr "चालू"
 
-#: .\templates\jobs.html:400
+#: .\templates\jobs.html:402
 msgid "Job Openings"
-msgstr ""
+msgstr "नोकरीची संधी"
 
-#: .\templates\jobs.html:412
+#: .\templates\jobs.html:414
 msgid "Available"
-msgstr ""
+msgstr "उपलब्ध"
 
-#: .\templates\jobs.html:412
+#: .\templates\jobs.html:414
 msgid "Positions"
-msgstr ""
+msgstr "पदे"
 
-#: .\templates\jobs.html:446
+#: .\templates\jobs.html:448
 msgid "Apply Now"
-msgstr ""
+msgstr "आता अर्ज करा"
 
-#: .\templates\jobs.html:453
+#: .\templates\jobs.html:455
 msgid "No job openings available at the moment."
-msgstr ""
+msgstr "याक्षणी कोणतीही नोकरीची संधी उपलब्ध नाही."
 
-#: .\templates\jobs.html:464
+#: .\templates\jobs.html:466
 msgid "join"
-msgstr ""
+msgstr "सामील होणे"
 
 #: .\templates\login.html:4
 msgid "Login – Cyber Café"
-msgstr ""
+msgstr "लॉगिन - सायबर कॅफे"
 
 #: .\templates\login.html:14
 msgid "Welcome Back"
-msgstr ""
+msgstr "परत स्वागत आहे"
 
 #: .\templates\login.html:15
 msgid "Sign in to your account"
-msgstr ""
+msgstr "तुमच्या खात्यात साइन इन करा"
 
 #: .\templates\login.html:58
 msgid "Remember me"
-msgstr ""
+msgstr "माझी आठवण ठेवा"
 
 #: .\templates\login.html:60
 msgid "Forgot password?"
-msgstr ""
+msgstr "पासवर्ड विसरलात?"
 
 #: .\templates\login.html:73
 msgid "Don't have an account?"
-msgstr ""
+msgstr "खाते नाही?"
 
 #: .\templates\login.html:74
 msgid "Register now"
-msgstr ""
+msgstr "आता नोंदणी करा"
 
 #: .\templates\password_change.html:4
 msgid "Change Password – Cyber Café"
-msgstr ""
+msgstr "पासवर्ड बदला – सायबर कॅफे"
 
 #: .\templates\password_change.html:14 .\templates\password_change.html:57
 #: .\templates\profile.html:66
 msgid "Change Password"
-msgstr ""
+msgstr "पासवर्ड बदला"
 
 #: .\templates\password_change.html:15
 msgid "Update your password to keep your account secure"
-msgstr ""
+msgstr "तुमचे खाते सुरक्षित ठेवण्यासाठी तुमचा पासवर्ड अपडेट करा"
 
 #: .\templates\password_change.html:66
 msgid "Back to Profile"
-msgstr ""
+msgstr "प्रोफाइलवर परत"
 
 #: .\templates\password_change_done.html:4
 msgid "Password Changed – Cyber Café"
-msgstr ""
+msgstr "पासवर्ड बदलला - सायबर कॅफे"
 
 #: .\templates\password_change_done.html:14
 msgid "Password Changed!"
-msgstr ""
+msgstr "पासवर्ड बदलला!"
 
 #: .\templates\password_change_done.html:15
 msgid "Your password has been updated successfully."
-msgstr ""
+msgstr "तुमचा पासवर्ड यशस्वीरित्या अपडेट केला गेला आहे."
 
 #: .\templates\password_change_done.html:20
 msgid "Return to Profile"
-msgstr ""
+msgstr "प्रोफाइलवर परत या"
 
 #: .\templates\password_change_done.html:23
 msgid "Go to Dashboard"
-msgstr ""
+msgstr "डॅशबोर्डवर जा"
 
 #: .\templates\profile.html:4
 msgid "My Profile – Cyber Café"
-msgstr ""
+msgstr "माझे प्रोफाइल - सायबर कॅफे"
 
 #: .\templates\profile.html:14
 msgid "My Profile"
-msgstr ""
+msgstr "माझे प्रोफाइल"
 
 #: .\templates\profile.html:15
 msgid "Update your personal information"
-msgstr ""
+msgstr "तुमची वैयक्तिक माहिती अपडेट करा"
 
 #: .\templates\profile.html:57
 msgid "Update Profile"
-msgstr ""
+msgstr "प्रोफाइल अपडेट करा"
 
 #: .\templates\register.html:4
 msgid "Register – Cyber Café"
-msgstr ""
+msgstr "नोंदणी करा - सायबर कॅफे"
 
 #: .\templates\register.html:14
 msgid "Create Account"
-msgstr ""
+msgstr "खाते तयार करा"
 
 #: .\templates\register.html:15
 msgid "Join us to access exclusive services"
-msgstr ""
+msgstr "विशेष सेवांमध्ये प्रवेश करण्यासाठी आमच्यात सामील व्हा"
 
 #: .\templates\register.html:57
 msgid "Sign Up"
-msgstr ""
+msgstr "साइन अप करा"
 
 #: .\templates\register.html:65
 msgid "Already have an account?"
-msgstr ""
+msgstr "आधीच खाते आहे?"
 
 #: .\templates\register.html:66
 msgid "Log in"
-msgstr ""
+msgstr "लॉग इन करा"
 
 #: .\templates\register.html:72
 msgid "By registering, you agree to our"
-msgstr ""
+msgstr "नोंदणी करून, तुम्ही आमच्याशी सहमत आहात"
 
 #: .\templates\register.html:73
 msgid "Terms of Service"
-msgstr ""
+msgstr "सेवा अटी"
 
 #: .\templates\register.html:74
+#: .\venv\Lib\site-packages\django\db\models\base.py:1633
+#: .\venv\Lib\site-packages\django\forms\models.py:932
 msgid "and"
-msgstr ""
+msgstr "आणि"
 
 #: .\templates\register.html:75
 msgid "Privacy Policy"
-msgstr ""
+msgstr "गोपनीयता धोरण"
 
-#: .\templates\required_document.html:190
+#: .\templates\required_document.html:192
 msgid "Required"
-msgstr ""
+msgstr "आवश्यक आहे"
 
-#: .\templates\required_document.html:190
+#: .\templates\required_document.html:192
 msgid "Documents"
-msgstr ""
+msgstr "कागदपत्रे"
 
-#: .\templates\required_document.html:223
+#: .\templates\required_document.html:225
 msgid "No documents listed."
-msgstr ""
+msgstr "कोणतीही कागदपत्रे सूचीबद्ध नाहीत."
 
-#: .\templates\required_document.html:239
+#: .\templates\required_document.html:241
 msgid "Important:"
-msgstr ""
+msgstr "महत्त्वाचे:"
 
-#: .\templates\required_document.html:252
+#: .\templates\required_document.html:254
 msgid "Need Help Preparing"
-msgstr ""
+msgstr "तयारीसाठी मदत हवी आहे"
 
-#: .\templates\required_document.html:252
+#: .\templates\required_document.html:254
 msgid "Documents?"
-msgstr ""
+msgstr "कागदपत्रे?"
 
-#: .\templates\service_charges.html:410
+#: .\templates\service_charges.html:412
 msgid "Charges"
-msgstr ""
+msgstr "चार्जेस"
 
-#: .\templates\service_charges.html:422
+#: .\templates\service_charges.html:424
 msgid "Price List"
-msgstr ""
+msgstr "किंमत यादी"
 
-#: .\templates\service_charges.html:467
+#: .\templates\service_charges.html:469
 msgid "No service charges available."
-msgstr ""
+msgstr "कोणतेही सेवा शुल्क उपलब्ध नाही."
 
-#: .\templates\service_charges.html:482
+#: .\templates\service_charges.html:484
 msgid "Important Notes"
-msgstr ""
+msgstr "महत्वाच्या नोट्स"
 
-#: .\templates\service_charges.html:502
+#: .\templates\service_charges.html:504
 msgid "Need"
-msgstr ""
+msgstr "गरज आहे"
 
-#: .\templates\service_charges.html:502
+#: .\templates\service_charges.html:504
 msgid "clarification"
-msgstr ""
+msgstr "स्पष्टीकरण"
 
-#: .\templates\services.html:465
+#: .\templates\services.html:467
 msgid "Satisfaction"
-msgstr ""
+msgstr "समाधान"
 
-#: .\templates\services.html:469
+#: .\templates\services.html:471
 msgid "Support"
-msgstr ""
+msgstr "सपोर्ट"
 
-#: .\templates\services.html:479
+#: .\templates\services.html:481
 msgid "Explore Our"
-msgstr ""
+msgstr "आमचे अन्वेषण करा"
 
-#: .\templates\services.html:479
+#: .\templates\services.html:481
 msgid "Solutions"
-msgstr ""
+msgstr "उपाय"
 
-#: .\templates\services.html:506
+#: .\templates\services.html:508
 msgid "Learn More"
-msgstr ""
+msgstr "अधिक जाणून घ्या"
 
-#: .\templates\services.html:530
+#: .\templates\services.html:532
 msgid "Need help with any"
-msgstr ""
+msgstr "कोणत्याही मदतीची आवश्यकता आहे"
 
-#: .\templates\services.html:530
+#: .\templates\services.html:532
 msgid "service"
-msgstr ""
+msgstr "सेवा"
 
 #: .\templates\superadmindashboard.html:9
 msgid "Super Admin Dashboard – Cyber Café"
-msgstr ""
+msgstr "सुपर ॲडमिन डॅशबोर्ड - सायबर कॅफे"
 
 #: .\templates\superadmindashboard.html:570
 #: .\templates\superadmindashboard.html:630
 msgid "Users"
-msgstr ""
+msgstr "वापरकर्ते"
 
 #: .\templates\superadmindashboard.html:1053
 #: .\templates\superadmindashboard.html:1195
 msgid "User Management"
-msgstr ""
+msgstr "वापरकर्ता व्यवस्थापन"
 
 #: .\templates\superadmindashboard.html:1062
 msgid "Staff"
-msgstr ""
+msgstr "कर्मचारी"
 
 #: .\templates\superadmindashboard.html:1076
 msgid "Yes,No"
-msgstr ""
+msgstr "होय, नाही"
 
 #: .\templates\superadmindashboard.html:1092
 msgid "No users found."
+msgstr "कोणतेही वापरकर्ते आढळले नाहीत."
+
+#: .\venv\Lib\site-packages\cloudinary\forms.py:55
+#: .\venv\Lib\site-packages\cloudinary\forms.py:124
+msgid "No file selected!"
+msgstr "कोणतीही फाइल निवडली नाही!"
+
+#: .\venv\Lib\site-packages\django\contrib\messages\apps.py:16
+msgid "Messages"
+msgstr "संदेश"
+
+#: .\venv\Lib\site-packages\django\contrib\sitemaps\apps.py:8
+msgid "Site Maps"
+msgstr "साइट नकाशे"
+
+#: .\venv\Lib\site-packages\django\contrib\staticfiles\apps.py:9
+msgid "Static Files"
+msgstr "स्थिर फायली"
+
+#: .\venv\Lib\site-packages\django\contrib\syndication\apps.py:7
+msgid "Syndication"
+msgstr "सिंडिकेशन"
+
+#. Translators: String used to replace omitted page numbers in elided page
+#. range generated by paginators, e.g. [1, 2, '…', 5, 6, 7, '…', 9, 10].
+#: .\venv\Lib\site-packages\django\core\paginator.py:33
+msgid "…"
+msgstr "…"
+
+#: .\venv\Lib\site-packages\django\core\paginator.py:35
+msgid "That page number is not an integer"
+msgstr "तो पृष्ठ क्रमांक पूर्णांक नाही"
+
+#: .\venv\Lib\site-packages\django\core\paginator.py:36
+msgid "That page number is less than 1"
+msgstr "तो पृष्ठ क्रमांक 1 पेक्षा कमी आहे"
+
+#: .\venv\Lib\site-packages\django\core\paginator.py:37
+msgid "That page contains no results"
+msgstr "त्या पृष्ठावर कोणतेही परिणाम नाहीत"
+
+#: .\venv\Lib\site-packages\django\core\validators.py:22
+msgid "Enter a valid value."
+msgstr "वैध मूल्य प्रविष्ट करा."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:70
+msgid "Enter a valid domain name."
+msgstr "वैध डोमेन नाव प्रविष्ट करा."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:153
+#: .\venv\Lib\site-packages\django\forms\fields.py:774
+msgid "Enter a valid URL."
+msgstr "वैध URL एंटर करा."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:200
+msgid "Enter a valid integer."
+msgstr "वैध पूर्णांक प्रविष्ट करा."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:211
+msgid "Enter a valid email address."
+msgstr "एक वैध ईमेल पत्ता प्रविष्ट करा."
+
+#. Translators: "letters" means latin letters: a-z and A-Z.
+#: .\venv\Lib\site-packages\django\core\validators.py:289
+msgid ""
+"Enter a valid “slug” consisting of letters, numbers, underscores or hyphens."
+msgstr "अक्षरे, संख्या, अंडरस्कोअर किंवा हायफन असलेले वैध \"स्लग\" प्रविष्ट करा."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:297
+msgid ""
+"Enter a valid “slug” consisting of Unicode letters, numbers, underscores, or"
+" hyphens."
 msgstr ""
+"युनिकोड अक्षरे, संख्या, अंडरस्कोअर किंवा हायफन असलेले वैध \"स्लग\" प्रविष्ट "
+"करा."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:309
+#: .\venv\Lib\site-packages\django\core\validators.py:318
+#: .\venv\Lib\site-packages\django\core\validators.py:332
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2220
+#, python-format
+msgid "Enter a valid %(protocol)s address."
+msgstr "वैध %(प्रोटोकॉल) पत्ता प्रविष्ट करा."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:311
+msgid "IPv4"
+msgstr "IPv4"
+
+#: .\venv\Lib\site-packages\django\core\validators.py:320
+#: .\venv\Lib\site-packages\django\utils\ipv6.py:43
+msgid "IPv6"
+msgstr "IPv6"
+
+#: .\venv\Lib\site-packages\django\core\validators.py:334
+msgid "IPv4 or IPv6"
+msgstr "IPv4 किंवा IPv6"
+
+#: .\venv\Lib\site-packages\django\core\validators.py:375
+msgid "Enter only digits separated by commas."
+msgstr "स्वल्पविरामाने विभक्त केलेले फक्त अंक प्रविष्ट करा."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:381
+#, python-format
+msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
+msgstr "हे मूल्य %(limit_value)s (ते %(show_value)s आहे) असल्याची खात्री करा."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:416
+#, python-format
+msgid "Ensure this value is less than or equal to %(limit_value)s."
+msgstr "हे मूल्य %(limit_value)s पेक्षा कमी किंवा समान असल्याची खात्री करा."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:425
+#, python-format
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr "हे मूल्य %(limit_value)s पेक्षा मोठे किंवा समान असल्याची खात्री करा."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:434
+#, python-format
+msgid "Ensure this value is a multiple of step size %(limit_value)s."
+msgstr "हे मूल्य चरण आकार %(limit_value)s चे गुणाकार असल्याची खात्री करा."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:441
+#, python-format
+msgid ""
+"Ensure this value is a multiple of step size %(limit_value)s, starting from "
+"%(offset)s, e.g. %(offset)s, %(valid_value1)s, %(valid_value2)s, and so on."
+msgstr ""
+"हे मूल्य चरण आकार %(limit_value)s चे गुणाकार असल्याची खात्री करा, %(offset)s"
+" पासून सुरू होत आहे, उदा. %(ऑफसेट)s, %(valid_value1)s, %(valid_value2)s, इ."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:473
+#, python-format
+msgid ""
+"Ensure this value has at least %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at least %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:491
+#, python-format
+msgid ""
+"Ensure this value has at most %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at most %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:514
+#: .\venv\Lib\site-packages\django\forms\fields.py:365
+#: .\venv\Lib\site-packages\django\forms\fields.py:404
+msgid "Enter a number."
+msgstr "नंबर टाका."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:516
+#, python-format
+msgid "Ensure that there are no more than %(max)s digit in total."
+msgid_plural "Ensure that there are no more than %(max)s digits in total."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:521
+#, python-format
+msgid "Ensure that there are no more than %(max)s decimal place."
+msgid_plural "Ensure that there are no more than %(max)s decimal places."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:526
+#, python-format
+msgid ""
+"Ensure that there are no more than %(max)s digit before the decimal point."
+msgid_plural ""
+"Ensure that there are no more than %(max)s digits before the decimal point."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:597
+#, python-format
+msgid ""
+"File extension “%(extension)s” is not allowed. Allowed extensions are: "
+"%(allowed_extensions)s."
+msgstr ""
+"फाइल विस्तार “%(विस्तार)s” ला अनुमती नाही. अनुमत विस्तार आहेत: "
+"%(अनुमत_विस्तार)s."
+
+#: .\venv\Lib\site-packages\django\core\validators.py:659
+msgid "Null characters are not allowed."
+msgstr "शून्य वर्णांना अनुमती नाही."
+
+#: .\venv\Lib\site-packages\django\db\models\base.py:1635
+#, python-format
+msgid "%(model_name)s with this %(field_labels)s already exists."
+msgstr "या %(field_labels) सह %(model_name)s आधीपासूनच अस्तित्वात आहेत."
+
+#: .\venv\Lib\site-packages\django\db\models\constraints.py:20
+#, python-format
+msgid "Constraint “%(name)s” is violated."
+msgstr "मर्यादा \"%(नाव)s\" चे उल्लंघन केले आहे."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:134
+#, python-format
+msgid "Value %(value)r is not a valid choice."
+msgstr "मूल्य %(value)r ही वैध निवड नाही."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:135
+msgid "This field cannot be null."
+msgstr "हे फील्ड शून्य असू शकत नाही."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:136
+msgid "This field cannot be blank."
+msgstr "हे फील्ड रिक्त असू शकत नाही."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:137
+#, python-format
+msgid "%(model_name)s with this %(field_label)s already exists."
+msgstr "या %(field_label) सह %(model_name)s आधीपासून अस्तित्वात आहे."
+
+#. Translators: The 'lookup_type' is one of 'date', 'year' or
+#. 'month'. Eg: "Title must be unique for pub_date year"
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:141
+#, python-format
+msgid ""
+"%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
+msgstr ""
+"%(field_label)s %(date_field_label)s %(lookup_type)s साठी अद्वितीय असणे "
+"आवश्यक आहे."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:180
+#, python-format
+msgid "Field of type: %(field_type)s"
+msgstr "फील्ड प्रकार: %(field_type)s"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1161
+#, python-format
+msgid "“%(value)s” value must be either True or False."
+msgstr "“%(मूल्य)s” मूल्य एकतर सत्य किंवा असत्य असणे आवश्यक आहे."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1162
+#, python-format
+msgid "“%(value)s” value must be either True, False, or None."
+msgstr "“%(मूल्य)s” मूल्य एकतर सत्य, असत्य किंवा काहीही नसावे."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1164
+msgid "Boolean (Either True or False)"
+msgstr "बुलियन (एकतर खरे किंवा खोटे)"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1214
+#, python-format
+msgid "String (up to %(max_length)s)"
+msgstr "स्ट्रिंग (%(max_length)s पर्यंत)"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1216
+msgid "String (unlimited)"
+msgstr "स्ट्रिंग (अमर्यादित)"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1325
+msgid "Comma-separated integers"
+msgstr "स्वल्पविरामाने विभक्त पूर्णांक"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1426
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid date format. It must be in YYYY-MM-DD "
+"format."
+msgstr ""
+"“%(मूल्य)s” मूल्यामध्ये अवैध तारीख स्वरूप आहे. ते YYYY-MM-DD फॉरमॅटमध्ये "
+"असणे आवश्यक आहे."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1430
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1565
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD) but it is an invalid "
+"date."
+msgstr ""
+"“%(मूल्य)s” मूल्याचे स्वरूप योग्य आहे (YYYY-MM-DD) परंतु ती अवैध तारीख आहे."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1434
+msgid "Date (without time)"
+msgstr "तारीख (वेळेशिवाय)"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1561
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in YYYY-MM-DD "
+"HH:MM[:ss[.uuuuuu]][TZ] format."
+msgstr ""
+"“%(मूल्य)s” मूल्याचे स्वरूप अवैध आहे. ते YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ] "
+"फॉरमॅटमध्ये असणे आवश्यक आहे."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1569
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD "
+"HH:MM[:ss[.uuuuuu]][TZ]) but it is an invalid date/time."
+msgstr ""
+"“%(मूल्य)s” मूल्याचे स्वरूप योग्य आहे (YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]) "
+"परंतु ती अवैध तारीख/वेळ आहे."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1574
+msgid "Date (with time)"
+msgstr "तारीख (वेळेसह)"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1701
+#, python-format
+msgid "“%(value)s” value must be a decimal number."
+msgstr "“%(मूल्य)s” मूल्य दशांश संख्या असणे आवश्यक आहे."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1703
+msgid "Decimal number"
+msgstr "दशांश संख्या"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1864
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in [DD] "
+"[[HH:]MM:]ss[.uuuuuu] format."
+msgstr ""
+"“%(मूल्य)s” मूल्याचे स्वरूप अवैध आहे. ते [DD] [[HH:]MM:]ss[.uuuuuu] "
+"फॉरमॅटमध्ये असणे आवश्यक आहे."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1868
+msgid "Duration"
+msgstr "कालावधी"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1920
+msgid "Email address"
+msgstr "ईमेल पत्ता"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1945
+msgid "File path"
+msgstr "फाइल मार्ग"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2023
+#, python-format
+msgid "“%(value)s” value must be a float."
+msgstr "“%(मूल्य)s” मूल्य फ्लोट असणे आवश्यक आहे."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2025
+msgid "Floating point number"
+msgstr "फ्लोटिंग पॉइंट क्रमांक"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2065
+#, python-format
+msgid "“%(value)s” value must be an integer."
+msgstr "“%(मूल्य)s” मूल्य पूर्णांक असणे आवश्यक आहे."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2067
+msgid "Integer"
+msgstr "पूर्णांक"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2163
+msgid "Big (8 byte) integer"
+msgstr "मोठा (8 बाइट) पूर्णांक"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2180
+msgid "Small integer"
+msgstr "लहान पूर्णांक"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2188
+msgid "IPv4 address"
+msgstr "IPv4 पत्ता"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2219
+msgid "IP address"
+msgstr "IP पत्ता"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2310
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2311
+#, python-format
+msgid "“%(value)s” value must be either None, True or False."
+msgstr "“%(मूल्य)s” मूल्य एकतर काहीही नाही, खरे किंवा असत्य असणे आवश्यक आहे."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2313
+msgid "Boolean (Either True, False or None)"
+msgstr "बुलियन (एकतर खरे, असत्य किंवा काहीही नाही)"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2364
+msgid "Positive big integer"
+msgstr "धनात्मक मोठा पूर्णांक"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2379
+msgid "Positive integer"
+msgstr "धन पूर्णांक"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2394
+msgid "Positive small integer"
+msgstr "धनात्मक लहान पूर्णांक"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2410
+#, python-format
+msgid "Slug (up to %(max_length)s)"
+msgstr "स्लग (%(max_length)s पर्यंत)"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2446
+msgid "Text"
+msgstr "मजकूर"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2526
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
+"format."
+msgstr ""
+"“%(मूल्य)s” मूल्याचे स्वरूप अवैध आहे. ते HH:MM[:ss[.uuuuuu]] फॉरमॅटमध्ये "
+"असणे आवश्यक आहे."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2530
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
+"invalid time."
+msgstr ""
+"“%(value)s” मूल्याचे स्वरूप योग्य आहे (HH:MM[:ss[.uuuuu]]) परंतु ती अवैध वेळ"
+" आहे."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2642
+msgid "URL"
+msgstr "URL"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2666
+msgid "Raw binary data"
+msgstr "कच्चा बायनरी डेटा"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2731
+#, python-format
+msgid "“%(value)s” is not a valid UUID."
+msgstr "“%(मूल्य)s” हा वैध UUID नाही."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2733
+msgid "Universally unique identifier"
+msgstr "युनिव्हर्सली युनिक आयडेंटिफायर"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\files.py:244
+msgid "File"
+msgstr "फाईल"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\json.py:24
+msgid "A JSON object"
+msgstr "JSON ऑब्जेक्ट"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\json.py:26
+msgid "Value must be valid JSON."
+msgstr "मूल्य वैध JSON असणे आवश्यक आहे."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:978
+#, python-format
+msgid "%(model)s instance with %(field)s %(value)r is not a valid choice."
+msgstr "%(मॉडेल)चे उदाहरण %(फील्ड)s %(मूल्य)r सह वैध पर्याय नाही."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:981
+msgid "Foreign Key (type determined by related field)"
+msgstr "विदेशी की (संबंधित फील्डद्वारे निर्धारित प्रकार)"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1275
+msgid "One-to-one relationship"
+msgstr "एक-एक संबंध"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1332
+#, python-format
+msgid "%(from)s-%(to)s relationship"
+msgstr "%(पासून)s-%(ते) संबंध"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1334
+#, python-format
+msgid "%(from)s-%(to)s relationships"
+msgstr "%(पासून)s-%(ते) संबंध"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1382
+msgid "Many-to-many relationship"
+msgstr "अनेक ते अनेक संबंध"
+
+#. Translators: If found as last label character, these punctuation
+#. characters will prevent the default label_suffix to be appended to
+#. the label
+#: .\venv\Lib\site-packages\django\forms\boundfield.py:188
+msgid ":?.!"
+msgstr ":?.!"
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:92
+msgid "This field is required."
+msgstr "हे फील्ड आवश्यक आहे."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:314
+msgid "Enter a whole number."
+msgstr "पूर्ण संख्या प्रविष्ट करा."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:485
+#: .\venv\Lib\site-packages\django\forms\fields.py:1251
+msgid "Enter a valid date."
+msgstr "वैध तारीख प्रविष्ट करा."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:508
+#: .\venv\Lib\site-packages\django\forms\fields.py:1252
+msgid "Enter a valid time."
+msgstr "वैध वेळ प्रविष्ट करा."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:535
+msgid "Enter a valid date/time."
+msgstr "वैध तारीख/वेळ प्रविष्ट करा."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:569
+msgid "Enter a valid duration."
+msgstr "वैध कालावधी एंटर करा."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:570
+#, python-brace-format
+msgid "The number of days must be between {min_days} and {max_days}."
+msgstr "दिवसांची संख्या {min_days} आणि {max_days} दरम्यान असणे आवश्यक आहे."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:639
+msgid "No file was submitted. Check the encoding type on the form."
+msgstr "कोणतीही फाईल सादर केली नाही. फॉर्मवर एन्कोडिंग प्रकार तपासा."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:640
+msgid "No file was submitted."
+msgstr "कोणतीही फाईल सादर केली नाही."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:641
+msgid "The submitted file is empty."
+msgstr "सबमिट केलेली फाईल रिकामी आहे."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:643
+#, python-format
+msgid ""
+"Ensure this filename has at most %(max)d character (it has %(length)d)."
+msgid_plural ""
+"Ensure this filename has at most %(max)d characters (it has %(length)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:648
+msgid "Please either submit a file or check the clear checkbox, not both."
+msgstr "कृपया एकतर फाइल सबमिट करा किंवा स्पष्ट चेकबॉक्स चेक करा, दोन्ही नाही."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:716
+msgid ""
+"Upload a valid image. The file you uploaded was either not an image or a "
+"corrupted image."
+msgstr ""
+"एक वैध प्रतिमा अपलोड करा. तुम्ही अपलोड केलेली फाइल एकतर इमेज किंवा दूषित "
+"इमेज नव्हती."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:872
+#: .\venv\Lib\site-packages\django\forms\fields.py:959
+#: .\venv\Lib\site-packages\django\forms\models.py:1621
+#, python-format
+msgid "Select a valid choice. %(value)s is not one of the available choices."
+msgstr "वैध पर्याय निवडा. %(मूल्य) उपलब्ध पर्यायांपैकी एक नाही."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:961
+#: .\venv\Lib\site-packages\django\forms\fields.py:1080
+#: .\venv\Lib\site-packages\django\forms\models.py:1619
+msgid "Enter a list of values."
+msgstr "मूल्यांची सूची प्रविष्ट करा."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:1081
+msgid "Enter a complete value."
+msgstr "संपूर्ण मूल्य प्रविष्ट करा."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:1323
+msgid "Enter a valid UUID."
+msgstr "वैध UUID प्रविष्ट करा."
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:1353
+msgid "Enter a valid JSON."
+msgstr "वैध JSON एंटर करा."
+
+#. Translators: This is the default suffix added to form field labels
+#: .\venv\Lib\site-packages\django\forms\forms.py:97
+msgid ":"
+msgstr ":"
+
+#: .\venv\Lib\site-packages\django\forms\forms.py:239
+#, python-format
+msgid "(Hidden field %(name)s) %(error)s"
+msgstr "(लपलेले फील्ड %(नाव)s) %(त्रुटी)s"
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:61
+#, python-format
+msgid ""
+"ManagementForm data is missing or has been tampered with. Missing fields: "
+"%(field_names)s. You may need to file a bug report if the issue persists."
+msgstr ""
+"मॅनेजमेंटफॉर्म डेटा गहाळ आहे किंवा त्याच्याशी छेडछाड केली गेली आहे. गहाळ "
+"फील्ड: %(field_names)s. समस्या कायम राहिल्यास तुम्हाला बग अहवाल दाखल करावा "
+"लागेल."
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:65
+#, python-format
+msgid "Please submit at most %(num)d form."
+msgid_plural "Please submit at most %(num)d forms."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:70
+#, python-format
+msgid "Please submit at least %(num)d form."
+msgid_plural "Please submit at least %(num)d forms."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:484
+#: .\venv\Lib\site-packages\django\forms\formsets.py:491
+msgid "Order"
+msgstr "ऑर्डर करा"
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:499
+msgid "Delete"
+msgstr "हटवा"
+
+#: .\venv\Lib\site-packages\django\forms\models.py:925
+#, python-format
+msgid "Please correct the duplicate data for %(field)s."
+msgstr "कृपया %(फील्ड) साठी डुप्लिकेट डेटा दुरुस्त करा."
+
+#: .\venv\Lib\site-packages\django\forms\models.py:930
+#, python-format
+msgid "Please correct the duplicate data for %(field)s, which must be unique."
+msgstr ""
+"कृपया %(फील्ड) साठी डुप्लिकेट डेटा दुरुस्त करा, जो अद्वितीय असणे आवश्यक आहे."
+
+#: .\venv\Lib\site-packages\django\forms\models.py:937
+#, python-format
+msgid ""
+"Please correct the duplicate data for %(field_name)s which must be unique "
+"for the %(lookup)s in %(date_field)s."
+msgstr ""
+"कृपया %(field_name)s साठी डुप्लिकेट डेटा दुरुस्त करा जो %(date_field)s मधील "
+"%(lookup)s साठी अद्वितीय असणे आवश्यक आहे."
+
+#: .\venv\Lib\site-packages\django\forms\models.py:946
+msgid "Please correct the duplicate values below."
+msgstr "कृपया खालील डुप्लिकेट मूल्ये दुरुस्त करा."
+
+#: .\venv\Lib\site-packages\django\forms\models.py:1383
+msgid "The inline value did not match the parent instance."
+msgstr "इनलाइन मूल्य मूळ उदाहरणाशी जुळत नाही."
+
+#: .\venv\Lib\site-packages\django\forms\models.py:1474
+msgid ""
+"Select a valid choice. That choice is not one of the available choices."
+msgstr "वैध पर्याय निवडा. ती निवड उपलब्ध पर्यायांपैकी एक नाही."
+
+#: .\venv\Lib\site-packages\django\forms\models.py:1623
+#, python-format
+msgid "“%(pk)s” is not a valid value."
+msgstr "“%(pk)s” हे वैध मूल्य नाही."
+
+#: .\venv\Lib\site-packages\django\forms\utils.py:229
+#, python-format
+msgid ""
+"%(datetime)s couldn’t be interpreted in time zone %(current_timezone)s; it "
+"may be ambiguous or it may not exist."
+msgstr ""
+"%(datetime)s चा टाइम झोन %(current_timezone)s मध्ये अर्थ लावला जाऊ शकत नाही;"
+" ते अस्पष्ट असू शकते किंवा ते अस्तित्वात नसू शकते."
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:529
+msgid "Currently"
+msgstr "सध्या"
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:530
+msgid "Change"
+msgstr "बदला"
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:869
+msgid "Unknown"
+msgstr "अज्ञात"
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:870
+msgid "Yes"
+msgstr "होय"
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:871
+msgid "No"
+msgstr "नाही"
+
+#: .\venv\Lib\site-packages\django\tasks\base.py:34
+msgctxt "Task"
+msgid "Ready"
+msgstr "तयार"
+
+#: .\venv\Lib\site-packages\django\tasks\base.py:36
+msgctxt "Task"
+msgid "Running"
+msgstr "धावत आहे"
+
+#: .\venv\Lib\site-packages\django\tasks\base.py:38
+msgctxt "Task"
+msgid "Failed"
+msgstr "अयशस्वी"
+
+#: .\venv\Lib\site-packages\django\tasks\base.py:40
+msgctxt "Task"
+msgid "Successful"
+msgstr "यशस्वी"
+
+#. Translators: Please do not add spaces around commas.
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:878
+msgid "yes,no,maybe"
+msgstr "होय, नाही, कदाचित"
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:908
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:925
+#, python-format
+msgid "%(size)d byte"
+msgid_plural "%(size)d bytes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:927
+#, python-format
+msgid "%s KB"
+msgstr "%s KB"
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:929
+#, python-format
+msgid "%s MB"
+msgstr "%s MB"
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:931
+#, python-format
+msgid "%s GB"
+msgstr "%s GB"
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:933
+#, python-format
+msgid "%s TB"
+msgstr "%s टीबी"
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:935
+#, python-format
+msgid "%s PB"
+msgstr "%s PB"
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:74
+msgid "p.m."
+msgstr "p.m"
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:75
+msgid "a.m."
+msgstr "a.m"
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:80
+msgid "PM"
+msgstr "पीएम"
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:81
+msgid "AM"
+msgstr "एएम"
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:153
+msgid "midnight"
+msgstr "मध्यरात्री"
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:155
+msgid "noon"
+msgstr "दुपार"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:16
+msgid "Mon"
+msgstr "सोम"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:17
+msgid "Tue"
+msgstr "मंगळ"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:18
+msgid "Wed"
+msgstr "बुध"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:19
+msgid "Thu"
+msgstr "गुरु"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:20
+msgid "Fri"
+msgstr "शुक्र"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:21
+msgid "Sat"
+msgstr "शनि"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:22
+msgid "Sun"
+msgstr "रवि"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:25
+msgid "January"
+msgstr "जानेवारी"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:26
+msgid "February"
+msgstr "फेब्रुवारी"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:27
+msgid "March"
+msgstr "मार्च"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:28
+msgid "April"
+msgstr "एप्रिल"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:29
+msgid "May"
+msgstr "मे"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:30
+msgid "June"
+msgstr "जून"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:31
+msgid "July"
+msgstr "जुलै"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:32
+msgid "August"
+msgstr "ऑगस्ट"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:33
+msgid "September"
+msgstr "सप्टेंबर"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:34
+msgid "October"
+msgstr "ऑक्टोबर"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:35
+msgid "November"
+msgstr "नोव्हेंबर"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:36
+msgid "December"
+msgstr "डिसेंबर"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:39
+msgid "jan"
+msgstr "जान"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:40
+msgid "feb"
+msgstr "फेब्रुवारी"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:41
+msgid "mar"
+msgstr "mar"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:42
+msgid "apr"
+msgstr "एप्रिल"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:43
+msgid "may"
+msgstr "मे"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:44
+msgid "jun"
+msgstr "जून"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:45
+msgid "jul"
+msgstr "जुलै"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:46
+msgid "aug"
+msgstr "ऑगस्ट"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:47
+msgid "sep"
+msgstr "सप्टें"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:48
+msgid "oct"
+msgstr "ऑक्टो"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:49
+msgid "nov"
+msgstr "नोव्हेंबर"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:50
+msgid "dec"
+msgstr "डिसेंबर"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:53
+msgctxt "abbrev. month"
+msgid "Jan."
+msgstr "जाने."
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:54
+msgctxt "abbrev. month"
+msgid "Feb."
+msgstr "फेब्रु."
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:55
+msgctxt "abbrev. month"
+msgid "March"
+msgstr "मार्च"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:56
+msgctxt "abbrev. month"
+msgid "April"
+msgstr "एप्रिल"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:57
+msgctxt "abbrev. month"
+msgid "May"
+msgstr "मे"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:58
+msgctxt "abbrev. month"
+msgid "June"
+msgstr "जून"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:59
+msgctxt "abbrev. month"
+msgid "July"
+msgstr "जुलै"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:60
+msgctxt "abbrev. month"
+msgid "Aug."
+msgstr "ऑगस्ट"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:61
+msgctxt "abbrev. month"
+msgid "Sept."
+msgstr "सप्टें."
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:62
+msgctxt "abbrev. month"
+msgid "Oct."
+msgstr "ऑक्टो."
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:63
+msgctxt "abbrev. month"
+msgid "Nov."
+msgstr "नोव्हें."
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:64
+msgctxt "abbrev. month"
+msgid "Dec."
+msgstr "डिसें."
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:67
+msgctxt "alt. month"
+msgid "January"
+msgstr "जानेवारी"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:68
+msgctxt "alt. month"
+msgid "February"
+msgstr "फेब्रुवारी"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:69
+msgctxt "alt. month"
+msgid "March"
+msgstr "मार्च"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:70
+msgctxt "alt. month"
+msgid "April"
+msgstr "एप्रिल"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:71
+msgctxt "alt. month"
+msgid "May"
+msgstr "मे"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:72
+msgctxt "alt. month"
+msgid "June"
+msgstr "जून"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:73
+msgctxt "alt. month"
+msgid "July"
+msgstr "जुलै"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:74
+msgctxt "alt. month"
+msgid "August"
+msgstr "ऑगस्ट"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:75
+msgctxt "alt. month"
+msgid "September"
+msgstr "सप्टेंबर"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:76
+msgctxt "alt. month"
+msgid "October"
+msgstr "ऑक्टोबर"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:77
+msgctxt "alt. month"
+msgid "November"
+msgstr "नोव्हेंबर"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:78
+msgctxt "alt. month"
+msgid "December"
+msgstr "डिसेंबर"
+
+#: .\venv\Lib\site-packages\django\utils\ipv6.py:20
+msgid "This is not a valid IPv6 address."
+msgstr "हा वैध IPv6 पत्ता नाही."
+
+#: .\venv\Lib\site-packages\django\utils\text.py:76
+#, python-format
+msgctxt "String to return when truncating text"
+msgid "%(truncated_text)s…"
+msgstr "%(truncated_text)s…"
+
+#: .\venv\Lib\site-packages\django\utils\text.py:288
+msgid "or"
+msgstr "किंवा"
+
+#. Translators: This string is used as a separator between list elements
+#: .\venv\Lib\site-packages\django\utils\text.py:307
+#: .\venv\Lib\site-packages\django\utils\timesince.py:135
+msgid ", "
+msgstr ", "
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:8
+#, python-format
+msgid "%(num)d year"
+msgid_plural "%(num)d years"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:9
+#, python-format
+msgid "%(num)d month"
+msgid_plural "%(num)d months"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:10
+#, python-format
+msgid "%(num)d week"
+msgid_plural "%(num)d weeks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:11
+#, python-format
+msgid "%(num)d day"
+msgid_plural "%(num)d days"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:12
+#, python-format
+msgid "%(num)d hour"
+msgid_plural "%(num)d hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:13
+#, python-format
+msgid "%(num)d minute"
+msgid_plural "%(num)d minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:29
+msgid "Forbidden"
+msgstr "निषिद्ध"
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:30
+msgid "CSRF verification failed. Request aborted."
+msgstr "CSRF पडताळणी अयशस्वी. विनंती रद्द केली."
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:34
+msgid ""
+"You are seeing this message because this HTTPS site requires a “Referer "
+"header” to be sent by your web browser, but none was sent. This header is "
+"required for security reasons, to ensure that your browser is not being "
+"hijacked by third parties."
+msgstr ""
+"तुम्हाला हा मेसेज दिसत आहे कारण या HTTPS साइटला तुमच्या वेब ब्राउझरद्वारे "
+"\"रेफरर हेडर\" पाठवण्याची आवश्यकता आहे, परंतु कोणीही पाठवले नाही. तुमचा "
+"ब्राउझर तृतीय पक्षांकडून हायजॅक केला जात नाही याची खात्री करण्यासाठी "
+"सुरक्षिततेच्या कारणांसाठी हे शीर्षलेख आवश्यक आहे."
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:40
+msgid ""
+"If you have configured your browser to disable “Referer” headers, please re-"
+"enable them, at least for this site, or for HTTPS connections, or for “same-"
+"origin” requests."
+msgstr ""
+"तुम्ही तुमचा ब्राउझर “रेफरर” हेडर अक्षम करण्यासाठी कॉन्फिगर केले असल्यास, "
+"कृपया ते पुन्हा-सक्षम करा, किमान या साइटसाठी किंवा HTTPS कनेक्शनसाठी किंवा "
+"“समान-मूळ” विनंत्यांसाठी."
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:45
+msgid ""
+"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or"
+" including the “Referrer-Policy: no-referrer” header, please remove them. "
+"The CSRF protection requires the “Referer” header to do strict referer "
+"checking. If you’re concerned about privacy, use alternatives like <a "
+"rel=\"noreferrer\" …> for links to third-party sites."
+msgstr ""
+"तुम्ही <meta name=\"referrer\" content=\"no-referrer\"> टॅग वापरत असल्यास "
+"किंवा “रेफरर-पॉलिसी: नो-रेफरर” हेडर समाविष्ट करत असल्यास, कृपया ते काढून "
+"टाका. CSRF संरक्षणासाठी कठोर संदर्भ तपासणी करण्यासाठी \"रेफरर\" हेडर आवश्यक "
+"आहे. तुम्हाला गोपनीयतेबद्दल काळजी वाटत असल्यास, तृतीय-पक्ष साइटच्या लिंकसाठी"
+" <a rel=\"noreferrer\" …> सारखे पर्याय वापरा."
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:54
+msgid ""
+"You are seeing this message because this site requires a CSRF cookie when "
+"submitting forms. This cookie is required for security reasons, to ensure "
+"that your browser is not being hijacked by third parties."
+msgstr ""
+"तुम्हाला हा संदेश दिसत आहे कारण फॉर्म सबमिट करताना या साइटला CSRF कुकी "
+"आवश्यक आहे. तुमचा ब्राउझर तृतीय पक्षांद्वारे अपहृत केला जात नाही याची खात्री"
+" करण्यासाठी सुरक्षिततेच्या कारणांसाठी ही कुकी आवश्यक आहे."
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:60
+msgid ""
+"If you have configured your browser to disable cookies, please re-enable "
+"them, at least for this site, or for “same-origin” requests."
+msgstr ""
+"जर तुम्ही तुमचा ब्राउझर कुकीज अक्षम करण्यासाठी कॉन्फिगर केला असेल, तर कृपया "
+"त्या पुन्हा-सक्षम करा, किमान या साइटसाठी किंवा \"समान-मूळ\" विनंत्यांसाठी."
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:66
+msgid "More information is available with DEBUG=True."
+msgstr "अधिक माहिती DEBUG=True वर उपलब्ध आहे."
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:44
+msgid "No year specified"
+msgstr "कोणतेही वर्ष नमूद केलेले नाही"
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:64
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:115
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:214
+msgid "Date out of range"
+msgstr "श्रेणीच्या बाहेरची तारीख"
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:94
+msgid "No month specified"
+msgstr "कोणताही महिना निर्दिष्ट केलेला नाही"
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:147
+msgid "No day specified"
+msgstr "कोणताही दिवस निर्दिष्ट नाही"
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:194
+msgid "No week specified"
+msgstr "कोणताही आठवडा नमूद केलेला नाही"
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:353
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:384
+#, python-format
+msgid "No %(verbose_name_plural)s available"
+msgstr "कोणतेही %(verbose_name_plural)s उपलब्ध नाहीत"
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:680
+#, python-format
+msgid ""
+"Future %(verbose_name_plural)s not available because "
+"%(class_name)s.allow_future is False."
+msgstr ""
+"भविष्यातील %(verbose_name_plural)s उपलब्ध नाही कारण "
+"%(class_name)s.allow_future असत्य आहे."
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:720
+#, python-format
+msgid "Invalid date string “%(datestr)s” given format “%(format)s”"
+msgstr "अवैध तारीख स्ट्रिंग “%(datestr)s” दिलेले स्वरूप “%(स्वरूप)s”"
+
+#: .\venv\Lib\site-packages\django\views\generic\detail.py:56
+#, python-format
+msgid "No %(verbose_name)s found matching the query"
+msgstr "क्वेरीशी जुळणारे कोणतेही %(verbose_name) आढळले नाहीत"
+
+#: .\venv\Lib\site-packages\django\views\generic\list.py:70
+msgid "Page is not “last”, nor can it be converted to an int."
+msgstr "पृष्ठ \"अंतिम\" नाही किंवा ते इंटमध्ये रूपांतरित केले जाऊ शकत नाही."
+
+#: .\venv\Lib\site-packages\django\views\generic\list.py:77
+#, python-format
+msgid "Invalid page (%(page_number)s): %(message)s"
+msgstr "अवैध पृष्ठ (%(page_number)s): %(संदेश)s"
+
+#: .\venv\Lib\site-packages\django\views\generic\list.py:173
+#, python-format
+msgid "Empty list and “%(class_name)s.allow_empty” is False."
+msgstr "रिक्त यादी आणि “%(class_name)s.allow_empty” असत्य आहे."
+
+#: .\venv\Lib\site-packages\django\views\static.py:49
+msgid "Directory indexes are not allowed here."
+msgstr "डिरेक्टरी इंडेक्सेस येथे परवानगी नाही."
+
+#: .\venv\Lib\site-packages\django\views\static.py:51
+#, python-format
+msgid "“%(path)s” does not exist"
+msgstr "“%(पथ)s” अस्तित्वात नाही"
+
+#: .\venv\Lib\site-packages\django\views\static.py:68
+#: .\venv\Lib\site-packages\django\views\templates\directory_index.html:8
+#: .\venv\Lib\site-packages\django\views\templates\directory_index.html:11
+#, python-format
+msgid "Index of %(directory)s"
+msgstr "% (डिरेक्टरी) चे निर्देशांक"
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:7
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:204
+msgid "The install worked successfully! Congratulations!"
+msgstr "इंस्टॉलेशन यशस्वीरित्या कार्य केले! अभिनंदन!"
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:206
+#, python-format
+msgid ""
+"View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
+"target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
+msgstr ""
+"Django %(version) साठी <a "
+"href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
+"target=\"_blank\" rel=\"noopener\">रिलीझ नोट्स</a> पहा"
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:208
+#, python-format
+msgid ""
+"You are seeing this page because <a "
+"href=\"https://docs.djangoproject.com/en/%(version)s/ref/settings/#debug\" "
+"target=\"_blank\" rel=\"noopener\">DEBUG=True</a> is in your settings file "
+"and you have not configured any URLs."
+msgstr ""
+"तुम्हाला हे पृष्ठ दिसत आहे कारण <a "
+"href=\"https://docs.djangoproject.com/en/%(version)s/ref/settings/#debug\" "
+"target=\"_blank\" rel=\"noopener\">DEBUG=True</a> तुमच्या सेटिंग्ज फाइलमध्ये"
+" आहे आणि तुम्ही कोणतीही URL कॉन्फिगर केलेली नाही."
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:217
+msgid "Django Documentation"
+msgstr "जँगो दस्तऐवजीकरण"
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:218
+msgid "Topics, references, &amp; how-to’s"
+msgstr "विषय, संदर्भ, &amp; कसे करावे"
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:226
+msgid "Tutorial: A Polling App"
+msgstr "ट्यूटोरियल: एक मतदान ॲप"
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:227
+msgid "Get started with Django"
+msgstr "Django सह प्रारंभ करा"
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:235
+msgid "Django Community"
+msgstr "जँगो समुदाय"
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:236
+msgid "Connect, get help, or contribute"
+msgstr "कनेक्ट करा, मदत मिळवा किंवा योगदान द्या"

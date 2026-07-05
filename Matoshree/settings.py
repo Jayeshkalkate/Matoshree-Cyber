@@ -122,7 +122,7 @@ CLOUDINARY_STORAGE = {
 
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
-MEDIA_URL = "/media/"
+# MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 # ---------------------------------------------------
@@ -160,8 +160,6 @@ LANGUAGES = [
     ('en', 'English'),
     ('mr', 'Marathi'),
     ('hi', 'Hindi'),
-    ('gu', 'Gujarati'),
-    ('ah', 'Ahirani'),
 ]
 
 # ---------- Path where translation files will be stored ----------

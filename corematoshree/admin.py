@@ -1,32 +1,13 @@
 from django.contrib import admin
 from django.shortcuts import redirect
 from django.contrib import messages
-from .models import (
-    Appointment,
-    Contact,
-    Review,
-    Announcement,
-    Gallery,
-    Service,
-    ServiceCharge,
-    RequiredDocument,
-    DownloadForm,
-    GovernmentScheme,
-    JobNotification,
-    FAQ,
-    BusinessInfo,
-)
-from django.contrib.auth.admin import UserAdmin
-from .models import User
-
-from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from .models import (
     Appointment, Contact, Review, Announcement, Gallery,
     Service, ServiceCharge, RequiredDocument, DownloadForm,
     GovernmentScheme, JobNotification, FAQ, BusinessInfo,
-    User,  # custom User model
+    User,
 )
 
 
