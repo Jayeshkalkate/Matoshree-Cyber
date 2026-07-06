@@ -1,7 +1,6 @@
-{% extends "base.html" %}
-{% load i18n %}
-{% load static %}
-
+{% extends "base.html" %} 
+{% load i18n %} 
+{% load static %} 
 {% block extra_head %}
 <!-- Homepage-specific styles -->
 <style>
@@ -227,14 +226,17 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 24px;
   }
+
   .service-card {
-    background: var(--white);
-    border-radius: var(--radius);
-    padding: 28px 20px 24px;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-sm);
+    padding: 18px 12px;
     text-align: center;
-    box-shadow: var(--shadow-sm);
     transition: var(--transition);
-    border: 1px solid rgba(0, 0, 0, 0.04);
+    color: var(--white);
+    padding: 28px 20px 24px;
     position: relative;
     overflow: hidden;
   }
@@ -704,9 +706,7 @@
     box-shadow: 0 4px 16px rgba(0, 212, 255, 0.3);
   }
 </style>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <!-- ===== HERO ===== -->
 <section class="hero" id="home">
   <div class="container">
@@ -716,17 +716,22 @@
         <span>{% trans "Affordable" %}</span> {% trans "Cyber Services" %}
       </h1>
       <p>
-        {% blocktrans with name=business.business_name|default:"CyberTech Digital Services" %}
-          Welcome to {{ name }}! We provide fast, reliable, and affordable online services such as document printing, online applications, Aadhaar updates, PAN card services, photocopying, and more. Committed to serving you with quality and convenience.
-        {% endblocktrans %}
+        {% blocktrans with name=business.business_name|default:"Matoshree Cyber
+        Cafe" %} Welcome to {{ name }}! We provide fast, reliable, and
+        affordable online services such as document printing, online
+        applications, Aadhaar updates, PAN card services, photocopying, and
+        more. Committed to serving you with quality and convenience. {%
+        endblocktrans %}
       </p>
       <div class="hero-buttons">
         <!-- "Explore Services" now links to the full Services page -->
         <a href="{% url 'services' %}" class="btn-primary">
-          <i class="fas fa-arrow-right" style="margin-right: 10px"></i> {% trans "Explore Services" %}
+          <i class="fas fa-arrow-right" style="margin-right: 10px"></i> {% trans
+          "Explore Services" %}
         </a>
         <a href="{% url 'contact' %}" class="btn-primary">
-          <i class="fas fa-phone" style="margin-right: 10px"></i> {% trans "Contact Us" %}
+          <i class="fas fa-phone" style="margin-right: 10px"></i> {% trans
+          "Contact Us" %}
         </a>
       </div>
     </div>
@@ -735,7 +740,8 @@
         <i class="fas fa-file-alt"></i><span>{% trans "Online Forms" %}</span>
       </div>
       <div class="hero-service-item">
-        <i class="fas fa-id-card"></i><span>{% trans "Aadhaar Services" %}</span>
+        <i class="fas fa-id-card"></i
+        ><span>{% trans "Aadhaar Services" %}</span>
       </div>
       <div class="hero-service-item">
         <i class="fas fa-credit-card"></i><span>{% trans "PAN Card" %}</span>
@@ -744,7 +750,8 @@
         <i class="fas fa-passport"></i><span>{% trans "Passport" %}</span>
       </div>
       <div class="hero-service-item">
-        <i class="fas fa-print"></i><span>{% trans "Printing &amp; Scan" %}</span>
+        <i class="fas fa-print"></i
+        ><span>{% trans "Printing &amp; Scan" %}</span>
       </div>
       <div class="hero-service-item">
         <i class="fas fa-file-pdf"></i><span>{% trans "Lamination" %}</span>
@@ -763,7 +770,9 @@
       </h2>
       <div class="tagline">{% trans "Your One-Stop Digital Service Hub" %}</div>
       <p>
-        {{ business.welcome_message|default:_("We are a trusted cyber service provider offering a wide range of digital solutions to individuals and businesses.") }}
+        {{ business.welcome_message|default:_("We are a trusted cyber service
+        provider offering a wide range of digital solutions to individuals and
+        businesses.") }}
       </p>
       <div class="welcome-stats">
         <div class="stat">
@@ -784,45 +793,14 @@
       <i class="fas fa-shield-alt"></i>
       <h3>{% trans "Trusted &amp; Secure" %}</h3>
       <p>
-        {% trans "Your data is safe with us. Professional, confidential, and reliable service every time." %}
+        {% trans "Your data is safe with us. Professional, confidential, and
+        reliable service every time." %}
       </p>
     </div>
   </div>
 </section>
-
-<!-- ===== SERVICES ===== -->
-<section class="services" id="services">
-  <div class="container">
-    <div class="section-header">
-      <h2>{% trans "Our" %} <span>{% trans "Services" %}</span></h2>
-      <p>
-        {% trans "Comprehensive digital solutions tailored to your needs" %}
-      </p>
-    </div>
-    <div class="services-grid">
-      {% for service in services %}
-      <div class="service-card">
-        <div class="icon">
-          <i class="fas fa-{{ service.icon|default:'cog' }}"></i>
-        </div>
-        <h3>{{ service.name }}</h3>
-        <p>{{ service.description }}</p>
-      </div>
-      {% empty %}
-      <p style="grid-column: 1/-1; text-align: center; padding: 40px">
-        {% trans "No services available." %}
-      </p>
-      {% endfor %}
-    </div>
-    <!-- View All Services button -->
-    <div class="view-all-wrap">
-      <a href="{% url 'services' %}" class="btn-outline">
-        {% trans "View All Services" %} <i class="fas fa-arrow-right"></i>
-      </a>
-    </div>
-  </div>
-</section>
-
+<br />
+<hr />
 <!-- ===== GALLERY ===== -->
 <section class="gallery" id="gallery">
   <div class="container">
@@ -847,7 +825,8 @@
     </div>
   </div>
 </section>
-
+<br />
+<hr />
 <!-- ===== REVIEWS ===== -->
 <section class="reviews" id="reviews">
   <div class="container">
@@ -875,19 +854,19 @@
     </div>
   </div>
 </section>
-
+<br />
+<hr />
 <!-- ===== TIMINGS & CONTACT ===== -->
 <section class="info-row" id="contact">
   <div class="container">
     <div class="timings-card">
       <h3><i class="fas fa-clock"></i> {% trans "Business Timings" %}</h3>
-      {% if business.business_hours %}
-        {{ business.business_hours|linebreaks }}
+      {% if business.business_hours %} {{ business.business_hours|linebreaks }}
       {% else %}
-        <p>
-          {% trans "Monday – Saturday: 9:00 AM – 8:00 PM" %}<br />
-          {% trans "Sunday: 10:00 AM – 2:00 PM" %}
-        </p>
+      <p>
+        {% trans "Monday – Saturday: 9:00 AM – 8:00 PM" %}<br />
+        {% trans "Sunday: 10:00 AM – 2:00 PM" %}
+      </p>
       {% endif %}
     </div>
     <div class="contact-card">
@@ -895,31 +874,45 @@
       <div class="phone">
         <i class="fas fa-mobile-alt"></i>
         <a href="tel:{{ business.phone|default:'+919876543210' }}"
-          >{{ business.phone|default:'+91 98765 43210' }}</a>
+          >{{ business.phone|default:'+91 98765 43210' }}</a
+        >
       </div>
       <div class="sub">
         {% trans "Call us for inquiries, support, or to place an order." %}
       </div>
       <div class="contact-buttons">
-        <a href="tel:{{ business.phone|default:'+919876543210' }}" class="btn-primary" style="padding: 12px 28px; font-size: 0.95rem">
-          <i class="fas fa-phone" style="margin-right: 8px"></i> {% trans "Call Now" %}
+        <a
+          href="tel:{{ business.phone|default:'+919876543210' }}"
+          class="btn-primary"
+          style="padding: 12px 28px; font-size: 0.95rem"
+        >
+          <i class="fas fa-phone" style="margin-right: 8px"></i> {% trans "Call
+          Now" %}
         </a>
-        <a href="https://wa.me/{{ business.whatsapp|default:'919876543210'|cut:'+' }}?text=Hello%2C%20I%20would%20like%20to%20know%20about%20your%20services." target="_blank" class="btn-whatsapp" style="padding: 12px 28px; font-size: 0.95rem">
+        <a
+          href="https://wa.me/{{ business.whatsapp|default:'919876543210'|cut:'+' }}?text=Hello%2C%20I%20would%20like%20to%20know%20about%20your%20services."
+          target="_blank"
+          class="btn-whatsapp"
+          style="padding: 12px 28px; font-size: 0.95rem"
+        >
           <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
         </a>
       </div>
     </div>
   </div>
 </section>
-
+<br />
+<hr />
 <!-- ===== ANNOUNCEMENTS ===== -->
 <section class="announcements" id="announcements">
   <div class="container">
     <div class="section-header">
       <h2>{% trans "Recent" %} <span>{% trans "Announcements" %}</span></h2>
       <p>
-        {% trans "Stay updated with the latest news, offers, and important notices" %}
+        {% trans "Stay updated with the latest news, offers, and important
+        notices" %}
       </p>
+      <br /><br />
     </div>
     <div class="announcements-grid">
       {% for announcement in announcements %}
@@ -942,7 +935,8 @@
     </div>
   </div>
 </section>
-
+<br />
+<hr />
 <!-- ===== LOCATION & MAP ===== -->
 <section class="location" id="location">
   <div class="container">
@@ -951,24 +945,34 @@
       <div class="address">
         <p>
           <i class="fas fa-map-marker-alt"></i>
-          {{ business.business_name|default:"CyberTech Digital Services" }}
+          {{ business.business_name|default:"Matoshree Cyber Cafe" }}
         </p>
         <p style="padding-left: 28px">
-          {{ business.address|linebreaksbr|default:"Shop No. 12, Main Road, Pune, Maharashtra – 411001" }}
+          {{ business.address|linebreaksbr|default:"देऊबाई कॉम्प्लेक्स, साईबाबा
+          चौक, Ranale, Maharashtra 425411" }}
         </p>
       </div>
-      <a href="https://maps.google.com/?q={{ business.address|urlencode|default:'CyberTech+Digital+Services+Pune' }}" target="_blank" class="btn-primary" style="padding: 12px 32px; font-size: 0.95rem">
-        <i class="fas fa-directions" style="margin-right: 10px"></i> {% trans "Get Directions" %}
+      <a
+        href="https://maps.google.com/?q={{ business.address|urlencode|default:'CyberTech+Digital+Services+Pune' }}"
+        target="_blank"
+        class="btn-primary"
+        style="padding: 12px 32px; font-size: 0.95rem"
+      >
+        <i class="fas fa-directions" style="margin-right: 10px"></i> {% trans
+        "Get Directions" %}
       </a>
     </div>
     <div class="map-container">
-      {{ business.google_map|safe|default:'<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.2613173278896!2d73.8567444!3d18.5204303!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTjCsDMxJzEzLjUiTiA3M8KwNTEnMjQuMyJF!5e0!3m2!1sen!2sin!4v1647527588784!5m2!1sen!2sin" allowfullscreen="" loading="lazy"></iframe>' }}
+      {{ business.google_map|safe|default:'<iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.2613173278896!2d73.8567444!3d18.5204303!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTjCsDMxJzEzLjUiTiA3M8KwNTEnMjQuMyJF!5e0!3m2!1sen!2sin!4v1647527588784!5m2!1sen!2sin"
+        allowfullscreen=""
+        loading="lazy"
+      ></iframe
+      >' }}
     </div>
   </div>
 </section>
-{% endblock %}
-
-{% block extra_scripts %}
+{% endblock %} {% block extra_scripts %}
 <script>
   // ===== HAMBURGER TOGGLE (if not already in base) =====
   document.getElementById("hamburger").addEventListener("click", function () {

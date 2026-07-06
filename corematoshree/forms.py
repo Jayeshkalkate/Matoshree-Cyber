@@ -204,7 +204,10 @@ class ReviewForm(forms.ModelForm):
 class ServiceForm(forms.ModelForm):
     class Meta:
         model = Service
-        fields = ['name', 'category', 'description', 'active', 'icon']
+        fields = ['name', 'category', 'description', 'active', 'icon', 'icon_color']
+        widgets = {
+            'icon_color': forms.TextInput(attrs={'type': 'color', 'class': 'form-control'}),
+        }
         labels = {
             'name': _('Name'),
             'category': _('Category'),

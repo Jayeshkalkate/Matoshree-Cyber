@@ -226,7 +226,7 @@
                 <td>{{ service.category }}</td>
                 <td><span class="badge-status {% if service.active %}confirmed{% else %}cancelled{% endif %}">{{ service.active|yesno:_("Active,Inactive") }}</span></td>
                 <td>
-                  <button class="btn-primary btn-sm" onclick="editService('{{ service.id }}', '{{ service.name|escapejs }}', '{{ service.category|escapejs }}', '{{ service.description|escapejs }}', '{{ service.active|yesno:"true,false" }}', '{{ service.icon|escapejs }}')"><i class="fas fa-edit"></i></button>
+                  <button class="btn-primary btn-sm" onclick="editService('{{ service.id }}', '{{ service.name|escapejs }}', '{{ service.category|escapejs }}', '{{ service.description|escapejs }}', '{{ service.active|yesno:"true,false" }}', '{{ service.icon|escapejs }}', '{{ service.icon_color|default:"#00d4ff" }}')"><i class="fas fa-edit"></i></button>
                   <form method="post" style="display:inline;">
                     {% csrf_token %}
                     <input type="hidden" name="action" value="delete">
@@ -275,6 +275,10 @@
             <div>
               <label>{% trans "Icon" %}</label>
               <input type="text" name="icon" id="editSvcIcon" placeholder="{% trans "e.g. fa-print" %}">
+            </div>
+            <div>
+              <label>{% trans "Icon Color" %}</label>
+              <input type="color" name="icon_color" id="editSvcColor" value="#00d4ff">
             </div>
             <div class="form-actions">
               <button type="button" class="btn-outline" onclick="document.getElementById('editServiceForm').style.display='none'">{% trans "Cancel" %}</button>
@@ -832,14 +836,15 @@
           document.getElementById("sidebar").classList.toggle("open");
         });
 
-        // ---- Edit Service ----
-        window.editService = function(id, name, category, description, active, icon) {
+        // ---- Edit Service (fixed: added 'color' parameter) ----
+        window.editService = function(id, name, category, description, active, icon, color) {
           document.getElementById("editServiceId").value = id;
           document.getElementById("editSvcName").value = name;
           document.getElementById("editSvcCategory").value = category;
           document.getElementById("editSvcDesc").value = description;
           document.getElementById("editSvcStatus").value = active === 'true' ? 'true' : 'false';
           document.getElementById("editSvcIcon").value = icon || '';
+          document.getElementById("editSvcColor").value = color || '#00d4ff';
           document.getElementById("editServiceForm").style.display = "grid";
           document.getElementById("editServiceForm").scrollIntoView({ behavior: 'smooth' });
         };

@@ -1,160 +1,448 @@
-{% extends "base.html" %}
-{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login – Cyber Café</title>
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ---------- reset & base ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-{% block title %}{% trans "Login – Cyber Café" %}{% endblock %}
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
 
-{% block content %}
-<div class="container py-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
-      <div class="card shadow-lg border-0 rounded-4">
-        <div class="card-body p-4 p-md-5">
-          <div class="text-center mb-4">
-            <i class="fas fa-sign-in-alt fa-3x text-primary mb-3"></i>
-            <h2 class="fw-bold">{% trans "Welcome Back" %}</h2>
-            <p class="text-muted">{% trans "Sign in to your account" %}</p>
-          </div>
+        /* ---------- card ---------- */
+        .login-card {
+            background: #ffffff;
+            border-radius: 1.25rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.04);
+            padding: 2.5rem 2.5rem 2.25rem;
+            width: 100%;
+            max-width: 440px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
 
-          {% if form.non_field_errors %}
-          <div class="alert alert-danger" role="alert">
-            {% for error in form.non_field_errors %}{{ error }}{% endfor %}
-          </div>
-          {% endif %}
+        .login-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 28px 72px rgba(0, 0, 0, 0.10), 0 8px 28px rgba(0, 0, 0, 0.04);
+        }
 
-          <form method="post" novalidate>
-            {% csrf_token %}
-            {% for field in form %}
-            <div class="mb-3">
-              <label for="{{ field.id_for_label }}" class="form-label fw-semibold">
-                {{ field.label }}
-                {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
-              </label>
+        /* ---------- header ---------- */
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
 
-              {% if field.field.widget.input_type == 'password' %}
-              <div class="input-group">
-                {{ field }}
-                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="{{ field.id_for_label }}">
-                  <i class="fas fa-eye"></i>
-                </button>
-              </div>
-              {% else %}
-                {{ field }}
-              {% endif %}
+        .login-header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #0b1b33;
+            margin-bottom: 0.25rem;
+        }
 
-              {% if field.help_text %}
-                <small class="form-text text-muted">{{ field.help_text }}</small>
-              {% endif %}
-              {% if field.errors %}
-                <div class="invalid-feedback d-block">
-                  {% for error in field.errors %}{{ error }}{% endfor %}
-                </div>
-              {% endif %}
-            </div>
-            {% endfor %}
+        .login-header p {
+            font-size: 0.95rem;
+            color: #6b7a8f;
+            margin: 0;
+        }
 
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="remember" id="remember" />
-                <label class="form-check-label" for="remember">{% trans "Remember me" %}</label>
-              </div>
-              <a href="{% url 'password_change' %}" class="text-decoration-none small">{% trans "Forgot password?" %}</a>
-            </div>
+        /* ---------- form ---------- */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
 
-            <div class="d-grid gap-2">
-              <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-semibold">
-                <i class="fas fa-arrow-right-to-bracket me-2"></i> {% trans "Login" %}
-              </button>
-            </div>
-          </form>
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #1e2a3a;
+            margin-bottom: 0.4rem;
+        }
 
-          <hr class="my-4" />
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 0.625rem;
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+        }
 
-          <p class="text-center mb-0">
-            {% trans "Don't have an account?" %}
-            <a href="{% url 'register' %}" class="fw-semibold text-decoration-none">{% trans "Register now" %}</a>
-          </p>
+        .input-wrapper:focus-within {
+            border-color: #0a66c2;
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(10, 102, 194, 0.08);
+        }
+
+        .input-wrapper .input-icon {
+            flex-shrink: 0;
+            width: 2.75rem;
+            text-align: center;
+            color: #8b9aaf;
+            font-size: 1rem;
+            transition: color 0.2s;
+        }
+
+        .input-wrapper:focus-within .input-icon {
+            color: #0a66c2;
+        }
+
+        .input-wrapper input {
+            flex: 1;
+            padding: 0.7rem 0.75rem 0.7rem 0;
+            border: none;
+            background: transparent;
+            font-size: 0.95rem;
+            color: #0b1b33;
+            outline: none;
+            min-width: 0;
+            width: 100%;
+        }
+
+        .input-wrapper input::placeholder {
+            color: #a0b3c9;
+        }
+
+        .input-wrapper .toggle-password {
+            flex-shrink: 0;
+            width: 2.75rem;
+            background: transparent;
+            border: none;
+            color: #8b9aaf;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            transition: color 0.2s;
+        }
+
+        .input-wrapper .toggle-password:hover {
+            color: #0b1b33;
+        }
+
+        /* ---------- row: remember + forgot ---------- */
+        .form-actions-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #1e2a3a;
+            cursor: pointer;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 1.1rem;
+            height: 1.1rem;
+            accent-color: #0a66c2;
+            border-radius: 0.25rem;
+            border: 1.5px solid #d0d8e3;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .checkbox-wrapper input[type="checkbox"]:checked {
+            border-color: #0a66c2;
+        }
+
+        .forgot-link {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #0a66c2;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .forgot-link:hover {
+            color: #084a8a;
+            text-decoration: underline;
+        }
+
+        /* ---------- submit button ---------- */
+        .btn-primary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.8rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffffff;
+            background: #0a66c2;
+            border: none;
+            border-radius: 2.5rem;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(10, 102, 194, 0.25);
+        }
+
+        .btn-primary:hover {
+            background: #084a8a;
+            box-shadow: 0 6px 20px rgba(10, 102, 194, 0.30);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+
+        /* ---------- divider ---------- */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1.75rem 0 1.5rem;
+            color: #a0b3c9;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e2e8f0;
+        }
+
+        /* ---------- social buttons ---------- */
+        .social-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .btn-social {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.7rem 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #1e2a3a;
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 2.5rem;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-social:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .btn-social i {
+            font-size: 1.1rem;
+        }
+
+        .btn-social .fa-google {
+            color: #ea4335;
+        }
+        .btn-social .fa-github {
+            color: #1b1f23;
+        }
+
+        /* ---------- sign up link ---------- */
+        .signup-text {
+            text-align: center;
+            font-size: 0.95rem;
+            color: #1e2a3a;
+            margin: 0;
+        }
+
+        .signup-text a {
+            font-weight: 600;
+            color: #0a66c2;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .signup-text a:hover {
+            color: #084a8a;
+            text-decoration: underline;
+        }
+
+        /* ---------- error alerts ---------- */
+        .alert {
+            padding: 0.75rem 1rem;
+            border-radius: 0.625rem;
+            font-size: 0.875rem;
+            margin-bottom: 1.25rem;
+            border: 1px solid transparent;
+        }
+
+        .alert-danger {
+            background: #fef2f2;
+            border-color: #fecaca;
+            color: #b91c1c;
+        }
+
+        .alert-success {
+            background: #ecfdf5;
+            border-color: #a7f3d0;
+            color: #065f46;
+        }
+
+        .invalid-feedback {
+            font-size: 0.8rem;
+            color: #b91c1c;
+            margin-top: 0.3rem;
+        }
+
+        .form-text {
+            font-size: 0.8rem;
+            color: #6b7a8f;
+            margin-top: 0.3rem;
+            display: block;
+        }
+
+        /* ---------- responsive ---------- */
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 1.75rem 1.25rem;
+            }
+
+            .login-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .social-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+
+        <!-- header -->
+        <div class="login-header">
+            <h1>Welcome Back</h1>
+            <p>Sign in to your account</p>
         </div>
-      </div>
+
+        <!-- Display non-field errors (e.g. invalid credentials) -->
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger" role="alert">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- form -->
+        <form method="post" novalidate>
+            {% csrf_token %}
+
+            <!-- username field (was "email", now corrected) -->
+            <div class="form-group">
+                <label for="id_username">Username <span class="text-danger">*</span></label>
+                <div class="input-wrapper">
+                    <span class="input-icon"><i class="fas fa-user"></i></span>
+                    <input type="text" name="username" id="id_username" placeholder="Enter your username" required />
+                </div>
+                {% if form.username.errors %}
+                    <div class="invalid-feedback d-block">
+                        {% for error in form.username.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- password -->
+            <div class="form-group">
+                <label for="id_password">Password <span class="text-danger">*</span></label>
+                <div class="input-wrapper">
+                    <span class="input-icon"><i class="fas fa-lock"></i></span>
+                    <input type="password" name="password" id="id_password" placeholder="••••••••" required />
+                    <button class="toggle-password" type="button" data-target="id_password" aria-label="Toggle password visibility">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                {% if form.password.errors %}
+                    <div class="invalid-feedback d-block">
+                        {% for error in form.password.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- remember + forgot -->
+            <div class="form-actions-row">
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" name="remember" id="remember" />
+                    Remember me
+                </label>
+                <a href="#" class="forgot-link">Forgot password?</a>
+            </div>
+
+            <!-- submit -->
+            <button type="submit" class="btn-primary">
+                <i class="fas fa-arrow-right-to-bracket"></i> Sign In
+            </button>
+        </form>
+
+        <br><hr><br>
+
+        <!-- sign up -->
+        <p class="signup-text">
+            Don't have an account? <a href="{% url 'register' %}">Sign up</a>
+        </p>
     </div>
-  </div>
-</div>
 
-<style>
-  .card {
-    background: #ffffff;
-    transition: transform 0.2s ease;
-  }
-  .card:hover {
-    transform: translateY(-2px);
-  }
+    <script>
+        // ---------- toggle password visibility ----------
+        document.querySelectorAll('.toggle-password').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const input = document.getElementById(targetId);
+                if (!input) return;
+                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                input.setAttribute('type', type);
+                const icon = this.querySelector('i');
+                icon.classList.toggle('fa-eye');
+                icon.classList.toggle('fa-eye-slash');
+            });
+        });
+    </script>
 
-  input[type="text"],
-  input[type="email"],
-  input[type="password"] {
-    width: 100%;
-    padding: 0.6rem 1rem;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-
-  input[type="text"]:focus,
-  input[type="email"]:focus,
-  input[type="password"]:focus {
-    border-color: #0a66c2;
-    box-shadow: 0 0 0 4px rgba(10, 102, 194, 0.1);
-    outline: none;
-  }
-
-  .input-group .toggle-password {
-    border-left: none;
-    border-radius: 0 0.5rem 0.5rem 0;
-    background: #f8fafc;
-    border-color: #e2e8f0;
-    color: #64748b;
-  }
-  .input-group .toggle-password:hover {
-    background: #e9edf2;
-    color: #0b1b33;
-  }
-  .input-group input {
-    border-radius: 0.5rem 0 0 0.5rem;
-    border-right: none;
-  }
-
-  .invalid-feedback {
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-  }
-  .form-text {
-    font-size: 0.8rem;
-    margin-top: 0.25rem;
-  }
-  .form-check-input:checked {
-    background-color: #0a66c2;
-    border-color: #0a66c2;
-  }
-
-  @media (max-width: 576px) {
-    .card-body {
-      padding: 1.5rem !important;
-    }
-  }
-</style>
-
-<script>
-  document.querySelectorAll(".toggle-password").forEach((button) => {
-    button.addEventListener("click", function () {
-      const targetId = this.getAttribute("data-target");
-      const input = document.getElementById(targetId);
-      if (input) {
-        const type = input.getAttribute("type") === "password" ? "text" : "password";
-        input.setAttribute("type", type);
-        this.querySelector("i").classList.toggle("fa-eye");
-        this.querySelector("i").classList.toggle("fa-eye-slash");
-      }
-    });
-  });
-</script>
-{% endblock %}
+</body>
+</html>

@@ -534,7 +534,7 @@ msgid "Trusted Cyber Café &amp; Digital Service Center"
 msgstr "विश्वसनीय सायबर कॅफे &amp; डिजिटल सेवा केंद्र"
 
 #: .\templates\aboutus.html:726
-msgid "CyberTech Digital Services"
+msgid "Matoshree Cyber Cafe"
 msgstr "सायबरटेक डिजिटल सेवा"
 
 #: .\templates\aboutus.html:741

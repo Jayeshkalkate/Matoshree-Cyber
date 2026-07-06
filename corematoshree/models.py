@@ -67,6 +67,12 @@ class Service(models.Model):
         default="cog",
         help_text=_("Font Awesome icon class (e.g., 'fa-print')")
     )
+    icon_color = models.CharField(
+        _("Icon Color"),
+        max_length=7,
+        default='#00d4ff',
+        help_text=_("Hex color for the icon circle (e.g., #ff6b35)")
+    )
 
     def __str__(self):
         return self.name
