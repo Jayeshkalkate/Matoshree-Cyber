@@ -6,4 +6,9 @@ def business_info(request):
         info = BusinessInfo.get_instance()   # uses singleton logic
     except OperationalError:
         info = None
-    return {'business_info': info}
+    # Return both 'business' and 'business_info'
+    return {
+        'business': info,
+        'business_info': info,
+    }
+    
