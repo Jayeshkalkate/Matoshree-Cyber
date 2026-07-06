@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-05 17:44+0530\n"
+"POT-Creation-Date: 2026-07-06 19:27+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,31 +20,31 @@ msgstr ""
 
 #: .\corematoshree\forms.py:15 .\corematoshree\forms.py:52
 #: .\corematoshree\forms.py:72 .\corematoshree\forms.py:119
-#: .\corematoshree\forms.py:258 .\corematoshree\forms.py:272
-#: .\corematoshree\forms.py:331 .\corematoshree\models.py:95
-#: .\corematoshree\models.py:151 .\corematoshree\models.py:191
-#: .\corematoshree\models.py:480 .\templates\contactus.html:323
+#: .\corematoshree\forms.py:261 .\corematoshree\forms.py:275
+#: .\corematoshree\forms.py:334 .\corematoshree\models.py:101
+#: .\corematoshree\models.py:157 .\corematoshree\models.py:197
+#: .\corematoshree\models.py:486 .\templates\contactus.html:359
 #: .\templates\customer_reviews.html:675
-#: .\templates\superadmindashboard.html:1060
+#: .\templates\superadmindashboard.html:1223
 msgid "Email"
 msgstr "ईमेल"
 
 #: .\corematoshree\forms.py:19 .\corematoshree\forms.py:53
 #: .\corematoshree\forms.py:73 .\corematoshree\forms.py:118
-#: .\corematoshree\forms.py:257 .\corematoshree\forms.py:273
-#: .\corematoshree\forms.py:329 .\corematoshree\models.py:24
-#: .\corematoshree\models.py:90 .\corematoshree\models.py:154
-#: .\corematoshree\models.py:470 .\templates\contactus.html:307
+#: .\corematoshree\forms.py:260 .\corematoshree\forms.py:276
+#: .\corematoshree\forms.py:332 .\corematoshree\models.py:24
+#: .\corematoshree\models.py:96 .\corematoshree\models.py:160
+#: .\corematoshree\models.py:476 .\templates\contactus.html:337
 msgid "Phone"
 msgstr "फ़ोन"
 
 #: .\corematoshree\forms.py:24 .\corematoshree\forms.py:54
-#: .\corematoshree\forms.py:328 .\corematoshree\models.py:29
-#: .\corematoshree\models.py:467 .\templates\contactus.html:297
+#: .\corematoshree\forms.py:331 .\corematoshree\models.py:29
+#: .\corematoshree\models.py:473 .\templates\contactus.html:327
 msgid "Address"
 msgstr "पता"
 
-#: .\corematoshree\forms.py:33 .\templates\superadmindashboard.html:1059
+#: .\corematoshree\forms.py:33 .\templates\superadmindashboard.html:1222
 msgid "Username"
 msgstr "उपयोगकर्ता नाम"
 
@@ -64,38 +64,38 @@ msgstr "पहला नाम"
 msgid "Last Name"
 msgstr "उपनाम"
 
-#: .\corematoshree\forms.py:71 .\corematoshree\forms.py:209
-#: .\corematoshree\forms.py:271 .\corematoshree\models.py:49
-#: .\corematoshree\models.py:147 .\templates\admindashboard.html:218
-#: .\templates\superadmindashboard.html:676
+#: .\corematoshree\forms.py:71 .\corematoshree\forms.py:212
+#: .\corematoshree\forms.py:274 .\corematoshree\models.py:49
+#: .\corematoshree\models.py:153 .\templates\admindashboard.html:220
+#: .\templates\superadmindashboard.html:682
 msgid "Name"
 msgstr "नाम"
 
 #: .\corematoshree\forms.py:74 .\corematoshree\forms.py:92
-#: .\corematoshree\forms.py:274 .\corematoshree\models.py:159
-#: .\templates\contactus.html:277
+#: .\corematoshree\forms.py:277 .\corematoshree\models.py:165
+#: .\templates\contactus.html:293
 msgid "Subject"
 msgstr "विषय"
 
-#: .\corematoshree\forms.py:75 .\corematoshree\forms.py:262
-#: .\corematoshree\forms.py:275 .\corematoshree\models.py:110
-#: .\corematoshree\models.py:163 .\templates\contactus.html:282
+#: .\corematoshree\forms.py:75 .\corematoshree\forms.py:265
+#: .\corematoshree\forms.py:278 .\corematoshree\models.py:116
+#: .\corematoshree\models.py:169 .\templates\contactus.html:301
 msgid "Message"
 msgstr "संदेश"
 
 #: .\corematoshree\forms.py:80 .\corematoshree\forms.py:169
-#: .\corematoshree\forms.py:177 .\templates\contactus.html:262
+#: .\corematoshree\forms.py:177 .\templates\contactus.html:269
 msgid "Your Name"
 msgstr "आपका नाम"
 
 #: .\corematoshree\forms.py:84 .\corematoshree\forms.py:136
 #: .\corematoshree\forms.py:170 .\corematoshree\forms.py:181
-#: .\templates\appointment.html:323 .\templates\contactus.html:267
+#: .\templates\appointment.html:323 .\templates\contactus.html:277
 msgid "Email Address"
 msgstr "मेल पता"
 
 #: .\corematoshree\forms.py:88 .\corematoshree\forms.py:132
-#: .\templates\appointment.html:308 .\templates\contactus.html:272
+#: .\templates\appointment.html:308 .\templates\contactus.html:285
 msgid "Phone Number"
 msgstr "फ़ोन नंबर"
 
@@ -104,31 +104,31 @@ msgid "Write your message..."
 msgstr "अपना संदेश लिखें..."
 
 #: .\corematoshree\forms.py:117 .\corematoshree\forms.py:128
-#: .\corematoshree\forms.py:256 .\corematoshree\models.py:86
+#: .\corematoshree\forms.py:259 .\corematoshree\models.py:92
 #: .\templates\appointment.html:296 .\templates\customer_reviews.html:669
 msgid "Full Name"
 msgstr "पूरा नाम"
 
-#: .\corematoshree\forms.py:120 .\corematoshree\forms.py:259
-#: .\corematoshree\forms.py:297 .\corematoshree\models.py:101
-#: .\corematoshree\models.py:296 .\corematoshree\models.py:318
-#: .\templates\admindashboard.html:306 .\templates\admindashboard.html:336
-#: .\templates\admindashboard.html:477 .\templates\appointment.html:334
+#: .\corematoshree\forms.py:120 .\corematoshree\forms.py:262
+#: .\corematoshree\forms.py:300 .\corematoshree\models.py:107
+#: .\corematoshree\models.py:302 .\corematoshree\models.py:324
+#: .\templates\admindashboard.html:312 .\templates\admindashboard.html:342
+#: .\templates\admindashboard.html:601 .\templates\appointment.html:334
 #: .\templates\required_document.html:207 .\templates\service_charges.html:412
-#: .\templates\service_charges.html:444
-#: .\templates\superadmindashboard.html:766
-#: .\templates\superadmindashboard.html:796
-#: .\templates\superadmindashboard.html:947
+#: .\templates\service_charges.html:444 .\templates\services.html:176
+#: .\templates\superadmindashboard.html:776
+#: .\templates\superadmindashboard.html:806
+#: .\templates\superadmindashboard.html:1075
 msgid "Service"
 msgstr "सेवा"
 
-#: .\corematoshree\forms.py:121 .\corematoshree\forms.py:260
-#: .\corematoshree\models.py:104 .\templates\appointment.html:346
+#: .\corematoshree\forms.py:121 .\corematoshree\forms.py:263
+#: .\corematoshree\models.py:110 .\templates\appointment.html:346
 msgid "Appointment Date"
 msgstr "नियुक्ति तिथि"
 
-#: .\corematoshree\forms.py:122 .\corematoshree\forms.py:261
-#: .\corematoshree\models.py:107 .\templates\appointment.html:358
+#: .\corematoshree\forms.py:122 .\corematoshree\forms.py:264
+#: .\corematoshree\models.py:113 .\templates\appointment.html:358
 msgid "Appointment Time"
 msgstr "नियुक्ति के समय"
 
@@ -140,12 +140,12 @@ msgstr "अतिरिक्त संदेश"
 msgid "Additional Message (Optional)"
 msgstr "अतिरिक्त संदेश (वैकल्पिक)"
 
-#: .\corematoshree\forms.py:171 .\corematoshree\models.py:196
-#: .\corematoshree\models.py:213
+#: .\corematoshree\forms.py:171 .\corematoshree\models.py:202
+#: .\corematoshree\models.py:219
 msgid "Review"
 msgstr "समीक्षा"
 
-#: .\corematoshree\forms.py:172 .\corematoshree\models.py:199
+#: .\corematoshree\forms.py:172 .\corematoshree\models.py:205
 #: .\templates\customer_reviews.html:681
 msgid "Rating"
 msgstr "रेटिंग"
@@ -158,139 +158,163 @@ msgstr "अपना आलेख लिखो..."
 msgid "Rating must be between 1 and 5."
 msgstr "रेटिंग 1 से 5 के बीच होनी चाहिए."
 
-#: .\corematoshree\forms.py:210 .\corematoshree\forms.py:222
-#: .\corematoshree\forms.py:285 .\corematoshree\forms.py:311
-#: .\corematoshree\models.py:53 .\corematoshree\models.py:236
-#: .\corematoshree\models.py:273 .\corematoshree\models.py:341
-#: .\templates\admindashboard.html:218 .\templates\admindashboard.html:254
-#: .\templates\superadmindashboard.html:676
-#: .\templates\superadmindashboard.html:712
+#: .\corematoshree\forms.py:213 .\corematoshree\forms.py:225
+#: .\corematoshree\forms.py:288 .\corematoshree\forms.py:314
+#: .\corematoshree\models.py:53 .\corematoshree\models.py:242
+#: .\corematoshree\models.py:279 .\corematoshree\models.py:347
+#: .\templates\admindashboard.html:220 .\templates\admindashboard.html:256
+#: .\templates\admindashboard.html:413 .\templates\admindashboard.html:710
+#: .\templates\superadmindashboard.html:682
+#: .\templates\superadmindashboard.html:718
+#: .\templates\superadmindashboard.html:879
+#: .\templates\superadmindashboard.html:1190
 msgid "Category"
 msgstr "वर्ग"
 
-#: .\corematoshree\forms.py:211 .\corematoshree\forms.py:223
-#: .\corematoshree\forms.py:235 .\corematoshree\forms.py:245
-#: .\corematoshree\models.py:57 .\corematoshree\models.py:241
-#: .\corematoshree\models.py:369 .\corematoshree\models.py:414
-#: .\templates\admindashboard.html:263
-#: .\templates\superadmindashboard.html:721
+#: .\corematoshree\forms.py:214 .\corematoshree\forms.py:226
+#: .\corematoshree\forms.py:238 .\corematoshree\forms.py:248
+#: .\corematoshree\models.py:57 .\corematoshree\models.py:247
+#: .\corematoshree\models.py:375 .\corematoshree\models.py:420
+#: .\templates\admindashboard.html:265 .\templates\admindashboard.html:424
+#: .\templates\admindashboard.html:498 .\templates\admindashboard.html:576
+#: .\templates\superadmindashboard.html:727
+#: .\templates\superadmindashboard.html:890
+#: .\templates\superadmindashboard.html:966
+#: .\templates\superadmindashboard.html:1046
 msgid "Description"
 msgstr "विवरण"
 
-#: .\corematoshree\forms.py:212 .\corematoshree\models.py:61
-#: .\templates\admindashboard.html:269
-#: .\templates\superadmindashboard.html:727
+#: .\corematoshree\forms.py:215 .\corematoshree\models.py:61
+#: .\templates\admindashboard.html:271
+#: .\templates\superadmindashboard.html:733
 msgid "Active"
 msgstr "सक्रिय"
 
-#: .\corematoshree\forms.py:213 .\corematoshree\forms.py:236
-#: .\corematoshree\models.py:65 .\corematoshree\models.py:417
-#: .\templates\admindashboard.html:274
-#: .\templates\superadmindashboard.html:732
+#: .\corematoshree\forms.py:216 .\corematoshree\forms.py:239
+#: .\corematoshree\models.py:65 .\corematoshree\models.py:423
+#: .\templates\admindashboard.html:276 .\templates\admindashboard.html:510
+#: .\templates\superadmindashboard.html:738
+#: .\templates\superadmindashboard.html:978
 msgid "Icon"
 msgstr "आइकन"
 
-#: .\corematoshree\forms.py:221 .\corematoshree\forms.py:231
-#: .\corematoshree\forms.py:244 .\corematoshree\forms.py:284
-#: .\corematoshree\forms.py:310 .\corematoshree\models.py:232
-#: .\corematoshree\models.py:269 .\corematoshree\models.py:337
-#: .\corematoshree\models.py:365 .\corematoshree\models.py:399
+#: .\corematoshree\forms.py:224 .\corematoshree\forms.py:234
+#: .\corematoshree\forms.py:247 .\corematoshree\forms.py:287
+#: .\corematoshree\forms.py:313 .\corematoshree\models.py:238
+#: .\corematoshree\models.py:275 .\corematoshree\models.py:343
+#: .\corematoshree\models.py:371 .\corematoshree\models.py:405
+#: .\templates\admindashboard.html:409 .\templates\admindashboard.html:490
+#: .\templates\admindashboard.html:572 .\templates\admindashboard.html:706
+#: .\templates\superadmindashboard.html:875
+#: .\templates\superadmindashboard.html:958
+#: .\templates\superadmindashboard.html:1042
+#: .\templates\superadmindashboard.html:1186
 msgid "Title"
 msgstr "शीर्षक"
 
-#: .\corematoshree\forms.py:232 .\corematoshree\models.py:403
+#: .\corematoshree\forms.py:235 .\corematoshree\models.py:409
+#: .\templates\admindashboard.html:494
+#: .\templates\superadmindashboard.html:962
 msgid "Organization"
 msgstr "संगठन"
 
-#: .\corematoshree\forms.py:233 .\corematoshree\forms.py:247
-#: .\corematoshree\models.py:376 .\corematoshree\models.py:407
+#: .\corematoshree\forms.py:236 .\corematoshree\forms.py:250
+#: .\corematoshree\models.py:382 .\corematoshree\models.py:413
+#: .\templates\admindashboard.html:502
+#: .\templates\superadmindashboard.html:970
 msgid "Last Date"
 msgstr "अंतिम तिथि"
 
-#: .\corematoshree\forms.py:234 .\corematoshree\models.py:410
+#: .\corematoshree\forms.py:237 .\corematoshree\models.py:416
+#: .\templates\admindashboard.html:506
+#: .\templates\superadmindashboard.html:974
 msgid "Apply Link"
 msgstr "लिंक लागू करें"
 
-#: .\corematoshree\forms.py:246 .\corematoshree\models.py:372
+#: .\corematoshree\forms.py:249 .\corematoshree\models.py:378
+#: .\templates\admindashboard.html:580
+#: .\templates\superadmindashboard.html:1050
 msgid "Eligibility"
 msgstr "पात्रता"
 
-#: .\corematoshree\forms.py:248 .\corematoshree\forms.py:312
-#: .\corematoshree\models.py:278 .\corematoshree\models.py:381
+#: .\corematoshree\forms.py:251 .\corematoshree\forms.py:315
+#: .\corematoshree\models.py:284 .\corematoshree\models.py:387
+#: .\templates\admindashboard.html:584
+#: .\templates\superadmindashboard.html:1054
 #: .\venv\Lib\site-packages\django\db\models\fields\files.py:420
 msgid "Image"
 msgstr "छवि"
 
-#: .\corematoshree\forms.py:263 .\corematoshree\models.py:114
-#: .\templates\admindashboard.html:218 .\templates\admindashboard.html:267
-#: .\templates\admindashboard.html:477
-#: .\templates\superadmindashboard.html:676
-#: .\templates\superadmindashboard.html:725
-#: .\templates\superadmindashboard.html:947
+#: .\corematoshree\forms.py:266 .\corematoshree\models.py:120
+#: .\templates\admindashboard.html:220 .\templates\admindashboard.html:269
+#: .\templates\admindashboard.html:601
+#: .\templates\superadmindashboard.html:682
+#: .\templates\superadmindashboard.html:731
+#: .\templates\superadmindashboard.html:1075
 msgid "Status"
 msgstr "स्थिति"
 
-#: .\corematoshree\forms.py:276 .\corematoshree\models.py:166
-#: .\templates\admindashboard.html:516
-#: .\templates\superadmindashboard.html:990
+#: .\corematoshree\forms.py:279 .\corematoshree\models.py:172
+#: .\templates\admindashboard.html:640
+#: .\templates\superadmindashboard.html:1118
 msgid "Replied"
 msgstr "उत्तर दिया"
 
-#: .\corematoshree\forms.py:286 .\corematoshree\models.py:345
-#: .\templates\download_forms.html:387
+#: .\corematoshree\forms.py:289 .\corematoshree\models.py:351
+#: .\templates\download_forms.html:399
 msgid "PDF"
 msgstr "पीडीएफ"
 
-#: .\corematoshree\forms.py:298 .\corematoshree\models.py:299
+#: .\corematoshree\forms.py:301 .\corematoshree\models.py:305
 msgid "Charge"
 msgstr "शुल्क"
 
-#: .\corematoshree\forms.py:315
+#: .\corematoshree\forms.py:318
 msgid "Image Title"
 msgstr "छवि शीर्षक"
 
-#: .\corematoshree\forms.py:325 .\corematoshree\models.py:454
+#: .\corematoshree\forms.py:328 .\corematoshree\models.py:460
 msgid "Business Name"
 msgstr "व्यवसाय का नाम"
 
-#: .\corematoshree\forms.py:326 .\corematoshree\models.py:458
+#: .\corematoshree\forms.py:329 .\corematoshree\models.py:464
 msgid "Logo"
 msgstr "प्रतीक चिन्ह"
 
-#: .\corematoshree\forms.py:327 .\corematoshree\models.py:464
+#: .\corematoshree\forms.py:330 .\corematoshree\models.py:470
 msgid "Welcome Message"
 msgstr "स्वागत संदेश"
 
-#: .\corematoshree\forms.py:330 .\corematoshree\models.py:475
-#: .\templates\contactus.html:314
+#: .\corematoshree\forms.py:333 .\corematoshree\models.py:481
+#: .\templates\contactus.html:346
 msgid "WhatsApp"
 msgstr "WhatsApp"
 
-#: .\corematoshree\forms.py:332 .\corematoshree\models.py:483
+#: .\corematoshree\forms.py:335 .\corematoshree\models.py:489
 msgid "Google Map"
 msgstr "गूगल नक़्शे"
 
-#: .\corematoshree\forms.py:333 .\corematoshree\models.py:487
-#: .\templates\contactus.html:330
+#: .\corematoshree\forms.py:336 .\corematoshree\models.py:493
+#: .\templates\contactus.html:369
 msgid "Business Hours"
 msgstr "काम करने के घंटे"
 
-#: .\corematoshree\models.py:13 .\templates\superadmindashboard.html:1083
+#: .\corematoshree\models.py:13 .\templates\superadmindashboard.html:1246
 msgid "User"
 msgstr "उपयोगकर्ता"
 
-#: .\corematoshree\models.py:14 .\templates\admindashboard.html:157
-#: .\templates\superadmindashboard.html:1084
+#: .\corematoshree\models.py:14 .\templates\admindashboard.html:159
+#: .\templates\superadmindashboard.html:1247
 msgid "Admin"
 msgstr "व्यवस्थापक"
 
 #: .\corematoshree\models.py:15 .\templates\base.html:490
-#: .\templates\superadmindashboard.html:588
-#: .\templates\superadmindashboard.html:1085
+#: .\templates\superadmindashboard.html:594
+#: .\templates\superadmindashboard.html:1248
 msgid "Super Admin"
 msgstr "सुपर एडमिन"
 
-#: .\corematoshree\models.py:18 .\templates\superadmindashboard.html:1061
+#: .\corematoshree\models.py:18 .\templates\superadmindashboard.html:1224
 msgid "Role"
 msgstr "भूमिका"
 
@@ -302,205 +326,220 @@ msgstr "एक वैध फ़ोन नंबर (10-15 अंक) दर्�
 msgid "Font Awesome icon class (e.g., 'fa-print')"
 msgstr "फ़ॉन्ट विस्मयकारी आइकन वर्ग (उदाहरण के लिए, 'एफए-प्रिंट')"
 
-#: .\corematoshree\models.py:79
+#: .\corematoshree\models.py:71 .\templates\admindashboard.html:280
+#: .\templates\superadmindashboard.html:742
+msgid "Icon Color"
+msgstr "चिह्न रंग"
+
+#: .\corematoshree\models.py:74
+msgid "Hex color for the icon circle (e.g., #ff6b35)"
+msgstr "आइकन सर्कल के लिए हेक्स रंग (जैसे, #ff6b35)"
+
+#: .\corematoshree\models.py:85
 msgid "Pending"
 msgstr "लंबित"
 
-#: .\corematoshree\models.py:80
+#: .\corematoshree\models.py:86
 msgid "Confirmed"
 msgstr "की पुष्टि"
 
-#: .\corematoshree\models.py:81
+#: .\corematoshree\models.py:87
 msgid "Completed"
 msgstr "पुरा होना।"
 
-#: .\corematoshree\models.py:82
+#: .\corematoshree\models.py:88
 msgid "Cancelled"
 msgstr "रद्द कर दिया गया"
 
-#: .\corematoshree\models.py:120 .\corematoshree\models.py:170
-#: .\corematoshree\models.py:207 .\corematoshree\models.py:244
+#: .\corematoshree\models.py:126 .\corematoshree\models.py:176
+#: .\corematoshree\models.py:213 .\corematoshree\models.py:250
 msgid "Created At"
 msgstr "पर बनाया गया"
 
-#: .\corematoshree\models.py:126
+#: .\corematoshree\models.py:132
 msgid "Appointment"
 msgstr "नियुक्ति"
 
-#: .\corematoshree\models.py:127 .\templates\admindashboard.html:138
-#: .\templates\admindashboard.html:171 .\templates\admindashboard.html:474
-#: .\templates\admindashboard.html:659
-#: .\templates\superadmindashboard.html:567
-#: .\templates\superadmindashboard.html:609
-#: .\templates\superadmindashboard.html:943
-#: .\templates\superadmindashboard.html:1192
+#: .\corematoshree\models.py:133 .\templates\admindashboard.html:140
+#: .\templates\admindashboard.html:173 .\templates\admindashboard.html:598
+#: .\templates\admindashboard.html:818
+#: .\templates\superadmindashboard.html:573
+#: .\templates\superadmindashboard.html:615
+#: .\templates\superadmindashboard.html:1071
+#: .\templates\superadmindashboard.html:1355
 msgid "Appointments"
 msgstr "नियुक्ति"
 
-#: .\corematoshree\models.py:134
+#: .\corematoshree\models.py:140
 msgid "Appointment date cannot be in the past."
 msgstr "नियुक्ति तिथि पहले की नहीं हो सकती."
 
-#: .\corematoshree\models.py:176 .\templates\base.html:479
+#: .\corematoshree\models.py:182 .\templates\base.html:479
 msgid "Contact"
 msgstr "संपर्क"
 
-#: .\corematoshree\models.py:177
+#: .\corematoshree\models.py:183
 msgid "Contacts"
 msgstr "संपर्क"
 
-#: .\corematoshree\models.py:187
+#: .\corematoshree\models.py:193
 msgid "Customer Name"
 msgstr "ग्राहक का नाम"
 
-#: .\corematoshree\models.py:203
+#: .\corematoshree\models.py:209
 msgid "Approved"
 msgstr "अनुमत"
 
-#: .\corematoshree\models.py:214
+#: .\corematoshree\models.py:220
 msgid "Reviews"
 msgstr "समीक्षा"
 
-#: .\corematoshree\models.py:224 .\corematoshree\models.py:388
+#: .\corematoshree\models.py:230 .\corematoshree\models.py:394
+#: .\templates\admindashboard.html:416
+#: .\templates\superadmindashboard.html:882
 msgid "Government Scheme"
 msgstr "सरकारी योजना"
 
-#: .\corematoshree\models.py:225
+#: .\corematoshree\models.py:231 .\templates\admindashboard.html:417
+#: .\templates\superadmindashboard.html:883
 msgid "Recruitment"
 msgstr "भर्ती"
 
-#: .\corematoshree\models.py:226
+#: .\corematoshree\models.py:232 .\templates\admindashboard.html:418
+#: .\templates\superadmindashboard.html:884
 msgid "Scholarship"
 msgstr "छात्रवृत्ति"
 
-#: .\corematoshree\models.py:227
+#: .\corematoshree\models.py:233 .\templates\admindashboard.html:419
+#: .\templates\superadmindashboard.html:885
 msgid "Holiday"
 msgstr "छुट्टी"
 
-#: .\corematoshree\models.py:228
+#: .\corematoshree\models.py:234 .\templates\admindashboard.html:420
+#: .\templates\superadmindashboard.html:886
 msgid "Notice"
 msgstr "सूचना"
 
-#: .\corematoshree\models.py:250
+#: .\corematoshree\models.py:256
 msgid "Announcement"
 msgstr "घोषणा"
 
-#: .\corematoshree\models.py:251 .\templates\admindashboard.html:135
-#: .\templates\admindashboard.html:358 .\templates\admindashboard.html:656
+#: .\corematoshree\models.py:257 .\templates\admindashboard.html:137
+#: .\templates\admindashboard.html:364 .\templates\admindashboard.html:815
 #: .\templates\announcements.html:393 .\templates\base.html:473
-#: .\templates\homepage.html:919 .\templates\superadmindashboard.html:564
-#: .\templates\superadmindashboard.html:820
-#: .\templates\superadmindashboard.html:1189
+#: .\templates\homepage.html:910 .\templates\superadmindashboard.html:570
+#: .\templates\superadmindashboard.html:830
+#: .\templates\superadmindashboard.html:1352
 msgid "Announcements"
 msgstr "घोषणाएं"
 
-#: .\corematoshree\models.py:261
+#: .\corematoshree\models.py:267
 msgid "Cyber Cafe"
 msgstr "साइबर कैफे"
 
-#: .\corematoshree\models.py:262
+#: .\corematoshree\models.py:268
 msgid "Customers"
 msgstr "ग्राहकों"
 
-#: .\corematoshree\models.py:263
+#: .\corematoshree\models.py:269
 msgid "Certificates"
 msgstr "प्रमाण पत्र"
 
-#: .\corematoshree\models.py:264
+#: .\corematoshree\models.py:270
 msgid "Equipment"
 msgstr "उपकरण"
 
-#: .\corematoshree\models.py:265
+#: .\corematoshree\models.py:271
 msgid "Office"
 msgstr "कार्यालय"
 
-#: .\corematoshree\models.py:283 .\templates\gallery.html:488
+#: .\corematoshree\models.py:289 .\templates\gallery.html:488
 msgid "Gallery Image"
 msgstr "गैलरी छवि"
 
-#: .\corematoshree\models.py:284
+#: .\corematoshree\models.py:290
 msgid "Gallery Images"
 msgstr "गैलरी छवियाँ"
 
-#: .\corematoshree\models.py:305
+#: .\corematoshree\models.py:311
 msgid "Service Charge"
 msgstr "सेवा शुल्क"
 
-#: .\corematoshree\models.py:306 .\templates\admindashboard.html:288
+#: .\corematoshree\models.py:312 .\templates\admindashboard.html:294
 #: .\templates\base.html:461 .\templates\service_charges.html:410
-#: .\templates\superadmindashboard.html:748
+#: .\templates\superadmindashboard.html:758
 msgid "Service Charges"
 msgstr "सेवा शुल्क"
 
-#: .\corematoshree\models.py:321
+#: .\corematoshree\models.py:327
 msgid "Document Name"
 msgstr "दस्तावेज़ का नाम"
 
-#: .\corematoshree\models.py:326 .\templates\required_document.html:208
+#: .\corematoshree\models.py:332 .\templates\required_document.html:208
 msgid "Required Document"
 msgstr "आवश्यक दस्तावेज़"
 
-#: .\corematoshree\models.py:327 .\templates\base.html:459
+#: .\corematoshree\models.py:333 .\templates\base.html:459
 msgid "Required Documents"
 msgstr "आवश्यक दस्तावेज"
 
-#: .\corematoshree\models.py:349
+#: .\corematoshree\models.py:355
 msgid "Uploaded At"
 msgstr "पर अपलोड किया गया"
 
-#: .\corematoshree\models.py:354
+#: .\corematoshree\models.py:360
 msgid "Download Form"
 msgstr "फॉर्म डाउनलोड करें"
 
-#: .\corematoshree\models.py:355 .\templates\base.html:460
+#: .\corematoshree\models.py:361 .\templates\base.html:460
 msgid "Download Forms"
 msgstr "फॉर्म डाउनलोड करें"
 
-#: .\corematoshree\models.py:389 .\templates\admindashboard.html:434
-#: .\templates\admindashboard.html:658 .\templates\base.html:474
+#: .\corematoshree\models.py:395 .\templates\admindashboard.html:524
+#: .\templates\admindashboard.html:817 .\templates\base.html:474
 #: .\templates\government_schemes.html:265
-#: .\templates\superadmindashboard.html:900
-#: .\templates\superadmindashboard.html:1191
+#: .\templates\superadmindashboard.html:994
+#: .\templates\superadmindashboard.html:1354
 msgid "Government Schemes"
 msgstr "सरकारी योजनाएं"
 
-#: .\corematoshree\models.py:420
+#: .\corematoshree\models.py:426
 msgid "Font Awesome icon (e.g. 'fa-briefcase')"
 msgstr "फ़ॉन्ट विस्मयकारी आइकन (उदाहरण के लिए 'एफए-ब्रीफ़केस')"
 
-#: .\corematoshree\models.py:424
+#: .\corematoshree\models.py:430
 msgid "Job Notification"
 msgstr "नौकरी अधिसूचना"
 
-#: .\corematoshree\models.py:425 .\templates\admindashboard.html:136
-#: .\templates\admindashboard.html:396 .\templates\admindashboard.html:657
-#: .\templates\base.html:475 .\templates\superadmindashboard.html:565
-#: .\templates\superadmindashboard.html:860
-#: .\templates\superadmindashboard.html:1190
+#: .\corematoshree\models.py:431 .\templates\admindashboard.html:138
+#: .\templates\admindashboard.html:445 .\templates\admindashboard.html:816
+#: .\templates\base.html:475 .\templates\superadmindashboard.html:571
+#: .\templates\superadmindashboard.html:913
+#: .\templates\superadmindashboard.html:1353
 msgid "Job Notifications"
 msgstr "नौकरी अधिसूचनाएँ"
 
-#: .\corematoshree\models.py:435
+#: .\corematoshree\models.py:441
 msgid "Question"
 msgstr "सवाल"
 
-#: .\corematoshree\models.py:439
+#: .\corematoshree\models.py:445
 msgid "Answer"
 msgstr "उत्तर"
 
-#: .\corematoshree\models.py:443 .\templates\base.html:471
+#: .\corematoshree\models.py:449 .\templates\base.html:471
 msgid "FAQ"
 msgstr "अक्सर पूछे जाने वाले प्रश्न"
 
-#: .\corematoshree\models.py:444
+#: .\corematoshree\models.py:450
 msgid "FAQs"
 msgstr "पूछे जाने वाले प्रश्न"
 
-#: .\corematoshree\models.py:484
+#: .\corematoshree\models.py:490
 msgid "Paste Google Maps Embed Code"
 msgstr "Google मानचित्र एंबेड कोड चिपकाएँ"
 
-#: .\corematoshree\models.py:506 .\corematoshree\models.py:507
+#: .\corematoshree\models.py:512 .\corematoshree\models.py:513
 msgid "Business Information"
 msgstr "व्यवसाय संबंधी जानकारी"
 
@@ -541,7 +580,7 @@ msgstr "साइबरटेक डिजिटल सेवाएँ"
 msgid "Years of Excellence"
 msgstr "उत्कृष्टता के वर्ष"
 
-#: .\templates\aboutus.html:745 .\templates\homepage.html:771
+#: .\templates\aboutus.html:745 .\templates\homepage.html:780
 msgid "Happy Customers"
 msgstr "खुश ग्राहक"
 
@@ -580,8 +619,8 @@ msgid "Reliable · Fast · Transparent · Secure"
 msgstr "विश्वसनीय · तेज़ · पारदर्शी · सुरक्षित"
 
 #: .\templates\aboutus.html:801 .\templates\gallery.html:403
-#: .\templates\homepage.html:797 .\templates\homepage.html:830
-#: .\templates\service_charges.html:424 .\templates\services.html:455
+#: .\templates\homepage.html:808 .\templates\service_charges.html:424
+#: .\templates\services.html:164
 msgid "Our"
 msgstr "हमारा"
 
@@ -625,7 +664,7 @@ msgstr "ईमेल एवं amp; इंटरनेट सेवाएं"
 msgid "Resume / Biodata Creation"
 msgstr "बायोडाटा/बायोडाटा निर्माण"
 
-#: .\templates\aboutus.html:848 .\templates\homepage.html:750
+#: .\templates\aboutus.html:848 .\templates\homepage.html:757
 msgid "Lamination"
 msgstr "फाड़ना"
 
@@ -719,19 +758,18 @@ msgid "Experience"
 msgstr "अनुभव"
 
 #: .\templates\aboutus.html:988 .\templates\announcements.html:470
-#: .\templates\download_forms.html:431 .\templates\gallery.html:469
-#: .\templates\government_schemes.html:324 .\templates\homepage.html:729
-#: .\templates\jobs.html:475 .\templates\required_document.html:262
-#: .\templates\service_charges.html:513 .\templates\services.html:540
+#: .\templates\download_forms.html:448 .\templates\gallery.html:469
+#: .\templates\government_schemes.html:324 .\templates\jobs.html:475
+#: .\templates\required_document.html:262 .\templates\service_charges.html:513
 msgid "Contact Us"
 msgstr "हमसे संपर्क करें"
 
 #: .\templates\aboutus.html:995 .\templates\announcements.html:473
-#: .\templates\base.html:563 .\templates\contactus.html:369
-#: .\templates\download_forms.html:438 .\templates\gallery.html:476
-#: .\templates\government_schemes.html:331 .\templates\homepage.html:908
+#: .\templates\base.html:563 .\templates\contactus.html:501
+#: .\templates\download_forms.html:455 .\templates\gallery.html:476
+#: .\templates\government_schemes.html:331 .\templates\homepage.html:898
 #: .\templates\jobs.html:483 .\templates\required_document.html:269
-#: .\templates\service_charges.html:521 .\templates\services.html:548
+#: .\templates\service_charges.html:521
 msgid "Chat on WhatsApp"
 msgstr "व्हाट्सएप पर चैट करें"
 
@@ -739,370 +777,442 @@ msgstr "व्हाट्सएप पर चैट करें"
 msgid "Admin Dashboard – Cyber Café"
 msgstr "एडमिन डैशबोर्ड - साइबर कैफे"
 
-#: .\templates\admindashboard.html:129
-#: .\templates\superadmindashboard.html:558
+#: .\templates\admindashboard.html:131
+#: .\templates\superadmindashboard.html:564
 msgid "CyberAdmin"
 msgstr "साइबर एडमिन"
 
-#: .\templates\admindashboard.html:132 .\templates\admindashboard.html:154
-#: .\templates\admindashboard.html:653 .\templates\admindashboard.html:665
-#: .\templates\base.html:487 .\templates\superadmindashboard.html:561
-#: .\templates\superadmindashboard.html:585
-#: .\templates\superadmindashboard.html:1186
-#: .\templates\superadmindashboard.html:1199
+#: .\templates\admindashboard.html:134 .\templates\admindashboard.html:156
+#: .\templates\admindashboard.html:812 .\templates\admindashboard.html:824
+#: .\templates\base.html:487 .\templates\superadmindashboard.html:567
+#: .\templates\superadmindashboard.html:591
+#: .\templates\superadmindashboard.html:1349
+#: .\templates\superadmindashboard.html:1362
 msgid "Dashboard"
 msgstr "डैशबोर्ड"
 
-#: .\templates\admindashboard.html:133 .\templates\admindashboard.html:200
-#: .\templates\admindashboard.html:654
-#: .\templates\superadmindashboard.html:562
-#: .\templates\superadmindashboard.html:657
-#: .\templates\superadmindashboard.html:1187
+#: .\templates\admindashboard.html:135 .\templates\admindashboard.html:202
+#: .\templates\admindashboard.html:813
+#: .\templates\superadmindashboard.html:568
+#: .\templates\superadmindashboard.html:663
+#: .\templates\superadmindashboard.html:1350
 msgid "Manage Services"
 msgstr "सेवाएँ प्रबंधित करें"
 
-#: .\templates\admindashboard.html:134 .\templates\admindashboard.html:655
-#: .\templates\superadmindashboard.html:563
-#: .\templates\superadmindashboard.html:1188
+#: .\templates\admindashboard.html:136 .\templates\admindashboard.html:814
+#: .\templates\superadmindashboard.html:569
+#: .\templates\superadmindashboard.html:1351
 msgid "Update Prices"
 msgstr "कीमतें अपडेट करें"
 
-#: .\templates\admindashboard.html:137
-#: .\templates\superadmindashboard.html:566
+#: .\templates\admindashboard.html:139
+#: .\templates\superadmindashboard.html:572
 msgid "Gov. Schemes"
 msgstr "सरकारी योजनाएँ"
 
-#: .\templates\admindashboard.html:139 .\templates\admindashboard.html:175
-#: .\templates\admindashboard.html:660
-#: .\templates\superadmindashboard.html:568
-#: .\templates\superadmindashboard.html:616
-#: .\templates\superadmindashboard.html:1193
+#: .\templates\admindashboard.html:141 .\templates\admindashboard.html:177
+#: .\templates\admindashboard.html:819
+#: .\templates\superadmindashboard.html:574
+#: .\templates\superadmindashboard.html:622
+#: .\templates\superadmindashboard.html:1356
 msgid "Inquiries"
 msgstr "पूछताछ"
 
-#: .\templates\admindashboard.html:140 .\templates\admindashboard.html:537
-#: .\templates\admindashboard.html:661
-#: .\templates\superadmindashboard.html:569
-#: .\templates\superadmindashboard.html:1013
-#: .\templates\superadmindashboard.html:1194
+#: .\templates\admindashboard.html:142 .\templates\admindashboard.html:661
+#: .\templates\admindashboard.html:820
+#: .\templates\superadmindashboard.html:575
+#: .\templates\superadmindashboard.html:1141
+#: .\templates\superadmindashboard.html:1357
 msgid "Upload Forms"
 msgstr "फॉर्म अपलोड करें"
 
-#: .\templates\admindashboard.html:141 .\templates\admindashboard.html:662
+#: .\templates\admindashboard.html:143 .\templates\admindashboard.html:821
 #: .\templates\base.html:465 .\templates\gallery.html:403
-#: .\templates\gallery.html:416 .\templates\homepage.html:830
-#: .\templates\superadmindashboard.html:571
-#: .\templates\superadmindashboard.html:1196
+#: .\templates\gallery.html:416 .\templates\homepage.html:808
+#: .\templates\superadmindashboard.html:577
+#: .\templates\superadmindashboard.html:1359
 msgid "Gallery"
 msgstr "गैलरी"
 
-#: .\templates\admindashboard.html:142 .\templates\admindashboard.html:663
-#: .\templates\superadmindashboard.html:572
-#: .\templates\superadmindashboard.html:1197
+#: .\templates\admindashboard.html:144 .\templates\admindashboard.html:822
+#: .\templates\superadmindashboard.html:578
+#: .\templates\superadmindashboard.html:1360
 msgid "Settings"
 msgstr "सेटिंग्स"
 
-#: .\templates\admindashboard.html:145 .\templates\base.html:495
-#: .\templates\superadmindashboard.html:575
+#: .\templates\admindashboard.html:147 .\templates\base.html:495
+#: .\templates\superadmindashboard.html:581
 msgid "Logout"
 msgstr "लॉग आउट"
 
-#: .\templates\admindashboard.html:167 .\templates\base.html:456
-#: .\templates\homepage.html:775 .\templates\homepage.html:797
-#: .\templates\services.html:453 .\templates\services.html:455
-#: .\templates\services.html:463 .\templates\superadmindashboard.html:602
+#: .\templates\admindashboard.html:169 .\templates\base.html:456
+#: .\templates\homepage.html:784 .\templates\services.html:164
+#: .\templates\superadmindashboard.html:608
 msgid "Services"
 msgstr "सेवाएं"
 
-#: .\templates\admindashboard.html:179
-#: .\templates\superadmindashboard.html:623
+#: .\templates\admindashboard.html:181
+#: .\templates\superadmindashboard.html:629
 msgid "Forms"
 msgstr "फार्म"
 
-#: .\templates\admindashboard.html:183
-#: .\templates\superadmindashboard.html:636
+#: .\templates\admindashboard.html:185
+#: .\templates\superadmindashboard.html:642
 msgid "Recent Activity"
 msgstr "हाल की गतिविधि"
 
-#: .\templates\admindashboard.html:191
-#: .\templates\superadmindashboard.html:646
+#: .\templates\admindashboard.html:193
+#: .\templates\superadmindashboard.html:652
 msgid "No recent activity."
 msgstr "कोई हालिया गतिविधि नहीं।"
 
-#: .\templates\admindashboard.html:201
-#: .\templates\superadmindashboard.html:658
+#: .\templates\admindashboard.html:203
+#: .\templates\superadmindashboard.html:664
 msgid "Add Service"
 msgstr "सेवा जोड़ें"
 
-#: .\templates\admindashboard.html:211 .\templates\admindashboard.html:299
-#: .\templates\admindashboard.html:369 .\templates\admindashboard.html:407
-#: .\templates\admindashboard.html:445
-#: .\templates\superadmindashboard.html:669
-#: .\templates\superadmindashboard.html:759
-#: .\templates\superadmindashboard.html:831
-#: .\templates\superadmindashboard.html:871
-#: .\templates\superadmindashboard.html:911
+#: .\templates\admindashboard.html:213 .\templates\admindashboard.html:305
+#: .\templates\admindashboard.html:375 .\templates\admindashboard.html:456
+#: .\templates\admindashboard.html:535
+#: .\templates\superadmindashboard.html:675
+#: .\templates\superadmindashboard.html:769
+#: .\templates\superadmindashboard.html:841
+#: .\templates\superadmindashboard.html:924
+#: .\templates\superadmindashboard.html:1005
 msgid "Save"
 msgstr "बचाना"
 
-#: .\templates\admindashboard.html:218 .\templates\admindashboard.html:306
-#: .\templates\superadmindashboard.html:676
-#: .\templates\superadmindashboard.html:766
+#: .\templates\admindashboard.html:220 .\templates\admindashboard.html:312
+#: .\templates\superadmindashboard.html:682
+#: .\templates\superadmindashboard.html:776
 msgid "Actions"
 msgstr "कार्रवाई"
 
-#: .\templates\admindashboard.html:225
-#: .\templates\superadmindashboard.html:683
+#: .\templates\admindashboard.html:227
+#: .\templates\superadmindashboard.html:689
 msgid "Active,Inactive"
 msgstr "सक्रिय निष्क्रिय"
 
-#: .\templates\admindashboard.html:233
-#: .\templates\superadmindashboard.html:691
+#: .\templates\admindashboard.html:235
+#: .\templates\superadmindashboard.html:697
 msgid "Delete this service?"
 msgstr "यह सेवा हटाएं?"
 
-#: .\templates\admindashboard.html:237
-#: .\templates\superadmindashboard.html:695
+#: .\templates\admindashboard.html:239
+#: .\templates\superadmindashboard.html:701
 msgid "No services."
 msgstr "कोई सेवा नहीं."
 
-#: .\templates\admindashboard.html:250
-#: .\templates\superadmindashboard.html:708
+#: .\templates\admindashboard.html:252
+#: .\templates\superadmindashboard.html:714
 msgid "Service Name"
 msgstr "सेवा का नाम"
 
-#: .\templates\admindashboard.html:256 .\templates\government_schemes.html:267
-#: .\templates\superadmindashboard.html:714
+#: .\templates\admindashboard.html:258 .\templates\admindashboard.html:713
+#: .\templates\government_schemes.html:267
+#: .\templates\superadmindashboard.html:720
+#: .\templates\superadmindashboard.html:1193
 msgid "Government"
 msgstr "सरकार"
 
-#: .\templates\admindashboard.html:257
-#: .\templates\superadmindashboard.html:715
+#: .\templates\admindashboard.html:259 .\templates\admindashboard.html:714
+#: .\templates\superadmindashboard.html:721
+#: .\templates\superadmindashboard.html:1194
 msgid "Financial"
 msgstr "वित्तीय"
 
-#: .\templates\admindashboard.html:258
-#: .\templates\superadmindashboard.html:716
+#: .\templates\admindashboard.html:260
+#: .\templates\superadmindashboard.html:722
 msgid "Printing"
 msgstr "मुद्रण"
 
-#: .\templates\admindashboard.html:259
-#: .\templates\superadmindashboard.html:717
+#: .\templates\admindashboard.html:261
+#: .\templates\superadmindashboard.html:723
 msgid "Other"
 msgstr "अन्य"
 
-#: .\templates\admindashboard.html:270
-#: .\templates\superadmindashboard.html:728
+#: .\templates\admindashboard.html:272
+#: .\templates\superadmindashboard.html:734
 msgid "Inactive"
 msgstr "निष्क्रिय"
 
-#: .\templates\admindashboard.html:275
-#: .\templates\superadmindashboard.html:733
+#: .\templates\admindashboard.html:277
+#: .\templates\superadmindashboard.html:739
 msgid "e.g. fa-print"
 msgstr "जैसे एफए-प्रिंट"
 
-#: .\templates\admindashboard.html:278 .\templates\admindashboard.html:348
-#: .\templates\superadmindashboard.html:736
-#: .\templates\superadmindashboard.html:808
+#: .\templates\admindashboard.html:284 .\templates\admindashboard.html:354
+#: .\templates\admindashboard.html:435 .\templates\admindashboard.html:514
+#: .\templates\admindashboard.html:589 .\templates\admindashboard.html:724
+#: .\templates\superadmindashboard.html:746
+#: .\templates\superadmindashboard.html:818
+#: .\templates\superadmindashboard.html:901
+#: .\templates\superadmindashboard.html:982
+#: .\templates\superadmindashboard.html:1059
+#: .\templates\superadmindashboard.html:1204
 msgid "Cancel"
 msgstr "रद्द करना"
 
-#: .\templates\admindashboard.html:279 .\templates\admindashboard.html:349
-#: .\templates\superadmindashboard.html:737
-#: .\templates\superadmindashboard.html:809
-#: .\templates\superadmindashboard.html:1087
+#: .\templates\admindashboard.html:285 .\templates\admindashboard.html:355
+#: .\templates\admindashboard.html:436 .\templates\admindashboard.html:515
+#: .\templates\admindashboard.html:590 .\templates\admindashboard.html:725
+#: .\templates\superadmindashboard.html:747
+#: .\templates\superadmindashboard.html:819
+#: .\templates\superadmindashboard.html:902
+#: .\templates\superadmindashboard.html:983
+#: .\templates\superadmindashboard.html:1060
+#: .\templates\superadmindashboard.html:1205
+#: .\templates\superadmindashboard.html:1250
 msgid "Update"
 msgstr "अद्यतन"
 
-#: .\templates\admindashboard.html:289
-#: .\templates\superadmindashboard.html:749
+#: .\templates\admindashboard.html:295
+#: .\templates\superadmindashboard.html:759
 msgid "Add Charge"
 msgstr "चार्ज जोड़ें"
 
-#: .\templates\admindashboard.html:306 .\templates\admindashboard.html:344
+#: .\templates\admindashboard.html:312 .\templates\admindashboard.html:350
 #: .\templates\service_charges.html:445
-#: .\templates\superadmindashboard.html:766
-#: .\templates\superadmindashboard.html:804
+#: .\templates\superadmindashboard.html:776
+#: .\templates\superadmindashboard.html:814
 msgid "Charge (₹)"
 msgstr "शुल्क (₹)"
 
-#: .\templates\admindashboard.html:319
-#: .\templates\superadmindashboard.html:779
+#: .\templates\admindashboard.html:325
+#: .\templates\superadmindashboard.html:789
 msgid "Delete this charge?"
 msgstr "यह आरोप हटाएँ?"
 
-#: .\templates\admindashboard.html:323
-#: .\templates\superadmindashboard.html:783
+#: .\templates\admindashboard.html:329
+#: .\templates\superadmindashboard.html:793
 msgid "No charges defined."
 msgstr "कोई शुल्क परिभाषित नहीं."
 
-#: .\templates\admindashboard.html:359
-#: .\templates\superadmindashboard.html:821
+#: .\templates\admindashboard.html:365
+#: .\templates\superadmindashboard.html:831
 msgid "Add Announcement"
 msgstr "घोषणा जोड़ें"
 
-#: .\templates\admindashboard.html:386
-#: .\templates\superadmindashboard.html:848
+#: .\templates\admindashboard.html:394
+#: .\templates\superadmindashboard.html:860
 msgid "Delete this announcement?"
 msgstr "यह घोषणा हटाएँ?"
 
-#: .\templates\admindashboard.html:389
-#: .\templates\superadmindashboard.html:851
+#: .\templates\admindashboard.html:398
+#: .\templates\superadmindashboard.html:864
 msgid "No announcements."
 msgstr "कोई घोषणा नहीं."
 
-#: .\templates\admindashboard.html:397
-#: .\templates\superadmindashboard.html:861
+#: .\templates\admindashboard.html:415 .\templates\admindashboard.html:712
+#: .\templates\announcements.html:421 .\templates\download_forms.html:396
+#: .\templates\superadmindashboard.html:881
+#: .\templates\superadmindashboard.html:1192
+msgid "General"
+msgstr "सामान्य"
+
+#: .\templates\admindashboard.html:428 .\templates\announcements.html:424
+#: .\templates\superadmindashboard.html:894
+msgid "Urgent"
+msgstr "अति आवश्यक"
+
+#: .\templates\admindashboard.html:430
+#: .\templates\superadmindashboard.html:896
+#: .\venv\Lib\site-packages\django\forms\widgets.py:871
+msgid "No"
+msgstr "नहीं"
+
+#: .\templates\admindashboard.html:431
+#: .\templates\superadmindashboard.html:897
+#: .\venv\Lib\site-packages\django\forms\widgets.py:870
+msgid "Yes"
+msgstr "हाँ"
+
+#: .\templates\admindashboard.html:446
+#: .\templates\superadmindashboard.html:914
 msgid "Add Job"
 msgstr "नौकरी जोड़ें"
 
-#: .\templates\admindashboard.html:417
-#: .\templates\superadmindashboard.html:881
+#: .\templates\admindashboard.html:466
+#: .\templates\superadmindashboard.html:934
 #, python-format
 msgid "%(org)s – Last Date: %(date)s"
 msgstr "%(org)s - अंतिम तिथि: %(date)s"
 
-#: .\templates\admindashboard.html:424
-#: .\templates\superadmindashboard.html:888
+#: .\templates\admindashboard.html:475
+#: .\templates\superadmindashboard.html:943
 msgid "Delete this job?"
 msgstr "यह कार्य हटाएं?"
 
-#: .\templates\admindashboard.html:427
-#: .\templates\superadmindashboard.html:891
+#: .\templates\admindashboard.html:479
+#: .\templates\superadmindashboard.html:947
 msgid "No jobs."
 msgstr "कोई नौकरी नहीं."
 
-#: .\templates\admindashboard.html:435
-#: .\templates\superadmindashboard.html:901
+#: .\templates\admindashboard.html:511
+#: .\templates\superadmindashboard.html:979
+msgid "e.g. briefcase"
+msgstr "जैसे अटैची"
+
+#: .\templates\admindashboard.html:525
+#: .\templates\superadmindashboard.html:995
 msgid "Add Scheme"
 msgstr "योजना जोड़ें"
 
-#: .\templates\admindashboard.html:455
-#: .\templates\superadmindashboard.html:921
+#: .\templates\admindashboard.html:545
+#: .\templates\superadmindashboard.html:1015
 #, python-format
 msgid "%(desc)s – Eligibility: %(elig)s"
 msgstr "%(desc)s – पात्रता: %(elig)s"
 
-#: .\templates\admindashboard.html:465
-#: .\templates\superadmindashboard.html:931
+#: .\templates\admindashboard.html:557
+#: .\templates\superadmindashboard.html:1027
 msgid "Delete this scheme?"
 msgstr "यह योजना हटाएं?"
 
-#: .\templates\admindashboard.html:468
-#: .\templates\superadmindashboard.html:934
+#: .\templates\admindashboard.html:561
+#: .\templates\superadmindashboard.html:1031
 msgid "No schemes."
 msgstr "कोई योजना नहीं."
 
-#: .\templates\admindashboard.html:477
-#: .\templates\superadmindashboard.html:947
+#: .\templates\admindashboard.html:581
+#: .\templates\superadmindashboard.html:1051
+msgid "e.g. All citizens above 18"
+msgstr "जैसे 18 वर्ष से ऊपर के सभी नागरिक"
+
+#: .\templates\admindashboard.html:586
+#: .\templates\superadmindashboard.html:1056
+msgid "Leave empty to keep current image."
+msgstr "वर्तमान छवि बनाए रखने के लिए खाली छोड़ें."
+
+#: .\templates\admindashboard.html:601
+#: .\templates\superadmindashboard.html:1075
 msgid "Customer"
 msgstr "ग्राहक"
 
-#: .\templates\admindashboard.html:477
-#: .\templates\superadmindashboard.html:947
+#: .\templates\admindashboard.html:601
+#: .\templates\superadmindashboard.html:1075
 msgid "Date"
 msgstr "तारीख"
 
-#: .\templates\admindashboard.html:477
-#: .\templates\superadmindashboard.html:947
+#: .\templates\admindashboard.html:601
+#: .\templates\superadmindashboard.html:1075
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2534
 msgid "Time"
 msgstr "समय"
 
-#: .\templates\admindashboard.html:477
-#: .\templates\superadmindashboard.html:947
-#: .\templates\superadmindashboard.html:1063
+#: .\templates\admindashboard.html:601
+#: .\templates\superadmindashboard.html:1075
+#: .\templates\superadmindashboard.html:1226
 msgid "Action"
 msgstr "कार्रवाई"
 
-#: .\templates\admindashboard.html:492
-#: .\templates\superadmindashboard.html:962
+#: .\templates\admindashboard.html:616
+#: .\templates\superadmindashboard.html:1090
 msgid "Delete this appointment?"
 msgstr "यह नियुक्ति हटाएं?"
 
-#: .\templates\admindashboard.html:496
-#: .\templates\superadmindashboard.html:966
+#: .\templates\admindashboard.html:620
+#: .\templates\superadmindashboard.html:1094
 msgid "No appointments."
 msgstr "कोई नियुक्ति नहीं."
 
-#: .\templates\admindashboard.html:504
-#: .\templates\superadmindashboard.html:977
+#: .\templates\admindashboard.html:628
+#: .\templates\superadmindashboard.html:1105
 msgid "Customer Inquiries"
 msgstr "ग्राहक पूछताछ"
 
-#: .\templates\admindashboard.html:511
-#: .\templates\superadmindashboard.html:985
+#: .\templates\admindashboard.html:635
+#: .\templates\superadmindashboard.html:1113
 msgid "Resolved,Pending"
 msgstr "समाधान किया गया, लंबित है"
 
-#: .\templates\admindashboard.html:514
-#: .\templates\superadmindashboard.html:988
+#: .\templates\admindashboard.html:638
+#: .\templates\superadmindashboard.html:1116
 msgid "Q:"
 msgstr "क्यू:"
 
-#: .\templates\admindashboard.html:524
-#: .\templates\superadmindashboard.html:998
+#: .\templates\admindashboard.html:648
+#: .\templates\superadmindashboard.html:1126
 msgid "Write reply..."
 msgstr "उत्तर लिखें..."
 
-#: .\templates\admindashboard.html:525
-#: .\templates\superadmindashboard.html:999
+#: .\templates\admindashboard.html:649
+#: .\templates\superadmindashboard.html:1127
 msgid "Reply"
 msgstr "जवाब"
 
-#: .\templates\admindashboard.html:530
-#: .\templates\superadmindashboard.html:1004
+#: .\templates\admindashboard.html:654
+#: .\templates\superadmindashboard.html:1132
 msgid "No inquiries."
 msgstr "कोई पूछताछ नहीं."
 
-#: .\templates\admindashboard.html:538
-#: .\templates\superadmindashboard.html:1014
+#: .\templates\admindashboard.html:662
+#: .\templates\superadmindashboard.html:1142
 msgid "Upload Form"
 msgstr "फॉर्म अपलोड करें"
 
-#: .\templates\admindashboard.html:548 .\templates\admindashboard.html:586
-#: .\templates\superadmindashboard.html:1024
-#: .\templates\superadmindashboard.html:1115
+#: .\templates\admindashboard.html:672 .\templates\admindashboard.html:745
+#: .\templates\superadmindashboard.html:1152
+#: .\templates\superadmindashboard.html:1278
 msgid "Upload"
 msgstr "अपलोड करें"
 
-#: .\templates\admindashboard.html:565
-#: .\templates\superadmindashboard.html:1041
+#: .\templates\admindashboard.html:691
+#: .\templates\superadmindashboard.html:1171
 msgid "Delete this form?"
 msgstr "यह फ़ॉर्म हटाएं?"
 
-#: .\templates\admindashboard.html:568
-#: .\templates\superadmindashboard.html:1044
+#: .\templates\admindashboard.html:695
+#: .\templates\superadmindashboard.html:1175
 msgid "No forms uploaded."
 msgstr "कोई फॉर्म अपलोड नहीं किया गया."
 
-#: .\templates\admindashboard.html:575
-#: .\templates\superadmindashboard.html:1104
+#: .\templates\admindashboard.html:715
+#: .\templates\superadmindashboard.html:1195
+#, fuzzy
+#| msgid "Action"
+msgid "Application"
+msgstr "कार्रवाई"
+
+#: .\templates\admindashboard.html:719
+#: .\templates\superadmindashboard.html:1199
+#, fuzzy
+#| msgid "File"
+msgid "PDF File"
+msgstr "फ़ाइल"
+
+#: .\templates\admindashboard.html:721
+#: .\templates\superadmindashboard.html:1201
+msgid "Leave empty to keep current file."
+msgstr "वर्तमान फ़ाइल रखने के लिए खाली छोड़ें।"
+
+#: .\templates\admindashboard.html:734
+#: .\templates\superadmindashboard.html:1267
 msgid "Manage Gallery"
 msgstr "गैलरी प्रबंधित करें"
 
-#: .\templates\admindashboard.html:576
-#: .\templates\superadmindashboard.html:1105
+#: .\templates\admindashboard.html:735
+#: .\templates\superadmindashboard.html:1268
 msgid "Add Image"
 msgstr "छवि जोड़ें"
 
-#: .\templates\admindashboard.html:601
-#: .\templates\superadmindashboard.html:1130
+#: .\templates\admindashboard.html:760
+#: .\templates\superadmindashboard.html:1293
 msgid "Delete this image?"
 msgstr "यह छवि हटाएं?"
 
-#: .\templates\admindashboard.html:605
-#: .\templates\superadmindashboard.html:1134
+#: .\templates\admindashboard.html:764
+#: .\templates\superadmindashboard.html:1297
 msgid "No images uploaded yet."
 msgstr "अभी तक कोई चित्र अपलोड नहीं किया गया."
 
-#: .\templates\admindashboard.html:613
-#: .\templates\superadmindashboard.html:1144
+#: .\templates\admindashboard.html:772
+#: .\templates\superadmindashboard.html:1307
 msgid "Website Settings"
 msgstr "वेबसाइट सेटिंग्स"
 
-#: .\templates\admindashboard.html:623
-#: .\templates\superadmindashboard.html:1154
+#: .\templates\admindashboard.html:782
+#: .\templates\superadmindashboard.html:1317
 msgid "Save Settings"
 msgstr "सेटिंग्स सेव करें"
 
@@ -1113,14 +1223,6 @@ msgstr "हमारे केंद्र से नवीनतम अपड�
 #: .\templates\announcements.html:404
 msgid "All"
 msgstr "सभी"
-
-#: .\templates\announcements.html:421 .\templates\download_forms.html:385
-msgid "General"
-msgstr "सामान्य"
-
-#: .\templates\announcements.html:424
-msgid "Urgent"
-msgstr "अति आवश्यक"
 
 #: .\templates\announcements.html:435
 msgid "No announcements available at the moment."
@@ -1153,7 +1255,7 @@ msgstr "तक पहुँच"
 msgid "We're here to help with any of your digital service needs."
 msgstr "हम आपकी किसी भी डिजिटल सेवा आवश्यकता में सहायता के लिए यहां हैं।"
 
-#: .\templates\announcements.html:491 .\templates\homepage.html:933
+#: .\templates\announcements.html:491 .\templates\homepage.html:926
 msgid "No announcements available."
 msgstr "कोई घोषणा उपलब्ध नहीं है."
 
@@ -1219,7 +1321,7 @@ msgstr "ग्राहक समीक्षाएँ"
 msgid "Profile"
 msgstr "प्रोफ़ाइल"
 
-#: .\templates\base.html:498 .\templates\login.html:65
+#: .\templates\base.html:498
 msgid "Login"
 msgstr "लॉग इन करें"
 
@@ -1251,107 +1353,90 @@ msgstr "यूट्यूब"
 msgid "Twitter"
 msgstr "ट्विटर"
 
-#: .\templates\contactus.html:231
+#: .\templates\contactus.html:229
 msgid "Get in"
 msgstr "अंदर आना"
 
-#: .\templates\contactus.html:232
+#: .\templates\contactus.html:230
 msgid "Touch"
 msgstr "छूना"
 
-#: .\templates\contactus.html:243
-msgid ""
-"We're here to help. Send us a message and we'll get back to you promptly."
-msgstr ""
-"हम मदद के लिए यहां हैं. हमें एक संदेश भेजें और हम तुरंत आपसे संपर्क करेंगे।"
-
-#: .\templates\contactus.html:256
+#: .\templates\contactus.html:258
 msgid "Send a Message"
 msgstr "एक संदेश भेजो"
 
-#: .\templates\contactus.html:287
+#: .\templates\contactus.html:317
 msgid "Send Message"
 msgstr "मेसेज भेजें"
 
-#: .\templates\contactus.html:299
-#, python-format
-msgid "%(name)s"
-msgstr "%(नाम)s"
-
-#: .\templates\contactus.html:300
+#: .\templates\contactus.html:329
 #, python-format
 msgid "%(address)s"
 msgstr "%(पता)s"
 
-#: .\templates\contactus.html:316
+#: .\templates\contactus.html:330
+#, python-format
+msgid "%(name)s"
+msgstr "%(नाम)s"
+
+#: .\templates\contactus.html:352
 msgid "Chat with Us"
 msgstr "हमारे साथ चैट करें"
 
-#: .\templates\contactus.html:335
+#: .\templates\contactus.html:374
 #: .\venv\Lib\site-packages\django\utils\dates.py:7
 msgid "Monday"
 msgstr "सोमवार"
 
-#: .\templates\contactus.html:335 .\templates\contactus.html:336
-#: .\templates\contactus.html:337 .\templates\contactus.html:338
-#: .\templates\contactus.html:339 .\templates\contactus.html:340
+#: .\templates\contactus.html:375 .\templates\contactus.html:379
+#: .\templates\contactus.html:383 .\templates\contactus.html:387
+#: .\templates\contactus.html:391 .\templates\contactus.html:395
 msgid "9:00 AM – 8:00 PM"
 msgstr "प्रातः 9:00 बजे से रात्रि 8:00 बजे तक"
 
-#: .\templates\contactus.html:336
+#: .\templates\contactus.html:378
 #: .\venv\Lib\site-packages\django\utils\dates.py:8
 msgid "Tuesday"
 msgstr "मंगलवार"
 
-#: .\templates\contactus.html:337
+#: .\templates\contactus.html:382
 #: .\venv\Lib\site-packages\django\utils\dates.py:9
 msgid "Wednesday"
 msgstr "बुधवार"
 
-#: .\templates\contactus.html:338
+#: .\templates\contactus.html:386
 #: .\venv\Lib\site-packages\django\utils\dates.py:10
 msgid "Thursday"
 msgstr "गुरुवार"
 
-#: .\templates\contactus.html:339
+#: .\templates\contactus.html:390
 #: .\venv\Lib\site-packages\django\utils\dates.py:11
 msgid "Friday"
 msgstr "शुक्रवार"
 
-#: .\templates\contactus.html:340
+#: .\templates\contactus.html:394
 #: .\venv\Lib\site-packages\django\utils\dates.py:12
 msgid "Saturday"
 msgstr "शनिवार"
 
-#: .\templates\contactus.html:341
+#: .\templates\contactus.html:398
 #: .\venv\Lib\site-packages\django\utils\dates.py:13
 msgid "Sunday"
 msgstr "रविवार"
 
-#: .\templates\contactus.html:341
+#: .\templates\contactus.html:399
 msgid "10:00 AM – 2:00 PM"
 msgstr "सुबह 10:00 बजे से दोपहर 2:00 बजे तक"
 
-#: .\templates\contactus.html:359
+#: .\templates\contactus.html:440
 msgid "We're just a"
 msgstr "हम बस एक हैं"
 
-#: .\templates\contactus.html:359
+#: .\templates\contactus.html:441
 msgid "click"
 msgstr "क्लिक"
 
-#: .\templates\contactus.html:359
-msgid "away!"
-msgstr "दूर!"
-
-#: .\templates\contactus.html:362
-msgid ""
-"Reach out to us for any queries or to book a service. We respond promptly."
-msgstr ""
-"किसी भी प्रश्न के लिए या सेवा बुक करने के लिए हमसे संपर्क करें। हम तुरंत "
-"जवाब देते हैं."
-
-#: .\templates\contactus.html:366 .\templates\homepage.html:905
+#: .\templates\contactus.html:478
 msgid "Call Now"
 msgstr "अब कॉल करें"
 
@@ -1466,61 +1551,67 @@ msgstr "कृपया एक रेटिंग चुनें."
 msgid "Please write your review."
 msgstr "कृपया अपनी समीक्षा लिखें."
 
-#: .\templates\download_forms.html:358
+#: .\templates\download_forms.html:369
 msgid "Download"
 msgstr "डाउनलोड करना"
 
-#: .\templates\download_forms.html:358
+#: .\templates\download_forms.html:369
 msgid "Government Forms"
 msgstr "सरकारी फॉर्म"
 
-#: .\templates\download_forms.html:359
+#: .\templates\download_forms.html:370
 msgid "Access and download official forms for various services."
 msgstr "विभिन्न सेवाओं के लिए आधिकारिक फॉर्म एक्सेस करें और डाउनलोड करें।"
 
-#: .\templates\download_forms.html:372
+#: .\templates\download_forms.html:383
 msgid "Search forms by name..."
 msgstr "नाम से फ़ॉर्म खोजें..."
 
-#: .\templates\download_forms.html:373
+#: .\templates\download_forms.html:384
 msgid "Search forms"
 msgstr "प्रपत्र खोजें"
 
-#: .\templates\download_forms.html:375 .\templates\faq.html:375
+#: .\templates\download_forms.html:386 .\templates\faq.html:375
 msgid "Clear search"
 msgstr "स्पष्ट खोज"
 
-#: .\templates\download_forms.html:375
+#: .\templates\download_forms.html:386
 #: .\venv\Lib\site-packages\django\forms\widgets.py:528
 msgid "Clear"
 msgstr "स्पष्ट"
 
-#: .\templates\download_forms.html:399
+#: .\templates\download_forms.html:403
+#, fuzzy
+#| msgid "Profile"
+msgid "No file"
+msgstr "प्रोफ़ाइल"
+
+#: .\templates\download_forms.html:416
 msgid "No forms available."
 msgstr "कोई फॉर्म उपलब्ध नहीं है."
 
-#: .\templates\download_forms.html:407
+#: .\templates\download_forms.html:424
 msgid "No forms match your search."
 msgstr "कोई भी फॉर्म आपकी खोज से मेल नहीं खाता."
 
-#: .\templates\download_forms.html:413
+#: .\templates\download_forms.html:430
 msgid "All forms are official and up-to-date."
 msgstr "सभी फॉर्म आधिकारिक और अद्यतित हैं।"
 
-#: .\templates\download_forms.html:418
+#: .\templates\download_forms.html:435
 #, python-format
 msgid "Updated: %(current_month_year)s"
 msgstr "अपडेट किया गया: %(current_month_year)s"
 
-#: .\templates\download_forms.html:427
+#: .\templates\download_forms.html:444
 msgid "Need Assistance with"
 msgstr "के साथ सहायता की आवश्यकता है"
 
-#: .\templates\download_forms.html:427
+#: .\templates\download_forms.html:444
 msgid "Forms?"
 msgstr "प्रपत्र?"
 
-#: .\templates\download_forms.html:428
+#: .\templates\download_forms.html:445
 msgid "We're here to help you fill, print, and submit your documents."
 msgstr ""
 "हम आपके दस्तावेज़ भरने, प्रिंट करने और सबमिट करने में आपकी सहायता के लिए "
@@ -1594,7 +1685,7 @@ msgstr ""
 msgid "All Images"
 msgstr "सभी छवियाँ"
 
-#: .\templates\gallery.html:438 .\templates\homepage.html:838
+#: .\templates\gallery.html:438 .\templates\homepage.html:816
 msgid "No images available."
 msgstr "कोई चित्र उपलब्ध नहीं."
 
@@ -1684,156 +1775,105 @@ msgstr "खरीदने की सामर्थ्य"
 msgid "Cyber Services"
 msgstr "साइबर सेवाएँ"
 
-#: .\templates\homepage.html:719
-#, python-format
-msgid ""
-"\n"
-"          Welcome to %(name)s! We provide fast, reliable, and affordable online services such as document printing, online applications, Aadhaar updates, PAN card services, photocopying, and more. Committed to serving you with quality and convenience.\n"
-"        "
-msgstr ""
-"%(नाम)s में आपका स्वागत है! हम तेज़, विश्वसनीय और किफायती ऑनलाइन सेवाएँ "
-"प्रदान करते हैं जैसे दस्तावेज़ मुद्रण, ऑनलाइन आवेदन, आधार अपडेट, पैन कार्ड "
-"सेवाएँ, फोटोकॉपी और बहुत कुछ। आपको गुणवत्ता और सुविधा के साथ सेवा देने के "
-"लिए प्रतिबद्ध।"
-
-#: .\templates\homepage.html:726
-msgid "Explore Services"
-msgstr "सेवाओं का अन्वेषण करें"
-
-#: .\templates\homepage.html:735
+#: .\templates\homepage.html:740
 msgid "Online Forms"
 msgstr "ऑनलाइन फॉर्म"
 
-#: .\templates\homepage.html:738
+#: .\templates\homepage.html:744
 msgid "Aadhaar Services"
 msgstr "आधार सेवाएँ"
 
-#: .\templates\homepage.html:741
+#: .\templates\homepage.html:747
 msgid "PAN Card"
 msgstr "पैन कार्ड"
 
-#: .\templates\homepage.html:744
+#: .\templates\homepage.html:750
 msgid "Passport"
 msgstr "पासपोर्ट"
 
-#: .\templates\homepage.html:747
+#: .\templates\homepage.html:754
 msgid "Printing &amp; Scan"
 msgstr "मुद्रण एवं amp; स्कैन"
 
-#: .\templates\homepage.html:761
+#: .\templates\homepage.html:768
 msgid "Welcome to"
 msgstr "आपका स्वागत है"
 
-#: .\templates\homepage.html:764
+#: .\templates\homepage.html:771
 msgid "Your One-Stop Digital Service Hub"
 msgstr "आपका वन-स्टॉप डिजिटल सर्विस हब"
 
-#: .\templates\homepage.html:766
-msgid ""
-"We are a trusted cyber service provider offering a wide range of digital "
-"solutions to individuals and businesses."
-msgstr ""
-"हम एक विश्वसनीय साइबर सेवा प्रदाता हैं जो व्यक्तियों और व्यवसायों को डिजिटल "
-"समाधानों की एक विस्तृत श्रृंखला प्रदान करते हैं।"
-
-#: .\templates\homepage.html:779
+#: .\templates\homepage.html:788
 msgid "Customer Rating"
 msgstr "ग्राहक रेटिंग"
 
-#: .\templates\homepage.html:785
+#: .\templates\homepage.html:794
 msgid "Trusted &amp; Secure"
 msgstr "विश्वसनीय और amp; सुरक्षित"
 
-#: .\templates\homepage.html:787
-msgid ""
-"Your data is safe with us. Professional, confidential, and reliable service "
-"every time."
-msgstr ""
-"आपका डेटा हमारे पास सुरक्षित है. हर बार पेशेवर, गोपनीय और विश्वसनीय सेवा।"
-
-#: .\templates\homepage.html:799
-msgid "Comprehensive digital solutions tailored to your needs"
-msgstr "आपकी आवश्यकताओं के अनुरूप व्यापक डिजिटल समाधान"
-
-#: .\templates\homepage.html:813
-msgid "No services available."
-msgstr "कोई सेवा उपलब्ध नहीं."
-
-#: .\templates\homepage.html:820
-msgid "View All Services"
-msgstr "सभी सेवाएँ देखें"
-
-#: .\templates\homepage.html:831
+#: .\templates\homepage.html:809
 msgid "Take a look at our work and facilities"
 msgstr "हमारे काम और सुविधाओं पर एक नज़र डालें"
 
-#: .\templates\homepage.html:845
+#: .\templates\homepage.html:823
 msgid "View Full Gallery"
 msgstr "पूरी गैलरी देखें"
 
-#: .\templates\homepage.html:855
+#: .\templates\homepage.html:834
 msgid "What Our"
 msgstr "हमारा क्या"
 
-#: .\templates\homepage.html:855
+#: .\templates\homepage.html:834
 msgid "Customers Say"
 msgstr "ग्राहक कहते हैं"
 
-#: .\templates\homepage.html:856
+#: .\templates\homepage.html:835
 msgid "Real feedback from our valued clients"
 msgstr "हमारे मूल्यवान ग्राहकों से वास्तविक प्रतिक्रिया"
 
-#: .\templates\homepage.html:866
+#: .\templates\homepage.html:845
 msgid "No reviews yet."
 msgstr "अभी तक कोई समीक्षा नहीं."
 
-#: .\templates\homepage.html:873
+#: .\templates\homepage.html:852
 msgid "Read All Reviews"
 msgstr "सभी समीक्षाएँ पढ़ें"
 
-#: .\templates\homepage.html:883
+#: .\templates\homepage.html:863
 msgid "Business Timings"
 msgstr "व्यवसाय का समय"
 
-#: .\templates\homepage.html:888
+#: .\templates\homepage.html:867
 msgid "Monday – Saturday: 9:00 AM – 8:00 PM"
 msgstr "सोमवार-शनिवार: सुबह 9:00 बजे से शाम 8:00 बजे तक"
 
-#: .\templates\homepage.html:889
+#: .\templates\homepage.html:868
 msgid "Sunday: 10:00 AM – 2:00 PM"
 msgstr "रविवार: सुबह 10:00 बजे से दोपहर 2:00 बजे तक"
 
-#: .\templates\homepage.html:894 .\templates\services.html:529
+#: .\templates\homepage.html:873
 msgid "Get in Touch"
 msgstr "संपर्क में रहो"
 
-#: .\templates\homepage.html:901
+#: .\templates\homepage.html:881
 msgid "Call us for inquiries, support, or to place an order."
 msgstr "पूछताछ, सहायता या ऑर्डर देने के लिए हमें कॉल करें।"
 
-#: .\templates\homepage.html:919
+#: .\templates\homepage.html:910
 msgid "Recent"
 msgstr "हाल ही का"
 
-#: .\templates\homepage.html:921
-msgid "Stay updated with the latest news, offers, and important notices"
-msgstr "नवीनतम समाचारों, ऑफ़र और महत्वपूर्ण सूचनाओं से अपडेट रहें"
-
-#: .\templates\homepage.html:940
+#: .\templates\homepage.html:933
 msgid "View All Announcements"
 msgstr "सभी घोषणाएँ देखें"
 
-#: .\templates\homepage.html:950
+#: .\templates\homepage.html:944
 msgid "Find Us"
 msgstr "हमें लगता है"
 
-#: .\templates\homepage.html:950
+#: .\templates\homepage.html:944
 msgid "Here"
 msgstr "यहाँ"
-
-#: .\templates\homepage.html:961
-msgid "Get Directions"
-msgstr "दिशा - निर्देश प्राप्त करें"
 
 #: .\templates\jobs.html:400
 msgid "Jobs"
@@ -1867,39 +1907,11 @@ msgstr "फिलहाल कोई नौकरी का अवसर उप�
 msgid "join"
 msgstr "जोड़ना"
 
-#: .\templates\login.html:4
-msgid "Login – Cyber Café"
-msgstr "लॉग इन करें - साइबर कैफे"
-
-#: .\templates\login.html:14
-msgid "Welcome Back"
-msgstr "वापसी पर स्वागत है"
-
-#: .\templates\login.html:15
-msgid "Sign in to your account"
-msgstr "अपने खाते में साइन इन करें"
-
-#: .\templates\login.html:58
-msgid "Remember me"
-msgstr "मुझे याद करो"
-
-#: .\templates\login.html:60
-msgid "Forgot password?"
-msgstr "पासवर्ड भूल गए?"
-
-#: .\templates\login.html:73
-msgid "Don't have an account?"
-msgstr "कोई खाता नहीं है?"
-
-#: .\templates\login.html:74
-msgid "Register now"
-msgstr "अभी पंजीकरण करें"
-
 #: .\templates\password_change.html:4
 msgid "Change Password – Cyber Café"
 msgstr "पासवर्ड बदलें - साइबर कैफे"
 
-#: .\templates\password_change.html:14 .\templates\password_change.html:57
+#: .\templates\password_change.html:14 .\templates\password_change.html:61
 #: .\templates\profile.html:66
 msgid "Change Password"
 msgstr "पासवर्ड बदलें"
@@ -1908,7 +1920,7 @@ msgstr "पासवर्ड बदलें"
 msgid "Update your password to keep your account secure"
 msgstr "अपने खाते को सुरक्षित रखने के लिए अपना पासवर्ड अपडेट करें"
 
-#: .\templates\password_change.html:66
+#: .\templates\password_change.html:70
 msgid "Back to Profile"
 msgstr "प्रोफ़ाइल पर वापस जाएँ"
 
@@ -1960,33 +1972,33 @@ msgstr "खाता बनाएं"
 msgid "Join us to access exclusive services"
 msgstr "विशिष्ट सेवाओं तक पहुँचने के लिए हमसे जुड़ें"
 
-#: .\templates\register.html:57
+#: .\templates\register.html:65
 msgid "Sign Up"
 msgstr "साइन अप करें"
 
-#: .\templates\register.html:65
+#: .\templates\register.html:73
 msgid "Already have an account?"
 msgstr "क्या आपके पास पहले से एक खाता मौजूद है?"
 
-#: .\templates\register.html:66
+#: .\templates\register.html:74
 msgid "Log in"
 msgstr "लॉग इन करें"
 
-#: .\templates\register.html:72
+#: .\templates\register.html:80
 msgid "By registering, you agree to our"
 msgstr "पंजीकरण करके, आप हमारी बात से सहमत हैं"
 
-#: .\templates\register.html:73
+#: .\templates\register.html:81
 msgid "Terms of Service"
 msgstr "सेवा की शर्तें"
 
-#: .\templates\register.html:74
+#: .\templates\register.html:82
 #: .\venv\Lib\site-packages\django\db\models\base.py:1633
 #: .\venv\Lib\site-packages\django\forms\models.py:932
 msgid "and"
 msgstr "और"
 
-#: .\templates\register.html:75
+#: .\templates\register.html:83
 msgid "Privacy Policy"
 msgstr "गोपनीयता नीति"
 
@@ -2038,57 +2050,45 @@ msgstr "ज़रूरत"
 msgid "clarification"
 msgstr "स्पष्टीकरण"
 
-#: .\templates\services.html:467
-msgid "Satisfaction"
-msgstr "संतुष्टि"
+#: .\templates\services.html:5
+#, fuzzy
+#| msgid "Matoshree Cyber Cafe"
+msgid "Our Services – Matoshree Cyber Café"
+msgstr "साइबरटेक डिजिटल सेवाएँ"
 
-#: .\templates\services.html:471
-msgid "Support"
-msgstr "सहायता"
+#: .\templates\services.html:165
+msgid "Fast, reliable &amp; affordable — all under one roof"
+msgstr "तेज़, विश्वसनीय और amp; किफायती - सब कुछ एक ही छत के नीचे"
 
-#: .\templates\services.html:481
-msgid "Explore Our"
-msgstr "हमारा अन्वेषण करें"
-
-#: .\templates\services.html:481
-msgid "Solutions"
-msgstr "समाधान"
-
-#: .\templates\services.html:508
-msgid "Learn More"
-msgstr "और अधिक जानें"
-
-#: .\templates\services.html:532
-msgid "Need help with any"
-msgstr "किसी की मदद चाहिए"
-
-#: .\templates\services.html:532
-msgid "service"
-msgstr "सेवा"
+#: .\templates\services.html:181
+#, fuzzy
+#| msgid "No job openings available at the moment."
+msgid "No services available at the moment."
+msgstr "फिलहाल कोई नौकरी का अवसर उपलब्ध नहीं है."
 
 #: .\templates\superadmindashboard.html:9
 msgid "Super Admin Dashboard – Cyber Café"
 msgstr "सुपर एडमिन डैशबोर्ड - साइबर कैफे"
 
-#: .\templates\superadmindashboard.html:570
-#: .\templates\superadmindashboard.html:630
+#: .\templates\superadmindashboard.html:576
+#: .\templates\superadmindashboard.html:636
 msgid "Users"
 msgstr "उपयोगकर्ताओं"
 
-#: .\templates\superadmindashboard.html:1053
-#: .\templates\superadmindashboard.html:1195
+#: .\templates\superadmindashboard.html:1216
+#: .\templates\superadmindashboard.html:1358
 msgid "User Management"
 msgstr "प्रयोक्ता प्रबंधन"
 
-#: .\templates\superadmindashboard.html:1062
+#: .\templates\superadmindashboard.html:1225
 msgid "Staff"
 msgstr "कर्मचारी"
 
-#: .\templates\superadmindashboard.html:1076
+#: .\templates\superadmindashboard.html:1239
 msgid "Yes,No"
 msgstr "हां नहीं"
 
-#: .\templates\superadmindashboard.html:1092
+#: .\templates\superadmindashboard.html:1255
 msgid "No users found."
 msgstr "कोई उपयोगकर्ता नहीं मिला."
 
@@ -2768,14 +2768,6 @@ msgstr "परिवर्तन"
 msgid "Unknown"
 msgstr "अज्ञात"
 
-#: .\venv\Lib\site-packages\django\forms\widgets.py:870
-msgid "Yes"
-msgstr "हाँ"
-
-#: .\venv\Lib\site-packages\django\forms\widgets.py:871
-msgid "No"
-msgstr "नहीं"
-
 #: .\venv\Lib\site-packages\django\tasks\base.py:34
 msgctxt "Task"
 msgid "Ready"
@@ -3360,3 +3352,101 @@ msgstr "जैंगो समुदाय"
 #: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:236
 msgid "Connect, get help, or contribute"
 msgstr "जुड़ें, सहायता प्राप्त करें, या योगदान करें"
+
+#~ msgid ""
+#~ "We're here to help. Send us a message and we'll get back to you promptly."
+#~ msgstr ""
+#~ "हम मदद के लिए यहां हैं. हमें एक संदेश भेजें और हम तुरंत आपसे संपर्क करेंगे।"
+
+#~ msgid "away!"
+#~ msgstr "दूर!"
+
+#~ msgid ""
+#~ "Reach out to us for any queries or to book a service. We respond promptly."
+#~ msgstr ""
+#~ "किसी भी प्रश्न के लिए या सेवा बुक करने के लिए हमसे संपर्क करें। हम तुरंत "
+#~ "जवाब देते हैं."
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "          Welcome to %(name)s! We provide fast, reliable, and affordable online services such as document printing, online applications, Aadhaar updates, PAN card services, photocopying, and more. Committed to serving you with quality and convenience.\n"
+#~ "        "
+#~ msgstr ""
+#~ "%(नाम)s में आपका स्वागत है! हम तेज़, विश्वसनीय और किफायती ऑनलाइन सेवाएँ "
+#~ "प्रदान करते हैं जैसे दस्तावेज़ मुद्रण, ऑनलाइन आवेदन, आधार अपडेट, पैन कार्ड "
+#~ "सेवाएँ, फोटोकॉपी और बहुत कुछ। आपको गुणवत्ता और सुविधा के साथ सेवा देने के "
+#~ "लिए प्रतिबद्ध।"
+
+#~ msgid "Explore Services"
+#~ msgstr "सेवाओं का अन्वेषण करें"
+
+#~ msgid ""
+#~ "We are a trusted cyber service provider offering a wide range of digital "
+#~ "solutions to individuals and businesses."
+#~ msgstr ""
+#~ "हम एक विश्वसनीय साइबर सेवा प्रदाता हैं जो व्यक्तियों और व्यवसायों को डिजिटल "
+#~ "समाधानों की एक विस्तृत श्रृंखला प्रदान करते हैं।"
+
+#~ msgid ""
+#~ "Your data is safe with us. Professional, confidential, and reliable service "
+#~ "every time."
+#~ msgstr ""
+#~ "आपका डेटा हमारे पास सुरक्षित है. हर बार पेशेवर, गोपनीय और विश्वसनीय सेवा।"
+
+#~ msgid "Comprehensive digital solutions tailored to your needs"
+#~ msgstr "आपकी आवश्यकताओं के अनुरूप व्यापक डिजिटल समाधान"
+
+#~ msgid "No services available."
+#~ msgstr "कोई सेवा उपलब्ध नहीं."
+
+#~ msgid "View All Services"
+#~ msgstr "सभी सेवाएँ देखें"
+
+#~ msgid "Stay updated with the latest news, offers, and important notices"
+#~ msgstr "नवीनतम समाचारों, ऑफ़र और महत्वपूर्ण सूचनाओं से अपडेट रहें"
+
+#~ msgid "Get Directions"
+#~ msgstr "दिशा - निर्देश प्राप्त करें"
+
+#~ msgid "Login – Cyber Café"
+#~ msgstr "लॉग इन करें - साइबर कैफे"
+
+#~ msgid "Welcome Back"
+#~ msgstr "वापसी पर स्वागत है"
+
+#~ msgid "Sign in to your account"
+#~ msgstr "अपने खाते में साइन इन करें"
+
+#~ msgid "Remember me"
+#~ msgstr "मुझे याद करो"
+
+#~ msgid "Forgot password?"
+#~ msgstr "पासवर्ड भूल गए?"
+
+#~ msgid "Don't have an account?"
+#~ msgstr "कोई खाता नहीं है?"
+
+#~ msgid "Register now"
+#~ msgstr "अभी पंजीकरण करें"
+
+#~ msgid "Satisfaction"
+#~ msgstr "संतुष्टि"
+
+#~ msgid "Support"
+#~ msgstr "सहायता"
+
+#~ msgid "Explore Our"
+#~ msgstr "हमारा अन्वेषण करें"
+
+#~ msgid "Solutions"
+#~ msgstr "समाधान"
+
+#~ msgid "Learn More"
+#~ msgstr "और अधिक जानें"
+
+#~ msgid "Need help with any"
+#~ msgstr "किसी की मदद चाहिए"
+
+#~ msgid "service"
+#~ msgstr "सेवा"

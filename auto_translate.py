@@ -1,6 +1,6 @@
 import polib
 from deep_translator import GoogleTranslator
-
+        
 LANGUAGES = {
     "mr": "marathi",
     "hi": "hindi",
