@@ -101,6 +101,8 @@
       .list-item .info .sub { font-size:0.85rem; color:#6f85a0; }
       .list-item .info img { max-height:50px; border-radius:4px; margin-top:4px; }
 
+      .list-actions { display:flex; gap:0.3rem; align-items:center; flex-wrap:wrap; }
+
       /* Gallery grid */
       .gallery-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(150px,1fr)); gap:1rem; margin-top:1rem; }
       .gallery-item { position:relative; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1); background:#fff; }
@@ -378,15 +380,58 @@
               <span class="title">{{ ann.title }}</span>
               <span class="sub">{{ ann.description|truncatechars:60 }} – {{ ann.category }}</span>
             </div>
-            <form method="post" style="display:inline;">
-              {% csrf_token %}
-              <input type="hidden" name="action" value="delete">
-              <input type="hidden" name="model_type" value="announcement">
-              <input type="hidden" name="id" value="{{ ann.id }}">
-              <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this announcement?"|escapejs %}')"><i class="fas fa-times"></i></button>
-            </form>
+            <div class="list-actions">
+              <button class="btn-primary btn-sm" onclick="editAnnouncement('{{ ann.id }}', '{{ ann.title|escapejs }}', '{{ ann.category|default:""|escapejs }}', '{{ ann.description|escapejs }}')"><i class="fas fa-edit"></i></button>
+              <form method="post" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="model_type" value="announcement">
+                <input type="hidden" name="id" value="{{ ann.id }}">
+                <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this announcement?"|escapejs %}')"><i class="fas fa-times"></i></button>
+              </form>
+            </div>
           </div>
           {% empty %}<p style="color:#6f85a0;">{% trans "No announcements." %}</p>{% endfor %}
+        </div>
+
+        <!-- Inline Edit Form for Announcements -->
+        <div class="admin-form" id="editAnnouncementForm" style="display:none; margin-top:1rem;">
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="edit">
+            <input type="hidden" name="model_type" value="announcement">
+            <input type="hidden" name="id" id="editAnnouncementId">
+            <div>
+              <label>{% trans "Title" %} *</label>
+              <input type="text" name="title" id="editAnnTitle" required>
+            </div>
+            <div>
+              <label>{% trans "Category" %}</label>
+              <select name="category" id="editAnnCategory">
+                <option value="General">{% trans "General" %}</option>
+                <option value="Government Scheme">{% trans "Government Scheme" %}</option>
+                <option value="Recruitment">{% trans "Recruitment" %}</option>
+                <option value="Scholarship">{% trans "Scholarship" %}</option>
+                <option value="Holiday">{% trans "Holiday" %}</option>
+                <option value="Notice">{% trans "Notice" %}</option>
+              </select>
+            </div>
+            <div class="full-width">
+              <label>{% trans "Description" %}</label>
+              <textarea name="description" id="editAnnDesc" rows="3"></textarea>
+            </div>
+            <div class="full-width">
+              <label>{% trans "Urgent" %}</label>
+              <select name="is_urgent" id="editAnnUrgent">
+                <option value="false">{% trans "No" %}</option>
+                <option value="true">{% trans "Yes" %}</option>
+              </select>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn-outline" onclick="document.getElementById('editAnnouncementForm').style.display='none'">{% trans "Cancel" %}</button>
+              <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
+            </div>
+          </form>
         </div>
       </div>
 
@@ -416,15 +461,56 @@
               <span class="title"><i class="fas fa-{{ job.icon|default:'briefcase' }}"></i> {{ job.title }}</span>
               <span class="sub">{% blocktrans with org=job.organization date=job.last_date|date:"d M Y" %}{{ org }} – Last Date: {{ date }}{% endblocktrans %}</span>
             </div>
-            <form method="post" style="display:inline;">
-              {% csrf_token %}
-              <input type="hidden" name="action" value="delete">
-              <input type="hidden" name="model_type" value="job">
-              <input type="hidden" name="id" value="{{ job.id }}">
-              <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this job?"|escapejs %}')"><i class="fas fa-times"></i></button>
-            </form>
+            <div class="list-actions">
+              <button class="btn-primary btn-sm" onclick="editJob('{{ job.id }}', '{{ job.title|escapejs }}', '{{ job.organization|escapejs }}', '{{ job.description|escapejs }}', '{{ job.last_date|date:"Y-m-d" }}', '{{ job.apply_link|escapejs }}', '{{ job.icon|default:""|escapejs }}')"><i class="fas fa-edit"></i></button>
+              <form method="post" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="model_type" value="job">
+                <input type="hidden" name="id" value="{{ job.id }}">
+                <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this job?"|escapejs %}')"><i class="fas fa-times"></i></button>
+              </form>
+            </div>
           </div>
           {% empty %}<p style="color:#6f85a0;">{% trans "No jobs." %}</p>{% endfor %}
+        </div>
+
+        <!-- Inline Edit Form for Jobs -->
+        <div class="admin-form" id="editJobForm" style="display:none; margin-top:1rem;">
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="edit">
+            <input type="hidden" name="model_type" value="job">
+            <input type="hidden" name="id" id="editJobId">
+            <div>
+              <label>{% trans "Title" %} *</label>
+              <input type="text" name="title" id="editJobTitle" required>
+            </div>
+            <div>
+              <label>{% trans "Organization" %} *</label>
+              <input type="text" name="organization" id="editJobOrg" required>
+            </div>
+            <div class="full-width">
+              <label>{% trans "Description" %}</label>
+              <textarea name="description" id="editJobDesc" rows="3"></textarea>
+            </div>
+            <div>
+              <label>{% trans "Last Date" %}</label>
+              <input type="date" name="last_date" id="editJobDate">
+            </div>
+            <div>
+              <label>{% trans "Apply Link" %}</label>
+              <input type="url" name="apply_link" id="editJobLink" placeholder="https://...">
+            </div>
+            <div>
+              <label>{% trans "Icon" %}</label>
+              <input type="text" name="icon" id="editJobIcon" placeholder="{% trans "e.g. briefcase" %}">
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn-outline" onclick="document.getElementById('editJobForm').style.display='none'">{% trans "Cancel" %}</button>
+              <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
+            </div>
+          </form>
         </div>
       </div>
 
@@ -457,15 +543,49 @@
                 <img src="{{ scheme.image.url }}" alt="{{ scheme.title }}">
               {% endif %}
             </div>
-            <form method="post" style="display:inline;">
-              {% csrf_token %}
-              <input type="hidden" name="action" value="delete">
-              <input type="hidden" name="model_type" value="scheme">
-              <input type="hidden" name="id" value="{{ scheme.id }}">
-              <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this scheme?"|escapejs %}')"><i class="fas fa-times"></i></button>
-            </form>
+            <div class="list-actions">
+              <button class="btn-primary btn-sm" onclick="editScheme('{{ scheme.id }}', '{{ scheme.title|escapejs }}', '{{ scheme.description|escapejs }}', '{{ scheme.eligibility|default:""|escapejs }}')"><i class="fas fa-edit"></i></button>
+              <form method="post" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="model_type" value="scheme">
+                <input type="hidden" name="id" value="{{ scheme.id }}">
+                <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this scheme?"|escapejs %}')"><i class="fas fa-times"></i></button>
+              </form>
+            </div>
           </div>
           {% empty %}<p style="color:#6f85a0;">{% trans "No schemes." %}</p>{% endfor %}
+        </div>
+
+        <!-- Inline Edit Form for Schemes (image handled separately) -->
+        <div class="admin-form" id="editSchemeForm" style="display:none; margin-top:1rem;">
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="edit">
+            <input type="hidden" name="model_type" value="scheme">
+            <input type="hidden" name="id" id="editSchemeId">
+            <div>
+              <label>{% trans "Title" %} *</label>
+              <input type="text" name="title" id="editSchemeTitle" required>
+            </div>
+            <div class="full-width">
+              <label>{% trans "Description" %}</label>
+              <textarea name="description" id="editSchemeDesc" rows="3"></textarea>
+            </div>
+            <div>
+              <label>{% trans "Eligibility" %}</label>
+              <input type="text" name="eligibility" id="editSchemeEligibility" placeholder="{% trans "e.g. All citizens above 18" %}">
+            </div>
+            <div>
+              <label>{% trans "Image" %}</label>
+              <input type="file" name="image" id="editSchemeImage" accept="image/*">
+              <small style="color:#6f85a0; display:block; margin-top:0.2rem;">{% trans "Leave empty to keep current image." %}</small>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn-outline" onclick="document.getElementById('editSchemeForm').style.display='none'">{% trans "Cancel" %}</button>
+              <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
+            </div>
+          </form>
         </div>
       </div>
 
@@ -557,15 +677,50 @@
               <span class="title">{{ f.title }}</span>
               <span class="sub">{{ f.category }} – {{ f.pdf.name }}</span>
             </div>
-            <form method="post" style="display:inline;">
-              {% csrf_token %}
-              <input type="hidden" name="action" value="delete">
-              <input type="hidden" name="model_type" value="form">
-              <input type="hidden" name="id" value="{{ f.id }}">
-              <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this form?"|escapejs %}')"><i class="fas fa-times"></i></button>
-            </form>
+            <div class="list-actions">
+              <button class="btn-primary btn-sm" onclick="editForm('{{ f.id }}', '{{ f.title|escapejs }}', '{{ f.category|default:""|escapejs }}')"><i class="fas fa-edit"></i></button>
+              <form method="post" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="model_type" value="form">
+                <input type="hidden" name="id" value="{{ f.id }}">
+                <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this form?"|escapejs %}')"><i class="fas fa-times"></i></button>
+              </form>
+            </div>
           </div>
           {% empty %}<p style="color:#6f85a0;">{% trans "No forms uploaded." %}</p>{% endfor %}
+        </div>
+
+        <!-- Inline Edit Form for Download Forms -->
+        <div class="admin-form" id="editFormForm" style="display:none; margin-top:1rem;">
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="edit">
+            <input type="hidden" name="model_type" value="form">
+            <input type="hidden" name="id" id="editFormId">
+            <div>
+              <label>{% trans "Title" %} *</label>
+              <input type="text" name="title" id="editFormTitle" required>
+            </div>
+            <div>
+              <label>{% trans "Category" %}</label>
+              <select name="category" id="editFormCategory">
+                <option value="General">{% trans "General" %}</option>
+                <option value="Government">{% trans "Government" %}</option>
+                <option value="Financial">{% trans "Financial" %}</option>
+                <option value="Application">{% trans "Application" %}</option>
+              </select>
+            </div>
+            <div>
+              <label>{% trans "PDF File" %}</label>
+              <input type="file" name="pdf" id="editFormPdf" accept=".pdf">
+              <small style="color:#6f85a0; display:block; margin-top:0.2rem;">{% trans "Leave empty to keep current file." %}</small>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn-outline" onclick="document.getElementById('editFormForm').style.display='none'">{% trans "Cancel" %}</button>
+              <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
+            </div>
+          </form>
         </div>
       </div>
 
@@ -677,7 +832,7 @@
           document.getElementById("sidebar").classList.toggle("open");
         });
 
-        // Edit service: populate inline form
+        // ---- Edit Service ----
         window.editService = function(id, name, category, description, active, icon) {
           document.getElementById("editServiceId").value = id;
           document.getElementById("editSvcName").value = name;
@@ -689,12 +844,11 @@
           document.getElementById("editServiceForm").scrollIntoView({ behavior: 'smooth' });
         };
 
-        // Cancel edit
         document.querySelector("#editServiceForm .btn-outline").addEventListener("click", function() {
           document.getElementById("editServiceForm").style.display = "none";
         });
 
-        // Edit charge: populate inline form
+        // ---- Edit Charge ----
         window.editCharge = function(id, serviceId, charge) {
           document.getElementById("editChargeId").value = id;
           document.getElementById("editChargeService").value = serviceId;
@@ -703,9 +857,66 @@
           document.getElementById("editChargeForm").scrollIntoView({ behavior: 'smooth' });
         };
 
-        // Cancel edit charge
         document.querySelector("#editChargeForm .btn-outline").addEventListener("click", function() {
           document.getElementById("editChargeForm").style.display = "none";
+        });
+
+        // ---- Edit Announcement ----
+        window.editAnnouncement = function(id, title, category, description) {
+          document.getElementById("editAnnouncementId").value = id;
+          document.getElementById("editAnnTitle").value = title;
+          document.getElementById("editAnnCategory").value = category || 'General';
+          document.getElementById("editAnnDesc").value = description || '';
+          document.getElementById("editAnnouncementForm").style.display = "grid";
+          document.getElementById("editAnnouncementForm").scrollIntoView({ behavior: 'smooth' });
+        };
+
+        document.querySelector("#editAnnouncementForm .btn-outline").addEventListener("click", function() {
+          document.getElementById("editAnnouncementForm").style.display = "none";
+        });
+
+        // ---- Edit Job ----
+        window.editJob = function(id, title, organization, description, lastDate, applyLink, icon) {
+          document.getElementById("editJobId").value = id;
+          document.getElementById("editJobTitle").value = title;
+          document.getElementById("editJobOrg").value = organization;
+          document.getElementById("editJobDesc").value = description || '';
+          document.getElementById("editJobDate").value = lastDate || '';
+          document.getElementById("editJobLink").value = applyLink || '';
+          document.getElementById("editJobIcon").value = icon || '';
+          document.getElementById("editJobForm").style.display = "grid";
+          document.getElementById("editJobForm").scrollIntoView({ behavior: 'smooth' });
+        };
+
+        document.querySelector("#editJobForm .btn-outline").addEventListener("click", function() {
+          document.getElementById("editJobForm").style.display = "none";
+        });
+
+        // ---- Edit Scheme ----
+        window.editScheme = function(id, title, description, eligibility) {
+          document.getElementById("editSchemeId").value = id;
+          document.getElementById("editSchemeTitle").value = title;
+          document.getElementById("editSchemeDesc").value = description || '';
+          document.getElementById("editSchemeEligibility").value = eligibility || '';
+          document.getElementById("editSchemeForm").style.display = "grid";
+          document.getElementById("editSchemeForm").scrollIntoView({ behavior: 'smooth' });
+        };
+
+        document.querySelector("#editSchemeForm .btn-outline").addEventListener("click", function() {
+          document.getElementById("editSchemeForm").style.display = "none";
+        });
+
+        // ---- Edit Form (DownloadForm) ----
+        window.editForm = function(id, title, category) {
+          document.getElementById("editFormId").value = id;
+          document.getElementById("editFormTitle").value = title;
+          document.getElementById("editFormCategory").value = category || 'General';
+          document.getElementById("editFormForm").style.display = "grid";
+          document.getElementById("editFormForm").scrollIntoView({ behavior: 'smooth' });
+        };
+
+        document.querySelector("#editFormForm .btn-outline").addEventListener("click", function() {
+          document.getElementById("editFormForm").style.display = "none";
         });
 
         // Show dashboard by default

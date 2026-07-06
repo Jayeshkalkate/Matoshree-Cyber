@@ -223,6 +223,17 @@
   .btn-download:active {
     transform: scale(0.96);
   }
+  .btn-download.disabled {
+    opacity: 0.5;
+    cursor: default;
+    pointer-events: none;
+  }
+  .btn-download.disabled:hover {
+    transform: none;
+    box-shadow: none;
+    background: transparent;
+    color: var(--secondary);
+  }
 
   /* No results */
   .no-results {
@@ -383,9 +394,15 @@
           <i class="fas fa-file-pdf"></i> {{ form.title }}
         </span>
         <span class="form-category">{{ form.category|default:_("General") }}</span>
+        {% if form.pdf %}
         <a href="{{ form.pdf.url }}" class="btn-download" download>
           <i class="fas fa-download"></i> {% trans "PDF" %}
         </a>
+        {% else %}
+        <span class="btn-download disabled">
+          <i class="fas fa-file-pdf"></i> {% trans "No file" %}
+        </span>
+        {% endif %}
       </div>
       {% empty %}
       <p
