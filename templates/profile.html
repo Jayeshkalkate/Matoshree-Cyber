@@ -1,149 +1,504 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block title %}{% trans "My Profile – Cyber Café" %}{% endblock %}
+{% block title %}{% trans "My Profile" %}{% endblock %}
 
-{% block content %}
-<div class="container py-5">
-  <div class="row justify-content-center">
-    <div class="col-md-8 col-lg-6">
-      <div class="card shadow-lg border-0 rounded-4">
-        <div class="card-body p-4 p-md-5">
-          <div class="text-center mb-4">
-            <i class="fas fa-user-circle fa-3x text-primary mb-3"></i>
-            <h2 class="fw-bold">{% trans "My Profile" %}</h2>
-            <p class="text-muted">{% trans "Update your personal information" %}</p>
-          </div>
-
-          {% if form.non_field_errors %}
-          <div class="alert alert-danger" role="alert">
-            {% for error in form.non_field_errors %}{{ error }}{% endfor %}
-          </div>
-          {% endif %}
-
-          <form method="post" novalidate>
-            {% csrf_token %}
-            {% for field in form %}
-            <div class="mb-3">
-              <label for="{{ field.id_for_label }}" class="form-label fw-semibold">
-                {{ field.label }}
-                {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
-              </label>
-
-              {% if field.field.widget.input_type == 'password' %}
-              <div class="input-group">
-                {{ field }}
-                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="{{ field.id_for_label }}">
-                  <i class="fas fa-eye"></i>
-                </button>
-              </div>
-              {% else %}
-                {{ field }}
-              {% endif %}
-
-              {% if field.help_text %}
-                <small class="form-text text-muted">{{ field.help_text }}</small>
-              {% endif %}
-              {% if field.errors %}
-                <div class="invalid-feedback d-block">
-                  {% for error in field.errors %}{{ error }}{% endfor %}
-                </div>
-              {% endif %}
-            </div>
-            {% endfor %}
-
-            <div class="d-grid gap-2">
-              <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-semibold">
-                <i class="fas fa-save me-2"></i> {% trans "Update Profile" %}
-              </button>
-            </div>
-          </form>
-
-          <hr class="my-4" />
-
-          <div class="text-center">
-            <a href="{% url 'password_change' %}" class="btn btn-outline-secondary rounded-pill px-4">
-              <i class="fas fa-key me-2"></i> {% trans "Change Password" %}
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
+{% block extra_head %}
+<!-- ================================================================
+     PROFILE PAGE – Futuristic Cyber / Gaming Theme
+     Uses global CSS variables from base.html.
+     Includes neon glow effects, glassmorphism, reveal animations,
+     and pricing cards with hover scaling + neon border.
+     ================================================================ -->
 <style>
-  .card {
-    background: #ffffff;
-    transition: transform 0.2s ease;
+  /* ---- Section reveal animation (scroll-triggered) ---- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
   }
-  .card:hover {
-    transform: translateY(-2px);
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
   }
 
-  input[type="text"],
-  input[type="email"],
-  input[type="password"] {
+  /* ---- Profile card (glassmorphism) ---- */
+  .profile-section {
+    padding: 70px 0 60px;
+    background: var(--bg-secondary);
+  }
+  .profile-card-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .profile-card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 2rem 2.5rem;
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(8px);
+    transition: var(--transition);
+  }
+  .profile-card:hover {
+    border-color: var(--neon-cyan);
+    box-shadow: var(--shadow-card), var(--glow-cyan);
+  }
+  .profile-card .avatar {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .profile-card .avatar i {
+    font-size: 4rem;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 40px rgba(0, 240, 255, 0.3);
+  }
+  .profile-card h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--text-white);
+    text-align: center;
+    margin-bottom: 0.25rem;
+  }
+  .profile-card .subhead {
+    text-align: center;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  /* ---- Form fields (neon focus) ---- */
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+  .form-group label {
+    display: block;
+    font-weight: 600;
+    color: var(--text-white);
+    margin-bottom: 0.3rem;
+    font-size: 0.95rem;
+  }
+  .form-group label .required {
+    color: var(--neon-magenta);
+  }
+  .form-control {
     width: 100%;
-    padding: 0.6rem 1rem;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 0.5rem;
+    padding: 0.7rem 1rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1.5px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-sm);
+    color: var(--text-white);
     font-size: 1rem;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: var(--transition);
+    font-family: var(--font-body);
   }
-
-  input[type="text"]:focus,
-  input[type="email"]:focus,
-  input[type="password"]:focus {
-    border-color: #0a66c2;
-    box-shadow: 0 0 0 4px rgba(10, 102, 194, 0.1);
+  .form-control:focus {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 0 4px rgba(0, 240, 255, 0.08), 0 0 30px rgba(0, 240, 255, 0.05);
     outline: none;
+    background: rgba(255, 255, 255, 0.06);
   }
-
-  .input-group .toggle-password {
-    border-left: none;
-    border-radius: 0 0.5rem 0.5rem 0;
-    background: #f8fafc;
-    border-color: #e2e8f0;
-    color: #64748b;
-  }
-  .input-group .toggle-password:hover {
-    background: #e9edf2;
-    color: #0b1b33;
-  }
-  .input-group input {
-    border-radius: 0.5rem 0 0 0.5rem;
-    border-right: none;
-  }
-
-  .invalid-feedback {
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
+  .form-control::placeholder {
+    color: var(--text-muted);
+    opacity: 0.6;
   }
   .form-text {
+    color: var(--text-muted);
     font-size: 0.8rem;
-    margin-top: 0.25rem;
+    margin-top: 0.2rem;
+  }
+  .invalid-feedback {
+    color: var(--neon-magenta);
+    font-size: 0.85rem;
+    margin-top: 0.2rem;
   }
 
-  @media (max-width: 576px) {
-    .card-body {
-      padding: 1.5rem !important;
+  /* ---- Password toggle (neon styled) ---- */
+  .input-group {
+    display: flex;
+    align-items: stretch;
+  }
+  .input-group .form-control {
+    border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+    border-right: none;
+  }
+  .input-group .toggle-password {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1.5px solid rgba(255, 255, 255, 0.06);
+    border-left: none;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    color: var(--text-muted);
+    padding: 0 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+  }
+  .input-group .toggle-password:hover {
+    background: rgba(0, 240, 255, 0.06);
+    color: var(--neon-cyan);
+    border-color: var(--neon-cyan);
+  }
+
+  /* ---- Submit button (pulse & glow) ---- */
+  .btn-submit {
+    width: 100%;
+    padding: 0.9rem;
+    background: var(--gradient-cyan);
+    border: none;
+    border-radius: var(--radius-pill);
+    color: var(--bg-primary);
+    font-weight: 700;
+    font-size: 1rem;
+    transition: var(--transition);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    font-family: var(--font-body);
+    cursor: pointer;
+  }
+  .btn-submit:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: var(--glow-cyan);
+  }
+  .btn-submit:active {
+    animation: neonPulse 1.5s ease-in-out infinite;
+  }
+
+  /* ---- Secondary action (password change) ---- */
+  .action-link {
+    display: block;
+    text-align: center;
+    margin-top: 1.5rem;
+    color: var(--text-muted);
+    transition: var(--transition);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .action-link:hover {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+  }
+  .action-link i {
+    margin-right: 0.5rem;
+  }
+
+  hr {
+    border: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.04);
+    margin: 1.5rem 0;
+  }
+
+  /* ---- Pricing Cards Section (reused from other pages) ---- */
+  .pricing-section {
+    padding: 70px 0 80px;
+    background: var(--bg-primary);
+    border-top: 1px solid rgba(0, 240, 255, 0.04);
+  }
+  .pricing-section .section-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .pricing-section .section-header h2 {
+    font-size: 2.6rem;
+    font-weight: 800;
+    font-family: var(--font-display);
+    color: var(--text-white);
+    letter-spacing: -0.5px;
+  }
+  .pricing-section .section-header h2 span {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+  }
+  .pricing-section .section-header p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    max-width: 560px;
+    margin: 8px auto 0;
+  }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .pricing-card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 36px 24px 30px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    transition: var(--transition);
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+  }
+  .pricing-card::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 20%, rgba(0, 240, 255, 0.02), transparent 70%);
+    pointer-events: none;
+    opacity: 0;
+    transition: var(--transition);
+  }
+  .pricing-card:hover::before {
+    opacity: 1;
+  }
+  /* ---- The sleek hover interaction: scale up + neon border ---- */
+  .pricing-card:hover {
+    transform: scale(1.04) translateY(-8px);
+    border-color: var(--neon-cyan);
+    box-shadow: var(--shadow-card), var(--glow-cyan), 0 0 60px rgba(0, 240, 255, 0.05);
+  }
+  .pricing-card .plan-name {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-white);
+    margin-bottom: 4px;
+  }
+  .pricing-card .price {
+    font-family: var(--font-display);
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+    margin: 12px 0;
+  }
+  .pricing-card .price span {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+  .pricing-card .features {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0 24px;
+    text-align: left;
+  }
+  .pricing-card .features li {
+    padding: 6px 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  }
+  .pricing-card .features li i {
+    color: var(--neon-cyan);
+    width: 20px;
+    font-size: 0.9rem;
+  }
+  .pricing-card .btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* ================================================================
+     RESPONSIVE
+     ================================================================ */
+  @media (max-width: 1024px) {
+    .pricing-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .profile-card {
+      padding: 1.5rem;
+    }
+    .profile-card .avatar i {
+      font-size: 3rem;
+    }
+    .profile-card h2 {
+      font-size: 1.6rem;
+    }
+    .pricing-grid {
+      grid-template-columns: 1fr;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .profile-card {
+      padding: 1rem;
+    }
+    .pricing-card .price {
+      font-size: 2.2rem;
     }
   }
 </style>
+{% endblock %}
 
+{% block content %}
+<!-- ================================================================
+     PROFILE SECTION – Glassmorphism card with neon glow
+     ================================================================ -->
+<section class="profile-section reveal">
+  <div class="container">
+    <div class="profile-card-wrapper">
+      <div class="profile-card">
+        <div class="avatar">
+          <i class="fas fa-user-circle"></i>
+        </div>
+        <h2>{% trans "My Profile" %}</h2>
+        <p class="subhead">{% trans "Update your personal information" %}</p>
+
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger" role="alert">
+          {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="post" novalidate>
+          {% csrf_token %}
+
+          {% for field in form %}
+          <div class="form-group">
+            <label for="{{ field.id_for_label }}">
+              {{ field.label }}
+              {% if field.field.required %}<span class="required">*</span>{% endif %}
+            </label>
+
+            {% if field.field.widget.input_type == 'password' %}
+            <div class="input-group">
+              {{ field }}
+              <button class="toggle-password" type="button" data-target="{{ field.id_for_label }}">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+            {% else %}
+              {{ field }}
+            {% endif %}
+
+            {% if field.help_text %}
+              <div class="form-text">{{ field.help_text }}</div>
+            {% endif %}
+            {% if field.errors %}
+              <div class="invalid-feedback">
+                {% for error in field.errors %}{{ error }}{% endfor %}
+              </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+
+          <button type="submit" class="btn-submit">
+            <i class="fas fa-save"></i> {% trans "Update Profile" %}
+          </button>
+        </form>
+
+        <hr>
+
+        <a href="{% url 'password_change' %}" class="action-link">
+          <i class="fas fa-key"></i> {% trans "Change Password" %}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     PRICING CARDS – Service packages with neon hover effect
+     (Included to showcase the hover interaction as requested)
+     ================================================================ -->
+<section class="pricing-section reveal">
+  <div class="container">
+    <div class="section-header">
+      <h2>{% trans "Popular" %} <span>{% trans "Service Packages" %}</span></h2>
+      <p>{% trans "Get the most out of our services with these convenient packages." %}</p>
+    </div>
+    <div class="pricing-grid">
+      <!-- Basic Package -->
+      <div class="pricing-card">
+        <div class="plan-name">{% trans "Starter" %}</div>
+        <div class="price">₹99 <span>/ {% trans "session" %}</span></div>
+        <ul class="features">
+          <li><i class="fas fa-check"></i> {% trans "Printing (10 pages B&W)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Photocopy (10 pages)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Email & Internet (30 min)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Document Scanning (5 pages)" %}</li>
+        </ul>
+        <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Get Started" %}</a>
+      </div>
+      <!-- Standard Package (highlighted with pulse) -->
+      <div class="pricing-card" style="border-color: rgba(0, 240, 255, 0.15);">
+        <div class="plan-name">{% trans "Pro" %}</div>
+        <div class="price">₹199 <span>/ {% trans "session" %}</span></div>
+        <ul class="features">
+          <li><i class="fas fa-check"></i> {% trans "Printing (30 pages B&W / 10 color)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Photocopy (30 pages)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Email & Internet (60 min)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Document Scanning (15 pages)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Passport-size photos (4 copies)" %}</li>
+        </ul>
+        <a href="{% url 'appointment' %}" class="btn-primary pulse">{% trans "Choose Plan" %}</a>
+      </div>
+      <!-- Premium Package -->
+      <div class="pricing-card">
+        <div class="plan-name">{% trans "Enterprise" %}</div>
+        <div class="price">₹299 <span>/ {% trans "session" %}</span></div>
+        <ul class="features">
+          <li><i class="fas fa-check"></i> {% trans "Printing (50 pages B&W / 20 color)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Photocopy (50 pages)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Email & Internet (90 min)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Document Scanning (30 pages)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Passport-size photos (8 copies)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Priority support & assistance" %}</li>
+        </ul>
+        <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Go Premium" %}</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
 <script>
-  document.querySelectorAll(".toggle-password").forEach((button) => {
-    button.addEventListener("click", function () {
-      const targetId = this.getAttribute("data-target");
-      const input = document.getElementById(targetId);
-      if (input) {
-        const type = input.getAttribute("type") === "password" ? "text" : "password";
-        input.setAttribute("type", type);
-        this.querySelector("i").classList.toggle("fa-eye");
-        this.querySelector("i").classList.toggle("fa-eye-slash");
-      }
+  (function() {
+    'use strict';
+
+    // ---- Scroll-triggered reveal animation (Intersection Observer) ----
+    const revealElements = document.querySelectorAll('.reveal');
+    if (revealElements.length && 'IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+      revealElements.forEach(el => observer.observe(el));
+    } else {
+      // Fallback: show all if no IntersectionObserver
+      revealElements.forEach(el => el.classList.add('visible'));
+    }
+
+    // ---- Toggle password visibility ----
+    document.querySelectorAll('.toggle-password').forEach((button) => {
+      button.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-target');
+        const input = document.getElementById(targetId);
+        if (input) {
+          const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+          input.setAttribute('type', type);
+          this.querySelector('i').classList.toggle('fa-eye');
+          this.querySelector('i').classList.toggle('fa-eye-slash');
+        }
+      });
     });
-  });
+
+  })();
 </script>
 {% endblock %}

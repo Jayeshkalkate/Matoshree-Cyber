@@ -1,45 +1,58 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load static %}
-{% block extra_head %}
 
-<!-- Page-specific styles for Announcements -->
+
+{% block title %}{% trans "Announcements" %}{% endblock %}
+
+{% block extra_head %}
+<!-- ================================================================
+     ANNOUNCEMENTS PAGE – Futuristic Cyber / Gaming Theme
+     Uses global CSS variables from base.html for consistency.
+     Includes neon glow effects, card hover scaling, and scroll animations.
+     ================================================================ -->
 <style>
-  /* ===== PAGE HERO ===== */
+  /* ---- Section reveal animation (scroll-triggered) ---- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ---- Hero Section (glassmorphism with glow) ---- */
   .page-hero {
-    background: linear-gradient(145deg, var(--primary), var(--primary-light));
-    padding: 70px 0 60px;
+    background: radial-gradient(ellipse at 30% 20%, rgba(0, 240, 255, 0.08), transparent 60%),
+                radial-gradient(ellipse at 70% 80%, rgba(255, 45, 149, 0.05), transparent 60%),
+                var(--bg-primary);
+    padding: 80px 0 70px;
     position: relative;
     overflow: hidden;
     text-align: center;
+    border-bottom: 1px solid rgba(0, 240, 255, 0.08);
   }
   .page-hero::before {
     content: "";
     position: absolute;
-    top: -50%;
-    right: -20%;
-    width: 700px;
-    height: 700px;
-    background: radial-gradient(
-      circle,
-      rgba(0, 212, 255, 0.06) 0%,
-      transparent 70%
-    );
+    top: -30%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.04), transparent 70%);
     border-radius: 50%;
     pointer-events: none;
   }
   .page-hero::after {
     content: "";
     position: absolute;
-    bottom: -40%;
+    bottom: -30%;
     left: -10%;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(
-      circle,
-      rgba(255, 107, 53, 0.05) 0%,
-      transparent 70%
-    );
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(255, 45, 149, 0.03), transparent 70%);
     border-radius: 50%;
     pointer-events: none;
   }
@@ -51,134 +64,152 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--text-muted);
     font-size: 0.85rem;
     font-weight: 500;
     margin-bottom: 16px;
     letter-spacing: 0.3px;
   }
   .page-hero .breadcrumb a {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--text-muted);
     transition: var(--transition);
   }
   .page-hero .breadcrumb a:hover {
-    color: var(--secondary);
+    color: var(--neon-cyan);
   }
   .page-hero .breadcrumb .current {
-    color: var(--secondary);
+    color: var(--neon-cyan);
   }
   .page-hero h1 {
-    font-size: 3.2rem;
-    font-weight: 800;
-    color: var(--white);
-    letter-spacing: -1px;
+    font-size: 3.4rem;
+    font-weight: 900;
+    font-family: var(--font-display);
+    color: var(--text-white);
+    letter-spacing: 1px;
     margin-bottom: 12px;
+    text-shadow: 0 0 40px rgba(0, 240, 255, 0.15);
   }
   .page-hero h1 span {
-    color: var(--secondary);
+    color: var(--neon-cyan);
+    text-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
   }
   .page-hero p {
-    font-size: 1.15rem;
-    color: rgba(255, 255, 255, 0.7);
-    max-width: 620px;
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    max-width: 640px;
     margin: 0 auto;
-    line-height: 1.7;
+    line-height: 1.8;
   }
 
-  /* ===== ANNOUNCEMENTS SECTION ===== */
+  /* ---- Announcements Section ---- */
   .announcements-section {
     padding: 70px 0 60px;
-    background: var(--gray-light);
+    background: var(--bg-secondary);
+  }
+  .announcements-section .container {
+    max-width: 900px;
   }
 
-  /* Filter Bar */
+  /* Filter Bar (neon-styled buttons) */
   .filter-bar {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 0.6rem;
     margin-bottom: 2rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--gray);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   }
   .filter-btn {
     background: transparent;
-    border: 1.5px solid var(--gray);
-    padding: 0.4rem 1.2rem;
-    border-radius: 40px;
+    border: 1.5px solid rgba(255, 255, 255, 0.08);
+    padding: 0.5rem 1.4rem;
+    border-radius: var(--radius-pill);
     font-weight: 600;
     font-size: 0.85rem;
-    color: var(--text-dark);
+    color: var(--text-muted);
     cursor: pointer;
     transition: var(--transition);
-    font-family: "Inter", sans-serif;
+    font-family: var(--font-body);
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.5rem;
+    backdrop-filter: blur(4px);
   }
   .filter-btn i {
     font-size: 0.8rem;
-    opacity: 0.7;
+    opacity: 0.6;
   }
   .filter-btn:hover {
-    background: var(--gray);
-    border-color: var(--secondary);
+    background: rgba(0, 240, 255, 0.06);
+    border-color: var(--neon-cyan);
+    color: var(--text-white);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.05);
   }
   .filter-btn.active {
-    background: var(--secondary);
-    border-color: var(--secondary);
-    color: var(--primary);
+    background: var(--gradient-cyan);
+    border-color: var(--neon-cyan);
+    color: var(--bg-primary);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
   }
   .filter-btn.active i {
     opacity: 1;
   }
 
-  /* Announcements List */
+  /* Announcement Cards (glassmorphism) */
   .announcements-list {
     display: flex;
     flex-direction: column;
     gap: 1.2rem;
   }
   .announcement-card {
-    background: var(--white);
+    background: var(--bg-card);
     border-radius: var(--radius);
     padding: 1.4rem 1.8rem;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--gray);
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(255, 255, 255, 0.04);
     transition: var(--transition);
     display: flex;
     gap: 1rem;
     align-items: flex-start;
+    backdrop-filter: blur(4px);
   }
   .announcement-card:hover {
-    box-shadow: var(--shadow);
-    border-color: var(--secondary);
+    border-color: var(--neon-cyan);
+    box-shadow: var(--shadow-card), var(--glow-cyan);
+    transform: translateY(-4px);
   }
   .announcement-card.urgent {
-    border-left: 5px solid #d93c3c;
-    background: #fef7f7;
+    border-left: 5px solid var(--neon-magenta);
+    background: rgba(255, 45, 149, 0.04);
   }
   .announcement-card.urgent .badge-urgent {
-    background: #d93c3c;
-    color: #fff;
+    background: var(--neon-magenta);
+    color: var(--text-white);
     padding: 0.1rem 0.7rem;
-    border-radius: 30px;
+    border-radius: var(--radius-pill);
     font-size: 0.7rem;
     font-weight: 700;
     margin-left: 0.5rem;
     text-transform: uppercase;
+    box-shadow: 0 0 20px rgba(255, 45, 149, 0.3);
   }
 
   .announcement-icon {
     flex-shrink: 0;
     width: 3rem;
     height: 3rem;
-    background: rgba(0, 212, 255, 0.12);
+    background: rgba(0, 240, 255, 0.08);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--secondary);
+    color: var(--neon-cyan);
     font-size: 1.3rem;
+    transition: var(--transition);
+  }
+  .announcement-card:hover .announcement-icon {
+    background: rgba(0, 240, 255, 0.15);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.1);
   }
   .announcement-content {
     flex: 1;
@@ -193,7 +224,7 @@
   }
   .announcement-date {
     font-size: 0.8rem;
-    color: var(--gray-dark);
+    color: var(--text-muted);
     display: flex;
     align-items: center;
     gap: 0.3rem;
@@ -205,133 +236,265 @@
     font-size: 0.7rem;
     font-weight: 600;
     padding: 0.2rem 0.8rem;
-    border-radius: 30px;
-    background: var(--gray);
-    color: var(--text-dark);
+    border-radius: var(--radius-pill);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.02em;
+    border: 1px solid rgba(255, 255, 255, 0.04);
   }
   .category-badge.scheme {
-    background: #d4e6ff;
-    color: #004c9e;
+    background: rgba(0, 240, 255, 0.12);
+    color: var(--neon-cyan);
   }
   .category-badge.recruitment {
-    background: #fce8d5;
-    color: #9d4a00;
+    background: rgba(255, 45, 149, 0.1);
+    color: var(--neon-magenta);
   }
   .category-badge.scholarship {
-    background: #d5f0e6;
-    color: #006b4b;
+    background: rgba(34, 211, 238, 0.1);
+    color: var(--neon-green);
   }
   .category-badge.holiday {
-    background: #fde8e8;
-    color: #a03a3a;
+    background: rgba(249, 115, 22, 0.1);
+    color: var(--neon-orange);
   }
   .category-badge.notice {
-    background: #e8e0f5;
-    color: #4a2b7a;
+    background: rgba(168, 85, 247, 0.1);
+    color: var(--neon-purple);
   }
 
   .announcement-title {
     font-size: 1.1rem;
     font-weight: 700;
-    color: var(--primary);
+    color: var(--text-white);
     margin: 0.2rem 0 0.3rem;
   }
   .announcement-desc {
     font-size: 0.95rem;
-    color: var(--gray-dark);
+    color: var(--text-muted);
     line-height: 1.6;
   }
   .announcement-desc a {
-    color: var(--secondary);
+    color: var(--neon-cyan);
     text-decoration: none;
     font-weight: 500;
+    transition: var(--transition);
   }
   .announcement-desc a:hover {
-    text-decoration: underline;
+    text-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
   }
 
   /* No results */
   .no-results {
     text-align: center;
     padding: 3rem 0;
-    color: var(--gray-dark);
+    color: var(--text-muted);
     display: none;
   }
   .no-results i {
     font-size: 2.5rem;
-    opacity: 0.5;
+    opacity: 0.3;
     margin-bottom: 0.5rem;
     display: block;
   }
 
-  /* ===== FOOTER NOTE ===== */
+  /* Footer note */
   .footer-note {
     margin-top: 2.5rem;
     padding-top: 1.5rem;
-    border-top: 1px solid var(--gray);
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     gap: 0.5rem;
     font-size: 0.9rem;
-    color: var(--gray-dark);
+    color: var(--text-muted);
   }
   .footer-note i {
-    color: var(--secondary);
+    color: var(--neon-cyan);
     margin-right: 0.2rem;
   }
   .footer-note .badge {
-    background: var(--gray);
+    background: rgba(0, 240, 255, 0.06);
     padding: 0.2rem 0.9rem;
-    border-radius: 30px;
+    border-radius: var(--radius-pill);
     font-weight: 500;
     font-size: 0.8rem;
-    color: var(--text-dark);
+    color: var(--text-white);
+    border: 1px solid rgba(0, 240, 255, 0.08);
   }
 
-  /* ===== CTA BANNER (optional) ===== */
-  .cta-banner {
-    padding: 60px 0;
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  /* ---- Pricing Cards Section (Neon hover effect) ---- */
+  .pricing-section {
+    padding: 70px 0 80px;
+    background: var(--bg-primary);
+    border-top: 1px solid rgba(0, 240, 255, 0.04);
+  }
+  .pricing-section .section-header {
     text-align: center;
-    border-top: 2px solid rgba(0, 212, 255, 0.1);
-    border-bottom: 2px solid rgba(0, 212, 255, 0.1);
+    margin-bottom: 48px;
+  }
+  .pricing-section .section-header h2 {
+    font-size: 2.6rem;
+    font-weight: 800;
+    font-family: var(--font-display);
+    color: var(--text-white);
+    letter-spacing: -0.5px;
+  }
+  .pricing-section .section-header h2 span {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+  }
+  .pricing-section .section-header p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    max-width: 560px;
+    margin: 8px auto 0;
+  }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .pricing-card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 36px 24px 30px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    transition: var(--transition);
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+  }
+  .pricing-card::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 20%, rgba(0, 240, 255, 0.02), transparent 70%);
+    pointer-events: none;
+    opacity: 0;
+    transition: var(--transition);
+  }
+  .pricing-card:hover::before {
+    opacity: 1;
+  }
+  /* ---- The sleek hover interaction: scale up + neon border ---- */
+  .pricing-card:hover {
+    transform: scale(1.04) translateY(-8px);
+    border-color: var(--neon-cyan);
+    box-shadow: var(--shadow-card), var(--glow-cyan), 0 0 60px rgba(0, 240, 255, 0.05);
+  }
+  .pricing-card .plan-name {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-white);
+    margin-bottom: 4px;
+  }
+  .pricing-card .price {
+    font-family: var(--font-display);
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+    margin: 12px 0;
+  }
+  .pricing-card .price span {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+  .pricing-card .features {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0 24px;
+    text-align: left;
+  }
+  .pricing-card .features li {
+    padding: 6px 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  }
+  .pricing-card .features li i {
+    color: var(--neon-cyan);
+    width: 20px;
+    font-size: 0.9rem;
+  }
+  .pricing-card .btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* ---- CTA Banner ---- */
+  .cta-banner {
+    padding: 70px 0;
+    background: radial-gradient(ellipse at 30% 20%, rgba(0, 240, 255, 0.06), transparent 60%),
+                var(--bg-primary);
+    border-top: 1px solid rgba(0, 240, 255, 0.06);
+    border-bottom: 1px solid rgba(0, 240, 255, 0.06);
+    text-align: center;
   }
   .cta-banner .container {
     max-width: 720px;
   }
   .cta-banner h2 {
-    font-size: 2.2rem;
+    font-size: 2.4rem;
     font-weight: 800;
-    color: var(--white);
+    font-family: var(--font-display);
+    color: var(--text-white);
     letter-spacing: -0.5px;
     margin-bottom: 8px;
   }
   .cta-banner h2 span {
-    color: var(--secondary);
+    color: var(--neon-cyan);
+    text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
   }
   .cta-banner p {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 1.05rem;
-    margin-bottom: 24px;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 28px;
   }
-  .cta-banner .cta-buttons {
+  .cta-buttons {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 18px;
+  }
+  .cta-buttons .btn-primary,
+  .cta-buttons .btn-whatsapp {
+    min-width: 180px;
   }
 
-  /* ===== RESPONSIVE ===== */
+  /* ================================================================
+     RESPONSIVE ADJUSTMENTS
+     ================================================================ */
+  @media (max-width: 1024px) {
+    .pricing-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
   @media (max-width: 768px) {
     .page-hero h1 {
-      font-size: 2.2rem;
+      font-size: 2.4rem;
     }
     .page-hero p {
       font-size: 1rem;
+    }
+    .filter-bar {
+      gap: 0.4rem;
     }
     .filter-btn {
       font-size: 0.75rem;
@@ -350,23 +513,33 @@
     .announcement-title {
       font-size: 1rem;
     }
-    .cta-banner h2 {
-      font-size: 1.8rem;
+    .pricing-grid {
+      grid-template-columns: 1fr;
+      max-width: 400px;
+      margin: 0 auto;
     }
-    .cta-banner .cta-buttons {
+    .cta-banner h2 {
+      font-size: 2rem;
+    }
+    .cta-buttons {
       flex-direction: column;
       align-items: center;
     }
-    .cta-banner .cta-buttons .btn-primary,
-    .cta-banner .cta-buttons .btn-whatsapp {
+    .cta-buttons .btn-primary,
+    .cta-buttons .btn-whatsapp {
       width: 100%;
       justify-content: center;
+    }
+    .footer-note {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.3rem;
     }
   }
 
   @media (max-width: 480px) {
     .filter-bar {
-      gap: 0.4rem;
+      gap: 0.3rem;
     }
     .filter-btn {
       flex: 1 1 auto;
@@ -376,6 +549,9 @@
       flex-direction: column;
       align-items: flex-start;
       gap: 0.3rem;
+    }
+    .pricing-card .price {
+      font-size: 2.2rem;
     }
   }
 
@@ -387,28 +563,38 @@
 {% endblock %}
 
 {% block content %}
-<!-- ===== PAGE HERO ===== -->
-<section class="page-hero">
+<!-- ================================================================
+     PAGE HERO – Futuristic cyber header
+     ================================================================ -->
+<section class="page-hero reveal">
   <div class="container">
+    <div class="breadcrumb">
+      <a href="{% url 'home' %}">{% trans "Home" %}</a>
+      <i class="fas fa-chevron-right" style="font-size: 0.6rem"></i>
+      <span class="current">{% trans "Announcements" %}</span>
+    </div>
     <h1><span>{% trans "Announcements" %}</span></h1>
     <p>{% trans "Stay informed with the latest updates from our centre." %}</p>
   </div>
 </section>
 
-<!-- ===== ANNOUNCEMENTS SECTION ===== -->
-<section class="announcements-section">
+<!-- ================================================================
+     ANNOUNCEMENTS SECTION – Glassmorphism cards with filters
+     ================================================================ -->
+<section class="announcements-section reveal">
   <div class="container">
     <!-- Filter Bar -->
     <div class="filter-bar">
       <button class="filter-btn active" data-filter="all">
         <i class="fas fa-list"></i> {% trans "All" %}
       </button>
+      <!-- Additional filter buttons will be added via JavaScript -->
     </div>
 
     <!-- Announcements List -->
     <div class="announcements-list">
       {% for announcement in announcements %}
-      <div class="announcement-card" data-category="{{ announcement.category|lower }}">
+      <div class="announcement-card {% if announcement.is_urgent %}urgent{% endif %}" data-category="{{ announcement.category|lower }}">
         <div class="announcement-icon">
           <i class="fas fa-bullhorn"></i>
         </div>
@@ -431,7 +617,7 @@
         </div>
       </div>
       {% empty %}
-      <p style="text-align: center; padding: 40px; color: var(--gray-dark)">
+      <p style="text-align: center; padding: 40px; color: var(--text-muted);">
         {% trans "No announcements available at the moment." %}
       </p>
       {% endfor %}
@@ -460,8 +646,63 @@
   </div>
 </section>
 
-<!-- ===== CTA BANNER ===== -->
-<section class="cta-banner">
+<!-- ================================================================
+     PRICING CARDS – Service packages with neon hover effect
+     ================================================================ -->
+<section class="pricing-section reveal">
+  <div class="container">
+    <div class="section-header">
+      <h2>{% trans "Popular" %} <span>{% trans "Service Packages" %}</span></h2>
+      <p>{% trans "Get the most out of our services with these convenient packages." %}</p>
+    </div>
+    <div class="pricing-grid">
+      <!-- Basic Package -->
+      <div class="pricing-card">
+        <div class="plan-name">{% trans "Starter" %}</div>
+        <div class="price">₹99 <span>/ {% trans "session" %}</span></div>
+        <ul class="features">
+          <li><i class="fas fa-check"></i> {% trans "Printing (10 pages B&W)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Photocopy (10 pages)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Email & Internet (30 min)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Document Scanning (5 pages)" %}</li>
+        </ul>
+        <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Get Started" %}</a>
+      </div>
+      <!-- Standard Package (highlighted with pulse) -->
+      <div class="pricing-card" style="border-color: rgba(0, 240, 255, 0.15);">
+        <div class="plan-name">{% trans "Pro" %}</div>
+        <div class="price">₹199 <span>/ {% trans "session" %}</span></div>
+        <ul class="features">
+          <li><i class="fas fa-check"></i> {% trans "Printing (30 pages B&W / 10 color)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Photocopy (30 pages)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Email & Internet (60 min)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Document Scanning (15 pages)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Passport-size photos (4 copies)" %}</li>
+        </ul>
+        <a href="{% url 'appointment' %}" class="btn-primary pulse">{% trans "Choose Plan" %}</a>
+      </div>
+      <!-- Premium Package -->
+      <div class="pricing-card">
+        <div class="plan-name">{% trans "Enterprise" %}</div>
+        <div class="price">₹299 <span>/ {% trans "session" %}</span></div>
+        <ul class="features">
+          <li><i class="fas fa-check"></i> {% trans "Printing (50 pages B&W / 20 color)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Photocopy (50 pages)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Email & Internet (90 min)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Document Scanning (30 pages)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Passport-size photos (8 copies)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Priority support & assistance" %}</li>
+        </ul>
+        <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Go Premium" %}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     CTA BANNER – Call to action
+     ================================================================ -->
+<section class="cta-banner reveal">
   <div class="container">
     <h2>{% trans "Have Questions?" %} <span>{% trans "Reach Out" %}</span></h2>
     <p>{% trans "We're here to help with any of your digital service needs." %}</p>
@@ -479,11 +720,33 @@
 
 {% block extra_scripts %}
 <script>
-  (function () {
+  (function() {
+    'use strict';
+
+    // ---- Scroll-triggered reveal animation (Intersection Observer) ----
+    const revealElements = document.querySelectorAll('.reveal');
+    if (revealElements.length && 'IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+      revealElements.forEach(el => observer.observe(el));
+    } else {
+      // Fallback: show all if no IntersectionObserver
+      revealElements.forEach(el => el.classList.add('visible'));
+    }
+
+    // ---- Filter functionality for announcements ----
     const announcements = document.querySelectorAll(".announcement-card");
     const filterBar = document.querySelector(".filter-bar");
     const noResults = document.getElementById("noResults");
     const countSpan = document.getElementById("announcementCount");
+    const countBadge = document.getElementById("countBadge");
 
     if (announcements.length === 0) {
       filterBar.style.display = "none";
@@ -492,12 +755,14 @@
       return;
     }
 
+    // Gather unique categories from announcement cards
     const categories = new Set();
     announcements.forEach((card) => {
       const cat = card.dataset.category || "general";
       categories.add(cat);
     });
 
+    // Add filter buttons for each category (excluding 'all')
     categories.forEach((cat) => {
       if (cat === "all") return;
       const btn = document.createElement("button");
@@ -507,6 +772,7 @@
       filterBar.appendChild(btn);
     });
 
+    // Filter function
     function filterAnnouncements(category) {
       let visibleCount = 0;
       announcements.forEach((card) => {
@@ -522,25 +788,32 @@
 
       noResults.style.display = visibleCount === 0 ? "block" : "none";
 
+      // Update active button
       document.querySelectorAll(".filter-btn").forEach((btn) => {
         btn.classList.toggle("active", btn.dataset.filter === category);
       });
 
+      // Update count badge
       if (countSpan) countSpan.textContent = visibleCount;
-      const badge = document.querySelector(".footer-note .badge");
-      if (badge) {
-        badge.innerHTML = `<i class="far fa-bell"></i> ${visibleCount} active notice${visibleCount !== 1 ? "s" : ""}`;
+      if (countBadge) {
+        const label = visibleCount === 1 ? "active notice" : "active notices";
+        countBadge.innerHTML = `<i class="far fa-bell"></i> ${visibleCount} ${label}`;
       }
     }
 
+    // Attach click events to filter buttons
     document.querySelectorAll(".filter-btn").forEach((btn) => {
       btn.addEventListener("click", function () {
         filterAnnouncements(this.dataset.filter);
       });
     });
 
+    // Initial: show all
     filterAnnouncements("all");
+
+    // Expose for debugging if needed
     window.filterAnnouncements = filterAnnouncements;
+
   })();
 </script>
 {% endblock %}

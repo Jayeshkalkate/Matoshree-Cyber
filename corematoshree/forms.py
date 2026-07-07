@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from django.utils.translation import gettext_lazy as _   # <-- added
+from django.utils.translation import gettext_lazy as _
 from .models import (
     User, Contact, Appointment, Review, Service, Announcement,
     JobNotification, GovernmentScheme, DownloadForm, ServiceCharge,
@@ -42,6 +42,7 @@ class CustomUserCreationForm(UserCreationForm):
             user.save()
         return user
 
+
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = User
@@ -53,6 +54,7 @@ class ProfileUpdateForm(forms.ModelForm):
             'phone': _('Phone'),
             'address': _('Address'),
         }
+
 
 # ==========================
 # Contact Form (Public)
@@ -97,6 +99,7 @@ class ContactForm(forms.ModelForm):
                 "placeholder": _("Write your message..."),
             }),
         }
+
 
 # ==========================
 # Appointment Form (Public)
@@ -153,6 +156,7 @@ class AppointmentForm(forms.ModelForm):
             }),
         }
 
+
 # ==========================
 # Review Form
 # ==========================
@@ -198,6 +202,7 @@ class ReviewForm(forms.ModelForm):
             raise forms.ValidationError(_("Rating must be between 1 and 5."))
         return rating
 
+
 # ------------------------------
 # Dashboard ModelForms
 # ------------------------------
@@ -214,7 +219,9 @@ class ServiceForm(forms.ModelForm):
             'description': _('Description'),
             'active': _('Active'),
             'icon': _('Icon'),
+            'icon_color': _('Icon Color'),
         }
+
 
 class AnnouncementForm(forms.ModelForm):
     class Meta:
@@ -225,6 +232,7 @@ class AnnouncementForm(forms.ModelForm):
             'category': _('Category'),
             'description': _('Description'),
         }
+
 
 class JobNotificationForm(forms.ModelForm):
     class Meta:
@@ -239,6 +247,7 @@ class JobNotificationForm(forms.ModelForm):
             'icon': _('Icon'),
         }
 
+
 class GovernmentSchemeForm(forms.ModelForm):
     class Meta:
         model = GovernmentScheme
@@ -250,6 +259,7 @@ class GovernmentSchemeForm(forms.ModelForm):
             'last_date': _('Last Date'),
             'image': _('Image'),
         }
+
 
 class AppointmentFormDashboard(forms.ModelForm):
     class Meta:
@@ -266,10 +276,12 @@ class AppointmentFormDashboard(forms.ModelForm):
             'status': _('Status'),
         }
 
+
 class ContactFormDashboard(forms.ModelForm):
     class Meta:
         model = Contact
-        fields = ['name', 'email', 'phone', 'subject', 'message', 'replied']
+        # Added 'reply' field as per Step 2.2
+        fields = ['name', 'email', 'phone', 'subject', 'message', 'replied', 'reply']
         labels = {
             'name': _('Name'),
             'email': _('Email'),
@@ -277,7 +289,9 @@ class ContactFormDashboard(forms.ModelForm):
             'subject': _('Subject'),
             'message': _('Message'),
             'replied': _('Replied'),
+            'reply': _('Reply'),      # new label
         }
+
 
 class DownloadFormForm(forms.ModelForm):
     class Meta:
@@ -289,8 +303,9 @@ class DownloadFormForm(forms.ModelForm):
             'pdf': _('PDF'),
         }
 
+
 # ==========================
-# Additional Dashboard Forms (NEW)
+# Additional Dashboard Forms
 # ==========================
 class ServiceChargeForm(forms.ModelForm):
     class Meta:
@@ -304,6 +319,7 @@ class ServiceChargeForm(forms.ModelForm):
             'service': forms.Select(attrs={'class': 'form-select'}),
             'charge': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
         }
+
 
 class GalleryForm(forms.ModelForm):
     class Meta:
@@ -319,6 +335,7 @@ class GalleryForm(forms.ModelForm):
             'category': forms.Select(attrs={'class': 'form-select'}),
             'image': forms.FileInput(attrs={'class': 'form-control'}),
         }
+
 
 class BusinessInfoForm(forms.ModelForm):
     class Meta:
@@ -346,4 +363,4 @@ class BusinessInfoForm(forms.ModelForm):
             'google_map': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'business_hours': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
         }
-
+        

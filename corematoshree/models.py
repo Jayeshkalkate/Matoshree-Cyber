@@ -3,7 +3,7 @@ from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
-from django.utils.translation import gettext_lazy as _   # <-- added
+from django.utils.translation import gettext_lazy as _
 
 # ==========================
 # User
@@ -33,6 +33,7 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
+
 # ==========================
 # Validators
 # ==========================
@@ -40,6 +41,7 @@ phone_validator = RegexValidator(
     regex=r'^\+?1?\d{10,15}$',
     message=_("Enter a valid phone number (10-15 digits).")
 )
+
 
 # ==========================
 # Services
@@ -76,6 +78,7 @@ class Service(models.Model):
 
     def __str__(self):
         return self.name
+
 
 # ==========================
 # Appointment
@@ -145,6 +148,7 @@ class Appointment(models.Model):
     def __str__(self):
         return f"{self.full_name} - {self.service.name}"
 
+
 # ==========================
 # Contact
 # ==========================
@@ -168,6 +172,11 @@ class Contact(models.Model):
     message = models.TextField(
         _("Message")
     )
+    reply = models.TextField(
+        _("Reply"),
+        blank=True,
+        null=True          # <-- Added per Step 2.1
+    )
     replied = models.BooleanField(
         _("Replied"),
         default=False
@@ -184,6 +193,7 @@ class Contact(models.Model):
 
     def __str__(self):
         return self.name
+
 
 # ==========================
 # Reviews
@@ -222,6 +232,7 @@ class Review(models.Model):
     def __str__(self):
         return f"{self.customer_name} ({self.rating}/5)"
 
+
 # ==========================
 # Announcements
 # ==========================
@@ -259,6 +270,7 @@ class Announcement(models.Model):
     def __str__(self):
         return self.title
 
+
 # ==========================
 # Gallery
 # ==========================
@@ -292,6 +304,7 @@ class Gallery(models.Model):
     def __str__(self):
         return self.title
 
+
 # ==========================
 # Service Charges
 # ==========================
@@ -314,6 +327,7 @@ class ServiceCharge(models.Model):
     def __str__(self):
         return f"{self.service.name} - ₹{self.charge}"
 
+
 # ==========================
 # Required Documents
 # ==========================
@@ -334,6 +348,7 @@ class RequiredDocument(models.Model):
 
     def __str__(self):
         return f"{self.service.name} - {self.document_name}"
+
 
 # ==========================
 # Download Forms
@@ -362,6 +377,7 @@ class DownloadForm(models.Model):
 
     def __str__(self):
         return self.title
+
 
 # ==========================
 # Government Schemes
@@ -396,6 +412,7 @@ class GovernmentScheme(models.Model):
 
     def __str__(self):
         return self.title
+
 
 # ==========================
 # Job Notifications
@@ -433,6 +450,7 @@ class JobNotification(models.Model):
     def __str__(self):
         return self.title
 
+
 # ==========================
 # FAQs
 # ==========================
@@ -451,6 +469,7 @@ class FAQ(models.Model):
 
     def __str__(self):
         return self.question
+
 
 # ==========================
 # Business Information (Singleton)

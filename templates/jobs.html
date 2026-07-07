@@ -1,17 +1,10 @@
-{% extends "base.html" %}
-{% load i18n %}
-{% load static %}
+{% extends "base.html" %} 
+{% load i18n %} 
+{% load static %} 
+
+{% block title %}{% trans "Jobs" %}{% endblock %}
+
 {% block extra_head %}
-<!-- Font Awesome (already in base) -->
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-/>
-<!-- Google Fonts (already in base) -->
-<link
-  href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
-  rel="stylesheet"
-/>
 
 <style>
   /* ============================================================
@@ -388,8 +381,424 @@
       justify-content: center;
     }
   }
+
+  /*====================================================
+    FUTURISTIC GAMING ENHANCEMENT
+====================================================*/
+
+:root{
+
+    --neon:#00F5FF;
+    --purple:#8A2BE2;
+    --pink:#FF3CAC;
+    --dark:#08111F;
+    --glass:rgba(255,255,255,.05);
+
+}
+
+
+/* Digital page animation */
+
+.jobs-page{
+
+    animation: pageReveal .8s ease forwards;
+
+}
+
+@keyframes pageReveal{
+
+    from{
+        opacity:0;
+        transform:translateY(40px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+
+/* Hero Background */
+
+.jobs-page .page-hero{
+
+    background:
+        radial-gradient(circle at top right,
+        rgba(0,245,255,.12),
+        transparent 45%),
+
+        radial-gradient(circle at bottom left,
+        rgba(138,43,226,.12),
+        transparent 40%),
+
+        linear-gradient(135deg,#091425,#101C35,#08111F);
+
+}
+
+
+/*=========================================
+            JOB CARD
+=========================================*/
+
+.jobs-page .job-card{
+
+    background:rgba(255,255,255,.04);
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    transition:all .3s ease;
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+
+/* animated glow border */
+
+.jobs-page .job-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:-1px;
+
+    background:linear-gradient(
+        120deg,
+        transparent,
+        rgba(0,245,255,.35),
+        transparent
+    );
+
+    opacity:0;
+
+    transition:all .3s ease;
+
+}
+
+
+.jobs-page .job-card:hover{
+
+    transform:translateY(-8px) scale(1.03);
+
+    border-color:var(--neon);
+
+    box-shadow:
+
+        0 0 15px rgba(0,245,255,.3),
+
+        0 0 40px rgba(0,245,255,.18),
+
+        0 20px 40px rgba(0,0,0,.45);
+
+}
+
+
+.jobs-page .job-card:hover::before{
+
+    opacity:1;
+
+}
+
+
+/*=========================================
+            BUTTONS
+=========================================*/
+
+.jobs-page .btn-primary,
+.jobs-page .btn-apply,
+.jobs-page .btn-whatsapp{
+
+    transition:all .3s ease;
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+
+/* Shine animation */
+
+.jobs-page .btn-primary::before,
+.jobs-page .btn-apply::before,
+.jobs-page .btn-whatsapp::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:-120%;
+
+    top:0;
+
+    width:60%;
+
+    height:100%;
+
+    background:
+
+    linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.4),
+        transparent);
+
+    transform:skewX(-25deg);
+
+    transition:.6s;
+
+}
+
+.jobs-page .btn-primary:hover::before,
+.jobs-page .btn-apply:hover::before,
+.jobs-page .btn-whatsapp:hover::before{
+
+    left:160%;
+
+}
+
+
+/* Neon Hover */
+
+.jobs-page .btn-primary:hover,
+.jobs-page .btn-apply:hover{
+
+    box-shadow:
+
+        0 0 12px var(--neon),
+
+        0 0 28px rgba(0,245,255,.55),
+
+        0 0 60px rgba(0,245,255,.25);
+
+}
+
+
+/* Pulsing Active */
+
+.jobs-page .btn-primary:active,
+.jobs-page .btn-apply:active,
+.jobs-page .btn-whatsapp:active{
+
+    animation:neonPulse .7s;
+
+}
+
+
+@keyframes neonPulse{
+
+    0%{
+
+        box-shadow:0 0 0 rgba(0,245,255,.8);
+
+    }
+
+    50%{
+
+        box-shadow:
+
+        0 0 20px var(--neon),
+
+        0 0 60px var(--neon);
+
+    }
+
+    100%{
+
+        box-shadow:0 0 0 rgba(0,245,255,.2);
+
+    }
+
+}
+
+
+/*=========================================
+        CTA SECTION
+=========================================*/
+
+.jobs-page .cta-banner{
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+
+.jobs-page .cta-banner::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:500px;
+
+    height:500px;
+
+    background:
+
+    radial-gradient(circle,
+
+    rgba(0,245,255,.18),
+
+    transparent 70%);
+
+    top:-220px;
+
+    right:-180px;
+
+}
+
+
+/*=========================================
+        GRID ENTRANCE ANIMATION
+=========================================*/
+
+.jobs-page .job-card{
+
+    animation:cardFade .7s ease both;
+
+}
+
+.jobs-page .job-card:nth-child(2){animation-delay:.08s;}
+.jobs-page .job-card:nth-child(3){animation-delay:.16s;}
+.jobs-page .job-card:nth-child(4){animation-delay:.24s;}
+.jobs-page .job-card:nth-child(5){animation-delay:.32s;}
+.jobs-page .job-card:nth-child(6){animation-delay:.40s;}
+
+@keyframes cardFade{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(35px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+
+/*=========================================
+        Floating Background Glow
+=========================================*/
+
+.jobs-page::before{
+
+    content:"";
+
+    position:fixed;
+
+    width:600px;
+
+    height:600px;
+
+    left:-250px;
+
+    top:-250px;
+
+    border-radius:50%;
+
+    background:
+
+    radial-gradient(circle,
+
+    rgba(0,245,255,.08),
+
+    transparent 70%);
+
+    animation:floatGlow 14s linear infinite;
+
+    pointer-events:none;
+
+    z-index:0;
+
+}
+
+@keyframes floatGlow{
+
+    0%{
+
+        transform:translate(0,0);
+
+    }
+
+    50%{
+
+        transform:translate(180px,80px);
+
+    }
+
+    100%{
+
+        transform:translate(0,0);
+
+    }
+
+}
+
+
+/*=========================================
+        RESPONSIVE
+=========================================*/
+
+@media(max-width:768px){
+
+    .jobs-page .page-hero h1{
+
+        font-size:2.3rem;
+
+    }
+
+    .jobs-page .section-header h2{
+
+        font-size:2rem;
+
+    }
+
+    .jobs-page .job-card{
+
+        padding:22px;
+
+    }
+
+}
+
+@media(max-width:480px){
+
+    .jobs-page .page-hero{
+
+        padding:60px 0;
+
+    }
+
+    .jobs-page .job-card{
+
+        transform:none;
+
+    }
+
+}
+
 </style>
-{% endblock extra_head %} {% block content %}
+{% endblock extra_head %} 
+
+{% block content %}
 <div class="jobs-page">
   <!-- ===== PAGE HERO ===== -->
   <section class="page-hero">
@@ -475,7 +884,7 @@
           <i class="fas fa-phone"></i> {% trans "Contact Us" %}
         </a>
         <a
-          href="https://wa.me/{{ business.whatsapp|default:'919876543210'|cut:'+' }}?text=Hello%2C%20I%20am%20interested%20in%20job%20opportunities."
+          href="https://wa.me/{{ business.whatsapp|cut:'+' }}?text=Hello%2C%20I%20am%20interested%20in%20job%20opportunities."
           target="_blank"
           rel="noopener noreferrer"
           class="btn-whatsapp"
@@ -486,6 +895,4 @@
     </div>
   </section>
 </div>
-{% endblock content %} {% block extra_scripts %}
-<!-- Any page-specific JS (if needed) -->
-{% endblock extra_scripts %}
+{% endblock content %} 

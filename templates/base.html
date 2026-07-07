@@ -1,198 +1,617 @@
+<!-- ============================================================
+     FILE: base.html
+     DESCRIPTION: Base template with header, footer, navigation,
+                  and global styles for a futuristic cyber/gaming
+                  aesthetic. Includes neon glow effects, glassmorphism,
+                  smooth animations, and fully responsive design.
+     ============================================================ -->
 {% load i18n %}
 {% load static %}
+
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     {% block meta %}
-        <meta name="description" content="{% trans "Matoshree – Cyber Café & Digital Services. Reliable, fast, and affordable digital solutions." %}">
+    <meta name="description" content="{% trans "Matoshree – Cyber Café & Digital Services. Reliable, fast, and affordable digital solutions." %}" />
     {% endblock %}
+
     <title>{% block title %}{% trans "Matoshree – Cyber Café & Digital Services" %}{% endblock %}</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{% static 'images/matoshreelogo.png' %}">
+    <link rel="icon" type="image/png" href="{% static 'images/matoshreelogo.png' %}" />
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..800&display=swap" rel="stylesheet">
+    <!-- Google Fonts (Inter + Orbitron for display) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
 
-    {% block extra_head %}{% endblock %}
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
+    <!-- ================================================================
+         STYLES – Complete Cyber / Gaming Theme
+         ================================================================ -->
     <style>
-        /* ===== RESET & BASE ===== */
+        /* ================================================================
+               ROOT VARIABLES – Futuristic Cyber / Gaming Palette
+               ================================================================ */
+        :root {
+            /* ---- Primary backgrounds ---- */
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #111827;
+            --bg-card: #141c2b;
+            --bg-card-hover: #1a2640;
+
+            /* ---- Neon accent colors ---- */
+            --neon-cyan: #00f0ff;
+            --neon-magenta: #ff2d95;
+            --neon-purple: #a855f7;
+            --neon-green: #22d3ee;
+            --neon-orange: #f97316;
+
+            /* ---- Gradients ---- */
+            --gradient-cyan: linear-gradient(135deg, #00f0ff, #0088ff);
+            --gradient-magenta: linear-gradient(135deg, #ff2d95, #a855f7);
+            --gradient-cyber: linear-gradient(135deg, #00f0ff, #a855f7, #ff2d95);
+
+            /* ---- Text colors ---- */
+            --text-white: #f0f4ff;
+            --text-muted: #94a3b8;
+            --text-dark: #0f172a;
+
+            /* ---- Shadows & Glows ---- */
+            --glow-cyan: 0 0 20px rgba(0, 240, 255, 0.4), 0 0 60px rgba(0, 240, 255, 0.15);
+            --glow-magenta: 0 0 20px rgba(255, 45, 149, 0.4), 0 0 60px rgba(255, 45, 149, 0.15);
+            --glow-purple: 0 0 20px rgba(168, 85, 247, 0.4), 0 0 60px rgba(168, 85, 247, 0.15);
+            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.5);
+
+            /* ---- Border radii ---- */
+            --radius: 16px;
+            --radius-sm: 10px;
+            --radius-pill: 50px;
+
+            /* ---- Transitions ---- */
+            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --transition-slow: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+            /* ---- Fonts ---- */
+            --font-body: "Inter", sans-serif;
+            --font-display: "Orbitron", monospace;
+        }
+
+        /* ================================================================
+               RESET & BASE – Clean slate with cyber flair
+               ================================================================ */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        :root {
-            --primary: #0a1628;
-            --primary-light: #1a2a4a;
-            --secondary: #00d4ff;
-            --accent: #ff6b35;
-            --white: #ffffff;
-            --gray-light: #f8fafc;
-            --gray: #e2e8f0;
-            --gray-dark: #475569;
-            --text-dark: #0f172a;
-            --shadow: 0 20px 60px rgba(0,0,0,0.15);
-            --shadow-sm: 0 4px 20px rgba(0,0,0,0.08);
-            --radius: 16px;
-            --radius-sm: 10px;
-            --transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
+
         html {
             scroll-behavior: smooth;
         }
+
         body {
-            font-family: "Inter", sans-serif;
-            background: var(--gray-light);
-            color: var(--text-dark);
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-white);
             line-height: 1.6;
             overflow-x: hidden;
+            /* ---- Fade-in + slide-up on load (digital / cyber feel) ---- */
+            animation: fadeSlideUp 0.9s ease forwards;
         }
+
+        /* ---- Keyframes: subtle digital fade & slide ---- */
+        @keyframes fadeSlideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(40px);
+                filter: blur(2px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        /* ---- Ambient background pulse (glowing aura) ---- */
+        body::before {
+            content: "";
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background:
+                radial-gradient(ellipse at 30% 20%, rgba(0, 240, 255, 0.03), transparent 60%),
+                radial-gradient(ellipse at 70% 80%, rgba(255, 45, 149, 0.03), transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+            animation: bgPulse 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes bgPulse {
+            0% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+        }
+
         a {
             text-decoration: none;
             color: inherit;
         }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 24px;
+            position: relative;
+            z-index: 1;
         }
 
-        /* ===== HEADER ===== */
+        /* ================================================================
+               BUTTONS – Neon Glow + Pulse animation
+               ================================================================ */
+
+        /* ---- Primary button with animated border glow ---- */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 32px;
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #fff;
+            background: var(--gradient-cyan);
+            border: none;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ---- Glowing border ring on hover (cyber effect) ---- */
+        .btn-primary::before {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            border-radius: var(--radius-pill);
+            padding: 2px;
+            background: var(--gradient-cyber);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: var(--glow-cyan), 0 0 60px rgba(0, 240, 255, 0.2);
+        }
+
+        .btn-primary:hover::before {
+            opacity: 1;
+        }
+
+        /* ---- Neon pulse animation for active/primary buttons ---- */
+        .btn-primary.pulse,
+        .btn-primary:active {
+            animation: neonPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes neonPulse {
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(0, 240, 255, 0.3), 0 0 60px rgba(0, 240, 255, 0.1);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(0, 240, 255, 0.7), 0 0 80px rgba(0, 240, 255, 0.3), 0 0 120px rgba(0, 240, 255, 0.1);
+            }
+        }
+
+        /* ---- Secondary / outline button ---- */
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 28px;
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--neon-cyan);
+            background: transparent;
+            border: 2px solid var(--neon-cyan);
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+        }
+
+        .btn-outline:hover {
+            background: rgba(0, 240, 255, 0.1);
+            box-shadow: var(--glow-cyan);
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        /* ---- WhatsApp button with brand color ---- */
+        .btn-whatsapp {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 32px;
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #fff;
+            background: #25d366;
+            border: none;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 0 20px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-whatsapp:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 0 40px rgba(37, 211, 102, 0.5);
+        }
+
+        /* ================================================================
+               CARDS – Gaming-style with hover scale + neon border
+               ================================================================ */
+
+        /* ---- Base card with glassmorphism ---- */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 28px 24px;
+            box-shadow: var(--shadow-card);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        /* ---- Card hover: scale up + neon border glow ---- */
+        .card:hover {
+            transform: scale(1.02) translateY(-6px);
+            border-color: var(--neon-cyan);
+            box-shadow: var(--shadow-card), var(--glow-cyan);
+        }
+
+        /* ---- Alternative card with magenta glow on hover ---- */
+        .card-magenta:hover {
+            border-color: var(--neon-magenta);
+            box-shadow: var(--shadow-card), var(--glow-magenta);
+        }
+
+        /* ---- Card with purple glow ---- */
+        .card-purple:hover {
+            border-color: var(--neon-purple);
+            box-shadow: var(--shadow-card), var(--glow-purple);
+        }
+
+        /* ---- Pricing card specific (extra pop) ---- */
+        .card-pricing {
+            text-align: center;
+            padding: 32px 24px;
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: var(--radius);
+            transition: var(--transition);
+            box-shadow: var(--shadow-card);
+        }
+
+        .card-pricing:hover {
+            transform: scale(1.04) translateY(-8px);
+            border-color: var(--neon-cyan);
+            box-shadow: var(--shadow-card), var(--glow-cyan), 0 0 60px rgba(0, 240, 255, 0.05);
+        }
+
+        .card-pricing .price {
+            font-family: var(--font-display);
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+            margin: 12px 0;
+        }
+
+        .card-pricing .price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        /* ---- Card inner glow accent (subtle) ---- */
+        .card::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 20%, rgba(0, 240, 255, 0.02), transparent 70%);
+            pointer-events: none;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .card:hover::after {
+            opacity: 1;
+        }
+
+        /* ================================================================
+               HEADER – Glassmorphism with sticky behavior
+               ================================================================ */
         .header {
-            background: var(--primary);
-            padding: 16px 0;
+            background: rgba(10, 14, 26, 0.85);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            padding: 14px 0;
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 4px 30px rgba(0,0,0,0.3);
-            border-bottom: 2px solid rgba(0,212,255,0.15);
+            border-bottom: 1px solid rgba(0, 240, 255, 0.12);
+            box-shadow: 0 4px 40px rgba(0, 0, 0, 0.5);
         }
+
         .header .container {
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 16px;
+            gap: 12px;
         }
+
+        /* ---- Brand / Logo ---- */
         .brand {
             display: flex;
             align-items: center;
             gap: 14px;
-            color: var(--white);
+            color: var(--text-white);
+            transition: var(--transition);
         }
+
+        .brand:hover {
+            transform: scale(1.02);
+        }
+
         .brand-icon {
             width: 48px;
             height: 48px;
-            background: linear-gradient(135deg, var(--secondary), #0099ff);
+            background: var(--gradient-cyan);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.6rem;
-            color: var(--white);
-            box-shadow: 0 4px 15px rgba(0,212,255,0.3);
+            color: #fff;
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.25);
             flex-shrink: 0;
             overflow: hidden;
+            transition: var(--transition);
         }
+
+        .brand-icon:hover {
+            box-shadow: var(--glow-cyan);
+        }
+
         .logo-img {
             width: 100%;
             height: 100%;
             object-fit: contain;
             border-radius: 12px;
         }
+
         .brand-name {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--white);
-            letter-spacing: -0.5px;
-        }
-        .brand-name span {
-            color: var(--secondary);
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--text-white);
+            letter-spacing: 1px;
+            text-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
         }
 
+        .brand-name span {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+
+        /* ---- Navigation links ---- */
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 4px;
             flex-wrap: wrap;
         }
+
         .nav-links a {
-            color: rgba(255,255,255,0.75);
+            color: var(--text-muted);
             font-weight: 500;
-            padding: 8px 18px;
-            border-radius: 50px;
+            padding: 8px 16px;
+            border-radius: var(--radius-pill);
             transition: var(--transition);
-            font-size: 0.95rem;
-        }
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: var(--white);
-            background: rgba(0,212,255,0.12);
-        }
-        .nav-links a.cta-nav {
-            background: var(--secondary);
-            color: var(--primary);
-            font-weight: 700;
-        }
-        .nav-links a.cta-nav:hover {
-            background: #00e5ff;
-            transform: scale(1.04);
+            font-size: 0.9rem;
+            position: relative;
         }
 
-        /* ----- Dropdown ----- */
+        /* ---- Underline glow on hover (cyber) ---- */
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--neon-cyan);
+            transition: var(--transition);
+            transform: translateX(-50%);
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.5);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 60%;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--text-white);
+            background: rgba(0, 240, 255, 0.06);
+        }
+
+        /* ---- CTA nav button (special) ---- */
+        .nav-links a.cta-nav {
+            background: var(--gradient-cyan);
+            color: var(--bg-primary);
+            font-weight: 700;
+            padding: 10px 24px;
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+            transition: var(--transition);
+        }
+
+        .nav-links a.cta-nav:hover {
+            transform: scale(1.05);
+            box-shadow: var(--glow-cyan);
+        }
+
+        .nav-links a.cta-nav::after {
+            display: none;
+        }
+
+        /* ---- Dropdown ---- */
         .nav-links .dropdown {
             position: relative;
         }
-        .nav-links .dropdown > a {
+
+        .nav-links .dropdown>a {
             display: inline-flex;
             align-items: center;
             gap: 4px;
             cursor: pointer;
         }
-        .nav-links .dropdown > a i.fa-chevron-down {
+
+        .nav-links .dropdown>a i.fa-chevron-down {
             font-size: 0.6rem;
             opacity: 0.7;
             transition: transform 0.3s;
         }
-        .nav-links .dropdown:hover > a i.fa-chevron-down {
+
+        .nav-links .dropdown:hover>a i.fa-chevron-down {
             transform: rotate(180deg);
         }
+
         .nav-links .dropdown-menu {
             display: none;
             position: absolute;
             top: 100%;
             left: 0;
-            min-width: 200px;
-            background: var(--primary-light);
+            min-width: 210px;
+            background: rgba(20, 28, 43, 0.96);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border-radius: var(--radius-sm);
             padding: 8px 0;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(255,255,255,0.06);
+            box-shadow: var(--shadow-card), 0 0 40px rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.08);
             z-index: 100;
+            transition: var(--transition);
         }
+
         .nav-links .dropdown:hover .dropdown-menu {
             display: block;
+            animation: fadeSlideUp 0.25s ease forwards;
         }
+
         .nav-links .dropdown-menu a {
             display: block;
             padding: 8px 20px;
-            color: rgba(255,255,255,0.8);
+            color: var(--text-muted);
             border-radius: 0;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             background: transparent;
             white-space: nowrap;
-        }
-        .nav-links .dropdown-menu a:hover {
-            background: rgba(0,212,255,0.12);
-            color: var(--white);
+            transition: var(--transition);
         }
 
+        .nav-links .dropdown-menu a:hover {
+            background: rgba(0, 240, 255, 0.08);
+            color: var(--text-white);
+            padding-left: 26px;
+        }
+
+        .nav-links .dropdown-menu a::after {
+            display: none;
+        }
+
+        /* ---- User section (auth + language) ---- */
+        .nav-user-section {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: auto;
+            flex-wrap: wrap;
+        }
+
+        .nav-user-section a {
+            color: var(--text-muted);
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: var(--radius-pill);
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+
+        .nav-user-section a:hover {
+            color: var(--text-white);
+            background: rgba(0, 240, 255, 0.06);
+        }
+
+        /* ---- Language switcher ---- */
+        .lang-select {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-white);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-pill);
+            padding: 4px 14px;
+            font-size: 0.85rem;
+            font-family: var(--font-body);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .lang-select:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
+        }
+
+        .lang-select option {
+            background: var(--bg-secondary);
+        }
+
+        /* ---- Hamburger (mobile) ---- */
         .hamburger {
             display: none;
             flex-direction: column;
@@ -201,103 +620,143 @@
             padding: 4px;
             background: none;
             border: none;
+            transition: var(--transition);
         }
+
         .hamburger span {
             width: 28px;
-            height: 3px;
-            background: var(--white);
+            height: 2px;
+            background: var(--text-white);
             border-radius: 4px;
             transition: var(--transition);
         }
 
-        /* ===== MESSAGES ===== */
-        {% comment %} .messages-container {
-            padding: 1rem 0 0;
-        } {% endcomment %}
+        .hamburger:hover span {
+            background: var(--neon-cyan);
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
+        }
+
+        /* ================================================================
+               MESSAGES (Django alerts with neon styling)
+               ================================================================ */
+        .messages-container {
+            padding-top: 16px;
+        }
+
         .alert {
             padding: 0.8rem 1.2rem;
             border-radius: var(--radius-sm);
             margin-bottom: 0.5rem;
             font-weight: 500;
-        }
-        .alert-success {
-            background: #c8f0d4;
-            color: #0a6b2a;
-            border-left: 4px solid #1e8e3e;
-        }
-        .alert-error {
-            background: #fde0e0;
-            color: #a03a3a;
-            border-left: 4px solid #d93c3c;
-        }
-        .alert-info {
-            background: #cce5ff;
-            color: #004c9e;
-            border-left: 4px solid #0a66c2;
+            border-left: 4px solid;
+            backdrop-filter: blur(4px);
+            animation: fadeSlideUp 0.4s ease forwards;
         }
 
-        /* ===== FOOTER ===== */
-        .footer {
-            background: var(--primary);
-            color: rgba(255,255,255,0.7);
-            padding: 36px 0 28px;
-            border-top: 1px solid rgba(255,255,255,0.06);
+        .alert-success {
+            background: rgba(34, 211, 238, 0.12);
+            color: var(--neon-green);
+            border-color: var(--neon-green);
         }
+
+        .alert-error {
+            background: rgba(255, 45, 149, 0.12);
+            color: var(--neon-magenta);
+            border-color: var(--neon-magenta);
+        }
+
+        .alert-info {
+            background: rgba(0, 240, 255, 0.08);
+            color: var(--neon-cyan);
+            border-color: var(--neon-cyan);
+        }
+
+        /* ================================================================
+               FOOTER – Cyber glow borders
+               ================================================================ */
+        .footer {
+            background: rgba(10, 14, 26, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 40px 0 32px;
+            border-top: 1px solid rgba(0, 240, 255, 0.08);
+            margin-top: 40px;
+        }
+
         .footer .container {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 16px;
+            gap: 20px;
         }
+
         .footer .brand-small {
             display: flex;
             align-items: center;
             gap: 12px;
         }
+
         .footer .brand-small .icon {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, var(--secondary), #0099ff);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            font-size: 1.2rem;
-            flex-shrink: 0;
-        }
-        .footer .brand-small .name {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--white);
-        }
-        .footer .brand-small .name span {
-            color: var(--secondary);
-        }
-        .footer .socials {
-            display: flex;
-            gap: 14px;
-        }
-        .footer .socials a {
             width: 40px;
             height: 40px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.06);
+            background: var(--gradient-cyan);
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: rgba(255,255,255,0.6);
-            transition: var(--transition);
-            font-size: 1.1rem;
-        }
-        .footer .socials a:hover {
-            background: var(--secondary);
-            color: var(--primary);
-            transform: translateY(-3px);
+            color: #fff;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
         }
 
-        /* ===== FLOATING WHATSAPP ===== */
+        .footer .brand-small .name {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-white);
+            letter-spacing: 0.5px;
+        }
+
+        .footer .brand-small .name span {
+            color: var(--neon-cyan);
+        }
+
+        .footer p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer .socials {
+            display: flex;
+            gap: 12px;
+        }
+
+        .footer .socials a {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            transition: var(--transition);
+            font-size: 1.1rem;
+            border: 1px solid transparent;
+        }
+
+        .footer .socials a:hover {
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--neon-cyan);
+            border-color: var(--neon-cyan);
+            box-shadow: var(--glow-cyan);
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        /* ================================================================
+               FLOATING WHATSAPP – Pulsing neon effect
+               ================================================================ */
         .whatsapp-float {
             position: fixed;
             bottom: 30px;
@@ -310,86 +769,124 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--white);
+            color: #fff;
             font-size: 2.2rem;
-            box-shadow: 0 8px 40px rgba(37,211,102,0.4);
+            box-shadow: 0 8px 40px rgba(37, 211, 102, 0.4);
             transition: var(--transition);
-            animation: pulse-whatsapp 2.5s infinite;
+            animation: pulseWhatsapp 2.5s infinite;
         }
+
         .whatsapp-float:hover {
             transform: scale(1.1) rotate(-4deg);
-            box-shadow: 0 12px 50px rgba(37,211,102,0.55);
-        }
-        @keyframes pulse-whatsapp {
-            0%, 100% { box-shadow: 0 8px 40px rgba(37,211,102,0.4); }
-            50%     { box-shadow: 0 8px 60px rgba(37,211,102,0.7); }
+            box-shadow: 0 12px 60px rgba(37, 211, 102, 0.6);
         }
 
-        /* ===== USER NAV SECTION ===== */
-        .nav-user-section {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-left: auto;
+        @keyframes pulseWhatsapp {
+            0%,
+            100% {
+                box-shadow: 0 8px 40px rgba(37, 211, 102, 0.4);
+            }
+            50% {
+                box-shadow: 0 8px 60px rgba(37, 211, 102, 0.7);
+            }
         }
 
-        /* ===== RESPONSIVE ===== */
+        /* ================================================================
+               RESPONSIVE BREAKPOINTS
+               ================================================================ */
+
+        /* ---- Tablet & small desktop ---- */
+        @media (max-width: 1024px) {
+            .brand-name {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* ---- Mobile navigation toggle ---- */
         @media (max-width: 992px) {
             .nav-links {
                 display: none;
                 width: 100%;
                 flex-direction: column;
                 align-items: stretch;
-                gap: 4px;
+                gap: 2px;
                 padding-top: 16px;
-                border-top: 1px solid rgba(255,255,255,0.06);
+                border-top: 1px solid rgba(255, 255, 255, 0.04);
+                background: rgba(10, 14, 26, 0.98);
+                border-radius: var(--radius-sm);
+                padding: 16px;
+                margin-top: 8px;
             }
+
             .nav-links.open {
                 display: flex;
+                animation: fadeSlideUp 0.3s ease forwards;
             }
+
             .nav-links a {
-                padding: 12px 16px;
+                padding: 10px 16px;
                 text-align: center;
+                border-radius: var(--radius-sm);
             }
+
+            .nav-links a::after {
+                display: none;
+            }
+
             .nav-links .dropdown {
                 display: block;
                 width: 100%;
             }
-            .nav-links .dropdown > a {
+
+            .nav-links .dropdown>a {
                 justify-content: center;
                 width: 100%;
             }
+
             .nav-links .dropdown-menu {
                 position: static;
                 display: none;
-                background: rgba(255,255,255,0.05);
+                background: rgba(255, 255, 255, 0.03);
                 border-radius: var(--radius-sm);
-                margin: 4px 16px;
+                margin: 4px 0;
                 padding: 4px 0;
                 box-shadow: none;
                 border: none;
                 min-width: unset;
+                backdrop-filter: none;
             }
+
             .nav-links .dropdown.open .dropdown-menu {
                 display: block;
+                animation: fadeSlideUp 0.2s ease forwards;
             }
+
             .nav-links .dropdown-menu a {
                 text-align: center;
                 padding: 8px 16px;
                 font-size: 0.85rem;
                 white-space: normal;
             }
+
             .hamburger {
                 display: flex;
             }
-            .brand-name {
-                font-size: 1.2rem;
+
+            .nav-user-section {
+                margin-left: 0 !important;
+                justify-content: center;
+                border-top: 1px solid rgba(255, 255, 255, 0.04);
+                padding-top: 12px;
+                margin-top: 8px;
+                flex-wrap: wrap;
             }
+
             .brand-icon {
                 width: 40px;
                 height: 40px;
                 font-size: 1.3rem;
             }
+
             .whatsapp-float {
                 width: 56px;
                 height: 56px;
@@ -397,62 +894,90 @@
                 bottom: 20px;
                 right: 20px;
             }
+
             .footer .container {
                 flex-direction: column;
                 text-align: center;
             }
-            .nav-user-section {
-                margin-left: 0 !important;
-                justify-content: center;
-                border-top: 1px solid rgba(255,255,255,0.06);
-                padding-top: 12px;
-                margin-top: 8px;
-                flex-wrap: wrap;
-            }
-            .brand {
-                gap: 10px;
-            }
-            .brand-icon {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            .logo-img {
-                border-radius: 50%;
-            }
         }
 
+        /* ---- Small phones ---- */
         @media (max-width: 480px) {
-            .nav-links .dropdown-menu {
-                margin: 4px 8px;
+            .brand-name {
+                font-size: 1rem;
+            }
+
+            .brand-icon {
+                width: 36px;
+                height: 36px;
+            }
+
+            .nav-links {
+                padding: 12px;
+            }
+
+            .btn-primary,
+            .btn-outline,
+            .btn-whatsapp {
+                padding: 10px 20px;
+                font-size: 0.85rem;
+            }
+
+            .whatsapp-float {
+                width: 48px;
+                height: 48px;
+                font-size: 1.5rem;
+                bottom: 16px;
+                right: 16px;
+            }
+
+            .card {
+                padding: 20px 16px;
+            }
+
+            .card-pricing {
+                padding: 24px 16px;
+            }
+
+            .card-pricing .price {
+                font-size: 1.8rem;
             }
         }
     </style>
+
+    {% block extra_head %}{% endblock %}
 </head>
+
 <body>
-    <!-- ===== HEADER ===== -->
+    <!-- ================================================================
+         HEADER – Glassmorphism with sticky behavior
+         ================================================================ -->
     <header class="header">
         <div class="container">
+            <!-- Brand / Logo -->
             <a href="{% url 'home' %}" class="brand">
                 <div class="brand-icon">
-                    <img src="{% static 'images/matoshreelogo.png' %}" alt="{% trans "Matoshree Logo" %}" class="logo-img">
+                    <img src="{% static 'images/matoshreelogo.png' %}" alt="{% trans "Matoshree Logo" %}" class="logo-img" />
                 </div>
                 <div class="brand-name">
                     {{ business.business_name|default:"Matoshree" }}
                 </div>
             </a>
+
+            <!-- Hamburger (mobile toggle) -->
             <button class="hamburger" id="hamburger" aria-label="{% trans "Toggle navigation" %}">
                 <span></span><span></span><span></span>
             </button>
 
+            <!-- Navigation -->
             <nav class="nav-links" id="navLinks">
-                <!-- Main navigation -->
+                <!-- Main nav items -->
                 <a href="{% url 'home' %}">{% trans "Home" %}</a>
                 <a href="{% url 'about' %}">{% trans "About" %}</a>
 
                 <!-- Services Dropdown -->
                 <div class="dropdown">
-                    <a href="#"> {% trans "Services" %} <i class="fas fa-chevron-down"></i> </a>
+                    <a href="#">{% trans "Services" %} <i class="fas fa-chevron-down"></i></a>
                     <div class="dropdown-menu">
                         <a href="{% url 'services' %}">{% trans "All Services" %}</a>
                         <a href="{% url 'documents' %}">{% trans "Required Documents" %}</a>
@@ -465,7 +990,7 @@
 
                 <!-- Resources Dropdown -->
                 <div class="dropdown">
-                    <a href="#"> {% trans "Resources" %} <i class="fas fa-chevron-down"></i> </a>
+                    <a href="#">{% trans "Resources" %} <i class="fas fa-chevron-down"></i></a>
                     <div class="dropdown-menu">
                         <a href="{% url 'faq' %}">{% trans "FAQ" %}</a>
                         <a href="{% url 'reviews' %}">{% trans "Customer Reviews" %}</a>
@@ -476,39 +1001,42 @@
                 </div>
 
                 <a href="{% url 'contact' %}">{% trans "Contact" %}</a>
-                <a href="{% url 'appointment' %}" class="cta-nav">{% trans "Book Appointment" %}</a>
 
-                <!-- User authentication & Language Switcher -->
+                <!-- User & Language section -->
                 <div class="nav-user-section">
                     {% if user.is_authenticated %}
-                        <span style="color: rgba(255,255,255,0.7); font-weight: 500;">{{ user.username }}</span>
-                        {% if user.role == 'admin' or user.role == 'superadmin' %}
-                            <a href="{% url 'admin_dashboard' %}">{% trans "Dashboard" %}</a>
-                        {% endif %}
-                        {% if user.role == 'superadmin' %}
-                            <a href="{% url 'superadmin_dashboard' %}">{% trans "Super Admin" %}</a>
-                        {% endif %}
-                        <a href="{% url 'profile' %}">{% trans "Profile" %}</a>
-                        <form action="{% url 'logout' %}" method="post" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" style="background:none; border:none; color:rgba(255,255,255,0.75); cursor:pointer; font-weight:500; padding:8px 12px; font-size:0.95rem;">{% trans "Logout" %}</button>
-                        </form>
+                    <span style="color: var(--text-muted); font-weight:500; font-size:0.85rem;">{{ user.username }}</span>
+                    {% if user.role == 'admin' or user.role == 'superadmin' %}
+                    <a href="{% url 'admin_dashboard' %}">{% trans "Dashboard" %}</a>
+                    {% endif %}
+                    {% if user.role == 'superadmin' %}
+                    <a href="{% url 'superadmin_dashboard' %}">{% trans "Super Admin" %}</a>
+                    {% endif %}
+                    <a href="{% url 'profile' %}">{% trans "Profile" %}</a>
+                    <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-weight:500; padding:6px 14px; font-size:0.85rem; border-radius:var(--radius-pill); transition:var(--transition);">
+                            {% trans "Logout" %}
+                        </button>
+                    </form>
                     {% else %}
-                        <a href="{% url 'login' %}">{% trans "Login" %}</a>
-                        <a href="{% url 'register' %}">{% trans "Register" %}</a>
+                    <a href="{% url 'login' %}">{% trans "Login" %}</a>
+                    <a href="{% url 'register' %}">{% trans "Register" %}</a>
                     {% endif %}
 
+                <a href="{% url 'appointment' %}" class="cta-nav">{% trans "Book Appointment" %}</a>
+                
                     <!-- Language Switcher -->
                     <form action="{% url 'set_language' %}" method="post" style="display:inline;">
                         {% csrf_token %}
-                        <input name="next" type="hidden" value="{{ request.path }}">
-                        <select name="language" onchange="this.form.submit()" style="background:rgba(255,255,255,0.1); color:#fff; border:1px solid rgba(255,255,255,0.2); border-radius:20px; padding:4px 12px; font-size:0.9rem;">
+                        <input name="next" type="hidden" value="{{ request.path }}" />
+                        <select name="language" class="lang-select" onchange="this.form.submit()">
                             {% get_current_language as current_lang %}
                             {% get_available_languages as LANGUAGES %}
                             {% for lang_code, lang_name in LANGUAGES %}
-                                <option value="{{ lang_code }}" {% if lang_code == current_lang %}selected{% endif %}>
-                                    {{ lang_name }}
-                                </option>
+                            <option value="{{ lang_code }}" {% if lang_code == current_lang %}selected{% endif %}>
+                                {{ lang_name }}
+                            </option>
                             {% endfor %}
                         </select>
                     </form>
@@ -517,21 +1045,27 @@
         </div>
     </header>
 
-    <!-- ===== MESSAGES ===== -->
+    <!-- ================================================================
+         MESSAGES – Django alerts with neon styling
+         ================================================================ -->
     <div class="container messages-container">
         {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-            {% endfor %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
         {% endif %}
     </div>
 
-    <!-- ===== MAIN CONTENT ===== -->
+    <!-- ================================================================
+         MAIN CONTENT – Child templates extend here
+         ================================================================ -->
     <main>
         {% block content %}{% endblock %}
     </main>
 
-    <!-- ===== FOOTER ===== -->
+    <!-- ================================================================
+         FOOTER – Cyber glow borders & social links
+         ================================================================ -->
     <footer class="footer">
         <div class="container">
             <div class="brand-small">
@@ -542,8 +1076,8 @@
             </div>
             <p>
                 {% now "Y" as current_year %}
-                {% blocktrans with year=current_year name=business.business_name|default:"Matoshree Cyber Cafe" %}
-                    &copy; {{ year }} {{ name }}. All rights reserved.
+                {% blocktrans with year=current_year name=business.business_name|default:"Matoshree Cyber Cafe" trimmed %}
+                &copy; {{ year }} {{ name }}. All rights reserved.
                 {% endblocktrans %}
             </p>
             <div class="socials">
@@ -555,62 +1089,95 @@
         </div>
     </footer>
 
-    <!-- ===== FLOATING WHATSAPP ===== -->
-    <a href="https://wa.me/{{ business.whatsapp|default:'919876543210'|cut:'+' }}?text=Hello"
-       target="_blank"
-       class="whatsapp-float"
-       aria-label="{% trans "Chat on WhatsApp" %}">
-       <i class="fab fa-whatsapp"></i>
-    </a>
+    <!-- ================================================================
+         FLOATING WHATSAPP – Pulsing neon button
+         ================================================================ -->
+    {% with whatsapp_number=business.whatsapp|default:"" %}
+    {% if whatsapp_number %}
+    <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello"
+    target="_blank"
+    class="whatsapp-float"
+    aria-label="{% trans "Chat on WhatsApp" %}">
+    <i class="fab fa-whatsapp"></i>
+</a>
+{% endif %}
+{% endwith %}
 
-    <!-- ===== SCRIPTS ===== -->
-    <script>
-        (function() {
-            // Toggle mobile navigation
-            const hamburger = document.getElementById('hamburger');
-            const navLinks = document.getElementById('navLinks');
+<!-- ================================================================
+     SCRIPTS – Mobile nav, dropdowns, active link highlight
+     ================================================================ -->
+<script>
+    (function() {
+        'use strict';
 
+        // ---- Toggle mobile navigation ---- //
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        if (hamburger && navLinks) {
             hamburger.addEventListener('click', function() {
                 navLinks.classList.toggle('open');
             });
 
-            // Close navigation when any link is clicked (mobile)
+            // Close nav on link click (mobile)
             navLinks.querySelectorAll('a').forEach(function(link) {
                 link.addEventListener('click', function() {
                     navLinks.classList.remove('open');
                 });
             });
+        }
 
-            // Toggle dropdowns on mobile (click instead of hover)
-            const dropdownToggles = document.querySelectorAll('.nav-links .dropdown > a');
-            dropdownToggles.forEach(function(toggle) {
-                toggle.addEventListener('click', function(e) {
-                    if (window.innerWidth <= 992) {
-                        e.preventDefault();
-                        var parent = this.parentElement;
-                        // Close other open dropdowns
-                        document.querySelectorAll('.nav-links .dropdown.open').forEach(function(d) {
-                            if (d !== parent) d.classList.remove('open');
-                        });
-                        parent.classList.toggle('open');
+        // ---- Toggle dropdowns on mobile (click) ---- //
+        const dropdownToggles = document.querySelectorAll('.nav-links .dropdown > a');
+        dropdownToggles.forEach(function(toggle) {
+            toggle.addEventListener('click', function(e) {
+                if (window.innerWidth <= 992) {
+                    e.preventDefault();
+                    var parent = this.parentElement;
+                    document.querySelectorAll('.nav-links .dropdown.open').forEach(function(d) {
+                        if (d !== parent) d.classList.remove('open');
+                    });
+                    parent.classList.toggle('open');
+                }
+            });
+        });
+
+        // ---- Close dropdowns when clicking outside (mobile) ---- //
+        document.addEventListener('click', function(e) {
+            if (window.innerWidth <= 992) {
+                if (!e.target.closest('.nav-links .dropdown')) {
+                    document.querySelectorAll('.nav-links .dropdown.open').forEach(function(d) {
+                        d.classList.remove('open');
+                    });
+                }
+            }
+        });
+
+        // ---- Active nav link highlight on scroll (cyber indicator) ---- //
+        const sections = document.querySelectorAll('section[id]');
+        const navLinkItems = document.querySelectorAll('.nav-links a:not(.cta-nav):not(.dropdown > a)');
+
+        if (sections.length && navLinkItems.length) {
+            window.addEventListener('scroll', function() {
+                let current = '';
+                sections.forEach(function(section) {
+                    const top = section.offsetTop - 140;
+                    if (window.scrollY >= top) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                navLinkItems.forEach(function(link) {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
                     }
                 });
             });
+        }
 
-            // Close dropdowns when clicking outside (optional)
-            document.addEventListener('click', function(e) {
-                if (window.innerWidth <= 992) {
-                    if (!e.target.closest('.nav-links .dropdown')) {
-                        document.querySelectorAll('.nav-links .dropdown.open').forEach(function(d) {
-                            d.classList.remove('open');
-                        });
-                    }
-                }
-            });
-        })();
-    </script>
+    })();
+</script>
 
-    <!-- Page-specific scripts -->
-    {% block extra_scripts %}{% endblock %}
+{% block extra_scripts %}{% endblock %}
 </body>
 </html>

@@ -1,0 +1,3219 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-06 20:27+0530\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\corematoshree\forms.py:15 .\corematoshree\forms.py:52
+#: .\corematoshree\forms.py:72 .\corematoshree\forms.py:119
+#: .\corematoshree\forms.py:261 .\corematoshree\forms.py:275
+#: .\corematoshree\forms.py:334 .\corematoshree\models.py:101
+#: .\corematoshree\models.py:157 .\corematoshree\models.py:197
+#: .\corematoshree\models.py:486 .\templates\contactus.html:359
+#: .\templates\customer_reviews.html:675
+#: .\templates\superadmindashboard.html:1223
+msgid "Email"
+msgstr ""
+
+#: .\corematoshree\forms.py:19 .\corematoshree\forms.py:53
+#: .\corematoshree\forms.py:73 .\corematoshree\forms.py:118
+#: .\corematoshree\forms.py:260 .\corematoshree\forms.py:276
+#: .\corematoshree\forms.py:332 .\corematoshree\models.py:24
+#: .\corematoshree\models.py:96 .\corematoshree\models.py:160
+#: .\corematoshree\models.py:476 .\templates\contactus.html:337
+msgid "Phone"
+msgstr ""
+
+#: .\corematoshree\forms.py:24 .\corematoshree\forms.py:54
+#: .\corematoshree\forms.py:331 .\corematoshree\models.py:29
+#: .\corematoshree\models.py:473 .\templates\contactus.html:327
+msgid "Address"
+msgstr ""
+
+#: .\corematoshree\forms.py:33 .\templates\superadmindashboard.html:1222
+msgid "Username"
+msgstr ""
+
+#: .\corematoshree\forms.py:34
+msgid "Password"
+msgstr ""
+
+#: .\corematoshree\forms.py:35
+msgid "Confirm Password"
+msgstr ""
+
+#: .\corematoshree\forms.py:50
+msgid "First Name"
+msgstr ""
+
+#: .\corematoshree\forms.py:51
+msgid "Last Name"
+msgstr ""
+
+#: .\corematoshree\forms.py:71 .\corematoshree\forms.py:212
+#: .\corematoshree\forms.py:274 .\corematoshree\models.py:49
+#: .\corematoshree\models.py:153 .\templates\admindashboard.html:220
+#: .\templates\superadmindashboard.html:682
+msgid "Name"
+msgstr ""
+
+#: .\corematoshree\forms.py:74 .\corematoshree\forms.py:92
+#: .\corematoshree\forms.py:277 .\corematoshree\models.py:165
+#: .\templates\contactus.html:293
+msgid "Subject"
+msgstr ""
+
+#: .\corematoshree\forms.py:75 .\corematoshree\forms.py:265
+#: .\corematoshree\forms.py:278 .\corematoshree\models.py:116
+#: .\corematoshree\models.py:169 .\templates\contactus.html:301
+msgid "Message"
+msgstr ""
+
+#: .\corematoshree\forms.py:80 .\corematoshree\forms.py:169
+#: .\corematoshree\forms.py:177 .\templates\contactus.html:269
+msgid "Your Name"
+msgstr ""
+
+#: .\corematoshree\forms.py:84 .\corematoshree\forms.py:136
+#: .\corematoshree\forms.py:170 .\corematoshree\forms.py:181
+#: .\templates\appointment.html:323 .\templates\contactus.html:277
+msgid "Email Address"
+msgstr ""
+
+#: .\corematoshree\forms.py:88 .\corematoshree\forms.py:132
+#: .\templates\appointment.html:308 .\templates\contactus.html:285
+msgid "Phone Number"
+msgstr ""
+
+#: .\corematoshree\forms.py:97
+msgid "Write your message..."
+msgstr ""
+
+#: .\corematoshree\forms.py:117 .\corematoshree\forms.py:128
+#: .\corematoshree\forms.py:259 .\corematoshree\models.py:92
+#: .\templates\appointment.html:296 .\templates\customer_reviews.html:669
+msgid "Full Name"
+msgstr ""
+
+#: .\corematoshree\forms.py:120 .\corematoshree\forms.py:262
+#: .\corematoshree\forms.py:300 .\corematoshree\models.py:107
+#: .\corematoshree\models.py:302 .\corematoshree\models.py:324
+#: .\templates\admindashboard.html:312 .\templates\admindashboard.html:342
+#: .\templates\admindashboard.html:601 .\templates\appointment.html:334
+#: .\templates\required_document.html:207 .\templates\service_charges.html:412
+#: .\templates\service_charges.html:444 .\templates\services.html:176
+#: .\templates\superadmindashboard.html:776
+#: .\templates\superadmindashboard.html:806
+#: .\templates\superadmindashboard.html:1075
+msgid "Service"
+msgstr ""
+
+#: .\corematoshree\forms.py:121 .\corematoshree\forms.py:263
+#: .\corematoshree\models.py:110 .\templates\appointment.html:346
+msgid "Appointment Date"
+msgstr ""
+
+#: .\corematoshree\forms.py:122 .\corematoshree\forms.py:264
+#: .\corematoshree\models.py:113 .\templates\appointment.html:358
+msgid "Appointment Time"
+msgstr ""
+
+#: .\corematoshree\forms.py:123 .\templates\appointment.html:370
+msgid "Additional Message"
+msgstr ""
+
+#: .\corematoshree\forms.py:152
+msgid "Additional Message (Optional)"
+msgstr ""
+
+#: .\corematoshree\forms.py:171 .\corematoshree\models.py:202
+#: .\corematoshree\models.py:219
+msgid "Review"
+msgstr ""
+
+#: .\corematoshree\forms.py:172 .\corematoshree\models.py:205
+#: .\templates\customer_reviews.html:681
+msgid "Rating"
+msgstr ""
+
+#: .\corematoshree\forms.py:186
+msgid "Write your review..."
+msgstr ""
+
+#: .\corematoshree\forms.py:198
+msgid "Rating must be between 1 and 5."
+msgstr ""
+
+#: .\corematoshree\forms.py:213 .\corematoshree\forms.py:225
+#: .\corematoshree\forms.py:288 .\corematoshree\forms.py:314
+#: .\corematoshree\models.py:53 .\corematoshree\models.py:242
+#: .\corematoshree\models.py:279 .\corematoshree\models.py:347
+#: .\templates\admindashboard.html:220 .\templates\admindashboard.html:256
+#: .\templates\admindashboard.html:413 .\templates\admindashboard.html:710
+#: .\templates\superadmindashboard.html:682
+#: .\templates\superadmindashboard.html:718
+#: .\templates\superadmindashboard.html:879
+#: .\templates\superadmindashboard.html:1190
+msgid "Category"
+msgstr ""
+
+#: .\corematoshree\forms.py:214 .\corematoshree\forms.py:226
+#: .\corematoshree\forms.py:238 .\corematoshree\forms.py:248
+#: .\corematoshree\models.py:57 .\corematoshree\models.py:247
+#: .\corematoshree\models.py:375 .\corematoshree\models.py:420
+#: .\templates\admindashboard.html:265 .\templates\admindashboard.html:424
+#: .\templates\admindashboard.html:498 .\templates\admindashboard.html:576
+#: .\templates\superadmindashboard.html:727
+#: .\templates\superadmindashboard.html:890
+#: .\templates\superadmindashboard.html:966
+#: .\templates\superadmindashboard.html:1046
+msgid "Description"
+msgstr ""
+
+#: .\corematoshree\forms.py:215 .\corematoshree\models.py:61
+#: .\templates\admindashboard.html:271 .\templates\superadmindashboard.html:733
+msgid "Active"
+msgstr ""
+
+#: .\corematoshree\forms.py:216 .\corematoshree\forms.py:239
+#: .\corematoshree\models.py:65 .\corematoshree\models.py:423
+#: .\templates\admindashboard.html:276 .\templates\admindashboard.html:510
+#: .\templates\superadmindashboard.html:738
+#: .\templates\superadmindashboard.html:978
+msgid "Icon"
+msgstr ""
+
+#: .\corematoshree\forms.py:224 .\corematoshree\forms.py:234
+#: .\corematoshree\forms.py:247 .\corematoshree\forms.py:287
+#: .\corematoshree\forms.py:313 .\corematoshree\models.py:238
+#: .\corematoshree\models.py:275 .\corematoshree\models.py:343
+#: .\corematoshree\models.py:371 .\corematoshree\models.py:405
+#: .\templates\admindashboard.html:409 .\templates\admindashboard.html:490
+#: .\templates\admindashboard.html:572 .\templates\admindashboard.html:706
+#: .\templates\superadmindashboard.html:875
+#: .\templates\superadmindashboard.html:958
+#: .\templates\superadmindashboard.html:1042
+#: .\templates\superadmindashboard.html:1186
+msgid "Title"
+msgstr ""
+
+#: .\corematoshree\forms.py:235 .\corematoshree\models.py:409
+#: .\templates\admindashboard.html:494 .\templates\superadmindashboard.html:962
+msgid "Organization"
+msgstr ""
+
+#: .\corematoshree\forms.py:236 .\corematoshree\forms.py:250
+#: .\corematoshree\models.py:382 .\corematoshree\models.py:413
+#: .\templates\admindashboard.html:502 .\templates\superadmindashboard.html:970
+msgid "Last Date"
+msgstr ""
+
+#: .\corematoshree\forms.py:237 .\corematoshree\models.py:416
+#: .\templates\admindashboard.html:506 .\templates\superadmindashboard.html:974
+msgid "Apply Link"
+msgstr ""
+
+#: .\corematoshree\forms.py:249 .\corematoshree\models.py:378
+#: .\templates\admindashboard.html:580
+#: .\templates\superadmindashboard.html:1050
+msgid "Eligibility"
+msgstr ""
+
+#: .\corematoshree\forms.py:251 .\corematoshree\forms.py:315
+#: .\corematoshree\models.py:284 .\corematoshree\models.py:387
+#: .\templates\admindashboard.html:584
+#: .\templates\superadmindashboard.html:1054
+#: .\venv\Lib\site-packages\django\db\models\fields\files.py:420
+msgid "Image"
+msgstr ""
+
+#: .\corematoshree\forms.py:266 .\corematoshree\models.py:120
+#: .\templates\admindashboard.html:220 .\templates\admindashboard.html:269
+#: .\templates\admindashboard.html:601 .\templates\superadmindashboard.html:682
+#: .\templates\superadmindashboard.html:731
+#: .\templates\superadmindashboard.html:1075
+msgid "Status"
+msgstr ""
+
+#: .\corematoshree\forms.py:279 .\corematoshree\models.py:172
+#: .\templates\admindashboard.html:640
+#: .\templates\superadmindashboard.html:1118
+msgid "Replied"
+msgstr ""
+
+#: .\corematoshree\forms.py:289 .\corematoshree\models.py:351
+#: .\templates\download_forms.html:399
+msgid "PDF"
+msgstr ""
+
+#: .\corematoshree\forms.py:301 .\corematoshree\models.py:305
+msgid "Charge"
+msgstr ""
+
+#: .\corematoshree\forms.py:318
+msgid "Image Title"
+msgstr ""
+
+#: .\corematoshree\forms.py:328 .\corematoshree\models.py:460
+msgid "Business Name"
+msgstr ""
+
+#: .\corematoshree\forms.py:329 .\corematoshree\models.py:464
+msgid "Logo"
+msgstr ""
+
+#: .\corematoshree\forms.py:330 .\corematoshree\models.py:470
+msgid "Welcome Message"
+msgstr ""
+
+#: .\corematoshree\forms.py:333 .\corematoshree\models.py:481
+#: .\templates\contactus.html:346
+msgid "WhatsApp"
+msgstr ""
+
+#: .\corematoshree\forms.py:335 .\corematoshree\models.py:489
+msgid "Google Map"
+msgstr ""
+
+#: .\corematoshree\forms.py:336 .\corematoshree\models.py:493
+#: .\templates\contactus.html:369
+msgid "Business Hours"
+msgstr ""
+
+#: .\corematoshree\models.py:13 .\templates\superadmindashboard.html:1246
+msgid "User"
+msgstr ""
+
+#: .\corematoshree\models.py:14 .\templates\admindashboard.html:159
+#: .\templates\superadmindashboard.html:1247
+msgid "Admin"
+msgstr ""
+
+#: .\corematoshree\models.py:15 .\templates\base.html:490
+#: .\templates\superadmindashboard.html:594
+#: .\templates\superadmindashboard.html:1248
+msgid "Super Admin"
+msgstr ""
+
+#: .\corematoshree\models.py:18 .\templates\superadmindashboard.html:1224
+msgid "Role"
+msgstr ""
+
+#: .\corematoshree\models.py:41
+msgid "Enter a valid phone number (10-15 digits)."
+msgstr ""
+
+#: .\corematoshree\models.py:68
+msgid "Font Awesome icon class (e.g., 'fa-print')"
+msgstr ""
+
+#: .\corematoshree\models.py:71 .\templates\admindashboard.html:280
+#: .\templates\superadmindashboard.html:742
+msgid "Icon Color"
+msgstr ""
+
+#: .\corematoshree\models.py:74
+msgid "Hex color for the icon circle (e.g., #ff6b35)"
+msgstr ""
+
+#: .\corematoshree\models.py:85
+msgid "Pending"
+msgstr ""
+
+#: .\corematoshree\models.py:86
+msgid "Confirmed"
+msgstr ""
+
+#: .\corematoshree\models.py:87
+msgid "Completed"
+msgstr ""
+
+#: .\corematoshree\models.py:88
+msgid "Cancelled"
+msgstr ""
+
+#: .\corematoshree\models.py:126 .\corematoshree\models.py:176
+#: .\corematoshree\models.py:213 .\corematoshree\models.py:250
+msgid "Created At"
+msgstr ""
+
+#: .\corematoshree\models.py:132
+msgid "Appointment"
+msgstr ""
+
+#: .\corematoshree\models.py:133 .\templates\admindashboard.html:140
+#: .\templates\admindashboard.html:173 .\templates\admindashboard.html:598
+#: .\templates\admindashboard.html:818 .\templates\superadmindashboard.html:573
+#: .\templates\superadmindashboard.html:615
+#: .\templates\superadmindashboard.html:1071
+#: .\templates\superadmindashboard.html:1355
+msgid "Appointments"
+msgstr ""
+
+#: .\corematoshree\models.py:140
+msgid "Appointment date cannot be in the past."
+msgstr ""
+
+#: .\corematoshree\models.py:182 .\templates\base.html:479
+msgid "Contact"
+msgstr ""
+
+#: .\corematoshree\models.py:183
+msgid "Contacts"
+msgstr ""
+
+#: .\corematoshree\models.py:193
+msgid "Customer Name"
+msgstr ""
+
+#: .\corematoshree\models.py:209
+msgid "Approved"
+msgstr ""
+
+#: .\corematoshree\models.py:220
+msgid "Reviews"
+msgstr ""
+
+#: .\corematoshree\models.py:230 .\corematoshree\models.py:394
+#: .\templates\admindashboard.html:416 .\templates\superadmindashboard.html:882
+msgid "Government Scheme"
+msgstr ""
+
+#: .\corematoshree\models.py:231 .\templates\admindashboard.html:417
+#: .\templates\superadmindashboard.html:883
+msgid "Recruitment"
+msgstr ""
+
+#: .\corematoshree\models.py:232 .\templates\admindashboard.html:418
+#: .\templates\superadmindashboard.html:884
+msgid "Scholarship"
+msgstr ""
+
+#: .\corematoshree\models.py:233 .\templates\admindashboard.html:419
+#: .\templates\superadmindashboard.html:885
+msgid "Holiday"
+msgstr ""
+
+#: .\corematoshree\models.py:234 .\templates\admindashboard.html:420
+#: .\templates\superadmindashboard.html:886
+msgid "Notice"
+msgstr ""
+
+#: .\corematoshree\models.py:256
+msgid "Announcement"
+msgstr ""
+
+#: .\corematoshree\models.py:257 .\templates\admindashboard.html:137
+#: .\templates\admindashboard.html:364 .\templates\admindashboard.html:815
+#: .\templates\announcements.html:393 .\templates\base.html:473
+#: .\templates\homepage.html:910 .\templates\superadmindashboard.html:570
+#: .\templates\superadmindashboard.html:830
+#: .\templates\superadmindashboard.html:1352
+msgid "Announcements"
+msgstr ""
+
+#: .\corematoshree\models.py:267
+msgid "Cyber Cafe"
+msgstr ""
+
+#: .\corematoshree\models.py:268
+msgid "Customers"
+msgstr ""
+
+#: .\corematoshree\models.py:269
+msgid "Certificates"
+msgstr ""
+
+#: .\corematoshree\models.py:270
+msgid "Equipment"
+msgstr ""
+
+#: .\corematoshree\models.py:271
+msgid "Office"
+msgstr ""
+
+#: .\corematoshree\models.py:289 .\templates\gallery.html:488
+msgid "Gallery Image"
+msgstr ""
+
+#: .\corematoshree\models.py:290
+msgid "Gallery Images"
+msgstr ""
+
+#: .\corematoshree\models.py:311
+msgid "Service Charge"
+msgstr ""
+
+#: .\corematoshree\models.py:312 .\templates\admindashboard.html:294
+#: .\templates\base.html:461 .\templates\service_charges.html:410
+#: .\templates\superadmindashboard.html:758
+msgid "Service Charges"
+msgstr ""
+
+#: .\corematoshree\models.py:327
+msgid "Document Name"
+msgstr ""
+
+#: .\corematoshree\models.py:332 .\templates\required_document.html:208
+msgid "Required Document"
+msgstr ""
+
+#: .\corematoshree\models.py:333 .\templates\base.html:459
+msgid "Required Documents"
+msgstr ""
+
+#: .\corematoshree\models.py:355
+msgid "Uploaded At"
+msgstr ""
+
+#: .\corematoshree\models.py:360
+msgid "Download Form"
+msgstr ""
+
+#: .\corematoshree\models.py:361 .\templates\base.html:460
+msgid "Download Forms"
+msgstr ""
+
+#: .\corematoshree\models.py:395 .\templates\admindashboard.html:524
+#: .\templates\admindashboard.html:817 .\templates\base.html:474
+#: .\templates\government_schemes.html:265
+#: .\templates\superadmindashboard.html:994
+#: .\templates\superadmindashboard.html:1354
+msgid "Government Schemes"
+msgstr ""
+
+#: .\corematoshree\models.py:426
+msgid "Font Awesome icon (e.g. 'fa-briefcase')"
+msgstr ""
+
+#: .\corematoshree\models.py:430
+msgid "Job Notification"
+msgstr ""
+
+#: .\corematoshree\models.py:431 .\templates\admindashboard.html:138
+#: .\templates\admindashboard.html:445 .\templates\admindashboard.html:816
+#: .\templates\base.html:475 .\templates\superadmindashboard.html:571
+#: .\templates\superadmindashboard.html:913
+#: .\templates\superadmindashboard.html:1353
+msgid "Job Notifications"
+msgstr ""
+
+#: .\corematoshree\models.py:441
+msgid "Question"
+msgstr ""
+
+#: .\corematoshree\models.py:445
+msgid "Answer"
+msgstr ""
+
+#: .\corematoshree\models.py:449 .\templates\base.html:471
+msgid "FAQ"
+msgstr ""
+
+#: .\corematoshree\models.py:450
+msgid "FAQs"
+msgstr ""
+
+#: .\corematoshree\models.py:490
+msgid "Paste Google Maps Embed Code"
+msgstr ""
+
+#: .\corematoshree\models.py:512 .\corematoshree\models.py:513
+msgid "Business Information"
+msgstr ""
+
+#: .\templates\aboutus.html:704 .\templates\base.html:451
+#: .\templates\government_schemes.html:263
+msgid "Home"
+msgstr ""
+
+#: .\templates\aboutus.html:706
+msgid "About Us"
+msgstr ""
+
+#: .\templates\aboutus.html:708 .\templates\base.html:452
+msgid "About"
+msgstr ""
+
+#: .\templates\aboutus.html:708
+msgid "CyberTech"
+msgstr ""
+
+#: .\templates\aboutus.html:721
+msgid "Who"
+msgstr ""
+
+#: .\templates\aboutus.html:721
+msgid "We Are"
+msgstr ""
+
+#: .\templates\aboutus.html:723
+msgid "Trusted Cyber Café &amp; Digital Service Center"
+msgstr ""
+
+#: .\templates\aboutus.html:726
+msgid "Matoshree Cyber Cafe"
+msgstr ""
+
+#: .\templates\aboutus.html:741
+msgid "Years of Excellence"
+msgstr ""
+
+#: .\templates\aboutus.html:745 .\templates\homepage.html:780
+msgid "Happy Customers"
+msgstr ""
+
+#: .\templates\aboutus.html:749
+msgid "Services Offered"
+msgstr ""
+
+#: .\templates\aboutus.html:764
+msgid "Decades of"
+msgstr ""
+
+#: .\templates\aboutus.html:764
+msgid "Digital Service"
+msgstr ""
+
+#: .\templates\aboutus.html:768
+msgid ""
+"We have over <strong>8 years of experience</strong> in\n"
+"        providing digital and online services. Our experienced staff "
+"ensures\n"
+"        every service is completed accurately and efficiently. From "
+"government\n"
+"        form submissions to document processing, we've handled thousands of\n"
+"        applications with precision."
+msgstr ""
+
+#: .\templates\aboutus.html:790
+msgid "Your Trusted Digital Partner"
+msgstr ""
+
+#: .\templates\aboutus.html:791
+msgid "Reliable · Fast · Transparent · Secure"
+msgstr ""
+
+#: .\templates\aboutus.html:801 .\templates\gallery.html:403
+#: .\templates\homepage.html:808 .\templates\service_charges.html:424
+#: .\templates\services.html:164
+msgid "Our"
+msgstr ""
+
+#: .\templates\aboutus.html:801
+msgid "Complete"
+msgstr ""
+
+#: .\templates\aboutus.html:812
+msgid "Online Government Applications"
+msgstr ""
+
+#: .\templates\aboutus.html:816
+msgid "Aadhaar Assistance"
+msgstr ""
+
+#: .\templates\aboutus.html:820
+msgid "PAN Card Services"
+msgstr ""
+
+#: .\templates\aboutus.html:824
+msgid "Passport Application Support"
+msgstr ""
+
+#: .\templates\aboutus.html:828
+msgid "Printing (B&amp;W &amp; Color)"
+msgstr ""
+
+#: .\templates\aboutus.html:832
+msgid "Photocopy (Xerox)"
+msgstr ""
+
+#: .\templates\aboutus.html:836
+msgid "Document Scanning"
+msgstr ""
+
+#: .\templates\aboutus.html:840
+msgid "Email &amp; Internet Services"
+msgstr ""
+
+#: .\templates\aboutus.html:844
+msgid "Resume / Biodata Creation"
+msgstr ""
+
+#: .\templates\aboutus.html:848 .\templates\homepage.html:757
+msgid "Lamination"
+msgstr ""
+
+#: .\templates\aboutus.html:852
+msgid "Passport-size Photo Printing"
+msgstr ""
+
+#: .\templates\aboutus.html:856
+msgid "Online Bill Payments"
+msgstr ""
+
+#: .\templates\aboutus.html:860
+msgid "Exam &amp; Admission Form Filling"
+msgstr ""
+
+#: .\templates\aboutus.html:864
+msgid "Document Attestation &amp; Notary"
+msgstr ""
+
+#: .\templates\aboutus.html:868
+msgid "Digital Signature &amp; e-Sign"
+msgstr ""
+
+#: .\templates\aboutus.html:872
+msgid "Cloud Storage &amp; Data Transfer"
+msgstr ""
+
+#: .\templates\aboutus.html:882
+msgid "Why"
+msgstr ""
+
+#: .\templates\aboutus.html:882
+msgid "Trust Us"
+msgstr ""
+
+#: .\templates\aboutus.html:891
+msgid "Experienced Staff"
+msgstr ""
+
+#: .\templates\aboutus.html:899
+msgid "Fast &amp; Accurate Service"
+msgstr ""
+
+#: .\templates\aboutus.html:907
+msgid "Transparent Pricing"
+msgstr ""
+
+#: .\templates\aboutus.html:915
+msgid "Customer Satisfaction"
+msgstr ""
+
+#: .\templates\aboutus.html:923
+msgid "Data Privacy &amp; Security"
+msgstr ""
+
+#: .\templates\aboutus.html:931
+msgid "Friendly Customer Support"
+msgstr ""
+
+#: .\templates\aboutus.html:947
+msgid "Authorized"
+msgstr ""
+
+#: .\templates\aboutus.html:947
+msgid "Service Provider"
+msgstr ""
+
+#: .\templates\aboutus.html:950
+msgid "Officially recognized for excellence in digital services"
+msgstr ""
+
+#: .\templates\aboutus.html:955
+msgid "XYZ Digital Services"
+msgstr ""
+
+#: .\templates\aboutus.html:959
+msgid "ABC Government Service Center"
+msgstr ""
+
+#: .\templates\aboutus.html:963
+msgid "Registration No.: 123456789"
+msgstr ""
+
+#: .\templates\aboutus.html:979 .\templates\gallery.html:465
+#: .\templates\jobs.html:466
+msgid "Ready to"
+msgstr ""
+
+#: .\templates\aboutus.html:979 .\templates\gallery.html:465
+msgid "Experience"
+msgstr ""
+
+#: .\templates\aboutus.html:988 .\templates\announcements.html:470
+#: .\templates\download_forms.html:448 .\templates\gallery.html:469
+#: .\templates\government_schemes.html:324 .\templates\jobs.html:475
+#: .\templates\required_document.html:262 .\templates\service_charges.html:513
+msgid "Contact Us"
+msgstr ""
+
+#: .\templates\aboutus.html:995 .\templates\announcements.html:473
+#: .\templates\base.html:563 .\templates\contactus.html:501
+#: .\templates\download_forms.html:455 .\templates\gallery.html:476
+#: .\templates\government_schemes.html:331 .\templates\homepage.html:898
+#: .\templates\jobs.html:483 .\templates\required_document.html:269
+#: .\templates\service_charges.html:521
+msgid "Chat on WhatsApp"
+msgstr ""
+
+#: .\templates\admindashboard.html:9
+msgid "Admin Dashboard – Cyber Café"
+msgstr ""
+
+#: .\templates\admindashboard.html:131 .\templates\superadmindashboard.html:564
+msgid "CyberAdmin"
+msgstr ""
+
+#: .\templates\admindashboard.html:134 .\templates\admindashboard.html:156
+#: .\templates\admindashboard.html:812 .\templates\admindashboard.html:824
+#: .\templates\base.html:487 .\templates\superadmindashboard.html:567
+#: .\templates\superadmindashboard.html:591
+#: .\templates\superadmindashboard.html:1349
+#: .\templates\superadmindashboard.html:1362
+msgid "Dashboard"
+msgstr ""
+
+#: .\templates\admindashboard.html:135 .\templates\admindashboard.html:202
+#: .\templates\admindashboard.html:813 .\templates\superadmindashboard.html:568
+#: .\templates\superadmindashboard.html:663
+#: .\templates\superadmindashboard.html:1350
+msgid "Manage Services"
+msgstr ""
+
+#: .\templates\admindashboard.html:136 .\templates\admindashboard.html:814
+#: .\templates\superadmindashboard.html:569
+#: .\templates\superadmindashboard.html:1351
+msgid "Update Prices"
+msgstr ""
+
+#: .\templates\admindashboard.html:139 .\templates\superadmindashboard.html:572
+msgid "Gov. Schemes"
+msgstr ""
+
+#: .\templates\admindashboard.html:141 .\templates\admindashboard.html:177
+#: .\templates\admindashboard.html:819 .\templates\superadmindashboard.html:574
+#: .\templates\superadmindashboard.html:622
+#: .\templates\superadmindashboard.html:1356
+msgid "Inquiries"
+msgstr ""
+
+#: .\templates\admindashboard.html:142 .\templates\admindashboard.html:661
+#: .\templates\admindashboard.html:820 .\templates\superadmindashboard.html:575
+#: .\templates\superadmindashboard.html:1141
+#: .\templates\superadmindashboard.html:1357
+msgid "Upload Forms"
+msgstr ""
+
+#: .\templates\admindashboard.html:143 .\templates\admindashboard.html:821
+#: .\templates\base.html:465 .\templates\gallery.html:403
+#: .\templates\gallery.html:416 .\templates\homepage.html:808
+#: .\templates\superadmindashboard.html:577
+#: .\templates\superadmindashboard.html:1359
+msgid "Gallery"
+msgstr ""
+
+#: .\templates\admindashboard.html:144 .\templates\admindashboard.html:822
+#: .\templates\superadmindashboard.html:578
+#: .\templates\superadmindashboard.html:1360
+msgid "Settings"
+msgstr ""
+
+#: .\templates\admindashboard.html:147 .\templates\base.html:495
+#: .\templates\superadmindashboard.html:581
+msgid "Logout"
+msgstr ""
+
+#: .\templates\admindashboard.html:169 .\templates\base.html:456
+#: .\templates\homepage.html:784 .\templates\services.html:164
+#: .\templates\superadmindashboard.html:608
+msgid "Services"
+msgstr ""
+
+#: .\templates\admindashboard.html:181 .\templates\superadmindashboard.html:629
+msgid "Forms"
+msgstr ""
+
+#: .\templates\admindashboard.html:185 .\templates\superadmindashboard.html:642
+msgid "Recent Activity"
+msgstr ""
+
+#: .\templates\admindashboard.html:193 .\templates\superadmindashboard.html:652
+msgid "No recent activity."
+msgstr ""
+
+#: .\templates\admindashboard.html:203 .\templates\superadmindashboard.html:664
+msgid "Add Service"
+msgstr ""
+
+#: .\templates\admindashboard.html:213 .\templates\admindashboard.html:305
+#: .\templates\admindashboard.html:375 .\templates\admindashboard.html:456
+#: .\templates\admindashboard.html:535 .\templates\superadmindashboard.html:675
+#: .\templates\superadmindashboard.html:769
+#: .\templates\superadmindashboard.html:841
+#: .\templates\superadmindashboard.html:924
+#: .\templates\superadmindashboard.html:1005
+msgid "Save"
+msgstr ""
+
+#: .\templates\admindashboard.html:220 .\templates\admindashboard.html:312
+#: .\templates\superadmindashboard.html:682
+#: .\templates\superadmindashboard.html:776
+msgid "Actions"
+msgstr ""
+
+#: .\templates\admindashboard.html:227 .\templates\superadmindashboard.html:689
+msgid "Active,Inactive"
+msgstr ""
+
+#: .\templates\admindashboard.html:235 .\templates\superadmindashboard.html:697
+msgid "Delete this service?"
+msgstr ""
+
+#: .\templates\admindashboard.html:239 .\templates\superadmindashboard.html:701
+msgid "No services."
+msgstr ""
+
+#: .\templates\admindashboard.html:252 .\templates\superadmindashboard.html:714
+msgid "Service Name"
+msgstr ""
+
+#: .\templates\admindashboard.html:258 .\templates\admindashboard.html:713
+#: .\templates\government_schemes.html:267
+#: .\templates\superadmindashboard.html:720
+#: .\templates\superadmindashboard.html:1193
+msgid "Government"
+msgstr ""
+
+#: .\templates\admindashboard.html:259 .\templates\admindashboard.html:714
+#: .\templates\superadmindashboard.html:721
+#: .\templates\superadmindashboard.html:1194
+msgid "Financial"
+msgstr ""
+
+#: .\templates\admindashboard.html:260 .\templates\superadmindashboard.html:722
+msgid "Printing"
+msgstr ""
+
+#: .\templates\admindashboard.html:261 .\templates\superadmindashboard.html:723
+msgid "Other"
+msgstr ""
+
+#: .\templates\admindashboard.html:272 .\templates\superadmindashboard.html:734
+msgid "Inactive"
+msgstr ""
+
+#: .\templates\admindashboard.html:277 .\templates\superadmindashboard.html:739
+msgid "e.g. fa-print"
+msgstr ""
+
+#: .\templates\admindashboard.html:284 .\templates\admindashboard.html:354
+#: .\templates\admindashboard.html:435 .\templates\admindashboard.html:514
+#: .\templates\admindashboard.html:589 .\templates\admindashboard.html:724
+#: .\templates\superadmindashboard.html:746
+#: .\templates\superadmindashboard.html:818
+#: .\templates\superadmindashboard.html:901
+#: .\templates\superadmindashboard.html:982
+#: .\templates\superadmindashboard.html:1059
+#: .\templates\superadmindashboard.html:1204
+msgid "Cancel"
+msgstr ""
+
+#: .\templates\admindashboard.html:285 .\templates\admindashboard.html:355
+#: .\templates\admindashboard.html:436 .\templates\admindashboard.html:515
+#: .\templates\admindashboard.html:590 .\templates\admindashboard.html:725
+#: .\templates\superadmindashboard.html:747
+#: .\templates\superadmindashboard.html:819
+#: .\templates\superadmindashboard.html:902
+#: .\templates\superadmindashboard.html:983
+#: .\templates\superadmindashboard.html:1060
+#: .\templates\superadmindashboard.html:1205
+#: .\templates\superadmindashboard.html:1250
+msgid "Update"
+msgstr ""
+
+#: .\templates\admindashboard.html:295 .\templates\superadmindashboard.html:759
+msgid "Add Charge"
+msgstr ""
+
+#: .\templates\admindashboard.html:312 .\templates\admindashboard.html:350
+#: .\templates\service_charges.html:445
+#: .\templates\superadmindashboard.html:776
+#: .\templates\superadmindashboard.html:814
+msgid "Charge (₹)"
+msgstr ""
+
+#: .\templates\admindashboard.html:325 .\templates\superadmindashboard.html:789
+msgid "Delete this charge?"
+msgstr ""
+
+#: .\templates\admindashboard.html:329 .\templates\superadmindashboard.html:793
+msgid "No charges defined."
+msgstr ""
+
+#: .\templates\admindashboard.html:365 .\templates\superadmindashboard.html:831
+msgid "Add Announcement"
+msgstr ""
+
+#: .\templates\admindashboard.html:394 .\templates\superadmindashboard.html:860
+msgid "Delete this announcement?"
+msgstr ""
+
+#: .\templates\admindashboard.html:398 .\templates\superadmindashboard.html:864
+msgid "No announcements."
+msgstr ""
+
+#: .\templates\admindashboard.html:415 .\templates\admindashboard.html:712
+#: .\templates\announcements.html:421 .\templates\download_forms.html:396
+#: .\templates\superadmindashboard.html:881
+#: .\templates\superadmindashboard.html:1192
+msgid "General"
+msgstr ""
+
+#: .\templates\admindashboard.html:428 .\templates\announcements.html:424
+#: .\templates\superadmindashboard.html:894
+msgid "Urgent"
+msgstr ""
+
+#: .\templates\admindashboard.html:430 .\templates\superadmindashboard.html:896
+#: .\venv\Lib\site-packages\django\forms\widgets.py:871
+msgid "No"
+msgstr ""
+
+#: .\templates\admindashboard.html:431 .\templates\superadmindashboard.html:897
+#: .\venv\Lib\site-packages\django\forms\widgets.py:870
+msgid "Yes"
+msgstr ""
+
+#: .\templates\admindashboard.html:446 .\templates\superadmindashboard.html:914
+msgid "Add Job"
+msgstr ""
+
+#: .\templates\admindashboard.html:466 .\templates\superadmindashboard.html:934
+#, python-format
+msgid "%(org)s – Last Date: %(date)s"
+msgstr ""
+
+#: .\templates\admindashboard.html:475 .\templates\superadmindashboard.html:943
+msgid "Delete this job?"
+msgstr ""
+
+#: .\templates\admindashboard.html:479 .\templates\superadmindashboard.html:947
+msgid "No jobs."
+msgstr ""
+
+#: .\templates\admindashboard.html:511 .\templates\superadmindashboard.html:979
+msgid "e.g. briefcase"
+msgstr ""
+
+#: .\templates\admindashboard.html:525 .\templates\superadmindashboard.html:995
+msgid "Add Scheme"
+msgstr ""
+
+#: .\templates\admindashboard.html:545
+#: .\templates\superadmindashboard.html:1015
+#, python-format
+msgid "%(desc)s – Eligibility: %(elig)s"
+msgstr ""
+
+#: .\templates\admindashboard.html:557
+#: .\templates\superadmindashboard.html:1027
+msgid "Delete this scheme?"
+msgstr ""
+
+#: .\templates\admindashboard.html:561
+#: .\templates\superadmindashboard.html:1031
+msgid "No schemes."
+msgstr ""
+
+#: .\templates\admindashboard.html:581
+#: .\templates\superadmindashboard.html:1051
+msgid "e.g. All citizens above 18"
+msgstr ""
+
+#: .\templates\admindashboard.html:586
+#: .\templates\superadmindashboard.html:1056
+msgid "Leave empty to keep current image."
+msgstr ""
+
+#: .\templates\admindashboard.html:601
+#: .\templates\superadmindashboard.html:1075
+msgid "Customer"
+msgstr ""
+
+#: .\templates\admindashboard.html:601
+#: .\templates\superadmindashboard.html:1075
+msgid "Date"
+msgstr ""
+
+#: .\templates\admindashboard.html:601
+#: .\templates\superadmindashboard.html:1075
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2534
+msgid "Time"
+msgstr ""
+
+#: .\templates\admindashboard.html:601
+#: .\templates\superadmindashboard.html:1075
+#: .\templates\superadmindashboard.html:1226
+msgid "Action"
+msgstr ""
+
+#: .\templates\admindashboard.html:616
+#: .\templates\superadmindashboard.html:1090
+msgid "Delete this appointment?"
+msgstr ""
+
+#: .\templates\admindashboard.html:620
+#: .\templates\superadmindashboard.html:1094
+msgid "No appointments."
+msgstr ""
+
+#: .\templates\admindashboard.html:628
+#: .\templates\superadmindashboard.html:1105
+msgid "Customer Inquiries"
+msgstr ""
+
+#: .\templates\admindashboard.html:635
+#: .\templates\superadmindashboard.html:1113
+msgid "Resolved,Pending"
+msgstr ""
+
+#: .\templates\admindashboard.html:638
+#: .\templates\superadmindashboard.html:1116
+msgid "Q:"
+msgstr ""
+
+#: .\templates\admindashboard.html:648
+#: .\templates\superadmindashboard.html:1126
+msgid "Write reply..."
+msgstr ""
+
+#: .\templates\admindashboard.html:649
+#: .\templates\superadmindashboard.html:1127
+msgid "Reply"
+msgstr ""
+
+#: .\templates\admindashboard.html:654
+#: .\templates\superadmindashboard.html:1132
+msgid "No inquiries."
+msgstr ""
+
+#: .\templates\admindashboard.html:662
+#: .\templates\superadmindashboard.html:1142
+msgid "Upload Form"
+msgstr ""
+
+#: .\templates\admindashboard.html:672 .\templates\admindashboard.html:745
+#: .\templates\superadmindashboard.html:1152
+#: .\templates\superadmindashboard.html:1278
+msgid "Upload"
+msgstr ""
+
+#: .\templates\admindashboard.html:691
+#: .\templates\superadmindashboard.html:1171
+msgid "Delete this form?"
+msgstr ""
+
+#: .\templates\admindashboard.html:695
+#: .\templates\superadmindashboard.html:1175
+msgid "No forms uploaded."
+msgstr ""
+
+#: .\templates\admindashboard.html:715
+#: .\templates\superadmindashboard.html:1195
+msgid "Application"
+msgstr ""
+
+#: .\templates\admindashboard.html:719
+#: .\templates\superadmindashboard.html:1199
+msgid "PDF File"
+msgstr ""
+
+#: .\templates\admindashboard.html:721
+#: .\templates\superadmindashboard.html:1201
+msgid "Leave empty to keep current file."
+msgstr ""
+
+#: .\templates\admindashboard.html:734
+#: .\templates\superadmindashboard.html:1267
+msgid "Manage Gallery"
+msgstr ""
+
+#: .\templates\admindashboard.html:735
+#: .\templates\superadmindashboard.html:1268
+msgid "Add Image"
+msgstr ""
+
+#: .\templates\admindashboard.html:760
+#: .\templates\superadmindashboard.html:1293
+msgid "Delete this image?"
+msgstr ""
+
+#: .\templates\admindashboard.html:764
+#: .\templates\superadmindashboard.html:1297
+msgid "No images uploaded yet."
+msgstr ""
+
+#: .\templates\admindashboard.html:772
+#: .\templates\superadmindashboard.html:1307
+msgid "Website Settings"
+msgstr ""
+
+#: .\templates\admindashboard.html:782
+#: .\templates\superadmindashboard.html:1317
+msgid "Save Settings"
+msgstr ""
+
+#: .\templates\announcements.html:394
+msgid "Stay informed with the latest updates from our centre."
+msgstr ""
+
+#: .\templates\announcements.html:404
+msgid "All"
+msgstr ""
+
+#: .\templates\announcements.html:435
+msgid "No announcements available at the moment."
+msgstr ""
+
+#: .\templates\announcements.html:443
+msgid "No announcements match the selected filter."
+msgstr ""
+
+#: .\templates\announcements.html:449
+msgid "Stay updated with our latest announcements."
+msgstr ""
+
+#: .\templates\announcements.html:453
+#, python-format
+msgid "<span id=\"announcementCount\">%(counter)s</span> active notice"
+msgid_plural "<span id=\"announcementCount\">%(counter)s</span> active notices"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\templates\announcements.html:466
+msgid "Have Questions?"
+msgstr ""
+
+#: .\templates\announcements.html:466
+msgid "Reach Out"
+msgstr ""
+
+#: .\templates\announcements.html:467
+msgid "We're here to help with any of your digital service needs."
+msgstr ""
+
+#: .\templates\announcements.html:491 .\templates\homepage.html:926
+msgid "No announcements available."
+msgstr ""
+
+#: .\templates\appointment.html:282
+msgid "Book an Appointment"
+msgstr ""
+
+#: .\templates\appointment.html:285
+msgid ""
+"Select your service, choose a date &amp; time, and we’ll confirm your visit."
+msgstr ""
+
+#: .\templates\appointment.html:379 .\templates\base.html:480
+msgid "Book Appointment"
+msgstr ""
+
+#: .\templates\appointment.html:386
+msgid "Your details are secure."
+msgstr ""
+
+#: .\templates\appointment.html:387
+msgid "9:00 AM – 5:00 PM"
+msgstr ""
+
+#: .\templates\appointment.html:528
+msgid "Booking…"
+msgstr ""
+
+#: .\templates\base.html:9
+msgid ""
+"Matoshree – Cyber Café & Digital Services. Reliable, fast, and affordable "
+"digital solutions."
+msgstr ""
+
+#: .\templates\base.html:11
+msgid "Matoshree – Cyber Café & Digital Services"
+msgstr ""
+
+#: .\templates\base.html:439
+msgid "Matoshree Logo"
+msgstr ""
+
+#: .\templates\base.html:445
+msgid "Toggle navigation"
+msgstr ""
+
+#: .\templates\base.html:458
+msgid "All Services"
+msgstr ""
+
+#: .\templates\base.html:469
+msgid "Resources"
+msgstr ""
+
+#: .\templates\base.html:472 .\templates\customer_reviews.html:565
+msgid "Customer Reviews"
+msgstr ""
+
+#: .\templates\base.html:492
+msgid "Profile"
+msgstr ""
+
+#: .\templates\base.html:498
+msgid "Login"
+msgstr ""
+
+#: .\templates\base.html:499
+msgid "Register"
+msgstr ""
+
+#: .\templates\base.html:546
+#, python-format
+msgid ""
+"\n"
+"                    &copy; %(year)s %(name)s. All rights reserved.\n"
+"                "
+msgstr ""
+
+#: .\templates\base.html:551
+msgid "Facebook"
+msgstr ""
+
+#: .\templates\base.html:552
+msgid "Instagram"
+msgstr ""
+
+#: .\templates\base.html:553
+msgid "YouTube"
+msgstr ""
+
+#: .\templates\base.html:554
+msgid "Twitter"
+msgstr ""
+
+#: .\templates\contactus.html:229
+msgid "Get in"
+msgstr ""
+
+#: .\templates\contactus.html:230
+msgid "Touch"
+msgstr ""
+
+#: .\templates\contactus.html:258
+msgid "Send a Message"
+msgstr ""
+
+#: .\templates\contactus.html:317
+msgid "Send Message"
+msgstr ""
+
+#: .\templates\contactus.html:329
+#, python-format
+msgid "%(address)s"
+msgstr ""
+
+#: .\templates\contactus.html:330
+#, python-format
+msgid "%(name)s"
+msgstr ""
+
+#: .\templates\contactus.html:352
+msgid "Chat with Us"
+msgstr ""
+
+#: .\templates\contactus.html:374
+#: .\venv\Lib\site-packages\django\utils\dates.py:7
+msgid "Monday"
+msgstr ""
+
+#: .\templates\contactus.html:375 .\templates\contactus.html:379
+#: .\templates\contactus.html:383 .\templates\contactus.html:387
+#: .\templates\contactus.html:391 .\templates\contactus.html:395
+msgid "9:00 AM – 8:00 PM"
+msgstr ""
+
+#: .\templates\contactus.html:378
+#: .\venv\Lib\site-packages\django\utils\dates.py:8
+msgid "Tuesday"
+msgstr ""
+
+#: .\templates\contactus.html:382
+#: .\venv\Lib\site-packages\django\utils\dates.py:9
+msgid "Wednesday"
+msgstr ""
+
+#: .\templates\contactus.html:386
+#: .\venv\Lib\site-packages\django\utils\dates.py:10
+msgid "Thursday"
+msgstr ""
+
+#: .\templates\contactus.html:390
+#: .\venv\Lib\site-packages\django\utils\dates.py:11
+msgid "Friday"
+msgstr ""
+
+#: .\templates\contactus.html:394
+#: .\venv\Lib\site-packages\django\utils\dates.py:12
+msgid "Saturday"
+msgstr ""
+
+#: .\templates\contactus.html:398
+#: .\venv\Lib\site-packages\django\utils\dates.py:13
+msgid "Sunday"
+msgstr ""
+
+#: .\templates\contactus.html:399
+msgid "10:00 AM – 2:00 PM"
+msgstr ""
+
+#: .\templates\contactus.html:440
+msgid "We're just a"
+msgstr ""
+
+#: .\templates\contactus.html:441
+msgid "click"
+msgstr ""
+
+#: .\templates\contactus.html:478
+msgid "Call Now"
+msgstr ""
+
+#: .\templates\customer_reviews.html:567
+msgid ""
+"Real feedback from customers who have used our services. See why they trust "
+"us."
+msgstr ""
+
+#: .\templates\customer_reviews.html:592
+#, python-format
+msgid " Based on <strong>%(total)s</strong> customer reviews "
+msgstr ""
+
+#: .\templates\customer_reviews.html:613
+#, python-format
+msgid ""
+"\n"
+"        <strong>%(count)s</strong> customer reviews\n"
+"        "
+msgstr ""
+
+#: .\templates\customer_reviews.html:618
+msgid "Newest"
+msgstr ""
+
+#: .\templates\customer_reviews.html:619
+msgid "Highest"
+msgstr ""
+
+#: .\templates\customer_reviews.html:620
+msgid "Lowest"
+msgstr ""
+
+#: .\templates\customer_reviews.html:645
+msgid "Verified"
+msgstr ""
+
+#: .\templates\customer_reviews.html:654
+msgid "No reviews yet. Be the first to share your experience!"
+msgstr ""
+
+#: .\templates\customer_reviews.html:661
+msgid "Share Your Experience"
+msgstr ""
+
+#: .\templates\customer_reviews.html:662
+msgid "We value your feedback. Let us know how we did!"
+msgstr ""
+
+#: .\templates\customer_reviews.html:688 .\templates\customer_reviews.html:746
+#: .\templates\customer_reviews.html:756
+msgid "Select a rating"
+msgstr ""
+
+#: .\templates\customer_reviews.html:695
+msgid "Your Review"
+msgstr ""
+
+#: .\templates\customer_reviews.html:701
+msgid "Submit Review"
+msgstr ""
+
+#: .\templates\customer_reviews.html:707
+msgid "Thank you for your review!"
+msgstr ""
+
+#: .\templates\customer_reviews.html:713
+msgid "All reviews are from genuine customers."
+msgstr ""
+
+#: .\templates\customer_reviews.html:714
+#, python-format
+msgid "%(total)s reviews and counting"
+msgstr ""
+
+#: .\templates\customer_reviews.html:728
+msgid "Terrible"
+msgstr ""
+
+#: .\templates\customer_reviews.html:729
+msgid "Poor"
+msgstr ""
+
+#: .\templates\customer_reviews.html:730
+msgid "Average"
+msgstr ""
+
+#: .\templates\customer_reviews.html:731
+msgid "Good"
+msgstr ""
+
+#: .\templates\customer_reviews.html:732
+msgid "Excellent"
+msgstr ""
+
+#: .\templates\customer_reviews.html:774
+msgid "Name is required."
+msgstr ""
+
+#: .\templates\customer_reviews.html:775
+msgid "Email is required."
+msgstr ""
+
+#: .\templates\customer_reviews.html:776
+msgid "Please select a rating."
+msgstr ""
+
+#: .\templates\customer_reviews.html:777
+msgid "Please write your review."
+msgstr ""
+
+#: .\templates\download_forms.html:369
+msgid "Download"
+msgstr ""
+
+#: .\templates\download_forms.html:369
+msgid "Government Forms"
+msgstr ""
+
+#: .\templates\download_forms.html:370
+msgid "Access and download official forms for various services."
+msgstr ""
+
+#: .\templates\download_forms.html:383
+msgid "Search forms by name..."
+msgstr ""
+
+#: .\templates\download_forms.html:384
+msgid "Search forms"
+msgstr ""
+
+#: .\templates\download_forms.html:386 .\templates\faq.html:375
+msgid "Clear search"
+msgstr ""
+
+#: .\templates\download_forms.html:386
+#: .\venv\Lib\site-packages\django\forms\widgets.py:528
+msgid "Clear"
+msgstr ""
+
+#: .\templates\download_forms.html:403
+msgid "No file"
+msgstr ""
+
+#: .\templates\download_forms.html:416
+msgid "No forms available."
+msgstr ""
+
+#: .\templates\download_forms.html:424
+msgid "No forms match your search."
+msgstr ""
+
+#: .\templates\download_forms.html:430
+msgid "All forms are official and up-to-date."
+msgstr ""
+
+#: .\templates\download_forms.html:435
+#, python-format
+msgid "Updated: %(current_month_year)s"
+msgstr ""
+
+#: .\templates\download_forms.html:444
+msgid "Need Assistance with"
+msgstr ""
+
+#: .\templates\download_forms.html:444
+msgid "Forms?"
+msgstr ""
+
+#: .\templates\download_forms.html:445
+msgid "We're here to help you fill, print, and submit your documents."
+msgstr ""
+
+#: .\templates\faq.html:354
+msgid "Frequently Asked"
+msgstr ""
+
+#: .\templates\faq.html:354
+msgid "Questions"
+msgstr ""
+
+#: .\templates\faq.html:357
+msgid ""
+"Find quick answers to common questions about our services, documents, and "
+"charges."
+msgstr ""
+
+#: .\templates\faq.html:367
+msgid "Search for questions..."
+msgstr ""
+
+#: .\templates\faq.html:368
+msgid "Search FAQs"
+msgstr ""
+
+#: .\templates\faq.html:379
+msgid "Submit search"
+msgstr ""
+
+#: .\templates\faq.html:416
+msgid "No FAQs have been added yet. Please check back later."
+msgstr ""
+
+#: .\templates\faq.html:424
+msgid "No questions match your search. Try a different keyword."
+msgstr ""
+
+#: .\templates\faq.html:430
+msgid "Can't find what you need?"
+msgstr ""
+
+#: .\templates\faq.html:435
+msgid "Contact us"
+msgstr ""
+
+#: .\templates\faq.html:440
+#, python-format
+msgid ""
+"\n"
+"          %(counter)s answer\n"
+"        "
+msgid_plural ""
+"\n"
+"          %(counter)s answers\n"
+"        "
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\templates\gallery.html:405
+msgid ""
+"Take a visual tour of our cyber café, facilities, equipment, and "
+"achievements."
+msgstr ""
+
+#: .\templates\gallery.html:417
+msgid "All Images"
+msgstr ""
+
+#: .\templates\gallery.html:438 .\templates\homepage.html:816
+msgid "No images available."
+msgstr ""
+
+#: .\templates\gallery.html:450
+msgid "About Our Gallery"
+msgstr ""
+
+#: .\templates\gallery.html:452
+msgid "All images are from our actual cyber café and service center."
+msgstr ""
+
+#: .\templates\gallery.html:454
+msgid ""
+"We regularly update our gallery to showcase our latest facilities and events."
+msgstr ""
+
+#: .\templates\gallery.html:456
+msgid "Click on any image to view it in full size."
+msgstr ""
+
+#: .\templates\gallery.html:465
+msgid "Our Services?"
+msgstr ""
+
+#: .\templates\gallery.html:466
+msgid "Visit us today or reach out to get started with any of our services."
+msgstr ""
+
+#: .\templates\government_schemes.html:267
+msgid "Schemes"
+msgstr ""
+
+#: .\templates\government_schemes.html:269
+msgid ""
+"Explore the latest government schemes and initiatives designed to benefit "
+"citizens, businesses, and communities."
+msgstr ""
+
+#: .\templates\government_schemes.html:289
+msgid "Eligibility:"
+msgstr ""
+
+#: .\templates\government_schemes.html:296 .\templates\jobs.html:440
+msgid "Last Date:"
+msgstr ""
+
+#: .\templates\government_schemes.html:305
+msgid "No government schemes available at the moment."
+msgstr ""
+
+#: .\templates\government_schemes.html:307
+msgid "Please check back later for updates."
+msgstr ""
+
+#: .\templates\government_schemes.html:318
+msgid "Need Help Applying for"
+msgstr ""
+
+#: .\templates\government_schemes.html:318
+msgid "Schemes?"
+msgstr ""
+
+#: .\templates\government_schemes.html:320
+msgid ""
+"We assist with scheme applications, document verification, and form filling. "
+"Let us guide you through the process."
+msgstr ""
+
+#: .\templates\homepage.html:715
+msgid "Fast, Reliable &amp;"
+msgstr ""
+
+#: .\templates\homepage.html:716
+msgid "Affordable"
+msgstr ""
+
+#: .\templates\homepage.html:716
+msgid "Cyber Services"
+msgstr ""
+
+#: .\templates\homepage.html:740
+msgid "Online Forms"
+msgstr ""
+
+#: .\templates\homepage.html:744
+msgid "Aadhaar Services"
+msgstr ""
+
+#: .\templates\homepage.html:747
+msgid "PAN Card"
+msgstr ""
+
+#: .\templates\homepage.html:750
+msgid "Passport"
+msgstr ""
+
+#: .\templates\homepage.html:754
+msgid "Printing &amp; Scan"
+msgstr ""
+
+#: .\templates\homepage.html:768
+msgid "Welcome to"
+msgstr ""
+
+#: .\templates\homepage.html:771
+msgid "Your One-Stop Digital Service Hub"
+msgstr ""
+
+#: .\templates\homepage.html:788
+msgid "Customer Rating"
+msgstr ""
+
+#: .\templates\homepage.html:794
+msgid "Trusted &amp; Secure"
+msgstr ""
+
+#: .\templates\homepage.html:809
+msgid "Take a look at our work and facilities"
+msgstr ""
+
+#: .\templates\homepage.html:823
+msgid "View Full Gallery"
+msgstr ""
+
+#: .\templates\homepage.html:834
+msgid "What Our"
+msgstr ""
+
+#: .\templates\homepage.html:834
+msgid "Customers Say"
+msgstr ""
+
+#: .\templates\homepage.html:835
+msgid "Real feedback from our valued clients"
+msgstr ""
+
+#: .\templates\homepage.html:845
+msgid "No reviews yet."
+msgstr ""
+
+#: .\templates\homepage.html:852
+msgid "Read All Reviews"
+msgstr ""
+
+#: .\templates\homepage.html:863
+msgid "Business Timings"
+msgstr ""
+
+#: .\templates\homepage.html:867
+msgid "Monday – Saturday: 9:00 AM – 8:00 PM"
+msgstr ""
+
+#: .\templates\homepage.html:868
+msgid "Sunday: 10:00 AM – 2:00 PM"
+msgstr ""
+
+#: .\templates\homepage.html:873
+msgid "Get in Touch"
+msgstr ""
+
+#: .\templates\homepage.html:881
+msgid "Call us for inquiries, support, or to place an order."
+msgstr ""
+
+#: .\templates\homepage.html:910
+msgid "Recent"
+msgstr ""
+
+#: .\templates\homepage.html:933
+msgid "View All Announcements"
+msgstr ""
+
+#: .\templates\homepage.html:944
+msgid "Find Us"
+msgstr ""
+
+#: .\templates\homepage.html:944
+msgid "Here"
+msgstr ""
+
+#: .\templates\jobs.html:400
+msgid "Jobs"
+msgstr ""
+
+#: .\templates\jobs.html:402
+msgid "Current"
+msgstr ""
+
+#: .\templates\jobs.html:402
+msgid "Job Openings"
+msgstr ""
+
+#: .\templates\jobs.html:414
+msgid "Available"
+msgstr ""
+
+#: .\templates\jobs.html:414
+msgid "Positions"
+msgstr ""
+
+#: .\templates\jobs.html:448
+msgid "Apply Now"
+msgstr ""
+
+#: .\templates\jobs.html:455
+msgid "No job openings available at the moment."
+msgstr ""
+
+#: .\templates\jobs.html:466
+msgid "join"
+msgstr ""
+
+#: .\templates\password_change.html:4
+msgid "Change Password – Cyber Café"
+msgstr ""
+
+#: .\templates\password_change.html:14 .\templates\password_change.html:61
+#: .\templates\profile.html:66
+msgid "Change Password"
+msgstr ""
+
+#: .\templates\password_change.html:15
+msgid "Update your password to keep your account secure"
+msgstr ""
+
+#: .\templates\password_change.html:70
+msgid "Back to Profile"
+msgstr ""
+
+#: .\templates\password_change_done.html:4
+msgid "Password Changed – Cyber Café"
+msgstr ""
+
+#: .\templates\password_change_done.html:14
+msgid "Password Changed!"
+msgstr ""
+
+#: .\templates\password_change_done.html:15
+msgid "Your password has been updated successfully."
+msgstr ""
+
+#: .\templates\password_change_done.html:20
+msgid "Return to Profile"
+msgstr ""
+
+#: .\templates\password_change_done.html:23
+msgid "Go to Dashboard"
+msgstr ""
+
+#: .\templates\profile.html:4
+msgid "My Profile – Cyber Café"
+msgstr ""
+
+#: .\templates\profile.html:14
+msgid "My Profile"
+msgstr ""
+
+#: .\templates\profile.html:15
+msgid "Update your personal information"
+msgstr ""
+
+#: .\templates\profile.html:57
+msgid "Update Profile"
+msgstr ""
+
+#: .\templates\register.html:4
+msgid "Register – Cyber Café"
+msgstr ""
+
+#: .\templates\register.html:14
+msgid "Create Account"
+msgstr ""
+
+#: .\templates\register.html:15
+msgid "Join us to access exclusive services"
+msgstr ""
+
+#: .\templates\register.html:65
+msgid "Sign Up"
+msgstr ""
+
+#: .\templates\register.html:73
+msgid "Already have an account?"
+msgstr ""
+
+#: .\templates\register.html:74
+msgid "Log in"
+msgstr ""
+
+#: .\templates\register.html:80
+msgid "By registering, you agree to our"
+msgstr ""
+
+#: .\templates\register.html:81
+msgid "Terms of Service"
+msgstr ""
+
+#: .\templates\register.html:82
+#: .\venv\Lib\site-packages\django\db\models\base.py:1633
+#: .\venv\Lib\site-packages\django\forms\models.py:932
+msgid "and"
+msgstr ""
+
+#: .\templates\register.html:83
+msgid "Privacy Policy"
+msgstr ""
+
+#: .\templates\required_document.html:192
+msgid "Required"
+msgstr ""
+
+#: .\templates\required_document.html:192
+msgid "Documents"
+msgstr ""
+
+#: .\templates\required_document.html:225
+msgid "No documents listed."
+msgstr ""
+
+#: .\templates\required_document.html:241
+msgid "Important:"
+msgstr ""
+
+#: .\templates\required_document.html:254
+msgid "Need Help Preparing"
+msgstr ""
+
+#: .\templates\required_document.html:254
+msgid "Documents?"
+msgstr ""
+
+#: .\templates\service_charges.html:412
+msgid "Charges"
+msgstr ""
+
+#: .\templates\service_charges.html:424
+msgid "Price List"
+msgstr ""
+
+#: .\templates\service_charges.html:469
+msgid "No service charges available."
+msgstr ""
+
+#: .\templates\service_charges.html:484
+msgid "Important Notes"
+msgstr ""
+
+#: .\templates\service_charges.html:504
+msgid "Need"
+msgstr ""
+
+#: .\templates\service_charges.html:504
+msgid "clarification"
+msgstr ""
+
+#: .\templates\services.html:5
+msgid "Our Services – Matoshree Cyber Café"
+msgstr ""
+
+#: .\templates\services.html:165
+msgid "Fast, reliable &amp; affordable — all under one roof"
+msgstr ""
+
+#: .\templates\services.html:181
+msgid "No services available at the moment."
+msgstr ""
+
+#: .\templates\superadmindashboard.html:9
+msgid "Super Admin Dashboard – Cyber Café"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:576
+#: .\templates\superadmindashboard.html:636
+msgid "Users"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:1216
+#: .\templates\superadmindashboard.html:1358
+msgid "User Management"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:1225
+msgid "Staff"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:1239
+msgid "Yes,No"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:1255
+msgid "No users found."
+msgstr ""
+
+#: .\venv\Lib\site-packages\cloudinary\forms.py:55
+#: .\venv\Lib\site-packages\cloudinary\forms.py:124
+msgid "No file selected!"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\contrib\messages\apps.py:16
+msgid "Messages"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\contrib\sitemaps\apps.py:8
+msgid "Site Maps"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\contrib\staticfiles\apps.py:9
+msgid "Static Files"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\contrib\syndication\apps.py:7
+msgid "Syndication"
+msgstr ""
+
+#. Translators: String used to replace omitted page numbers in elided page
+#. range generated by paginators, e.g. [1, 2, '…', 5, 6, 7, '…', 9, 10].
+#: .\venv\Lib\site-packages\django\core\paginator.py:33
+msgid "…"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\paginator.py:35
+msgid "That page number is not an integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\paginator.py:36
+msgid "That page number is less than 1"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\paginator.py:37
+msgid "That page contains no results"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:22
+msgid "Enter a valid value."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:70
+msgid "Enter a valid domain name."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:153
+#: .\venv\Lib\site-packages\django\forms\fields.py:774
+msgid "Enter a valid URL."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:200
+msgid "Enter a valid integer."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:211
+msgid "Enter a valid email address."
+msgstr ""
+
+#. Translators: "letters" means latin letters: a-z and A-Z.
+#: .\venv\Lib\site-packages\django\core\validators.py:289
+msgid ""
+"Enter a valid “slug” consisting of letters, numbers, underscores or hyphens."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:297
+msgid ""
+"Enter a valid “slug” consisting of Unicode letters, numbers, underscores, or "
+"hyphens."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:309
+#: .\venv\Lib\site-packages\django\core\validators.py:318
+#: .\venv\Lib\site-packages\django\core\validators.py:332
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2220
+#, python-format
+msgid "Enter a valid %(protocol)s address."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:311
+msgid "IPv4"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:320
+#: .\venv\Lib\site-packages\django\utils\ipv6.py:43
+msgid "IPv6"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:334
+msgid "IPv4 or IPv6"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:375
+msgid "Enter only digits separated by commas."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:381
+#, python-format
+msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:416
+#, python-format
+msgid "Ensure this value is less than or equal to %(limit_value)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:425
+#, python-format
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:434
+#, python-format
+msgid "Ensure this value is a multiple of step size %(limit_value)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:441
+#, python-format
+msgid ""
+"Ensure this value is a multiple of step size %(limit_value)s, starting from "
+"%(offset)s, e.g. %(offset)s, %(valid_value1)s, %(valid_value2)s, and so on."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:473
+#, python-format
+msgid ""
+"Ensure this value has at least %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at least %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:491
+#, python-format
+msgid ""
+"Ensure this value has at most %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at most %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:514
+#: .\venv\Lib\site-packages\django\forms\fields.py:365
+#: .\venv\Lib\site-packages\django\forms\fields.py:404
+msgid "Enter a number."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:516
+#, python-format
+msgid "Ensure that there are no more than %(max)s digit in total."
+msgid_plural "Ensure that there are no more than %(max)s digits in total."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:521
+#, python-format
+msgid "Ensure that there are no more than %(max)s decimal place."
+msgid_plural "Ensure that there are no more than %(max)s decimal places."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:526
+#, python-format
+msgid ""
+"Ensure that there are no more than %(max)s digit before the decimal point."
+msgid_plural ""
+"Ensure that there are no more than %(max)s digits before the decimal point."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:597
+#, python-format
+msgid ""
+"File extension “%(extension)s” is not allowed. Allowed extensions are: "
+"%(allowed_extensions)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:659
+msgid "Null characters are not allowed."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\base.py:1635
+#, python-format
+msgid "%(model_name)s with this %(field_labels)s already exists."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\constraints.py:20
+#, python-format
+msgid "Constraint “%(name)s” is violated."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:134
+#, python-format
+msgid "Value %(value)r is not a valid choice."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:135
+msgid "This field cannot be null."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:136
+msgid "This field cannot be blank."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:137
+#, python-format
+msgid "%(model_name)s with this %(field_label)s already exists."
+msgstr ""
+
+#. Translators: The 'lookup_type' is one of 'date', 'year' or
+#. 'month'. Eg: "Title must be unique for pub_date year"
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:141
+#, python-format
+msgid ""
+"%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:180
+#, python-format
+msgid "Field of type: %(field_type)s"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1161
+#, python-format
+msgid "“%(value)s” value must be either True or False."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1162
+#, python-format
+msgid "“%(value)s” value must be either True, False, or None."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1164
+msgid "Boolean (Either True or False)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1214
+#, python-format
+msgid "String (up to %(max_length)s)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1216
+msgid "String (unlimited)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1325
+msgid "Comma-separated integers"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1426
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid date format. It must be in YYYY-MM-DD "
+"format."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1430
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1565
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD) but it is an invalid "
+"date."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1434
+msgid "Date (without time)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1561
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in YYYY-MM-DD "
+"HH:MM[:ss[.uuuuuu]][TZ] format."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1569
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
+"[TZ]) but it is an invalid date/time."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1574
+msgid "Date (with time)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1701
+#, python-format
+msgid "“%(value)s” value must be a decimal number."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1703
+msgid "Decimal number"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1864
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in [DD] "
+"[[HH:]MM:]ss[.uuuuuu] format."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1868
+msgid "Duration"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1920
+msgid "Email address"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1945
+msgid "File path"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2023
+#, python-format
+msgid "“%(value)s” value must be a float."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2025
+msgid "Floating point number"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2065
+#, python-format
+msgid "“%(value)s” value must be an integer."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2067
+msgid "Integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2163
+msgid "Big (8 byte) integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2180
+msgid "Small integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2188
+msgid "IPv4 address"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2219
+msgid "IP address"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2310
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2311
+#, python-format
+msgid "“%(value)s” value must be either None, True or False."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2313
+msgid "Boolean (Either True, False or None)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2364
+msgid "Positive big integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2379
+msgid "Positive integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2394
+msgid "Positive small integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2410
+#, python-format
+msgid "Slug (up to %(max_length)s)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2446
+msgid "Text"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2526
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
+"format."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2530
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
+"invalid time."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2642
+msgid "URL"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2666
+msgid "Raw binary data"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2731
+#, python-format
+msgid "“%(value)s” is not a valid UUID."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2733
+msgid "Universally unique identifier"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\files.py:244
+msgid "File"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\json.py:24
+msgid "A JSON object"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\json.py:26
+msgid "Value must be valid JSON."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:978
+#, python-format
+msgid "%(model)s instance with %(field)s %(value)r is not a valid choice."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:981
+msgid "Foreign Key (type determined by related field)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1275
+msgid "One-to-one relationship"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1332
+#, python-format
+msgid "%(from)s-%(to)s relationship"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1334
+#, python-format
+msgid "%(from)s-%(to)s relationships"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1382
+msgid "Many-to-many relationship"
+msgstr ""
+
+#. Translators: If found as last label character, these punctuation
+#. characters will prevent the default label_suffix to be appended to
+#. the label
+#: .\venv\Lib\site-packages\django\forms\boundfield.py:188
+msgid ":?.!"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:92
+msgid "This field is required."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:314
+msgid "Enter a whole number."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:485
+#: .\venv\Lib\site-packages\django\forms\fields.py:1251
+msgid "Enter a valid date."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:508
+#: .\venv\Lib\site-packages\django\forms\fields.py:1252
+msgid "Enter a valid time."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:535
+msgid "Enter a valid date/time."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:569
+msgid "Enter a valid duration."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:570
+#, python-brace-format
+msgid "The number of days must be between {min_days} and {max_days}."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:639
+msgid "No file was submitted. Check the encoding type on the form."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:640
+msgid "No file was submitted."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:641
+msgid "The submitted file is empty."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:643
+#, python-format
+msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
+msgid_plural ""
+"Ensure this filename has at most %(max)d characters (it has %(length)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:648
+msgid "Please either submit a file or check the clear checkbox, not both."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:716
+msgid ""
+"Upload a valid image. The file you uploaded was either not an image or a "
+"corrupted image."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:872
+#: .\venv\Lib\site-packages\django\forms\fields.py:959
+#: .\venv\Lib\site-packages\django\forms\models.py:1621
+#, python-format
+msgid "Select a valid choice. %(value)s is not one of the available choices."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:961
+#: .\venv\Lib\site-packages\django\forms\fields.py:1080
+#: .\venv\Lib\site-packages\django\forms\models.py:1619
+msgid "Enter a list of values."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:1081
+msgid "Enter a complete value."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:1323
+msgid "Enter a valid UUID."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:1353
+msgid "Enter a valid JSON."
+msgstr ""
+
+#. Translators: This is the default suffix added to form field labels
+#: .\venv\Lib\site-packages\django\forms\forms.py:97
+msgid ":"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\forms.py:239
+#, python-format
+msgid "(Hidden field %(name)s) %(error)s"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:61
+#, python-format
+msgid ""
+"ManagementForm data is missing or has been tampered with. Missing fields: "
+"%(field_names)s. You may need to file a bug report if the issue persists."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:65
+#, python-format
+msgid "Please submit at most %(num)d form."
+msgid_plural "Please submit at most %(num)d forms."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:70
+#, python-format
+msgid "Please submit at least %(num)d form."
+msgid_plural "Please submit at least %(num)d forms."
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:484
+#: .\venv\Lib\site-packages\django\forms\formsets.py:491
+msgid "Order"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:499
+msgid "Delete"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:925
+#, python-format
+msgid "Please correct the duplicate data for %(field)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:930
+#, python-format
+msgid "Please correct the duplicate data for %(field)s, which must be unique."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:937
+#, python-format
+msgid ""
+"Please correct the duplicate data for %(field_name)s which must be unique "
+"for the %(lookup)s in %(date_field)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:946
+msgid "Please correct the duplicate values below."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:1383
+msgid "The inline value did not match the parent instance."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:1474
+msgid "Select a valid choice. That choice is not one of the available choices."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:1623
+#, python-format
+msgid "“%(pk)s” is not a valid value."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\utils.py:229
+#, python-format
+msgid ""
+"%(datetime)s couldn’t be interpreted in time zone %(current_timezone)s; it "
+"may be ambiguous or it may not exist."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:529
+msgid "Currently"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:530
+msgid "Change"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:869
+msgid "Unknown"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\tasks\base.py:34
+msgctxt "Task"
+msgid "Ready"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\tasks\base.py:36
+msgctxt "Task"
+msgid "Running"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\tasks\base.py:38
+msgctxt "Task"
+msgid "Failed"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\tasks\base.py:40
+msgctxt "Task"
+msgid "Successful"
+msgstr ""
+
+#. Translators: Please do not add spaces around commas.
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:878
+msgid "yes,no,maybe"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:908
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:925
+#, python-format
+msgid "%(size)d byte"
+msgid_plural "%(size)d bytes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:927
+#, python-format
+msgid "%s KB"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:929
+#, python-format
+msgid "%s MB"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:931
+#, python-format
+msgid "%s GB"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:933
+#, python-format
+msgid "%s TB"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:935
+#, python-format
+msgid "%s PB"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:74
+msgid "p.m."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:75
+msgid "a.m."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:80
+msgid "PM"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:81
+msgid "AM"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:153
+msgid "midnight"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:155
+msgid "noon"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:16
+msgid "Mon"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:17
+msgid "Tue"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:18
+msgid "Wed"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:19
+msgid "Thu"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:20
+msgid "Fri"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:21
+msgid "Sat"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:22
+msgid "Sun"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:25
+msgid "January"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:26
+msgid "February"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:27
+msgid "March"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:28
+msgid "April"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:29
+msgid "May"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:30
+msgid "June"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:31
+msgid "July"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:32
+msgid "August"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:33
+msgid "September"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:34
+msgid "October"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:35
+msgid "November"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:36
+msgid "December"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:39
+msgid "jan"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:40
+msgid "feb"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:41
+msgid "mar"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:42
+msgid "apr"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:43
+msgid "may"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:44
+msgid "jun"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:45
+msgid "jul"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:46
+msgid "aug"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:47
+msgid "sep"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:48
+msgid "oct"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:49
+msgid "nov"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:50
+msgid "dec"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:53
+msgctxt "abbrev. month"
+msgid "Jan."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:54
+msgctxt "abbrev. month"
+msgid "Feb."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:55
+msgctxt "abbrev. month"
+msgid "March"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:56
+msgctxt "abbrev. month"
+msgid "April"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:57
+msgctxt "abbrev. month"
+msgid "May"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:58
+msgctxt "abbrev. month"
+msgid "June"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:59
+msgctxt "abbrev. month"
+msgid "July"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:60
+msgctxt "abbrev. month"
+msgid "Aug."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:61
+msgctxt "abbrev. month"
+msgid "Sept."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:62
+msgctxt "abbrev. month"
+msgid "Oct."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:63
+msgctxt "abbrev. month"
+msgid "Nov."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:64
+msgctxt "abbrev. month"
+msgid "Dec."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:67
+msgctxt "alt. month"
+msgid "January"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:68
+msgctxt "alt. month"
+msgid "February"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:69
+msgctxt "alt. month"
+msgid "March"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:70
+msgctxt "alt. month"
+msgid "April"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:71
+msgctxt "alt. month"
+msgid "May"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:72
+msgctxt "alt. month"
+msgid "June"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:73
+msgctxt "alt. month"
+msgid "July"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:74
+msgctxt "alt. month"
+msgid "August"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:75
+msgctxt "alt. month"
+msgid "September"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:76
+msgctxt "alt. month"
+msgid "October"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:77
+msgctxt "alt. month"
+msgid "November"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:78
+msgctxt "alt. month"
+msgid "December"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\ipv6.py:20
+msgid "This is not a valid IPv6 address."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\text.py:76
+#, python-format
+msgctxt "String to return when truncating text"
+msgid "%(truncated_text)s…"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\text.py:288
+msgid "or"
+msgstr ""
+
+#. Translators: This string is used as a separator between list elements
+#: .\venv\Lib\site-packages\django\utils\text.py:307
+#: .\venv\Lib\site-packages\django\utils\timesince.py:135
+msgid ", "
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:8
+#, python-format
+msgid "%(num)d year"
+msgid_plural "%(num)d years"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:9
+#, python-format
+msgid "%(num)d month"
+msgid_plural "%(num)d months"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:10
+#, python-format
+msgid "%(num)d week"
+msgid_plural "%(num)d weeks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:11
+#, python-format
+msgid "%(num)d day"
+msgid_plural "%(num)d days"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:12
+#, python-format
+msgid "%(num)d hour"
+msgid_plural "%(num)d hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:13
+#, python-format
+msgid "%(num)d minute"
+msgid_plural "%(num)d minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:29
+msgid "Forbidden"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:30
+msgid "CSRF verification failed. Request aborted."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:34
+msgid ""
+"You are seeing this message because this HTTPS site requires a “Referer "
+"header” to be sent by your web browser, but none was sent. This header is "
+"required for security reasons, to ensure that your browser is not being "
+"hijacked by third parties."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:40
+msgid ""
+"If you have configured your browser to disable “Referer” headers, please re-"
+"enable them, at least for this site, or for HTTPS connections, or for “same-"
+"origin” requests."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:45
+msgid ""
+"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or "
+"including the “Referrer-Policy: no-referrer” header, please remove them. The "
+"CSRF protection requires the “Referer” header to do strict referer checking. "
+"If you’re concerned about privacy, use alternatives like <a "
+"rel=\"noreferrer\" …> for links to third-party sites."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:54
+msgid ""
+"You are seeing this message because this site requires a CSRF cookie when "
+"submitting forms. This cookie is required for security reasons, to ensure "
+"that your browser is not being hijacked by third parties."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:60
+msgid ""
+"If you have configured your browser to disable cookies, please re-enable "
+"them, at least for this site, or for “same-origin” requests."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:66
+msgid "More information is available with DEBUG=True."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:44
+msgid "No year specified"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:64
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:115
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:214
+msgid "Date out of range"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:94
+msgid "No month specified"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:147
+msgid "No day specified"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:194
+msgid "No week specified"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:353
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:384
+#, python-format
+msgid "No %(verbose_name_plural)s available"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:680
+#, python-format
+msgid ""
+"Future %(verbose_name_plural)s not available because "
+"%(class_name)s.allow_future is False."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:720
+#, python-format
+msgid "Invalid date string “%(datestr)s” given format “%(format)s”"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\detail.py:56
+#, python-format
+msgid "No %(verbose_name)s found matching the query"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\list.py:70
+msgid "Page is not “last”, nor can it be converted to an int."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\list.py:77
+#, python-format
+msgid "Invalid page (%(page_number)s): %(message)s"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\list.py:173
+#, python-format
+msgid "Empty list and “%(class_name)s.allow_empty” is False."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\static.py:49
+msgid "Directory indexes are not allowed here."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\static.py:51
+#, python-format
+msgid "“%(path)s” does not exist"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\static.py:68
+#: .\venv\Lib\site-packages\django\views\templates\directory_index.html:8
+#: .\venv\Lib\site-packages\django\views\templates\directory_index.html:11
+#, python-format
+msgid "Index of %(directory)s"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:7
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:204
+msgid "The install worked successfully! Congratulations!"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:206
+#, python-format
+msgid ""
+"View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
+"target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:208
+#, python-format
+msgid ""
+"You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
+"%(version)s/ref/settings/#debug\" target=\"_blank\" "
+"rel=\"noopener\">DEBUG=True</a> is in your settings file and you have not "
+"configured any URLs."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:217
+msgid "Django Documentation"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:218
+msgid "Topics, references, &amp; how-to’s"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:226
+msgid "Tutorial: A Polling App"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:227
+msgid "Get started with Django"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:235
+msgid "Django Community"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:236
+msgid "Connect, get help, or contribute"
+msgstr ""

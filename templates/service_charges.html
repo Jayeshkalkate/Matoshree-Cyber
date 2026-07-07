@@ -1,529 +1,613 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load static %}
+
+{% block title %}{% trans "Serivce Charges" %}{% endblock %}
+
 {% block extra_head %}
-<!-- Font Awesome Icons (already in base, but include for safety) -->
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-/>
-<!-- Google Fonts (already in base) -->
-<link
-  href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
-  rel="stylesheet"
-/>
-
+<!-- ================================================================
+     SERVICE CHARGES PAGE – Futuristic Cyber / Gaming Theme
+     Uses global CSS variables from base.html for consistency.
+     Includes neon glow effects, card hover scaling, and scroll animations.
+     ================================================================ -->
 <style>
-  /* ============================================================
-     SERVICE CHARGES PAGE – scoped styles, consistent with homepage
-     ============================================================ */
-  .charges-page {
-    font-family: "Inter", sans-serif;
-    color: var(--gray-dark, #0f172a);
-    background: var(--gray-light, #f8fafc);
+  /* ---- Section reveal animation (scroll-triggered) ---- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
   }
 
-  .charges-page .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-
-  /* ----- Page Hero (matches homepage .hero) ----- */
-  .charges-page .page-hero {
-    background: linear-gradient(
-      145deg,
-      var(--primary, #0a1628),
-      var(--primary-light, #1a2a4a)
-    );
+  /* ---- Hero Section (glassmorphism with glow) ---- */
+  .page-hero {
+    background: radial-gradient(ellipse at 30% 20%, rgba(0, 240, 255, 0.08), transparent 60%),
+                radial-gradient(ellipse at 70% 80%, rgba(255, 45, 149, 0.05), transparent 60%),
+                var(--bg-primary);
     padding: 80px 0 70px;
     position: relative;
     overflow: hidden;
     text-align: center;
+    border-bottom: 1px solid rgba(0, 240, 255, 0.08);
   }
-  .charges-page .page-hero::before {
+  .page-hero::before {
     content: "";
     position: absolute;
-    top: -40%;
+    top: -30%;
     right: -10%;
     width: 600px;
     height: 600px;
-    background: radial-gradient(
-      circle,
-      rgba(0, 212, 255, 0.08) 0%,
-      transparent 70%
-    );
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.04), transparent 70%);
     border-radius: 50%;
     pointer-events: none;
   }
-  .charges-page .page-hero::after {
+  .page-hero::after {
     content: "";
     position: absolute;
     bottom: -30%;
-    left: -5%;
+    left: -10%;
     width: 500px;
     height: 500px;
-    background: radial-gradient(
-      circle,
-      rgba(255, 107, 53, 0.06) 0%,
-      transparent 70%
-    );
+    background: radial-gradient(circle, rgba(255, 45, 149, 0.03), transparent 70%);
     border-radius: 50%;
     pointer-events: none;
   }
-  .charges-page .page-hero .container {
+  .page-hero .container {
     position: relative;
     z-index: 1;
   }
-
-  .charges-page .breadcrumb {
+  .page-hero .breadcrumb {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--text-muted);
     font-size: 0.85rem;
     font-weight: 500;
     margin-bottom: 16px;
     letter-spacing: 0.3px;
   }
-  .charges-page .breadcrumb a {
-    color: rgba(255, 255, 255, 0.6);
-    transition: var(--transition, 0.35s ease);
-    text-decoration: none;
+  .page-hero .breadcrumb a {
+    color: var(--text-muted);
+    transition: var(--transition);
   }
-  .charges-page .breadcrumb a:hover {
-    color: var(--secondary, #00d4ff);
+  .page-hero .breadcrumb a:hover {
+    color: var(--neon-cyan);
   }
-  .charges-page .breadcrumb .current {
-    color: var(--secondary, #00d4ff);
+  .page-hero .breadcrumb .current {
+    color: var(--neon-cyan);
   }
-  .charges-page .breadcrumb i {
-    font-size: 0.6rem;
-    opacity: 0.5;
-  }
-
-  .charges-page .page-hero h1 {
-    font-size: 3.2rem;
-    font-weight: 800;
-    color: var(--white, #ffffff);
-    letter-spacing: -1px;
+  .page-hero h1 {
+    font-size: 3.4rem;
+    font-weight: 900;
+    font-family: var(--font-display);
+    color: var(--text-white);
+    letter-spacing: 1px;
     margin-bottom: 12px;
+    text-shadow: 0 0 40px rgba(0, 240, 255, 0.15);
   }
-  .charges-page .page-hero h1 span {
-    color: var(--secondary, #00d4ff);
+  .page-hero h1 span {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
   }
-  .charges-page .page-hero p {
+  .page-hero p {
     font-size: 1.2rem;
-    color: rgba(255, 255, 255, 0.8);
-    max-width: 620px;
+    color: var(--text-muted);
+    max-width: 640px;
     margin: 0 auto;
-    line-height: 1.7;
+    line-height: 1.8;
   }
 
-  /* ----- Charges Section (table) ----- */
-  .charges-page .charges-section {
-    padding: 60px 0 70px;
-    background: var(--white, #ffffff);
+  /* ---- Charges Table (glassmorphism) ---- */
+  .charges-section {
+    padding: 70px 0 60px;
+    background: var(--bg-secondary);
   }
-
-  .charges-page .charges-section .container {
+  .charges-section .container {
     max-width: 900px;
   }
-
-  .charges-page .section-header {
+  .section-header {
     text-align: center;
     margin-bottom: 40px;
   }
-  .charges-page .section-header h2 {
-    font-size: 2.4rem;
+  .section-header h2 {
+    font-size: 2.6rem;
     font-weight: 800;
-    color: var(--primary, #0a1628);
+    font-family: var(--font-display);
+    color: var(--text-white);
     letter-spacing: -0.5px;
   }
-  .charges-page .section-header h2 span {
-    color: var(--secondary, #00d4ff);
+  .section-header h2 span {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
   }
-  .charges-page .section-header p {
-    color: var(--gray-dark, #475569);
-    font-size: 1.05rem;
+  .section-header p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
     margin-top: 4px;
   }
 
-  .charges-page .table-wrapper {
-    background: var(--white, #ffffff);
-    border-radius: var(--radius, 16px);
+  .table-wrapper {
+    background: var(--bg-card);
+    border-radius: var(--radius);
     overflow: hidden;
-    box-shadow: var(--shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.04));
-    border: 1px solid rgba(0, 0, 0, 0.04);
-    transition: var(--transition, 0.35s ease);
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    transition: var(--transition);
+    backdrop-filter: blur(4px);
   }
-  .charges-page .table-wrapper:hover {
-    box-shadow: var(--shadow-md, 0 4px 24px rgba(0, 0, 0, 0.08));
+  .table-wrapper:hover {
+    border-color: var(--neon-cyan);
+    box-shadow: var(--shadow-card), var(--glow-cyan);
   }
 
-  .charges-page .charges-table {
+  .charges-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.98rem;
+    font-size: 0.95rem;
+    color: var(--text-white);
   }
-
-  .charges-page .charges-table thead {
-    background: var(--primary, #0a1628);
-    color: var(--white, #ffffff);
+  .charges-table thead {
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 2px solid rgba(0, 240, 255, 0.08);
   }
-
-  .charges-page .charges-table th {
-    padding: 16px 24px;
+  .charges-table th {
+    padding: 1rem 1.4rem;
     text-align: left;
-    font-weight: 700;
-    font-size: 1.05rem;
-    letter-spacing: 0.3px;
+    font-weight: 600;
+    font-family: var(--font-display);
+    color: var(--neon-cyan);
+    letter-spacing: 0.5px;
   }
-
-  .charges-page .charges-table th:last-child {
+  .charges-table th:last-child {
     text-align: right;
   }
-
-  .charges-page .charges-table td {
-    padding: 14px 24px;
-    border-bottom: 1px solid var(--gray, #e2e8f0);
-    color: var(--gray-900, #0f172a);
-    transition: var(--transition, 0.35s ease);
+  .charges-table td {
+    padding: 0.9rem 1.4rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    vertical-align: middle;
   }
-
-  .charges-page .charges-table td:last-child {
+  .charges-table td:last-child {
     text-align: right;
     font-weight: 600;
-    color: var(--primary, #0a1628);
+    color: var(--neon-cyan);
   }
-
-  .charges-page .charges-table tbody tr:last-child td {
+  .charges-table tbody tr:last-child td {
     border-bottom: none;
   }
-
-  .charges-page .charges-table tbody tr:hover {
-    background: rgba(0, 212, 255, 0.05);
+  .charges-table tbody tr:hover {
+    background: rgba(0, 240, 255, 0.04);
   }
-
-  .charges-page .charges-table .service-name {
+  .charges-table tbody tr:hover td {
+    color: var(--text-white);
+  }
+  .service-name {
     display: flex;
     align-items: center;
     gap: 12px;
+    color: var(--text-white);
   }
-
-  .charges-page .charges-table .service-name i {
+  .service-name i {
     width: 24px;
-    color: var(--secondary, #00d4ff);
+    color: var(--neon-cyan);
     font-size: 1rem;
     text-align: center;
+    transition: var(--transition);
+  }
+  .charges-table tbody tr:hover .service-name i {
+    color: var(--neon-magenta);
+    text-shadow: 0 0 20px rgba(255, 45, 149, 0.3);
   }
 
-  /* ----- Notes / Disclaimer (matches homepage card style) ----- */
-  .charges-page .charges-notes {
-    padding: 40px 0 60px;
-    background: var(--gray-light, #f8fafc);
+  /* ---- Pricing Cards Section (Neon hover effect) ---- */
+  .pricing-section {
+    padding: 70px 0 80px;
+    background: var(--bg-primary);
+    border-top: 1px solid rgba(0, 240, 255, 0.04);
   }
-  .charges-page .charges-notes .container {
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .pricing-card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 36px 24px 30px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    transition: var(--transition);
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+  }
+  .pricing-card::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 20%, rgba(0, 240, 255, 0.02), transparent 70%);
+    pointer-events: none;
+    opacity: 0;
+    transition: var(--transition);
+  }
+  .pricing-card:hover::before {
+    opacity: 1;
+  }
+  /* ---- The sleek hover interaction: scale up + neon border ---- */
+  .pricing-card:hover {
+    transform: scale(1.04) translateY(-8px);
+    border-color: var(--neon-cyan);
+    box-shadow: var(--shadow-card), var(--glow-cyan), 0 0 60px rgba(0, 240, 255, 0.05);
+  }
+  .pricing-card .plan-name {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-white);
+    margin-bottom: 4px;
+  }
+  .pricing-card .price {
+    font-family: var(--font-display);
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+    margin: 12px 0;
+  }
+  .pricing-card .price span {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+  .pricing-card .features {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0 24px;
+    text-align: left;
+  }
+  .pricing-card .features li {
+    padding: 6px 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  }
+  .pricing-card .features li i {
+    color: var(--neon-cyan);
+    width: 20px;
+    font-size: 0.9rem;
+  }
+  .pricing-card .btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* ---- Disclaimer / Notes (glassmorphism) ---- */
+  .charges-notes {
+    padding: 40px 0 60px;
+    background: var(--bg-secondary);
+  }
+  .charges-notes .container {
     max-width: 820px;
   }
-
-  .charges-page .note-box {
-    background: var(--white, #ffffff);
-    border-radius: var(--radius, 12px);
+  .note-box {
+    background: var(--bg-card);
+    border-radius: var(--radius-sm);
     padding: 24px 28px;
-    border-left: 4px solid var(--accent, #ff6b35);
-    box-shadow: var(--shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.04));
-    transition: var(--transition, 0.35s ease);
+    border-left: 4px solid var(--neon-orange);
+    box-shadow: var(--shadow-card);
+    transition: var(--transition);
   }
-  .charges-page .note-box:hover {
-    box-shadow: var(--shadow-md, 0 4px 24px rgba(0, 0, 0, 0.08));
+  .note-box:hover {
+    border-left-color: var(--neon-cyan);
+    box-shadow: var(--shadow-card), var(--glow-cyan);
+    transform: scale(1.01);
   }
-
-  .charges-page .note-box h4 {
+  .note-box h4 {
     font-size: 1.1rem;
     font-weight: 700;
-    color: var(--primary, #0a1628);
+    color: var(--text-white);
     margin-bottom: 8px;
     display: flex;
     align-items: center;
     gap: 10px;
   }
-  .charges-page .note-box h4 i {
-    color: var(--accent, #ff6b35);
+  .note-box h4 i {
+    color: var(--neon-orange);
   }
-
-  .charges-page .note-box p {
-    color: var(--gray-dark, #475569);
+  .note-box p {
+    color: var(--text-muted);
     font-size: 0.95rem;
     line-height: 1.7;
     margin: 0;
   }
-  .charges-page .note-box p i {
-    color: var(--secondary, #00d4ff);
+  .note-box p i {
+    color: var(--neon-cyan);
     margin-right: 6px;
   }
 
-  /* ----- CTA Banner (matches homepage info-row style) ----- */
-  .charges-page .cta-banner {
-    padding: 60px 0;
-    background: var(--primary, #0a1628);
+  /* ---- CTA Banner (matches global style) ---- */
+  .cta-banner {
+    padding: 70px 0;
+    background: radial-gradient(ellipse at 30% 20%, rgba(0, 240, 255, 0.06), transparent 60%),
+                var(--bg-primary);
+    border-top: 1px solid rgba(0, 240, 255, 0.06);
+    border-bottom: 1px solid rgba(0, 240, 255, 0.06);
     text-align: center;
-    border-top: 2px solid rgba(0, 212, 255, 0.1);
-    border-bottom: 2px solid rgba(0, 212, 255, 0.1);
   }
-  .charges-page .cta-banner .container {
+  .cta-banner .container {
     max-width: 720px;
   }
-  .charges-page .cta-banner h2 {
+  .cta-banner h2 {
     font-size: 2.4rem;
     font-weight: 800;
-    color: var(--white, #ffffff);
+    font-family: var(--font-display);
+    color: var(--text-white);
     letter-spacing: -0.5px;
     margin-bottom: 8px;
   }
-  .charges-page .cta-banner h2 span {
-    color: var(--secondary, #00d4ff);
+  .cta-banner h2 span {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
   }
-  .charges-page .cta-banner p {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 1.05rem;
-    margin-bottom: 24px;
+  .cta-banner p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 28px;
   }
-
-  .charges-page .cta-buttons {
+  .cta-buttons {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 18px;
+  }
+  .cta-buttons .btn-primary,
+  .cta-buttons .btn-whatsapp {
+    min-width: 180px;
   }
 
-  /* Reuse global .btn-primary and .btn-whatsapp from base, but define fallback */
-  .charges-page .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: var(--secondary, #00d4ff);
-    color: var(--primary, #0a1628);
-    font-weight: 700;
-    padding: 14px 36px;
-    border-radius: 50px;
-    border: none;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: var(--transition, 0.35s ease);
-    box-shadow: 0 8px 30px rgba(0, 212, 255, 0.35);
-    text-decoration: none;
-  }
-  .charges-page .btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 14px 40px rgba(0, 212, 255, 0.45);
-    background: #00e5ff;
+  /* ================================================================
+     RESPONSIVE ADJUSTMENTS
+     ================================================================ */
+  @media (max-width: 1024px) {
+    .pricing-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 
-  .charges-page .btn-whatsapp {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    background: #25d366;
-    color: #ffffff;
-    font-weight: 700;
-    padding: 14px 32px;
-    border-radius: 50px;
-    border: none;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: var(--transition, 0.35s ease);
-    box-shadow: 0 8px 30px rgba(37, 211, 102, 0.35);
-    text-decoration: none;
-  }
-  .charges-page .btn-whatsapp:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 14px 40px rgba(37, 211, 102, 0.45);
-    background: #20b858;
-  }
-  .charges-page .btn-whatsapp i {
-    font-size: 1.4rem;
-  }
-
-  /* ----- Responsive (matches homepage breakpoints) ----- */
   @media (max-width: 768px) {
-    .charges-page .page-hero {
-      padding: 50px 0 40px;
+    .page-hero h1 {
+      font-size: 2.4rem;
     }
-    .charges-page .page-hero h1 {
-      font-size: 2.2rem;
-    }
-    .charges-page .page-hero p {
+    .page-hero p {
       font-size: 1rem;
     }
-    .charges-page .charges-table {
-      font-size: 0.88rem;
+    .charges-section .container {
+      padding: 0 1rem;
     }
-    .charges-page .charges-table th,
-    .charges-page .charges-table td {
-      padding: 12px 16px;
+    .charges-table th,
+    .charges-table td {
+      padding: 0.7rem 0.9rem;
+      font-size: 0.85rem;
     }
-    .charges-page .charges-table .service-name i {
+    .service-name i {
       display: none;
     }
-    .charges-page .charges-table td:last-child {
-      font-size: 0.95rem;
+    .pricing-grid {
+      grid-template-columns: 1fr;
+      max-width: 400px;
+      margin: 0 auto;
     }
-    .charges-page .cta-banner h2 {
-      font-size: 1.8rem;
+    .cta-banner h2 {
+      font-size: 2rem;
     }
-    .charges-page .cta-buttons {
+    .cta-buttons {
       flex-direction: column;
       align-items: center;
     }
-    .charges-page .cta-buttons .btn-primary,
-    .charges-page .cta-buttons .btn-whatsapp {
+    .cta-buttons .btn-primary,
+    .cta-buttons .btn-whatsapp {
       width: 100%;
       justify-content: center;
     }
   }
 
   @media (max-width: 480px) {
-    .charges-page .charges-table {
-      font-size: 0.82rem;
+    .pricing-card .price {
+      font-size: 2.2rem;
     }
-    .charges-page .charges-table th,
-    .charges-page .charges-table td {
-      padding: 10px 12px;
+    .charges-table th,
+    .charges-table td {
+      padding: 0.5rem 0.6rem;
+      font-size: 0.8rem;
     }
-    .charges-page .charges-table td:last-child {
-      font-weight: 700;
-    }
-    .charges-page .note-box {
+    .note-box {
       padding: 18px 16px;
     }
   }
 </style>
-{% endblock extra_head %} {% block content %}
-<div class="charges-page">
-  <!-- ===== PAGE HERO ===== -->
-  <section class="page-hero">
-    <div class="container">
-      <div class="breadcrumb">
-        <a href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a>
-        <i class="fas fa-chevron-right"></i>
-        <span class="current">{% trans "Service Charges" %}</span>
+{% endblock %}
+
+{% block content %}
+<!-- ================================================================
+     PAGE HERO – Futuristic cyber header
+     ================================================================ -->
+<section class="page-hero reveal">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="{% url 'home' %}">{% trans "Home" %}</a>
+      <i class="fas fa-chevron-right" style="font-size: 0.6rem"></i>
+      <span class="current">{% trans "Service Charges" %}</span>
+    </div>
+    <h1>{% trans "Service" %} <span>{% trans "Charges" %}</span></h1>
+    <p>
+      {% trans "Transparent pricing for all our services. Know the cost before you come in." %}
+    </p>
+  </div>
+</section>
+
+<!-- ================================================================
+     CHARGES TABLE – Glassmorphism with hover glow
+     ================================================================ -->
+<section class="charges-section reveal">
+  <div class="container">
+    <div class="section-header">
+      <h2>{% trans "Our" %} <span>{% trans "Price List" %}</span></h2>
+      <p>{% trans "All charges are inclusive of service fees unless stated otherwise." %}</p>
+    </div>
+    <div class="table-wrapper">
+      <table class="charges-table">
+        <thead>
+          <tr>
+            <th>{% trans "Service" %}</th>
+            <th>{% trans "Charge (₹)" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for charge in charges %}
+          <tr>
+            <td>
+              <span class="service-name">
+                <i class="fas fa-{{ charge.service.icon|default:'cog' }}"></i>
+                {{ charge.service.name }}
+              </span>
+            </td>
+            <td>₹ {{ charge.charge }}</td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="2" style="text-align: center; padding: 30px; color: var(--text-muted);">
+              {% trans "No service charges available." %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     PRICING CARDS – Service packages with neon hover effect
+     ================================================================ -->
+<section class="pricing-section reveal">
+  <div class="container">
+    <div class="section-header">
+      <h2>{% trans "Service" %} <span>{% trans "Packages" %}</span></h2>
+      <p>{% trans "Choose a package that fits your needs and save on our core services." %}</p>
+    </div>
+    <div class="pricing-grid">
+      <!-- Basic Package -->
+      <div class="pricing-card">
+        <div class="plan-name">{% trans "Starter" %}</div>
+        <div class="price">₹99 <span>/ {% trans "session" %}</span></div>
+        <ul class="features">
+          <li><i class="fas fa-check"></i> {% trans "Printing (10 pages B&W)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Photocopy (10 pages)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Email & Internet (30 min)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Document Scanning (5 pages)" %}</li>
+        </ul>
+        <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Get Started" %}</a>
       </div>
-      <h1>{% trans "Service" %} <span>{% trans "Charges" %}</span></h1>
+      <!-- Standard Package (highlighted with pulse) -->
+      <div class="pricing-card" style="border-color: rgba(0, 240, 255, 0.15);">
+        <div class="plan-name">{% trans "Pro" %}</div>
+        <div class="price">₹199 <span>/ {% trans "session" %}</span></div>
+        <ul class="features">
+          <li><i class="fas fa-check"></i> {% trans "Printing (30 pages B&W / 10 color)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Photocopy (30 pages)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Email & Internet (60 min)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Document Scanning (15 pages)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Passport-size photos (4 copies)" %}</li>
+        </ul>
+        <a href="{% url 'appointment' %}" class="btn-primary pulse">{% trans "Choose Plan" %}</a>
+      </div>
+      <!-- Premium Package -->
+      <div class="pricing-card">
+        <div class="plan-name">{% trans "Enterprise" %}</div>
+        <div class="price">₹299 <span>/ {% trans "session" %}</span></div>
+        <ul class="features">
+          <li><i class="fas fa-check"></i> {% trans "Printing (50 pages B&W / 20 color)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Photocopy (50 pages)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Email & Internet (90 min)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Document Scanning (30 pages)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Passport-size photos (8 copies)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Priority support & assistance" %}</li>
+        </ul>
+        <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Go Premium" %}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     DISCLAIMER / NOTES – Important information
+     ================================================================ -->
+<section class="charges-notes reveal">
+  <div class="container">
+    <div class="note-box">
+      <h4><i class="fas fa-info-circle"></i> {% trans "Important Notes" %}</h4>
       <p>
-        {% trans "Transparent pricing for all our services. Know the cost before
-        you come in." %}
+        <i class="fas fa-check-circle"></i> {% trans "Prices are subject to change without prior notice." %}<br>
+        <i class="fas fa-check-circle"></i> {% trans "GST (if applicable) will be added to the final bill." %}<br>
+        <i class="fas fa-check-circle"></i> {% trans "Discounts may be available for bulk orders or regular customers." %}<br>
+        <i class="fas fa-check-circle"></i> {% trans "For exact pricing, please contact our support team." %}
       </p>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ===== CHARGES TABLE ===== -->
-  <section class="charges-section">
-    <div class="container">
-      <div class="section-header">
-        <h2>{% trans "Our" %} <span>{% trans "Price List" %}</span></h2>
-        <p>
-          {% trans "All charges are inclusive of service fees unless stated
-          otherwise." %}
-        </p>
-      </div>
-
-      <hr
-        style="
-          border: 0;
-          height: 1px;
-          background: var(--gray, #e2e8f0);
-          margin: 0 0 30px;
-        "
-      />
-
-      <div class="table-wrapper">
-        <table class="charges-table">
-          <thead>
-            <tr>
-              <th>{% trans "Service" %}</th>
-              <th>{% trans "Charge (₹)" %}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for charge in charges %}
-            <tr>
-              <td>
-                <span class="service-name">
-                  <i class="fas fa-{{ charge.service.icon|default:'cog' }}"></i>
-                  {{ charge.service.name }}
-                </span>
-              </td>
-              <td>₹ {{ charge.charge }}</td>
-            </tr>
-            {% empty %}
-            <tr>
-              <td
-                colspan="2"
-                style="
-                  text-align: center;
-                  padding: 30px;
-                  color: var(--gray-dark, #475569);
-                "
-              >
-                {% trans "No service charges available." %}
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+<!-- ================================================================
+     CTA BANNER – Call to action
+     ================================================================ -->
+<section class="cta-banner reveal">
+  <div class="container">
+    <h2>{% trans "Need" %} <span>{% trans "clarification" %}</span> {% trans "on pricing?" %}</h2>
+    <p>{% trans "We're here to help. Reach out to us for any questions about our charges or services." %}</p>
+    <div class="cta-buttons">
+      <a href="{% url 'home' %}#contact" class="btn-primary">
+        <i class="fas fa-phone-alt"></i> {% trans "Contact Us" %}
+      </a>
+      <a href="https://wa.me/{{ business.whatsapp|cut:'+' }}?text=Hello%2C%20I%20want%20to%20know%20the%20charges%20for%20a%20service." target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
+        <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
+      </a>
     </div>
-  </section>
+  </div>
+</section>
+{% endblock %}
 
-  <!-- ===== NOTES / DISCLAIMER ===== -->
-  <section class="charges-notes">
-    <div class="container">
-      <div class="note-box">
-        <h4>
-          <i class="fas fa-info-circle"></i> {% trans "Important Notes" %}
-        </h4>
-        <p>
-          <i class="fas fa-check-circle"></i> {% trans "Prices are subject to
-          change without prior notice." %}<br />
-          <i class="fas fa-check-circle"></i> {% trans "GST (if applicable) will
-          be added to the final bill." %}<br />
-          <i class="fas fa-check-circle"></i> {% trans "Discounts may be
-          available for bulk orders or regular customers." %}<br />
-          <i class="fas fa-check-circle"></i> {% trans "For exact pricing,
-          please contact our support team." %}
-        </p>
-      </div>
-    </div>
-  </section>
+{% block extra_scripts %}
+<script>
+  (function() {
+    'use strict';
 
-  <!-- ===== CTA BANNER ===== -->
-  <section class="cta-banner">
-    <div class="container">
-      <h2>
-        {% trans "Need" %} <span>{% trans "clarification" %}</span> {% trans "on
-        pricing?" %}
-      </h2>
-      <p>
-        {% trans "We're here to help. Reach out to us for any questions about
-        our charges or services." %}
-      </p>
-      <div class="cta-buttons">
-        <a href="{% url 'home' %}#contact" class="btn-primary">
-          <i class="fas fa-phone-alt"></i> {% trans "Contact Us" %}
-        </a>
-        <a
-          href="https://wa.me/{{ business.whatsapp|default:'919876543210'|cut:'+' }}?text=Hello%2C%20I%20want%20to%20know%20the%20charges%20for%20a%20service."
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn-whatsapp"
-        >
-          <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
-        </a>
-      </div>
-    </div>
-  </section>
-</div>
-{% endblock content %} {% block extra_scripts %}
-<!-- Any page-specific JS (if needed) -->
-{% endblock extra_scripts %}
+    // ---- Scroll-triggered reveal animation (Intersection Observer) ----
+    const revealElements = document.querySelectorAll('.reveal');
+    if (revealElements.length && 'IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+      revealElements.forEach(el => observer.observe(el));
+    } else {
+      // Fallback: show all if no IntersectionObserver
+      revealElements.forEach(el => el.classList.add('visible'));
+    }
+
+  })();
+</script>
+{% endblock %}

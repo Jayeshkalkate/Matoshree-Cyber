@@ -1,73 +1,58 @@
-{% extends "base.html" %} 
-{% load i18n %} 
-{% load static %} 
-{% block extra_head %}
-<!-- Font Awesome & Google Fonts (if not already in base) -->
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-/>
-<link
-  href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
-  rel="stylesheet"
-/>
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
 
+
+{% block title %}{% trans "About Us" %}{% endblock %}
+
+{% block extra_head %}
 <style>
-  /* ===== PAGE-SPECIFIC STYLES ===== */
-  :root {
-    --primary: #0a1628;
-    --primary-light: #1a2a4a;
-    --secondary: #00d4ff;
-    --accent: #ff6b35;
-    --accent-hover: #e55a2b;
-    --white: #ffffff;
-    --gray-light: #f8fafc;
-    --gray: #e2e8f0;
-    --gray-dark: #475569;
-    --text-dark: #0f172a;
-    --text-light: #f1f5f9;
-    --shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-    --shadow-sm: 0 4px 20px rgba(0, 0, 0, 0.08);
-    --radius: 16px;
-    --radius-sm: 10px;
-    --transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  /* ================================================================
+     PAGE-SPECIFIC STYLES – Futuristic Cyber / Gaming Theme
+     Uses global CSS variables from base.html for consistency.
+     ================================================================ */
+
+  /* ---- Section reveal animation (scroll-triggered) ---- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
   }
 
-  /* ===== PAGE HERO ===== */
+  /* ---- Hero Section (glassmorphism with glow) ---- */
   .page-hero {
-    background: linear-gradient(145deg, var(--primary), var(--primary-light));
-    padding: 70px 0 60px;
+    background: radial-gradient(ellipse at 30% 20%, rgba(0, 240, 255, 0.08), transparent 60%),
+                radial-gradient(ellipse at 70% 80%, rgba(255, 45, 149, 0.05), transparent 60%),
+                var(--bg-primary);
+    padding: 80px 0 70px;
     position: relative;
     overflow: hidden;
     text-align: center;
+    border-bottom: 1px solid rgba(0, 240, 255, 0.08);
   }
   .page-hero::before {
     content: "";
     position: absolute;
-    top: -50%;
-    right: -20%;
-    width: 700px;
-    height: 700px;
-    background: radial-gradient(
-      circle,
-      rgba(0, 212, 255, 0.06) 0%,
-      transparent 70%
-    );
+    top: -30%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.04), transparent 70%);
     border-radius: 50%;
     pointer-events: none;
   }
   .page-hero::after {
     content: "";
     position: absolute;
-    bottom: -40%;
+    bottom: -30%;
     left: -10%;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(
-      circle,
-      rgba(255, 107, 53, 0.05) 0%,
-      transparent 70%
-    );
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(255, 45, 149, 0.03), transparent 70%);
     border-radius: 50%;
     pointer-events: none;
   }
@@ -79,44 +64,47 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--text-muted);
     font-size: 0.85rem;
     font-weight: 500;
     margin-bottom: 16px;
     letter-spacing: 0.3px;
   }
   .page-hero .breadcrumb a {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--text-muted);
     transition: var(--transition);
   }
   .page-hero .breadcrumb a:hover {
-    color: var(--secondary);
+    color: var(--neon-cyan);
   }
   .page-hero .breadcrumb .current {
-    color: var(--secondary);
+    color: var(--neon-cyan);
   }
   .page-hero h1 {
-    font-size: 3.2rem;
-    font-weight: 800;
-    color: var(--white);
-    letter-spacing: -1px;
+    font-size: 3.4rem;
+    font-weight: 900;
+    font-family: var(--font-display);
+    color: var(--text-white);
+    letter-spacing: 1px;
     margin-bottom: 12px;
+    text-shadow: 0 0 40px rgba(0, 240, 255, 0.15);
   }
   .page-hero h1 span {
-    color: var(--secondary);
+    color: var(--neon-cyan);
+    text-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
   }
   .page-hero p {
-    font-size: 1.15rem;
-    color: rgba(255, 255, 255, 0.7);
-    max-width: 620px;
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    max-width: 640px;
     margin: 0 auto;
-    line-height: 1.7;
+    line-height: 1.8;
   }
 
-  /* ===== ABOUT INTRO ===== */
+  /* ---- About Intro (grid with stats) ---- */
   .about-intro {
-    padding: 70px 0 60px;
-    background: var(--white);
+    padding: 80px 0 70px;
+    background: var(--bg-secondary);
   }
   .about-intro .container {
     display: grid;
@@ -125,23 +113,26 @@
     align-items: center;
   }
   .about-intro-text h2 {
-    font-size: 2.4rem;
+    font-size: 2.6rem;
     font-weight: 800;
-    color: var(--primary);
+    font-family: var(--font-display);
+    color: var(--text-white);
     letter-spacing: -0.5px;
     margin-bottom: 6px;
   }
   .about-intro-text h2 span {
-    color: var(--secondary);
+    color: var(--neon-cyan);
+    text-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
   }
   .about-intro-text .subtitle {
-    font-size: 1.05rem;
-    color: var(--accent);
+    font-size: 1.1rem;
+    color: var(--neon-magenta);
     font-weight: 600;
     margin-bottom: 16px;
+    letter-spacing: 0.3px;
   }
   .about-intro-text p {
-    color: var(--gray-dark);
+    color: var(--text-muted);
     font-size: 1.05rem;
     line-height: 1.8;
     margin-bottom: 16px;
@@ -155,35 +146,38 @@
     gap: 20px;
   }
   .stat-box {
-    background: var(--gray-light);
+    background: var(--bg-card);
     border-radius: var(--radius-sm);
     padding: 24px 16px;
     text-align: center;
-    border: 1px solid var(--gray);
+    border: 1px solid rgba(255, 255, 255, 0.04);
     transition: var(--transition);
+    backdrop-filter: blur(4px);
   }
   .stat-box:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-sm);
-    border-color: var(--secondary);
+    transform: translateY(-6px);
+    border-color: var(--neon-cyan);
+    box-shadow: var(--glow-cyan);
   }
   .stat-box .number {
-    font-size: 2.2rem;
-    font-weight: 800;
-    color: var(--secondary);
+    font-size: 2.4rem;
+    font-weight: 900;
+    font-family: var(--font-display);
+    color: var(--neon-cyan);
     display: block;
+    text-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
   }
   .stat-box .label {
     font-size: 0.9rem;
-    color: var(--gray-dark);
+    color: var(--text-muted);
     font-weight: 500;
-    margin-top: 2px;
+    margin-top: 4px;
   }
 
-  /* ===== EXPERIENCE SECTION ===== */
+  /* ---- Experience / Mission Section ---- */
   .experience {
-    padding: 70px 0 60px;
-    background: var(--gray-light);
+    padding: 80px 0 70px;
+    background: var(--bg-primary);
   }
   .experience .container {
     display: grid;
@@ -192,28 +186,32 @@
     align-items: center;
   }
   .experience-content h2 {
-    font-size: 2.2rem;
+    font-size: 2.4rem;
     font-weight: 800;
-    color: var(--primary);
+    font-family: var(--font-display);
+    color: var(--text-white);
     letter-spacing: -0.5px;
     margin-bottom: 8px;
   }
   .experience-content h2 span {
-    color: var(--secondary);
+    color: var(--neon-cyan);
+    text-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
   }
   .experience-content .exp-badge {
     display: inline-block;
-    background: rgba(0, 212, 255, 0.12);
-    color: var(--secondary);
+    background: rgba(0, 240, 255, 0.1);
+    color: var(--neon-cyan);
     font-weight: 700;
-    padding: 4px 18px;
-    border-radius: 50px;
+    padding: 4px 20px;
+    border-radius: var(--radius-pill);
     font-size: 0.85rem;
     margin-bottom: 12px;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(0, 240, 255, 0.15);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.05);
   }
   .experience-content p {
-    color: var(--gray-dark);
+    color: var(--text-muted);
     font-size: 1.05rem;
     line-height: 1.8;
     margin-bottom: 16px;
@@ -221,20 +219,28 @@
   .experience-content .highlight-text {
     font-size: 1.1rem;
     font-weight: 600;
-    color: var(--primary);
-    padding: 16px 20px;
-    background: var(--white);
+    color: var(--text-white);
+    padding: 18px 24px;
+    background: var(--bg-card);
     border-radius: var(--radius-sm);
-    border-left: 4px solid var(--secondary);
+    border-left: 4px solid var(--neon-cyan);
     margin: 12px 0 0;
+    box-shadow: var(--shadow-card);
+    transition: var(--transition);
+  }
+  .experience-content .highlight-text:hover {
+    border-left-color: var(--neon-magenta);
+    box-shadow: var(--glow-cyan);
   }
   .experience-image {
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    background: radial-gradient(ellipse at 30% 20%, rgba(0, 240, 255, 0.06), transparent 70%),
+                var(--bg-card);
     border-radius: var(--radius);
     padding: 40px 30px;
     text-align: center;
-    color: var(--white);
-    box-shadow: var(--shadow);
+    color: var(--text-white);
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(255, 255, 255, 0.04);
     position: relative;
     overflow: hidden;
     min-height: 260px;
@@ -242,118 +248,229 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    transition: var(--transition);
   }
-  .experience-image::before {
-    content: "";
-    position: absolute;
-    top: -40%;
-    right: -20%;
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(
-      circle,
-      rgba(0, 212, 255, 0.1) 0%,
-      transparent 70%
-    );
-    border-radius: 50%;
+  .experience-image:hover {
+    border-color: var(--neon-cyan);
+    box-shadow: var(--shadow-card), var(--glow-cyan);
+    transform: scale(1.02);
   }
   .experience-image .big-icon {
     font-size: 4.5rem;
-    color: var(--secondary);
+    color: var(--neon-cyan);
     margin-bottom: 16px;
     position: relative;
     z-index: 1;
+    text-shadow: 0 0 40px rgba(0, 240, 255, 0.3);
   }
   .experience-image h3 {
     font-size: 1.8rem;
     font-weight: 700;
+    font-family: var(--font-display);
     position: relative;
     z-index: 1;
   }
   .experience-image p {
-    opacity: 0.8;
+    color: var(--text-muted);
     position: relative;
     z-index: 1;
   }
 
-  /* ===== SERVICES LIST ===== */
+  /* ---- Services Overview (grid cards) ---- */
   .services-list {
-    padding: 70px 0 60px;
-    background: var(--white);
+    padding: 80px 0 70px;
+    background: var(--bg-secondary);
   }
   .services-list .section-header {
     text-align: center;
-    margin-bottom: 44px;
+    margin-bottom: 48px;
   }
   .services-list .section-header h2 {
-    font-size: 2.4rem;
+    font-size: 2.6rem;
     font-weight: 800;
-    color: var(--primary);
+    font-family: var(--font-display);
+    color: var(--text-white);
     letter-spacing: -0.5px;
   }
   .services-list .section-header h2 span {
-    color: var(--secondary);
+    color: var(--neon-cyan);
+    text-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
   }
   .services-list .section-header p {
-    color: var(--gray-dark);
-    font-size: 1.05rem;
+    color: var(--text-muted);
+    font-size: 1.1rem;
     max-width: 560px;
-    margin: 6px auto 0;
+    margin: 8px auto 0;
   }
   .services-grid-about {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    gap: 24px;
   }
   .service-about-item {
-    background: var(--gray-light);
+    background: var(--bg-card);
     border-radius: var(--radius-sm);
-    padding: 20px 16px;
+    padding: 24px 16px;
     text-align: center;
-    border: 1px solid transparent;
+    border: 1px solid rgba(255, 255, 255, 0.04);
     transition: var(--transition);
+    backdrop-filter: blur(4px);
   }
   .service-about-item:hover {
-    border-color: var(--secondary);
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-sm);
-    background: var(--white);
+    border-color: var(--neon-cyan);
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: var(--glow-cyan);
+    background: var(--bg-card-hover);
   }
   .service-about-item i {
-    font-size: 2rem;
-    color: var(--secondary);
+    font-size: 2.2rem;
+    color: var(--neon-cyan);
     margin-bottom: 10px;
     display: block;
+    transition: var(--transition);
+  }
+  .service-about-item:hover i {
+    color: var(--neon-magenta);
+    text-shadow: 0 0 30px rgba(255, 45, 149, 0.3);
   }
   .service-about-item span {
-    font-size: 0.92rem;
+    font-size: 0.95rem;
     font-weight: 600;
-    color: var(--primary);
+    color: var(--text-white);
   }
 
-  /* ===== TRUST SECTION ===== */
+  /* ---- Pricing Section (cards with neon border on hover) ---- */
+  .pricing-section {
+    padding: 80px 0 70px;
+    background: var(--bg-primary);
+  }
+  .pricing-section .section-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .pricing-section .section-header h2 {
+    font-size: 2.6rem;
+    font-weight: 800;
+    font-family: var(--font-display);
+    color: var(--text-white);
+    letter-spacing: -0.5px;
+  }
+  .pricing-section .section-header h2 span {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+  }
+  .pricing-section .section-header p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    max-width: 560px;
+    margin: 8px auto 0;
+  }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+  }
+  .pricing-card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 36px 24px 30px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    transition: var(--transition);
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+  }
+  .pricing-card::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 20%, rgba(0, 240, 255, 0.02), transparent 70%);
+    pointer-events: none;
+    opacity: 0;
+    transition: var(--transition);
+  }
+  .pricing-card:hover::before {
+    opacity: 1;
+  }
+  .pricing-card:hover {
+    transform: scale(1.04) translateY(-8px);
+    border-color: var(--neon-cyan);
+    box-shadow: var(--shadow-card), var(--glow-cyan), 0 0 60px rgba(0, 240, 255, 0.05);
+  }
+  .pricing-card .plan-name {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-white);
+    margin-bottom: 4px;
+  }
+  .pricing-card .price {
+    font-family: var(--font-display);
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+    margin: 12px 0;
+  }
+  .pricing-card .price span {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+  .pricing-card .features {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0 24px;
+    text-align: left;
+  }
+  .pricing-card .features li {
+    padding: 6px 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  }
+  .pricing-card .features li i {
+    color: var(--neon-cyan);
+    width: 20px;
+    font-size: 0.9rem;
+  }
+  .pricing-card .btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* ---- Trust Section (why choose us) ---- */
   .trust {
-    padding: 70px 0 60px;
-    background: var(--gray-light);
+    padding: 80px 0 70px;
+    background: var(--bg-secondary);
   }
   .trust .section-header {
     text-align: center;
-    margin-bottom: 44px;
+    margin-bottom: 48px;
   }
   .trust .section-header h2 {
-    font-size: 2.4rem;
+    font-size: 2.6rem;
     font-weight: 800;
-    color: var(--primary);
+    font-family: var(--font-display);
+    color: var(--text-white);
     letter-spacing: -0.5px;
   }
   .trust .section-header h2 span {
-    color: var(--secondary);
+    color: var(--neon-cyan);
+    text-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
   }
   .trust .section-header p {
-    color: var(--gray-dark);
-    font-size: 1.05rem;
+    color: var(--text-muted);
+    font-size: 1.1rem;
     max-width: 560px;
-    margin: 6px auto 0;
+    margin: 8px auto 0;
   }
   .trust-grid {
     display: grid;
@@ -361,56 +478,55 @@
     gap: 28px;
   }
   .trust-card {
-    background: var(--white);
+    background: var(--bg-card);
     border-radius: var(--radius);
     padding: 32px 24px 28px;
     text-align: center;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(255, 255, 255, 0.04);
     transition: var(--transition);
-    border: 1px solid rgba(0, 0, 0, 0.04);
   }
   .trust-card:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--shadow);
+    transform: translateY(-8px) scale(1.02);
+    border-color: var(--neon-cyan);
+    box-shadow: var(--shadow-card), var(--glow-cyan);
   }
   .trust-card .icon {
     width: 70px;
     height: 70px;
-    background: linear-gradient(
-      135deg,
-      rgba(0, 212, 255, 0.12),
-      rgba(0, 153, 255, 0.06)
-    );
+    background: rgba(0, 240, 255, 0.06);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto 16px;
     font-size: 2rem;
-    color: var(--secondary);
+    color: var(--neon-cyan);
     transition: var(--transition);
+    border: 1px solid rgba(0, 240, 255, 0.08);
   }
   .trust-card:hover .icon {
-    background: linear-gradient(135deg, var(--secondary), #0099ff);
-    color: var(--white);
+    background: var(--neon-cyan);
+    color: var(--bg-primary);
     transform: scale(1.05) rotate(-3deg);
+    box-shadow: var(--glow-cyan);
   }
   .trust-card h4 {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     font-weight: 700;
-    color: var(--primary);
+    color: var(--text-white);
     margin-bottom: 6px;
   }
   .trust-card p {
     font-size: 0.95rem;
-    color: var(--gray-dark);
+    color: var(--text-muted);
     line-height: 1.6;
   }
 
-  /* ===== AUTHORIZED BADGE ===== */
+  /* ---- Authorized Badge (glassmorphism) ---- */
   .authorized {
-    padding: 60px 0 70px;
-    background: var(--white);
+    padding: 70px 0 80px;
+    background: var(--bg-primary);
   }
   .authorized .container {
     max-width: 820px;
@@ -418,48 +534,42 @@
     text-align: center;
   }
   .authorized-badge {
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    background: var(--bg-card);
     border-radius: var(--radius);
-    padding: 44px 40px 40px;
-    color: var(--white);
-    box-shadow: var(--shadow);
+    padding: 48px 40px 40px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    box-shadow: var(--shadow-card);
     position: relative;
     overflow: hidden;
+    transition: var(--transition);
   }
-  .authorized-badge::before {
-    content: "";
-    position: absolute;
-    top: -30%;
-    right: -10%;
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(
-      circle,
-      rgba(0, 212, 255, 0.06) 0%,
-      transparent 70%
-    );
-    border-radius: 50%;
+  .authorized-badge:hover {
+    border-color: var(--neon-cyan);
+    box-shadow: var(--shadow-card), var(--glow-cyan);
   }
   .authorized-badge .badge-icon {
     font-size: 3.5rem;
-    color: var(--secondary);
+    color: var(--neon-cyan);
     margin-bottom: 12px;
     position: relative;
     z-index: 1;
+    text-shadow: 0 0 40px rgba(0, 240, 255, 0.2);
   }
   .authorized-badge h3 {
     font-size: 1.8rem;
     font-weight: 700;
+    font-family: var(--font-display);
+    color: var(--text-white);
     position: relative;
     z-index: 1;
     margin-bottom: 4px;
   }
   .authorized-badge h3 span {
-    color: var(--secondary);
+    color: var(--neon-cyan);
   }
   .authorized-badge .sub {
     font-size: 1.05rem;
-    opacity: 0.85;
+    color: var(--text-muted);
     position: relative;
     z-index: 1;
     margin-bottom: 16px;
@@ -479,107 +589,69 @@
     gap: 10px;
     font-size: 1rem;
     font-weight: 500;
+    color: var(--text-white);
   }
   .authorized-badge .auth-list .item i {
-    color: var(--secondary);
+    color: var(--neon-cyan);
     font-size: 1.2rem;
   }
   .authorized-badge .note {
     margin-top: 18px;
     font-size: 0.85rem;
-    opacity: 0.5;
+    color: var(--text-muted);
+    opacity: 0.6;
     position: relative;
     z-index: 1;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
     padding-top: 16px;
   }
   .authorized-badge .note i {
     margin-right: 6px;
   }
 
-  /* ===== CTA BANNER ===== */
+  /* ---- CTA Banner ---- */
   .cta-banner {
-    padding: 60px 0;
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    padding: 70px 0;
+    background: radial-gradient(ellipse at 30% 20%, rgba(0, 240, 255, 0.06), transparent 60%),
+                var(--bg-secondary);
+    border-top: 1px solid rgba(0, 240, 255, 0.06);
+    border-bottom: 1px solid rgba(0, 240, 255, 0.06);
     text-align: center;
-    border-top: 2px solid rgba(0, 212, 255, 0.1);
-    border-bottom: 2px solid rgba(0, 212, 255, 0.1);
   }
   .cta-banner .container {
     max-width: 720px;
   }
   .cta-banner h2 {
-    font-size: 2.2rem;
+    font-size: 2.4rem;
     font-weight: 800;
-    color: var(--white);
+    font-family: var(--font-display);
+    color: var(--text-white);
     letter-spacing: -0.5px;
     margin-bottom: 8px;
   }
   .cta-banner h2 span {
-    color: var(--secondary);
+    color: var(--neon-cyan);
+    text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
   }
   .cta-banner p {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 1.05rem;
-    margin-bottom: 24px;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 28px;
   }
   .cta-banner .cta-buttons {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 18px;
+  }
+  .cta-banner .cta-buttons .btn-primary,
+  .cta-banner .cta-buttons .btn-whatsapp {
+    min-width: 180px;
   }
 
-  /* ===== BUTTONS (if not defined globally) ===== */
-  .btn-primary {
-    display: inline-block;
-    background: var(--secondary);
-    color: var(--primary);
-    font-weight: 700;
-    padding: 14px 36px;
-    border-radius: 50px;
-    border: none;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: var(--transition);
-    box-shadow: 0 8px 30px rgba(0, 212, 255, 0.35);
-    letter-spacing: 0.3px;
-    text-decoration: none;
-  }
-  .btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 14px 40px rgba(0, 212, 255, 0.45);
-    background: #00e5ff;
-  }
-  .btn-primary i {
-    margin-right: 10px;
-  }
-  .btn-whatsapp {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    background: #25d366;
-    color: var(--white);
-    font-weight: 700;
-    padding: 14px 32px;
-    border-radius: 50px;
-    border: none;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: var(--transition);
-    box-shadow: 0 8px 30px rgba(37, 211, 102, 0.35);
-    text-decoration: none;
-  }
-  .btn-whatsapp:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 14px 40px rgba(37, 211, 102, 0.45);
-    background: #20b858;
-  }
-  .btn-whatsapp i {
-    font-size: 1.4rem;
-  }
-
-  /* ===== RESPONSIVE ===== */
+  /* ================================================================
+     RESPONSIVE ADJUSTMENTS
+     ================================================================ */
   @media (max-width: 1024px) {
     .about-intro .container {
       grid-template-columns: 1fr;
@@ -595,6 +667,9 @@
     .services-grid-about {
       grid-template-columns: repeat(3, 1fr);
     }
+    .pricing-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
     .trust-grid {
       grid-template-columns: repeat(2, 1fr);
     }
@@ -602,26 +677,26 @@
 
   @media (max-width: 768px) {
     .page-hero h1 {
-      font-size: 2.2rem;
+      font-size: 2.4rem;
     }
     .page-hero p {
       font-size: 1rem;
     }
     .about-intro-text h2 {
-      font-size: 1.8rem;
+      font-size: 2rem;
     }
     .about-intro-stats {
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      gap: 14px;
     }
     .stat-box {
       padding: 16px 12px;
     }
     .stat-box .number {
-      font-size: 1.6rem;
+      font-size: 1.8rem;
     }
     .experience-content h2 {
-      font-size: 1.8rem;
+      font-size: 2rem;
     }
     .experience-image {
       min-height: 200px;
@@ -635,20 +710,25 @@
     }
     .services-grid-about {
       grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
+      gap: 16px;
     }
     .service-about-item {
-      padding: 16px 12px;
+      padding: 18px 12px;
     }
     .service-about-item i {
-      font-size: 1.6rem;
+      font-size: 1.8rem;
     }
     .service-about-item span {
-      font-size: 0.82rem;
+      font-size: 0.85rem;
+    }
+    .pricing-grid {
+      grid-template-columns: 1fr;
+      max-width: 400px;
+      margin: 0 auto;
     }
     .trust-grid {
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      gap: 18px;
     }
     .trust-card {
       padding: 24px 16px 20px;
@@ -670,7 +750,7 @@
       align-items: center;
     }
     .cta-banner h2 {
-      font-size: 1.8rem;
+      font-size: 2rem;
     }
     .cta-banner .cta-buttons {
       flex-direction: column;
@@ -686,7 +766,7 @@
   @media (max-width: 480px) {
     .about-intro-stats {
       grid-template-columns: 1fr;
-      gap: 10px;
+      gap: 12px;
     }
     .services-grid-about {
       grid-template-columns: 1fr 1fr;
@@ -694,11 +774,18 @@
     .trust-grid {
       grid-template-columns: 1fr;
     }
+    .pricing-card .price {
+      font-size: 2.2rem;
+    }
   }
 </style>
-{% endblock %} {% block content %}
-<!-- ===== PAGE HERO ===== -->
-<section class="page-hero">
+{% endblock %}
+
+{% block content %}
+<!-- ================================================================
+     PAGE HERO – Futuristic cyber header
+     ================================================================ -->
+<section class="page-hero reveal">
   <div class="container">
     <div class="breadcrumb">
       <a href="{% url 'home' %}">{% trans "Home" %}</a>
@@ -707,32 +794,24 @@
     </div>
     <h1>{% trans "About" %} <span>{% trans "CyberTech" %}</span></h1>
     <p>
-      {% trans "Your trusted partner for digital services, government
-      applications, and document solutions — built on experience, integrity, and
-      customer care." %}
+      {% trans "Your trusted partner for digital services, government applications, and document solutions — built on experience, integrity, and customer care." %}
     </p>
   </div>
 </section>
 
-<!-- ===== ABOUT INTRO ===== -->
-<section class="about-intro">
+<!-- ================================================================
+     ABOUT INTRO – Who we are + stats
+     ================================================================ -->
+<section class="about-intro reveal">
   <div class="container">
     <div class="about-intro-text">
       <h2>{% trans "Who" %} <span>{% trans "We Are" %}</span></h2>
-      <div class="subtitle">
-        {% trans "Trusted Cyber Café &amp; Digital Service Center" %}
-      </div>
+      <div class="subtitle">{% trans "Trusted Cyber Café &amp; Digital Service Center" %}</div>
       <p>
-        <strong>{% trans "Matoshree Cyber Cafe" %}</strong> {% trans "is a
-        trusted cyber café and digital service center dedicated to providing
-        fast, reliable, and affordable online services. We help customers with
-        government applications, printing, scanning, document services, and
-        various digital solutions under one roof." %}
+        <strong>{% trans "Matoshree Cyber Cafe" %}</strong> {% trans "is a trusted cyber café and digital service center dedicated to providing fast, reliable, and affordable online services. We help customers with government applications, printing, scanning, document services, and various digital solutions under one roof." %}
       </p>
       <p>
-        {% trans "Our mission is to bridge the digital divide by making
-        essential online services accessible to everyone — from students and job
-        seekers to business owners and senior citizens." %}
+        {% trans "Our mission is to bridge the digital divide by making essential online services accessible to everyone — from students and job seekers to business owners and senior citizens." %}
       </p>
     </div>
     <div class="about-intro-stats">
@@ -752,37 +831,25 @@
   </div>
 </section>
 
-<!-- ===== EXPERIENCE ===== -->
-<section class="experience">
+<!-- ================================================================
+     EXPERIENCE / MISSION – Our journey
+     ================================================================ -->
+<section class="experience reveal">
   <div class="container">
     <div class="experience-content">
       <div class="exp-badge">
-        <i class="fas fa-award" style="margin-right: 6px"></i> {% trans "8+
-        Years of Experience" %}
+        <i class="fas fa-award" style="margin-right: 6px"></i> {% trans "8+ Years of Experience" %}
       </div>
-      <h2>
-        {% trans "Decades of" %} <span>{% trans "Digital Service" %}</span> {%
-        trans "Excellence" %}
-      </h2>
+      <h2>{% trans "Decades of" %} <span>{% trans "Digital Service" %}</span> {% trans "Excellence" %}</h2>
       <p>
-        {% blocktrans %}We have over <strong>8 years of experience</strong> in
-        providing digital and online services. Our experienced staff ensures
-        every service is completed accurately and efficiently. From government
-        form submissions to document processing, we've handled thousands of
-        applications with precision.{% endblocktrans %}
+        {% blocktrans %}We have over <strong>8 years of experience</strong> in providing digital and online services. Our experienced staff ensures every service is completed accurately and efficiently. From government form submissions to document processing, we've handled thousands of applications with precision.{% endblocktrans %}
       </p>
       <p>
-        {% trans "Our team stays updated with the latest government portals,
-        application procedures, and digital tools to ensure you get the best
-        possible service every time." %}
+        {% trans "Our team stays updated with the latest government portals, application procedures, and digital tools to ensure you get the best possible service every time." %}
       </p>
       <div class="highlight-text">
-        <i
-          class="fas fa-check-circle"
-          style="color: var(--secondary); margin-right: 10px"
-        ></i>
-        {% trans "We combine technical expertise with a customer-first approach
-        to deliver results you can count on." %}
+        <i class="fas fa-check-circle" style="color: var(--neon-cyan); margin-right: 10px"></i>
+        {% trans "We combine technical expertise with a customer-first approach to deliver results you can count on." %}
       </div>
     </div>
     <div class="experience-image">
@@ -793,18 +860,14 @@
   </div>
 </section>
 
-<!-- ===== SERVICES LIST ===== -->
-<section class="services-list">
+<!-- ================================================================
+     SERVICES OVERVIEW – Grid of offered services
+     ================================================================ -->
+<section class="services-list reveal">
   <div class="container">
     <div class="section-header">
-      <h2>
-        {% trans "Our" %} <span>{% trans "Complete" %}</span> {% trans "Service
-        List" %}
-      </h2>
-      <p>
-        {% trans "Everything you need, all under one roof — from government
-        applications to document services." %}
-      </p>
+      <h2>{% trans "Our" %} <span>{% trans "Complete" %}</span> {% trans "Service List" %}</h2>
+      <p>{% trans "Everything you need, all under one roof — from government applications to document services." %}</p>
     </div>
     <div class="services-grid-about">
       <div class="service-about-item">
@@ -875,80 +938,112 @@
   </div>
 </section>
 
-<!-- ===== TRUST SECTION ===== -->
-<section class="trust">
+<!-- ================================================================
+     PRICING SECTION – Pricing cards with neon hover effect
+     ================================================================ -->
+<section class="pricing-section reveal">
   <div class="container">
     <div class="section-header">
-      <h2>{% trans "Why" %} <span>{% trans "Trust Us" %}</span></h2>
-      <p>
-        {% trans "We are committed to providing honest, secure, and
-        customer-friendly services." %}
-      </p>
+      <h2>{% trans "Our" %} <span>{% trans "Service Plans" %}</span></h2>
+      <p>{% trans "Choose a plan that fits your needs. All plans include our core services with transparent pricing." %}</p>
     </div>
-    <div class="trust-grid">
-      <div class="trust-card">
-        <div class="icon"><i class="fas fa-user-tie"></i></div>
-        <h4>{% trans "Experienced Staff" %}</h4>
-        <p>
-          {% trans "Our team has deep knowledge of government portals and
-          digital tools to handle every application with care." %}
-        </p>
+    <div class="pricing-grid">
+      <!-- Basic Plan -->
+      <div class="pricing-card">
+        <div class="plan-name">{% trans "Basic" %}</div>
+        <div class="price">₹99 <span>/ {% trans "session" %}</span></div>
+        <ul class="features">
+          <li><i class="fas fa-check"></i> {% trans "Printing (10 pages B&W)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Photocopy (10 pages)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Email & Internet (30 min)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Document Scanning (5 pages)" %}</li>
+        </ul>
+        <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Get Started" %}</a>
       </div>
-      <div class="trust-card">
-        <div class="icon"><i class="fas fa-bolt"></i></div>
-        <h4>{% trans "Fast &amp; Accurate Service" %}</h4>
-        <p>
-          {% trans "We value your time. Our processes are optimized for speed
-          without compromising on accuracy or quality." %}
-        </p>
+      <!-- Standard Plan -->
+      <div class="pricing-card" style="border-color: rgba(0, 240, 255, 0.15);">
+        <div class="plan-name">{% trans "Standard" %}</div>
+        <div class="price">₹199 <span>/ {% trans "session" %}</span></div>
+        <ul class="features">
+          <li><i class="fas fa-check"></i> {% trans "Printing (30 pages B&W / 10 color)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Photocopy (30 pages)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Email & Internet (60 min)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Document Scanning (15 pages)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Passport-size photos (4 copies)" %}</li>
+        </ul>
+        <a href="{% url 'appointment' %}" class="btn-primary pulse">{% trans "Choose Plan" %}</a>
       </div>
-      <div class="trust-card">
-        <div class="icon"><i class="fas fa-tag"></i></div>
-        <h4>{% trans "Transparent Pricing" %}</h4>
-        <p>
-          {% trans "No hidden charges, no surprise fees. We believe in clear,
-          upfront pricing so you know exactly what to expect." %}
-        </p>
-      </div>
-      <div class="trust-card">
-        <div class="icon"><i class="fas fa-smile"></i></div>
-        <h4>{% trans "Customer Satisfaction" %}</h4>
-        <p>
-          {% trans "Your happiness is our priority. We go the extra mile to
-          ensure every customer walks away satisfied." %}
-        </p>
-      </div>
-      <div class="trust-card">
-        <div class="icon"><i class="fas fa-lock"></i></div>
-        <h4>{% trans "Data Privacy &amp; Security" %}</h4>
-        <p>
-          {% trans "We treat your personal information with the utmost
-          confidentiality. Your data is safe with us." %}
-        </p>
-      </div>
-      <div class="trust-card">
-        <div class="icon"><i class="fas fa-headset"></i></div>
-        <h4>{% trans "Friendly Customer Support" %}</h4>
-        <p>
-          {% trans "From the moment you walk in to the completion of your
-          service, we offer warm, helpful support at every step." %}
-        </p>
+      <!-- Premium Plan -->
+      <div class="pricing-card">
+        <div class="plan-name">{% trans "Premium" %}</div>
+        <div class="price">₹299 <span>/ {% trans "session" %}</span></div>
+        <ul class="features">
+          <li><i class="fas fa-check"></i> {% trans "Printing (50 pages B&W / 20 color)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Photocopy (50 pages)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Email & Internet (90 min)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Document Scanning (30 pages)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Passport-size photos (8 copies)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Priority service & support" %}</li>
+        </ul>
+        <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Go Premium" %}</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== AUTHORIZED BADGE ===== -->
-<section class="authorized">
+<!-- ================================================================
+     TRUST SECTION – Why choose us
+     ================================================================ -->
+<section class="trust reveal">
+  <div class="container">
+    <div class="section-header">
+      <h2>{% trans "Why" %} <span>{% trans "Trust Us" %}</span></h2>
+      <p>{% trans "We are committed to providing honest, secure, and customer-friendly services." %}</p>
+    </div>
+    <div class="trust-grid">
+      <div class="trust-card">
+        <div class="icon"><i class="fas fa-user-tie"></i></div>
+        <h4>{% trans "Experienced Staff" %}</h4>
+        <p>{% trans "Our team has deep knowledge of government portals and digital tools to handle every application with care." %}</p>
+      </div>
+      <div class="trust-card">
+        <div class="icon"><i class="fas fa-bolt"></i></div>
+        <h4>{% trans "Fast &amp; Accurate Service" %}</h4>
+        <p>{% trans "We value your time. Our processes are optimized for speed without compromising on accuracy or quality." %}</p>
+      </div>
+      <div class="trust-card">
+        <div class="icon"><i class="fas fa-tag"></i></div>
+        <h4>{% trans "Transparent Pricing" %}</h4>
+        <p>{% trans "No hidden charges, no surprise fees. We believe in clear, upfront pricing so you know exactly what to expect." %}</p>
+      </div>
+      <div class="trust-card">
+        <div class="icon"><i class="fas fa-smile"></i></div>
+        <h4>{% trans "Customer Satisfaction" %}</h4>
+        <p>{% trans "Your happiness is our priority. We go the extra mile to ensure every customer walks away satisfied." %}</p>
+      </div>
+      <div class="trust-card">
+        <div class="icon"><i class="fas fa-lock"></i></div>
+        <h4>{% trans "Data Privacy &amp; Security" %}</h4>
+        <p>{% trans "We treat your personal information with the utmost confidentiality. Your data is safe with us." %}</p>
+      </div>
+      <div class="trust-card">
+        <div class="icon"><i class="fas fa-headset"></i></div>
+        <h4>{% trans "Friendly Customer Support" %}</h4>
+        <p>{% trans "From the moment you walk in to the completion of your service, we offer warm, helpful support at every step." %}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     AUTHORIZED BADGE – Official recognition
+     ================================================================ -->
+<section class="authorized reveal">
   <div class="container">
     <div class="authorized-badge">
       <div class="badge-icon"><i class="fas fa-certificate"></i></div>
-      <h3>
-        {% trans "Authorized" %} <span>{% trans "Service Provider" %}</span>
-      </h3>
-      <div class="sub">
-        {% trans "Officially recognized for excellence in digital services" %}
-      </div>
+      <h3>{% trans "Authorized" %} <span>{% trans "Service Provider" %}</span></h3>
+      <div class="sub">{% trans "Officially recognized for excellence in digital services" %}</div>
       <div class="auth-list">
         <div class="item">
           <i class="fas fa-check-circle"></i>
@@ -965,44 +1060,54 @@
       </div>
       <div class="note">
         <i class="fas fa-info-circle"></i>
-        {% trans "This section is displayed only when official authorization is
-        valid and verifiable." %}
+        {% trans "This section is displayed only when official authorization is valid and verifiable." %}
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== CTA BANNER ===== -->
-<section class="cta-banner">
+<!-- ================================================================
+     CTA BANNER – Call to action
+     ================================================================ -->
+<section class="cta-banner reveal">
   <div class="container">
-    <h2>
-      {% trans "Ready to" %} <span>{% trans "Experience" %}</span> {% trans "the
-      Difference?" %}
-    </h2>
-    <p>
-      {% trans "Visit us today or reach out to get started with any of our
-      services." %}
-    </p>
+    <h2>{% trans "Ready to" %} <span>{% trans "Experience" %}</span> {% trans "the Difference?" %}</h2>
+    <p>{% trans "Visit us today or reach out to get started with any of our services." %}</p>
     <div class="cta-buttons">
       <a href="{% url 'home' %}#contact" class="btn-primary">
         <i class="fas fa-phone"></i> {% trans "Contact Us" %}
       </a>
-      <a
-        href="https://wa.me/919876543210?text=Hello%2C%20I%20would%20like%20to%20know%20more%20about%20your%20services."
-        target="_blank"
-        class="btn-whatsapp"
-      >
+      <a href="https://wa.me/919876543210?text=Hello%2C%20I%20would%20like%20to%20know%20more%20about%20your%20services." target="_blank" class="btn-whatsapp">
         <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
       </a>
     </div>
   </div>
 </section>
-{% endblock %} {% block extra_scripts %}
-<!-- Page-specific JS if needed -->
-<script>
-  // Any page-specific JavaScript can go here.
-  // For example, if you need to toggle anything not covered by base.
-  console.log("About Us page loaded.");
-</script>
 {% endblock %}
 
+{% block extra_scripts %}
+<script>
+  (function() {
+    'use strict';
+
+    // ---- Scroll-triggered reveal animation (Intersection Observer) ----
+    const revealElements = document.querySelectorAll('.reveal');
+    if (revealElements.length && 'IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+      revealElements.forEach(el => observer.observe(el));
+    } else {
+      // Fallback: show all if no IntersectionObserver
+      revealElements.forEach(el => el.classList.add('visible'));
+    }
+
+  })();
+</script>
+{% endblock %}

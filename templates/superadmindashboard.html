@@ -1,9 +1,10 @@
+{% extends "base.html" %}
 {% load i18n %}
 {% load static %}
 
-<!doctype html>
-<html lang="en">
-<head>
+{% block title %}{% trans "Super Admin" %}{% endblock %}
+
+{% block extra_head %}
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% trans "Super Admin Dashboard – Cyber Café" %}</title>
@@ -23,539 +24,490 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-        /* ----- Reset & Base ----- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: "Inter", sans-serif;
-            background: #f1f5f9;
-            color: #0b1b33;
-            display: flex;
-            min-height: 100vh;
-        }
+      /* =====================================================================
+         CYBER CAFE ADMIN — FUTURISTIC NEON THEME
+         ---------------------------------------------------------------------
+         Design language: dark "control room" glass panels, a faint circuit
+         grid backdrop, and cyan/violet neon accents. Every original class
+         name from the template is kept 1:1 so no HTML/Django logic needed
+         to change — this is a pure re-skin.
+      ========================================================================= */
 
-        /* ----- Sidebar ----- */
-        .sidebar {
-            width: 260px;
-            background: #0b1b33;
-            color: #dce3ed;
-            display: flex;
-            flex-direction: column;
-            padding: 1.5rem 0;
-            position: sticky;
-            top: 0;
-            height: 100vh;
-            overflow-y: auto;
-            flex-shrink: 0;
-            transition: transform 0.3s ease;
-            z-index: 100;
-        }
-        .sidebar .logo {
-            padding: 0 1.5rem 2rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #fff;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            margin-bottom: 1.5rem;
-        }
-        .sidebar .logo i {
-            color: #4dabf7;
-        }
-        .sidebar nav {
-            flex: 1;
-        }
-        .sidebar nav ul {
-            list-style: none;
-            padding: 0 0.8rem;
-        }
-        .sidebar nav ul li {
-            margin-bottom: 0.2rem;
-        }
-        .sidebar nav ul li a {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            padding: 0.7rem 1rem;
-            border-radius: 10px;
-            color: #a8bbd1;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: all 0.2s;
-        }
-        .sidebar nav ul li a i {
-            width: 1.4rem;
-            font-size: 1.1rem;
-            text-align: center;
-        }
-        .sidebar nav ul li a:hover {
-            background: rgba(255, 255, 255, 0.06);
-            color: #fff;
-        }
-        .sidebar nav ul li a.active {
-            background: #1a3a5c;
-            color: #fff;
-        }
-        .sidebar .logout-btn {
-            margin: 1.5rem 0.8rem 0;
-            padding: 0.7rem 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            color: #a8bbd1;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            cursor: pointer;
-            border-radius: 10px;
-            transition: 0.2s;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .sidebar .logout-btn:hover {
-            background: rgba(255, 255, 255, 0.06);
-            color: #fff;
-        }
+      /* Extra display font for headings/logo only. Body copy stays on Inter
+         (loaded in <head>) for readability. */
+      @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&display=swap');
 
-        /* ----- Main Content ----- */
-        .main-content {
-            flex: 1;
-            padding: 1.5rem 2rem 2rem;
-            overflow-y: auto;
-        }
+      :root {
+        /* ---- Surfaces ---- */
+        --bg-void:        #060814;                 /* page background */
+        --bg-panel:       rgba(18, 24, 44, 0.72);   /* glass card fill */
+        --bg-panel-solid: #0e1424;                  /* opaque panel fill */
+        --bg-sidebar:     #05060e;
+        --bg-input:       #0b1120;
 
-        /* Top bar */
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        .top-bar h2 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #0b1b33;
-        }
-        .top-bar .user-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        .top-bar .user-info span {
-            font-weight: 500;
-        }
-        .top-bar .user-info .avatar {
-            width: 40px;
-            height: 40px;
-            background: #0a66c2;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-weight: 700;
-        }
-        .hamburger {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.6rem;
-            color: #0b1b33;
-            cursor: pointer;
-        }
+        /* ---- Neon palette ---- */
+        --neon-cyan:    #00e6ff;
+        --neon-cyan-soft: rgba(0, 230, 255, 0.16);
+        --neon-purple:  #a855f7;
+        --neon-purple-soft: rgba(168, 85, 247, 0.16);
+        --neon-pink:    #ff2e9a;
+        --neon-green:   #39ff9e;
+        --neon-amber:   #ffc23c;
+        --neon-red:     #ff3d5f;
 
-        /* ----- Stats Cards ----- */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1.2rem;
-            margin-bottom: 2rem;
-        }
-        .stat-card {
-            background: #fff;
-            padding: 1.2rem 1.5rem;
-            border-radius: 1rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-            border: 1px solid #e9eef4;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        .stat-card .icon {
-            width: 48px;
-            height: 48px;
-            background: #e8f0fe;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #0a66c2;
-            font-size: 1.4rem;
-        }
-        .stat-card .info h4 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #0b1b33;
-        }
-        .stat-card .info p {
-            color: #6f85a0;
-            font-size: 0.85rem;
-        }
+        /* ---- Text ---- */
+        --text-bright: #eef4ff;
+        --text-soft:   #9fb0d4;
+        --text-dim:    #5c6a8c;
 
-        /* ----- Section containers ----- */
-        .section {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-        .section.active {
-            display: block;
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+        /* ---- Borders / radii ---- */
+        --border-glow:  rgba(0, 230, 255, 0.22);
+        --border-soft:  rgba(148, 163, 199, 0.14);
+        --radius-lg: 1rem;
+        --radius-md: 0.7rem;
+        --radius-sm: 0.5rem;
 
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-            margin-bottom: 1.5rem;
-        }
-        .section-header h3 {
-            font-size: 1.4rem;
-            font-weight: 700;
-        }
+        /* ---- Motion ---- */
+        --transition: all 0.3s ease;
 
-        .btn-primary {
-            background: #0a66c2;
-            color: #fff;
-            border: none;
-            padding: 0.5rem 1.2rem;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: background 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-family: "Inter", sans-serif;
-        }
-        .btn-primary:hover {
-            background: #0854a3;
-        }
-        .btn-primary.btn-sm {
-            padding: 0.25rem 0.8rem;
-            font-size: 0.8rem;
-        }
-        .btn-danger {
-            background: #d93c3c;
-            color: #fff;
-            border: none;
-            padding: 0.3rem 0.8rem;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .btn-danger:hover {
-            background: #b52e2e;
-        }
-        .btn-success {
-            background: #1e8e3e;
-            color: #fff;
-            border: none;
-            padding: 0.3rem 0.8rem;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .btn-success:hover {
-            background: #167231;
-        }
-        .btn-outline {
-            background: transparent;
-            border: 1.5px solid #dce3ed;
-            padding: 0.3rem 0.9rem;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: #1a2b44;
-        }
-        .btn-outline:hover {
-            background: #e8f0fe;
-            border-color: #0a66c2;
-        }
+        /* ---- Glow shadows (reused everywhere for the "high-tech" feel) --- */
+        --glow-cyan:   0 0 6px rgba(0, 230, 255, 0.55), 0 0 22px rgba(0, 230, 255, 0.25);
+        --glow-purple: 0 0 6px rgba(168, 85, 247, 0.55), 0 0 22px rgba(168, 85, 247, 0.25);
+        --glow-pink:   0 0 6px rgba(255, 46, 154, 0.55), 0 0 22px rgba(255, 46, 154, 0.25);
+        --glow-red:    0 0 6px rgba(255, 61, 95, 0.55), 0 0 18px rgba(255, 61, 95, 0.25);
+        --glow-green:  0 0 6px rgba(57, 255, 158, 0.55), 0 0 18px rgba(57, 255, 158, 0.25);
+      }
 
-        .table-wrap {
-            overflow-x: auto;
-            background: #fff;
-            border-radius: 1rem;
-            border: 1px solid #e9eef4;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.95rem;
-        }
-        th {
-            text-align: left;
-            padding: 0.9rem 1.2rem;
-            background: #f8faff;
-            font-weight: 600;
-            color: #1a2b44;
-            border-bottom: 1px solid #e9eef4;
-        }
-        td {
-            padding: 0.8rem 1.2rem;
-            border-bottom: 1px solid #eef3f9;
-            vertical-align: middle;
-        }
-        tr:last-child td {
-            border-bottom: none;
-        }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        .badge-status {
-            padding: 0.2rem 0.7rem;
-            border-radius: 30px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        .badge-status.pending {
-            background: #fde8b3;
-            color: #8a6d00;
-        }
-        .badge-status.confirmed {
-            background: #cce5ff;
-            color: #004c9e;
-        }
-        .badge-status.completed {
-            background: #c8f0d4;
-            color: #0a6b2a;
-        }
-        .badge-status.cancelled {
-            background: #fde0e0;
-            color: #a03a3a;
-        }
+      /* ---------------------------------------------------------------------
+         PAGE LOAD ANIMATION
+         A soft "digital" fade-in + slide-up used on first paint and whenever
+         a dashboard section is switched. -------------------------------- */
+      @keyframes fadeSlideUp {
+        from { opacity: 0; transform: translateY(22px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes neonPulse {
+        0%, 100% { box-shadow: 0 0 6px currentColor, 0 0 14px currentColor; }
+        50%      { box-shadow: 0 0 14px currentColor, 0 0 32px currentColor; }
+      }
+      @keyframes borderScan {
+        0%   { background-position: 0% 50%; }
+        100% { background-position: 200% 50%; }
+      }
 
-        .admin-form {
-            background: #fff;
-            padding: 1.5rem;
-            border-radius: 1rem;
-            border: 1px solid #e9eef4;
-            margin-bottom: 1.5rem;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem 1.5rem;
-        }
-        .admin-form .full-width {
-            grid-column: 1 / -1;
-        }
-        .admin-form label {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: #1a2b44;
-            display: block;
-            margin-bottom: 0.2rem;
-        }
-        .admin-form input,
-        .admin-form select,
-        .admin-form textarea {
-            width: 100%;
-            padding: 0.6rem 1rem;
-            border: 1.5px solid #dce3ed;
-            border-radius: 10px;
-            font-family: "Inter", sans-serif;
-            font-size: 0.95rem;
-            background: #fafcff;
-            transition: border-color 0.2s;
-        }
-        .admin-form input:focus,
-        .admin-form select:focus,
-        .admin-form textarea:focus {
-            outline: none;
-            border-color: #0a66c2;
-            box-shadow: 0 0 0 4px rgba(10, 102, 194, 0.06);
-        }
-        .admin-form textarea {
-            resize: vertical;
-            min-height: 70px;
-        }
-        .admin-form .form-actions {
-            grid-column: 1 / -1;
-            display: flex;
-            gap: 0.8rem;
-            justify-content: flex-end;
-        }
+      body {
+        font-family: "Inter", sans-serif;
+        background: var(--bg-void);
+        color: var(--text-bright);
+        display: flex;
+        min-height: 100vh;
+        /* faint circuit-board grid for a high-tech backdrop */
+        background-image:
+          linear-gradient(rgba(0, 230, 255, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 230, 255, 0.05) 1px, transparent 1px),
+          radial-gradient(circle at 15% 10%, rgba(168, 85, 247, 0.12), transparent 40%),
+          radial-gradient(circle at 85% 90%, rgba(0, 230, 255, 0.12), transparent 40%);
+        background-size: 42px 42px, 42px 42px, 100% 100%, 100% 100%;
+        background-attachment: fixed;
+        animation: fadeSlideUp 0.6s ease both;
+      }
 
-        .list-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.6rem 1rem;
-            background: #f8faff;
-            border-radius: 10px;
-            margin-bottom: 0.5rem;
-            border: 1px solid #eef3f9;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-        .list-item .info {
-            display: flex;
-            flex-direction: column;
-            gap: 0.1rem;
-            flex: 1;
-        }
-        .list-item .info .title {
-            font-weight: 600;
-        }
-        .list-item .info .sub {
-            font-size: 0.85rem;
-            color: #6f85a0;
-        }
-        .list-item .info img {
-            max-height: 50px;
-            border-radius: 4px;
-            margin-top: 4px;
-        }
-        .list-actions {
-            display: flex;
-            gap: 0.3rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+      /* Slim glowing scrollbars to keep the theme consistent everywhere */
+      ::-webkit-scrollbar { width: 10px; height: 10px; }
+      ::-webkit-scrollbar-track { background: var(--bg-void); }
+      ::-webkit-scrollbar-thumb {
+        background: linear-gradient(var(--neon-cyan), var(--neon-purple));
+        border-radius: 10px;
+      }
 
-        /* ---- User management extras ---- */
-        .role-badge {
-            padding: 0.2rem 0.7rem;
-            border-radius: 30px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        .role-badge.superadmin {
-            background: #0b1b33;
-            color: #fff;
-        }
-        .role-badge.admin {
-            background: #0a66c2;
-            color: #fff;
-        }
-        .role-badge.user {
-            background: #dce3ed;
-            color: #1a2b44;
-        }
+      /* ----- Sidebar --------------------------------------------------- */
+      .sidebar {
+        width: 260px;
+        background: var(--bg-sidebar);
+        color: var(--text-soft);
+        display: flex;
+        flex-direction: column;
+        padding: 1.5rem 0;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+        flex-shrink: 0;
+        transition: transform 0.3s ease;
+        z-index: 100;
+        border-right: 1px solid var(--border-glow);
+        box-shadow: 4px 0 30px rgba(0, 230, 255, 0.06);
+        animation: fadeSlideUp 0.6s ease both;
+      }
+      .sidebar .logo {
+        padding: 0 1.5rem 2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-family: "Orbitron", "Inter", sans-serif;
+        font-size: 1.3rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        color: #fff;
+        text-shadow: var(--glow-cyan);
+        border-bottom: 1px solid var(--border-soft);
+        margin-bottom: 1.5rem;
+      }
+      .sidebar .logo i {
+        color: var(--neon-cyan);
+        filter: drop-shadow(0 0 6px rgba(0, 230, 255, 0.8));
+      }
+      .sidebar nav { flex: 1; }
+      .sidebar nav ul { list-style: none; padding: 0 0.8rem; }
+      .sidebar nav ul li { margin-bottom: 0.25rem; }
+      .sidebar nav ul li a {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 0.7rem 1rem;
+        border-radius: 10px;
+        color: var(--text-soft);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.95rem;
+        border: 1px solid transparent;
+        border-left: 3px solid transparent;
+        transition: var(--transition);
+        position: relative;
+      }
+      .sidebar nav ul li a i { width: 1.4rem; font-size: 1.1rem; text-align: center; }
+      .sidebar nav ul li a:hover {
+        background: rgba(0, 230, 255, 0.06);
+        border-color: var(--border-glow);
+        color: #fff;
+        transform: translateX(3px);
+      }
+      /* Active nav item: soft pulsing neon glow, like a powered-on console key */
+      .sidebar nav ul li a.active {
+        background: linear-gradient(90deg, rgba(0, 230, 255, 0.14), rgba(168, 85, 247, 0.08));
+        border-left: 3px solid var(--neon-cyan);
+        color: #fff;
+        box-shadow: inset 0 0 12px rgba(0, 230, 255, 0.12);
+      }
+      .sidebar nav ul li a.active i {
+        color: var(--neon-cyan);
+        animation: neonPulse 2.2s ease-in-out infinite;
+      }
+      .sidebar .logout-btn {
+        margin: 1.5rem 0.8rem 0;
+        padding: 0.7rem 1rem;
+        border-top: 1px solid var(--border-soft);
+        color: var(--text-soft);
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        cursor: pointer;
+        border-radius: 10px;
+        transition: var(--transition);
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .sidebar .logout-btn:hover {
+        background: rgba(255, 61, 95, 0.1);
+        color: var(--neon-red);
+        text-shadow: var(--glow-red);
+      }
 
-        .form-select-sm {
-            padding: 0.2rem 0.6rem;
-            font-size: 0.8rem;
-            border-radius: 30px;
-            border: 1.5px solid #dce3ed;
-            background: #fafcff;
-            font-family: "Inter", sans-serif;
-        }
+      /* ----- Main content ---------------------------------------------- */
+      .main-content { flex: 1; padding: 1.5rem 2rem 2rem; overflow-y: auto; }
 
-        /* Gallery grid */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        .gallery-item {
-            position: relative;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            background: #fff;
-        }
-        .gallery-item img {
-            width: 100%;
-            height: 120px;
-            object-fit: cover;
-            display: block;
-        }
-        .gallery-item .caption {
-            padding: 0.5rem;
-            font-size: 0.8rem;
-            text-align: center;
-        }
-        .gallery-item .delete-btn {
-            position: absolute;
-            top: 4px;
-            right: 4px;
-        }
+      .top-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; }
+      .top-bar h2 {
+        font-family: "Orbitron", "Inter", sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .top-bar .user-info { display: flex; align-items: center; gap: 1rem; }
+      .top-bar .user-info span { font-weight: 500; color: var(--text-soft); }
+      .top-bar .user-info .avatar {
+        width: 40px; height: 40px;
+        background: radial-gradient(circle at 30% 30%, var(--neon-purple), #1a1030);
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        color: #fff; font-weight: 700;
+        box-shadow: var(--glow-purple);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+      }
+      .hamburger { display: none; background: none; border: none; font-size: 1.6rem; color: var(--neon-cyan); cursor: pointer; transition: var(--transition); }
+      .hamburger:hover { filter: drop-shadow(var(--glow-cyan)); transform: scale(1.1); }
 
-        /* ----- Responsive ----- */
-        @media (max-width: 992px) {
-            .sidebar {
-                transform: translateX(-100%);
-                position: fixed;
-                height: 100%;
-                width: 280px;
-            }
-            .sidebar.open {
-                transform: translateX(0);
-            }
-            .hamburger {
-                display: block;
-            }
-            .main-content {
-                padding: 1rem;
-            }
-            .admin-form {
-                grid-template-columns: 1fr;
-            }
-        }
-        @media (max-width: 600px) {
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .top-bar h2 {
-                font-size: 1.3rem;
-            }
-            .stat-card .icon {
-                width: 40px;
-                height: 40px;
-                font-size: 1.1rem;
-            }
-            .stat-card .info h4 {
-                font-size: 1.2rem;
-            }
-        }
+      /* ----- Stat cards ("pricing card" style: glass + neon hover) ----- */
+      .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.2rem; margin-bottom: 2rem; }
+      .stat-card {
+        background: var(--bg-panel);
+        backdrop-filter: blur(10px);
+        padding: 1.2rem 1.5rem;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-soft);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        transition: all 0.3s ease; /* smooth transition on every interactive card */
+        animation: fadeSlideUp 0.6s ease both;
+      }
+      /* The signature "pricing card" hover: gentle scale-up + vibrant neon border */
+      .stat-card:hover {
+        transform: translateY(-4px) scale(1.03);
+        border-color: var(--neon-cyan);
+        box-shadow: var(--glow-cyan);
+      }
+      .stat-card .icon {
+        width: 48px; height: 48px;
+        background: var(--neon-cyan-soft);
+        border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        color: var(--neon-cyan);
+        font-size: 1.4rem;
+        transition: var(--transition);
+      }
+      .stat-card:hover .icon { box-shadow: var(--glow-cyan); }
+      .stat-card .info h4 { font-size: 1.5rem; font-weight: 700; color: #fff; }
+      .stat-card .info p { color: var(--text-dim); font-size: 0.85rem; }
 
-        .mt-2 {
-            margin-top: 1rem;
-        }
-        .mb-2 {
-            margin-bottom: 1rem;
-        }
-        .flex {
-            display: flex;
-            gap: 0.8rem;
-            flex-wrap: wrap;
-        }
+      /* ----- Section containers: slide up when switched ----------------- */
+      .section { display: none; animation: fadeSlideUp 0.35s ease; }
+      .section.active { display: block; }
+      @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+      .section-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; margin-bottom: 1.5rem; }
+      .section-header h3 { font-size: 1.3rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 0.5rem; }
+      .section-header h3 i { color: var(--neon-cyan) !important; filter: drop-shadow(0 0 6px rgba(0,230,255,0.6)); }
+
+      /* ----- Buttons: neon pulsing glow on the primary action ----------- */
+      .btn-primary {
+        background: linear-gradient(135deg, #0d3a66, #08192e);
+        color: var(--neon-cyan);
+        border: 1px solid var(--neon-cyan);
+        padding: 0.5rem 1.2rem;
+        border-radius: 40px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-family: "Inter", sans-serif;
+      }
+      .btn-primary:hover {
+        background: var(--neon-cyan);
+        color: #001018;
+        box-shadow: var(--glow-cyan);
+        transform: translateY(-2px);
+        animation: neonPulse 1.6s ease-in-out infinite;
+      }
+      .btn-primary.btn-sm { padding: 0.25rem 0.8rem; font-size: 0.8rem; }
+
+      .btn-danger {
+        background: transparent;
+        color: var(--neon-red);
+        border: 1px solid var(--neon-red);
+        padding: 0.3rem 0.8rem;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .btn-danger:hover { background: var(--neon-red); color: #1a0006; box-shadow: var(--glow-red); transform: translateY(-2px); }
+
+      .btn-success {
+        background: transparent;
+        color: var(--neon-green);
+        border: 1px solid var(--neon-green);
+        padding: 0.3rem 0.8rem;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .btn-success:hover { background: var(--neon-green); color: #001a0d; box-shadow: var(--glow-green); transform: translateY(-2px); }
+
+      .btn-outline {
+        background: transparent;
+        border: 1.5px solid var(--border-soft);
+        padding: 0.3rem 0.9rem;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: var(--text-soft);
+      }
+      .btn-outline:hover { background: var(--neon-purple-soft); border-color: var(--neon-purple); color: #fff; }
+
+      /* ----- Tables: dark glass panel with neon row hover --------------- */
+      .table-wrap {
+        overflow-x: auto;
+        background: var(--bg-panel);
+        backdrop-filter: blur(10px);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-soft);
+        transition: var(--transition);
+        animation: fadeSlideUp 0.6s ease both;
+      }
+      table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+      th {
+        text-align: left;
+        padding: 0.9rem 1.2rem;
+        background: rgba(0, 230, 255, 0.05);
+        font-weight: 600;
+        color: var(--neon-cyan);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        font-size: 0.78rem;
+        border-bottom: 1px solid var(--border-glow);
+      }
+      td { padding: 0.8rem 1.2rem; border-bottom: 1px solid var(--border-soft); vertical-align: middle; color: var(--text-bright); }
+      tr { transition: var(--transition); }
+      tr:hover td { background: rgba(0, 230, 255, 0.045); }
+      tr:last-child td { border-bottom: none; }
+
+      /* ----- Status badges: neon pill glow matched to meaning ------------ */
+      .badge-status { padding: 0.2rem 0.7rem; border-radius: 30px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.02em; border: 1px solid transparent; transition: var(--transition); }
+      .badge-status.pending   { background: rgba(255, 194, 60, 0.12); color: var(--neon-amber); border-color: var(--neon-amber); }
+      .badge-status.confirmed { background: rgba(0, 230, 255, 0.12); color: var(--neon-cyan);  border-color: var(--neon-cyan); }
+      .badge-status.completed { background: rgba(57, 255, 158, 0.12); color: var(--neon-green); border-color: var(--neon-green); }
+      .badge-status.cancelled { background: rgba(255, 61, 95, 0.12); color: var(--neon-red);   border-color: var(--neon-red); }
+
+      /* ----- Forms: dark inputs with a cyan focus glow ------------------ */
+      .admin-form {
+        background: var(--bg-panel);
+        backdrop-filter: blur(10px);
+        padding: 1.5rem;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-soft);
+        margin-bottom: 1.5rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem 1.5rem;
+        transition: var(--transition);
+        animation: fadeSlideUp 0.4s ease both;
+      }
+      .admin-form .full-width { grid-column: 1 / -1; }
+      .admin-form label { font-weight: 600; font-size: 0.85rem; color: var(--text-soft); display: block; margin-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 0.03em; }
+      .admin-form input,
+      .admin-form select,
+      .admin-form textarea {
+        width: 100%;
+        padding: 0.6rem 1rem;
+        border: 1.5px solid var(--border-soft);
+        border-radius: 10px;
+        font-family: "Inter", sans-serif;
+        font-size: 0.95rem;
+        background: var(--bg-input);
+        color: var(--text-bright);
+        transition: all 0.3s ease;
+      }
+      .admin-form input:focus,
+      .admin-form select:focus,
+      .admin-form textarea:focus {
+        outline: none;
+        border-color: var(--neon-cyan);
+        box-shadow: 0 0 0 4px rgba(0, 230, 255, 0.1), var(--glow-cyan);
+      }
+      .admin-form textarea { resize: vertical; min-height: 70px; }
+      .admin-form .form-actions { grid-column: 1 / -1; display: flex; gap: 0.8rem; justify-content: flex-end; }
+
+      /* ----- List items (announcements, jobs, schemes, forms...) -------- */
+      .list-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.7rem 1.1rem;
+        background: var(--bg-panel);
+        backdrop-filter: blur(8px);
+        border-radius: 10px;
+        margin-bottom: 0.5rem;
+        border: 1px solid var(--border-soft);
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+      }
+      .list-item:hover {
+        border-color: var(--neon-purple);
+        box-shadow: var(--glow-purple);
+        transform: translateX(4px);
+      }
+      .list-item .info { display: flex; flex-direction: column; gap: 0.15rem; flex: 1; }
+      .list-item .info .title { font-weight: 600; color: #fff; }
+      .list-item .info .sub { font-size: 0.85rem; color: var(--text-dim); }
+      .list-item .info img { max-height: 50px; border-radius: 4px; margin-top: 4px; }
+      .list-actions { display: flex; gap: 0.3rem; align-items: center; flex-wrap: wrap; }
+
+      /* ---- User management extras (superadmin: role badges + selector) - */
+      .role-badge { padding: 0.2rem 0.7rem; border-radius: 30px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; border: 1px solid transparent; transition: var(--transition); }
+      .role-badge.superadmin { background: rgba(168, 85, 247, 0.14); color: var(--neon-purple); border-color: var(--neon-purple); box-shadow: var(--glow-purple); }
+      .role-badge.admin      { background: rgba(0, 230, 255, 0.14); color: var(--neon-cyan); border-color: var(--neon-cyan); }
+      .role-badge.user       { background: rgba(148, 163, 199, 0.12); color: var(--text-soft); border-color: var(--border-soft); }
+
+      .form-select-sm {
+        padding: 0.2rem 0.6rem;
+        font-size: 0.8rem;
+        border-radius: 30px;
+        border: 1.5px solid var(--border-soft);
+        background: var(--bg-input);
+        color: var(--text-bright);
+        font-family: "Inter", sans-serif;
+        transition: var(--transition);
+      }
+      .form-select-sm:focus { outline: none; border-color: var(--neon-cyan); box-shadow: 0 0 0 3px rgba(0, 230, 255, 0.1); }
+
+      /* ----- Gallery grid: neon hover-zoom cards ------------------------- */
+      .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem; }
+      .gallery-item {
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid var(--border-soft);
+        background: var(--bg-panel-solid);
+        transition: all 0.3s ease;
+      }
+      .gallery-item:hover {
+        transform: scale(1.04);
+        border-color: var(--neon-pink);
+        box-shadow: var(--glow-pink);
+        z-index: 2;
+      }
+      .gallery-item img { width: 100%; height: 120px; object-fit: cover; display: block; transition: transform 0.3s ease; }
+      .gallery-item:hover img { transform: scale(1.08); }
+      .gallery-item .caption { padding: 0.5rem; font-size: 0.8rem; text-align: center; color: var(--text-soft); }
+      .gallery-item .delete-btn { position: absolute; top: 4px; right: 4px; }
+
+      /* ----- Small utility helpers (used in superadmin markup) ---------- */
+      .mt-2 { margin-top: 1rem; }
+      .mb-2 { margin-bottom: 1rem; }
+      .flex { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+
+      /* ----- Responsive layout ------------------------------------------- */
+      @media (max-width: 992px) {
+        .sidebar { transform: translateX(-100%); position: fixed; height: 100%; width: 280px; }
+        .sidebar.open { transform: translateX(0); box-shadow: 0 0 40px rgba(0, 230, 255, 0.15); }
+        .hamburger { display: block; }
+        .main-content { padding: 1rem; }
+        .admin-form { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 600px) {
+        .stats-grid { grid-template-columns: 1fr 1fr; }
+        .top-bar h2 { font-size: 1.2rem; }
+        .stat-card .icon { width: 40px; height: 40px; font-size: 1.1rem; }
+        .stat-card .info h4 { font-size: 1.2rem; }
+      }
     </style>
+
 </head>
 <body>
 
@@ -1064,7 +1016,7 @@
         </div>
 
         <!-- ========================================================== -->
-        <!-- SECTION: APPOINTMENTS                                      -->
+        <!-- SECTION: APPOINTMENTS (with edit)                         -->
         <!-- ========================================================== -->
         <div id="section-appointments" class="section">
             <div class="section-header">
@@ -1072,7 +1024,7 @@
             </div>
             <div class="table-wrap">
                 <table>
-                    <thead><tr><th>{% trans "Customer" %}</th><th>{% trans "Service" %}</th><th>{% trans "Date" %}</th><th>{% trans "Time" %}</th><th>{% trans "Status" %}</th><th>{% trans "Action" %}</th></tr></thead>
+                    <thead><tr><th>{% trans "Customer" %}</th><th>{% trans "Service" %}</th><th>{% trans "Date" %}</th><th>{% trans "Time" %}</th><th>{% trans "Status" %}</th><th>{% trans "Actions" %}</th></tr></thead>
                     <tbody>
                         {% for appt in appointments %}
                         <tr>
@@ -1082,6 +1034,7 @@
                             <td>{{ appt.appointment_time|time:"H:i" }}</td>
                             <td><span class="badge-status {{ appt.status|lower }}">{{ appt.status }}</span></td>
                             <td>
+                                <button class="btn-primary btn-sm" onclick="editAppointment('{{ appt.id }}', '{{ appt.full_name|escapejs }}', '{{ appt.phone|escapejs }}', '{{ appt.email|escapejs }}', '{{ appt.service.id }}', '{{ appt.appointment_date|date:"Y-m-d" }}', '{{ appt.appointment_time|time:"H:i" }}', '{{ appt.message|escapejs }}', '{{ appt.status|escapejs }}')"><i class="fas fa-edit"></i></button>
                                 <form method="post" style="display:inline;">
                                     {% csrf_token %}
                                     <input type="hidden" name="action" value="delete">
@@ -1094,6 +1047,61 @@
                         {% empty %}<tr><td colspan="6">{% trans "No appointments." %}</td></tr>{% endfor %}
                     </tbody>
                 </table>
+            </div>
+
+            <!-- Inline Edit Form for Appointments -->
+            <div class="admin-form" id="editAppointmentForm" style="display:none; margin-top:1rem;">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="edit">
+                    <input type="hidden" name="model_type" value="appointment">
+                    <input type="hidden" name="id" id="editApptId">
+                    <div>
+                        <label>{% trans "Full Name" %} *</label>
+                        <input type="text" name="full_name" id="editApptName" required>
+                    </div>
+                    <div>
+                        <label>{% trans "Phone" %} *</label>
+                        <input type="text" name="phone" id="editApptPhone" required>
+                    </div>
+                    <div>
+                        <label>{% trans "Email" %}</label>
+                        <input type="email" name="email" id="editApptEmail">
+                    </div>
+                    <div>
+                        <label>{% trans "Service" %} *</label>
+                        <select name="service" id="editApptService" required>
+                            {% for service in services %}
+                                <option value="{{ service.id }}">{{ service.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label>{% trans "Date" %} *</label>
+                        <input type="date" name="appointment_date" id="editApptDate" required>
+                    </div>
+                    <div>
+                        <label>{% trans "Time" %} *</label>
+                        <input type="time" name="appointment_time" id="editApptTime" required>
+                    </div>
+                    <div>
+                        <label>{% trans "Status" %}</label>
+                        <select name="status" id="editApptStatus">
+                            <option value="Pending">{% trans "Pending" %}</option>
+                            <option value="Confirmed">{% trans "Confirmed" %}</option>
+                            <option value="Completed">{% trans "Completed" %}</option>
+                            <option value="Cancelled">{% trans "Cancelled" %}</option>
+                        </select>
+                    </div>
+                    <div class="full-width">
+                        <label>{% trans "Message" %}</label>
+                        <textarea name="message" id="editApptMessage" rows="2"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-outline" onclick="document.getElementById('editAppointmentForm').style.display='none'">{% trans "Cancel" %}</button>
+                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
+                    </div>
+                </form>
             </div>
         </div>
 
@@ -1114,9 +1122,12 @@
                         </span>
                     </div>
                     <div style="font-size:0.95rem;">{% trans "Q:" %} {{ contact.message|truncatechars:80 }}</div>
-                    {% if contact.replied %}
-                    <div style="background:#eef3f9; padding:0.4rem 0.8rem; border-radius:8px; font-size:0.9rem;">{% trans "Replied" %}</div>
-                    {% else %}
+                    {% if contact.reply %}
+                    <div style="background:#eef3f9; padding:0.4rem 0.8rem; border-radius:8px; font-size:0.9rem;">
+                        <strong>{% trans "Reply:" %}</strong> {{ contact.reply }}
+                    </div>
+                    {% endif %}
+                    {% if not contact.replied %}
                     <form method="post" style="margin-top:0.2rem;">
                         {% csrf_token %}
                         <input type="hidden" name="action" value="edit">
@@ -1375,7 +1386,7 @@
                 document.getElementById("sidebar").classList.toggle("open");
             });
 
-            // ----- Edit service (fixed: added 'color' parameter) -----
+            // ----- Edit service ----
             window.editService = function(id, name, category, description, active, icon, color) {
                 document.getElementById("editServiceId").value = id;
                 document.getElementById("editSvcName").value = name;
@@ -1448,6 +1459,25 @@
 
             document.querySelector("#editSchemeForm .btn-outline").addEventListener("click", function() {
                 document.getElementById("editSchemeForm").style.display = "none";
+            });
+
+            // ----- Edit Appointment (NEW) -----
+            window.editAppointment = function(id, full_name, phone, email, serviceId, date, time, message, status) {
+                document.getElementById("editApptId").value = id;
+                document.getElementById("editApptName").value = full_name;
+                document.getElementById("editApptPhone").value = phone;
+                document.getElementById("editApptEmail").value = email;
+                document.getElementById("editApptService").value = serviceId;
+                document.getElementById("editApptDate").value = date;
+                document.getElementById("editApptTime").value = time;
+                document.getElementById("editApptMessage").value = message || '';
+                document.getElementById("editApptStatus").value = status || 'Pending';
+                document.getElementById("editAppointmentForm").style.display = "grid";
+                document.getElementById("editAppointmentForm").scrollIntoView({ behavior: 'smooth' });
+            };
+
+            document.querySelector("#editAppointmentForm .btn-outline").addEventListener("click", function() {
+                document.getElementById("editAppointmentForm").style.display = "none";
             });
 
             // ----- Edit Form (DownloadForm) -----

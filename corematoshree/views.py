@@ -14,7 +14,8 @@ from django.db import OperationalError  # <-- added for safe DB access
 from .forms import (
     ServiceForm, AnnouncementForm, JobNotificationForm,
     GovernmentSchemeForm, AppointmentForm, ContactFormDashboard,
-    DownloadFormForm, ServiceChargeForm, GalleryForm, BusinessInfoForm  # <-- new forms
+    DownloadFormForm, ServiceChargeForm, GalleryForm, BusinessInfoForm,
+    AppointmentFormDashboard   # <-- added for admin dashboard
 )
 from .models import (
     Review, Announcement, Gallery, Service, ServiceCharge,
@@ -103,7 +104,7 @@ def admin_dashboard(request):
     announcement_form = AnnouncementForm()
     job_form = JobNotificationForm()
     scheme_form = GovernmentSchemeForm()
-    appointment_form = AppointmentForm()
+    appointment_form = AppointmentFormDashboard()      # <-- changed to AppointmentFormDashboard
     contact_form = ContactFormDashboard()
     download_form = DownloadFormForm()
     servicecharge_form = ServiceChargeForm()      # <-- new
@@ -139,14 +140,16 @@ def admin_dashboard(request):
                 else:
                     messages.error(request, 'Error adding job.')
             elif model_type == 'scheme':
-                form = GovernmentSchemeForm(request.POST)
+                # FIX: include request.FILES for image upload
+                form = GovernmentSchemeForm(request.POST, request.FILES)
                 if form.is_valid():
                     form.save()
                     messages.success(request, 'Scheme added.')
                 else:
                     messages.error(request, 'Error adding scheme.')
             elif model_type == 'appointment':
-                form = AppointmentForm(request.POST)
+                # FIX: use AppointmentFormDashboard which includes status field
+                form = AppointmentFormDashboard(request.POST)
                 if form.is_valid():
                     form.save()
                     messages.success(request, 'Appointment added.')
@@ -166,7 +169,6 @@ def admin_dashboard(request):
                     messages.success(request, 'Download form uploaded.')
                 else:
                     messages.error(request, 'Error uploading form.')
-            # ----- NEW additions for ServiceCharge & Gallery -----
             elif model_type == 'servicecharge':
                 form = ServiceChargeForm(request.POST)
                 if form.is_valid():
@@ -209,16 +211,18 @@ def admin_dashboard(request):
                 else:
                     messages.error(request, 'Error updating job.')
             elif model_type == 'scheme' and obj_id:
+                # FIX: include request.FILES for image upload
                 instance = get_object_or_404(GovernmentScheme, id=obj_id)
-                form = GovernmentSchemeForm(request.POST, instance=instance)
+                form = GovernmentSchemeForm(request.POST, request.FILES, instance=instance)
                 if form.is_valid():
                     form.save()
                     messages.success(request, 'Scheme updated.')
                 else:
                     messages.error(request, 'Error updating scheme.')
             elif model_type == 'appointment' and obj_id:
+                # FIX: use AppointmentFormDashboard for editing
                 instance = get_object_or_404(Appointment, id=obj_id)
-                form = AppointmentForm(request.POST, instance=instance)
+                form = AppointmentFormDashboard(request.POST, instance=instance)
                 if form.is_valid():
                     form.save()
                     messages.success(request, 'Appointment updated.')
@@ -226,12 +230,19 @@ def admin_dashboard(request):
                     messages.error(request, 'Error updating appointment.')
             elif model_type == 'contact' and obj_id:
                 instance = get_object_or_404(Contact, id=obj_id)
-                form = ContactFormDashboard(request.POST, instance=instance)
-                if form.is_valid():
-                    form.save()
-                    messages.success(request, 'Contact updated.')
+                # FIX: handle reply separately, if present
+                if 'reply' in request.POST:
+                    instance.reply = request.POST.get('reply')
+                    instance.replied = True
+                    instance.save()
+                    messages.success(request, 'Reply saved.')
                 else:
-                    messages.error(request, 'Error updating contact.')
+                    form = ContactFormDashboard(request.POST, instance=instance)
+                    if form.is_valid():
+                        form.save()
+                        messages.success(request, 'Contact updated.')
+                    else:
+                        messages.error(request, 'Error updating contact.')
             elif model_type == 'form' and obj_id:
                 instance = get_object_or_404(DownloadForm, id=obj_id)
                 form = DownloadFormForm(request.POST, request.FILES, instance=instance)
@@ -240,7 +251,6 @@ def admin_dashboard(request):
                     messages.success(request, 'Form updated.')
                 else:
                     messages.error(request, 'Error updating form.')
-            # ----- NEW: edit ServiceCharge and BusinessInfo -----
             elif model_type == 'servicecharge' and obj_id:
                 instance = get_object_or_404(ServiceCharge, id=obj_id)
                 form = ServiceChargeForm(request.POST, instance=instance)
@@ -281,7 +291,6 @@ def admin_dashboard(request):
             elif model_type == 'form' and obj_id:
                 get_object_or_404(DownloadForm, id=obj_id).delete()
                 messages.success(request, 'Form deleted.')
-            # ----- NEW: delete ServiceCharge and Gallery -----
             elif model_type == 'servicecharge' and obj_id:
                 get_object_or_404(ServiceCharge, id=obj_id).delete()
                 messages.success(request, 'Service charge deleted.')
@@ -298,9 +307,9 @@ def admin_dashboard(request):
         'jobs': jobs,
         'schemes': schemes,
         'forms_list': forms_list,
-        'servicecharges': servicecharges,        # <-- new
-        'gallery_images': gallery_images,        # <-- new
-        'business_info': business_info,          # <-- new
+        'servicecharges': servicecharges,
+        'gallery_images': gallery_images,
+        'business_info': business_info,
         'service_form': service_form,
         'announcement_form': announcement_form,
         'job_form': job_form,
@@ -308,9 +317,9 @@ def admin_dashboard(request):
         'appointment_form': appointment_form,
         'contact_form': contact_form,
         'download_form': download_form,
-        'servicecharge_form': servicecharge_form,  # <-- new
-        'gallery_form': gallery_form,              # <-- new
-        'businessinfo_form': businessinfo_form,    # <-- new
+        'servicecharge_form': servicecharge_form,
+        'gallery_form': gallery_form,
+        'businessinfo_form': businessinfo_form,
         'business': get_business(),
     }
     return render(request, 'admindashboard.html', context)
@@ -328,21 +337,21 @@ def superadmin_dashboard(request):
     schemes = GovernmentScheme.objects.all().order_by('-last_date')
     forms_list = DownloadForm.objects.all().order_by('-uploaded_at')
     users = User.objects.all().order_by('username')
-    servicecharges = ServiceCharge.objects.select_related('service').all()   # <-- new
-    gallery_images = Gallery.objects.all()                                  # <-- new
-    business_info = BusinessInfo.objects.first()                            # <-- new
+    servicecharges = ServiceCharge.objects.select_related('service').all()
+    gallery_images = Gallery.objects.all()
+    business_info = BusinessInfo.objects.first()
 
     # Initialize forms
     service_form = ServiceForm()
     announcement_form = AnnouncementForm()
     job_form = JobNotificationForm()
     scheme_form = GovernmentSchemeForm()
-    appointment_form = AppointmentForm()
+    appointment_form = AppointmentFormDashboard()      # <-- changed to AppointmentFormDashboard
     contact_form = ContactFormDashboard()
     download_form = DownloadFormForm()
-    servicecharge_form = ServiceChargeForm()      # <-- new
-    gallery_form = GalleryForm()                  # <-- new
-    businessinfo_form = BusinessInfoForm(instance=business_info)  # <-- new
+    servicecharge_form = ServiceChargeForm()
+    gallery_form = GalleryForm()
+    businessinfo_form = BusinessInfoForm(instance=business_info)
 
     if request.method == 'POST':
         action = request.POST.get('action')
@@ -373,14 +382,16 @@ def superadmin_dashboard(request):
                 else:
                     messages.error(request, 'Error adding job.')
             elif model_type == 'scheme':
-                form = GovernmentSchemeForm(request.POST)
+                # FIX: include request.FILES for image upload
+                form = GovernmentSchemeForm(request.POST, request.FILES)
                 if form.is_valid():
                     form.save()
                     messages.success(request, 'Scheme added.')
                 else:
                     messages.error(request, 'Error adding scheme.')
             elif model_type == 'appointment':
-                form = AppointmentForm(request.POST)
+                # FIX: use AppointmentFormDashboard
+                form = AppointmentFormDashboard(request.POST)
                 if form.is_valid():
                     form.save()
                     messages.success(request, 'Appointment added.')
@@ -400,7 +411,6 @@ def superadmin_dashboard(request):
                     messages.success(request, 'Download form uploaded.')
                 else:
                     messages.error(request, 'Error uploading form.')
-            # ----- NEW additions for ServiceCharge & Gallery -----
             elif model_type == 'servicecharge':
                 form = ServiceChargeForm(request.POST)
                 if form.is_valid():
@@ -444,16 +454,18 @@ def superadmin_dashboard(request):
                 else:
                     messages.error(request, 'Error updating job.')
             elif model_type == 'scheme' and obj_id:
+                # FIX: include request.FILES for image upload
                 instance = get_object_or_404(GovernmentScheme, id=obj_id)
-                form = GovernmentSchemeForm(request.POST, instance=instance)
+                form = GovernmentSchemeForm(request.POST, request.FILES, instance=instance)
                 if form.is_valid():
                     form.save()
                     messages.success(request, 'Scheme updated.')
                 else:
                     messages.error(request, 'Error updating scheme.')
             elif model_type == 'appointment' and obj_id:
+                # FIX: use AppointmentFormDashboard for editing
                 instance = get_object_or_404(Appointment, id=obj_id)
-                form = AppointmentForm(request.POST, instance=instance)
+                form = AppointmentFormDashboard(request.POST, instance=instance)
                 if form.is_valid():
                     form.save()
                     messages.success(request, 'Appointment updated.')
@@ -461,12 +473,19 @@ def superadmin_dashboard(request):
                     messages.error(request, 'Error updating appointment.')
             elif model_type == 'contact' and obj_id:
                 instance = get_object_or_404(Contact, id=obj_id)
-                form = ContactFormDashboard(request.POST, instance=instance)
-                if form.is_valid():
-                    form.save()
-                    messages.success(request, 'Contact updated.')
+                # FIX: handle reply separately, if present
+                if 'reply' in request.POST:
+                    instance.reply = request.POST.get('reply')
+                    instance.replied = True
+                    instance.save()
+                    messages.success(request, 'Reply saved.')
                 else:
-                    messages.error(request, 'Error updating contact.')
+                    form = ContactFormDashboard(request.POST, instance=instance)
+                    if form.is_valid():
+                        form.save()
+                        messages.success(request, 'Contact updated.')
+                    else:
+                        messages.error(request, 'Error updating contact.')
             elif model_type == 'form' and obj_id:
                 instance = get_object_or_404(DownloadForm, id=obj_id)
                 form = DownloadFormForm(request.POST, request.FILES, instance=instance)
@@ -475,7 +494,6 @@ def superadmin_dashboard(request):
                     messages.success(request, 'Form updated.')
                 else:
                     messages.error(request, 'Error updating form.')
-            # ----- NEW: edit ServiceCharge and BusinessInfo -----
             elif model_type == 'servicecharge' and obj_id:
                 instance = get_object_or_404(ServiceCharge, id=obj_id)
                 form = ServiceChargeForm(request.POST, instance=instance)
@@ -517,7 +535,6 @@ def superadmin_dashboard(request):
             elif model_type == 'form' and obj_id:
                 get_object_or_404(DownloadForm, id=obj_id).delete()
                 messages.success(request, 'Form deleted.')
-            # ----- NEW: delete ServiceCharge and Gallery -----
             elif model_type == 'servicecharge' and obj_id:
                 get_object_or_404(ServiceCharge, id=obj_id).delete()
                 messages.success(request, 'Service charge deleted.')
@@ -546,9 +563,9 @@ def superadmin_dashboard(request):
         'schemes': schemes,
         'forms_list': forms_list,
         'users': users,
-        'servicecharges': servicecharges,        # <-- new
-        'gallery_images': gallery_images,        # <-- new
-        'business_info': business_info,          # <-- new
+        'servicecharges': servicecharges,
+        'gallery_images': gallery_images,
+        'business_info': business_info,
         'service_form': service_form,
         'announcement_form': announcement_form,
         'job_form': job_form,
@@ -556,9 +573,9 @@ def superadmin_dashboard(request):
         'appointment_form': appointment_form,
         'contact_form': contact_form,
         'download_form': download_form,
-        'servicecharge_form': servicecharge_form,  # <-- new
-        'gallery_form': gallery_form,              # <-- new
-        'businessinfo_form': businessinfo_form,    # <-- new
+        'servicecharge_form': servicecharge_form,
+        'gallery_form': gallery_form,
+        'businessinfo_form': businessinfo_form,
         'business': get_business(),
     }
     return render(request, 'superadmindashboard.html', context)
@@ -791,36 +808,4 @@ def jobs(request):
         'business': get_business(),
         'jobs': jobs_page,
     })
-
-
-# @login_required
-# @user_passes_test(is_admin)
-# def dashboard_services(request):
-#     services = Service.objects.all().order_by('name')
-#     form = ServiceForm()
-#     if request.method == 'POST':
-#         if 'add' in request.POST:
-#             form = ServiceForm(request.POST)
-#             if form.is_valid():
-#                 form.save()
-#                 messages.success(request, 'Service added.')
-#                 return redirect('dashboard_services')
-#         elif 'delete' in request.POST:
-#             service_id = request.POST.get('service_id')
-#             service = get_object_or_404(Service, id=service_id)
-#             service.delete()
-#             messages.success(request, 'Service deleted.')
-#             return redirect('dashboard_services')
-#         elif 'edit' in request.POST:
-#             service_id = request.POST.get('service_id')
-#             service = get_object_or_404(Service, id=service_id)
-#             form = ServiceForm(request.POST, instance=service)
-#             if form.is_valid():
-#                 form.save()
-#                 messages.success(request, 'Service updated.')
-#                 return redirect('dashboard_services')
-#     context = {
-#         'services': services,
-#         'form': form,
-#     }
-#     return render(request, 'dashboard_services.html', context)
+    
