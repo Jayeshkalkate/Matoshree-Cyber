@@ -7,9 +7,6 @@
      ============================================================ -->
 {% load i18n %}
 {% load static %}
-
-
-{% block extra_head %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -927,11 +924,15 @@
             }
         }
     </style>
-</head>
-{% endblock %}
 
-{% block content %}
+    <!-- ================================================================
+         EXTRA HEAD – for child templates to append
+         ================================================================ -->
+    {% block extra_head %}{% endblock %}
+</head>
+
 <body>
+
     <!-- ================================================================
          HEADER – Glassmorphism with sticky behavior
          ================================================================ -->
@@ -989,25 +990,25 @@
                 <!-- User & Language section -->
                 <div class="nav-user-section">
                     {% if user.is_authenticated %}
-                    <span style="color: var(--text-muted); font-weight:500; font-size:0.85rem;">{{ user.username }}</span>
-                    {% if user.role == 'admin' or user.role == 'superadmin' %}
-                    <a href="{% url 'admin_dashboard' %}">{% trans "Dashboard" %}</a>
-                    {% endif %}
-                    {% if user.role == 'superadmin' %}
-                    <a href="{% url 'superadmin_dashboard' %}">{% trans "Super Admin" %}</a>
-                    {% endif %}
-                    <a href="{% url 'profile' %}">{% trans "Profile" %}</a>
-                    <form action="{% url 'logout' %}" method="post" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-weight:500; padding:6px 14px; font-size:0.85rem; border-radius:var(--radius-pill); transition:var(--transition);">
-                            {% trans "Logout" %}
-                        </button>
-                    </form>
+                        <span style="color: var(--text-muted); font-weight:500; font-size:0.85rem;">{{ user.username }}</span>
+                        {% if user.role == 'admin' or user.role == 'superadmin' %}
+                            <a href="{% url 'admin_dashboard' %}">{% trans "Dashboard" %}</a>
+                        {% endif %}
+                        {% if user.role == 'superadmin' %}
+                            <a href="{% url 'superadmin_dashboard' %}">{% trans "Super Admin" %}</a>
+                        {% endif %}
+                        <a href="{% url 'profile' %}">{% trans "Profile" %}</a>
+                        <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-weight:500; padding:6px 14px; font-size:0.85rem; border-radius:var(--radius-pill); transition:var(--transition);">
+                                {% trans "Logout" %}
+                            </button>
+                        </form>
                     {% else %}
-                    <a href="{% url 'login' %}">{% trans "Login" %}</a>
-                    <a href="{% url 'register' %}">{% trans "Register" %}</a>
+                        <a href="{% url 'login' %}">{% trans "Login" %}</a>
+                        <a href="{% url 'register' %}">{% trans "Register" %}</a>
                     {% endif %}
-                
+
                     <!-- Language Switcher -->
                     <form action="{% url 'set_language' %}" method="post" style="display:inline;">
                         {% csrf_token %}
@@ -1016,9 +1017,9 @@
                             {% get_current_language as current_lang %}
                             {% get_available_languages as LANGUAGES %}
                             {% for lang_code, lang_name in LANGUAGES %}
-                            <option value="{{ lang_code }}" {% if lang_code == current_lang %}selected{% endif %}>
-                                {{ lang_name }}
-                            </option>
+                                <option value="{{ lang_code }}" {% if lang_code == current_lang %}selected{% endif %}>
+                                    {{ lang_name }}
+                                </option>
                             {% endfor %}
                         </select>
                     </form>
@@ -1032,9 +1033,9 @@
          ================================================================ -->
     <div class="container messages-container">
         {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-        {% endfor %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
         {% endif %}
     </div>
 
@@ -1059,14 +1060,13 @@
             <p>
                 {% now "Y" as current_year %}
                 {% blocktrans with year=current_year name=business.business_name|default:"Matoshree Cyber Cafe" trimmed %}
-                &copy; {{ year }} {{ name }}. All rights reserved.
+                    &copy; {{ year }} {{ name }}. All rights reserved.
                 {% endblocktrans %}
             </p>
             <div class="socials">
                 <a href="#" aria-label="{% trans "Facebook" %}"><i class="fab fa-facebook-f"></i></a>
                 <a href="#" aria-label="{% trans "Instagram" %}"><i class="fab fa-instagram"></i></a>
                 <a href="#" aria-label="{% trans "YouTube" %}"><i class="fab fa-youtube"></i></a>
-                <a href="#" aria-label="{% trans "Twitter" %}"><i class="fab fa-twitter"></i></a>
                 <a href="#" aria-label="{% trans "Twitter" %}"><i class="fab fa-twitter"></i></a>
             </div>
         </div>
@@ -1076,71 +1076,72 @@
          FLOATING WHATSAPP – Pulsing neon button
          ================================================================ -->
     {% with whatsapp_number=business.whatsapp|default:"" %}
-    {% if whatsapp_number %}
-    <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello"
-    target="_blank"
-    class="whatsapp-float"
-    aria-label="{% trans "Chat on WhatsApp" %}">
-    <i class="fab fa-whatsapp"></i>
-    </a>
+        {% if whatsapp_number %}
+            <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello"
+               target="_blank"
+               class="whatsapp-float"
+               aria-label="{% trans "Chat on WhatsApp" %}">
+                <i class="fab fa-whatsapp"></i>
+            </a>
+        {% endif %}
+    {% endwith %}
 
-{% endif %}
-{% endwith %}
+    <!-- ================================================================
+         SCRIPTS – Mobile nav, dropdowns, active link highlight
+         ================================================================ -->
+    <script>
+        (function() {
+            'use strict';
 
-{% endblock %}
+            // ---- Toggle mobile navigation ---- //
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
 
-{% block extra_scripts %}
-<!-- ================================================================
-     SCRIPTS – Mobile nav, dropdowns, active link highlight
-     ================================================================ -->
-<script>
-    (function() {
-        'use strict';
+            if (hamburger && navLinks) {
+                hamburger.addEventListener('click', function() {
+                    navLinks.classList.toggle('open');
+                });
 
-        // ---- Toggle mobile navigation ---- //
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.getElementById('navLinks');
+                // Close nav on link click (mobile)
+                navLinks.querySelectorAll('a').forEach(function(link) {
+                    link.addEventListener('click', function() {
+                        navLinks.classList.remove('open');
+                    });
+                });
+            }
 
-        if (hamburger && navLinks) {
-            hamburger.addEventListener('click', function() {
-                navLinks.classList.toggle('open');
-            });
-
-            // Close nav on link click (mobile)
-            navLinks.querySelectorAll('a').forEach(function(link) {
-                link.addEventListener('click', function() {
-                    navLinks.classList.remove('open');
+            // ---- Toggle dropdowns on mobile (click) ---- //
+            const dropdownToggles = document.querySelectorAll('.nav-links .dropdown > a');
+            dropdownToggles.forEach(function(toggle) {
+                toggle.addEventListener('click', function(e) {
+                    if (window.innerWidth <= 992) {
+                        e.preventDefault();
+                        var parent = this.parentElement;
+                        document.querySelectorAll('.nav-links .dropdown.open').forEach(function(d) {
+                            if (d !== parent) d.classList.remove('open');
+                        });
+                        parent.classList.toggle('open');
+                    }
                 });
             });
-        }
 
-        // ---- Toggle dropdowns on mobile (click) ---- //
-        const dropdownToggles = document.querySelectorAll('.nav-links .dropdown > a');
-        dropdownToggles.forEach(function(toggle) {
-            toggle.addEventListener('click', function(e) {
+            // ---- Close dropdowns when clicking outside (mobile) ---- //
+            document.addEventListener('click', function(e) {
                 if (window.innerWidth <= 992) {
-                    e.preventDefault();
-                    var parent = this.parentElement;
-                    document.querySelectorAll('.nav-links .dropdown.open').forEach(function(d) {
-                        if (d !== parent) d.classList.remove('open');
-                    });
-                    parent.classList.toggle('open');
+                    if (!e.target.closest('.nav-links .dropdown')) {
+                        document.querySelectorAll('.nav-links .dropdown.open').forEach(function(d) {
+                            d.classList.remove('open');
+                        });
+                    }
                 }
             });
-        });
 
-        // ---- Close dropdowns when clicking outside (mobile) ---- //
-        document.addEventListener('click', function(e) {
-            if (window.innerWidth <= 992) {
-                if (!e.target.closest('.nav-links .dropdown')) {
-                    document.querySelectorAll('.nav-links .dropdown.open').forEach(function(d) {
-                        d.classList.remove('open');
-                    });
-                }
-            }
-        });
+        })();
+    </script>
 
-    })();
-</script>
-
-{% endblock %}
+    <!-- ================================================================
+         EXTRA SCRIPTS – for child templates to append
+         ================================================================ -->
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>
