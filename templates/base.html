@@ -8,6 +8,8 @@
 {% load i18n %}
 {% load static %}
 
+
+{% block extra_head %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -928,7 +930,9 @@
 
     {% block extra_head %}{% endblock %}
 </head>
+{% endblock %}
 
+{% block content %}
 <body>
     <!-- ================================================================
          HEADER – Glassmorphism with sticky behavior
@@ -1065,6 +1069,7 @@
                 <a href="#" aria-label="{% trans "Instagram" %}"><i class="fab fa-instagram"></i></a>
                 <a href="#" aria-label="{% trans "YouTube" %}"><i class="fab fa-youtube"></i></a>
                 <a href="#" aria-label="{% trans "Twitter" %}"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="{% trans "Twitter" %}"><i class="fab fa-twitter"></i></a>
             </div>
         </div>
     </footer>
@@ -1079,10 +1084,14 @@
     class="whatsapp-float"
     aria-label="{% trans "Chat on WhatsApp" %}">
     <i class="fab fa-whatsapp"></i>
-</a>
+    </a>
+    
 {% endif %}
 {% endwith %}
 
+{% endblock %}
+
+{% block extra_scripts %}
 <!-- ================================================================
      SCRIPTS – Mobile nav, dropdowns, active link highlight
      ================================================================ -->
@@ -1136,6 +1145,4 @@
     })();
 </script>
 
-{% block extra_scripts %}{% endblock %}
-</body>
-</html>
+{% endblock %}
