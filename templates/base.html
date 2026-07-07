@@ -482,25 +482,6 @@
             background: rgba(0, 240, 255, 0.06);
         }
 
-        /* ---- CTA nav button (special) ---- */
-        .nav-links a.cta-nav {
-            background: var(--gradient-cyan);
-            color: var(--bg-primary);
-            font-weight: 700;
-            padding: 10px 24px;
-            box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
-            transition: var(--transition);
-        }
-
-        .nav-links a.cta-nav:hover {
-            transform: scale(1.05);
-            box-shadow: var(--glow-cyan);
-        }
-
-        .nav-links a.cta-nav::after {
-            display: none;
-        }
-
         /* ---- Dropdown ---- */
         .nav-links .dropdown {
             position: relative;
@@ -1001,6 +982,7 @@
                 </div>
 
                 <a href="{% url 'contact' %}">{% trans "Contact" %}</a>
+                <a href="{% url 'appointment' %}">{% trans "Book Appointment" %}</a>
 
                 <!-- User & Language section -->
                 <div class="nav-user-section">
@@ -1023,8 +1005,6 @@
                     <a href="{% url 'login' %}">{% trans "Login" %}</a>
                     <a href="{% url 'register' %}">{% trans "Register" %}</a>
                     {% endif %}
-
-                <a href="{% url 'appointment' %}" class="cta-nav">{% trans "Book Appointment" %}</a>
                 
                     <!-- Language Switcher -->
                     <form action="{% url 'set_language' %}" method="post" style="display:inline;">
@@ -1152,28 +1132,6 @@
                 }
             }
         });
-
-        // ---- Active nav link highlight on scroll (cyber indicator) ---- //
-        const sections = document.querySelectorAll('section[id]');
-        const navLinkItems = document.querySelectorAll('.nav-links a:not(.cta-nav):not(.dropdown > a)');
-
-        if (sections.length && navLinkItems.length) {
-            window.addEventListener('scroll', function() {
-                let current = '';
-                sections.forEach(function(section) {
-                    const top = section.offsetTop - 140;
-                    if (window.scrollY >= top) {
-                        current = section.getAttribute('id');
-                    }
-                });
-                navLinkItems.forEach(function(link) {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === '#' + current) {
-                        link.classList.add('active');
-                    }
-                });
-            });
-        }
 
     })();
 </script>
