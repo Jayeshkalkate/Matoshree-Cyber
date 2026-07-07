@@ -592,13 +592,17 @@ def home(request):
         'announcements': Announcement.objects.all()[:5],
         'reviews': Review.objects.filter(approved=True)[:6],
         'gallery': Gallery.objects.all()[:8],
+        'charges': ServiceCharge.objects.select_related('service').all()[:3],
     }
     return render(request, 'homepage.html', context)
 
-
 def about(request):
-    return render(request, 'aboutus.html', {'business': get_business()})
-
+    context = {
+        'business': get_business(),
+        'services': Service.objects.filter(active=True),
+        'charges': ServiceCharge.objects.select_related('service').all(),
+    }
+    return render(request, 'aboutus.html', context)
 
 def services(request):
     context = {

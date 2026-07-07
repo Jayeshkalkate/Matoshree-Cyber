@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load static %}
 
-{% block title %}{% trans "Serivce Charges" %}{% endblock %}
+{% block title %}{% trans "Service Charges" %}{% endblock %}
 
 {% block extra_head %}
 <!-- ================================================================
@@ -240,7 +240,6 @@
   .pricing-card:hover::before {
     opacity: 1;
   }
-  /* ---- The sleek hover interaction: scale up + neon border ---- */
   .pricing-card:hover {
     transform: scale(1.04) translateY(-8px);
     border-color: var(--neon-cyan);
@@ -456,7 +455,7 @@
 </section>
 
 <!-- ================================================================
-     CHARGES TABLE – Glassmorphism with hover glow
+     CHARGES TABLE – Glassmorphism with hover glow (DYNAMIC)
      ================================================================ -->
 <section class="charges-section reveal">
   <div class="container">
@@ -498,6 +497,7 @@
 
 <!-- ================================================================
      PRICING CARDS – Service packages with neon hover effect
+     (These are static "package" examples – can be made dynamic if needed)
      ================================================================ -->
 <section class="pricing-section reveal">
   <div class="container">

@@ -106,36 +106,16 @@
             animation: fadeSlideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
 
-        .animate-on-load:nth-child(1) {
-            animation-delay: 0.05s;
-        }
-        .animate-on-load:nth-child(2) {
-            animation-delay: 0.10s;
-        }
-        .animate-on-load:nth-child(3) {
-            animation-delay: 0.15s;
-        }
-        .animate-on-load:nth-child(4) {
-            animation-delay: 0.20s;
-        }
-        .animate-on-load:nth-child(5) {
-            animation-delay: 0.25s;
-        }
-        .animate-on-load:nth-child(6) {
-            animation-delay: 0.30s;
-        }
-        .animate-on-load:nth-child(7) {
-            animation-delay: 0.35s;
-        }
-        .animate-on-load:nth-child(8) {
-            animation-delay: 0.40s;
-        }
-        .animate-on-load:nth-child(9) {
-            animation-delay: 0.45s;
-        }
-        .animate-on-load:nth-child(10) {
-            animation-delay: 0.50s;
-        }
+        .animate-on-load:nth-child(1) { animation-delay: 0.05s; }
+        .animate-on-load:nth-child(2) { animation-delay: 0.10s; }
+        .animate-on-load:nth-child(3) { animation-delay: 0.15s; }
+        .animate-on-load:nth-child(4) { animation-delay: 0.20s; }
+        .animate-on-load:nth-child(5) { animation-delay: 0.25s; }
+        .animate-on-load:nth-child(6) { animation-delay: 0.30s; }
+        .animate-on-load:nth-child(7) { animation-delay: 0.35s; }
+        .animate-on-load:nth-child(8) { animation-delay: 0.40s; }
+        .animate-on-load:nth-child(9) { animation-delay: 0.45s; }
+        .animate-on-load:nth-child(10) { animation-delay: 0.50s; }
 
         @keyframes fadeSlideUp {
             0% {
@@ -217,31 +197,16 @@
 
         /* ---- Pulse keyframes ---- */
         @keyframes pulseGlowCyan {
-            0%,
-            100% {
-                box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(0, 212, 255, 0.8), 0 0 80px rgba(0, 212, 255, 0.3);
-            }
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(0, 212, 255, 0.8), 0 0 80px rgba(0, 212, 255, 0.3); }
         }
         @keyframes pulseGlowPurple {
-            0%,
-            100% {
-                box-shadow: 0 0 20px rgba(180, 74, 255, 0.4);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(180, 74, 255, 0.8), 0 0 80px rgba(180, 74, 255, 0.3);
-            }
+            0%, 100% { box-shadow: 0 0 20px rgba(180, 74, 255, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(180, 74, 255, 0.8), 0 0 80px rgba(180, 74, 255, 0.3); }
         }
         @keyframes pulseGlowGreen {
-            0%,
-            100% {
-                box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(57, 255, 20, 0.7), 0 0 80px rgba(57, 255, 20, 0.2);
-            }
+            0%, 100% { box-shadow: 0 0 20px rgba(57, 255, 20, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(57, 255, 20, 0.7), 0 0 80px rgba(57, 255, 20, 0.2); }
         }
 
         /* ================================================================
@@ -534,9 +499,6 @@
             margin-bottom: 12px;
             transition: var(--transition);
         }
-        .scheme-card:hover .scheme-description {
-            color: var(--gray-dark);
-        }
 
         .scheme-card .scheme-meta {
             display: flex;
@@ -570,6 +532,47 @@
         }
         .scheme-card .scheme-meta .eligibility {
             flex-basis: 100%;
+        }
+
+        /* ─── Pagination ─── */
+        .pagination-wrap {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        .pagination-wrap .page-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 16px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: var(--gray-dark);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            text-decoration: none;
+            min-width: 44px;
+        }
+        .pagination-wrap .page-link:hover {
+            background: rgba(0, 212, 255, 0.08);
+            border-color: var(--secondary);
+            color: var(--white);
+            box-shadow: var(--glow-secondary);
+            transform: translateY(-2px);
+        }
+        .pagination-wrap .page-link.active {
+            background: var(--secondary);
+            color: var(--primary);
+            border-color: var(--secondary);
+            box-shadow: var(--glow-secondary);
+        }
+        .pagination-wrap .page-link.disabled {
+            opacity: 0.3;
+            pointer-events: none;
         }
 
         /* ─── No Schemes ─── */
@@ -664,18 +667,12 @@
                RESPONSIVE
                ================================================================ */
         @media (max-width: 1024px) {
-            .schemes-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            .schemes-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         @media (max-width: 768px) {
-            .navbar .container {
-                flex-wrap: wrap;
-            }
-            .hamburger {
-                display: flex;
-            }
+            .navbar .container { flex-wrap: wrap; }
+            .hamburger { display: flex; }
             .nav-links {
                 display: none;
                 flex-direction: column;
@@ -684,44 +681,20 @@
                 gap: 16px;
                 align-items: center;
             }
-            .nav-links.open {
-                display: flex;
-            }
+            .nav-links.open { display: flex; }
 
-            .page-hero {
-                padding: 50px 0 40px;
-            }
-            .page-hero h1 {
-                font-size: 2.2rem;
-            }
-            .page-hero p {
-                font-size: 1rem;
-            }
+            .page-hero { padding: 50px 0 40px; }
+            .page-hero h1 { font-size: 2.2rem; }
+            .page-hero p { font-size: 1rem; }
 
-            .schemes-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
+            .schemes-grid { grid-template-columns: 1fr; gap: 20px; }
+            .scheme-card { padding: 20px 18px 18px; }
+            .scheme-card .scheme-image { height: 160px; }
+            .scheme-card .scheme-title { font-size: 1.05rem; }
+            .scheme-card .scheme-description { font-size: 0.9rem; }
 
-            .scheme-card {
-                padding: 20px 18px 18px;
-            }
-            .scheme-card .scheme-image {
-                height: 160px;
-            }
-            .scheme-card .scheme-title {
-                font-size: 1.05rem;
-            }
-            .scheme-card .scheme-description {
-                font-size: 0.9rem;
-            }
-
-            .cta-banner {
-                padding: 50px 0;
-            }
-            .cta-banner h2 {
-                font-size: 1.8rem;
-            }
+            .cta-banner { padding: 50px 0; }
+            .cta-banner h2 { font-size: 1.8rem; }
             .cta-banner .cta-buttons {
                 flex-direction: column;
                 align-items: center;
@@ -734,23 +707,14 @@
         }
 
         @media (max-width: 480px) {
-            .page-hero h1 {
-                font-size: 1.8rem;
-            }
-
-            .scheme-card .scheme-image {
-                height: 140px;
-            }
+            .page-hero h1 { font-size: 1.8rem; }
+            .scheme-card .scheme-image { height: 140px; }
             .scheme-card .scheme-meta {
                 flex-direction: column;
                 gap: 4px;
             }
-            .scheme-card .scheme-meta .eligibility {
-                flex-basis: auto;
-            }
-            .scheme-card .scheme-meta .meta-item {
-                font-size: 0.8rem;
-            }
+            .scheme-card .scheme-meta .eligibility { flex-basis: auto; }
+            .scheme-card .scheme-meta .meta-item { font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -765,12 +729,12 @@
     <section class="page-hero animate-on-load">
         <div class="container">
             <div class="breadcrumb">
-                <a href="homepage.html"><i class="fas fa-home"></i> Home</a>
+                <a href="{% url 'home' %}"><i class="fas fa-home"></i> {% trans "Home" %}</a>
                 <span><i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5;"></i></span>
-                <span class="current">Government Schemes</span>
+                <span class="current">{% trans "Government Schemes" %}</span>
             </div>
-            <h1>Government <span>Schemes</span></h1>
-            <p>Explore the latest government schemes and initiatives designed to benefit citizens, businesses, and communities.</p>
+            <h1>{% trans "Government" %} <span>{% trans "Schemes" %}</span></h1>
+            <p>{% trans "Explore the latest government schemes and initiatives designed to benefit citizens, businesses, and communities." %}</p>
             <div class="glow-line"></div>
         </div>
     </section>
@@ -781,124 +745,68 @@
     <section class="schemes-section" id="schemes">
         <div class="container">
 
-            <!-- ─── Schemes Grid ─── -->
+            <!-- ─── Schemes Grid (DYNAMIC) ─── -->
             <div class="schemes-grid">
-
-                <!-- Scheme Card 1 -->
+                {% for scheme in schemes_page %}
                 <div class="scheme-card animate-on-load">
-                    <img src="https://picsum.photos/id/10/400/300" alt="PM Awas Yojana" class="scheme-image" loading="lazy" />
-                    <h3 class="scheme-title">Pradhan Mantri Awas Yojana</h3>
-                    <p class="scheme-description">Housing for All scheme providing affordable housing to urban poor. Offers interest subsidies on home loans for eligible beneficiaries.</p>
+                    {% if scheme.image %}
+                        <img src="{{ scheme.image.url }}" alt="{{ scheme.title }}" class="scheme-image" loading="lazy" />
+                    {% else %}
+                        <img src="https://picsum.photos/seed/{{ scheme.id }}/400/300" alt="{{ scheme.title }}" class="scheme-image" loading="lazy" />
+                    {% endif %}
+                    <h3 class="scheme-title">{{ scheme.title }}</h3>
+                    <p class="scheme-description">{{ scheme.description|truncatechars:150 }}</p>
                     <div class="scheme-meta">
                         <div class="meta-item eligibility">
                             <i class="fas fa-check-circle"></i>
-                            <span class="label">Eligibility:</span>
-                            <span class="value">Economically Weaker Sections &amp; LIG</span>
+                            <span class="label">{% trans "Eligibility:" %}</span>
+                            <span class="value">{{ scheme.eligibility|default:_("Not specified") }}</span>
                         </div>
                         <div class="meta-item">
                             <i class="far fa-calendar-alt"></i>
-                            <span class="label">Last Date:</span>
-                            <span class="value">31 Dec 2026</span>
+                            <span class="label">{% trans "Last Date:" %}</span>
+                            <span class="value">
+                                {% if scheme.last_date %}
+                                    {{ scheme.last_date|date:"d M Y" }}
+                                {% else %}
+                                    {% trans "Ongoing" %}
+                                {% endif %}
+                            </span>
                         </div>
                     </div>
                 </div>
-
-                <!-- Scheme Card 2 -->
-                <div class="scheme-card animate-on-load">
-                    <img src="https://picsum.photos/id/20/400/300" alt="PM Jan Dhan Yojana" class="scheme-image" loading="lazy" />
-                    <h3 class="scheme-title">Pradhan Mantri Jan Dhan Yojana</h3>
-                    <p class="scheme-description">Financial inclusion program providing universal access to banking facilities. Offers zero-balance accounts, RuPay debit card, and insurance coverage.</p>
-                    <div class="scheme-meta">
-                        <div class="meta-item eligibility">
-                            <i class="fas fa-check-circle"></i>
-                            <span class="label">Eligibility:</span>
-                            <span class="value">All Indian citizens</span>
-                        </div>
-                        <div class="meta-item">
-                            <i class="far fa-calendar-alt"></i>
-                            <span class="label">Last Date:</span>
-                            <span class="value">Ongoing</span>
-                        </div>
-                    </div>
+                {% empty %}
+                <div class="no-schemes">
+                    <i class="fas fa-hand-holding-heart"></i>
+                    <p>{% trans "No government schemes available at the moment." %}</p>
                 </div>
-
-                <!-- Scheme Card 3 -->
-                <div class="scheme-card animate-on-load">
-                    <img src="https://picsum.photos/id/30/400/300" alt="Digital India" class="scheme-image" loading="lazy" />
-                    <h3 class="scheme-title">Digital India Mission</h3>
-                    <p class="scheme-description">Flagship program to transform India into a digitally empowered society. Promotes digital literacy, e-governance, and online service delivery.</p>
-                    <div class="scheme-meta">
-                        <div class="meta-item eligibility">
-                            <i class="fas fa-check-circle"></i>
-                            <span class="label">Eligibility:</span>
-                            <span class="value">All citizens and businesses</span>
-                        </div>
-                        <div class="meta-item">
-                            <i class="far fa-calendar-alt"></i>
-                            <span class="label">Last Date:</span>
-                            <span class="value">Ongoing</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Scheme Card 4 -->
-                <div class="scheme-card animate-on-load">
-                    <img src="https://picsum.photos/id/40/400/300" alt="PM Mudra Yojana" class="scheme-image" loading="lazy" />
-                    <h3 class="scheme-title">Pradhan Mantri Mudra Yojana</h3>
-                    <p class="scheme-description">Provides micro-loans up to ₹10 lakh to small entrepreneurs and startups. Three categories: Shishu, Kishor, and Tarun based on loan amount.</p>
-                    <div class="scheme-meta">
-                        <div class="meta-item eligibility">
-                            <i class="fas fa-check-circle"></i>
-                            <span class="label">Eligibility:</span>
-                            <span class="value">Small business owners &amp; startups</span>
-                        </div>
-                        <div class="meta-item">
-                            <i class="far fa-calendar-alt"></i>
-                            <span class="label">Last Date:</span>
-                            <span class="value">Ongoing</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Scheme Card 5 -->
-                <div class="scheme-card animate-on-load">
-                    <img src="https://picsum.photos/id/50/400/300" alt="PM Fasal Bima Yojana" class="scheme-image" loading="lazy" />
-                    <h3 class="scheme-title">Pradhan Mantri Fasal Bima Yojana</h3>
-                    <p class="scheme-description">Crop insurance scheme protecting farmers against crop failure due to natural calamities. Provides financial support and risk coverage for agriculture.</p>
-                    <div class="scheme-meta">
-                        <div class="meta-item eligibility">
-                            <i class="fas fa-check-circle"></i>
-                            <span class="label">Eligibility:</span>
-                            <span class="value">All farmers and cultivators</span>
-                        </div>
-                        <div class="meta-item">
-                            <i class="far fa-calendar-alt"></i>
-                            <span class="label">Last Date:</span>
-                            <span class="value">31 Jul 2026</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Scheme Card 6 -->
-                <div class="scheme-card animate-on-load">
-                    <img src="https://picsum.photos/id/60/400/300" alt="PM Skill Development" class="scheme-image" loading="lazy" />
-                    <h3 class="scheme-title">PM Skill Development Program</h3>
-                    <p class="scheme-description">Nationwide skill training initiative providing vocational education to youth. Offers certification, placement assistance, and entrepreneurship support.</p>
-                    <div class="scheme-meta">
-                        <div class="meta-item eligibility">
-                            <i class="fas fa-check-circle"></i>
-                            <span class="label">Eligibility:</span>
-                            <span class="value">Youth aged 18-35 years</span>
-                        </div>
-                        <div class="meta-item">
-                            <i class="far fa-calendar-alt"></i>
-                            <span class="label">Last Date:</span>
-                            <span class="value">Ongoing</span>
-                        </div>
-                    </div>
-                </div>
-
+                {% endfor %}
             </div>
+
+            <!-- ─── Pagination ─── -->
+            {% if schemes_page.has_other_pages %}
+            <div class="pagination-wrap">
+                {% if schemes_page.has_previous %}
+                    <a href="?page={{ schemes_page.previous_page_number }}" class="page-link"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</a>
+                {% else %}
+                    <span class="page-link disabled"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</span>
+                {% endif %}
+
+                {% for num in schemes_page.paginator.page_range %}
+                    {% if schemes_page.number == num %}
+                        <span class="page-link active">{{ num }}</span>
+                    {% elif num > schemes_page.number|add:'-3' and num < schemes_page.number|add:'3' %}
+                        <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if schemes_page.has_next %}
+                    <a href="?page={{ schemes_page.next_page_number }}" class="page-link">{% trans "Next" %} <i class="fas fa-chevron-right"></i></a>
+                {% else %}
+                    <span class="page-link disabled">{% trans "Next" %} <i class="fas fa-chevron-right"></i></span>
+                {% endif %}
+            </div>
+            {% endif %}
 
         </div>
     </section>
@@ -908,14 +816,14 @@
     ================================================================ -->
     <section class="cta-banner animate-on-load" id="contact">
         <div class="container">
-            <h2>Need Help Applying for <span>Schemes?</span></h2>
-            <p>We assist with scheme applications, document verification, and form filling. Let us guide you through the process.</p>
+            <h2>{% trans "Need Help Applying for" %} <span>{% trans "Schemes?" %}</span></h2>
+            <p>{% trans "We assist with scheme applications, document verification, and form filling. Let us guide you through the process." %}</p>
             <div class="cta-buttons">
-                <a href="#" class="btn-primary">
-                    <i class="fas fa-phone"></i> Contact Us
+                <a href="{% url 'home' %}#contact" class="btn-primary">
+                    <i class="fas fa-phone"></i> {% trans "Contact Us" %}
                 </a>
                 <a href="https://wa.me/919876543210?text=Hello%2C%20I%20need%20help%20with%20government%20scheme%20applications." target="_blank" class="btn-whatsapp">
-                    <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+                    <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
                 </a>
             </div>
         </div>
@@ -926,7 +834,7 @@
     ================================================================ -->
     <footer class="footer">
         <div class="container">
-            &copy; 2026 <span>CyberTech</span> — All rights reserved. Built with <i class="fas fa-heart"></i>
+            &copy; 2026 <span>CyberTech</span> — {% trans "All rights reserved." %} {% trans "Built with" %} <i class="fas fa-heart"></i>
         </div>
     </footer>
 {% endblock %}

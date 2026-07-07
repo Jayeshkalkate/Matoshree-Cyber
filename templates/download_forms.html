@@ -104,36 +104,16 @@
             animation: fadeSlideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
 
-        .animate-on-load:nth-child(1) {
-            animation-delay: 0.05s;
-        }
-        .animate-on-load:nth-child(2) {
-            animation-delay: 0.10s;
-        }
-        .animate-on-load:nth-child(3) {
-            animation-delay: 0.15s;
-        }
-        .animate-on-load:nth-child(4) {
-            animation-delay: 0.20s;
-        }
-        .animate-on-load:nth-child(5) {
-            animation-delay: 0.25s;
-        }
-        .animate-on-load:nth-child(6) {
-            animation-delay: 0.30s;
-        }
-        .animate-on-load:nth-child(7) {
-            animation-delay: 0.35s;
-        }
-        .animate-on-load:nth-child(8) {
-            animation-delay: 0.40s;
-        }
-        .animate-on-load:nth-child(9) {
-            animation-delay: 0.45s;
-        }
-        .animate-on-load:nth-child(10) {
-            animation-delay: 0.50s;
-        }
+        .animate-on-load:nth-child(1) { animation-delay: 0.05s; }
+        .animate-on-load:nth-child(2) { animation-delay: 0.10s; }
+        .animate-on-load:nth-child(3) { animation-delay: 0.15s; }
+        .animate-on-load:nth-child(4) { animation-delay: 0.20s; }
+        .animate-on-load:nth-child(5) { animation-delay: 0.25s; }
+        .animate-on-load:nth-child(6) { animation-delay: 0.30s; }
+        .animate-on-load:nth-child(7) { animation-delay: 0.35s; }
+        .animate-on-load:nth-child(8) { animation-delay: 0.40s; }
+        .animate-on-load:nth-child(9) { animation-delay: 0.45s; }
+        .animate-on-load:nth-child(10) { animation-delay: 0.50s; }
 
         @keyframes fadeSlideUp {
             0% {
@@ -238,31 +218,16 @@
 
         /* ---- Pulse keyframes ---- */
         @keyframes pulseGlowCyan {
-            0%,
-            100% {
-                box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(0, 212, 255, 0.8), 0 0 80px rgba(0, 212, 255, 0.3);
-            }
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(0, 212, 255, 0.8), 0 0 80px rgba(0, 212, 255, 0.3); }
         }
         @keyframes pulseGlowPurple {
-            0%,
-            100% {
-                box-shadow: 0 0 20px rgba(180, 74, 255, 0.4);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(180, 74, 255, 0.8), 0 0 80px rgba(180, 74, 255, 0.3);
-            }
+            0%, 100% { box-shadow: 0 0 20px rgba(180, 74, 255, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(180, 74, 255, 0.8), 0 0 80px rgba(180, 74, 255, 0.3); }
         }
         @keyframes pulseGlowGreen {
-            0%,
-            100% {
-                box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(57, 255, 20, 0.7), 0 0 80px rgba(57, 255, 20, 0.2);
-            }
+            0%, 100% { box-shadow: 0 0 20px rgba(57, 255, 20, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(57, 255, 20, 0.7), 0 0 80px rgba(57, 255, 20, 0.2); }
         }
 
         /* ================================================================
@@ -748,18 +713,12 @@
                RESPONSIVE
                ================================================================ */
         @media (max-width: 1024px) {
-            .form-grid {
-                grid-template-columns: 1fr 1fr;
-            }
+            .form-grid { grid-template-columns: 1fr 1fr; }
         }
 
         @media (max-width: 768px) {
-            .navbar .container {
-                flex-wrap: wrap;
-            }
-            .hamburger {
-                display: flex;
-            }
+            .navbar .container { flex-wrap: wrap; }
+            .hamburger { display: flex; }
             .nav-links {
                 display: none;
                 flex-direction: column;
@@ -768,19 +727,11 @@
                 gap: 16px;
                 align-items: center;
             }
-            .nav-links.open {
-                display: flex;
-            }
+            .nav-links.open { display: flex; }
 
-            .page-hero {
-                padding: 50px 0 40px;
-            }
-            .page-hero h1 {
-                font-size: 2.2rem;
-            }
-            .page-hero p {
-                font-size: 1rem;
-            }
+            .page-hero { padding: 50px 0 40px; }
+            .page-hero h1 { font-size: 2.2rem; }
+            .page-hero p { font-size: 1rem; }
 
             .search-wrap {
                 max-width: 100%;
@@ -795,11 +746,7 @@
                 font-size: 0.75rem;
             }
 
-            .form-grid {
-                grid-template-columns: 1fr;
-                gap: 14px;
-            }
-
+            .form-grid { grid-template-columns: 1fr; gap: 14px; }
             .form-card {
                 padding: 14px 16px 14px 18px;
                 flex-wrap: wrap;
@@ -818,12 +765,8 @@
                 padding: 1px 10px;
             }
 
-            .cta-banner {
-                padding: 50px 0;
-            }
-            .cta-banner h2 {
-                font-size: 1.8rem;
-            }
+            .cta-banner { padding: 50px 0; }
+            .cta-banner h2 { font-size: 1.8rem; }
             .cta-banner .cta-buttons {
                 flex-direction: column;
                 align-items: center;
@@ -842,28 +785,16 @@
         }
 
         @media (max-width: 480px) {
-            .page-hero h1 {
-                font-size: 1.8rem;
-            }
-            .form-card {
-                padding: 12px 12px 12px 14px;
-            }
-            .form-card .form-info i {
-                font-size: 1rem;
-            }
-            .form-card .form-name {
-                font-size: 0.8rem;
-            }
+            .page-hero h1 { font-size: 1.8rem; }
+            .form-card { padding: 12px 12px 12px 14px; }
+            .form-card .form-info i { font-size: 1rem; }
+            .form-card .form-name { font-size: 0.8rem; }
             .btn-download {
                 padding: 4px 14px;
                 font-size: 0.7rem;
             }
-            .search-wrap {
-                border-radius: 40px;
-            }
-            .search-wrap input {
-                font-size: 0.85rem;
-            }
+            .search-wrap { border-radius: 40px; }
+            .search-wrap input { font-size: 0.85rem; }
         }
     </style>
 </head>
@@ -878,12 +809,12 @@
     <section class="page-hero animate-on-load">
         <div class="container">
             <div class="breadcrumb">
-                <a href="homepage.html"><i class="fas fa-home"></i> Home</a>
+                <a href="{% url 'home' %}"><i class="fas fa-home"></i> {% trans "Home" %}</a>
                 <span><i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5;"></i></span>
-                <span class="current">Download Forms</span>
+                <span class="current">{% trans "Download Forms" %}</span>
             </div>
-            <h1>Download <span>Government Forms</span></h1>
-            <p>Access and download official forms for various services — fast, secure, and always up-to-date.</p>
+            <h1>{% trans "Download" %} <span>{% trans "Government Forms" %}</span></h1>
+            <p>{% trans "Access and download official forms for various services — fast, secure, and always up-to-date." %}</p>
             <div class="glow-line"></div>
         </div>
     </section>
@@ -898,167 +829,56 @@
             <div class="search-wrap animate-on-load" id="searchWrap">
                 <i class="fas fa-search"></i>
                 <input
-                type="text"
-                id="searchInput"
-                placeholder="Search forms by name..."
-                aria-label="Search forms"
+                    type="text"
+                    id="searchInput"
+                    placeholder="{% trans "Search forms by name..." %}"
+                    aria-label="{% trans "Search forms" %}"
                 />
-                <button class="clear-btn" id="searchClear" aria-label="Clear search">
-                    <i class="fas fa-times"></i> Clear
+                <button class="clear-btn" id="searchClear" aria-label="{% trans "Clear search" %}">
+                    <i class="fas fa-times"></i> {% trans "Clear" %}
                 </button>
             </div>
 
-            <!-- ─── Form Grid ─── -->
+            <!-- ─── Form Grid (DYNAMIC) ─── -->
             <div class="form-grid" id="formGrid">
-                <!-- Each card gets 'animate-on-load' for staggered fade-in -->
-                <div class="form-card animate-on-load" data-form="aadhaar enrollment correction">
+                {% for form in forms_list %}
+                <div class="form-card animate-on-load" data-form="{{ form.title|lower }}">
                     <div class="form-info">
-                        <i class="fas fa-id-card"></i>
-                        <span class="form-name">Aadhaar Enrollment / Correction Form</span>
+                        <i class="fas fa-file-pdf"></i>
+                        <span class="form-name">{{ form.title }}</span>
                     </div>
-                    <span class="form-category">Identity</span>
-                    <a href="#" class="btn-download" download>
-                        <i class="fas fa-download"></i> PDF
+                    <span class="form-category">{{ form.category|default:_("General") }}</span>
+                    <a href="{{ form.pdf.url }}" target="_blank" class="btn-download" download>
+                        <i class="fas fa-download"></i> {% trans "PDF" %}
                     </a>
                 </div>
-
-                <div class="form-card animate-on-load" data-form="pan card application">
-                    <div class="form-info">
-                        <i class="fas fa-credit-card"></i>
-                        <span class="form-name">PAN Card Application Form</span>
-                    </div>
-                    <span class="form-category">Tax</span>
-                    <a href="#" class="btn-download" download>
-                        <i class="fas fa-download"></i> PDF
-                    </a>
+                {% empty %}
+                <div class="no-results" style="display: block;">
+                    <i class="fas fa-file-alt"></i>
+                    <p>{% trans "No forms available at the moment." %}</p>
                 </div>
-
-                <div class="form-card animate-on-load" data-form="passport application">
-                    <div class="form-info">
-                        <i class="fas fa-passport"></i>
-                        <span class="form-name">Passport Application Form</span>
-                    </div>
-                    <span class="form-category">Travel</span>
-                    <a href="#" class="btn-download" download>
-                        <i class="fas fa-download"></i> PDF
-                    </a>
-                </div>
-
-                <div class="form-card animate-on-load" data-form="income tax return itr">
-                    <div class="form-info">
-                        <i class="fas fa-file-invoice"></i>
-                        <span class="form-name">Income Tax Return (ITR) Form</span>
-                    </div>
-                    <span class="form-category">Tax</span>
-                    <a href="#" class="btn-download" download>
-                        <i class="fas fa-download"></i> PDF
-                    </a>
-                </div>
-
-                <div class="form-card animate-on-load" data-form="voter id registration">
-                    <div class="form-info">
-                        <i class="fas fa-check-circle"></i>
-                        <span class="form-name">Voter ID Registration Form</span>
-                    </div>
-                    <span class="form-category">Identity</span>
-                    <a href="#" class="btn-download" download>
-                        <i class="fas fa-download"></i> PDF
-                    </a>
-                </div>
-
-                <div class="form-card animate-on-load" data-form="driving license application">
-                    <div class="form-info">
-                        <i class="fas fa-car"></i>
-                        <span class="form-name">Driving License Application</span>
-                    </div>
-                    <span class="form-category">Transport</span>
-                    <a href="#" class="btn-download" download>
-                        <i class="fas fa-download"></i> PDF
-                    </a>
-                </div>
-
-                <div class="form-card animate-on-load" data-form="birth certificate">
-                    <div class="form-info">
-                        <i class="fas fa-baby"></i>
-                        <span class="form-name">Birth Certificate Application</span>
-                    </div>
-                    <span class="form-category">Civil</span>
-                    <a href="#" class="btn-download" download>
-                        <i class="fas fa-download"></i> PDF
-                    </a>
-                </div>
-
-                <div class="form-card animate-on-load" data-form="death certificate">
-                    <div class="form-info">
-                        <i class="fas fa-heartbeat"></i>
-                        <span class="form-name">Death Certificate Application</span>
-                    </div>
-                    <span class="form-category">Civil</span>
-                    <a href="#" class="btn-download" download>
-                        <i class="fas fa-download"></i> PDF
-                    </a>
-                </div>
-
-                <div class="form-card animate-on-load" data-form="gst registration">
-                    <div class="form-info">
-                        <i class="fas fa-building"></i>
-                        <span class="form-name">GST Registration Form</span>
-                    </div>
-                    <span class="form-category">Business</span>
-                    <a href="#" class="btn-download" download>
-                        <i class="fas fa-download"></i> PDF
-                    </a>
-                </div>
-
-                <div class="form-card animate-on-load" data-form="ration card">
-                    <div class="form-info">
-                        <i class="fas fa-utensils"></i>
-                        <span class="form-name">Ration Card Application</span>
-                    </div>
-                    <span class="form-category">Food</span>
-                    <a href="#" class="btn-download" download>
-                        <i class="fas fa-download"></i> PDF
-                    </a>
-                </div>
-
-                <div class="form-card animate-on-load" data-form="caste certificate">
-                    <div class="form-info">
-                        <i class="fas fa-users"></i>
-                        <span class="form-name">Caste Certificate Application</span>
-                    </div>
-                    <span class="form-category">Identity</span>
-                    <a href="#" class="btn-download" download>
-                        <i class="fas fa-download"></i> PDF
-                    </a>
-                </div>
-
-                <div class="form-card animate-on-load" data-form="income certificate">
-                    <div class="form-info">
-                        <i class="fas fa-wallet"></i>
-                        <span class="form-name">Income Certificate Application</span>
-                    </div>
-                    <span class="form-category">Civil</span>
-                    <a href="#" class="btn-download" download>
-                        <i class="fas fa-download"></i> PDF
-                    </a>
-                </div>
+                {% endfor %}
             </div>
 
-            <!-- ─── No Results ─── -->
+            <!-- ─── No Results (filter) ─── -->
             <div class="no-results" id="noResults">
                 <i class="fas fa-file-alt"></i>
-                <p>No forms match your search.</p>
+                <p>{% trans "No forms match your search." %}</p>
             </div>
 
             <!-- ─── Footer Note ─── -->
             <div class="footer-note animate-on-load">
                 <span>
                     <i class="fas fa-check-circle" style="color: #39ff14;"></i>
-                    All forms are official and up-to-date.
+                    {% trans "All forms are official and up-to-date." %}
                 </span>
                 <span class="badge">
                     <i class="far fa-clock"></i>
-                    Updated: June 2026
+                    {% blocktrans count counter=forms_list|length trimmed %}
+                        {{ counter }} form available
+                    {% plural %}
+                        {{ counter }} forms available
+                    {% endblocktrans %}
                 </span>
             </div>
 
@@ -1070,14 +890,14 @@
     ================================================================ -->
     <section class="cta-banner animate-on-load" id="contact">
         <div class="container">
-            <h2>Need Assistance with <span>Forms?</span></h2>
-            <p>We're here to help you fill, print, and submit your documents with ease.</p>
+            <h2>{% trans "Need Assistance with" %} <span>{% trans "Forms?" %}</span></h2>
+            <p>{% trans "We're here to help you fill, print, and submit your documents with ease." %}</p>
             <div class="cta-buttons">
-                <a href="#" class="btn-primary">
-                    <i class="fas fa-phone"></i> Contact Us
+                <a href="{% url 'home' %}#contact" class="btn-primary">
+                    <i class="fas fa-phone"></i> {% trans "Contact Us" %}
                 </a>
                 <a href="https://wa.me/919876543210?text=Hello%2C%20I%20need%20help%20with%20government%20forms." target="_blank" class="btn-whatsapp">
-                    <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+                    <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
                 </a>
             </div>
         </div>
@@ -1088,7 +908,7 @@
     ================================================================ -->
     <footer class="footer">
         <div class="container">
-            &copy; 2026 <span>CyberTech</span> — All rights reserved. Built with <i class="fas fa-heart"></i>
+            &copy; 2026 <span>CyberTech</span> — {% trans "All rights reserved." %} {% trans "Built with" %} <i class="fas fa-heart"></i>
         </div>
     </footer>
 {% endblock %}
@@ -1134,6 +954,14 @@
             const clearBtn = document.getElementById('searchClear');
             const formCards = document.querySelectorAll('.form-card');
             const noResults = document.getElementById('noResults');
+
+            // If no cards, hide the search bar and show no results
+            if (formCards.length === 0) {
+                document.getElementById('searchWrap').style.display = 'none';
+                noResults.style.display = 'block';
+                noResults.innerHTML = '<i class="fas fa-file-alt"></i><p>{% trans "No forms available at the moment."|escapejs %}</p>';
+                return;
+            }
 
             function filterForms(query) {
                 const q = query.trim().toLowerCase();

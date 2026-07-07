@@ -168,6 +168,63 @@
     text-shadow: 0 0 20px rgba(255, 45, 149, 0.3);
   }
 
+  /* ---- Pagination (neon-styled) ---- */
+  .pagination-wrap {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 2.5rem;
+    flex-wrap: wrap;
+  }
+  .pagination-wrap .page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: var(--transition);
+    text-decoration: none;
+    min-width: 44px;
+  }
+  .pagination-wrap .page-link:hover {
+    background: rgba(0, 240, 255, 0.08);
+    border-color: var(--neon-cyan);
+    color: var(--text-white);
+    box-shadow: var(--glow-cyan);
+    transform: translateY(-2px);
+  }
+  .pagination-wrap .page-link.active {
+    background: var(--neon-cyan);
+    color: var(--bg-primary);
+    border-color: var(--neon-cyan);
+    box-shadow: var(--glow-cyan);
+  }
+  .pagination-wrap .page-link.disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  /* ---- Total count badge ---- */
+  .total-badge {
+    display: inline-block;
+    margin-top: 12px;
+    background: rgba(0, 240, 255, 0.08);
+    color: var(--neon-cyan);
+    padding: 4px 18px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    border: 1px solid rgba(0, 240, 255, 0.1);
+  }
+  .total-badge i {
+    margin-right: 6px;
+  }
+
   /* ---- Disclaimer (glassmorphism) ---- */
   .disclaimer {
     padding: 40px 0 60px;
@@ -430,7 +487,7 @@
 </section>
 
 <!-- ================================================================
-     DOCUMENTS TABLE – Glassmorphism with hover glow
+     DOCUMENTS TABLE – Glassmorphism with hover glow (DYNAMIC)
      ================================================================ -->
 <section class="docs-section reveal">
   <div class="container">
@@ -443,7 +500,7 @@
           </tr>
         </thead>
         <tbody>
-          {% for doc in documents %}
+          {% for doc in documents_page %}
           <tr>
             <td class="service-name">{{ doc.service.name }}</td>
             <td class="doc-name">
@@ -460,6 +517,46 @@
         </tbody>
       </table>
     </div>
+
+    <!-- Total count badge -->
+    {% if documents_page.paginator.count > 0 %}
+    <div style="text-align: center; margin-top: 1.5rem;">
+      <span class="total-badge">
+        <i class="fas fa-file-alt"></i>
+        {% blocktrans count counter=documents_page.paginator.count trimmed %}
+          {{ counter }} document listed
+        {% plural %}
+          {{ counter }} documents listed
+        {% endblocktrans %}
+      </span>
+    </div>
+    {% endif %}
+
+    <!-- Pagination Controls -->
+    {% if documents_page.has_other_pages %}
+    <div class="pagination-wrap">
+      {% if documents_page.has_previous %}
+        <a href="?page={{ documents_page.previous_page_number }}" class="page-link"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</a>
+      {% else %}
+        <span class="page-link disabled"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</span>
+      {% endif %}
+
+      {% for num in documents_page.paginator.page_range %}
+        {% if documents_page.number == num %}
+          <span class="page-link active">{{ num }}</span>
+        {% elif num > documents_page.number|add:'-3' and num < documents_page.number|add:'3' %}
+          <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if documents_page.has_next %}
+        <a href="?page={{ documents_page.next_page_number }}" class="page-link">{% trans "Next" %} <i class="fas fa-chevron-right"></i></a>
+      {% else %}
+        <span class="page-link disabled">{% trans "Next" %} <i class="fas fa-chevron-right"></i></span>
+      {% endif %}
+    </div>
+    {% endif %}
+
   </div>
 </section>
 

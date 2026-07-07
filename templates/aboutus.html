@@ -861,7 +861,7 @@
 </section>
 
 <!-- ================================================================
-     SERVICES OVERVIEW – Grid of offered services
+     SERVICES OVERVIEW – Grid of offered services (DYNAMIC)
      ================================================================ -->
 <section class="services-list reveal">
   <div class="container">
@@ -870,76 +870,22 @@
       <p>{% trans "Everything you need, all under one roof — from government applications to document services." %}</p>
     </div>
     <div class="services-grid-about">
+      {% for service in services %}
       <div class="service-about-item">
-        <i class="fas fa-file-alt"></i>
-        <span>{% trans "Online Government Applications" %}</span>
+        <i class="fas fa-{{ service.icon|default:'cog' }}"></i>
+        <span>{{ service.name }}</span>
       </div>
-      <div class="service-about-item">
-        <i class="fas fa-id-card"></i>
-        <span>{% trans "Aadhaar Assistance" %}</span>
-      </div>
-      <div class="service-about-item">
-        <i class="fas fa-credit-card"></i>
-        <span>{% trans "PAN Card Services" %}</span>
-      </div>
-      <div class="service-about-item">
-        <i class="fas fa-passport"></i>
-        <span>{% trans "Passport Application Support" %}</span>
-      </div>
-      <div class="service-about-item">
-        <i class="fas fa-print"></i>
-        <span>{% trans "Printing (B&amp;W &amp; Color)" %}</span>
-      </div>
-      <div class="service-about-item">
-        <i class="fas fa-copy"></i>
-        <span>{% trans "Photocopy (Xerox)" %}</span>
-      </div>
-      <div class="service-about-item">
-        <i class="fas fa-scan"></i>
-        <span>{% trans "Document Scanning" %}</span>
-      </div>
-      <div class="service-about-item">
-        <i class="fas fa-envelope"></i>
-        <span>{% trans "Email &amp; Internet Services" %}</span>
-      </div>
-      <div class="service-about-item">
-        <i class="fas fa-file-pdf"></i>
-        <span>{% trans "Resume / Biodata Creation" %}</span>
-      </div>
-      <div class="service-about-item">
-        <i class="fas fa-layer-group"></i>
-        <span>{% trans "Lamination" %}</span>
-      </div>
-      <div class="service-about-item">
-        <i class="fas fa-camera"></i>
-        <span>{% trans "Passport-size Photo Printing" %}</span>
-      </div>
-      <div class="service-about-item">
-        <i class="fas fa-credit-card"></i>
-        <span>{% trans "Online Bill Payments" %}</span>
-      </div>
-      <div class="service-about-item">
-        <i class="fas fa-graduation-cap"></i>
-        <span>{% trans "Exam &amp; Admission Form Filling" %}</span>
-      </div>
-      <div class="service-about-item">
-        <i class="fas fa-file-signature"></i>
-        <span>{% trans "Document Attestation &amp; Notary" %}</span>
-      </div>
-      <div class="service-about-item">
-        <i class="fas fa-mobile-alt"></i>
-        <span>{% trans "Digital Signature &amp; e-Sign" %}</span>
-      </div>
-      <div class="service-about-item">
-        <i class="fas fa-cloud-upload-alt"></i>
-        <span>{% trans "Cloud Storage &amp; Data Transfer" %}</span>
-      </div>
+      {% empty %}
+      <p style="grid-column: 1 / -1; text-align: center; color: var(--text-muted);">
+        {% trans "No services available at the moment." %}
+      </p>
+      {% endfor %}
     </div>
   </div>
 </section>
 
 <!-- ================================================================
-     PRICING SECTION – Pricing cards with neon hover effect
+     PRICING SECTION – Pricing cards with neon hover effect (DYNAMIC)
      ================================================================ -->
 <section class="pricing-section reveal">
   <div class="container">
@@ -948,45 +894,25 @@
       <p>{% trans "Choose a plan that fits your needs. All plans include our core services with transparent pricing." %}</p>
     </div>
     <div class="pricing-grid">
-      <!-- Basic Plan -->
-      <div class="pricing-card">
-        <div class="plan-name">{% trans "Basic" %}</div>
-        <div class="price">₹99 <span>/ {% trans "session" %}</span></div>
+      {% for charge in charges %}
+      <div class="pricing-card {% if forloop.counter == 2 %}style="border-color: rgba(0, 240, 255, 0.15);"{% endif %}">
+        <div class="plan-name">{{ charge.service.name }}</div>
+        <div class="price">₹{{ charge.charge }} <span>/ {% trans "session" %}</span></div>
         <ul class="features">
-          <li><i class="fas fa-check"></i> {% trans "Printing (10 pages B&W)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Photocopy (10 pages)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Email & Internet (30 min)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Document Scanning (5 pages)" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Standard service" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Expert assistance" %}</li>
         </ul>
-        <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Get Started" %}</a>
+        <a href="{% url 'appointment' %}" class="btn-primary {% if forloop.counter == 2 %}pulse{% endif %}">
+          {% if forloop.counter == 1 %}{% trans "Get Started" %}
+          {% elif forloop.counter == 2 %}{% trans "Choose Plan" %}
+          {% else %}{% trans "Go Premium" %}{% endif %}
+        </a>
       </div>
-      <!-- Standard Plan -->
-      <div class="pricing-card" style="border-color: rgba(0, 240, 255, 0.15);">
-        <div class="plan-name">{% trans "Standard" %}</div>
-        <div class="price">₹199 <span>/ {% trans "session" %}</span></div>
-        <ul class="features">
-          <li><i class="fas fa-check"></i> {% trans "Printing (30 pages B&W / 10 color)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Photocopy (30 pages)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Email & Internet (60 min)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Document Scanning (15 pages)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Passport-size photos (4 copies)" %}</li>
-        </ul>
-        <a href="{% url 'appointment' %}" class="btn-primary pulse">{% trans "Choose Plan" %}</a>
-      </div>
-      <!-- Premium Plan -->
-      <div class="pricing-card">
-        <div class="plan-name">{% trans "Premium" %}</div>
-        <div class="price">₹299 <span>/ {% trans "session" %}</span></div>
-        <ul class="features">
-          <li><i class="fas fa-check"></i> {% trans "Printing (50 pages B&W / 20 color)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Photocopy (50 pages)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Email & Internet (90 min)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Document Scanning (30 pages)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Passport-size photos (8 copies)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Priority service & support" %}</li>
-        </ul>
-        <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Go Premium" %}</a>
-      </div>
+      {% empty %}
+      <p style="grid-column: 1 / -1; text-align: center; color: var(--text-muted);">
+        {% trans "No pricing plans available." %}
+      </p>
+      {% endfor %}
     </div>
   </div>
 </section>

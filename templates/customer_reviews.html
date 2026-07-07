@@ -106,42 +106,18 @@
             animation: fadeSlideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
 
-        .animate-on-load:nth-child(1) {
-            animation-delay: 0.05s;
-        }
-        .animate-on-load:nth-child(2) {
-            animation-delay: 0.10s;
-        }
-        .animate-on-load:nth-child(3) {
-            animation-delay: 0.15s;
-        }
-        .animate-on-load:nth-child(4) {
-            animation-delay: 0.20s;
-        }
-        .animate-on-load:nth-child(5) {
-            animation-delay: 0.25s;
-        }
-        .animate-on-load:nth-child(6) {
-            animation-delay: 0.30s;
-        }
-        .animate-on-load:nth-child(7) {
-            animation-delay: 0.35s;
-        }
-        .animate-on-load:nth-child(8) {
-            animation-delay: 0.40s;
-        }
-        .animate-on-load:nth-child(9) {
-            animation-delay: 0.45s;
-        }
-        .animate-on-load:nth-child(10) {
-            animation-delay: 0.50s;
-        }
-        .animate-on-load:nth-child(11) {
-            animation-delay: 0.55s;
-        }
-        .animate-on-load:nth-child(12) {
-            animation-delay: 0.60s;
-        }
+        .animate-on-load:nth-child(1) { animation-delay: 0.05s; }
+        .animate-on-load:nth-child(2) { animation-delay: 0.10s; }
+        .animate-on-load:nth-child(3) { animation-delay: 0.15s; }
+        .animate-on-load:nth-child(4) { animation-delay: 0.20s; }
+        .animate-on-load:nth-child(5) { animation-delay: 0.25s; }
+        .animate-on-load:nth-child(6) { animation-delay: 0.30s; }
+        .animate-on-load:nth-child(7) { animation-delay: 0.35s; }
+        .animate-on-load:nth-child(8) { animation-delay: 0.40s; }
+        .animate-on-load:nth-child(9) { animation-delay: 0.45s; }
+        .animate-on-load:nth-child(10) { animation-delay: 0.50s; }
+        .animate-on-load:nth-child(11) { animation-delay: 0.55s; }
+        .animate-on-load:nth-child(12) { animation-delay: 0.60s; }
 
         @keyframes fadeSlideUp {
             0% {
@@ -270,40 +246,20 @@
 
         /* ---- Pulse keyframes ---- */
         @keyframes pulseGlowCyan {
-            0%,
-            100% {
-                box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(0, 212, 255, 0.8), 0 0 80px rgba(0, 212, 255, 0.3);
-            }
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(0, 212, 255, 0.8), 0 0 80px rgba(0, 212, 255, 0.3); }
         }
         @keyframes pulseGlowPurple {
-            0%,
-            100% {
-                box-shadow: 0 0 20px rgba(180, 74, 255, 0.4);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(180, 74, 255, 0.8), 0 0 80px rgba(180, 74, 255, 0.3);
-            }
+            0%, 100% { box-shadow: 0 0 20px rgba(180, 74, 255, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(180, 74, 255, 0.8), 0 0 80px rgba(180, 74, 255, 0.3); }
         }
         @keyframes pulseGlowGreen {
-            0%,
-            100% {
-                box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(57, 255, 20, 0.7), 0 0 80px rgba(57, 255, 20, 0.2);
-            }
+            0%, 100% { box-shadow: 0 0 20px rgba(57, 255, 20, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(57, 255, 20, 0.7), 0 0 80px rgba(57, 255, 20, 0.2); }
         }
         @keyframes pulseGlowYellow {
-            0%,
-            100% {
-                box-shadow: 0 0 20px rgba(255, 230, 0, 0.3);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(255, 230, 0, 0.7), 0 0 80px rgba(255, 230, 0, 0.2);
-            }
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 230, 0, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(255, 230, 0, 0.7), 0 0 80px rgba(255, 230, 0, 0.2); }
         }
 
         /* ================================================================
@@ -882,6 +838,47 @@
             border-left-color: var(--accent);
         }
 
+        /* ─── Pagination ─── */
+        .pagination-wrap {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 32px;
+            flex-wrap: wrap;
+        }
+        .pagination-wrap .page-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 16px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: var(--gray-dark);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            text-decoration: none;
+            min-width: 44px;
+        }
+        .pagination-wrap .page-link:hover {
+            background: rgba(0, 212, 255, 0.08);
+            border-color: var(--secondary);
+            color: var(--white);
+            box-shadow: var(--glow-secondary);
+            transform: translateY(-2px);
+        }
+        .pagination-wrap .page-link.active {
+            background: var(--secondary);
+            color: var(--primary);
+            border-color: var(--secondary);
+            box-shadow: var(--glow-secondary);
+        }
+        .pagination-wrap .page-link.disabled {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
         /* ─── Footer Note ─── */
         .footer-note {
             margin-top: 32px;
@@ -989,18 +986,12 @@
                RESPONSIVE
                ================================================================ */
         @media (max-width: 1024px) {
-            .reviews-grid {
-                grid-template-columns: 1fr 1fr;
-            }
+            .reviews-grid { grid-template-columns: 1fr 1fr; }
         }
 
         @media (max-width: 768px) {
-            .navbar .container {
-                flex-wrap: wrap;
-            }
-            .hamburger {
-                display: flex;
-            }
+            .navbar .container { flex-wrap: wrap; }
+            .hamburger { display: flex; }
             .nav-links {
                 display: none;
                 flex-direction: column;
@@ -1009,19 +1000,11 @@
                 gap: 16px;
                 align-items: center;
             }
-            .nav-links.open {
-                display: flex;
-            }
+            .nav-links.open { display: flex; }
 
-            .page-hero {
-                padding: 50px 0 40px;
-            }
-            .page-hero h1 {
-                font-size: 2.2rem;
-            }
-            .page-hero p {
-                font-size: 1rem;
-            }
+            .page-hero { padding: 50px 0 40px; }
+            .page-hero h1 { font-size: 2.2rem; }
+            .page-hero p { font-size: 1rem; }
 
             .rating-summary {
                 flex-direction: column;
@@ -1029,63 +1012,33 @@
                 gap: 16px;
                 padding: 20px;
             }
-            .rating-big {
-                justify-content: center;
-            }
-            .rating-number {
-                font-size: 2.6rem;
-            }
-            .rating-bars {
-                min-width: unset;
-            }
+            .rating-big { justify-content: center; }
+            .rating-number { font-size: 2.6rem; }
+            .rating-bars { min-width: unset; }
 
             .filter-row {
                 flex-direction: column;
                 align-items: stretch;
                 gap: 8px;
             }
-            .sort-options {
-                flex-wrap: wrap;
-            }
+            .sort-options { flex-wrap: wrap; }
 
-            .reviews-grid {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
-
-            .review-card {
-                padding: 18px 18px 16px;
-            }
+            .reviews-grid { grid-template-columns: 1fr; gap: 16px; }
+            .review-card { padding: 18px 18px 16px; }
             .review-card .review-footer {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 4px;
             }
 
-            .submit-section {
-                padding: 20px 16px;
-            }
-            .submit-section h2 {
-                font-size: 1.3rem;
-            }
-            .review-form {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-            .review-form .full-width {
-                grid-column: 1;
-            }
-            .btn-submit {
-                width: 100%;
-                justify-content: center;
-            }
+            .submit-section { padding: 20px 16px; }
+            .submit-section h2 { font-size: 1.3rem; }
+            .review-form { grid-template-columns: 1fr; gap: 12px; }
+            .review-form .full-width { grid-column: 1; }
+            .btn-submit { width: 100%; justify-content: center; }
 
-            .cta-banner {
-                padding: 50px 0;
-            }
-            .cta-banner h2 {
-                font-size: 1.8rem;
-            }
+            .cta-banner { padding: 50px 0; }
+            .cta-banner h2 { font-size: 1.8rem; }
             .cta-banner .cta-buttons {
                 flex-direction: column;
                 align-items: center;
@@ -1104,24 +1057,12 @@
         }
 
         @media (max-width: 480px) {
-            .page-hero h1 {
-                font-size: 1.8rem;
-            }
-            .rating-number {
-                font-size: 2.2rem;
-            }
-            .rating-stars-big .stars {
-                font-size: 1.2rem;
-            }
-            .review-card .stars {
-                font-size: 1rem;
-            }
-            .review-card .review-text {
-                font-size: 0.9rem;
-            }
-            .star-select .star-option {
-                font-size: 1.6rem;
-            }
+            .page-hero h1 { font-size: 1.8rem; }
+            .rating-number { font-size: 2.2rem; }
+            .rating-stars-big .stars { font-size: 1.2rem; }
+            .review-card .stars { font-size: 1rem; }
+            .review-card .review-text { font-size: 0.9rem; }
+            .star-select .star-option { font-size: 1.6rem; }
         }
     </style>
 </head>
@@ -1136,12 +1077,12 @@
     <section class="page-hero animate-on-load">
         <div class="container">
             <div class="breadcrumb">
-                <a href="homepage.html"><i class="fas fa-home"></i> Home</a>
+                <a href="{% url 'home' %}"><i class="fas fa-home"></i> {% trans "Home" %}</a>
                 <span><i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5;"></i></span>
-                <span class="current">Customer Reviews</span>
+                <span class="current">{% trans "Customer Reviews" %}</span>
             </div>
-            <h1><i class="fas fa-star"></i> Customer <span>Reviews</span></h1>
-            <p>Real feedback from customers who have used our services. See why they trust us.</p>
+            <h1><i class="fas fa-star"></i> {% trans "Customer" %} <span>{% trans "Reviews" %}</span></h1>
+            <p>{% trans "Real feedback from customers who have used our services. See why they trust us." %}</p>
             <div class="glow-line"></div>
         </div>
     </section>
@@ -1152,7 +1093,7 @@
     <section class="reviews-page" id="reviews">
         <div class="container">
 
-            <!-- ─── RATING SUMMARY ─── -->
+            <!-- ─── RATING SUMMARY (Static) ─── -->
             <div class="rating-summary animate-on-load">
                 <div class="rating-big">
                     <div class="rating-number">
@@ -1166,7 +1107,7 @@
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star-half-alt"></i>
                         </div>
-                        <span class="count">Based on <strong>128</strong> customer reviews</span>
+                        <span class="count">{% blocktrans with total=reviews_page.paginator.count %}Based on <strong>{{ total }}</strong> customer reviews{% endblocktrans %}</span>
                     </div>
                 </div>
 
@@ -1202,195 +1143,132 @@
             <!-- ─── FILTER / SORT ─── -->
             <div class="filter-row animate-on-load">
                 <span class="reviews-count">
-                    <strong>12</strong> customer reviews
+                    {% blocktrans count counter=reviews_page.paginator.count trimmed %}
+                        <strong>{{ counter }}</strong> customer review
+                    {% plural %}
+                        <strong>{{ counter }}</strong> customer reviews
+                    {% endblocktrans %}
                 </span>
                 <div class="sort-options">
-                    <button class="sort-btn active" data-sort="newest"><i class="far fa-clock"></i> Newest</button>
-                    <button class="sort-btn" data-sort="highest"><i class="fas fa-sort-amount-down"></i> Highest</button>
-                    <button class="sort-btn" data-sort="lowest"><i class="fas fa-sort-amount-up"></i> Lowest</button>
+                    <button class="sort-btn active" data-sort="newest"><i class="far fa-clock"></i> {% trans "Newest" %}</button>
+                    <button class="sort-btn" data-sort="highest"><i class="fas fa-sort-amount-down"></i> {% trans "Highest" %}</button>
+                    <button class="sort-btn" data-sort="lowest"><i class="fas fa-sort-amount-up"></i> {% trans "Lowest" %}</button>
                 </div>
             </div>
 
-            <!-- ─── REVIEWS GRID ─── -->
+            <!-- ─── REVIEWS GRID (DYNAMIC) ─── -->
             <div class="reviews-grid" id="reviewsGrid">
-
-                <!-- Review Card 1 -->
-                <div class="review-card animate-on-load" data-rating="5" data-date="2026-06-15">
+                {% for review in reviews_page %}
+                <div class="review-card animate-on-load" data-rating="{{ review.rating }}" data-date="{{ review.created_at|date:'Y-m-d' }}">
                     <div class="stars">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        {% for i in "12345"|make_list %}
+                            {% if forloop.counter <= review.rating %}
+                                <i class="fas fa-star"></i>
+                            {% else %}
+                                <i class="fas fa-star empty-star"></i>
+                            {% endif %}
+                        {% endfor %}
                     </div>
-                    <p class="review-text">"Absolutely fantastic service! Got my Aadhaar updated in under 10 minutes. The staff was super helpful and professional. Highly recommend CyberTech!"</p>
+                    <p class="review-text">"{{ review.review }}"</p>
                     <div class="review-footer">
                         <span class="customer-name">
-                            <span class="initials">AK</span>
-                            Arjun Kumar
-                            <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>
+                            <span class="initials">{{ review.customer_name|slice:":2"|upper }}</span>
+                            {{ review.customer_name }}
+                            {% if review.approved %}
+                            <span class="verified-badge"><i class="fas fa-check-circle"></i> {% trans "Verified" %}</span>
+                            {% endif %}
                         </span>
-                        <span class="review-date"><i class="far fa-calendar-alt"></i> 15 Jun 2026</span>
+                        <span class="review-date"><i class="far fa-calendar-alt"></i> {{ review.created_at|date:"d M Y" }}</span>
                     </div>
                 </div>
-
-                <!-- Review Card 2 -->
-                <div class="review-card animate-on-load" data-rating="4" data-date="2026-06-12">
-                    <div class="stars">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star empty-star"></i>
-                    </div>
-                    <p class="review-text">"Great place for passport photos and printing. The quality is excellent and the prices are reasonable. Will definitely visit again."</p>
-                    <div class="review-footer">
-                        <span class="customer-name">
-                            <span class="initials">SM</span>
-                            Sneha Mehta
-                            <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>
-                        </span>
-                        <span class="review-date"><i class="far fa-calendar-alt"></i> 12 Jun 2026</span>
-                    </div>
+                {% empty %}
+                <div style="grid-column: 1/-1; text-align: center; padding: 3rem 0; color: var(--gray-dark);">
+                    <i class="fas fa-star" style="font-size: 3rem; display: block; margin-bottom: 0.5rem; opacity: 0.3;"></i>
+                    {% trans "No customer reviews yet. Be the first to share your experience!" %}
                 </div>
-
-                <!-- Review Card 3 -->
-                <div class="review-card animate-on-load" data-rating="5" data-date="2026-06-10">
-                    <div class="stars">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                    </div>
-                    <p class="review-text">"Best cyber cafe in town! They helped me with my PAN card application and it was processed smoothly. Very professional and trustworthy."</p>
-                    <div class="review-footer">
-                        <span class="customer-name">
-                            <span class="initials">RP</span>
-                            Rajesh Patil
-                            <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>
-                        </span>
-                        <span class="review-date"><i class="far fa-calendar-alt"></i> 10 Jun 2026</span>
-                    </div>
-                </div>
-
-                <!-- Review Card 4 -->
-                <div class="review-card animate-on-load" data-rating="5" data-date="2026-06-08">
-                    <div class="stars">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                    </div>
-                    <p class="review-text">"I needed urgent lamination for my documents and they delivered in 15 minutes. The quality was top-notch. Thank you CyberTech!"</p>
-                    <div class="review-footer">
-                        <span class="customer-name">
-                            <span class="initials">PD</span>
-                            Priya Desai
-                            <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>
-                        </span>
-                        <span class="review-date"><i class="far fa-calendar-alt"></i> 08 Jun 2026</span>
-                    </div>
-                </div>
-
-                <!-- Review Card 5 -->
-                <div class="review-card animate-on-load" data-rating="3" data-date="2026-06-05">
-                    <div class="stars">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star empty-star"></i><i class="fas fa-star empty-star"></i>
-                    </div>
-                    <p class="review-text">"Good service overall but the wait time was a bit long during peak hours. However, the staff was courteous and the work was done properly."</p>
-                    <div class="review-footer">
-                        <span class="customer-name">
-                            <span class="initials">AM</span>
-                            Amit Mishra
-                        </span>
-                        <span class="review-date"><i class="far fa-calendar-alt"></i> 05 Jun 2026</span>
-                    </div>
-                </div>
-
-                <!-- Review Card 6 -->
-                <div class="review-card animate-on-load" data-rating="5" data-date="2026-06-02">
-                    <div class="stars">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                    </div>
-                    <p class="review-text">"Excellent service! They helped me with my income tax filing and explained everything clearly. Very knowledgeable team. 5 stars!"</p>
-                    <div class="review-footer">
-                        <span class="customer-name">
-                            <span class="initials">NR</span>
-                            Neha Reddy
-                            <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>
-                        </span>
-                        <span class="review-date"><i class="far fa-calendar-alt"></i> 02 Jun 2026</span>
-                    </div>
-                </div>
-
-                <!-- Review Card 7 -->
-                <div class="review-card animate-on-load" data-rating="4" data-date="2026-05-28">
-                    <div class="stars">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star empty-star"></i>
-                    </div>
-                    <p class="review-text">"Great place for all cyber needs. The printing quality is excellent and they have very reasonable rates for bulk orders."</p>
-                    <div class="review-footer">
-                        <span class="customer-name">
-                            <span class="initials">VS</span>
-                            Vikram Singh
-                            <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>
-                        </span>
-                        <span class="review-date"><i class="far fa-calendar-alt"></i> 28 May 2026</span>
-                    </div>
-                </div>
-
-                <!-- Review Card 8 -->
-                <div class="review-card animate-on-load" data-rating="5" data-date="2026-05-25">
-                    <div class="stars">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                    </div>
-                    <p class="review-text">"I've been coming here for years. Always reliable, always friendly. The best cyber cafe in the area. Highly recommend to everyone!"</p>
-                    <div class="review-footer">
-                        <span class="customer-name">
-                            <span class="initials">DJ</span>
-                            Deepak Jain
-                            <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>
-                        </span>
-                        <span class="review-date"><i class="far fa-calendar-alt"></i> 25 May 2026</span>
-                    </div>
-                </div>
-
+                {% endfor %}
             </div>
+
+            <!-- ─── PAGINATION ─── -->
+            {% if reviews_page.has_other_pages %}
+            <div class="pagination-wrap">
+                {% if reviews_page.has_previous %}
+                    <a href="?page={{ reviews_page.previous_page_number }}" class="page-link"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</a>
+                {% else %}
+                    <span class="page-link disabled"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</span>
+                {% endif %}
+
+                {% for num in reviews_page.paginator.page_range %}
+                    {% if reviews_page.number == num %}
+                        <span class="page-link active">{{ num }}</span>
+                    {% elif num > reviews_page.number|add:'-3' and num < reviews_page.number|add:'3' %}
+                        <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if reviews_page.has_next %}
+                    <a href="?page={{ reviews_page.next_page_number }}" class="page-link">{% trans "Next" %} <i class="fas fa-chevron-right"></i></a>
+                {% else %}
+                    <span class="page-link disabled">{% trans "Next" %} <i class="fas fa-chevron-right"></i></span>
+                {% endif %}
+            </div>
+            {% endif %}
 
             <!-- ─── SUBMIT REVIEW SECTION ─── -->
             <div class="submit-section animate-on-load">
-                <h2><i class="fas fa-pen-fancy"></i> Share Your Experience</h2>
-                <p class="form-subhead">We value your feedback. Let us know how we did!</p>
+                <h2><i class="fas fa-pen-fancy"></i> {% trans "Share Your Experience" %}</h2>
+                <p class="form-subhead">{% trans "We value your feedback. Let us know how we did!" %}</p>
 
-                <form class="review-form" id="reviewForm" novalidate>
+                <form class="review-form" id="reviewForm" action="{% url 'submit_review' %}" method="post" novalidate>
+                    {% csrf_token %}
                     <div>
-                        <label for="customerName">Full Name <span class="required">*</span></label>
-                        <input type="text" id="customerName" placeholder="Enter your full name" required />
+                        <label for="id_customer_name">{% trans "Full Name" %} <span class="required">*</span></label>
+                        <input type="text" name="customer_name" id="id_customer_name" placeholder="{% trans 'Enter your full name' %}" required />
                     </div>
                     <div>
-                        <label for="customerEmail">Email <span class="required">*</span></label>
-                        <input type="email" id="customerEmail" placeholder="Enter your email" required />
+                        <label for="id_email">{% trans "Email" %} <span class="required">*</span></label>
+                        <input type="email" name="email" id="id_email" placeholder="{% trans 'Enter your email' %}" required />
                     </div>
 
                     <div class="full-width">
-                        <label>Rating <span class="required">*</span></label>
+                        <label>{% trans "Rating" %} <span class="required">*</span></label>
                         <div class="star-select" id="starSelect">
                             <button type="button" class="star-option" data-value="1">★</button>
                             <button type="button" class="star-option" data-value="2">★</button>
                             <button type="button" class="star-option" data-value="3">★</button>
                             <button type="button" class="star-option" data-value="4">★</button>
                             <button type="button" class="star-option" data-value="5">★</button>
-                            <span class="star-label" id="starLabel">Select a rating</span>
+                            <span class="star-label" id="starLabel">{% trans "Select a rating" %}</span>
                         </div>
-                        <input type="hidden" id="ratingValue" value="" />
+                        <input type="hidden" name="rating" id="ratingValue" value="" />
                     </div>
 
                     <div class="full-width">
-                        <label for="reviewText">Your Review <span class="required">*</span></label>
-                        <textarea id="reviewText" placeholder="Tell us about your experience..." rows="4" required></textarea>
+                        <label for="id_review">{% trans "Your Review" %} <span class="required">*</span></label>
+                        <textarea name="review" id="id_review" placeholder="{% trans 'Tell us about your experience...' %}" rows="4" required></textarea>
                     </div>
 
                     <div class="full-width">
-                        <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> Submit Review</button>
+                        <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> {% trans "Submit Review" %}</button>
                     </div>
                 </form>
 
                 <div id="formFeedback" class="form-feedback">
                     <i class="fas fa-check-circle"></i>
-                    <span id="feedbackMessage">Thank you for your review!</span>
+                    <span id="feedbackMessage">{% trans "Thank you for your review!" %}</span>
                 </div>
             </div>
 
             <!-- ─── FOOTER NOTE ─── -->
             <div class="footer-note animate-on-load">
-                <span><i class="fas fa-shield-alt"></i> All reviews are from genuine customers.</span>
-                <span class="badge"><i class="far fa-comments"></i> 128 reviews and counting</span>
+                <span><i class="fas fa-shield-alt"></i> {% trans "All reviews are from genuine customers." %}</span>
+                <span class="badge"><i class="far fa-comments"></i> 
+                    {% blocktrans count counter=reviews_page.paginator.count trimmed %}
+                        {{ counter }} review
+                    {% plural %}
+                        {{ counter }} reviews
+                    {% endblocktrans %}
+                </span>
             </div>
 
         </div>
@@ -1401,14 +1279,14 @@
     ================================================================ -->
     <section class="cta-banner animate-on-load" id="contact">
         <div class="container">
-            <h2>Ready to <span>Experience</span> Our Services?</h2>
-            <p>Visit us today or reach out to get started with any of our services.</p>
+            <h2>{% trans "Ready to" %} <span>{% trans "Experience" %}</span> {% trans "Our Services?" %}</h2>
+            <p>{% trans "Visit us today or reach out to get started with any of our services." %}</p>
             <div class="cta-buttons">
-                <a href="#" class="btn-primary">
-                    <i class="fas fa-phone"></i> Contact Us
+                <a href="{% url 'home' %}#contact" class="btn-primary">
+                    <i class="fas fa-phone"></i> {% trans "Contact Us" %}
                 </a>
                 <a href="https://wa.me/919876543210?text=Hello%2C%20I%20want%20to%20visit%20your%20cyber%20cafe." target="_blank" class="btn-whatsapp">
-                    <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+                    <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
                 </a>
             </div>
         </div>
@@ -1419,7 +1297,7 @@
     ================================================================ -->
     <footer class="footer">
         <div class="container">
-            &copy; 2026 <span>CyberTech</span> — All rights reserved. Built with <i class="fas fa-heart"></i>
+            &copy; 2026 <span>CyberTech</span> — {% trans "All rights reserved." %} {% trans "Built with" %} <i class="fas fa-heart"></i>
         </div>
     </footer>
 {% endblock %}
@@ -1463,7 +1341,7 @@
             });
 
             // ─── Rating labels ───
-            const ratingLabels = ["", "Terrible", "Poor", "Average", "Good", "Excellent"];
+            const ratingLabels = ["", "{% trans "Terrible" %}", "{% trans "Poor" %}", "{% trans "Average" %}", "{% trans "Good" %}", "{% trans "Excellent" %}"];
 
             // ─── Star selection ───
             const starOptions = document.querySelectorAll('.star-option');
@@ -1475,55 +1353,42 @@
                     const val = parseInt(this.dataset.value);
                     starOptions.forEach(function(b) { b.classList.remove('active'); });
                     this.classList.add('active');
-                    starLabel.textContent = ratingLabels[val] || 'Select a rating';
+                    starLabel.textContent = ratingLabels[val] || '{% trans "Select a rating" %}';
                     ratingInput.value = val;
                 });
             });
 
-            // ─── Form submission ───
+            // ─── Form submission (with client-side validation) ───
             const form = document.getElementById('reviewForm');
             const feedback = document.getElementById('formFeedback');
             const feedbackMsg = document.getElementById('feedbackMessage');
 
+            // Prevent double submission and handle errors
             form.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const name = document.getElementById('customerName').value.trim();
-                const email = document.getElementById('customerEmail').value.trim();
-                const rating = ratingInput.value;
-                const comment = document.getElementById('reviewText').value.trim();
+                const name = document.getElementById('id_customer_name').value.trim();
+                const email = document.getElementById('id_email').value.trim();
+                const rating = document.getElementById('ratingValue').value;
+                const comment = document.getElementById('id_review').value.trim();
 
                 let errors = [];
-                if (!name) errors.push('Name is required.');
-                if (!email) errors.push('Email is required.');
-                if (!rating) errors.push('Please select a rating.');
-                if (!comment) errors.push('Please write your review.');
+                if (!name) errors.push('{% trans "Name is required."|escapejs %}');
+                if (!email) errors.push('{% trans "Email is required."|escapejs %}');
+                if (!rating) errors.push('{% trans "Please select a rating."|escapejs %}');
+                if (!comment) errors.push('{% trans "Please write your review."|escapejs %}');
 
                 if (errors.length > 0) {
+                    e.preventDefault();
                     feedback.className = 'form-feedback error';
                     feedbackMsg.textContent = '⚠️ ' + errors.join(' ');
                     feedback.style.display = 'flex';
                     return;
                 }
 
-                // Simulate successful submission
-                feedback.className = 'form-feedback success';
-                feedbackMsg.textContent = '✅ Thank you for your review! It has been submitted.';
-                feedback.style.display = 'flex';
-
-                // Reset form
-                form.reset();
-                starOptions.forEach(function(b) { b.classList.remove('active'); });
-                starLabel.textContent = 'Select a rating';
-                ratingInput.value = '';
-
-                // Hide feedback after 5 seconds
-                setTimeout(function() {
-                    feedback.style.display = 'none';
-                }, 5000);
+                // If all good, let the form submit normally
+                // The feedback will be shown via Django messages on the redirected page
             });
 
-            // ─── Sort functionality ───
+            // ─── Sort functionality (client-side) ───
             const sortBtns = document.querySelectorAll('.sort-btn');
             const grid = document.getElementById('reviewsGrid');
 

@@ -688,6 +688,30 @@
             transform: scale(1.1);
         }
 
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius-sm);
+            aspect-ratio: 1/1;
+            cursor: pointer;
+        }
+        .gallery-item .caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            padding: 8px;
+            font-size: 0.8rem;
+            text-align: center;
+            opacity: 0;
+            transition: 0.3s;
+        }
+        .gallery-item:hover .caption {
+            opacity: 1;
+        }
+
         /* ============================================================
                REVIEWS
                ============================================================ */
@@ -1128,48 +1152,21 @@
                 <h2>Our <span>Services</span></h2>
                 <p>Cutting‑edge digital solutions at your fingertips</p>
             </div>
+            
             <div class="services-grid">
+                {% for service in services %}
                 <div class="service-card">
-                    <div class="icon"><i class="fas fa-print"></i></div>
-                    <h3>Printing &amp; Scanning</h3>
-                    <p>High‑quality prints, document scanning, and digitization.</p>
+                    <div class="icon" style="background: {{ service.icon_color }};">
+                         <i class="fas {{ service.icon }}"></i>
+                    </div>
+                    <h3>{{ service.name }}</h3>
+                    <p>{{ service.description|truncatechars:60 }}</p>
                 </div>
-                <div class="service-card">
-                    <div class="icon"><i class="fas fa-id-card"></i></div>
-                    <h3>Aadhaar Services</h3>
-                    <p>Updates, corrections, and e‑KYC assistance.</p>
-                </div>
-                <div class="service-card">
-                    <div class="icon"><i class="fas fa-credit-card"></i></div>
-                    <h3>PAN Card</h3>
-                    <p>New applications, corrections, and reprints.</p>
-                </div>
-                <div class="service-card">
-                    <div class="icon"><i class="fas fa-passport"></i></div>
-                    <h3>Passport</h3>
-                    <p>Application, renewal, and document verification.</p>
-                </div>
-                <div class="service-card">
-                    <div class="icon"><i class="fas fa-file-pdf"></i></div>
-                    <h3>Lamination</h3>
-                    <p>Protect your important documents with premium lamination.</p>
-                </div>
-                <div class="service-card">
-                    <div class="icon"><i class="fas fa-globe"></i></div>
-                    <h3>Online Forms</h3>
-                    <p>Govt. forms, job applications, and exam registrations.</p>
-                </div>
-                <div class="service-card">
-                    <div class="icon"><i class="fas fa-camera"></i></div>
-                    <h3>Photo Services</h3>
-                    <p>Passport &amp; ID photos with instant delivery.</p>
-                </div>
-                <div class="service-card">
-                    <div class="icon"><i class="fas fa-shield-alt"></i></div>
-                    <h3>Cyber Security</h3>
-                    <p>Awareness, secure browsing, and data protection tips.</p>
-                </div>
+                {% empty %}
+                <p class="no-data">No services available at the moment.</p>
+                {% endfor %}
             </div>
+
         </div>
     </section>
 
@@ -1185,48 +1182,25 @@
                 <p>Flexible pricing for every need — hover to feel the power</p>
             </div>
             <div class="pricing-grid">
-                <!-- Basic -->
-                <div class="pricing-card">
-                    <div class="plan-name">Starter</div>
-                    <div class="price">₹99 <small>/mo</small></div>
-                    <div class="desc">Essential services for individuals</div>
-                    <ul>
-                        <li><i class="fas fa-check"></i> 50 Prints / month</li>
-                        <li><i class="fas fa-check"></i> Aadhaar updates</li>
-                        <li><i class="fas fa-check"></i> Email support</li>
-                    </ul>
-                    <a href="#" class="btn-primary">Get Started</a>
-                </div>
-
-                <!-- Popular -->
-                <div class="pricing-card popular">
-                    <span class="badge">🔥 Popular</span>
-                    <div class="plan-name">Pro</div>
-                    <div class="price">₹199 <small>/mo</small></div>
-                    <div class="desc">Best value for power users</div>
-                    <ul>
-                        <li><i class="fas fa-check"></i> Unlimited Prints</li>
-                        <li><i class="fas fa-check"></i> PAN &amp; Passport assist</li>
-                        <li><i class="fas fa-check"></i> Priority support</li>
-                        <li><i class="fas fa-check"></i> Lamination (5 docs)</li>
-                    </ul>
-                    <a href="#" class="btn-primary">Go Pro</a>
-                </div>
-
-                <!-- Premium -->
-                <div class="pricing-card">
-                    <div class="plan-name">Enterprise</div>
-                    <div class="price">₹499 <small>/mo</small></div>
-                    <div class="desc">Full‑suite for businesses</div>
-                    <ul>
-                        <li><i class="fas fa-check"></i> Everything in Pro</li>
-                        <li><i class="fas fa-check"></i> Bulk document handling</li>
-                        <li><i class="fas fa-check"></i> Dedicated account manager</li>
-                        <li><i class="fas fa-check"></i> Cyber security audit</li>
-                    </ul>
-                    <a href="#" class="btn-primary">Contact Sales</a>
-                </div>
-            </div>
+                {% for charge in charges %}
+                <div class="pricing-card {% if forloop.counter == 2 %}popular{% endif %}">
+        {% if forloop.counter == 2 %}
+            <span class="badge">🔥 Popular</span>
+        {% endif %}
+        <div class="plan-name">{{ charge.service.name }}</div>
+        <div class="price">₹{{ charge.charge }} <small>/ session</small></div>
+        <div class="desc">Starting at affordable rates</div>
+        <ul>
+            <li><i class="fas fa-check"></i> Professional service</li>
+            <li><i class="fas fa-check"></i> Quick turnaround</li>
+            <li><i class="fas fa-check"></i> Expert assistance</li>
+        </ul>
+        <a href="{% url 'appointment' %}" class="btn-primary">Book Now</a>
+    </div>
+    {% empty %}
+    <p class="no-data">Pricing information coming soon.</p>
+    {% endfor %}
+</div>
         </div>
     </section>
 
@@ -1241,16 +1215,16 @@
                 <h2>Our <span>Gallery</span></h2>
                 <p>Take a peek into our digital workspace</p>
             </div>
-            <div class="gallery-grid">
-                <div class="gallery-item"><i class="fas fa-desktop"></i></div>
-                <div class="gallery-item"><i class="fas fa-print"></i></div>
-                <div class="gallery-item"><i class="fas fa-id-card"></i></div>
-                <div class="gallery-item"><i class="fas fa-camera"></i></div>
-                <div class="gallery-item"><i class="fas fa-passport"></i></div>
-                <div class="gallery-item"><i class="fas fa-shield-alt"></i></div>
-                <div class="gallery-item"><i class="fas fa-file-pdf"></i></div>
-                <div class="gallery-item"><i class="fas fa-globe"></i></div>
-            </div>
+<div class="gallery-grid">
+    {% for img in gallery %}
+    <div class="gallery-item" style="background-image: url('{{ img.image.url }}'); background-size: cover; background-position: center;">
+        <!-- optional caption -->
+        <div class="caption">{{ img.title }}</div>
+    </div>
+    {% empty %}
+    <p class="no-data">No gallery images yet.</p>
+    {% endfor %}
+</div>
         </div>
     </section>
 
@@ -1266,22 +1240,24 @@
                 <p>Real feedback from real people</p>
             </div>
             <div class="reviews-grid">
-                <div class="review-card">
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <div class="review-text">"Fast, reliable, and super friendly. Got my Aadhaar updated in minutes!"</div>
-                    <div class="reviewer">— Priya S.</div>
-                </div>
-                <div class="review-card">
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <div class="review-text">"The best cyber cafe in town. Professional service and great pricing."</div>
-                    <div class="reviewer">— Rahul K.</div>
-                </div>
-                <div class="review-card">
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <div class="review-text">"Helped me with my passport application. Smooth process from start to finish."</div>
-                    <div class="reviewer">— Anjali M.</div>
-                </div>
-            </div>
+    {% for review in reviews %}
+    <div class="review-card">
+        <div class="stars">
+            {% for i in "12345"|make_list %}
+                {% if forloop.counter <= review.rating %}
+                    <i class="fas fa-star"></i>
+                {% else %}
+                    <i class="fas fa-star" style="color: #444;"></i>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="review-text">{{ review.review }}</div>
+        <div class="reviewer">— {{ review.customer_name }}</div>
+    </div>
+    {% empty %}
+    <p class="no-data">No reviews yet. Be the first!</p>
+    {% endfor %}
+</div>
         </div>
     </section>
 

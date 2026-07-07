@@ -299,6 +299,47 @@
     display: block;
   }
 
+  /* ---- Pagination (neon-styled) ---- */
+  .pagination-wrap {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 2.5rem;
+    flex-wrap: wrap;
+  }
+  .pagination-wrap .page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: var(--transition);
+    text-decoration: none;
+    min-width: 44px;
+  }
+  .pagination-wrap .page-link:hover {
+    background: rgba(0, 240, 255, 0.08);
+    border-color: var(--neon-cyan);
+    color: var(--text-white);
+    box-shadow: var(--glow-cyan);
+    transform: translateY(-2px);
+  }
+  .pagination-wrap .page-link.active {
+    background: var(--neon-cyan);
+    color: var(--bg-primary);
+    border-color: var(--neon-cyan);
+    box-shadow: var(--glow-cyan);
+  }
+  .pagination-wrap .page-link.disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
   /* Footer note */
   .footer-note {
     margin-top: 2.5rem;
@@ -386,7 +427,6 @@
   .pricing-card:hover::before {
     opacity: 1;
   }
-  /* ---- The sleek hover interaction: scale up + neon border ---- */
   .pricing-card:hover {
     transform: scale(1.04) translateY(-8px);
     border-color: var(--neon-cyan);
@@ -623,11 +663,36 @@
       {% endfor %}
     </div>
 
-    <!-- No Results Message -->
+    <!-- No Results Message (filter) -->
     <div class="no-results" id="noResults">
       <i class="fas fa-inbox"></i>
       <p>{% trans "No announcements match the selected filter." %}</p>
     </div>
+
+    <!-- Pagination Controls -->
+    {% if announcements.has_other_pages %}
+    <div class="pagination-wrap">
+      {% if announcements.has_previous %}
+        <a href="?page={{ announcements.previous_page_number }}" class="page-link"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</a>
+      {% else %}
+        <span class="page-link disabled"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</span>
+      {% endif %}
+
+      {% for num in announcements.paginator.page_range %}
+        {% if announcements.number == num %}
+          <span class="page-link active">{{ num }}</span>
+        {% elif num > announcements.number|add:'-3' and num < announcements.number|add:'3' %}
+          <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if announcements.has_next %}
+        <a href="?page={{ announcements.next_page_number }}" class="page-link">{% trans "Next" %} <i class="fas fa-chevron-right"></i></a>
+      {% else %}
+        <span class="page-link disabled">{% trans "Next" %} <i class="fas fa-chevron-right"></i></span>
+      {% endif %}
+    </div>
+    {% endif %}
 
     <!-- Footer Note -->
     <div class="footer-note">
@@ -636,11 +701,15 @@
       </span>
       <span class="badge" id="countBadge">
         <i class="far fa-bell"></i>
-        {% blocktrans count counter=announcements|length trimmed %}
-          <span id="announcementCount">{{ counter }}</span> active notice
-        {% plural %}
-          <span id="announcementCount">{{ counter }}</span> active notices
-        {% endblocktrans %}
+        {% if announcements.paginator.count > 0 %}
+          {% blocktrans count counter=announcements.paginator.count trimmed %}
+            <span id="announcementCount">{{ counter }}</span> active notice
+          {% plural %}
+            <span id="announcementCount">{{ counter }}</span> active notices
+          {% endblocktrans %}
+        {% else %}
+          {% trans "No notices" %}
+        {% endif %}
       </span>
     </div>
   </div>
@@ -741,7 +810,7 @@
       revealElements.forEach(el => el.classList.add('visible'));
     }
 
-    // ---- Filter functionality for announcements ----
+    // ---- Filter functionality for announcements (client-side) ----
     const announcements = document.querySelectorAll(".announcement-card");
     const filterBar = document.querySelector(".filter-bar");
     const noResults = document.getElementById("noResults");
@@ -793,7 +862,7 @@
         btn.classList.toggle("active", btn.dataset.filter === category);
       });
 
-      // Update count badge
+      // Update count badge (visible count on current page)
       if (countSpan) countSpan.textContent = visibleCount;
       if (countBadge) {
         const label = visibleCount === 1 ? "active notice" : "active notices";

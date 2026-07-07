@@ -194,8 +194,7 @@
 
         /* ---- Pulse keyframes ---- */
         @keyframes pulseGlowCyan {
-            0%,
-            100% {
+            0%, 100% {
                 box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
             }
             50% {
@@ -203,8 +202,7 @@
             }
         }
         @keyframes pulseGlowPurple {
-            0%,
-            100% {
+            0%, 100% {
                 box-shadow: 0 0 20px rgba(180, 74, 255, 0.4);
             }
             50% {
@@ -640,112 +638,28 @@
                 <div class="sub-line"></div>
             </div>
 
-            <!-- ─── SERVICE GRID ─── -->
+            <!-- ─── SERVICE GRID (DYNAMIC) ─── -->
             <div class="service-grid">
-                <!-- Each card gets the 'animate-on-load' class for staggered fade-in -->
-                <!-- Icon colours are dynamic – we use inline style="background: ..." -->
-
+                {% for service in services %}
                 <div class="service-card animate-on-load">
-                    <div class="icon-wrap" style="background: #00d4ff;">
-                        <i class="fas fa-print"></i>
+                    <div class="icon-wrap" style="background: {{ service.icon_color|default:'#00d4ff' }};">
+                        <i class="fas fa-{{ service.icon|default:'cog' }}"></i>
                     </div>
-                    <div class="name">Printing &amp; Scanning</div>
-                    <div class="sub">High‑quality prints &amp; digitization</div>
+                    <div class="name">{{ service.name }}</div>
+                    <div class="sub">{{ service.description|truncatechars:60|default:"Professional service" }}</div>
                 </div>
-
-                <div class="service-card animate-on-load">
-                    <div class="icon-wrap" style="background: #b44aff;">
-                        <i class="fas fa-id-card"></i>
-                    </div>
-                    <div class="name">Aadhaar Services</div>
-                    <div class="sub">Updates, corrections &amp; e‑KYC</div>
+                {% empty %}
+                <div class="no-services">
+                    <i class="fas fa-concierge-bell"></i>
+                    <p>{% trans "No services available at the moment." %}</p>
                 </div>
-
-                <div class="service-card animate-on-load">
-                    <div class="icon-wrap" style="background: #ff6b35;">
-                        <i class="fas fa-credit-card"></i>
-                    </div>
-                    <div class="name">PAN Card</div>
-                    <div class="sub">New, corrections &amp; reprints</div>
-                </div>
-
-                <div class="service-card animate-on-load">
-                    <div class="icon-wrap" style="background: #39ff14;">
-                        <i class="fas fa-passport"></i>
-                    </div>
-                    <div class="name">Passport</div>
-                    <div class="sub">Application &amp; renewal</div>
-                </div>
-
-                <div class="service-card animate-on-load">
-                    <div class="icon-wrap" style="background: #ff2d95;">
-                        <i class="fas fa-file-pdf"></i>
-                    </div>
-                    <div class="name">Lamination</div>
-                    <div class="sub">Protect your documents</div>
-                </div>
-
-                <div class="service-card animate-on-load">
-                    <div class="icon-wrap" style="background: #00d4ff;">
-                        <i class="fas fa-globe"></i>
-                    </div>
-                    <div class="name">Online Forms</div>
-                    <div class="sub">Govt. &amp; job applications</div>
-                </div>
-
-                <div class="service-card animate-on-load">
-                    <div class="icon-wrap" style="background: #b44aff;">
-                        <i class="fas fa-camera"></i>
-                    </div>
-                    <div class="name">Photo Services</div>
-                    <div class="sub">Passport &amp; ID photos</div>
-                </div>
-
-                <div class="service-card animate-on-load">
-                    <div class="icon-wrap" style="background: #ff6b35;">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <div class="name">Cyber Security</div>
-                    <div class="sub">Awareness &amp; protection</div>
-                </div>
-
-                <div class="service-card animate-on-load">
-                    <div class="icon-wrap" style="background: #39ff14;">
-                        <i class="fas fa-file-signature"></i>
-                    </div>
-                    <div class="name">Digital Signatures</div>
-                    <div class="sub">DSC &amp; e‑sign services</div>
-                </div>
-
-                <div class="service-card animate-on-load">
-                    <div class="icon-wrap" style="background: #ff2d95;">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <div class="name">Mobile Recharge</div>
-                    <div class="sub">Prepaid &amp; postpaid</div>
-                </div>
-
-                <div class="service-card animate-on-load">
-                    <div class="icon-wrap" style="background: #00d4ff;">
-                        <i class="fas fa-ticket-alt"></i>
-                    </div>
-                    <div class="name">Ticket Booking</div>
-                    <div class="sub">Train, bus &amp; flight</div>
-                </div>
-
-                <div class="service-card animate-on-load">
-                    <div class="icon-wrap" style="background: #b44aff;">
-                        <i class="fas fa-file-invoice"></i>
-                    </div>
-                    <div class="name">Income Tax</div>
-                    <div class="sub">Filing &amp; assistance</div>
-                </div>
+                {% endfor %}
             </div>
 
             <!-- ─── BACK BUTTON ─── -->
             <div class="back-row animate-on-load">
-                <a href="homepage.html" class="btn-outline">
-                    <i class="fas fa-arrow-left"></i> Back to Home
+                <a href="{% url 'home' %}" class="btn-outline">
+                    <i class="fas fa-arrow-left"></i> {% trans "Back to Home" %}
                 </a>
             </div>
 

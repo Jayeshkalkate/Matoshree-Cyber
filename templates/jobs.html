@@ -137,6 +137,17 @@
     font-size: 1.05rem;
     margin-top: 4px;
   }
+  .jobs-page .section-header .total-badge {
+    display: inline-block;
+    margin-top: 8px;
+    background: var(--secondary, #00d4ff);
+    color: var(--primary, #0a1628);
+    padding: 4px 18px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+  }
 
   .jobs-page .jobs-grid {
     display: grid;
@@ -253,6 +264,47 @@
     color: var(--gray, #e2e8f0);
     margin-bottom: 0.5rem;
     display: block;
+  }
+
+  /* ----- Pagination (neon-styled) ----- */
+  .jobs-page .pagination-wrap {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+  .jobs-page .pagination-wrap .page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    color: var(--gray-dark, #475569);
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: var(--transition);
+    text-decoration: none;
+    min-width: 44px;
+  }
+  .jobs-page .pagination-wrap .page-link:hover {
+    background: rgba(0, 212, 255, 0.08);
+    border-color: var(--secondary);
+    color: var(--primary);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
+    transform: translateY(-2px);
+  }
+  .jobs-page .pagination-wrap .page-link.active {
+    background: var(--secondary);
+    color: var(--white);
+    border-color: var(--secondary);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+  }
+  .jobs-page .pagination-wrap .page-link.disabled {
+    opacity: 0.3;
+    pointer-events: none;
   }
 
   /* ----- CTA Banner (matches homepage info-row style) ----- */
@@ -384,416 +436,247 @@
 
   /*====================================================
     FUTURISTIC GAMING ENHANCEMENT
-====================================================*/
+  ====================================================*/
 
-:root{
-
+  :root{
     --neon:#00F5FF;
     --purple:#8A2BE2;
     --pink:#FF3CAC;
     --dark:#08111F;
     --glass:rgba(255,255,255,.05);
+  }
 
-}
-
-
-/* Digital page animation */
-
-.jobs-page{
-
+  /* Digital page animation */
+  .jobs-page{
     animation: pageReveal .8s ease forwards;
-
-}
-
-@keyframes pageReveal{
-
+  }
+  @keyframes pageReveal{
     from{
-        opacity:0;
-        transform:translateY(40px);
+      opacity:0;
+      transform:translateY(40px);
     }
-
     to{
-        opacity:1;
-        transform:translateY(0);
+      opacity:1;
+      transform:translateY(0);
     }
+  }
 
-}
-
-
-/* Hero Background */
-
-.jobs-page .page-hero{
-
+  /* Hero Background */
+  .jobs-page .page-hero{
     background:
-        radial-gradient(circle at top right,
+      radial-gradient(circle at top right,
         rgba(0,245,255,.12),
         transparent 45%),
-
-        radial-gradient(circle at bottom left,
+      radial-gradient(circle at bottom left,
         rgba(138,43,226,.12),
         transparent 40%),
+      linear-gradient(135deg,#091425,#101C35,#08111F);
+  }
 
-        linear-gradient(135deg,#091425,#101C35,#08111F);
-
-}
-
-
-/*=========================================
-            JOB CARD
-=========================================*/
-
-.jobs-page .job-card{
-
+  /*=========================================
+              JOB CARD
+  =========================================*/
+  .jobs-page .job-card{
     background:rgba(255,255,255,.04);
-
     backdrop-filter:blur(18px);
-
     border:1px solid rgba(255,255,255,.08);
-
     transition:all .3s ease;
-
     position:relative;
-
     overflow:hidden;
+  }
 
-}
-
-
-/* animated glow border */
-
-.jobs-page .job-card::before{
-
+  /* animated glow border */
+  .jobs-page .job-card::before{
     content:"";
-
     position:absolute;
-
     inset:-1px;
-
     background:linear-gradient(
-        120deg,
-        transparent,
-        rgba(0,245,255,.35),
-        transparent
+      120deg,
+      transparent,
+      rgba(0,245,255,.35),
+      transparent
     );
-
     opacity:0;
-
     transition:all .3s ease;
+  }
 
-}
-
-
-.jobs-page .job-card:hover{
-
+  .jobs-page .job-card:hover{
     transform:translateY(-8px) scale(1.03);
-
     border-color:var(--neon);
-
     box-shadow:
+      0 0 15px rgba(0,245,255,.3),
+      0 0 40px rgba(0,245,255,.18),
+      0 20px 40px rgba(0,0,0,.45);
+  }
 
-        0 0 15px rgba(0,245,255,.3),
-
-        0 0 40px rgba(0,245,255,.18),
-
-        0 20px 40px rgba(0,0,0,.45);
-
-}
-
-
-.jobs-page .job-card:hover::before{
-
+  .jobs-page .job-card:hover::before{
     opacity:1;
+  }
 
-}
-
-
-/*=========================================
-            BUTTONS
-=========================================*/
-
-.jobs-page .btn-primary,
-.jobs-page .btn-apply,
-.jobs-page .btn-whatsapp{
-
+  /*=========================================
+              BUTTONS
+  =========================================*/
+  .jobs-page .btn-primary,
+  .jobs-page .btn-apply,
+  .jobs-page .btn-whatsapp{
     transition:all .3s ease;
-
     position:relative;
-
     overflow:hidden;
+  }
 
-}
-
-
-/* Shine animation */
-
-.jobs-page .btn-primary::before,
-.jobs-page .btn-apply::before,
-.jobs-page .btn-whatsapp::before{
-
+  /* Shine animation */
+  .jobs-page .btn-primary::before,
+  .jobs-page .btn-apply::before,
+  .jobs-page .btn-whatsapp::before{
     content:"";
-
     position:absolute;
-
     left:-120%;
-
     top:0;
-
     width:60%;
-
     height:100%;
-
     background:
-
-    linear-gradient(
+      linear-gradient(
         90deg,
         transparent,
         rgba(255,255,255,.4),
         transparent);
-
     transform:skewX(-25deg);
-
     transition:.6s;
+  }
 
-}
-
-.jobs-page .btn-primary:hover::before,
-.jobs-page .btn-apply:hover::before,
-.jobs-page .btn-whatsapp:hover::before{
-
+  .jobs-page .btn-primary:hover::before,
+  .jobs-page .btn-apply:hover::before,
+  .jobs-page .btn-whatsapp:hover::before{
     left:160%;
+  }
 
-}
-
-
-/* Neon Hover */
-
-.jobs-page .btn-primary:hover,
-.jobs-page .btn-apply:hover{
-
+  /* Neon Hover */
+  .jobs-page .btn-primary:hover,
+  .jobs-page .btn-apply:hover{
     box-shadow:
+      0 0 12px var(--neon),
+      0 0 28px rgba(0,245,255,.55),
+      0 0 60px rgba(0,245,255,.25);
+  }
 
-        0 0 12px var(--neon),
-
-        0 0 28px rgba(0,245,255,.55),
-
-        0 0 60px rgba(0,245,255,.25);
-
-}
-
-
-/* Pulsing Active */
-
-.jobs-page .btn-primary:active,
-.jobs-page .btn-apply:active,
-.jobs-page .btn-whatsapp:active{
-
+  /* Pulsing Active */
+  .jobs-page .btn-primary:active,
+  .jobs-page .btn-apply:active,
+  .jobs-page .btn-whatsapp:active{
     animation:neonPulse .7s;
+  }
 
-}
-
-
-@keyframes neonPulse{
-
+  @keyframes neonPulse{
     0%{
-
-        box-shadow:0 0 0 rgba(0,245,255,.8);
-
+      box-shadow:0 0 0 rgba(0,245,255,.8);
     }
-
     50%{
-
-        box-shadow:
-
-        0 0 20px var(--neon),
-
-        0 0 60px var(--neon);
-
+      box-shadow:
+      0 0 20px var(--neon),
+      0 0 60px var(--neon);
     }
-
     100%{
-
-        box-shadow:0 0 0 rgba(0,245,255,.2);
-
+      box-shadow:0 0 0 rgba(0,245,255,.2);
     }
+  }
 
-}
-
-
-/*=========================================
-        CTA SECTION
-=========================================*/
-
-.jobs-page .cta-banner{
-
+  /*=========================================
+          CTA SECTION
+  =========================================*/
+  .jobs-page .cta-banner{
     position:relative;
-
     overflow:hidden;
+  }
 
-}
-
-
-.jobs-page .cta-banner::before{
-
+  .jobs-page .cta-banner::before{
     content:"";
-
     position:absolute;
-
     width:500px;
-
     height:500px;
-
     background:
-
-    radial-gradient(circle,
-
-    rgba(0,245,255,.18),
-
-    transparent 70%);
-
+      radial-gradient(circle,
+        rgba(0,245,255,.18),
+        transparent 70%);
     top:-220px;
-
     right:-180px;
+  }
 
-}
-
-
-/*=========================================
-        GRID ENTRANCE ANIMATION
-=========================================*/
-
-.jobs-page .job-card{
-
+  /*=========================================
+          GRID ENTRANCE ANIMATION
+  =========================================*/
+  .jobs-page .job-card{
     animation:cardFade .7s ease both;
+  }
+  .jobs-page .job-card:nth-child(2){animation-delay:.08s;}
+  .jobs-page .job-card:nth-child(3){animation-delay:.16s;}
+  .jobs-page .job-card:nth-child(4){animation-delay:.24s;}
+  .jobs-page .job-card:nth-child(5){animation-delay:.32s;}
+  .jobs-page .job-card:nth-child(6){animation-delay:.40s;}
 
-}
-
-.jobs-page .job-card:nth-child(2){animation-delay:.08s;}
-.jobs-page .job-card:nth-child(3){animation-delay:.16s;}
-.jobs-page .job-card:nth-child(4){animation-delay:.24s;}
-.jobs-page .job-card:nth-child(5){animation-delay:.32s;}
-.jobs-page .job-card:nth-child(6){animation-delay:.40s;}
-
-@keyframes cardFade{
-
+  @keyframes cardFade{
     from{
-
-        opacity:0;
-
-        transform:translateY(35px);
-
+      opacity:0;
+      transform:translateY(35px);
     }
-
     to{
-
-        opacity:1;
-
-        transform:translateY(0);
-
+      opacity:1;
+      transform:translateY(0);
     }
+  }
 
-}
-
-
-/*=========================================
-        Floating Background Glow
-=========================================*/
-
-.jobs-page::before{
-
+  /*=========================================
+          Floating Background Glow
+  =========================================*/
+  .jobs-page::before{
     content:"";
-
     position:fixed;
-
     width:600px;
-
     height:600px;
-
     left:-250px;
-
     top:-250px;
-
     border-radius:50%;
-
     background:
-
-    radial-gradient(circle,
-
-    rgba(0,245,255,.08),
-
-    transparent 70%);
-
+      radial-gradient(circle,
+        rgba(0,245,255,.08),
+        transparent 70%);
     animation:floatGlow 14s linear infinite;
-
     pointer-events:none;
-
     z-index:0;
-
-}
-
-@keyframes floatGlow{
-
+  }
+  @keyframes floatGlow{
     0%{
-
-        transform:translate(0,0);
-
+      transform:translate(0,0);
     }
-
     50%{
-
-        transform:translate(180px,80px);
-
+      transform:translate(180px,80px);
     }
-
     100%{
-
-        transform:translate(0,0);
-
+      transform:translate(0,0);
     }
+  }
 
-}
-
-
-/*=========================================
-        RESPONSIVE
-=========================================*/
-
-@media(max-width:768px){
-
+  /*=========================================
+          RESPONSIVE
+  =========================================*/
+  @media(max-width:768px){
     .jobs-page .page-hero h1{
-
-        font-size:2.3rem;
-
+      font-size:2.3rem;
     }
-
     .jobs-page .section-header h2{
-
-        font-size:2rem;
-
+      font-size:2rem;
     }
-
     .jobs-page .job-card{
-
-        padding:22px;
-
+      padding:22px;
     }
-
-}
-
-@media(max-width:480px){
-
+  }
+  @media(max-width:480px){
     .jobs-page .page-hero{
-
-        padding:60px 0;
-
+      padding:60px 0;
     }
-
     .jobs-page .job-card{
-
-        transform:none;
-
+      transform:none;
     }
-
-}
+  }
 
 </style>
 {% endblock extra_head %} 
@@ -810,8 +693,7 @@
       </div>
       <h1>{% trans "Current" %} <span>{% trans "Job Openings" %}</span></h1>
       <p>
-        {% trans "Explore opportunities to work with us or our partner
-        organizations." %}
+        {% trans "Explore opportunities to work with us or our partner organizations." %}
       </p>
     </div>
   </section>
@@ -822,9 +704,18 @@
       <div class="section-header">
         <h2>{% trans "Available" %} <span>{% trans "Positions" %}</span></h2>
         <p>
-          {% trans "Check out the latest openings and apply before the
-          deadline." %}
+          {% trans "Check out the latest openings and apply before the deadline." %}
         </p>
+        {% if jobs.paginator.count > 0 %}
+          <div class="total-badge">
+            <i class="fas fa-briefcase"></i>
+            {% blocktrans count counter=jobs.paginator.count trimmed %}
+              {{ counter }} job
+            {% plural %}
+              {{ counter }} jobs
+            {% endblocktrans %}
+          </div>
+        {% endif %}
       </div>
       <hr
         style="
@@ -865,6 +756,32 @@
         </div>
         {% endfor %}
       </div>
+
+      <!-- ===== PAGINATION ===== -->
+      {% if jobs.has_other_pages %}
+      <div class="pagination-wrap">
+        {% if jobs.has_previous %}
+          <a href="?page={{ jobs.previous_page_number }}" class="page-link"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</a>
+        {% else %}
+          <span class="page-link disabled"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</span>
+        {% endif %}
+
+        {% for num in jobs.paginator.page_range %}
+          {% if jobs.number == num %}
+            <span class="page-link active">{{ num }}</span>
+          {% elif num > jobs.number|add:'-3' and num < jobs.number|add:'3' %}
+            <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if jobs.has_next %}
+          <a href="?page={{ jobs.next_page_number }}" class="page-link">{% trans "Next" %} <i class="fas fa-chevron-right"></i></a>
+        {% else %}
+          <span class="page-link disabled">{% trans "Next" %} <i class="fas fa-chevron-right"></i></span>
+        {% endif %}
+      </div>
+      {% endif %}
+
     </div>
   </section>
 
@@ -872,27 +789,29 @@
   <section class="cta-banner">
     <div class="container">
       <h2>
-        {% trans "Ready to" %} <span>{% trans "join" %}</span> {% trans "our
-        team?" %}
+        {% trans "Ready to" %} <span>{% trans "join" %}</span> {% trans "our team?" %}
       </h2>
       <p>
-        {% trans "Have questions about a role or want to send us your CV? Reach
-        out to us anytime." %}
+        {% trans "Have questions about a role or want to send us your CV? Reach out to us anytime." %}
       </p>
       <div class="cta-buttons">
         <a href="{% url 'home' %}#contact" class="btn-primary">
           <i class="fas fa-phone"></i> {% trans "Contact Us" %}
         </a>
-        <a
-          href="https://wa.me/{{ business.whatsapp|cut:'+' }}?text=Hello%2C%20I%20am%20interested%20in%20job%20opportunities."
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn-whatsapp"
-        >
-          <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
-        </a>
+        {% with whatsapp_number=business.whatsapp|default:"" %}
+          {% if whatsapp_number %}
+            <a
+              href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20am%20interested%20in%20job%20opportunities."
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-whatsapp"
+            >
+              <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
+            </a>
+          {% endif %}
+        {% endwith %}
       </div>
     </div>
   </section>
 </div>
-{% endblock content %} 
+{% endblock content %}
