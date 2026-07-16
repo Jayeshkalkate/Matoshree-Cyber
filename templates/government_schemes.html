@@ -5,831 +5,461 @@
 {% block title %}{% trans "Government Schemes" %}{% endblock %}
 
 {% block extra_head %}
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- Minimal page-specific styles – all core UI comes from base.html -->
+<style>
+  /* ============================================================
+     PAGE HERO – uses base variables
+     ============================================================ */
+  .page-hero {
+    padding: 60px 0 40px;
+    text-align: center;
+    position: relative;
+  }
+  .page-hero::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.04) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .page-hero .container {
+    position: relative;
+    z-index: 1;
+  }
+  .page-hero .breadcrumb {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 14px;
+    opacity: 0.6;
+  }
+  .page-hero .breadcrumb a {
+    color: var(--text-muted);
+    transition: var(--transition);
+  }
+  .page-hero .breadcrumb a:hover {
+    color: var(--neon-cyan);
+  }
+  .page-hero .breadcrumb .current {
+    color: var(--neon-cyan);
+  }
+  .page-hero h1 {
+    font-size: 2.8rem;
+    font-weight: 900;
+    font-family: var(--font-display);
+    letter-spacing: -0.5px;
+    background: var(--gradient-cyber);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .page-hero p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    max-width: 620px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+  .page-hero .glow-line {
+    display: inline-block;
+    width: 80px;
+    height: 3px;
+    background: var(--gradient-cyan);
+    border-radius: 4px;
+    margin-top: 14px;
+    box-shadow: var(--glow-cyan);
+  }
 
-    <!-- ===== FONT AWESOME ===== -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  /* ============================================================
+     SCHEMES GRID & CARDS
+     ============================================================ */
+  .schemes-section {
+    padding: 30px 0 60px;
+  }
 
-    <style>
-        /* ================================================================
-               CSS VARIABLES — Cyberpunk / Gaming Theme
-               ================================================================ */
-        :root {
-            --primary: #0a0e1a;
-            --primary-light: #141b2b;
-            --secondary: #00d4ff;
-            --accent: #ff6b35;
-            --neon-purple: #b44aff;
-            --neon-pink: #ff2d95;
-            --neon-green: #39ff14;
-            --neon-yellow: #ffe600;
-            --white: #f0f4ff;
-            --gray-light: #1a2332;
-            --gray: #2a3444;
-            --gray-dark: #8a9bb5;
-            --radius: 16px;
-            --radius-sm: 10px;
-            --shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
-            --shadow-sm: 0 8px 24px rgba(0, 0, 0, 0.4);
-            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  .schemes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 28px;
+  }
 
-            /* Neon glow values */
-            --glow-secondary: 0 0 20px rgba(0, 212, 255, 0.5);
-            --glow-accent: 0 0 20px rgba(255, 107, 53, 0.5);
-            --glow-purple: 0 0 20px rgba(180, 74, 255, 0.5);
-            --glow-pink: 0 0 20px rgba(255, 45, 149, 0.5);
-            --glow-green: 0 0 20px rgba(57, 255, 20, 0.5);
-            --glow-yellow: 0 0 20px rgba(255, 230, 0, 0.5);
-        }
+  /* Scheme card – inherits .card from base, but we add extra styling */
+  .scheme-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius);
+    padding: 0 0 20px 0;
+    transition: var(--transition);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
 
-        /* ================================================================
-               RESET & BASE
-               ================================================================ */
-        *,
-        *::before,
-        *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  /* Top neon accent line (always visible) */
+  .scheme-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--gradient-cyan);
+    box-shadow: var(--glow-cyan);
+    transition: var(--transition);
+    z-index: 1;
+  }
 
-        html {
-            scroll-behavior: smooth;
-        }
+  /* Hover effect: scale + magenta border */
+  .scheme-card:hover {
+    transform: translateY(-6px) scale(1.01);
+    border-color: var(--neon-magenta);
+    box-shadow: var(--shadow-card), var(--glow-magenta);
+    background: var(--bg-card-hover);
+  }
 
-        body {
-            font-family: var(--font);
-            background: var(--primary);
-            color: var(--white);
-            line-height: 1.6;
-            min-height: 100vh;
-            overflow-x: hidden;
-            background: radial-gradient(ellipse at 20% 50%, #0d1b2a 0%, #0a0e1a 70%);
-        }
+  /* Bottom glow line on hover */
+  .scheme-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--gradient-cyber);
+    transform: scaleX(0);
+    transition: var(--transition);
+    transform-origin: left;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+  }
+  .scheme-card:hover::after {
+    transform: scaleX(1);
+  }
 
-        /* ================================================================
-               SCROLLBAR — Neon-styled
-               ================================================================ */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--primary);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--secondary);
-            border-radius: 50px;
-            box-shadow: var(--glow-secondary);
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent);
-            box-shadow: var(--glow-accent);
-        }
+  .scheme-card .scheme-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    transition: var(--transition);
+  }
+  .scheme-card:hover .scheme-image {
+    filter: brightness(1.05);
+  }
 
-        /* ================================================================
-               UTILITY
-               ================================================================ */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
+  .scheme-card .card-body {
+    padding: 18px 22px 12px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
 
-        /* ================================================================
-               PAGE LOAD ANIMATION — Fade-in + Slide-up
-               ================================================================ */
-        .animate-on-load {
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeSlideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-        }
+  .scheme-card .scheme-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-white);
+    margin-bottom: 6px;
+    transition: var(--transition);
+  }
+  .scheme-card:hover .scheme-title {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+  }
 
-        .animate-on-load:nth-child(1) { animation-delay: 0.05s; }
-        .animate-on-load:nth-child(2) { animation-delay: 0.10s; }
-        .animate-on-load:nth-child(3) { animation-delay: 0.15s; }
-        .animate-on-load:nth-child(4) { animation-delay: 0.20s; }
-        .animate-on-load:nth-child(5) { animation-delay: 0.25s; }
-        .animate-on-load:nth-child(6) { animation-delay: 0.30s; }
-        .animate-on-load:nth-child(7) { animation-delay: 0.35s; }
-        .animate-on-load:nth-child(8) { animation-delay: 0.40s; }
-        .animate-on-load:nth-child(9) { animation-delay: 0.45s; }
-        .animate-on-load:nth-child(10) { animation-delay: 0.50s; }
+  .scheme-card .scheme-description {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    flex: 1;
+    margin-bottom: 12px;
+  }
 
-        @keyframes fadeSlideUp {
-            0% {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+  .scheme-card .scheme-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+  .scheme-card .scheme-meta .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .scheme-card .scheme-meta .meta-item i {
+    color: var(--neon-cyan);
+    font-size: 0.85rem;
+    transition: var(--transition);
+  }
+  .scheme-card:hover .scheme-meta .meta-item i {
+    color: var(--neon-magenta);
+  }
+  .scheme-card .scheme-meta .meta-item .label {
+    font-weight: 600;
+    color: var(--text-muted);
+    opacity: 0.7;
+  }
+  .scheme-card .scheme-meta .meta-item .value {
+    color: var(--text-white);
+  }
+  .scheme-card .scheme-meta .eligibility {
+    flex-basis: 100%;
+  }
 
-        /* ================================================================
-               BUTTONS — Neon Glow / Pulsing
-               ================================================================ */
-        .btn-primary,
-        .btn-outline,
-        .btn-whatsapp {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 14px 34px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 1rem;
-            text-decoration: none;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: var(--transition);
-            position: relative;
-            letter-spacing: 0.3px;
-            background: transparent;
-            color: var(--white);
-        }
+  /* ============================================================
+     PAGINATION – uses base button styles
+     ============================================================ */
+  .pagination-wrap {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+  .pagination-wrap .page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 18px;
+    border-radius: var(--radius-pill);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: var(--transition);
+    text-decoration: none;
+    min-width: 44px;
+  }
+  .pagination-wrap .page-link:hover {
+    background: rgba(0, 240, 255, 0.08);
+    border-color: var(--neon-cyan);
+    color: var(--text-white);
+    box-shadow: var(--glow-cyan);
+    transform: translateY(-2px);
+  }
+  .pagination-wrap .page-link.active {
+    background: var(--gradient-cyan);
+    color: var(--text-dark);
+    border-color: var(--neon-cyan);
+    box-shadow: var(--glow-cyan);
+  }
+  .pagination-wrap .page-link.disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
 
-        /* ---- Primary (cyan) with pulsing neon glow ---- */
-        .btn-primary {
-            background: var(--secondary);
-            color: var(--primary);
-            border-color: var(--secondary);
-            box-shadow: var(--glow-secondary);
-            animation: pulseGlowCyan 2.5s ease-in-out infinite;
-        }
-        .btn-primary:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 0 40px rgba(0, 212, 255, 0.7), 0 0 80px rgba(0, 212, 255, 0.3);
-            background: #00e5ff;
-            border-color: #00e5ff;
-        }
+  /* ============================================================
+     CTA BANNER – uses base styles, just layout
+     ============================================================ */
+  .cta-banner {
+    padding: 60px 0;
+    background: rgba(10, 14, 26, 0.8);
+    border-top: 1px solid rgba(0, 240, 255, 0.06);
+    border-bottom: 1px solid rgba(0, 240, 255, 0.06);
+    text-align: center;
+  }
+  .cta-banner .container {
+    max-width: 720px;
+  }
+  .cta-banner h2 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    font-family: var(--font-display);
+    letter-spacing: -0.5px;
+  }
+  .cta-banner h2 span {
+    background: var(--gradient-cyber);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .cta-banner p {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    max-width: 600px;
+    margin: 0 auto 1.8rem;
+    line-height: 1.7;
+  }
+  .cta-banner .cta-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
 
-        /* ---- Outline (neon purple) with pulse ---- */
-        .btn-outline {
-            border-color: var(--neon-purple);
-            color: var(--neon-purple);
-            box-shadow: var(--glow-purple);
-            animation: pulseGlowPurple 3s ease-in-out infinite;
-        }
-        .btn-outline:hover {
-            background: var(--neon-purple);
-            color: var(--white);
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 0 40px rgba(180, 74, 255, 0.7), 0 0 80px rgba(180, 74, 255, 0.3);
-        }
+  /* ============================================================
+     NO SCHEMES
+     ============================================================ */
+  .no-schemes {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 0;
+    color: var(--text-muted);
+  }
+  .no-schemes i {
+    font-size: 3.5rem;
+    display: block;
+    margin-bottom: 0.75rem;
+    opacity: 0.3;
+  }
+  .no-schemes p {
+    font-size: 1.1rem;
+  }
 
-        /* ---- WhatsApp (green) with pulse ---- */
-        .btn-whatsapp {
-            background: #25d366;
-            color: var(--white);
-            border-color: #25d366;
-            box-shadow: var(--glow-green);
-            animation: pulseGlowGreen 3.2s ease-in-out infinite;
-        }
-        .btn-whatsapp:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 0 40px rgba(57, 255, 20, 0.6), 0 0 80px rgba(57, 255, 20, 0.25);
-            background: #2eea72;
-            border-color: #2eea72;
-        }
+  /* ============================================================
+     RESPONSIVE
+     ============================================================ */
+  @media (max-width: 768px) {
+    .page-hero { padding: 40px 0 30px; }
+    .page-hero h1 { font-size: 2rem; }
+    .page-hero p { font-size: 1rem; }
 
-        /* ---- Pulse keyframes ---- */
-        @keyframes pulseGlowCyan {
-            0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.4); }
-            50% { box-shadow: 0 0 40px rgba(0, 212, 255, 0.8), 0 0 80px rgba(0, 212, 255, 0.3); }
-        }
-        @keyframes pulseGlowPurple {
-            0%, 100% { box-shadow: 0 0 20px rgba(180, 74, 255, 0.4); }
-            50% { box-shadow: 0 0 40px rgba(180, 74, 255, 0.8), 0 0 80px rgba(180, 74, 255, 0.3); }
-        }
-        @keyframes pulseGlowGreen {
-            0%, 100% { box-shadow: 0 0 20px rgba(57, 255, 20, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(57, 255, 20, 0.7), 0 0 80px rgba(57, 255, 20, 0.2); }
-        }
+    .schemes-grid { grid-template-columns: 1fr; gap: 20px; }
+    .scheme-card .scheme-image { height: 160px; }
+    .scheme-card .card-body { padding: 14px 16px 10px; }
+    .scheme-card .scheme-title { font-size: 1.05rem; }
+    .scheme-card .scheme-description { font-size: 0.88rem; }
 
-        /* ================================================================
-               NAVBAR
-               ================================================================ */
-        .navbar {
-            padding: 18px 0;
-            background: rgba(10, 14, 26, 0.85);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(0, 212, 255, 0.08);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            transition: var(--transition);
-        }
-        .navbar .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo {
-            font-size: 1.7rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, var(--secondary), var(--neon-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-decoration: none;
-        }
-        .logo i {
-            color: var(--secondary);
-            -webkit-text-fill-color: var(--secondary);
-            margin-right: 6px;
-        }
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 28px;
-            list-style: none;
-        }
-        .nav-links a {
-            color: var(--gray-dark);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: var(--transition);
-            position: relative;
-        }
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0%;
-            height: 2px;
-            background: var(--secondary);
-            transition: var(--transition);
-            box-shadow: var(--glow-secondary);
-        }
-        .nav-links a:hover {
-            color: var(--white);
-        }
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-        .nav-links a.active {
-            color: var(--secondary);
-        }
-        .nav-links a.active::after {
-            width: 100%;
-        }
+    .cta-banner { padding: 40px 0; }
+    .cta-banner h2 { font-size: 1.8rem; }
+    .cta-banner .cta-buttons { flex-direction: column; align-items: center; }
+    .cta-banner .cta-buttons .btn-primary,
+    .cta-banner .cta-buttons .btn-whatsapp {
+      width: 100%;
+      justify-content: center;
+    }
+  }
 
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 4px;
-        }
-        .hamburger span {
-            width: 26px;
-            height: 2px;
-            background: var(--white);
-            border-radius: 4px;
-            transition: var(--transition);
-        }
-
-        /* ================================================================
-               PAGE HERO
-               ================================================================ */
-        .page-hero {
-            padding: 80px 0 60px;
-            position: relative;
-            overflow: hidden;
-            text-align: center;
-        }
-        .page-hero::before {
-            content: '';
-            position: absolute;
-            top: -40%;
-            right: -15%;
-            width: 700px;
-            height: 700px;
-            background: radial-gradient(circle, rgba(0, 212, 255, 0.06) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-        .page-hero::after {
-            content: '';
-            position: absolute;
-            bottom: -30%;
-            left: -10%;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(180, 74, 255, 0.05) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-        .page-hero .container {
-            position: relative;
-            z-index: 1;
-        }
-        .page-hero .breadcrumb {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 0.85rem;
-            font-weight: 500;
-            margin-bottom: 16px;
-            letter-spacing: 0.5px;
-        }
-        .page-hero .breadcrumb a {
-            color: rgba(255, 255, 255, 0.5);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-        .page-hero .breadcrumb a:hover {
-            color: var(--secondary);
-        }
-        .page-hero .breadcrumb .current {
-            color: var(--secondary);
-        }
-        .page-hero h1 {
-            font-size: 3.4rem;
-            font-weight: 800;
-            letter-spacing: -1px;
-            margin-bottom: 12px;
-            background: linear-gradient(135deg, var(--white), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .page-hero h1 span {
-            background: linear-gradient(135deg, var(--secondary), var(--neon-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .page-hero p {
-            font-size: 1.15rem;
-            color: var(--gray-dark);
-            max-width: 620px;
-            margin: 0 auto;
-            line-height: 1.8;
-        }
-        .page-hero .glow-line {
-            display: inline-block;
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(90deg, var(--secondary), var(--neon-purple));
-            border-radius: 4px;
-            margin-top: 16px;
-            box-shadow: var(--glow-secondary);
-        }
-
-        /* ================================================================
-               SCHEMES SECTION
-               ================================================================ */
-        .schemes-section {
-            padding: 60px 0 80px;
-            position: relative;
-        }
-        .schemes-section::before {
-            content: '';
-            position: absolute;
-            top: 10%;
-            right: -5%;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(255, 45, 149, 0.03) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
-        /* ─── Schemes Grid ─── */
-        .schemes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 28px;
-        }
-
-        /* ─── Scheme Card — Gaming-style hover ─── */
-        .scheme-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(4px);
-            border: 2px solid rgba(255, 255, 255, 0.05);
-            border-radius: var(--radius);
-            padding: 28px 26px 24px;
-            transition: var(--transition);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Top neon accent line */
-        .scheme-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--secondary), var(--neon-purple));
-            box-shadow: var(--glow-secondary);
-            transition: var(--transition);
-        }
-
-        /* ★ Gaming-style hover: scale + vibrant neon border ★ */
-        .scheme-card:hover {
-            transform: translateY(-8px) scale(1.01);
-            border-color: var(--neon-pink);
-            box-shadow: 0 0 30px rgba(255, 45, 149, 0.15), 0 16px 48px rgba(0, 0, 0, 0.5);
-            background: rgba(255, 45, 149, 0.04);
-        }
-
-        /* Glow line on hover (bottom) */
-        .scheme-card::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--secondary), var(--neon-pink), var(--neon-purple));
-            transform: scaleX(0);
-            transition: var(--transition);
-            transform-origin: left;
-            box-shadow: 0 0 20px rgba(255, 45, 149, 0.3);
-        }
-        .scheme-card:hover::after {
-            transform: scaleX(1);
-        }
-
-        .scheme-card .scheme-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: var(--radius-sm);
-            margin-bottom: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            transition: var(--transition);
-        }
-        .scheme-card:hover .scheme-image {
-            border-color: var(--secondary);
-            box-shadow: var(--glow-secondary);
-        }
-
-        .scheme-card .scheme-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--white);
-            margin-bottom: 6px;
-            transition: var(--transition);
-        }
-        .scheme-card:hover .scheme-title {
-            color: var(--secondary);
-            text-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
-        }
-
-        .scheme-card .scheme-description {
-            color: var(--gray-dark);
-            font-size: 0.95rem;
-            line-height: 1.7;
-            flex: 1;
-            margin-bottom: 12px;
-            transition: var(--transition);
-        }
-
-        .scheme-card .scheme-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px 16px;
-            padding-top: 14px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 0.85rem;
-            color: var(--gray-dark);
-        }
-        .scheme-card .scheme-meta .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .scheme-card .scheme-meta .meta-item i {
-            color: var(--secondary);
-            font-size: 0.9rem;
-            transition: var(--transition);
-        }
-        .scheme-card:hover .scheme-meta .meta-item i {
-            color: var(--neon-pink);
-            filter: drop-shadow(0 0 8px rgba(255, 45, 149, 0.3));
-        }
-        .scheme-card .scheme-meta .meta-item .label {
-            font-weight: 600;
-            color: var(--gray-dark);
-        }
-        .scheme-card .scheme-meta .meta-item .value {
-            color: var(--white);
-        }
-        .scheme-card .scheme-meta .eligibility {
-            flex-basis: 100%;
-        }
-
-        /* ─── Pagination ─── */
-        .pagination-wrap {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 40px;
-            flex-wrap: wrap;
-        }
-        .pagination-wrap .page-link {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 8px 16px;
-            border-radius: 30px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            color: var(--gray-dark);
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: var(--transition);
-            text-decoration: none;
-            min-width: 44px;
-        }
-        .pagination-wrap .page-link:hover {
-            background: rgba(0, 212, 255, 0.08);
-            border-color: var(--secondary);
-            color: var(--white);
-            box-shadow: var(--glow-secondary);
-            transform: translateY(-2px);
-        }
-        .pagination-wrap .page-link.active {
-            background: var(--secondary);
-            color: var(--primary);
-            border-color: var(--secondary);
-            box-shadow: var(--glow-secondary);
-        }
-        .pagination-wrap .page-link.disabled {
-            opacity: 0.3;
-            pointer-events: none;
-        }
-
-        /* ─── No Schemes ─── */
-        .no-schemes {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 4rem 0;
-            color: var(--gray-dark);
-        }
-        .no-schemes i {
-            font-size: 3.5rem;
-            display: block;
-            margin-bottom: 0.75rem;
-            color: var(--gray);
-            opacity: 0.4;
-        }
-        .no-schemes p {
-            font-size: 1.1rem;
-        }
-
-        /* ================================================================
-               CTA BANNER
-               ================================================================ */
-        .cta-banner {
-            padding: 70px 0;
-            background: linear-gradient(135deg, rgba(10, 14, 26, 0.9), rgba(20, 27, 43, 0.9));
-            text-align: center;
-            border-top: 1px solid rgba(0, 212, 255, 0.06);
-            border-bottom: 1px solid rgba(0, 212, 255, 0.06);
-            position: relative;
-            overflow: hidden;
-        }
-        .cta-banner::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -10%;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(0, 212, 255, 0.05) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-        .cta-banner .container {
-            position: relative;
-            z-index: 1;
-            max-width: 720px;
-        }
-        .cta-banner h2 {
-            font-size: 2.4rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            margin-bottom: 8px;
-        }
-        .cta-banner h2 span {
-            background: linear-gradient(135deg, var(--secondary), var(--neon-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .cta-banner p {
-            color: var(--gray-dark);
-            font-size: 1.05rem;
-            margin-bottom: 28px;
-            line-height: 1.7;
-        }
-        .cta-banner .cta-buttons {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        /* ================================================================
-               FOOTER
-               ================================================================ */
-        .footer {
-            padding: 30px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.03);
-            text-align: center;
-            color: var(--gray-dark);
-            font-size: 0.9rem;
-        }
-        .footer span {
-            color: var(--secondary);
-        }
-        .footer i {
-            color: var(--neon-pink);
-        }
-
-        /* ================================================================
-               RESPONSIVE
-               ================================================================ */
-        @media (max-width: 1024px) {
-            .schemes-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        @media (max-width: 768px) {
-            .navbar .container { flex-wrap: wrap; }
-            .hamburger { display: flex; }
-            .nav-links {
-                display: none;
-                flex-direction: column;
-                width: 100%;
-                padding: 20px 0 10px;
-                gap: 16px;
-                align-items: center;
-            }
-            .nav-links.open { display: flex; }
-
-            .page-hero { padding: 50px 0 40px; }
-            .page-hero h1 { font-size: 2.2rem; }
-            .page-hero p { font-size: 1rem; }
-
-            .schemes-grid { grid-template-columns: 1fr; gap: 20px; }
-            .scheme-card { padding: 20px 18px 18px; }
-            .scheme-card .scheme-image { height: 160px; }
-            .scheme-card .scheme-title { font-size: 1.05rem; }
-            .scheme-card .scheme-description { font-size: 0.9rem; }
-
-            .cta-banner { padding: 50px 0; }
-            .cta-banner h2 { font-size: 1.8rem; }
-            .cta-banner .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            .cta-banner .cta-buttons .btn-primary,
-            .cta-banner .cta-buttons .btn-whatsapp {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .page-hero h1 { font-size: 1.8rem; }
-            .scheme-card .scheme-image { height: 140px; }
-            .scheme-card .scheme-meta {
-                flex-direction: column;
-                gap: 4px;
-            }
-            .scheme-card .scheme-meta .eligibility { flex-basis: auto; }
-            .scheme-card .scheme-meta .meta-item { font-size: 0.8rem; }
-        }
-    </style>
-</head>
+  @media (max-width: 480px) {
+    .page-hero h1 { font-size: 1.7rem; }
+    .scheme-card .scheme-image { height: 140px; }
+    .scheme-card .scheme-meta {
+      flex-direction: column;
+      gap: 4px;
+    }
+    .scheme-card .scheme-meta .eligibility { flex-basis: auto; }
+    .pagination-wrap .page-link { padding: 6px 14px; font-size: 0.8rem; min-width: 36px; }
+  }
+</style>
 {% endblock %}
 
 {% block content %}
-<body>
+<!-- ============================================================
+     PAGE HERO
+     ============================================================ -->
+<section class="page-hero">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="{% url 'home' %}"><i class="fas fa-home"></i> {% trans "Home" %}</a>
+      <span><i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5;"></i></span>
+      <span class="current">{% trans "Government Schemes" %}</span>
+    </div>
+    <h1>{% trans "Government" %} <span>{% trans "Schemes" %}</span></h1>
+    <p>{% trans "Explore the latest government schemes and initiatives designed to benefit citizens, businesses, and communities." %}</p>
+    <div class="glow-line"></div>
+  </div>
+</section>
 
-    <!-- ================================================================
-    PAGE HERO
-    ================================================================ -->
-    <section class="page-hero animate-on-load">
-        <div class="container">
-            <div class="breadcrumb">
-                <a href="{% url 'home' %}"><i class="fas fa-home"></i> {% trans "Home" %}</a>
-                <span><i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5;"></i></span>
-                <span class="current">{% trans "Government Schemes" %}</span>
-            </div>
-            <h1>{% trans "Government" %} <span>{% trans "Schemes" %}</span></h1>
-            <p>{% trans "Explore the latest government schemes and initiatives designed to benefit citizens, businesses, and communities." %}</p>
-            <div class="glow-line"></div>
+<!-- ============================================================
+     SCHEMES SECTION
+     ============================================================ -->
+<section class="schemes-section container" id="schemes">
+  <div class="schemes-grid">
+    {% for scheme in schemes_page %}
+    <div class="scheme-card">
+      {% if scheme.image %}
+        <img src="{{ scheme.image.url }}" alt="{{ scheme.title }}" class="scheme-image" loading="lazy" />
+      {% else %}
+        <img src="https://picsum.photos/seed/{{ scheme.id }}/400/300" alt="{{ scheme.title }}" class="scheme-image" loading="lazy" />
+      {% endif %}
+      <div class="card-body">
+        <h3 class="scheme-title">{{ scheme.title }}</h3>
+        <p class="scheme-description">{{ scheme.description|truncatechars:150 }}</p>
+        <div class="scheme-meta">
+          <div class="meta-item eligibility">
+            <i class="fas fa-check-circle"></i>
+            <span class="label">{% trans "Eligibility:" %}</span>
+            <span class="value">{{ scheme.eligibility|default:_("Not specified") }}</span>
+          </div>
+          <div class="meta-item">
+            <i class="far fa-calendar-alt"></i>
+            <span class="label">{% trans "Last Date:" %}</span>
+            <span class="value">
+              {% if scheme.last_date %}
+                {{ scheme.last_date|date:"d M Y" }}
+              {% else %}
+                {% trans "Ongoing" %}
+              {% endif %}
+            </span>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+    {% empty %}
+    <div class="no-schemes">
+      <i class="fas fa-hand-holding-heart"></i>
+      <p>{% trans "No government schemes available at the moment." %}</p>
+    </div>
+    {% endfor %}
+  </div>
 
-    <!-- ================================================================
-    SCHEMES SECTION
-    ================================================================ -->
-    <section class="schemes-section" id="schemes">
-        <div class="container">
+  <!-- Pagination -->
+  {% if schemes_page.has_other_pages %}
+  <div class="pagination-wrap">
+    {% if schemes_page.has_previous %}
+      <a href="?page={{ schemes_page.previous_page_number }}" class="page-link"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</a>
+    {% else %}
+      <span class="page-link disabled"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</span>
+    {% endif %}
 
-            <!-- ─── Schemes Grid (DYNAMIC) ─── -->
-            <div class="schemes-grid">
-                {% for scheme in schemes_page %}
-                <div class="scheme-card animate-on-load">
-                    {% if scheme.image %}
-                        <img src="{{ scheme.image.url }}" alt="{{ scheme.title }}" class="scheme-image" loading="lazy" />
-                    {% else %}
-                        <img src="https://picsum.photos/seed/{{ scheme.id }}/400/300" alt="{{ scheme.title }}" class="scheme-image" loading="lazy" />
-                    {% endif %}
-                    <h3 class="scheme-title">{{ scheme.title }}</h3>
-                    <p class="scheme-description">{{ scheme.description|truncatechars:150 }}</p>
-                    <div class="scheme-meta">
-                        <div class="meta-item eligibility">
-                            <i class="fas fa-check-circle"></i>
-                            <span class="label">{% trans "Eligibility:" %}</span>
-                            <span class="value">{{ scheme.eligibility|default:_("Not specified") }}</span>
-                        </div>
-                        <div class="meta-item">
-                            <i class="far fa-calendar-alt"></i>
-                            <span class="label">{% trans "Last Date:" %}</span>
-                            <span class="value">
-                                {% if scheme.last_date %}
-                                    {{ scheme.last_date|date:"d M Y" }}
-                                {% else %}
-                                    {% trans "Ongoing" %}
-                                {% endif %}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                {% empty %}
-                <div class="no-schemes">
-                    <i class="fas fa-hand-holding-heart"></i>
-                    <p>{% trans "No government schemes available at the moment." %}</p>
-                </div>
-                {% endfor %}
-            </div>
+    {% for num in schemes_page.paginator.page_range %}
+      {% if schemes_page.number == num %}
+        <span class="page-link active">{{ num }}</span>
+      {% elif num > schemes_page.number|add:'-3' and num < schemes_page.number|add:'3' %}
+        <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+      {% endif %}
+    {% endfor %}
 
-            <!-- ─── Pagination ─── -->
-            {% if schemes_page.has_other_pages %}
-            <div class="pagination-wrap">
-                {% if schemes_page.has_previous %}
-                    <a href="?page={{ schemes_page.previous_page_number }}" class="page-link"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</a>
-                {% else %}
-                    <span class="page-link disabled"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</span>
-                {% endif %}
+    {% if schemes_page.has_next %}
+      <a href="?page={{ schemes_page.next_page_number }}" class="page-link">{% trans "Next" %} <i class="fas fa-chevron-right"></i></a>
+    {% else %}
+      <span class="page-link disabled">{% trans "Next" %} <i class="fas fa-chevron-right"></i></span>
+    {% endif %}
+  </div>
+  {% endif %}
+</section>
 
-                {% for num in schemes_page.paginator.page_range %}
-                    {% if schemes_page.number == num %}
-                        <span class="page-link active">{{ num }}</span>
-                    {% elif num > schemes_page.number|add:'-3' and num < schemes_page.number|add:'3' %}
-                        <a href="?page={{ num }}" class="page-link">{{ num }}</a>
-                    {% endif %}
-                {% endfor %}
-
-                {% if schemes_page.has_next %}
-                    <a href="?page={{ schemes_page.next_page_number }}" class="page-link">{% trans "Next" %} <i class="fas fa-chevron-right"></i></a>
-                {% else %}
-                    <span class="page-link disabled">{% trans "Next" %} <i class="fas fa-chevron-right"></i></span>
-                {% endif %}
-            </div>
-            {% endif %}
-
-        </div>
-    </section>
-
-    <!-- ================================================================
-    CTA BANNER
-    ================================================================ -->
-    <section class="cta-banner animate-on-load" id="contact">
-        <div class="container">
-            <h2>{% trans "Need Help Applying for" %} <span>{% trans "Schemes?" %}</span></h2>
-            <p>{% trans "We assist with scheme applications, document verification, and form filling. Let us guide you through the process." %}</p>
-            <div class="cta-buttons">
-                <a href="{% url 'home' %}#contact" class="btn-primary">
-                    <i class="fas fa-phone"></i> {% trans "Contact Us" %}
-                </a>
-                <a href="https://wa.me/919876543210?text=Hello%2C%20I%20need%20help%20with%20government%20scheme%20applications." target="_blank" class="btn-whatsapp">
-                    <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
-                </a>
-            </div>
-        </div>
-    </section>
-
+<!-- ============================================================
+     CTA BANNER
+     ============================================================ -->
+<section class="cta-banner" id="contact">
+  <div class="container">
+    <h2>{% trans "Need Help Applying for" %} <span>{% trans "Schemes?" %}</span></h2>
+    <p>{% trans "We assist with scheme applications, document verification, and form filling. Let us guide you through the process." %}</p>
+    <div class="cta-buttons">
+      <a href="{% url 'home' %}#contact" class="btn-primary">
+        <i class="fas fa-phone"></i> {% trans "Contact Us" %}
+      </a>
+      <a href="https://wa.me/919876543210?text=Hello%2C%20I%20need%20help%20with%20government%20scheme%20applications." target="_blank" class="btn-whatsapp">
+        <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
+      </a>
+    </div>
+  </div>
+</section>
 {% endblock %}
+
 
 {% block extra_scripts %}
     <!-- ================================================================
