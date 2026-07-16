@@ -529,11 +529,11 @@
 {% endblock %}
 
 {% block content %}
-<body>
-
     <!-- ===== SIDEBAR ===== -->
     <aside class="sidebar" id="sidebar">
-        <div class="logo"><i class="fas fa-laptop"></i> {% trans "CyberAdmin" %}</div>
+        <div class="logo">
+            <i class="fas fa-laptop"></i> {% trans "CyberAdmin" %}
+        </div>
         <nav>
             <ul>
                 <li><a href="#" class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> {% trans "Dashboard" %}</a></li>
@@ -552,13 +552,15 @@
                 <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> {% trans "Settings" %}</a></li>
             </ul>
         </nav>
-        <a href="{% url 'logout' %}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> {% trans "Logout" %}</a>
+        <a href="{% url 'logout' %}" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i> {% trans "Logout" %}
+        </a>
     </aside>
 
     <!-- ===== MAIN CONTENT ===== -->
     <main class="main-content">
 
-        <!-- Top Bar -->
+        <!-- ===== TOP BAR ===== -->
         <div class="top-bar">
             <div style="display:flex; align-items:center; gap:0.8rem">
                 <button class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></button>
@@ -569,95 +571,113 @@
                 <div class="avatar">SA</div>
             </div>
         </div>
-<!-- ===== REQUIRED DOCUMENTS ===== -->
-<div id="section-requireddocs" class="section">
-    <div class="section-header">
-        <h3><i class="fas fa-list-ul" style="color:#0a66c2"></i> {% trans "Required Documents" %}</h3>
-        <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addRequiredDocForm">{% trans "Add Document" %}</button>
-    </div>
 
-<div class="collapse admin-form" id="addRequiredDocForm">
-    <form method="post">
-        {% csrf_token %}
-        <input type="hidden" name="action" value="add">
-        <input type="hidden" name="model_type" value="requireddoc">
-        <div>
-            <label for="id_service">{% trans "Service" %} *</label>
-            {{ required_doc_form.service }}
-        </div>
-        <div>
-            <label for="id_document_name">{% trans "Document Name" %} *</label>
-            {{ required_doc_form.document_name }}
-            <small class="text-muted" style="display:block; margin-top:4px; color: var(--text-dim);">
-                {% trans "Enter one document name at a time (e.g., 'Aadhaar Card'). Add multiple entries separately." %}
-            </small>
-        </div>
-        <div class="form-actions">
-            <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save" %}</button>
-        </div>
-    </form>
-</div>
+        <!-- ========================================================== -->
+        <!-- SECTION: REQUIRED DOCUMENTS                                -->
+        <!-- ========================================================== -->
+        <div id="section-requireddocs" class="section">
+            <div class="section-header">
+                <h3><i class="fas fa-list-ul" style="color:#0a66c2"></i> {% trans "Required Documents" %}</h3>
+                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addRequiredDocForm">
+                    {% trans "Add Document" %}
+                </button>
+            </div>
 
-    <div class="table-wrap">
-        <table>
-            <thead>
-                <tr>
-                    <th>{% trans "Service" %}</th>
-                    <th>{% trans "Document Name" %}</th>
-                    <th>{% trans "Actions" %}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for doc in required_docs %}
-                <tr>
-                    <td>{{ doc.service.name }}</td>
-                    <td>{{ doc.document_name }}</td>
-                    <td>
-                        <button class="btn-primary btn-sm" onclick="editRequiredDoc('{{ doc.id }}', '{{ doc.service.id }}', '{{ doc.document_name|escapejs }}')">
-                            <i class="fas fa-edit"></i>
+            <div class="collapse admin-form" id="addRequiredDocForm">
+                <form method="post" id="addRequiredDocFormElement">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="add">
+                    <input type="hidden" name="model_type" value="requireddoc">
+                    <div>
+                        <label for="id_service">{% trans "Service" %} *</label>
+                        {{ required_doc_form.service }}
+                    </div>
+                    <div>
+                        <label for="id_document_name">{% trans "Document Name" %} *</label>
+                        {{ required_doc_form.document_name }}
+                        <small class="text-muted" style="display:block; margin-top:4px; color: var(--text-dim);">
+                            {% trans "Enter one document name at a time (e.g., 'Aadhaar Card')." %}
+                            <br>
+                            <span style="color: var(--neon-orange);">{% trans "Do not use commas – add each document separately." %}</span>
+                        </small>
+                        <div id="commaWarning" style="color: var(--neon-red); display:none; margin-top:4px;">
+                            <i class="fas fa-exclamation-triangle"></i> {% trans "Please remove commas and add each document separately." %}
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save" %}</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>{% trans "Service" %}</th>
+                            <th>{% trans "Document Name" %}</th>
+                            <th>{% trans "Actions" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for doc in required_docs %}
+                            <tr>
+                                <td>{{ doc.service.name }}</td>
+                                <td>{{ doc.document_name }}</td>
+                                <td>
+                                    <button class="btn-primary btn-sm"
+                                        onclick="editRequiredDoc('{{ doc.id }}', '{{ doc.service.id }}', '{{ doc.document_name|escapejs }}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <form method="post" style="display:inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="delete">
+                                        <input type="hidden" name="model_type" value="requireddoc">
+                                        <input type="hidden" name="id" value="{{ doc.id }}">
+                                        <button type="submit" class="btn-danger"
+                                            onclick="return confirm('{% trans "Delete this document requirement?"|escapejs %}')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr><td colspan="3">{% trans "No required documents defined." %}</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Inline Edit Form for Required Documents -->
+            <div class="admin-form" id="editRequiredDocForm" style="display:none; margin-top:1rem;">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="edit">
+                    <input type="hidden" name="model_type" value="requireddoc">
+                    <input type="hidden" name="id" id="editRequiredDocId">
+                    <div>
+                        <label>{% trans "Service" %} *</label>
+                        <select name="service" id="editRequiredDocService" class="form-control">
+                            {% for service in services %}
+                                <option value="{{ service.id }}">{{ service.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label>{% trans "Document Name" %} *</label>
+                        <input type="text" name="document_name" id="editRequiredDocName" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-outline"
+                            onclick="document.getElementById('editRequiredDocForm').style.display='none'">
+                            {% trans "Cancel" %}
                         </button>
-                        <form method="post" style="display:inline;">
-                            {% csrf_token %}
-                            <input type="hidden" name="action" value="delete">
-                            <input type="hidden" name="model_type" value="requireddoc">
-                            <input type="hidden" name="id" value="{{ doc.id }}">
-                            <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this document requirement?"|escapejs %}')"><i class="fas fa-trash"></i></button>
-                        </form>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr><td colspan="3">{% trans "No required documents defined." %}</td></tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
-    <!-- Inline Edit Form for Required Documents -->
-    <div class="admin-form" id="editRequiredDocForm" style="display:none; margin-top:1rem;">
-        <form method="post">
-            {% csrf_token %}
-            <input type="hidden" name="action" value="edit">
-            <input type="hidden" name="model_type" value="requireddoc">
-            <input type="hidden" name="id" id="editRequiredDocId">
-            <div>
-                <label>{% trans "Service" %} *</label>
-                <select name="service" id="editRequiredDocService" class="form-control">
-                    {% for service in services %}
-                        <option value="{{ service.id }}">{{ service.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div>
-                <label>{% trans "Document Name" %} *</label>
-                <input type="text" name="document_name" id="editRequiredDocName" required>
-            </div>
-            <div class="form-actions">
-                <button type="button" class="btn-outline" onclick="document.getElementById('editRequiredDocForm').style.display='none'">{% trans "Cancel" %}</button>
-                <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
-            </div>
-        </form>
-    </div>
-</div>
         <!-- ========================================================== -->
         <!-- SECTION: DASHBOARD                                         -->
         <!-- ========================================================== -->
@@ -704,14 +724,14 @@
                 <h4 style="margin-bottom:0.8rem;"><i class="fas fa-clock" style="color:#0a66c2"></i> {% trans "Recent Activity" %}</h4>
                 <ul style="list-style:none; padding:0">
                     {% if appointments %}
-                    {% for appt in appointments|slice:":5" %}
-                    <li style="display:flex; justify-content:space-between; padding:0.5rem 0; border-bottom:1px solid #f0f4fa;">
-                        <span><i class="fas fa-calendar-check" style="color:#0a66c2"></i> {{ appt.full_name }} – {{ appt.service.name }}</span>
-                        <span style="color:#6f85a0; font-size:0.85rem;">{{ appt.created_at|date:"d M, H:i" }}</span>
-                    </li>
-                    {% endfor %}
+                        {% for appt in appointments|slice:":5" %}
+                            <li style="display:flex; justify-content:space-between; padding:0.5rem 0; border-bottom:1px solid #f0f4fa;">
+                                <span><i class="fas fa-calendar-check" style="color:#0a66c2"></i> {{ appt.full_name }} – {{ appt.service.name }}</span>
+                                <span style="color:#6f85a0; font-size:0.85rem;">{{ appt.created_at|date:"d M, H:i" }}</span>
+                            </li>
+                        {% endfor %}
                     {% else %}
-                    <li style="color:#6f85a0; padding:0.5rem 0;">{% trans "No recent activity." %}</li>
+                        <li style="color:#6f85a0; padding:0.5rem 0;">{% trans "No recent activity." %}</li>
                     {% endif %}
                 </ul>
             </div>
@@ -723,7 +743,9 @@
         <div id="section-services" class="section">
             <div class="section-header">
                 <h3><i class="fas fa-concierge-bell" style="color:#0a66c2"></i> {% trans "Manage Services" %}</h3>
-                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addServiceForm">{% trans "Add Service" %}</button>
+                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addServiceForm">
+                    {% trans "Add Service" %}
+                </button>
             </div>
 
             <!-- Add Service Form -->
@@ -741,26 +763,44 @@
 
             <div class="table-wrap">
                 <table>
-                    <thead><tr><th>#</th><th>{% trans "Name" %}</th><th>{% trans "Category" %}</th><th>{% trans "Status" %}</th><th>{% trans "Actions" %}</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>{% trans "Name" %}</th>
+                            <th>{% trans "Category" %}</th>
+                            <th>{% trans "Status" %}</th>
+                            <th>{% trans "Actions" %}</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         {% for service in services %}
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td>{{ service.name }}</td>
-                            <td>{{ service.category }}</td>
-                            <td><span class="badge-status {% if service.active %}confirmed{% else %}cancelled{% endif %}">{{ service.active|yesno:_("Active,Inactive") }}</span></td>
-                            <td>
-                                <button class="btn-primary btn-sm" onclick="editService('{{ service.id }}', '{{ service.name|escapejs }}', '{{ service.category|escapejs }}', '{{ service.description|escapejs }}', '{{ service.active|yesno:"true,false" }}', '{{ service.icon|escapejs }}', '{{ service.icon_color|default:"#00d4ff" }}')"><i class="fas fa-edit"></i></button>
-                                <form method="post" style="display:inline;">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="action" value="delete">
-                                    <input type="hidden" name="model_type" value="service">
-                                    <input type="hidden" name="id" value="{{ service.id }}">
-                                    <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this service?"|escapejs %}')"><i class="fas fa-trash"></i></button>
-                                </form>
-                            </td>
-                        </tr>
-                        {% empty %}<tr><td colspan="5">{% trans "No services." %}</td></tr>{% endfor %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ service.name }}</td>
+                                <td>{{ service.category }}</td>
+                                <td><span class="badge-status {% if service.active %}confirmed{% else %}cancelled{% endif %}">
+                                    {{ service.active|yesno:_("Active,Inactive") }}
+                                </span></td>
+                                <td>
+                                    <button class="btn-primary btn-sm"
+                                        onclick="editService('{{ service.id }}', '{{ service.name|escapejs }}', '{{ service.category|escapejs }}', '{{ service.description|escapejs }}', '{{ service.active|yesno:"true,false" }}', '{{ service.icon|escapejs }}', '{{ service.icon_color|default:"#00d4ff" }}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <form method="post" style="display:inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="delete">
+                                        <input type="hidden" name="model_type" value="service">
+                                        <input type="hidden" name="id" value="{{ service.id }}">
+                                        <button type="submit" class="btn-danger"
+                                            onclick="return confirm('{% trans "Delete this service?"|escapejs %}')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr><td colspan="5">{% trans "No services." %}</td></tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -801,11 +841,14 @@
                         <input type="text" name="icon" id="editSvcIcon" placeholder="{% trans "e.g. fa-print" %}">
                     </div>
                     <div>
-                      <label>{% trans "Icon Color" %}</label>
-                      <input type="color" name="icon_color" id="editSvcColor" value="#00d4ff">
+                        <label>{% trans "Icon Color" %}</label>
+                        <input type="color" name="icon_color" id="editSvcColor" value="#00d4ff">
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn-outline" onclick="document.getElementById('editServiceForm').style.display='none'">{% trans "Cancel" %}</button>
+                        <button type="button" class="btn-outline"
+                            onclick="document.getElementById('editServiceForm').style.display='none'">
+                            {% trans "Cancel" %}
+                        </button>
                         <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
                     </div>
                 </form>
@@ -818,7 +861,9 @@
         <div id="section-prices" class="section">
             <div class="section-header">
                 <h3><i class="fas fa-coins" style="color:#0a66c2"></i> {% trans "Service Charges" %}</h3>
-                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addChargeForm">{% trans "Add Charge" %}</button>
+                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addChargeForm">
+                    {% trans "Add Charge" %}
+                </button>
             </div>
 
             <div class="collapse admin-form" id="addChargeForm">
@@ -835,24 +880,38 @@
 
             <div class="table-wrap">
                 <table>
-                    <thead><tr><th>{% trans "Service" %}</th><th>{% trans "Charge (₹)" %}</th><th>{% trans "Actions" %}</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th>{% trans "Service" %}</th>
+                            <th>{% trans "Charge (₹)" %}</th>
+                            <th>{% trans "Actions" %}</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         {% for charge in servicecharges %}
-                        <tr>
-                            <td>{{ charge.service.name }}</td>
-                            <td>₹ {{ charge.charge }}</td>
-                            <td>
-                                <button class="btn-primary btn-sm" onclick="editCharge('{{ charge.id }}', '{{ charge.service.id }}', '{{ charge.charge }}')"><i class="fas fa-edit"></i></button>
-                                <form method="post" style="display:inline;">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="action" value="delete">
-                                    <input type="hidden" name="model_type" value="servicecharge">
-                                    <input type="hidden" name="id" value="{{ charge.id }}">
-                                    <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this charge?"|escapejs %}')"><i class="fas fa-trash"></i></button>
-                                </form>
-                            </td>
-                        </tr>
-                        {% empty %}<tr><td colspan="3">{% trans "No charges defined." %}</td></tr>{% endfor %}
+                            <tr>
+                                <td>{{ charge.service.name }}</td>
+                                <td>₹ {{ charge.charge }}</td>
+                                <td>
+                                    <button class="btn-primary btn-sm"
+                                        onclick="editCharge('{{ charge.id }}', '{{ charge.service.id }}', '{{ charge.charge }}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <form method="post" style="display:inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="delete">
+                                        <input type="hidden" name="model_type" value="servicecharge">
+                                        <input type="hidden" name="id" value="{{ charge.id }}">
+                                        <button type="submit" class="btn-danger"
+                                            onclick="return confirm('{% trans "Delete this charge?"|escapejs %}')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr><td colspan="3">{% trans "No charges defined." %}</td></tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -877,7 +936,10 @@
                         <input type="number" step="0.01" name="charge" id="editChargeAmount" required>
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn-outline" onclick="document.getElementById('editChargeForm').style.display='none'">{% trans "Cancel" %}</button>
+                        <button type="button" class="btn-outline"
+                            onclick="document.getElementById('editChargeForm').style.display='none'">
+                            {% trans "Cancel" %}
+                        </button>
                         <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
                     </div>
                 </form>
@@ -890,7 +952,9 @@
         <div id="section-announcements" class="section">
             <div class="section-header">
                 <h3><i class="fas fa-bullhorn" style="color:#0a66c2"></i> {% trans "Announcements" %}</h3>
-                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addAnnouncementForm">{% trans "Add Announcement" %}</button>
+                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addAnnouncementForm">
+                    {% trans "Add Announcement" %}
+                </button>
             </div>
 
             <div class="collapse admin-form" id="addAnnouncementForm">
@@ -907,23 +971,31 @@
 
             <div id="announcementList">
                 {% for ann in announcements %}
-                <div class="list-item">
-                    <div class="info">
-                        <span class="title">{{ ann.title }}</span>
-                        <span class="sub">{{ ann.description|truncatechars:60 }} – {{ ann.category }}</span>
+                    <div class="list-item">
+                        <div class="info">
+                            <span class="title">{{ ann.title }}</span>
+                            <span class="sub">{{ ann.description|truncatechars:60 }} – {{ ann.category }}</span>
+                        </div>
+                        <div class="list-actions">
+                            <button class="btn-primary btn-sm"
+                                onclick="editAnnouncement('{{ ann.id }}', '{{ ann.title|escapejs }}', '{{ ann.category|default:""|escapejs }}', '{{ ann.description|escapejs }}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <form method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="model_type" value="announcement">
+                                <input type="hidden" name="id" value="{{ ann.id }}">
+                                <button type="submit" class="btn-danger"
+                                    onclick="return confirm('{% trans "Delete this announcement?"|escapejs %}')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                    <div class="list-actions">
-                        <button class="btn-primary btn-sm" onclick="editAnnouncement('{{ ann.id }}', '{{ ann.title|escapejs }}', '{{ ann.category|default:""|escapejs }}', '{{ ann.description|escapejs }}')"><i class="fas fa-edit"></i></button>
-                        <form method="post" style="display:inline;">
-                            {% csrf_token %}
-                            <input type="hidden" name="action" value="delete">
-                            <input type="hidden" name="model_type" value="announcement">
-                            <input type="hidden" name="id" value="{{ ann.id }}">
-                            <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this announcement?"|escapejs %}')"><i class="fas fa-times"></i></button>
-                        </form>
-                    </div>
-                </div>
-                {% empty %}<p style="color:#6f85a0;">{% trans "No announcements." %}</p>{% endfor %}
+                {% empty %}
+                    <p style="color:#6f85a0;">{% trans "No announcements." %}</p>
+                {% endfor %}
             </div>
 
             <!-- Inline Edit Form for Announcements -->
@@ -960,7 +1032,10 @@
                         </select>
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn-outline" onclick="document.getElementById('editAnnouncementForm').style.display='none'">{% trans "Cancel" %}</button>
+                        <button type="button" class="btn-outline"
+                            onclick="document.getElementById('editAnnouncementForm').style.display='none'">
+                            {% trans "Cancel" %}
+                        </button>
                         <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
                     </div>
                 </form>
@@ -973,7 +1048,9 @@
         <div id="section-jobs" class="section">
             <div class="section-header">
                 <h3><i class="fas fa-briefcase" style="color:#0a66c2"></i> {% trans "Job Notifications" %}</h3>
-                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addJobForm">{% trans "Add Job" %}</button>
+                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addJobForm">
+                    {% trans "Add Job" %}
+                </button>
             </div>
 
             <div class="collapse admin-form" id="addJobForm">
@@ -990,23 +1067,35 @@
 
             <div id="jobList">
                 {% for job in jobs %}
-                <div class="list-item">
-                    <div class="info">
-                        <span class="title"><i class="fas fa-{{ job.icon|default:'briefcase' }}"></i> {{ job.title }}</span>
-                        <span class="sub">{% blocktrans with org=job.organization date=job.last_date|date:"d M Y" %}{{ org }} – Last Date: {{ date }}{% endblocktrans %}</span>
+                    <div class="list-item">
+                        <div class="info">
+                            <span class="title"><i class="fas fa-{{ job.icon|default:'briefcase' }}"></i> {{ job.title }}</span>
+                            <span class="sub">
+                                {% blocktrans with org=job.organization date=job.last_date|date:"d M Y" %}
+                                    {{ org }} – Last Date: {{ date }}
+                                {% endblocktrans %}
+                            </span>
+                        </div>
+                        <div class="list-actions">
+                            <button class="btn-primary btn-sm"
+                                onclick="editJob('{{ job.id }}', '{{ job.title|escapejs }}', '{{ job.organization|escapejs }}', '{{ job.description|escapejs }}', '{{ job.last_date|date:"Y-m-d" }}', '{{ job.apply_link|escapejs }}', '{{ job.icon|default:""|escapejs }}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <form method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="model_type" value="job">
+                                <input type="hidden" name="id" value="{{ job.id }}">
+                                <button type="submit" class="btn-danger"
+                                    onclick="return confirm('{% trans "Delete this job?"|escapejs %}')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                    <div class="list-actions">
-                        <button class="btn-primary btn-sm" onclick="editJob('{{ job.id }}', '{{ job.title|escapejs }}', '{{ job.organization|escapejs }}', '{{ job.description|escapejs }}', '{{ job.last_date|date:"Y-m-d" }}', '{{ job.apply_link|escapejs }}', '{{ job.icon|default:""|escapejs }}')"><i class="fas fa-edit"></i></button>
-                        <form method="post" style="display:inline;">
-                            {% csrf_token %}
-                            <input type="hidden" name="action" value="delete">
-                            <input type="hidden" name="model_type" value="job">
-                            <input type="hidden" name="id" value="{{ job.id }}">
-                            <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this job?"|escapejs %}')"><i class="fas fa-times"></i></button>
-                        </form>
-                    </div>
-                </div>
-                {% empty %}<p style="color:#6f85a0;">{% trans "No jobs." %}</p>{% endfor %}
+                {% empty %}
+                    <p style="color:#6f85a0;">{% trans "No jobs." %}</p>
+                {% endfor %}
             </div>
 
             <!-- Inline Edit Form for Jobs -->
@@ -1041,7 +1130,10 @@
                         <input type="text" name="icon" id="editJobIcon" placeholder="{% trans "e.g. briefcase" %}">
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn-outline" onclick="document.getElementById('editJobForm').style.display='none'">{% trans "Cancel" %}</button>
+                        <button type="button" class="btn-outline"
+                            onclick="document.getElementById('editJobForm').style.display='none'">
+                            {% trans "Cancel" %}
+                        </button>
                         <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
                     </div>
                 </form>
@@ -1054,7 +1146,9 @@
         <div id="section-schemes" class="section">
             <div class="section-header">
                 <h3><i class="fas fa-hand-holding-heart" style="color:#0a66c2"></i> {% trans "Government Schemes" %}</h3>
-                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addSchemeForm">{% trans "Add Scheme" %}</button>
+                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addSchemeForm">
+                    {% trans "Add Scheme" %}
+                </button>
             </div>
 
             <div class="collapse admin-form" id="addSchemeForm">
@@ -1071,26 +1165,38 @@
 
             <div id="schemeList">
                 {% for scheme in schemes %}
-                <div class="list-item">
-                    <div class="info">
-                        <span class="title">{{ scheme.title }}</span>
-                        <span class="sub">{% blocktrans with desc=scheme.description|truncatechars:80 elig=scheme.eligibility|default:"N/A" %}{{ desc }} – Eligibility: {{ elig }}{% endblocktrans %}</span>
-                        {% if scheme.image %}
-                            <img src="{{ scheme.image.url }}" alt="{{ scheme.title }}">
-                        {% endif %}
+                    <div class="list-item">
+                        <div class="info">
+                            <span class="title">{{ scheme.title }}</span>
+                            <span class="sub">
+                                {% blocktrans with desc=scheme.description|truncatechars:80 elig=scheme.eligibility|default:"N/A" %}
+                                    {{ desc }} – Eligibility: {{ elig }}
+                                {% endblocktrans %}
+                            </span>
+                            {% if scheme.image %}
+                                <img src="{{ scheme.image.url }}" alt="{{ scheme.title }}">
+                            {% endif %}
+                        </div>
+                        <div class="list-actions">
+                            <button class="btn-primary btn-sm"
+                                onclick="editScheme('{{ scheme.id }}', '{{ scheme.title|escapejs }}', '{{ scheme.description|escapejs }}', '{{ scheme.eligibility|default:""|escapejs }}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <form method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="model_type" value="scheme">
+                                <input type="hidden" name="id" value="{{ scheme.id }}">
+                                <button type="submit" class="btn-danger"
+                                    onclick="return confirm('{% trans "Delete this scheme?"|escapejs %}')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                    <div class="list-actions">
-                        <button class="btn-primary btn-sm" onclick="editScheme('{{ scheme.id }}', '{{ scheme.title|escapejs }}', '{{ scheme.description|escapejs }}', '{{ scheme.eligibility|default:""|escapejs }}')"><i class="fas fa-edit"></i></button>
-                        <form method="post" style="display:inline;">
-                            {% csrf_token %}
-                            <input type="hidden" name="action" value="delete">
-                            <input type="hidden" name="model_type" value="scheme">
-                            <input type="hidden" name="id" value="{{ scheme.id }}">
-                            <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this scheme?"|escapejs %}')"><i class="fas fa-times"></i></button>
-                        </form>
-                    </div>
-                </div>
-                {% empty %}<p style="color:#6f85a0;">{% trans "No schemes." %}</p>{% endfor %}
+                {% empty %}
+                    <p style="color:#6f85a0;">{% trans "No schemes." %}</p>
+                {% endfor %}
             </div>
 
             <!-- Inline Edit Form for Schemes -->
@@ -1110,15 +1216,21 @@
                     </div>
                     <div>
                         <label>{% trans "Eligibility" %}</label>
-                        <input type="text" name="eligibility" id="editSchemeEligibility" placeholder="{% trans "e.g. All citizens above 18" %}">
+                        <input type="text" name="eligibility" id="editSchemeEligibility"
+                            placeholder="{% trans "e.g. All citizens above 18" %}">
                     </div>
                     <div>
                         <label>{% trans "Image" %}</label>
                         <input type="file" name="image" id="editSchemeImage" accept="image/*">
-                        <small style="color:#6f85a0; display:block; margin-top:0.2rem;">{% trans "Leave empty to keep current image." %}</small>
+                        <small style="color:#6f85a0; display:block; margin-top:0.2rem;">
+                            {% trans "Leave empty to keep current image." %}
+                        </small>
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn-outline" onclick="document.getElementById('editSchemeForm').style.display='none'">{% trans "Cancel" %}</button>
+                        <button type="button" class="btn-outline"
+                            onclick="document.getElementById('editSchemeForm').style.display='none'">
+                            {% trans "Cancel" %}
+                        </button>
                         <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
                     </div>
                 </form>
@@ -1126,7 +1238,7 @@
         </div>
 
         <!-- ========================================================== -->
-        <!-- SECTION: APPOINTMENTS (with edit)                         -->
+        <!-- SECTION: APPOINTMENTS                                      -->
         <!-- ========================================================== -->
         <div id="section-appointments" class="section">
             <div class="section-header">
@@ -1134,27 +1246,44 @@
             </div>
             <div class="table-wrap">
                 <table>
-                    <thead><tr><th>{% trans "Customer" %}</th><th>{% trans "Service" %}</th><th>{% trans "Date" %}</th><th>{% trans "Time" %}</th><th>{% trans "Status" %}</th><th>{% trans "Actions" %}</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th>{% trans "Customer" %}</th>
+                            <th>{% trans "Service" %}</th>
+                            <th>{% trans "Date" %}</th>
+                            <th>{% trans "Time" %}</th>
+                            <th>{% trans "Status" %}</th>
+                            <th>{% trans "Actions" %}</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         {% for appt in appointments %}
-                        <tr>
-                            <td>{{ appt.full_name }}</td>
-                            <td>{{ appt.service.name }}</td>
-                            <td>{{ appt.appointment_date }}</td>
-                            <td>{{ appt.appointment_time|time:"H:i" }}</td>
-                            <td><span class="badge-status {{ appt.status|lower }}">{{ appt.status }}</span></td>
-                            <td>
-                                <button class="btn-primary btn-sm" onclick="editAppointment('{{ appt.id }}', '{{ appt.full_name|escapejs }}', '{{ appt.phone|escapejs }}', '{{ appt.email|escapejs }}', '{{ appt.service.id }}', '{{ appt.appointment_date|date:"Y-m-d" }}', '{{ appt.appointment_time|time:"H:i" }}', '{{ appt.message|escapejs }}', '{{ appt.status|escapejs }}')"><i class="fas fa-edit"></i></button>
-                                <form method="post" style="display:inline;">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="action" value="delete">
-                                    <input type="hidden" name="model_type" value="appointment">
-                                    <input type="hidden" name="id" value="{{ appt.id }}">
-                                    <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this appointment?"|escapejs %}')"><i class="fas fa-trash"></i></button>
-                                </form>
-                            </td>
-                        </tr>
-                        {% empty %}<tr><td colspan="6">{% trans "No appointments." %}</td></tr>{% endfor %}
+                            <tr>
+                                <td>{{ appt.full_name }}</td>
+                                <td>{{ appt.service.name }}</td>
+                                <td>{{ appt.appointment_date }}</td>
+                                <td>{{ appt.appointment_time|time:"H:i" }}</td>
+                                <td><span class="badge-status {{ appt.status|lower }}">{{ appt.status }}</span></td>
+                                <td>
+                                    <button class="btn-primary btn-sm"
+                                        onclick="editAppointment('{{ appt.id }}', '{{ appt.full_name|escapejs }}', '{{ appt.phone|escapejs }}', '{{ appt.email|escapejs }}', '{{ appt.service.id }}', '{{ appt.appointment_date|date:"Y-m-d" }}', '{{ appt.appointment_time|time:"H:i" }}', '{{ appt.message|escapejs }}', '{{ appt.status|escapejs }}')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <form method="post" style="display:inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="delete">
+                                        <input type="hidden" name="model_type" value="appointment">
+                                        <input type="hidden" name="id" value="{{ appt.id }}">
+                                        <button type="submit" class="btn-danger"
+                                            onclick="return confirm('{% trans "Delete this appointment?"|escapejs %}')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr><td colspan="6">{% trans "No appointments." %}</td></tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -1208,7 +1337,10 @@
                         <textarea name="message" id="editApptMessage" rows="2"></textarea>
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn-outline" onclick="document.getElementById('editAppointmentForm').style.display='none'">{% trans "Cancel" %}</button>
+                        <button type="button" class="btn-outline"
+                            onclick="document.getElementById('editAppointmentForm').style.display='none'">
+                            {% trans "Cancel" %}
+                        </button>
                         <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
                     </div>
                 </form>
@@ -1224,33 +1356,38 @@
             </div>
             <div id="inquiryList">
                 {% for contact in contacts %}
-                <div class="list-item" style="flex-direction:column; align-items:stretch; gap:0.5rem;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
-                        <div><strong>{{ contact.name }}</strong> ({{ contact.email }})</div>
-                        <span style="font-size:0.8rem; color:{% if contact.replied %}#1e8e3e{% else %}#d93c3c{% endif %};">
-                            {{ contact.replied|yesno:_("Resolved,Pending") }}
-                        </span>
-                    </div>
-                    <div style="font-size:0.95rem;">{% trans "Q:" %} {{ contact.message|truncatechars:80 }}</div>
-                    {% if contact.reply %}
-                    <div style="background:#eef3f9; padding:0.4rem 0.8rem; border-radius:8px; font-size:0.9rem;">
-                        <strong>{% trans "Reply:" %}</strong> {{ contact.reply }}
-                    </div>
-                    {% endif %}
-                    {% if not contact.replied %}
-                    <form method="post" style="margin-top:0.2rem;">
-                        {% csrf_token %}
-                        <input type="hidden" name="action" value="edit">
-                        <input type="hidden" name="model_type" value="contact">
-                        <input type="hidden" name="id" value="{{ contact.id }}">
-                        <div style="display:flex; gap:0.5rem;">
-                            <input type="text" name="reply" placeholder="{% trans "Write reply..." %}" style="flex:1; padding:0.3rem 0.8rem; border:1.5px solid #dce3ed; border-radius:30px; font-size:0.85rem;">
-                            <button type="submit" class="btn-primary" style="padding:0.3rem 1rem; font-size:0.8rem;"><i class="fas fa-reply"></i> {% trans "Reply" %}</button>
+                    <div class="list-item" style="flex-direction:column; align-items:stretch; gap:0.5rem;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+                            <div><strong>{{ contact.name }}</strong> ({{ contact.email }})</div>
+                            <span style="font-size:0.8rem; color:{% if contact.replied %}#1e8e3e{% else %}#d93c3c{% endif %};">
+                                {{ contact.replied|yesno:_("Resolved,Pending") }}
+                            </span>
                         </div>
-                    </form>
-                    {% endif %}
-                </div>
-                {% empty %}<p style="color:#6f85a0;">{% trans "No inquiries." %}</p>{% endfor %}
+                        <div style="font-size:0.95rem;">{% trans "Q:" %} {{ contact.message|truncatechars:80 }}</div>
+                        {% if contact.reply %}
+                            <div style="background:#eef3f9; padding:0.4rem 0.8rem; border-radius:8px; font-size:0.9rem;">
+                                <strong>{% trans "Reply:" %}</strong> {{ contact.reply }}
+                            </div>
+                        {% endif %}
+                        {% if not contact.replied %}
+                            <form method="post" style="margin-top:0.2rem;">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="edit">
+                                <input type="hidden" name="model_type" value="contact">
+                                <input type="hidden" name="id" value="{{ contact.id }}">
+                                <div style="display:flex; gap:0.5rem;">
+                                    <input type="text" name="reply" placeholder="{% trans "Write reply..." %}"
+                                        style="flex:1; padding:0.3rem 0.8rem; border:1.5px solid #dce3ed; border-radius:30px; font-size:0.85rem;">
+                                    <button type="submit" class="btn-primary" style="padding:0.3rem 1rem; font-size:0.8rem;">
+                                        <i class="fas fa-reply"></i> {% trans "Reply" %}
+                                    </button>
+                                </div>
+                            </form>
+                        {% endif %}
+                    </div>
+                {% empty %}
+                    <p style="color:#6f85a0;">{% trans "No inquiries." %}</p>
+                {% endfor %}
             </div>
         </div>
 
@@ -1260,7 +1397,9 @@
         <div id="section-forms" class="section">
             <div class="section-header">
                 <h3><i class="fas fa-file-pdf" style="color:#0a66c2"></i> {% trans "Upload Forms" %}</h3>
-                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addFormUpload">{% trans "Upload Form" %}</button>
+                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addFormUpload">
+                    {% trans "Upload Form" %}
+                </button>
             </div>
 
             <div class="collapse admin-form" id="addFormUpload">
@@ -1277,23 +1416,31 @@
 
             <div id="formList">
                 {% for f in forms_list %}
-                <div class="list-item">
-                    <div class="info">
-                        <span class="title">{{ f.title }}</span>
-                        <span class="sub">{{ f.category }} – {{ f.pdf.name }}</span>
+                    <div class="list-item">
+                        <div class="info">
+                            <span class="title">{{ f.title }}</span>
+                            <span class="sub">{{ f.category }} – {{ f.pdf.name }}</span>
+                        </div>
+                        <div class="list-actions">
+                            <button class="btn-primary btn-sm"
+                                onclick="editForm('{{ f.id }}', '{{ f.title|escapejs }}', '{{ f.category|default:""|escapejs }}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <form method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="model_type" value="form">
+                                <input type="hidden" name="id" value="{{ f.id }}">
+                                <button type="submit" class="btn-danger"
+                                    onclick="return confirm('{% trans "Delete this form?"|escapejs %}')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                    <div class="list-actions">
-                        <button class="btn-primary btn-sm" onclick="editForm('{{ f.id }}', '{{ f.title|escapejs }}', '{{ f.category|default:""|escapejs }}')"><i class="fas fa-edit"></i></button>
-                        <form method="post" style="display:inline;">
-                            {% csrf_token %}
-                            <input type="hidden" name="action" value="delete">
-                            <input type="hidden" name="model_type" value="form">
-                            <input type="hidden" name="id" value="{{ f.id }}">
-                            <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this form?"|escapejs %}')"><i class="fas fa-times"></i></button>
-                        </form>
-                    </div>
-                </div>
-                {% empty %}<p style="color:#6f85a0;">{% trans "No forms uploaded." %}</p>{% endfor %}
+                {% empty %}
+                    <p style="color:#6f85a0;">{% trans "No forms uploaded." %}</p>
+                {% endfor %}
             </div>
 
             <!-- Inline Edit Form for Download Forms -->
@@ -1319,10 +1466,15 @@
                     <div>
                         <label>{% trans "PDF File" %}</label>
                         <input type="file" name="pdf" id="editFormPdf" accept=".pdf">
-                        <small style="color:#6f85a0; display:block; margin-top:0.2rem;">{% trans "Leave empty to keep current file." %}</small>
+                        <small style="color:#6f85a0; display:block; margin-top:0.2rem;">
+                            {% trans "Leave empty to keep current file." %}
+                        </small>
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn-outline" onclick="document.getElementById('editFormForm').style.display='none'">{% trans "Cancel" %}</button>
+                        <button type="button" class="btn-outline"
+                            onclick="document.getElementById('editFormForm').style.display='none'">
+                            {% trans "Cancel" %}
+                        </button>
                         <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
                     </div>
                 </form>
@@ -1330,7 +1482,7 @@
         </div>
 
         <!-- ========================================================== -->
-        <!-- SECTION: USER MANAGEMENT (SUPER ADMIN ONLY)               -->
+        <!-- SECTION: USER MANAGEMENT (SUPER ADMIN ONLY)                -->
         <!-- ========================================================== -->
         <div id="section-users" class="section">
             <div class="section-header">
@@ -1349,31 +1501,31 @@
                     </thead>
                     <tbody>
                         {% for user in users %}
-                        <tr>
-                            <td><strong>{{ user.username }}</strong></td>
-                            <td>{{ user.email }}</td>
-                            <td>
-                                <span class="role-badge {{ user.role }}">
-                                    {{ user.get_role_display }}
-                                </span>
-                            </td>
-                            <td>{{ user.is_staff|yesno:_("Yes,No") }}</td>
-                            <td>
-                                <form method="post" style="display:flex; gap:0.4rem; align-items:center; flex-wrap:wrap;">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="action" value="edit_user">
-                                    <input type="hidden" name="user_id" value="{{ user.id }}">
-                                    <select name="new_role" class="form-select-sm">
-                                        <option value="user" {% if user.role == 'user' %}selected{% endif %}>{% trans "User" %}</option>
-                                        <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>{% trans "Admin" %}</option>
-                                        <option value="superadmin" {% if user.role == 'superadmin' %}selected{% endif %}>{% trans "Super Admin" %}</option>
-                                    </select>
-                                    <button type="submit" class="btn-primary btn-sm"><i class="fas fa-sync-alt"></i> {% trans "Update" %}</button>
-                                </form>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td><strong>{{ user.username }}</strong></td>
+                                <td>{{ user.email }}</td>
+                                <td>
+                                    <span class="role-badge {{ user.role }}">
+                                        {{ user.get_role_display }}
+                                    </span>
+                                </td>
+                                <td>{{ user.is_staff|yesno:_("Yes,No") }}</td>
+                                <td>
+                                    <form method="post" style="display:flex; gap:0.4rem; align-items:center; flex-wrap:wrap;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="edit_user">
+                                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                                        <select name="new_role" class="form-select-sm">
+                                            <option value="user" {% if user.role == 'user' %}selected{% endif %}>{% trans "User" %}</option>
+                                            <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>{% trans "Admin" %}</option>
+                                            <option value="superadmin" {% if user.role == 'superadmin' %}selected{% endif %}>{% trans "Super Admin" %}</option>
+                                        </select>
+                                        <button type="submit" class="btn-primary btn-sm"><i class="fas fa-sync-alt"></i> {% trans "Update" %}</button>
+                                    </form>
+                                </td>
+                            </tr>
                         {% empty %}
-                        <tr><td colspan="5">{% trans "No users found." %}</td></tr>
+                            <tr><td colspan="5">{% trans "No users found." %}</td></tr>
                         {% endfor %}
                     </tbody>
                 </table>
@@ -1386,7 +1538,9 @@
         <div id="section-gallery" class="section">
             <div class="section-header">
                 <h3><i class="fas fa-images" style="color:#0a66c2"></i> {% trans "Manage Gallery" %}</h3>
-                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addGalleryForm">{% trans "Add Image" %}</button>
+                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addGalleryForm">
+                    {% trans "Add Image" %}
+                </button>
             </div>
 
             <div class="collapse admin-form" id="addGalleryForm">
@@ -1403,19 +1557,23 @@
 
             <div class="gallery-grid">
                 {% for img in gallery_images %}
-                <div class="gallery-item">
-                    <img src="{{ img.image.url }}" alt="{{ img.title }}">
-                    <div class="caption">{{ img.title }}</div>
-                    <form method="post" class="delete-btn">
-                        {% csrf_token %}
-                        <input type="hidden" name="action" value="delete">
-                        <input type="hidden" name="model_type" value="gallery">
-                        <input type="hidden" name="id" value="{{ img.id }}">
-                        <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this image?"|escapejs %}')" style="padding:2px 6px; font-size:0.7rem;"><i class="fas fa-times"></i></button>
-                    </form>
-                </div>
+                    <div class="gallery-item">
+                        <img src="{{ img.image.url }}" alt="{{ img.title }}">
+                        <div class="caption">{{ img.title }}</div>
+                        <form method="post" class="delete-btn">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="model_type" value="gallery">
+                            <input type="hidden" name="id" value="{{ img.id }}">
+                            <button type="submit" class="btn-danger"
+                                onclick="return confirm('{% trans "Delete this image?"|escapejs %}')"
+                                style="padding:2px 6px; font-size:0.7rem;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </form>
+                    </div>
                 {% empty %}
-                <p style="grid-column:1/-1; color:#6f85a0;">{% trans "No images uploaded yet." %}</p>
+                    <p style="grid-column:1/-1; color:#6f85a0;">{% trans "No images uploaded yet." %}</p>
                 {% endfor %}
             </div>
         </div>
@@ -1441,47 +1599,51 @@
             </div>
         </div>
 
-<!-- ===== APPLICATIONS ===== -->
-<div id="section-applications" class="section">
-    <div class="section-header">
-        <h3><i class="fas fa-file-alt" style="color:#0a66c2"></i> {% trans "Applications" %}</h3>
-    </div>
-    <div class="table-wrap">
-        <table>
-            <thead>
-                <tr>
-                    <th>{% trans "Applicant" %}</th>
-                    <th>{% trans "Service" %}</th>
-                    <th>{% trans "Status" %}</th>
-                    <th>{% trans "Submitted" %}</th>
-                    <th>{% trans "Actions" %}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for app in applications %}
-                <tr>
-                    <td>{{ app.full_name }}</td>
-                    <td>{{ app.service.name }}</td>
-                    <td><span class="badge bg-{% if app.status == 'approved' %}success{% elif app.status == 'rejected' %}danger{% elif app.status == 'review' %}warning{% else %}secondary{% endif %}">
-    {{ app.get_status_display }}
-</span></td>
-                    <td>{{ app.created_at|date:"d M Y" }}</td>
-                    <td>
-                        <a href="{% url 'admin:corematoshree_application_change' app.id %}" class="btn-primary btn-sm" target="_blank">
-                            <i class="fas fa-edit"></i> {% trans "View" %}
-                        </a>
-                        <a href="{% url 'admin:corematoshree_application_change' app.id %}" class="btn-outline btn-sm" target="_blank">
-                            <i class="fas fa-external-link-alt"></i>
-                        </a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr><td colspan="5">{% trans "No applications yet." %}</td></tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
+        <!-- ========================================================== -->
+        <!-- SECTION: APPLICATIONS                                      -->
+        <!-- ========================================================== -->
+        <div id="section-applications" class="section">
+            <div class="section-header">
+                <h3><i class="fas fa-file-alt" style="color:#0a66c2"></i> {% trans "Applications" %}</h3>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>{% trans "Applicant" %}</th>
+                            <th>{% trans "Service" %}</th>
+                            <th>{% trans "Status" %}</th>
+                            <th>{% trans "Submitted" %}</th>
+                            <th>{% trans "Actions" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for app in applications %}
+                            <tr>
+                                <td>{{ app.full_name }}</td>
+                                <td>{{ app.service.name }}</td>
+                                <td>
+                                    <span class="badge bg-{% if app.status == 'approved' %}success{% elif app.status == 'rejected' %}danger{% elif app.status == 'review' %}warning{% else %}secondary{% endif %}">
+                                        {{ app.get_status_display }}
+                                    </span>
+                                </td>
+                                <td>{{ app.created_at|date:"d M Y" }}</td>
+                                <td>
+                                    <a href="{% url 'application_admin_detail' app.id %}" class="btn-primary btn-sm">
+                                      <i class="fas fa-eye"></i> {% trans "View" %}
+                                    </a>
+                                    <a href="{% url 'admin:corematoshree_application_change' app.id %}" class="btn-outline btn-sm" target="_blank">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr><td colspan="5">{% trans "No applications yet." %}</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
     </main>
 {% endblock %}
@@ -1490,7 +1652,21 @@
     <!-- ===== Bootstrap JS ===== -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
     </script>
-
+<script>
+    (function() {
+        const docNameInput = document.querySelector('#addRequiredDocFormElement input[name="document_name"]');
+        const warningEl = document.getElementById('commaWarning');
+        if (docNameInput && warningEl) {
+            docNameInput.addEventListener('input', function() {
+                if (this.value.includes(',')) {
+                    warningEl.style.display = 'block';
+                } else {
+                    warningEl.style.display = 'none';
+                }
+            });
+        }
+    })();
+</script>
     <script>
         (function() {
             "use strict";

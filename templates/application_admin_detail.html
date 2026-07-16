@@ -1,0 +1,337 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Application Detail" %}{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* ---- Cyber-styled admin detail page ---- */
+    .app-detail .card {
+        background: var(--bg-card);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-card);
+        transition: var(--transition);
+        color: var(--text-white);
+    }
+    .app-detail .card:hover {
+        border-color: var(--neon-cyan);
+        box-shadow: var(--shadow-card), var(--glow-cyan);
+    }
+    .app-detail .card-header {
+        background: rgba(0, 240, 255, 0.05);
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+        padding: 1rem 1.5rem;
+        font-weight: 700;
+        font-size: 1.2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .app-detail .card-header .badge-status {
+        font-size: 0.8rem;
+    }
+    .app-detail .detail-row {
+        display: flex;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .app-detail .detail-row .label {
+        font-weight: 600;
+        color: var(--text-muted);
+        width: 160px;
+        flex-shrink: 0;
+    }
+    .app-detail .detail-row .value {
+        color: var(--text-white);
+        word-break: break-word;
+    }
+    .app-detail .table-wrap {
+        background: rgba(255,255,255,0.02);
+        border-radius: var(--radius-sm);
+        overflow-x: auto;
+        border: 1px solid rgba(255,255,255,0.04);
+        margin-top: 1rem;
+    }
+    .app-detail table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+    }
+    .app-detail th {
+        text-align: left;
+        padding: 0.7rem 1rem;
+        background: rgba(0, 240, 255, 0.04);
+        color: var(--neon-cyan);
+        font-weight: 600;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .app-detail td {
+        padding: 0.6rem 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+        color: var(--text-muted);
+        vertical-align: middle;
+    }
+    .app-detail td .file-link {
+        color: var(--neon-cyan);
+        text-decoration: none;
+        transition: var(--transition);
+    }
+    .app-detail td .file-link:hover {
+        color: var(--neon-magenta);
+        text-shadow: var(--glow-magenta);
+    }
+    .app-detail .form-group {
+        margin-bottom: 1.2rem;
+    }
+    .app-detail .form-group label {
+        font-weight: 600;
+        color: var(--text-muted);
+        display: block;
+        margin-bottom: 0.3rem;
+        font-size: 0.9rem;
+    }
+    .app-detail .form-control,
+    .app-detail input[type="text"],
+    .app-detail input[type="file"],
+    .app-detail select {
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.12);
+        color: #fff;
+        border-radius: var(--radius-sm);
+        padding: 0.6rem 1rem;
+        width: 100%;
+        transition: var(--transition);
+    }
+    .app-detail .form-control:focus,
+    .app-detail input:focus,
+    .app-detail select:focus {
+        border-color: var(--neon-cyan);
+        box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.15);
+        outline: none;
+        background: rgba(255,255,255,0.08);
+    }
+    .app-detail .btn-sm {
+        padding: 0.2rem 0.8rem;
+        font-size: 0.8rem;
+    }
+    .app-detail .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text-muted);
+        transition: var(--transition);
+        margin-bottom: 1rem;
+        text-decoration: none;
+    }
+    .app-detail .back-link:hover {
+        color: var(--neon-cyan);
+    }
+    .add-doc-form {
+        background: rgba(255,255,255,0.02);
+        border-radius: var(--radius-sm);
+        padding: 1.2rem;
+        border: 1px solid rgba(255,255,255,0.06);
+        margin-top: 1.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: flex-end;
+    }
+    .add-doc-form .form-group {
+        flex: 1 1 200px;
+        margin-bottom: 0;
+    }
+    .add-doc-form .form-actions {
+        flex: 0 0 auto;
+    }
+    @media (max-width: 768px) {
+        .app-detail .detail-row {
+            flex-wrap: wrap;
+        }
+        .app-detail .detail-row .label {
+            width: 100%;
+            margin-bottom: 0.2rem;
+        }
+        .add-doc-form {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .add-doc-form .form-group {
+            flex: 1 1 auto;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+    <div class="container">
+        <h1>{% trans "Application Detail" %}</h1>
+        <p>{% trans "Review and manage the application." %}</p>
+    </div>
+</section>
+
+<section class="app-detail">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <!-- Back link -->
+                <a href="{% url 'admin_dashboard' %}#section-applications" class="back-link">
+                    <i class="fas fa-arrow-left"></i> {% trans "Back to Applications" %}
+                </a>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span>
+                            <i class="fas fa-user-edit"></i>
+                            {{ application.full_name }} – {{ application.service.name }}
+                        </span>
+                        <span class="badge-status {{ application.status|lower }}">
+                            {{ application.get_status_display }}
+                        </span>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- User & Service Info -->
+                        <div class="detail-row">
+                            <div class="label">{% trans "User" %}:</div>
+                            <div class="value">{{ application.user.username }}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="label">{% trans "Service" %}:</div>
+                            <div class="value">{{ application.service.name }}</div>
+                        </div>
+
+                        <hr>
+
+                        <!-- Personal Details -->
+                        <h5>{% trans "Personal Details" %}</h5>
+                        <div class="detail-row">
+                            <div class="label">{% trans "Full Name" %}:</div>
+                            <div class="value">{{ application.full_name }}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="label">{% trans "Phone" %}:</div>
+                            <div class="value">{{ application.phone }}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="label">{% trans "Email" %}:</div>
+                            <div class="value">{{ application.email }}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="label">{% trans "Address" %}:</div>
+                            <div class="value">{{ application.address }}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="label">{% trans "Extra Data" %}:</div>
+                            <div class="value">{{ application.extra_data|default:"null" }}</div>
+                        </div>
+
+                        <hr>
+
+                        <!-- Status Update -->
+                        <h5>{% trans "Status" %}</h5>
+                        <form method="post" style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="update_status">
+                            <div class="form-group" style="margin:0;">
+                                <select name="status" class="form-control" style="width:auto; min-width:160px;">
+                                    {% for value, label in application.STATUS_CHOICES %}
+                                        <option value="{{ value }}" {% if application.status == value %}selected{% endif %}>
+                                            {{ label }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn-primary btn-sm">
+                                <i class="fas fa-save"></i> {% trans "Update Status" %}
+                            </button>
+                        </form>
+
+                        <hr>
+
+                        <!-- Timestamps -->
+                        <h5>{% trans "Timestamps" %}</h5>
+                        <div class="detail-row">
+                            <div class="label">{% trans "Created At" %}:</div>
+                            <div class="value">{{ application.created_at|date:"M d, Y, h:i a" }}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="label">{% trans "Updated At" %}:</div>
+                            <div class="value">{{ application.updated_at|date:"M d, Y, h:i a" }}</div>
+                        </div>
+
+                        <hr>
+
+                        <!-- Document Uploads -->
+                        <h5>{% trans "Document Uploads" %}</h5>
+
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>{% trans "Document Name" %}</th>
+                                        <th>{% trans "File" %}</th>
+                                        <th>{% trans "Mandatory" %}</th>
+                                        <th>{% trans "Verified by Admin" %}</th>
+                                        <th>{% trans "Uploaded At" %}</th>
+                                        <th>{% trans "Delete" %}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for doc in documents %}
+                                    <tr>
+                                        <td>{{ doc.document_name }}</td>
+                                        <td class="text-nowrap">
+                                        <!-- View PDF -->
+                                        <a href="{{ doc.file.url }}" target="_blank"
+                                           class="btn btn-sm btn-outline-primary me-1"
+                                           title="View PDF">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        
+                                        <!-- Download PDF -->
+                                        <a href="{{ doc.file.url }}" download
+                                           class="btn btn-sm btn-outline-success me-1"
+                                           title="Download PDF">
+                                            <i class="fas fa-download"></i>
+                                        </a>
+                                        
+                                        <!-- Split PDF -->
+                                        <a href="{% url 'split_pdf' doc.id %}"
+                                           class="btn btn-sm btn-outline-warning"
+                                           title="Split PDF">
+                                            <i class="fas fa-cut"></i>
+                                        </a>
+                                        </td>
+                                        
+                                        <td>{% if doc.is_mandatory %}<i class="fas fa-check-circle" style="color:var(--neon-green);"></i>{% else %}<i class="fas fa-times-circle" style="color:var(--text-dim);"></i>{% endif %}</td>
+                                        <td>{% if doc.verified %}<i class="fas fa-check-circle" style="color:var(--neon-green);"></i>{% else %}<i class="fas fa-clock" style="color:var(--neon-amber);"></i>{% endif %}</td>
+                                        <td>{{ doc.uploaded_at|date:"M d, Y, h:i a" }}</td>
+                                        <td>
+                                            <form method="post" onsubmit="return confirm('{% trans "Delete this document?" %}');">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="action" value="delete_document">
+                                                <input type="hidden" name="doc_id" value="{{ doc.id }}">
+                                                <button type="submit" class="btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr><td colspan="6" style="text-align:center; padding:1.5rem;">{% trans "No documents uploaded." %}</td></tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

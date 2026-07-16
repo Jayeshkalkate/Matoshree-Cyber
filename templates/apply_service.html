@@ -5,6 +5,194 @@
     {% trans "Apply for" %} {{ service.name }}
 {% endblock %}
 
+{% block extra_head %}
+<style>
+    /* ---- Page-specific styling with visible text colours ---- */
+    .apply-section .card {
+        background: var(--bg-card);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-card);
+        transition: var(--transition);
+        color: var(--text-white); /* Ensure all card text is white */
+    }
+    .apply-section .card:hover {
+        border-color: var(--neon-cyan);
+        box-shadow: var(--shadow-card), var(--glow-cyan);
+    }
+
+    .apply-section h4, 
+    .apply-section h5 {
+        color: var(--text-white);
+        font-weight: 700;
+    }
+
+    .apply-section .form-group {
+        margin-bottom: 1.2rem;
+    }
+
+    .apply-section .form-group label {
+        font-weight: 600;
+        color: #c8d6e5;          /* Light blue-grey for labels */
+        display: block;
+        margin-bottom: 0.3rem;
+        font-size: 0.9rem;
+    }
+
+    .apply-section .form-control,
+    .apply-section input[type="text"],
+    .apply-section input[type="email"],
+    .apply-section input[type="tel"],
+    .apply-section input[type="number"],
+    .apply-section input[type="file"],
+    .apply-section textarea,
+    .apply-section select {
+        background: rgba(255,255,255,0.06) !important;
+        border: 1px solid rgba(255,255,255,0.12) !important;
+        color: #ffffff !important;           /* White text in inputs */
+        border-radius: var(--radius-sm);
+        padding: 10px 14px;
+        width: 100%;
+        transition: var(--transition);
+        font-size: 0.95rem;
+    }
+
+    .apply-section .form-control:focus,
+    .apply-section input:focus,
+    .apply-section textarea:focus,
+    .apply-section select:focus {
+        border-color: var(--neon-cyan) !important;
+        box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.15);
+        outline: none;
+        background: rgba(255,255,255,0.08) !important;
+    }
+
+    /* Placeholder text colour */
+    .apply-section .form-control::placeholder,
+    .apply-section input::placeholder,
+    .apply-section textarea::placeholder {
+        color: #7a8aa8 !important;   /* dim but visible */
+        opacity: 1;
+    }
+
+    /* File input styling */
+    .apply-section input[type="file"] {
+        padding: 8px 10px;
+        background: rgba(255,255,255,0.04) !important;
+        border: 1px dashed rgba(255,255,255,0.2) !important;
+        color: #c8d6e5 !important;
+    }
+    .apply-section input[type="file"]::file-selector-button {
+        background: var(--neon-cyan);
+        color: #0a0e1a;
+        border: none;
+        padding: 6px 16px;
+        border-radius: var(--radius-pill);
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    .apply-section input[type="file"]::file-selector-button:hover {
+        background: #00e5ff;
+        box-shadow: var(--glow-cyan);
+    }
+
+    /* Upload groups */
+    .apply-section .upload-group {
+        background: rgba(255,255,255,0.02);
+        border-radius: var(--radius-sm);
+        border-left: 3px solid var(--neon-cyan);
+        padding: 1rem 1.2rem;
+        margin-bottom: 1.5rem;
+        transition: var(--transition);
+    }
+    .apply-section .upload-group:hover {
+        background: rgba(0, 240, 255, 0.04);
+        border-left-color: var(--neon-magenta);
+    }
+
+    .apply-section .upload-group .doc-label {
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1rem;
+        color: #ffffff !important;   /* white document name */
+        margin-bottom: 0.5rem;
+    }
+    .apply-section .upload-group .doc-label i {
+        color: var(--neon-cyan);
+    }
+    .apply-section .upload-group .badge {
+        font-size: 0.7rem;
+        background: var(--neon-red);
+        color: #fff;
+        padding: 2px 10px;
+        border-radius: var(--radius-pill);
+    }
+
+    /* Required documents list */
+    .required-docs-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 1.5rem 0;
+    }
+    .required-docs-list li {
+        padding: 6px 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #c8d6e5;           /* light text for readability */
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .required-docs-list li i {
+        color: var(--neon-cyan);
+        width: 20px;
+    }
+    .required-docs-list li .badge {
+        margin-left: auto;
+        background: var(--neon-red);
+        color: #fff;
+        font-size: 0.7rem;
+        padding: 2px 12px;
+        border-radius: var(--radius-pill);
+    }
+
+    /* Helper text */
+    .text-muted {
+        color: #9aabca !important;  /* more visible than default */
+    }
+
+    /* Error messages */
+    .text-danger {
+        color: var(--neon-red) !important;
+        font-weight: 500;
+        margin-top: 0.3rem;
+    }
+
+    /* Submit button already styled by base, but ensure icon colour */
+    .btn-primary i {
+        color: inherit;
+    }
+
+    .merge-btn {
+        display: inline-block;
+        padding: 12px 24px;
+        background: #ffdb9c;
+        color: #000000;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        transition: background 0.3s;
+    }
+    
+    .merge-btn:hover {
+        background: #ffdb9c;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 
 <section class="page-hero">
@@ -21,63 +209,87 @@
                 <div class="card">
                     <div class="card-body">
 
-                        <h4>
-                            {% trans "Service" %}: {{ service.name }}
-                        </h4>
-
+                        <h4>{% trans "Service" %}: {{ service.name }}</h4>
                         <p>{{ service.description }}</p>
-
                         <hr>
 
                         <!-- Required Documents -->
                         <h5>{% trans "Required Documents" %}</h5>
-
                         <ul class="required-docs-list">
                             {% for doc in required_docs %}
                                 <li>
-                                    <i class="fas fa-file-alt" style="color: var(--neon-cyan);"></i>
+                                    <i class="fas fa-file-alt"></i>
                                     {{ doc.document_name }}
-                                    <span class="badge badge-danger">
-                                        {% trans "Mandatory" %}
-                                    </span>
+                                    <span class="badge">{% trans "Mandatory" %}</span>
                                 </li>
                             {% empty %}
-                                <li>
-                                    {% trans "No specific documents required." %}
-                                </li>
+                                <li>{% trans "No specific documents required." %}</li>
                             {% endfor %}
                         </ul>
-
                         <hr>
 
                         <!-- Application Form -->
                         <form method="post" enctype="multipart/form-data">
                             {% csrf_token %}
 
+                            <!-- Personal Details -->
+                            <h5>{% trans "Personal Details" %}</h5>
+
+                            <div class="form-group">
+                                <label for="{{ form.full_name.id_for_label }}">{{ form.full_name.label }}</label>
+                                {{ form.full_name }}
+                                {% if form.full_name.errors %}
+                                    <div class="text-danger">{{ form.full_name.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>
+                                {{ form.phone }}
+                                {% if form.phone.errors %}
+                                    <div class="text-danger">{{ form.phone.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <div class="text-danger">{{ form.email.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                <label for="{{ form.address.id_for_label }}">{{ form.address.label }}</label>
+                                {{ form.address }}
+                                {% if form.address.errors %}
+                                    <div class="text-danger">{{ form.address.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <hr>
+
+                            <!-- Document Uploads -->
+                            <h5>{% trans "Upload Documents" %}</h5>
+                            <p class="text-muted">{% trans "📄 Please upload a merged PDF containing all the required documents." %}</p>
+                            <p>💡 You can merge your PDFs using iLovePDF before uploading.</P>
+                            <a href="https://www.ilovepdf.com/" target="_blank" class="merge-btn">
+                               i❤️PDF
+                            </a>
+                            <br>
+                            <br>
+                            <br>
                             {{ formset.management_form }}
 
-                            <h5>{% trans "Upload Documents" %}</h5>
-
-                            <p class="text-muted">
-                                {% trans "Please upload each required document separately." %}
-                            </p>
-
                             {% for doc_form in formset %}
-                                <div class="form-group upload-group"
-                                     style="margin-bottom:1.5rem;padding:1rem;background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);border-left:3px solid var(--neon-cyan);">
-
+                                <div class="upload-group">
                                     {{ doc_form.document_name }}
 
-                                    <label class="doc-label"
-                                           style="font-weight:600;display:block;margin-bottom:0.5rem;">
-                                        <i class="fas fa-upload" style="color:var(--neon-cyan);"></i>
-
+                                    <div class="doc-label">
+                                        <i class="fas fa-upload"></i>
                                         {{ doc_form.document_name.value }}
-
-                                        <span class="badge badge-danger" style="font-size:0.7rem;">
-                                            {% trans "Required" %}
-                                        </span>
-                                    </label>
+                                        <span class="badge">{% trans "Required" %}</span>
+                                    </div>
 
                                     {{ doc_form.file }}
 
@@ -86,24 +298,14 @@
                                     </small>
 
                                     {% if doc_form.file.errors %}
-                                        <div class="text-danger mt-2">
-                                            {{ doc_form.file.errors }}
-                                        </div>
+                                        <div class="text-danger mt-2">{{ doc_form.file.errors }}</div>
                                     {% endif %}
-
-                                    {% if doc_form.non_field_errors %}
-                                        <div class="text-danger mt-2">
-                                            {{ doc_form.non_field_errors }}
-                                        </div>
-                                    {% endif %}
-
                                 </div>
                             {% endfor %}
 
                             <button type="submit" class="btn-primary">
-                                {% trans "Submit Application" %}
+                                <i class="fas fa-paper-plane"></i> {% trans "Submit Application" %}
                             </button>
-
                         </form>
 
                     </div>

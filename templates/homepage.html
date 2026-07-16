@@ -5,1368 +5,1068 @@
 {% block title %}{% trans "Homepage" %}{% endblock %}
 
 {% block extra_head %}
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- ============================================================
+     PAGE-SPECIFIC STYLES — only what's needed beyond base.html
+     ============================================================ -->
+<style>
+    /* ============================================================
+           HERO SECTION
+           ============================================================ */
+    .hero {
+        padding: 80px 0 70px;
+        position: relative;
+        overflow: hidden;
+    }
 
-    <!-- ===== FONT AWESOME (icons) ===== -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    .hero::before {
+        content: '';
+        position: absolute;
+        top: -30%;
+        right: -10%;
+        width: 700px;
+        height: 700px;
+        background: radial-gradient(circle, rgba(0, 240, 255, 0.05) 0%, transparent 70%);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+    }
 
-    <style>
-        /* ============================================================
-               CSS VARIABLES — Gaming / Cyberpunk Theme
-               ============================================================ */
-        :root {
-            --primary: #0a0e1a;
-            --primary-light: #141b2b;
-            --secondary: #00d4ff;
-            --accent: #ff6b35;
-            --neon-purple: #b44aff;
-            --neon-pink: #ff2d95;
-            --neon-green: #39ff14;
-            --white: #f0f4ff;
-            --gray-light: #1a2332;
-            --gray: #2a3444;
-            --gray-dark: #8a9bb5;
-            --radius: 16px;
-            --radius-sm: 10px;
-            --shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
-            --shadow-sm: 0 8px 24px rgba(0, 0, 0, 0.4);
-            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    .hero::after {
+        content: '';
+        position: absolute;
+        bottom: -20%;
+        left: -10%;
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle, rgba(168, 85, 247, 0.04) 0%, transparent 70%);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+    }
 
-            /* Neon glow values */
-            --glow-secondary: 0 0 20px rgba(0, 212, 255, 0.5);
-            --glow-accent: 0 0 20px rgba(255, 107, 53, 0.5);
-            --glow-purple: 0 0 20px rgba(180, 74, 255, 0.5);
-            --glow-pink: 0 0 20px rgba(255, 45, 149, 0.5);
-            --glow-green: 0 0 20px rgba(57, 255, 20, 0.5);
-        }
+    .hero .container {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 50px;
+        align-items: center;
+    }
 
-        /* ============================================================
-               RESET & BASE
-               ============================================================ */
-        *,
-        *::before,
-        *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    .hero-content h1 {
+        font-size: 3.4rem;
+        font-weight: 900;
+        line-height: 1.1;
+        letter-spacing: -0.5px;
+        margin-bottom: 16px;
+        font-family: var(--font-display);
+    }
 
-        html {
-            scroll-behavior: smooth;
-        }
+    .hero-content h1 span {
+        background: var(--gradient-cyber);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
 
-        body {
-            font-family: var(--font);
-            background: var(--primary);
-            color: var(--white);
-            line-height: 1.6;
-            min-height: 100vh;
-            overflow-x: hidden;
-            /* Subtle animated gradient background */
-            background: radial-gradient(ellipse at 20% 50%, #0d1b2a 0%, #0a0e1a 70%);
-        }
+    .hero-content p {
+        font-size: 1.1rem;
+        color: var(--text-muted);
+        max-width: 480px;
+        line-height: 1.8;
+        margin-bottom: 28px;
+    }
 
-        /* ============================================================
-               SCROLLBAR
-               ============================================================ */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--primary);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--secondary);
-            border-radius: 50px;
-            box-shadow: var(--glow-secondary);
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent);
-            box-shadow: var(--glow-accent);
-        }
+    .hero-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+    }
 
-        /* ============================================================
-               UTILITY
-               ============================================================ */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
+    /* Hero quick-grid */
+    .hero-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+    }
 
-        .section-header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-        .section-header h2 {
-            font-size: 2.8rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, var(--white), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .section-header h2 span {
-            background: linear-gradient(135deg, var(--secondary), var(--neon-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .section-header p {
-            color: var(--gray-dark);
-            font-size: 1.1rem;
-            margin-top: 6px;
-        }
+    .hero-grid-item {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: var(--radius-sm);
+        padding: 18px 10px;
+        text-align: center;
+        transition: var(--transition);
+        cursor: default;
+        backdrop-filter: blur(4px);
+    }
 
-        hr {
-            border: none;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--secondary), transparent);
-            opacity: 0.15;
-            margin: 0;
-        }
+    .hero-grid-item:hover {
+        background: rgba(0, 240, 255, 0.06);
+        transform: translateY(-4px);
+        border-color: var(--neon-cyan);
+        box-shadow: var(--glow-cyan);
+    }
 
-        /* ============================================================
-               PAGE LOAD ANIMATION — Fade-in + Slide-up
-               ============================================================ */
-        .animate-on-load {
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeSlideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-        }
+    .hero-grid-item i {
+        font-size: 1.6rem;
+        color: var(--neon-cyan);
+        display: block;
+        margin-bottom: 4px;
+    }
 
-        .animate-on-load:nth-child(1) {
-            animation-delay: 0.05s;
-        }
-        .animate-on-load:nth-child(2) {
-            animation-delay: 0.15s;
-        }
-        .animate-on-load:nth-child(3) {
-            animation-delay: 0.25s;
-        }
-        .animate-on-load:nth-child(4) {
-            animation-delay: 0.35s;
-        }
-        .animate-on-load:nth-child(5) {
-            animation-delay: 0.45s;
-        }
-        .animate-on-load:nth-child(6) {
-            animation-delay: 0.55s;
-        }
+    .hero-grid-item span {
+        font-size: 0.78rem;
+        font-weight: 500;
+        color: var(--text-muted);
+    }
 
-        @keyframes fadeSlideUp {
-            0% {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    /* ============================================================
+           SERVICES — cards with icon wrappers
+           ============================================================ */
+    .services {
+        padding: 70px 0 80px;
+        background: rgba(10, 14, 26, 0.3);
+    }
 
-        /* ============================================================
-               BUTTONS — Neon Glow / Pulsing
-               ============================================================ */
-        .btn-primary,
-        .btn-outline,
-        .btn-neon {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 14px 34px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 1rem;
-            text-decoration: none;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: var(--transition);
-            position: relative;
-            letter-spacing: 0.3px;
-            background: transparent;
-            color: var(--white);
-        }
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
+    }
 
-        /* ---- Primary (cyan) with pulsing neon glow ---- */
-        .btn-primary {
-            background: var(--secondary);
-            color: var(--primary);
-            border-color: var(--secondary);
-            box-shadow: var(--glow-secondary);
-            animation: pulseGlowCyan 2.5s ease-in-out infinite;
-        }
-        .btn-primary:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 0 40px rgba(0, 212, 255, 0.7), 0 0 80px rgba(0, 212, 255, 0.3);
-            background: #00e5ff;
-            border-color: #00e5ff;
-        }
+    .service-card {
+        background: var(--bg-card);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: var(--radius);
+        padding: 28px 18px 24px;
+        text-align: center;
+        transition: var(--transition);
+        cursor: default;
+    }
 
-        /* ---- Outline (neon purple) with pulse ---- */
-        .btn-outline {
-            border-color: var(--neon-purple);
-            color: var(--neon-purple);
-            box-shadow: var(--glow-purple);
-            animation: pulseGlowPurple 3s ease-in-out infinite;
-        }
-        .btn-outline:hover {
-            background: var(--neon-purple);
-            color: var(--white);
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 0 40px rgba(180, 74, 255, 0.7), 0 0 80px rgba(180, 74, 255, 0.3);
-        }
+    .service-card:hover {
+        transform: translateY(-6px);
+        border-color: var(--neon-cyan);
+        box-shadow: var(--shadow-card), var(--glow-cyan);
+        background: var(--bg-card-hover);
+    }
 
-        /* ---- Accent (orange) ---- */
-        .btn-accent {
-            background: var(--accent);
-            color: var(--white);
-            border-color: var(--accent);
-            box-shadow: var(--glow-accent);
-            animation: pulseGlowOrange 2.8s ease-in-out infinite;
-        }
-        .btn-accent:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 0 40px rgba(255, 107, 53, 0.7), 0 0 80px rgba(255, 107, 53, 0.3);
-            background: #ff7a4a;
-            border-color: #ff7a4a;
-        }
+    .service-card .icon-wrap {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 14px;
+        font-size: 1.6rem;
+        color: #fff;
+        transition: var(--transition);
+        background: var(--gradient-cyan);
+        box-shadow: 0 0 24px rgba(0, 240, 255, 0.2);
+    }
 
-        /* ---- WhatsApp (green) ---- */
-        .btn-whatsapp {
-            background: #25d366;
-            color: var(--white);
-            border-color: #25d366;
-            box-shadow: var(--glow-green);
-            animation: pulseGlowGreen 3.2s ease-in-out infinite;
-        }
-        .btn-whatsapp:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 0 40px rgba(57, 255, 20, 0.6), 0 0 80px rgba(57, 255, 20, 0.25);
-            background: #2eea72;
-            border-color: #2eea72;
-        }
+    .service-card:hover .icon-wrap {
+        transform: scale(1.08) rotate(-4deg);
+        box-shadow: var(--glow-cyan);
+    }
 
-        /* ---- Pulse keyframes for different colors ---- */
-        @keyframes pulseGlowCyan {
-            0%,
-            100% {
-                box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(0, 212, 255, 0.8), 0 0 80px rgba(0, 212, 255, 0.3);
-            }
-        }
-        @keyframes pulseGlowPurple {
-            0%,
-            100% {
-                box-shadow: 0 0 20px rgba(180, 74, 255, 0.4);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(180, 74, 255, 0.8), 0 0 80px rgba(180, 74, 255, 0.3);
-            }
-        }
-        @keyframes pulseGlowOrange {
-            0%,
-            100% {
-                box-shadow: 0 0 20px rgba(255, 107, 53, 0.4);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(255, 107, 53, 0.8), 0 0 80px rgba(255, 107, 53, 0.3);
-            }
-        }
-        @keyframes pulseGlowGreen {
-            0%,
-            100% {
-                box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(57, 255, 20, 0.7), 0 0 80px rgba(57, 255, 20, 0.2);
-            }
-        }
+    .service-card h3 {
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin-bottom: 4px;
+        color: var(--text-white);
+    }
 
-        /* ============================================================
-               NAVBAR
-               ============================================================ */
-        .navbar {
-            padding: 18px 0;
-            background: rgba(10, 14, 26, 0.85);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(0, 212, 255, 0.08);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            transition: var(--transition);
-        }
-        .navbar .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo {
-            font-size: 1.7rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, var(--secondary), var(--neon-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-decoration: none;
-        }
-        .logo i {
-            color: var(--secondary);
-            -webkit-text-fill-color: var(--secondary);
-            margin-right: 6px;
-        }
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 28px;
-            list-style: none;
-        }
-        .nav-links a {
-            color: var(--gray-dark);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: var(--transition);
-            position: relative;
-        }
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0%;
-            height: 2px;
-            background: var(--secondary);
-            transition: var(--transition);
-            box-shadow: var(--glow-secondary);
-        }
-        .nav-links a:hover {
-            color: var(--white);
-        }
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-        .nav-links a.active {
-            color: var(--secondary);
-        }
-        .nav-links a.active::after {
-            width: 100%;
-        }
+    .service-card p {
+        font-size: 0.88rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+        margin: 0;
+    }
 
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 4px;
-        }
-        .hamburger span {
-            width: 26px;
-            height: 2px;
-            background: var(--white);
-            border-radius: 4px;
-            transition: var(--transition);
-        }
+    /* ============================================================
+           PRICING — gaming‑style hover
+           ============================================================ */
+    .pricing {
+        padding: 70px 0 80px;
+        background: var(--bg-primary);
+    }
 
-        /* ============================================================
-               HERO
-               ============================================================ */
-        .hero {
-            padding: 100px 0 80px;
-            position: relative;
-            overflow: hidden;
-        }
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -30%;
-            right: -10%;
-            width: 700px;
-            height: 700px;
-            background: radial-gradient(circle, rgba(0, 212, 255, 0.06) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-        .hero::after {
-            content: '';
-            position: absolute;
-            bottom: -20%;
-            left: -10%;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(180, 74, 255, 0.05) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-        }
+    .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 28px;
+    }
+
+    .pricing-card {
+        background: var(--bg-card);
+        border: 2px solid rgba(255, 255, 255, 0.05);
+        border-radius: var(--radius);
+        padding: 36px 24px 32px;
+        text-align: center;
+        transition: var(--transition);
+        cursor: default;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .pricing-card:hover {
+        transform: scale(1.03) translateY(-6px);
+        border-color: var(--neon-magenta);
+        box-shadow: var(--shadow-card), var(--glow-magenta);
+        background: var(--bg-card-hover);
+    }
+
+    .pricing-card .plan-name {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--text-white);
+    }
+
+    .pricing-card .price {
+        font-family: var(--font-display);
+        font-size: 2.6rem;
+        font-weight: 900;
+        color: var(--neon-cyan);
+        margin: 6px 0 2px;
+        text-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
+        transition: var(--transition);
+    }
+
+    .pricing-card:hover .price {
+        color: var(--neon-magenta);
+        text-shadow: 0 0 30px rgba(255, 45, 149, 0.25);
+    }
+
+    .pricing-card .price small {
+        font-size: 1rem;
+        font-weight: 400;
+        color: var(--text-muted);
+    }
+
+    .pricing-card .desc {
+        color: var(--text-muted);
+        font-size: 0.92rem;
+        margin-bottom: 16px;
+    }
+
+    .pricing-card ul {
+        list-style: none;
+        margin: 14px 0 22px;
+        padding: 0;
+        text-align: left;
+    }
+
+    .pricing-card ul li {
+        padding: 5px 0;
+        color: var(--text-muted);
+        font-size: 0.88rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .pricing-card ul li i {
+        color: var(--neon-cyan);
+        width: 18px;
+        font-size: 0.75rem;
+    }
+
+    .pricing-card.popular {
+        border-color: var(--neon-cyan);
+        box-shadow: var(--glow-cyan);
+    }
+
+    .pricing-card .badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: var(--gradient-cyan);
+        color: #fff;
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        padding: 4px 14px;
+        border-radius: var(--radius-pill);
+        letter-spacing: 0.5px;
+        box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
+    }
+
+    /* ============================================================
+           GALLERY
+           ============================================================ */
+    .gallery {
+        padding: 70px 0 80px;
+        background: rgba(10, 14, 26, 0.2);
+    }
+
+    .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+    }
+
+    .gallery-item {
+        border-radius: var(--radius-sm);
+        overflow: hidden;
+        aspect-ratio: 1/1;
+        background: var(--bg-card);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: var(--transition);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+    }
+
+    .gallery-item:hover {
+        transform: scale(1.03);
+        border-color: var(--neon-cyan);
+        box-shadow: var(--glow-cyan);
+    }
+
+    .gallery-item .caption {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.65);
+        color: #fff;
+        padding: 8px 12px;
+        font-size: 0.78rem;
+        text-align: center;
+        opacity: 0;
+        transition: var(--transition);
+        backdrop-filter: blur(4px);
+    }
+
+    .gallery-item:hover .caption {
+        opacity: 1;
+    }
+
+    .gallery-item .placeholder-icon {
+        font-size: 2.8rem;
+        color: var(--text-muted);
+        opacity: 0.3;
+    }
+
+    /* ============================================================
+           REVIEWS
+           ============================================================ */
+    .reviews {
+        padding: 70px 0 80px;
+        background: var(--bg-primary);
+    }
+
+    .reviews-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+    }
+
+    .review-card {
+        background: var(--bg-card);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: var(--radius);
+        padding: 24px 22px;
+        transition: var(--transition);
+        cursor: default;
+    }
+
+    .review-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--neon-purple);
+        box-shadow: var(--shadow-card), var(--glow-purple);
+        background: var(--bg-card-hover);
+    }
+
+    .review-card .stars {
+        color: #fbbf24;
+        margin-bottom: 6px;
+        letter-spacing: 1px;
+        font-size: 0.95rem;
+    }
+
+    .review-card .review-text {
+        color: var(--text-muted);
+        font-size: 0.92rem;
+        line-height: 1.6;
+    }
+
+    .review-card .reviewer {
+        font-weight: 700;
+        color: var(--text-white);
+        margin-top: 8px;
+        font-size: 0.9rem;
+    }
+
+    /* ============================================================
+           INFO ROW — timings + contact
+           ============================================================ */
+    .info-row {
+        padding: 60px 0;
+        background: rgba(10, 14, 26, 0.4);
+    }
+
+    .info-row .container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+    }
+
+    .timings-card,
+    .contact-card {
+        background: var(--bg-card);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: var(--radius);
+        padding: 32px 28px;
+        transition: var(--transition);
+    }
+
+    .timings-card:hover {
+        border-color: var(--neon-cyan);
+        box-shadow: var(--glow-cyan);
+    }
+
+    .contact-card:hover {
+        border-color: var(--neon-orange);
+        box-shadow: 0 0 20px rgba(249, 115, 22, 0.2);
+    }
+
+    .timings-card h3,
+    .contact-card h3 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: var(--text-white);
+    }
+
+    .timings-card h3 i {
+        color: var(--neon-cyan);
+    }
+
+    .contact-card h3 i {
+        color: var(--neon-orange);
+    }
+
+    .timings-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .timings-table tr {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .timings-table tr:last-child {
+        border-bottom: none;
+    }
+
+    .timings-table td {
+        padding: 10px 0;
+        color: var(--text-muted);
+        font-size: 0.92rem;
+    }
+
+    .timings-table td:last-child {
+        text-align: right;
+        color: var(--text-white);
+        font-weight: 600;
+    }
+
+    .timings-table .highlight td:last-child {
+        color: var(--neon-cyan);
+    }
+
+    .contact-card .phone {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--text-white);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 2px;
+        flex-wrap: wrap;
+    }
+
+    .contact-card .phone a {
+        color: var(--text-white);
+        transition: var(--transition);
+    }
+
+    .contact-card .phone a:hover {
+        color: var(--neon-cyan);
+    }
+
+    .contact-card .phone i {
+        color: var(--neon-cyan);
+        font-size: 1.5rem;
+    }
+
+    .contact-card .sub {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        margin-bottom: 18px;
+    }
+
+    .contact-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    /* ============================================================
+           LOCATION
+           ============================================================ */
+    .location {
+        padding: 70px 0 80px;
+        background: rgba(10, 14, 26, 0.25);
+    }
+
+    .location .container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 48px;
+        align-items: stretch;
+    }
+
+    .location-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .location-info h2 {
+        font-size: 2.4rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        font-family: var(--font-display);
+    }
+
+    .location-info h2 span {
+        background: var(--gradient-cyber);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .location-info .address {
+        font-size: 1rem;
+        color: var(--text-muted);
+        line-height: 1.8;
+        margin: 14px 0 22px;
+        padding: 18px 22px;
+        background: rgba(255, 255, 255, 0.03);
+        border-left: 4px solid var(--neon-cyan);
+        border-radius: var(--radius-sm);
+        transition: var(--transition);
+    }
+
+    .location-info .address:hover {
+        border-left-color: var(--neon-purple);
+        box-shadow: var(--glow-purple);
+    }
+
+    .location-info .address i {
+        color: var(--neon-cyan);
+        width: 22px;
+        margin-right: 4px;
+    }
+
+    .map-container {
+        border-radius: var(--radius);
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        min-height: 280px;
+        background: var(--bg-card);
+        transition: var(--transition);
+    }
+
+    .map-container:hover {
+        border-color: var(--neon-cyan);
+        box-shadow: var(--glow-cyan);
+    }
+
+    .map-container iframe {
+        width: 100%;
+        height: 100%;
+        min-height: 280px;
+        border: none;
+        display: block;
+    }
+
+    /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+
+    /* Tablet & below */
+    @media (max-width: 1024px) {
         .hero .container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-            position: relative;
-            z-index: 1;
+            grid-template-columns: 1fr;
+            text-align: center;
         }
-        .hero-content h1 {
-            font-size: 3.6rem;
-            font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: -1px;
-            margin-bottom: 16px;
-        }
-        .hero-content h1 span {
-            background: linear-gradient(135deg, var(--secondary), var(--neon-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            position: relative;
-        }
-        .hero-content h1 span::after {
-            content: '';
-            position: absolute;
-            bottom: 2px;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--secondary);
-            border-radius: 4px;
-            opacity: 0.3;
-            filter: blur(2px);
-        }
+
         .hero-content p {
-            font-size: 1.15rem;
-            color: var(--gray-dark);
-            max-width: 500px;
-            margin-bottom: 32px;
-            line-height: 1.8;
+            margin-left: auto;
+            margin-right: auto;
         }
+
         .hero-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        /* Hero service grid */
-        .hero-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-        }
-        .hero-grid-item {
-            background: rgba(255, 255, 255, 0.04);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: var(--radius-sm);
-            padding: 20px 12px;
-            text-align: center;
-            transition: var(--transition);
-            cursor: default;
-        }
-        .hero-grid-item:hover {
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateY(-4px);
-            border-color: var(--secondary);
-            box-shadow: var(--glow-secondary);
-        }
-        .hero-grid-item i {
-            font-size: 1.8rem;
-            color: var(--secondary);
-            margin-bottom: 6px;
-            display: block;
-        }
-        .hero-grid-item span {
-            font-size: 0.82rem;
-            font-weight: 500;
-            color: var(--gray-dark);
-        }
-
-        /* ============================================================
-               SERVICES — Cards with hover transitions
-               ============================================================ */
-        .services {
-            padding: 80px 0 90px;
-            background: rgba(10, 14, 26, 0.5);
-        }
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 24px;
-        }
-        .service-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: var(--radius);
-            padding: 32px 20px 28px;
-            text-align: center;
-            transition: var(--transition);
-            cursor: default;
-        }
-        .service-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--secondary);
-            box-shadow: var(--glow-secondary), 0 20px 50px rgba(0, 0, 0, 0.4);
-            background: rgba(0, 212, 255, 0.04);
-        }
-        .service-card .icon {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(180, 74, 255, 0.08));
-            display: flex;
-            align-items: center;
             justify-content: center;
-            margin: 0 auto 16px;
-            font-size: 2rem;
-            color: var(--secondary);
-            transition: var(--transition);
-        }
-        .service-card:hover .icon {
-            background: linear-gradient(135deg, var(--secondary), var(--neon-purple));
-            color: var(--primary);
-            transform: scale(1.08) rotate(-4deg);
-            box-shadow: var(--glow-secondary);
-        }
-        .service-card h3 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--white);
-            margin-bottom: 6px;
-        }
-        .service-card p {
-            font-size: 0.9rem;
-            color: var(--gray-dark);
-            line-height: 1.5;
         }
 
-        /* ============================================================
-               PRICING — Special hover: scale + neon border
-               ============================================================ */
-        .pricing {
-            padding: 80px 0 90px;
-            background: var(--primary);
+        .hero-grid {
+            max-width: 480px;
+            margin: 0 auto;
         }
+
+        .services-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
         .pricing-grid {
-            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .reviews-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .gallery-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .info-row .container {
+            grid-template-columns: 1fr;
+        }
+
+        .location .container {
+            grid-template-columns: 1fr;
+        }
+
+        .location-info .btn-primary {
+            align-self: center;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero {
+            padding: 50px 0 40px;
+        }
+
+        .hero-content h1 {
+            font-size: 2.4rem;
+        }
+
+        .hero-grid {
             grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-        }
-        .pricing-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(4px);
-            border: 2px solid rgba(255, 255, 255, 0.06);
-            border-radius: var(--radius);
-            padding: 40px 28px 36px;
-            text-align: center;
-            transition: var(--transition);
-            cursor: default;
-            position: relative;
-            overflow: hidden;
-        }
-        /* ★ Gaming-style hover: scale + vibrant neon border ★ */
-        .pricing-card:hover {
-            transform: scale(1.04);
-            border-color: var(--neon-pink);
-            box-shadow: 0 0 40px rgba(255, 45, 149, 0.3), 0 0 80px rgba(255, 45, 149, 0.1);
-            background: rgba(255, 45, 149, 0.04);
-        }
-        .pricing-card:hover .price {
-            color: var(--neon-pink);
-            text-shadow: 0 0 30px rgba(255, 45, 149, 0.4);
-        }
-        .pricing-card .plan-name {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--white);
-            margin-bottom: 4px;
-        }
-        .pricing-card .price {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--secondary);
-            transition: var(--transition);
-            margin: 8px 0 4px;
-        }
-        .pricing-card .price small {
-            font-size: 1.2rem;
-            font-weight: 400;
-            color: var(--gray-dark);
-        }
-        .pricing-card .desc {
-            color: var(--gray-dark);
-            font-size: 0.95rem;
-            margin-bottom: 20px;
-        }
-        .pricing-card ul {
-            list-style: none;
-            margin: 16px 0 24px;
-            text-align: left;
-            padding: 0 8px;
-        }
-        .pricing-card ul li {
-            padding: 6px 0;
-            color: var(--gray-dark);
-            font-size: 0.92rem;
-            display: flex;
-            align-items: center;
             gap: 10px;
         }
-        .pricing-card ul li i {
-            color: var(--secondary);
-            width: 18px;
-            font-size: 0.8rem;
-        }
-        .pricing-card .btn-primary {
-            animation: none;
-        }
-        .pricing-card .btn-primary:hover {
-            animation: pulseGlowCyan 2.5s ease-in-out infinite;
+
+        .hero-grid-item {
+            padding: 12px 8px;
         }
 
-        /* Featured / popular card */
-        .pricing-card.popular {
-            border-color: var(--secondary);
-            box-shadow: var(--glow-secondary);
-        }
-        .pricing-card.popular .badge {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: var(--secondary);
-            color: var(--primary);
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            padding: 4px 14px;
-            border-radius: 50px;
-            letter-spacing: 0.5px;
+        .hero-grid-item i {
+            font-size: 1.3rem;
         }
 
-        /* ============================================================
-               GALLERY
-               ============================================================ */
-        .gallery {
-            padding: 80px 0 90px;
-            background: rgba(10, 14, 26, 0.3);
-        }
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-        }
-        .gallery-grid .gallery-item {
-            border-radius: var(--radius-sm);
-            overflow: hidden;
-            background: var(--gray-light);
-            aspect-ratio: 1/1;
-            transition: var(--transition);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            color: var(--gray-dark);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-        }
-        .gallery-grid .gallery-item:hover {
-            transform: scale(1.03);
-            border-color: var(--secondary);
-            box-shadow: var(--glow-secondary);
-        }
-        .gallery-grid .gallery-item i {
-            transition: var(--transition);
-        }
-        .gallery-grid .gallery-item:hover i {
-            color: var(--secondary);
-            transform: scale(1.1);
+        .hero-grid-item span {
+            font-size: 0.68rem;
         }
 
-        .gallery-item {
-            position: relative;
-            overflow: hidden;
-            border-radius: var(--radius-sm);
-            aspect-ratio: 1/1;
-            cursor: pointer;
-        }
-        .gallery-item .caption {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0,0,0,0.6);
-            color: #fff;
-            padding: 8px;
-            font-size: 0.8rem;
-            text-align: center;
-            opacity: 0;
-            transition: 0.3s;
-        }
-        .gallery-item:hover .caption {
-            opacity: 1;
+        .services-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
         }
 
-        /* ============================================================
-               REVIEWS
-               ============================================================ */
-        .reviews {
-            padding: 80px 0 90px;
-            background: var(--primary);
+        .pricing-grid {
+            grid-template-columns: 1fr;
+            max-width: 380px;
+            margin: 0 auto;
         }
+
         .reviews-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-        }
-        .review-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: var(--radius);
-            padding: 28px 24px;
-            transition: var(--transition);
-            cursor: default;
-        }
-        .review-card:hover {
-            transform: translateY(-6px);
-            border-color: var(--neon-purple);
-            box-shadow: var(--glow-purple);
-            background: rgba(180, 74, 255, 0.04);
-        }
-        .review-card .stars {
-            color: #ffc107;
-            margin-bottom: 6px;
-            letter-spacing: 2px;
-        }
-        .review-card .reviewer {
-            font-weight: 700;
-            color: var(--white);
-            margin-top: 8px;
-        }
-        .review-card .review-text {
-            color: var(--gray-dark);
-            font-size: 0.95rem;
-            line-height: 1.6;
+            grid-template-columns: 1fr;
         }
 
-        /* ============================================================
-               CTA / INFO ROW
-               ============================================================ */
-        .info-row {
-            padding: 70px 0;
-            background: rgba(10, 14, 26, 0.6);
-        }
-        .info-row .container {
-            display: grid;
+        .gallery-grid {
             grid-template-columns: 1fr 1fr;
-            gap: 40px;
-        }
-        .timings-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: var(--radius);
-            padding: 36px 32px;
-            transition: var(--transition);
-        }
-        .timings-card:hover {
-            border-color: var(--secondary);
-            box-shadow: var(--glow-secondary);
-        }
-        .timings-card h3 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
             gap: 12px;
-        }
-        .timings-card h3 i {
-            color: var(--secondary);
-        }
-        .timings-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .timings-table tr {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .timings-table tr:last-child {
-            border-bottom: none;
-        }
-        .timings-table td {
-            padding: 12px 0;
-            color: var(--gray-dark);
-        }
-        .timings-table td:last-child {
-            text-align: right;
-            color: var(--white);
-            font-weight: 600;
-        }
-        .timings-table .highlight td:last-child {
-            color: var(--secondary);
         }
 
-        .contact-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: var(--radius);
-            padding: 36px 32px;
-            transition: var(--transition);
-        }
-        .contact-card:hover {
-            border-color: var(--accent);
-            box-shadow: var(--glow-accent);
-        }
-        .contact-card h3 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .contact-card h3 i {
-            color: var(--accent);
-        }
-        .contact-card .phone {
+        .section-header h2 {
             font-size: 2rem;
-            font-weight: 800;
-            color: var(--white);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 4px;
-        }
-        .contact-card .phone a {
-            color: var(--white);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-        .contact-card .phone a:hover {
-            color: var(--secondary);
-        }
-        .contact-card .phone i {
-            color: var(--secondary);
-            font-size: 1.6rem;
-        }
-        .contact-card .sub {
-            color: var(--gray-dark);
-            margin-bottom: 20px;
-            font-size: 0.95rem;
-        }
-        .contact-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 14px;
         }
 
-        /* ============================================================
-               LOCATION
-               ============================================================ */
-        .location {
-            padding: 80px 0 90px;
-            background: rgba(10, 14, 26, 0.4);
+        .contact-card .phone {
+            font-size: 1.4rem;
         }
-        .location .container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 50px;
-            align-items: stretch;
+
+        .timings-card,
+        .contact-card {
+            padding: 22px 18px;
         }
-        .location-info {
-            display: flex;
+
+        .location-info h2 {
+            font-size: 2rem;
+        }
+
+        .map-container {
+            min-height: 200px;
+        }
+
+        .map-container iframe {
+            min-height: 200px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hero-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .services-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .gallery-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .contact-buttons {
             flex-direction: column;
+        }
+
+        .contact-buttons .btn-primary,
+        .contact-buttons .btn-whatsapp {
+            width: 100%;
             justify-content: center;
         }
-        .location-info h2 {
-            font-size: 2.6rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
+
+        .hero-buttons {
+            flex-direction: column;
+            align-items: center;
         }
-        .location-info h2 span {
-            background: linear-gradient(135deg, var(--secondary), var(--neon-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .location-info .address {
-            font-size: 1.05rem;
-            color: var(--gray-dark);
-            line-height: 1.8;
-            margin: 16px 0 24px;
-            padding: 20px 24px;
-            background: rgba(255, 255, 255, 0.03);
-            border-left: 4px solid var(--secondary);
-            border-radius: var(--radius-sm);
-            transition: var(--transition);
-        }
-        .location-info .address:hover {
-            border-left-color: var(--neon-purple);
-            box-shadow: var(--glow-purple);
-        }
-        .location-info .address i {
-            color: var(--secondary);
-            width: 24px;
-        }
-        .map-container {
-            border-radius: var(--radius);
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            min-height: 300px;
-            background: var(--gray-light);
-            transition: var(--transition);
-        }
-        .map-container:hover {
-            border-color: var(--secondary);
-            box-shadow: var(--glow-secondary);
-        }
-        .map-container iframe {
+
+        .hero-buttons .btn-primary,
+        .hero-buttons .btn-outline {
             width: 100%;
-            height: 100%;
-            min-height: 300px;
-            border: none;
-            display: block;
+            justify-content: center;
         }
 
-        /* ============================================================
-               FOOTER
-               ============================================================ */
-        .footer {
-            padding: 30px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.04);
-            text-align: center;
-            color: var(--gray-dark);
-            font-size: 0.9rem;
-        }
-        .footer span {
-            color: var(--secondary);
+        .hero-content h1 {
+            font-size: 1.8rem;
         }
 
-        /* ============================================================
-               RESPONSIVE
-               ============================================================ */
-        @media (max-width: 1024px) {
-            .hero .container {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            .hero-content p {
-                margin-left: auto;
-                margin-right: auto;
-            }
-            .hero-buttons {
-                justify-content: center;
-            }
-            .hero-grid {
-                max-width: 500px;
-                margin: 0 auto;
-            }
-            .services-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .pricing-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .reviews-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .gallery-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .info-row .container {
-                grid-template-columns: 1fr;
-            }
-            .location .container {
-                grid-template-columns: 1fr;
-            }
-            .location-info .btn-primary {
-                align-self: center;
-            }
+        .pricing-card .price {
+            font-size: 2.2rem;
         }
+    }
 
-        @media (max-width: 768px) {
-            .hero {
-                padding: 60px 0 50px;
-            }
-            .hero-content h1 {
-                font-size: 2.4rem;
-            }
-            .hero-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 10px;
-            }
-            .hero-grid-item {
-                padding: 14px 8px;
-            }
-            .hero-grid-item i {
-                font-size: 1.4rem;
-            }
-            .hero-grid-item span {
-                font-size: 0.7rem;
-            }
-
-            .services-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 16px;
-            }
-            .pricing-grid {
-                grid-template-columns: 1fr;
-                max-width: 400px;
-                margin: 0 auto;
-            }
-            .reviews-grid {
-                grid-template-columns: 1fr;
-            }
-            .gallery-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .section-header h2 {
-                font-size: 2.2rem;
-            }
-            .contact-card .phone {
-                font-size: 1.5rem;
-                flex-wrap: wrap;
-            }
-            .timings-card {
-                padding: 24px 18px;
-            }
-            .contact-card {
-                padding: 24px 18px;
-            }
-            .location-info h2 {
-                font-size: 2rem;
-            }
-            .map-container {
-                min-height: 220px;
-            }
-            .map-container iframe {
-                min-height: 220px;
-            }
-
-            .navbar .container {
-                flex-wrap: wrap;
-            }
-            .hamburger {
-                display: flex;
-            }
-            .nav-links {
-                display: none;
-                flex-direction: column;
-                width: 100%;
-                padding: 20px 0 10px;
-                gap: 16px;
-                align-items: center;
-            }
-            .nav-links.open {
-                display: flex;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .services-grid {
-                grid-template-columns: 1fr;
-            }
-            .gallery-grid {
-                grid-template-columns: 1fr;
-            }
-            .contact-buttons {
-                flex-direction: column;
-            }
-            .contact-buttons .btn-primary,
-            .contact-buttons .btn-whatsapp {
-                width: 100%;
-                justify-content: center;
-            }
-            .hero-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            .hero-buttons .btn-primary,
-            .hero-buttons .btn-outline {
-                width: 100%;
-                justify-content: center;
-            }
-            .hero-content h1 {
-                font-size: 1.9rem;
-            }
-        }
-    </style>
-</head>
+    /* ============================================================
+           UTILITY — no-data fallback
+           ============================================================ */
+    .no-data {
+        color: var(--text-muted);
+        text-align: center;
+        padding: 30px 0;
+        grid-column: 1 / -1;
+        font-size: 1rem;
+        opacity: 0.6;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-<body>
-
-    <!-- ============================================================
-    HERO
-    ============================================================ -->
-    <section class="hero animate-on-load" id="home">
-        <div class="container">
-            <div class="hero-content">
-                <h1>
-                    Next‑Gen<br />
-                    <span>Cyber</span> Services
-                </h1>
-                <p>
-                    Fast, reliable &amp; affordable digital solutions —
-                    from document printing to Aadhaar, PAN, passport
-                    services and more. Built for the future.
-                </p>
-                <div class="hero-buttons">
-                    <a href="#services" class="btn-primary">
-                        <i class="fas fa-arrow-right"></i> Explore
-                    </a>
-                    <a href="#contact" class="btn-outline">
-                        <i class="fas fa-phone"></i> Contact
-                    </a>
-                </div>
-            </div>
-            <div class="hero-grid">
-                <div class="hero-grid-item"><i class="fas fa-file-alt"></i><span>Online Forms</span></div>
-                <div class="hero-grid-item"><i class="fas fa-id-card"></i><span>Aadhaar</span></div>
-                <div class="hero-grid-item"><i class="fas fa-credit-card"></i><span>PAN Card</span></div>
-                <div class="hero-grid-item"><i class="fas fa-passport"></i><span>Passport</span></div>
-                <div class="hero-grid-item"><i class="fas fa-print"></i><span>Print &amp; Scan</span></div>
-                <div class="hero-grid-item"><i class="fas fa-file-pdf"></i><span>Lamination</span></div>
-            </div>
-        </div>
-    </section>
-
-    <hr />
-
-    <!-- ============================================================
-    SERVICES
-    ============================================================ -->
-    <section class="services animate-on-load" id="services">
-        <div class="container">
-            <div class="section-header">
-                <h2>Our <span>Services</span></h2>
-                <p>Cutting‑edge digital solutions at your fingertips</p>
-            </div>
-            
-            <div class="services-grid">
-                {% for service in services %}
-                <div class="service-card">
-                    <div class="icon" style="background: {{ service.icon_color }};">
-                         <i class="fas {{ service.icon }}"></i>
-                    </div>
-                    <h3>{{ service.name }}</h3>
-                    <p>{{ service.description|truncatechars:60 }}</p>
-                </div>
-                {% empty %}
-                <p class="no-data">No services available at the moment.</p>
-                {% endfor %}
-            </div>
-
-        </div>
-    </section>
-
-    <hr />
-
-    <!-- ============================================================
-    PRICING — with gaming-style hover (scale + neon border)
-    ============================================================ -->
-    <section class="pricing animate-on-load" id="pricing">
-        <div class="container">
-            <div class="section-header">
-                <h2>Choose Your <span>Plan</span></h2>
-                <p>Flexible pricing for every need — hover to feel the power</p>
-            </div>
-            <div class="pricing-grid">
-                {% for charge in charges %}
-                <div class="pricing-card {% if forloop.counter == 2 %}popular{% endif %}">
-        {% if forloop.counter == 2 %}
-            <span class="badge">🔥 Popular</span>
-        {% endif %}
-        <div class="plan-name">{{ charge.service.name }}</div>
-        <div class="price">₹{{ charge.charge }} <small>/ session</small></div>
-        <div class="desc">Starting at affordable rates</div>
-        <ul>
-            <li><i class="fas fa-check"></i> Professional service</li>
-            <li><i class="fas fa-check"></i> Quick turnaround</li>
-            <li><i class="fas fa-check"></i> Expert assistance</li>
-        </ul>
-        <a href="{% url 'appointment' %}" class="btn-primary">Book Now</a>
-    </div>
-    {% empty %}
-    <p class="no-data">Pricing information coming soon.</p>
-    {% endfor %}
-</div>
-        </div>
-    </section>
-
-    <hr />
-
-    <!-- ============================================================
-    GALLERY
-    ============================================================ -->
-    <section class="gallery animate-on-load" id="gallery">
-        <div class="container">
-            <div class="section-header">
-                <h2>Our <span>Gallery</span></h2>
-                <p>Take a peek into our digital workspace</p>
-            </div>
-<div class="gallery-grid">
-    {% for img in gallery %}
-    <div class="gallery-item" style="background-image: url('{{ img.image.url }}'); background-size: cover; background-position: center;">
-        <!-- optional caption -->
-        <div class="caption">{{ img.title }}</div>
-    </div>
-    {% empty %}
-    <p class="no-data">No gallery images yet.</p>
-    {% endfor %}
-</div>
-        </div>
-    </section>
-
-    <hr />
-
-    <!-- ============================================================
-    REVIEWS
-    ============================================================ -->
-    <section class="reviews animate-on-load" id="reviews">
-        <div class="container">
-            <div class="section-header">
-                <h2>What <span>Customers</span> Say</h2>
-                <p>Real feedback from real people</p>
-            </div>
-            <div class="reviews-grid">
-    {% for review in reviews %}
-    <div class="review-card">
-        <div class="stars">
-            {% for i in "12345"|make_list %}
-                {% if forloop.counter <= review.rating %}
-                    <i class="fas fa-star"></i>
-                {% else %}
-                    <i class="fas fa-star" style="color: #444;"></i>
-                {% endif %}
-            {% endfor %}
-        </div>
-        <div class="review-text">{{ review.review }}</div>
-        <div class="reviewer">— {{ review.customer_name }}</div>
-    </div>
-    {% empty %}
-    <p class="no-data">No reviews yet. Be the first!</p>
-    {% endfor %}
-</div>
-        </div>
-    </section>
-
-    <hr />
-
-    <!-- ============================================================
-    INFO ROW — Timings + Contact
-    ============================================================ -->
-    <section class="info-row animate-on-load" id="contact">
-        <div class="container">
-            <div class="timings-card">
-                <h3><i class="fas fa-clock"></i> Business Timings</h3>
-                <table class="timings-table">
-                    <tr><td>Monday – Saturday</td><td>9:00 AM – 8:00 PM</td></tr>
-                    <tr class="highlight"><td>Sunday</td><td>10:00 AM – 2:00 PM</td></tr>
-                    <tr><td>Holidays</td><td>Closed</td></tr>
-                </table>
-            </div>
-            <div class="contact-card">
-                <h3><i class="fas fa-phone-alt"></i> Get in Touch</h3>
-                <div class="phone">
-                    <i class="fas fa-mobile-alt"></i>
-                    <a href="tel:+919876543210">+91 98765 43210</a>
-                </div>
-                <div class="sub">Call or WhatsApp for quick support.</div>
-                <div class="contact-buttons">
-                    <a href="tel:+919876543210" class="btn-primary">
-                        <i class="fas fa-phone"></i> Call Now
-                    </a>
-                    <a href="https://wa.me/919876543210?text=Hello%2C%20I%20need%20assistance." target="_blank" class="btn-whatsapp">
-                        <i class="fab fa-whatsapp"></i> WhatsApp
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <hr />
-
-    <!-- ============================================================
-    LOCATION
-    ============================================================ -->
-    <section class="location animate-on-load" id="location">
-        <div class="container">
-            <div class="location-info">
-                <h2>Find Us <span>Here</span></h2>
-                <div class="address">
-                    <p><i class="fas fa-map-marker-alt"></i> CyberTech Digital Hub</p>
-                    <p style="padding-left: 28px;">
-                        देऊबाई कॉम्प्लेक्स, साईबाबा चौक,<br />
-                        Ranale, Maharashtra 425411
-                    </p>
-                </div>
-                <a href="https://maps.app.goo.gl/WcuRkjRWAR8DdMqRA" target="_blank" class="btn-primary" style="padding: 12px 32px;">
-                    <i class="fas fa-directions"></i> Get Directions
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="hero animate-on-load" id="home">
+    <div class="container">
+        <div class="hero-content">
+            <h1>
+                Next‑Gen<br />
+                <span>Cyber</span> Services
+            </h1>
+            <p>
+                Fast, reliable &amp; affordable digital solutions —
+                from document printing to Aadhaar, PAN, passport
+                services and more. Built for the future.
+            </p>
+            <div class="hero-buttons">
+                <a href="#services" class="btn-primary">
+                    <i class="fas fa-arrow-right"></i> Explore
+                </a>
+                <a href="#contact" class="btn-outline">
+                    <i class="fas fa-phone"></i> Contact
                 </a>
             </div>
-            <div class="map-container">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d290.99334372828883!2d74.39469402087641!3d21.34436723602012!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bdf0fd00fae03e5%3A0xeb4fa60cf3743911!2zODlWVitRVzcsIOCkpuClh-CkiuCkrOCkvuCkiCDgpJXgpYngpK7gpY3gpKrgpY3gpLLgpYfgpJXgpY3gpLgsIOCkuOCkvuCkiOCkrOCkvuCkrOCkviDgpJrgpYzgpJUsIEhvbCBULiBSYW5hbGUsIFJhbmFsYSwgTWFoYXJhc2h0cmEgNDI1NDEx!5e1!3m2!1sen!2sin!4v1783429312785!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" 
-                loading="lazy" 
-                referrerpolicy="strict-origin-when-cross-origin"
-                title="Cyber Cafe Location Map"
-                ></iframe>
+        </div>
+        <div class="hero-grid">
+            <div class="hero-grid-item"><i class="fas fa-file-alt"></i><span>Online Forms</span></div>
+            <div class="hero-grid-item"><i class="fas fa-id-card"></i><span>Aadhaar</span></div>
+            <div class="hero-grid-item"><i class="fas fa-credit-card"></i><span>PAN Card</span></div>
+            <div class="hero-grid-item"><i class="fas fa-passport"></i><span>Passport</span></div>
+            <div class="hero-grid-item"><i class="fas fa-print"></i><span>Print &amp; Scan</span></div>
+            <div class="hero-grid-item"><i class="fas fa-file-pdf"></i><span>Lamination</span></div>
         </div>
     </div>
 </section>
 
 <hr />
 
+<!-- ============================================================
+     SERVICES
+     ============================================================ -->
+<section class="services animate-on-load" id="services">
+    <div class="container">
+        <div class="section-header">
+            <h2>Our <span>Services</span></h2>
+            <p>Cutting‑edge digital solutions at your fingertips</p>
+        </div>
+
+        <div class="services-grid">
+            {% for service in services %}
+            <div class="service-card">
+                <div class="icon-wrap">
+                    <i class="fas {{ service.icon|default:'fa-cogs' }}"></i>
+                </div>
+                <h3>{{ service.name }}</h3>
+                <p>{{ service.description|truncatechars:60 }}</p>
+            </div>
+            {% empty %}
+            <p class="no-data">{% trans "No services available at the moment." %}</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<hr />
+
+<!-- ============================================================
+     PRICING
+     ============================================================ -->
+<section class="pricing animate-on-load" id="pricing">
+    <div class="container">
+        <div class="section-header">
+            <h2>Choose Your <span>Plan</span></h2>
+            <p>Flexible pricing for every need — hover to feel the power</p>
+        </div>
+        <div class="pricing-grid">
+            {% for charge in charges %}
+            <div class="pricing-card {% if forloop.counter == 2 %}popular{% endif %}">
+                {% if forloop.counter == 2 %}
+                <span class="badge">🔥 Popular</span>
+                {% endif %}
+                <div class="plan-name">{{ charge.service.name }}</div>
+                <div class="price">₹{{ charge.charge }} <small>/ session</small></div>
+                <div class="desc">Starting at affordable rates</div>
+                <ul>
+                    <li><i class="fas fa-check"></i> Professional service</li>
+                    <li><i class="fas fa-check"></i> Quick turnaround</li>
+                    <li><i class="fas fa-check"></i> Expert assistance</li>
+                </ul>
+                <a href="{% url 'appointment' %}" class="btn-primary">Book Now</a>
+            </div>
+            {% empty %}
+            <p class="no-data">{% trans "Pricing information coming soon." %}</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<hr />
+
+<!-- ============================================================
+     GALLERY
+     ============================================================ -->
+<section class="gallery animate-on-load" id="gallery">
+    <div class="container">
+        <div class="section-header">
+            <h2>Our <span>Gallery</span></h2>
+            <p>Take a peek into our digital workspace</p>
+        </div>
+        <div class="gallery-grid">
+            {% for img in gallery %}
+            <div class="gallery-item" style="background-image: url('{{ img.image.url }}');">
+                <div class="caption">{{ img.title }}</div>
+            </div>
+            {% empty %}
+            {% for i in "1234"|make_list %}
+            <div class="gallery-item">
+                <div class="placeholder-icon"><i class="fas fa-image"></i></div>
+                <div class="caption">{% trans "Gallery image" %}</div>
+            </div>
+            {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<hr />
+
+<!-- ============================================================
+     REVIEWS
+     ============================================================ -->
+<section class="reviews animate-on-load" id="reviews">
+    <div class="container">
+        <div class="section-header">
+            <h2>What <span>Customers</span> Say</h2>
+            <p>Real feedback from real people</p>
+        </div>
+        <div class="reviews-grid">
+            {% for review in reviews %}
+            <div class="review-card">
+                <div class="stars">
+                    {% for i in "12345"|make_list %}
+                    {% if forloop.counter <= review.rating %}
+                    <i class="fas fa-star"></i>
+                    {% else %}
+                    <i class="fas fa-star" style="color: #444;"></i>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="review-text">{{ review.review }}</div>
+                <div class="reviewer">— {{ review.customer_name }}</div>
+            </div>
+            {% empty %}
+            <p class="no-data">{% trans "No reviews yet. Be the first!" %}</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<hr />
+
+<!-- ============================================================
+     INFO ROW — Timings + Contact
+     ============================================================ -->
+<section class="info-row animate-on-load" id="contact">
+    <div class="container">
+        <div class="timings-card">
+            <h3><i class="fas fa-clock"></i> Business Timings</h3>
+            <table class="timings-table">
+                <tr><td>Monday – Saturday</td><td>9:00 AM – 8:00 PM</td></tr>
+                <tr class="highlight"><td>Sunday</td><td>10:00 AM – 2:00 PM</td></tr>
+                <tr><td>Holidays</td><td>Closed</td></tr>
+            </table>
+        </div>
+        <div class="contact-card">
+            <h3><i class="fas fa-phone-alt"></i> Get in Touch</h3>
+            <div class="phone">
+                <i class="fas fa-mobile-alt"></i>
+                <a href="tel:+919876543210">+91 98765 43210</a>
+            </div>
+            <div class="sub">Call or WhatsApp for quick support.</div>
+            <div class="contact-buttons">
+                <a href="tel:+919876543210" class="btn-primary">
+                    <i class="fas fa-phone"></i> Call Now
+                </a>
+                <a href="https://wa.me/919876543210?text=Hello%2C%20I%20need%20assistance." target="_blank" class="btn-whatsapp">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr />
+
+<!-- ============================================================
+     LOCATION
+     ============================================================ -->
+<section class="location animate-on-load" id="location">
+    <div class="container">
+        <div class="location-info">
+            <h2>Find Us <span>Here</span></h2>
+            <div class="address">
+                <p><i class="fas fa-map-marker-alt"></i> CyberTech Digital Hub</p>
+                <p style="padding-left: 28px;">
+                    देऊबाई कॉम्प्लेक्स, साईबाबा चौक,<br />
+                    Ranale, Maharashtra 425411
+                </p>
+            </div>
+            <a href="https://maps.app.goo.gl/WcuRkjRWAR8DdMqRA" target="_blank" class="btn-primary" style="padding: 12px 32px; align-self: flex-start;">
+                <i class="fas fa-directions"></i> Get Directions
+            </a>
+        </div>
+        <div class="map-container">
+            <iframe
+            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d290.99334372828883!2d74.39469402087641!3d21.34436723602012!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bdf0fd00fae03e5%3A0xeb4fa60cf3743911!2zODlWVitRVzcsIOCkpuClh-CkiuCkrOCkvuCkiCDgpJXgpYngpK7gpY3gpKrgpY3gpLLgpYfgpJXgpY3gpLgsIOCkuOCkvuCkiOCkrOCkvuCkrOCkviDgpJrgpYzgpJUsIEhvbCBULiBSYW5hbGUsIFJhbmFsYSwgTWFoYXJhc2h0cmEgNDI1NDEx!5e1!3m2!1sen!2sin!4v1783429312785!5m2!1sen!2sin"
+            width="600"
+            height="450"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            title="Cyber Cafe Location Map"
+        ></iframe>
+    </div>
+</div>
+</section>
+
+<hr />
 {% endblock %}
 
 {% block extra_scripts %}
 <!-- ============================================================
-JAVASCRIPT — Hamburger + Active nav highlight
-============================================================ -->
+     PAGE-SPECIFIC JAVASCRIPT — active nav highlight on scroll
+     ============================================================ -->
 <script>
-    // Hamburger toggle
-    document.getElementById('hamburger').addEventListener('click', function() {
-        document.getElementById('navLinks').classList.toggle('open');
-    });
+    (function() {
+        'use strict';
 
-    // Close nav on link click (mobile)
-    document.querySelectorAll('.nav-links a').forEach(function(link) {
-        link.addEventListener('click', function() {
-            document.getElementById('navLinks').classList.remove('open');
-        });
-    });
+        // ---- Active nav highlight on scroll ----
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
 
-    // Active nav highlight on scroll
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-links a');
-    window.addEventListener('scroll', function() {
-        let current = '';
-        sections.forEach(function(section) {
-            const top = section.offsetTop - 120;
-            if (window.scrollY >= top) {
-                current = section.getAttribute('id');
-            }
+        if (sections.length && navLinks.length) {
+            window.addEventListener('scroll', function() {
+                let current = '';
+                const scrollY = window.scrollY + 100;
+
+                sections.forEach(function(section) {
+                    const top = section.offsetTop;
+                    const height = section.offsetHeight;
+                    if (scrollY >= top && scrollY < top + height) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(function(link) {
+                    link.classList.remove('active');
+                    const href = link.getAttribute('href');
+                    if (href === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            }, { passive: true });
+        }
+
+        // ---- Smooth scroll for anchor links (optional enhancement) ----
+        document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+            anchor.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                const targetEl = document.querySelector(targetId);
+                if (targetEl) {
+                    e.preventDefault();
+                    const headerHeight = document.querySelector('.header')?.offsetHeight || 70;
+                    const top = targetEl.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                    window.scrollTo({ top: top, behavior: 'smooth' });
+                }
+            });
         });
-        navLinks.forEach(function(link) {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === '#' + current) {
-                link.classList.add('active');
-            }
-        });
-    });
+
+    })();
 </script>
-
 {% endblock %}
-
-</body>
-</html>

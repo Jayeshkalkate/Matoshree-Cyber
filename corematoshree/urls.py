@@ -52,6 +52,10 @@ urlpatterns = [
     path('my-applications/', views.my_applications, name='my_applications'),
     path('application/<int:app_id>/', views.application_detail, name='application_detail'),
     path('application-detail/<int:app_id>/', views.application_detail_ajax, name='application_detail_ajax'),
+    path('admin/application/<int:app_id>/', views.application_admin_detail, name='application_admin_detail'),
+
+    path("pdf/<int:pk>/split/", views.split_pdf, name="split_pdf"),
+
     # Profile & Auth
     path('register/', views.register, name='register'),
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),

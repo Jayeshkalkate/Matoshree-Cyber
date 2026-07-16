@@ -1,7 +1,12 @@
 # =============================================================================
 # IMPORTS
 # =============================================================================
-
+import os
+import tempfile
+from django.http import FileResponse, Http404
+from django.shortcuts import get_object_or_404, render
+from pypdf import PdfReader, PdfWriter
+from .models import DocumentUpload
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.forms import formset_factory
@@ -969,3 +974,125 @@ def application_detail_ajax(request, app_id):
         ]
     }
     return JsonResponse(data)
+
+@login_required
+@user_passes_test(is_admin)
+def application_admin_detail(request, app_id):
+    application = get_object_or_404(Application, id=app_id)
+    
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        
+        # --- Update Status ---
+        if action == 'update_status':
+            new_status = request.POST.get('status')
+            if new_status in dict(Application.STATUS_CHOICES):
+                application.status = new_status
+                application.save()
+                messages.success(request, _("Status updated successfully."))
+            else:
+                messages.error(request, _("Invalid status."))
+            return redirect('application_admin_detail', app_id=app_id)
+        
+        # --- Delete Document ---
+        elif action == 'delete_document':
+            doc_id = request.POST.get('doc_id')
+            doc = get_object_or_404(DocumentUpload, id=doc_id, application=application)
+            doc.delete()
+            messages.success(request, _("Document deleted."))
+            return redirect('application_admin_detail', app_id=app_id)
+        
+        # --- Add Document ---
+        elif action == 'add_document':
+            doc_name = request.POST.get('document_name')
+            file = request.FILES.get('file')
+            if doc_name and file:
+                DocumentUpload.objects.create(
+                    application=application,
+                    document_name=doc_name,
+                    file=file,
+                    is_mandatory=False  # optional
+                )
+                messages.success(request, _("Document uploaded."))
+            else:
+                messages.error(request, _("Please provide both name and file."))
+            return redirect('application_admin_detail', app_id=app_id)
+    
+    # GET – show the form
+    documents = application.documents.all()
+    context = {
+        'application': application,
+        'documents': documents,
+        'business': get_business(),
+    }
+    return render(request, 'application_admin_detail.html', context)
+
+
+@login_required
+@user_passes_test(is_admin)
+def split_pdf(request, pk):
+    document = get_object_or_404(DocumentUpload, pk=pk)
+
+    if request.method == "POST":
+
+        pages = request.POST.get("pages")
+
+        reader = PdfReader(document.file.path)
+        writer = PdfWriter()
+
+        total_pages = len(reader.pages)
+
+        try:
+            selected_pages = []
+
+            parts = pages.split(",")
+
+            for part in parts:
+                part = part.strip()
+
+                if "-" in part:
+                    start, end = part.split("-")
+                    start = int(start)
+                    end = int(end)
+
+                    for p in range(start, end + 1):
+                        selected_pages.append(p)
+
+                else:
+                    selected_pages.append(int(part))
+
+            for page in selected_pages:
+
+                if page < 1 or page > total_pages:
+                    raise Exception("Invalid page")
+
+                writer.add_page(reader.pages[page - 1])
+
+            temp = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf")
+
+            with open(temp.name, "wb") as output:
+                writer.write(output)
+
+            return FileResponse(
+                open(temp.name, "rb"),
+                as_attachment=True,
+                filename=f"split_{os.path.basename(document.file.name)}",
+            )
+
+        except Exception:
+            return render(
+                request,
+                "split_pdf.html",
+                {
+                    "document": document,
+                    "error": "Invalid page numbers.",
+                },
+            )
+
+    return render(
+        request,
+        "split_pdf.html",
+        {
+            "document": document,
+        },
+    )
