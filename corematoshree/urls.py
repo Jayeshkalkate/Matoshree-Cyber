@@ -48,6 +48,10 @@ urlpatterns = [
     
     path('submit-review/', views.submit_review, name='submit_review'),
     
+    path('apply/<int:service_id>/', views.apply_service, name='apply_service'),
+    path('my-applications/', views.my_applications, name='my_applications'),
+    path('application/<int:app_id>/', views.application_detail, name='application_detail'),
+    path('application-detail/<int:app_id>/', views.application_detail_ajax, name='application_detail_ajax'),
     # Profile & Auth
     path('register/', views.register, name='register'),
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),

@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from .models import (
     User, Contact, Appointment, Review, Service, Announcement,
     JobNotification, GovernmentScheme, DownloadForm, ServiceCharge,
-    Gallery, BusinessInfo
+    Gallery, BusinessInfo, RequiredDocument   # <-- add this
 )
 
 # ==========================
@@ -364,3 +364,51 @@ class BusinessInfoForm(forms.ModelForm):
             'business_hours': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
         }
         
+from django import forms
+from .models import Application, DocumentUpload
+
+class ApplicationForm(forms.ModelForm):
+    class Meta:
+        model = Application
+        fields = ['full_name', 'phone', 'email', 'address']
+        widgets = {
+            'full_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('Full Name')}),
+            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('Phone Number')}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': _('Email Address')}),
+            'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': _('Address')}),
+        }
+
+
+class DocumentUploadForm(forms.ModelForm):
+    class Meta:
+        model = DocumentUpload
+        fields = ['document_name', 'file']
+        widgets = {
+            'document_name': forms.HiddenInput(),  # we will set it from the required doc
+            'file': forms.FileInput(attrs={'class': 'form-control'}),
+        }
+    def clean_file(self):
+        file = self.cleaned_data.get('file')
+        if file:
+            ext = file.name.split('.')[-1].lower()
+            if ext not in ['pdf', 'jpg', 'jpeg', 'png']:
+               raise forms.ValidationError(_("Only PDF, JPG, JPEG, and PNG files are allowed."))
+        return file
+        
+
+class RequiredDocumentForm(forms.ModelForm):
+    class Meta:
+        model = RequiredDocument
+        fields = ['service', 'document_name']
+        labels = {
+            'service': _('Service'),
+            'document_name': _('Document Name'),
+        }
+        widgets = {
+            'service': forms.Select(attrs={'class': 'form-select'}),
+            'document_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': _('e.g. Aadhaar Card'),   # changed
+                'help_text': _('Enter one document per entry.')  # not directly used; we'll add in template
+            }),
+        }

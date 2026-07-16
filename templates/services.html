@@ -647,6 +647,7 @@
                     </div>
                     <div class="name">{{ service.name }}</div>
                     <div class="sub">{{ service.description|truncatechars:60|default:"Professional service" }}</div>
+                    <a href="{% url 'apply_service' service.id %}" class="btn-primary btn-sm">{% trans "Apply Online" %}</a>
                 </div>
                 {% empty %}
                 <div class="no-services">

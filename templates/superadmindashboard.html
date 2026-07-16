@@ -383,6 +383,23 @@
       .badge-status.completed { background: rgba(57, 255, 158, 0.12); color: var(--neon-green); border-color: var(--neon-green); }
       .badge-status.cancelled { background: rgba(255, 61, 95, 0.12); color: var(--neon-red);   border-color: var(--neon-red); }
 
+      .badge-status.review {
+        background: rgba(255, 194, 60, 0.12);
+        color: var(--neon-amber);
+        border-color: var(--neon-amber);
+        }
+
+      .badge-status.approved {
+            background: rgba(57, 255, 158, 0.12);
+            color: var(--neon-green);
+            border-color: var(--neon-green);
+      }
+      .badge-status.rejected {
+            background: rgba(255, 61, 95, 0.12);
+            color: var(--neon-red);
+            border-color: var(--neon-red);
+      }
+
       /* ----- Forms: dark inputs with a cyan focus glow ------------------ */
       .admin-form {
         background: var(--bg-panel);
@@ -530,6 +547,8 @@
                 <li><a href="#" data-section="forms"><i class="fas fa-file-pdf"></i> {% trans "Upload Forms" %}</a></li>
                 <li><a href="#" data-section="users"><i class="fas fa-users"></i> {% trans "Users" %}</a></li>
                 <li><a href="#" data-section="gallery"><i class="fas fa-images"></i> {% trans "Gallery" %}</a></li>
+                <li><a href="#" data-section="requireddocs"><i class="fas fa-list-ul"></i> {% trans "Required Docs" %}</a></li>
+                <li><a href="#" data-section="applications"><i class="fas fa-file-alt"></i> {% trans "Applications" %}</a></li>
                 <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> {% trans "Settings" %}</a></li>
             </ul>
         </nav>
@@ -550,7 +569,95 @@
                 <div class="avatar">SA</div>
             </div>
         </div>
+<!-- ===== REQUIRED DOCUMENTS ===== -->
+<div id="section-requireddocs" class="section">
+    <div class="section-header">
+        <h3><i class="fas fa-list-ul" style="color:#0a66c2"></i> {% trans "Required Documents" %}</h3>
+        <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addRequiredDocForm">{% trans "Add Document" %}</button>
+    </div>
 
+<div class="collapse admin-form" id="addRequiredDocForm">
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="add">
+        <input type="hidden" name="model_type" value="requireddoc">
+        <div>
+            <label for="id_service">{% trans "Service" %} *</label>
+            {{ required_doc_form.service }}
+        </div>
+        <div>
+            <label for="id_document_name">{% trans "Document Name" %} *</label>
+            {{ required_doc_form.document_name }}
+            <small class="text-muted" style="display:block; margin-top:4px; color: var(--text-dim);">
+                {% trans "Enter one document name at a time (e.g., 'Aadhaar Card'). Add multiple entries separately." %}
+            </small>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save" %}</button>
+        </div>
+    </form>
+</div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>{% trans "Service" %}</th>
+                    <th>{% trans "Document Name" %}</th>
+                    <th>{% trans "Actions" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for doc in required_docs %}
+                <tr>
+                    <td>{{ doc.service.name }}</td>
+                    <td>{{ doc.document_name }}</td>
+                    <td>
+                        <button class="btn-primary btn-sm" onclick="editRequiredDoc('{{ doc.id }}', '{{ doc.service.id }}', '{{ doc.document_name|escapejs }}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <form method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="model_type" value="requireddoc">
+                            <input type="hidden" name="id" value="{{ doc.id }}">
+                            <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this document requirement?"|escapejs %}')"><i class="fas fa-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="3">{% trans "No required documents defined." %}</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Inline Edit Form for Required Documents -->
+    <div class="admin-form" id="editRequiredDocForm" style="display:none; margin-top:1rem;">
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="edit">
+            <input type="hidden" name="model_type" value="requireddoc">
+            <input type="hidden" name="id" id="editRequiredDocId">
+            <div>
+                <label>{% trans "Service" %} *</label>
+                <select name="service" id="editRequiredDocService" class="form-control">
+                    {% for service in services %}
+                        <option value="{{ service.id }}">{{ service.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label>{% trans "Document Name" %} *</label>
+                <input type="text" name="document_name" id="editRequiredDocName" required>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn-outline" onclick="document.getElementById('editRequiredDocForm').style.display='none'">{% trans "Cancel" %}</button>
+                <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
+            </div>
+        </form>
+    </div>
+</div>
         <!-- ========================================================== -->
         <!-- SECTION: DASHBOARD                                         -->
         <!-- ========================================================== -->
@@ -1334,6 +1441,48 @@
             </div>
         </div>
 
+<!-- ===== APPLICATIONS ===== -->
+<div id="section-applications" class="section">
+    <div class="section-header">
+        <h3><i class="fas fa-file-alt" style="color:#0a66c2"></i> {% trans "Applications" %}</h3>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>{% trans "Applicant" %}</th>
+                    <th>{% trans "Service" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "Submitted" %}</th>
+                    <th>{% trans "Actions" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in applications %}
+                <tr>
+                    <td>{{ app.full_name }}</td>
+                    <td>{{ app.service.name }}</td>
+                    <td><span class="badge bg-{% if app.status == 'approved' %}success{% elif app.status == 'rejected' %}danger{% elif app.status == 'review' %}warning{% else %}secondary{% endif %}">
+    {{ app.get_status_display }}
+</span></td>
+                    <td>{{ app.created_at|date:"d M Y" }}</td>
+                    <td>
+                        <a href="{% url 'admin:corematoshree_application_change' app.id %}" class="btn-primary btn-sm" target="_blank">
+                            <i class="fas fa-edit"></i> {% trans "View" %}
+                        </a>
+                        <a href="{% url 'admin:corematoshree_application_change' app.id %}" class="btn-outline btn-sm" target="_blank">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="5">{% trans "No applications yet." %}</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
     </main>
 {% endblock %}
 
@@ -1373,6 +1522,8 @@
                     forms: "{% trans "Upload Forms" %}",
                     users: "{% trans "User Management" %}",
                     gallery: "{% trans "Gallery" %}",
+                    requireddocs: "{% trans "Required Documents" %}",
+                    applications: "{% trans "Applications" %}",
                     settings: "{% trans "Settings" %}",
                 };
                 pageTitle.textContent = titles[sectionId] || "{% trans "Dashboard" %}";
@@ -1502,6 +1653,19 @@
             showSection("dashboard");
 
         })();
+
+// ---- Edit Required Document ----
+window.editRequiredDoc = function(id, serviceId, docName) {
+    document.getElementById("editRequiredDocId").value = id;
+    document.getElementById("editRequiredDocService").value = serviceId;
+    document.getElementById("editRequiredDocName").value = docName;
+    document.getElementById("editRequiredDocForm").style.display = "grid";
+    document.getElementById("editRequiredDocForm").scrollIntoView({ behavior: 'smooth' });
+};
+
+document.querySelector("#editRequiredDocForm .btn-outline").addEventListener("click", function() {
+    document.getElementById("editRequiredDocForm").style.display = "none";
+});
     </script>
 {% endblock %}
 </body>

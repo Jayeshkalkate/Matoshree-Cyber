@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Apply for" %} {{ service.name }}
+{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+    <div class="container">
+        <h1>{% trans "Apply for" %} {{ service.name }}</h1>
+        <p>{% trans "Please fill in your details and upload the required documents." %}</p>
+    </div>
+</section>
+
+<section class="apply-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h4>
+                            {% trans "Service" %}: {{ service.name }}
+                        </h4>
+
+                        <p>{{ service.description }}</p>
+
+                        <hr>
+
+                        <!-- Required Documents -->
+                        <h5>{% trans "Required Documents" %}</h5>
+
+                        <ul class="required-docs-list">
+                            {% for doc in required_docs %}
+                                <li>
+                                    <i class="fas fa-file-alt" style="color: var(--neon-cyan);"></i>
+                                    {{ doc.document_name }}
+                                    <span class="badge badge-danger">
+                                        {% trans "Mandatory" %}
+                                    </span>
+                                </li>
+                            {% empty %}
+                                <li>
+                                    {% trans "No specific documents required." %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+
+                        <hr>
+
+                        <!-- Application Form -->
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                            {{ formset.management_form }}
+
+                            <h5>{% trans "Upload Documents" %}</h5>
+
+                            <p class="text-muted">
+                                {% trans "Please upload each required document separately." %}
+                            </p>
+
+                            {% for doc_form in formset %}
+                                <div class="form-group upload-group"
+                                     style="margin-bottom:1.5rem;padding:1rem;background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);border-left:3px solid var(--neon-cyan);">
+
+                                    {{ doc_form.document_name }}
+
+                                    <label class="doc-label"
+                                           style="font-weight:600;display:block;margin-bottom:0.5rem;">
+                                        <i class="fas fa-upload" style="color:var(--neon-cyan);"></i>
+
+                                        {{ doc_form.document_name.value }}
+
+                                        <span class="badge badge-danger" style="font-size:0.7rem;">
+                                            {% trans "Required" %}
+                                        </span>
+                                    </label>
+
+                                    {{ doc_form.file }}
+
+                                    <small class="text-muted d-block mt-2">
+                                        {% trans "Allowed: PDF, JPG, JPEG, PNG" %}
+                                    </small>
+
+                                    {% if doc_form.file.errors %}
+                                        <div class="text-danger mt-2">
+                                            {{ doc_form.file.errors }}
+                                        </div>
+                                    {% endif %}
+
+                                    {% if doc_form.non_field_errors %}
+                                        <div class="text-danger mt-2">
+                                            {{ doc_form.non_field_errors }}
+                                        </div>
+                                    {% endif %}
+
+                                </div>
+                            {% endfor %}
+
+                            <button type="submit" class="btn-primary">
+                                {% trans "Submit Application" %}
+                            </button>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

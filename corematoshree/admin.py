@@ -193,3 +193,23 @@ class BusinessInfoAdmin(admin.ModelAdmin):
     list_display = ("business_name", "phone", "email")
     search_fields = ("business_name", "phone", "email")
 
+from .models import Application, DocumentUpload
+
+class DocumentUploadInline(admin.TabularInline):
+    model = DocumentUpload
+    extra = 0
+    readonly_fields = ('uploaded_at',)
+
+
+@admin.register(Application)
+class ApplicationAdmin(admin.ModelAdmin):
+    list_display = ('full_name', 'service', 'status', 'created_at')
+    list_filter = ('status', 'service', 'created_at')
+    search_fields = ('full_name', 'email', 'phone')
+    readonly_fields = ('created_at', 'updated_at')
+    inlines = [DocumentUploadInline]
+    fieldsets = (
+        (None, {'fields': ('user', 'service', 'full_name', 'phone', 'email', 'address', 'extra_data')}),
+        ('Status', {'fields': ('status',)}),
+        ('Timestamps', {'fields': ('created_at', 'updated_at')}),
+    )

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "My Applications" %}{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <h1>{% trans "My Applications" %}</h1>
+    </div>
+</section>
+
+<section class="applications-list">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                {% if applications %}
+                    <div class="list-group">
+                        {% for app in applications %}
+                            <a href="{% url 'application_detail' app.id %}" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">{{ app.service.name }}</h5>
+                                    <small>{{ app.created_at|date:"d M Y" }}</small>
+                                </div>
+                                <p class="mb-1">{% trans "Status" %}: <span class="badge bg-{% if app.status == 'approved' %}success{% elif app.status == 'rejected' %}danger{% elif app.status == 'review' %}warning{% else %}secondary{% endif %}">
+                                {{ app.get_status_display }}
+                                </span></p>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>{% trans "You have not submitted any applications yet." %}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

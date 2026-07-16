@@ -534,3 +534,47 @@ class BusinessInfo(models.Model):
     def __str__(self):
         return self.business_name
     
+class Application(models.Model):
+    STATUS_CHOICES = (
+        ('pending', 'Pending'),
+        ('review', 'Under Review'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("User"))
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name=_("Service"))
+    full_name = models.CharField(_("Full Name"), max_length=150)
+    phone = models.CharField(_("Phone"), max_length=15, validators=[phone_validator])
+    email = models.EmailField(_("Email"))
+    address = models.TextField(_("Address"))
+    # Additional fields as needed (e.g., aadhar, pan, etc.)
+    extra_data = models.JSONField(_("Extra Data"), blank=True, null=True)  # flexible for future
+    status = models.CharField(_("Status"), max_length=20, choices=STATUS_CHOICES, default='pending')
+    created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated At"), auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = _("Application")
+        verbose_name_plural = _("Applications")
+
+    def __str__(self):
+        return f"{self.full_name} – {self.service.name}"
+
+
+class DocumentUpload(models.Model):
+    application = models.ForeignKey(Application, on_delete=models.CASCADE, related_name='documents')
+    document_name = models.CharField(_("Document Name"), max_length=200)  # e.g., "Aadhaar Card"
+    file = models.FileField(_("File"), upload_to='applications/%Y/%m/%d/')
+    is_mandatory = models.BooleanField(_("Mandatory"), default=True)
+    uploaded_at = models.DateTimeField(_("Uploaded At"), auto_now_add=True)
+    verified = models.BooleanField(_("Verified by Admin"), default=False)
+
+    class Meta:
+        verbose_name = _("Document Upload")
+        verbose_name_plural = _("Document Uploads")
+
+    def __str__(self):
+        return f"{self.document_name} – {self.application.full_name}"
+    

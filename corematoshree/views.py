@@ -2,6 +2,12 @@
 # IMPORTS
 # =============================================================================
 
+from django.shortcuts import get_object_or_404, render, redirect
+from django.contrib.auth.decorators import login_required
+from django.forms import formset_factory
+from django.contrib import messages
+from .forms import ApplicationForm, DocumentUploadForm
+from .models import Service, RequiredDocument, Application, DocumentUpload
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -10,7 +16,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import OperationalError  # <-- added for safe DB access
-
+from django.utils.translation import gettext_lazy as _
 from .forms import (
     ServiceForm, AnnouncementForm, JobNotificationForm,
     GovernmentSchemeForm, AppointmentForm, ContactFormDashboard,
@@ -27,6 +33,8 @@ from .forms import (
     CustomUserCreationForm, ProfileUpdateForm,
 )
 from django.contrib.auth import get_user_model
+from .forms import RequiredDocumentForm
+from .models import RequiredDocument
 
 User = get_user_model()
 
@@ -98,6 +106,7 @@ def admin_dashboard(request):
     servicecharges = ServiceCharge.objects.select_related('service').all()   # <-- new
     gallery_images = Gallery.objects.all()                                  # <-- new
     business_info = BusinessInfo.objects.first()                            # <-- new
+    applications = Application.objects.all().order_by('-created_at')
 
     # Initialize empty forms for each model
     service_form = ServiceForm()
@@ -110,6 +119,8 @@ def admin_dashboard(request):
     servicecharge_form = ServiceChargeForm()      # <-- new
     gallery_form = GalleryForm()                  # <-- new
     businessinfo_form = BusinessInfoForm(instance=business_info)  # <-- new
+    required_docs = RequiredDocument.objects.select_related('service').all().order_by('service__name')
+    required_doc_form = RequiredDocumentForm()
 
     # Handle POST actions
     if request.method == 'POST':
@@ -125,6 +136,13 @@ def admin_dashboard(request):
                     messages.success(request, 'Service added.')
                 else:
                     messages.error(request, 'Error adding service. Check fields.')
+            elif model_type == 'requireddoc':
+                form = RequiredDocumentForm(request.POST)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Required document added.')
+                else:
+                    messages.error(request, 'Error adding required document. Check fields.')
             elif model_type == 'announcement':
                 form = AnnouncementForm(request.POST)
                 if form.is_valid():
@@ -194,6 +212,14 @@ def admin_dashboard(request):
                     messages.success(request, 'Service updated.')
                 else:
                     messages.error(request, 'Error updating service.')
+            elif model_type == 'requireddoc' and obj_id:
+                instance = get_object_or_404(RequiredDocument, id=obj_id)
+                form = RequiredDocumentForm(request.POST, instance=instance)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Required document updated.')
+                else:
+                    messages.error(request, 'Error updating required document.')
             elif model_type == 'announcement' and obj_id:
                 instance = get_object_or_404(Announcement, id=obj_id)
                 form = AnnouncementForm(request.POST, instance=instance)
@@ -276,6 +302,9 @@ def admin_dashboard(request):
             elif model_type == 'announcement' and obj_id:
                 get_object_or_404(Announcement, id=obj_id).delete()
                 messages.success(request, 'Announcement deleted.')
+            elif model_type == 'requireddoc' and obj_id:
+                get_object_or_404(RequiredDocument, id=obj_id).delete()
+                messages.success(request, 'Required document deleted.')  
             elif model_type == 'job' and obj_id:
                 get_object_or_404(JobNotification, id=obj_id).delete()
                 messages.success(request, 'Job deleted.')
@@ -320,6 +349,9 @@ def admin_dashboard(request):
         'servicecharge_form': servicecharge_form,
         'gallery_form': gallery_form,
         'businessinfo_form': businessinfo_form,
+        'applications': applications,
+        'required_docs': required_docs,
+        'required_doc_form': required_doc_form,
         'business': get_business(),
     }
     return render(request, 'admindashboard.html', context)
@@ -340,6 +372,7 @@ def superadmin_dashboard(request):
     servicecharges = ServiceCharge.objects.select_related('service').all()
     gallery_images = Gallery.objects.all()
     business_info = BusinessInfo.objects.first()
+    applications = Application.objects.all().order_by('-created_at')
 
     # Initialize forms
     service_form = ServiceForm()
@@ -352,6 +385,8 @@ def superadmin_dashboard(request):
     servicecharge_form = ServiceChargeForm()
     gallery_form = GalleryForm()
     businessinfo_form = BusinessInfoForm(instance=business_info)
+    required_docs = RequiredDocument.objects.select_related('service').all().order_by('service__name')
+    required_doc_form = RequiredDocumentForm()
 
     if request.method == 'POST':
         action = request.POST.get('action')
@@ -367,6 +402,13 @@ def superadmin_dashboard(request):
                     messages.success(request, 'Service added.')
                 else:
                     messages.error(request, 'Error adding service.')
+            elif model_type == 'requireddoc':
+                form = RequiredDocumentForm(request.POST)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Required document added.')
+                else:
+                    messages.error(request, 'Error adding required document. Check fields.')
             elif model_type == 'announcement':
                 form = AnnouncementForm(request.POST)
                 if form.is_valid():
@@ -445,6 +487,14 @@ def superadmin_dashboard(request):
                     messages.success(request, 'Announcement updated.')
                 else:
                     messages.error(request, 'Error updating announcement.')
+            elif model_type == 'requireddoc' and obj_id:
+                instance = get_object_or_404(RequiredDocument, id=obj_id)
+                form = RequiredDocumentForm(request.POST, instance=instance)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Required document updated.')
+                else:
+                    messages.error(request, 'Error updating required document.')
             elif model_type == 'job' and obj_id:
                 instance = get_object_or_404(JobNotification, id=obj_id)
                 form = JobNotificationForm(request.POST, instance=instance)
@@ -520,6 +570,9 @@ def superadmin_dashboard(request):
             elif model_type == 'announcement' and obj_id:
                 get_object_or_404(Announcement, id=obj_id).delete()
                 messages.success(request, 'Announcement deleted.')
+            elif model_type == 'requireddoc' and obj_id:
+                get_object_or_404(RequiredDocument, id=obj_id).delete()
+                messages.success(request, 'Required document deleted.')
             elif model_type == 'job' and obj_id:
                 get_object_or_404(JobNotification, id=obj_id).delete()
                 messages.success(request, 'Job deleted.')
@@ -576,6 +629,9 @@ def superadmin_dashboard(request):
         'servicecharge_form': servicecharge_form,
         'gallery_form': gallery_form,
         'businessinfo_form': businessinfo_form,
+        'applications': applications,
+        'required_docs': required_docs,
+        'required_doc_form': required_doc_form,
         'business': get_business(),
     }
     return render(request, 'superadmindashboard.html', context)
@@ -707,7 +763,7 @@ def documents(request):
 
     return render(request, 'required_document.html', {
         'business': get_business(),
-        'documents': documents_page,
+        'documents_page': documents_page,
     })
 
 
@@ -812,4 +868,104 @@ def jobs(request):
         'business': get_business(),
         'jobs': jobs_page,
     })
+
+@login_required
+def apply_service(request, service_id):
+    service = get_object_or_404(Service, id=service_id, active=True)
+    required_docs = RequiredDocument.objects.filter(service=service)
+
+    # Pre-fill user data if already exists
+    initial_data = {
+        'full_name': request.user.get_full_name() or request.user.username,
+        'phone': request.user.phone or '',
+        'email': request.user.email,
+        'address': request.user.address or '',
+    }
+
+    if request.method == 'POST':
+        form = ApplicationForm(request.POST)
+        # We'll create a formset for documents
+        DocumentFormSet = formset_factory(DocumentUploadForm, extra=len(required_docs), max_num=len(required_docs))
+        formset = DocumentFormSet(request.POST, request.FILES)
+
+        if form.is_valid() and formset.is_valid():
+            # Save application
+            application = form.save(commit=False)
+            application.user = request.user
+            application.service = service
+            application.save()
+
+            # Save each document
+            for i, doc_form in enumerate(formset.cleaned_data):
+                if doc_form:  # ensure not empty
+                    doc_name = required_docs[i].document_name if i < len(required_docs) else 'Other'
+                    DocumentUpload.objects.create(
+                        application=application,
+                        document_name=doc_name,
+                        file=doc_form['file'],
+                        is_mandatory=True,  # we treat all as mandatory for simplicity
+                    )
+
+            messages.success(request, _('Your application has been submitted successfully.'))
+            return redirect('my_applications')
+        else:
+            messages.error(request, _('Please correct the errors below.'))
+    else:
+        form = ApplicationForm(initial=initial_data)
+        # Pre-populate formset with document names
+        DocumentFormSet = formset_factory(DocumentUploadForm, extra=len(required_docs), max_num=len(required_docs))
+        initial_docs = [{'document_name': doc.document_name} for doc in required_docs]
+        formset = DocumentFormSet(initial=initial_docs)
+
+    context = {
+        'service': service,
+        'required_docs': required_docs,
+        'form': form,
+        'formset': formset,
+        'business': get_business(),
+    }
+    return render(request, 'apply_service.html', context)
+
+@login_required
+def my_applications(request):
+    applications = Application.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'my_applications.html', {
+        'applications': applications,
+        'business': get_business(),
+    })
     
+@login_required
+def application_detail(request, app_id):
+    application = get_object_or_404(Application, id=app_id, user=request.user)
+    documents = application.documents.all()
+    return render(request, 'application_detail.html', {
+        'application': application,
+        'documents': documents,
+        'business': get_business(),
+    })
+    
+from django.http import JsonResponse
+
+@login_required
+@user_passes_test(is_admin)
+def application_detail_ajax(request, app_id):
+    app = get_object_or_404(Application, id=app_id)
+    documents = app.documents.all()
+    data = {
+        'full_name': app.full_name,
+        'phone': app.phone,
+        'email': app.email,
+        'address': app.address,
+        'service': app.service.name,
+        'status': app.get_status_display(),
+        'created_at': app.created_at.strftime("%d %b %Y, %H:%M"),
+        'documents': [
+            {
+                'name': doc.document_name,
+                'url': doc.file.url,
+                'verified': doc.verified,
+            }
+            for doc in documents
+        ]
+    }
+    return JsonResponse(data)
