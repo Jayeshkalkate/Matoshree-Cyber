@@ -979,8 +979,6 @@
                 <div class="dropdown">
                     <a href="#">{% trans "Resources" %} <i class="fas fa-chevron-down"></i></a>
                     <div class="dropdown-menu">
-                        <a href="{% url 'faq' %}">{% trans "FAQ" %}</a>
-                        <a href="{% url 'reviews' %}">{% trans "Customer Reviews" %}</a>
                         <a href="{% url 'announcements' %}">{% trans "Announcements" %}</a>
                         <a href="{% url 'government_schemes' %}">{% trans "Government Schemes" %}</a>
                         <a href="{% url 'jobs' %}">{% trans "Job Notifications" %}</a>
@@ -1051,7 +1049,7 @@
     </main>
 
     <!-- ================================================================
-         FOOTER – Cyber glow borders & social links
+         FOOTER – Cyber glow borders & dynamic social links
          ================================================================ -->
     <footer class="footer">
         <div class="container">
@@ -1068,10 +1066,11 @@
                 {% endblocktrans %}
             </p>
             <div class="socials">
-                <a href="#" aria-label="{% trans "Facebook" %}"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" aria-label="{% trans "Instagram" %}"><i class="fab fa-instagram"></i></a>
-                <a href="#" aria-label="{% trans "YouTube" %}"><i class="fab fa-youtube"></i></a>
-                <a href="#" aria-label="{% trans "Twitter" %}"><i class="fab fa-twitter"></i></a>
+                <!-- Social links are now pulled from BusinessInfo – fallback to "#" if empty -->
+                <a href="{{ business.facebook_url|default:'#' }}" aria-label="{% trans "Facebook" %}"><i class="fab fa-facebook-f"></i></a>
+                <a href="{{ business.instagram_url|default:'#' }}" aria-label="{% trans "Instagram" %}"><i class="fab fa-instagram"></i></a>
+                <a href="{{ business.youtube_url|default:'#' }}" aria-label="{% trans "YouTube" %}"><i class="fab fa-youtube"></i></a>
+                <a href="{{ business.twitter_url|default:'#' }}" aria-label="{% trans "Twitter" %}"><i class="fab fa-twitter"></i></a>
             </div>
         </div>
     </footer>

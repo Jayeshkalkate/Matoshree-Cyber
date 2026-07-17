@@ -175,20 +175,34 @@
         color: inherit;
     }
 
-    .merge-btn {
-        display: inline-block;
-        padding: 12px 24px;
-        background: #ffdb9c;
-        color: #000000;
+    /* ---- NEW: Neon-styled merge button (consistent with theme) ---- */
+    .btn-merge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.7rem 1.8rem;
+        background: transparent;
+        border: 1.5px solid var(--neon-cyan);
+        color: var(--neon-cyan);
+        border-radius: var(--radius-pill);
+        font-weight: 700;
+        font-size: 0.95rem;
+        transition: var(--transition);
         text-decoration: none;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: 600;
-        transition: background 0.3s;
+        cursor: pointer;
     }
-    
-    .merge-btn:hover {
-        background: #ffdb9c;
+    .btn-merge i {
+        color: var(--neon-cyan);
+        font-size: 1.1rem;
+    }
+    .btn-merge:hover {
+        background: var(--neon-cyan);
+        color: var(--bg-primary);
+        box-shadow: var(--glow-cyan);
+        transform: translateY(-2px);
+    }
+    .btn-merge:hover i {
+        color: var(--bg-primary);
     }
 </style>
 {% endblock %}
@@ -272,13 +286,14 @@
                             <!-- Document Uploads -->
                             <h5>{% trans "Upload Documents" %}</h5>
                             <p class="text-muted">{% trans "📄 Please upload a merged PDF containing all the required documents." %}</p>
-                            <p>💡 You can merge your PDFs using iLovePDF before uploading.</P>
-                            <a href="https://www.ilovepdf.com/" target="_blank" class="merge-btn">
-                               i❤️PDF
+                            <p>{% trans "💡 You can merge your PDFs using an online tool before uploading." %}</p>
+                            <!-- Neo-themed merge button -->
+                            <a href="https://www.ilovepdf.com/" target="_blank" rel="noopener" class="btn-merge">
+                                <i class="fas fa-heart" style="color: var(--neon-magenta);"></i> 
+                                {% trans "Merge PDFs with iLovePDF" %}
                             </a>
-                            <br>
-                            <br>
-                            <br>
+                            <br><br>
+
                             {{ formset.management_form }}
 
                             {% for doc_form in formset %}

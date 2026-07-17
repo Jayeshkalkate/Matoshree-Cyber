@@ -230,6 +230,10 @@
             font-family: var(--font);
             text-transform: uppercase;
             letter-spacing: 0.3px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
         .sort-btn:hover {
             border-color: var(--neon-purple);
@@ -1093,54 +1097,78 @@
     <section class="reviews-page" id="reviews">
         <div class="container">
 
-            <!-- ─── RATING SUMMARY (Static) ─── -->
+            <!-- ─── RATING SUMMARY (Dynamic) ─── -->
             <div class="rating-summary animate-on-load">
                 <div class="rating-big">
                     <div class="rating-number">
-                        4.8<sup>/5</sup>
+                        {{ rating_avg|default:4.8|floatformat:1 }}<sup>/5</sup>
                     </div>
                     <div class="rating-stars-big">
                         <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
+                            {% with avg=rating_avg|default:4.8 %}
+                                {% for i in "12345"|make_list %}
+                                    {% if forloop.counter <= avg|floatformat:"0"|add:"0" %}
+                                        <i class="fas fa-star"></i>
+                                    {% elif forloop.counter <= avg|add:"0.5" %}
+                                        <i class="fas fa-star-half-alt"></i>
+                                    {% else %}
+                                        <i class="fas fa-star empty-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endwith %}
                         </div>
-                        <span class="count">{% blocktrans with total=reviews_page.paginator.count %}Based on <strong>{{ total }}</strong> customer reviews{% endblocktrans %}</span>
+                        <span class="count">
+                            {% blocktrans with total=total_reviews|default:reviews_page.paginator.count trimmed %}
+                                Based on <strong>{{ total }}</strong> customer reviews
+                            {% endblocktrans %}
+                        </span>
                     </div>
                 </div>
 
                 <div class="rating-bars">
-                    <div class="rating-bar-row">
-                        <span class="star-label">5 ★</span>
-                        <div class="bar-track"><div class="bar-fill" style="width: 78%;"></div></div>
-                        <span class="bar-percent">78%</span>
-                    </div>
-                    <div class="rating-bar-row">
-                        <span class="star-label">4 ★</span>
-                        <div class="bar-track"><div class="bar-fill" style="width: 15%;"></div></div>
-                        <span class="bar-percent">15%</span>
-                    </div>
-                    <div class="rating-bar-row">
-                        <span class="star-label">3 ★</span>
-                        <div class="bar-track"><div class="bar-fill" style="width: 5%;"></div></div>
-                        <span class="bar-percent">5%</span>
-                    </div>
-                    <div class="rating-bar-row">
-                        <span class="star-label">2 ★</span>
-                        <div class="bar-track"><div class="bar-fill" style="width: 1.5%;"></div></div>
-                        <span class="bar-percent">1.5%</span>
-                    </div>
-                    <div class="rating-bar-row">
-                        <span class="star-label">1 ★</span>
-                        <div class="bar-track"><div class="bar-fill" style="width: 0.5%;"></div></div>
-                        <span class="bar-percent">0.5%</span>
-                    </div>
+                    <!-- We compute bars dynamically if rating_counts is provided, else fallback static -->
+                    {% if rating_counts %}
+                        {% with total=total_reviews|default:1 %}
+                            {% for star, count in rating_counts.items %}
+                                <div class="rating-bar-row">
+                                    <span class="star-label">{{ star }} ★</span>
+                                    <div class="bar-track"><div class="bar-fill" style="width: {% widthratio count total 100 %}%;"></div></div>
+                                    <span class="bar-percent">{% widthratio count total 100 %}%</span>
+                                </div>
+                            {% endfor %}
+                        {% endwith %}
+                    {% else %}
+                        <!-- Fallback static bars (if view doesn't provide rating_counts) -->
+                        <div class="rating-bar-row">
+                            <span class="star-label">5 ★</span>
+                            <div class="bar-track"><div class="bar-fill" style="width: 78%;"></div></div>
+                            <span class="bar-percent">78%</span>
+                        </div>
+                        <div class="rating-bar-row">
+                            <span class="star-label">4 ★</span>
+                            <div class="bar-track"><div class="bar-fill" style="width: 15%;"></div></div>
+                            <span class="bar-percent">15%</span>
+                        </div>
+                        <div class="rating-bar-row">
+                            <span class="star-label">3 ★</span>
+                            <div class="bar-track"><div class="bar-fill" style="width: 5%;"></div></div>
+                            <span class="bar-percent">5%</span>
+                        </div>
+                        <div class="rating-bar-row">
+                            <span class="star-label">2 ★</span>
+                            <div class="bar-track"><div class="bar-fill" style="width: 1.5%;"></div></div>
+                            <span class="bar-percent">1.5%</span>
+                        </div>
+                        <div class="rating-bar-row">
+                            <span class="star-label">1 ★</span>
+                            <div class="bar-track"><div class="bar-fill" style="width: 0.5%;"></div></div>
+                            <span class="bar-percent">0.5%</span>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 
-            <!-- ─── FILTER / SORT ─── -->
+            <!-- ─── FILTER / SORT (server-side via GET) ─── -->
             <div class="filter-row animate-on-load">
                 <span class="reviews-count">
                     {% blocktrans count counter=reviews_page.paginator.count trimmed %}
@@ -1150,9 +1178,15 @@
                     {% endblocktrans %}
                 </span>
                 <div class="sort-options">
-                    <button class="sort-btn active" data-sort="newest"><i class="far fa-clock"></i> {% trans "Newest" %}</button>
-                    <button class="sort-btn" data-sort="highest"><i class="fas fa-sort-amount-down"></i> {% trans "Highest" %}</button>
-                    <button class="sort-btn" data-sort="lowest"><i class="fas fa-sort-amount-up"></i> {% trans "Lowest" %}</button>
+                    <a href="?sort=newest{% if request.GET.page %}&page={{ request.GET.page }}{% endif %}" class="sort-btn {% if request.GET.sort == 'newest' or not request.GET.sort %}active{% endif %}" data-sort="newest">
+                        <i class="far fa-clock"></i> {% trans "Newest" %}
+                    </a>
+                    <a href="?sort=highest{% if request.GET.page %}&page={{ request.GET.page }}{% endif %}" class="sort-btn {% if request.GET.sort == 'highest' %}active{% endif %}" data-sort="highest">
+                        <i class="fas fa-sort-amount-down"></i> {% trans "Highest" %}
+                    </a>
+                    <a href="?sort=lowest{% if request.GET.page %}&page={{ request.GET.page }}{% endif %}" class="sort-btn {% if request.GET.sort == 'lowest' %}active{% endif %}" data-sort="lowest">
+                        <i class="fas fa-sort-amount-up"></i> {% trans "Lowest" %}
+                    </a>
                 </div>
             </div>
 
@@ -1193,7 +1227,7 @@
             {% if reviews_page.has_other_pages %}
             <div class="pagination-wrap">
                 {% if reviews_page.has_previous %}
-                    <a href="?page={{ reviews_page.previous_page_number }}" class="page-link"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</a>
+                    <a href="?page={{ reviews_page.previous_page_number }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" class="page-link"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</a>
                 {% else %}
                     <span class="page-link disabled"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</span>
                 {% endif %}
@@ -1202,12 +1236,12 @@
                     {% if reviews_page.number == num %}
                         <span class="page-link active">{{ num }}</span>
                     {% elif num > reviews_page.number|add:'-3' and num < reviews_page.number|add:'3' %}
-                        <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                        <a href="?page={{ num }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" class="page-link">{{ num }}</a>
                     {% endif %}
                 {% endfor %}
 
                 {% if reviews_page.has_next %}
-                    <a href="?page={{ reviews_page.next_page_number }}" class="page-link">{% trans "Next" %} <i class="fas fa-chevron-right"></i></a>
+                    <a href="?page={{ reviews_page.next_page_number }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" class="page-link">{% trans "Next" %} <i class="fas fa-chevron-right"></i></a>
                 {% else %}
                     <span class="page-link disabled">{% trans "Next" %} <i class="fas fa-chevron-right"></i></span>
                 {% endif %}
@@ -1296,7 +1330,7 @@
 
 {% block extra_scripts %}
     <!-- ================================================================
-    JAVASCRIPT — Hamburger + Sort + Star Select + Form
+    JAVASCRIPT — Hamburger + Sort (fallback) + Star Select + Form
     ================================================================ -->
     <script>
         (function() {
@@ -1355,7 +1389,6 @@
             const feedback = document.getElementById('formFeedback');
             const feedbackMsg = document.getElementById('feedbackMessage');
 
-            // Prevent double submission and handle errors
             form.addEventListener('submit', function(e) {
                 const name = document.getElementById('id_customer_name').value.trim();
                 const email = document.getElementById('id_email').value.trim();
@@ -1375,12 +1408,13 @@
                     feedback.style.display = 'flex';
                     return;
                 }
-
-                // If all good, let the form submit normally
-                // The feedback will be shown via Django messages on the redirected page
+                // If all good, the form will submit normally.
+                // Django messages will appear on the redirected page.
             });
 
-            // ─── Sort functionality (client-side) ───
+            // ─── Client-side sorting fallback (if server-side sort not active) ───
+            // This will still work if the server doesn't handle sort param,
+            // but it only sorts the current page's cards.
             const sortBtns = document.querySelectorAll('.sort-btn');
             const grid = document.getElementById('reviewsGrid');
 
@@ -1401,19 +1435,35 @@
                 });
 
                 cards.forEach(function(card) { grid.appendChild(card); });
+            }
 
+            // If server-side sort is not active (no GET param), we still allow client-side sort.
+            // But we also want to respect the active state from the URL.
+            const currentSort = new URLSearchParams(window.location.search).get('sort');
+            if (!currentSort) {
+                // No server-side sort, enable client-side sorting via click.
                 sortBtns.forEach(function(btn) {
-                    btn.classList.toggle('active', btn.dataset.sort === criteria);
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const sort = this.dataset.sort;
+                        sortBtns.forEach(function(b) { b.classList.remove('active'); });
+                        this.classList.add('active');
+                        sortReviews(sort);
+                    });
+                });
+            } else {
+                // Server-side sorting is active; client-side sorting is disabled.
+                // But we can still highlight the active button.
+                sortBtns.forEach(function(btn) {
+                    if (btn.dataset.sort === currentSort) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
                 });
             }
 
-            sortBtns.forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    sortReviews(this.dataset.sort);
-                });
-            });
-
-            console.log('📝 Customer Reviews page ready — gaming theme loaded.');
+            console.log('📝 Customer Reviews page ready — dynamic rating summary & server-side sort support.');
         })();
     </script>
 

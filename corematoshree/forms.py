@@ -351,6 +351,8 @@ class BusinessInfoForm(forms.ModelForm):
             'email': _('Email'),
             'google_map': _('Google Map'),
             'business_hours': _('Business Hours'),
+            'registration_number': _('Registration Number'),
+            'certifications': _('Certifications / Authorizations'),
         }
         widgets = {
             'business_name': forms.TextInput(attrs={'class': 'form-control'}),
@@ -362,6 +364,8 @@ class BusinessInfoForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'google_map': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'business_hours': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'registration_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'certifications': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
         }
         
 from django import forms

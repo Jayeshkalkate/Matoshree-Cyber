@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth.admin import UserAdmin
+from .models import Application, DocumentUpload
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from .models import (
     Appointment, Contact, Review, Announcement, Gallery,
@@ -190,10 +191,17 @@ class FAQAdmin(admin.ModelAdmin):
 # ==========================
 @admin.register(BusinessInfo)
 class BusinessInfoAdmin(admin.ModelAdmin):
-    list_display = ("business_name", "phone", "email")
-    search_fields = ("business_name", "phone", "email")
-
-from .models import Application, DocumentUpload
+    list_display = ('business_name', 'phone', 'email', 'registration_number')
+    fieldsets = (
+        (None, {
+            'fields': (
+                'business_name', 'logo', 'welcome_message',
+                'address', 'phone', 'whatsapp', 'email',
+                'google_map', 'business_hours',
+                'registration_number', 'certifications'
+            )
+        }),
+    )
 
 class DocumentUploadInline(admin.TabularInline):
     model = DocumentUpload

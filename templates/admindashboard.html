@@ -411,7 +411,15 @@
         animation: fadeSlideUp 0.4s ease both;
       }
       .admin-form .full-width { grid-column: 1 / -1; }
-      .admin-form label { font-weight: 600; font-size: 0.85rem; color: var(--text-soft); display: block; margin-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 0.03em; }
+      .admin-form label { 
+        font-weight: 600; 
+        font-size: 0.85rem; 
+        color: var(--text-soft); 
+        display: block; 
+        margin-bottom: 0.3rem; 
+        text-transform: uppercase; 
+        letter-spacing: 0.03em; 
+      }
       .admin-form input,
       .admin-form select,
       .admin-form textarea {
@@ -433,7 +441,74 @@
         box-shadow: 0 0 0 4px rgba(0, 230, 255, 0.1), var(--glow-cyan);
       }
       .admin-form textarea { resize: vertical; min-height: 70px; }
-      .admin-form .form-actions { grid-column: 1 / -1; display: flex; gap: 0.8rem; justify-content: flex-end; }
+      .admin-form .form-actions { 
+        grid-column: 1 / -1; 
+        display: flex; 
+        gap: 0.8rem; 
+        justify-content: flex-end; 
+        margin-top: 0.5rem;
+      }
+
+      /* ---- NEW: Styling for forms that use {{ form.as_p }} ---- */
+      .admin-form form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem 1.5rem;
+        width: 100%;
+        grid-column: 1 / -1;  /* make the form itself span both columns */
+      }
+      .admin-form form p {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+        grid-column: span 1;
+      }
+      /* Full‑width fields (e.g., textareas) – we target them via the element inside */
+      .admin-form form p textarea {
+        grid-column: 1 / -1;  /* let textareas span the full row */
+      }
+      /* For fields that contain a checkbox (e.g., active) – we keep them as a single column */
+      .admin-form form p input[type="checkbox"] {
+        width: auto;
+        margin-top: 0.3rem;
+      }
+      .admin-form form p label {
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: var(--text-soft);
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        margin-bottom: 0.2rem;
+      }
+      .admin-form form p input,
+      .admin-form form p select,
+      .admin-form form p textarea {
+        width: 100%;
+        padding: 0.6rem 1rem;
+        border: 1.5px solid var(--border-soft);
+        border-radius: 10px;
+        font-family: "Inter", sans-serif;
+        font-size: 0.95rem;
+        background: var(--bg-input);
+        color: var(--text-bright);
+        transition: all 0.3s ease;
+      }
+      .admin-form form p input:focus,
+      .admin-form form p select:focus,
+      .admin-form form p textarea:focus {
+        outline: none;
+        border-color: var(--neon-cyan);
+        box-shadow: 0 0 0 4px rgba(0, 230, 255, 0.1), var(--glow-cyan);
+      }
+      /* The form-actions div is inside the form, so we need to target it */
+      .admin-form form .form-actions {
+        grid-column: 1 / -1;
+        display: flex;
+        gap: 0.8rem;
+        justify-content: flex-end;
+        margin-top: 0.5rem;
+      }
 
       /* ----- List items (announcements, jobs, schemes, forms...) -------- */
       .list-item {
@@ -1596,7 +1671,7 @@
         document.getElementById("editFormForm").scrollIntoView({ behavior: 'smooth' });
       };
 
-      // ---- Edit Required Document ----
+      // ---- Edit Required Document (single definition) ----
       window.editRequiredDoc = function(id, serviceId, docName) {
         document.getElementById("editRequiredDocId").value = id;
         document.getElementById("editRequiredDocService").value = serviceId;
@@ -1608,11 +1683,8 @@
       // --------------------------------------------------------------------
       // 4. Cancel buttons for inline edit forms (using class-based listeners)
       // --------------------------------------------------------------------
-      // We can attach a single listener to all .btn-outline inside admin-forms
-      // that hide their parent form. This avoids repeating code.
       document.querySelectorAll('.admin-form .btn-outline').forEach(function(btn) {
         btn.addEventListener('click', function(e) {
-          // Find the closest ancestor with class 'admin-form' and hide it
           const form = this.closest('.admin-form');
           if (form) {
             form.style.display = 'none';

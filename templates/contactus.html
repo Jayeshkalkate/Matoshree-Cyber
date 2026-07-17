@@ -5,15 +5,13 @@
 {% block title %}{% trans "Contact Us" %}{% endblock %}
 
 {% block extra_head %}
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <!-- ===== FONT AWESOME ===== -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-
+    <!-- ================================================================
+         CONTACT US – Futuristic Cyber / Gaming Theme
+         Dynamically pulls data from BusinessInfo model.
+         ================================================================ -->
     <style>
         /* ================================================================
-               CSS VARIABLES — Cyberpunk / Gaming Theme
+               CSS VARIABLES — consistent with base.html
                ================================================================ */
         :root {
             --primary: #0a0e1a;
@@ -33,9 +31,8 @@
             --shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
             --shadow-sm: 0 8px 24px rgba(0, 0, 0, 0.4);
             --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            --font: 'Inter', 'Segoe UI', system-ui, sans-serif;
 
-            /* Neon glow values */
             --glow-secondary: 0 0 20px rgba(0, 212, 255, 0.5);
             --glow-accent: 0 0 20px rgba(255, 107, 53, 0.5);
             --glow-purple: 0 0 20px rgba(180, 74, 255, 0.5);
@@ -44,325 +41,7 @@
             --glow-yellow: 0 0 20px rgba(255, 230, 0, 0.5);
         }
 
-        /* ================================================================
-               RESET & BASE
-               ================================================================ */
-        *,
-        *::before,
-        *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: var(--font);
-            background: var(--primary);
-            color: var(--white);
-            line-height: 1.6;
-            min-height: 100vh;
-            overflow-x: hidden;
-            background: radial-gradient(ellipse at 20% 50%, #0d1b2a 0%, #0a0e1a 70%);
-        }
-
-        /* ================================================================
-               SCROLLBAR — Neon-styled
-               ================================================================ */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--primary);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--secondary);
-            border-radius: 50px;
-            box-shadow: var(--glow-secondary);
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent);
-            box-shadow: var(--glow-accent);
-        }
-
-        /* ================================================================
-               UTILITY
-               ================================================================ */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        /* ================================================================
-               PAGE LOAD ANIMATION — Fade-in + Slide-up
-               ================================================================ */
-        .animate-on-load {
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeSlideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-        }
-
-        .animate-on-load:nth-child(1) {
-            animation-delay: 0.05s;
-        }
-        .animate-on-load:nth-child(2) {
-            animation-delay: 0.10s;
-        }
-        .animate-on-load:nth-child(3) {
-            animation-delay: 0.15s;
-        }
-        .animate-on-load:nth-child(4) {
-            animation-delay: 0.20s;
-        }
-        .animate-on-load:nth-child(5) {
-            animation-delay: 0.25s;
-        }
-        .animate-on-load:nth-child(6) {
-            animation-delay: 0.30s;
-        }
-        .animate-on-load:nth-child(7) {
-            animation-delay: 0.35s;
-        }
-        .animate-on-load:nth-child(8) {
-            animation-delay: 0.40s;
-        }
-        .animate-on-load:nth-child(9) {
-            animation-delay: 0.45s;
-        }
-        .animate-on-load:nth-child(10) {
-            animation-delay: 0.50s;
-        }
-
-        @keyframes fadeSlideUp {
-            0% {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* ================================================================
-               BUTTONS — Neon Glow / Pulsing
-               ================================================================ */
-        .btn-primary,
-        .btn-outline,
-        .btn-whatsapp,
-        .btn-submit {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 14px 34px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 1rem;
-            text-decoration: none;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: var(--transition);
-            position: relative;
-            letter-spacing: 0.3px;
-            background: transparent;
-            color: var(--white);
-        }
-
-        /* ---- Primary (cyan) with pulsing neon glow ---- */
-        .btn-primary {
-            background: var(--secondary);
-            color: var(--primary);
-            border-color: var(--secondary);
-            box-shadow: var(--glow-secondary);
-            animation: pulseGlowCyan 2.5s ease-in-out infinite;
-        }
-        .btn-primary:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 0 40px rgba(0, 212, 255, 0.7), 0 0 80px rgba(0, 212, 255, 0.3);
-            background: #00e5ff;
-            border-color: #00e5ff;
-        }
-
-        /* ---- Outline (neon purple) with pulse ---- */
-        .btn-outline {
-            border-color: var(--neon-purple);
-            color: var(--neon-purple);
-            box-shadow: var(--glow-purple);
-            animation: pulseGlowPurple 3s ease-in-out infinite;
-        }
-        .btn-outline:hover {
-            background: var(--neon-purple);
-            color: var(--white);
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 0 40px rgba(180, 74, 255, 0.7), 0 0 80px rgba(180, 74, 255, 0.3);
-        }
-
-        /* ---- WhatsApp (green) with pulse ---- */
-        .btn-whatsapp {
-            background: #25d366;
-            color: var(--white);
-            border-color: #25d366;
-            box-shadow: var(--glow-green);
-            animation: pulseGlowGreen 3.2s ease-in-out infinite;
-        }
-        .btn-whatsapp:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 0 40px rgba(57, 255, 20, 0.6), 0 0 80px rgba(57, 255, 20, 0.25);
-            background: #2eea72;
-            border-color: #2eea72;
-        }
-
-        /* ---- Submit button (yellow/neon) with pulse ---- */
-        .btn-submit {
-            background: var(--neon-yellow);
-            color: var(--primary);
-            border-color: var(--neon-yellow);
-            box-shadow: var(--glow-yellow);
-            animation: pulseGlowYellow 2.8s ease-in-out infinite;
-            font-family: var(--font);
-            padding: 12px 32px;
-            font-size: 1rem;
-        }
-        .btn-submit:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 0 40px rgba(255, 230, 0, 0.7), 0 0 80px rgba(255, 230, 0, 0.3);
-            background: #fff44f;
-            border-color: #fff44f;
-        }
-
-        /* ---- Pulse keyframes ---- */
-        @keyframes pulseGlowCyan {
-            0%,
-            100% {
-                box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(0, 212, 255, 0.8), 0 0 80px rgba(0, 212, 255, 0.3);
-            }
-        }
-        @keyframes pulseGlowPurple {
-            0%,
-            100% {
-                box-shadow: 0 0 20px rgba(180, 74, 255, 0.4);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(180, 74, 255, 0.8), 0 0 80px rgba(180, 74, 255, 0.3);
-            }
-        }
-        @keyframes pulseGlowGreen {
-            0%,
-            100% {
-                box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(57, 255, 20, 0.7), 0 0 80px rgba(57, 255, 20, 0.2);
-            }
-        }
-        @keyframes pulseGlowYellow {
-            0%,
-            100% {
-                box-shadow: 0 0 20px rgba(255, 230, 0, 0.3);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(255, 230, 0, 0.7), 0 0 80px rgba(255, 230, 0, 0.2);
-            }
-        }
-
-        /* ================================================================
-               NAVBAR
-               ================================================================ */
-        .navbar {
-            padding: 18px 0;
-            background: rgba(10, 14, 26, 0.85);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(0, 212, 255, 0.08);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            transition: var(--transition);
-        }
-        .navbar .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo {
-            font-size: 1.7rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, var(--secondary), var(--neon-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-decoration: none;
-        }
-        .logo i {
-            color: var(--secondary);
-            -webkit-text-fill-color: var(--secondary);
-            margin-right: 6px;
-        }
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 28px;
-            list-style: none;
-        }
-        .nav-links a {
-            color: var(--gray-dark);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: var(--transition);
-            position: relative;
-        }
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0%;
-            height: 2px;
-            background: var(--secondary);
-            transition: var(--transition);
-            box-shadow: var(--glow-secondary);
-        }
-        .nav-links a:hover {
-            color: var(--white);
-        }
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-        .nav-links a.active {
-            color: var(--secondary);
-        }
-        .nav-links a.active::after {
-            width: 100%;
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 4px;
-        }
-        .hamburger span {
-            width: 26px;
-            height: 2px;
-            background: var(--white);
-            border-radius: 4px;
-            transition: var(--transition);
-        }
-
-        /* ================================================================
-               PAGE HERO
-               ================================================================ */
+        /* ---- Page Hero (consistent with other pages) ---- */
         .page-hero {
             padding: 80px 0 60px;
             position: relative;
@@ -449,9 +128,7 @@
             box-shadow: var(--glow-secondary);
         }
 
-        /* ================================================================
-               CONTACT SECTION
-               ================================================================ */
+        /* ---- Contact Section ---- */
         .contact-section {
             padding: 60px 0 70px;
             position: relative;
@@ -468,14 +145,13 @@
             pointer-events: none;
         }
 
-        /* ─── Contact Grid ─── */
         .contact-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 40px;
         }
 
-        /* ─── Form Wrapper ─── */
+        /* ---- Form Wrapper ---- */
         .contact-form-wrapper {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(8px);
@@ -501,7 +177,7 @@
             color: var(--secondary);
         }
 
-        /* ─── Form Elements ─── */
+        /* ---- Form elements ---- */
         .contact-form .form-group {
             margin-bottom: 18px;
         }
@@ -536,37 +212,61 @@
             box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.08), var(--glow-secondary);
             background: rgba(0, 212, 255, 0.04);
         }
-        .contact-form .form-control.error {
-            border-color: var(--accent);
-        }
         .contact-form textarea.form-control {
             resize: vertical;
             min-height: 100px;
         }
-        .contact-form .error-message {
+        .contact-form .errorlist {
+            list-style: none;
+            padding: 0;
+            margin: 4px 0 0;
             color: var(--accent);
             font-size: 0.8rem;
-            margin-top: 4px;
             font-weight: 500;
         }
-
-        /* ─── Submit Button ─── */
-        .contact-form .btn-submit {
-            width: 100%;
-            justify-content: center;
-            padding: 16px;
-            font-size: 1.05rem;
-            margin-top: 4px;
+        .contact-form .errorlist li {
+            margin-bottom: 2px;
         }
 
-        /* ─── Contact Info ─── */
+        /* ---- Submit button (yellow/neon) ---- */
+        .btn-submit {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 34px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            border: 2px solid var(--neon-yellow);
+            background: var(--neon-yellow);
+            color: var(--primary);
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--glow-yellow);
+            animation: pulseGlowYellow 2.8s ease-in-out infinite;
+            font-family: var(--font);
+            width: 100%;
+            margin-top: 4px;
+        }
+        .btn-submit:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 0 40px rgba(255, 230, 0, 0.7), 0 0 80px rgba(255, 230, 0, 0.3);
+            background: #fff44f;
+            border-color: #fff44f;
+        }
+        @keyframes pulseGlowYellow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 230, 0, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(255, 230, 0, 0.7), 0 0 80px rgba(255, 230, 0, 0.2); }
+        }
+
+        /* ---- Info Blocks (gaming hover) ---- */
         .contact-info {
             display: flex;
             flex-direction: column;
             gap: 16px;
         }
 
-        /* ─── Info Block — Gaming-style hover ─── */
         .info-block {
             display: flex;
             align-items: flex-start;
@@ -580,16 +280,12 @@
             position: relative;
             overflow: hidden;
         }
-
-        /* ★ Gaming-style hover: scale + vibrant neon border ★ */
         .info-block:hover {
             transform: translateX(6px) scale(1.01);
             border-color: var(--neon-pink);
             box-shadow: 0 0 30px rgba(255, 45, 149, 0.12), 0 8px 32px rgba(0, 0, 0, 0.3);
             background: rgba(255, 45, 149, 0.04);
         }
-
-        /* Glow line on hover */
         .info-block::after {
             content: '';
             position: absolute;
@@ -670,8 +366,12 @@
             transform: scale(1.04);
             box-shadow: 0 0 40px rgba(57, 255, 20, 0.4);
         }
+        @keyframes pulseGlowGreen {
+            0%, 100% { box-shadow: 0 0 20px rgba(57, 255, 20, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(57, 255, 20, 0.7), 0 0 80px rgba(57, 255, 20, 0.2); }
+        }
 
-        /* ─── Hours Block ─── */
+        /* ---- Hours Block ---- */
         .hours-block {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(8px);
@@ -722,7 +422,7 @@
             text-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
         }
 
-        /* ─── Map Block ─── */
+        /* ---- Map Block ---- */
         .map-block {
             border-radius: var(--radius);
             overflow: hidden;
@@ -743,9 +443,7 @@
             display: block;
         }
 
-        /* ================================================================
-               CTA BANNER
-               ================================================================ */
+        /* ---- CTA Banner (already in base? we can keep or remove) ---- */
         .cta-banner {
             padding: 70px 0;
             background: linear-gradient(135deg, rgba(10, 14, 26, 0.9), rgba(20, 27, 43, 0.9));
@@ -796,26 +494,7 @@
             gap: 16px;
         }
 
-        /* ================================================================
-               FOOTER
-               ================================================================ */
-        .footer {
-            padding: 30px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.03);
-            text-align: center;
-            color: var(--gray-dark);
-            font-size: 0.9rem;
-        }
-        .footer span {
-            color: var(--secondary);
-        }
-        .footer i {
-            color: var(--neon-pink);
-        }
-
-        /* ================================================================
-               RESPONSIVE
-               ================================================================ */
+        /* ---- Responsive ---- */
         @media (max-width: 1024px) {
             .contact-grid {
                 grid-template-columns: 1fr;
@@ -827,24 +506,6 @@
         }
 
         @media (max-width: 768px) {
-            .navbar .container {
-                flex-wrap: wrap;
-            }
-            .hamburger {
-                display: flex;
-            }
-            .nav-links {
-                display: none;
-                flex-direction: column;
-                width: 100%;
-                padding: 20px 0 10px;
-                gap: 16px;
-                align-items: center;
-            }
-            .nav-links.open {
-                display: flex;
-            }
-
             .page-hero {
                 padding: 50px 0 40px;
             }
@@ -854,23 +515,19 @@
             .page-hero p {
                 font-size: 1rem;
             }
-
             .contact-form-wrapper {
                 padding: 24px 18px;
             }
             .contact-form-wrapper h2 {
                 font-size: 1.4rem;
             }
-
             .info-block {
                 padding: 16px 18px;
                 flex-wrap: wrap;
             }
-
             .hours-block {
                 padding: 18px 18px;
             }
-
             .cta-banner {
                 padding: 50px 0;
             }
@@ -886,7 +543,6 @@
                 width: 100%;
                 justify-content: center;
             }
-
             .map-block {
                 height: 220px;
             }
@@ -896,7 +552,6 @@
             .page-hero h1 {
                 font-size: 1.8rem;
             }
-
             .info-block {
                 flex-direction: column;
                 align-items: center;
@@ -908,7 +563,6 @@
             .info-block .content a {
                 word-break: break-all;
             }
-
             .contact-form-wrapper {
                 padding: 18px 14px;
             }
@@ -916,11 +570,10 @@
                 padding: 10px 12px;
                 font-size: 0.9rem;
             }
-            .contact-form .btn-submit {
+            .btn-submit {
                 font-size: 0.95rem;
                 padding: 14px;
             }
-
             .hours-table td {
                 font-size: 0.85rem;
                 padding: 6px 0;
@@ -928,72 +581,96 @@
             .hours-table td:last-child {
                 font-size: 0.85rem;
             }
-
             .map-block {
                 height: 180px;
             }
         }
     </style>
-</head>
 {% endblock %}
 
 {% block content %}
-<body>
-
     <!-- ================================================================
-    PAGE HERO
-    ================================================================ -->
+         PAGE HERO
+         ================================================================ -->
     <section class="page-hero animate-on-load">
         <div class="container">
             <div class="breadcrumb">
-                <a href="homepage.html"><i class="fas fa-home"></i> Home</a>
+                <a href="{% url 'home' %}"><i class="fas fa-home"></i> {% trans "Home" %}</a>
                 <span><i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5;"></i></span>
-                <span class="current">Contact Us</span>
+                <span class="current">{% trans "Contact Us" %}</span>
             </div>
-            <h1>Get in <span>Touch</span></h1>
-            <p>We're here to help. Send us a message and we'll get back to you promptly.</p>
+            <h1>{% trans "Get in" %} <span>{% trans "Touch" %}</span></h1>
+            <p>{% trans "We're here to help. Send us a message and we'll get back to you promptly." %}</p>
             <div class="glow-line"></div>
         </div>
     </section>
 
     <!-- ================================================================
-    CONTACT SECTION
-    ================================================================ -->
+         CONTACT SECTION
+         ================================================================ -->
     <section class="contact-section" id="contact">
         <div class="container">
 
-            <!-- ─── Contact Grid ─── -->
             <div class="contact-grid">
 
                 <!-- ─── Left: Form ─── -->
                 <div class="contact-form-wrapper animate-on-load">
-                    <h2><i class="fas fa-paper-plane"></i> Send a Message</h2>
-                    <form class="contact-form" id="contactForm" novalidate>
+                    <h2><i class="fas fa-paper-plane"></i> {% trans "Send a Message" %}</h2>
+
+                    <form class="contact-form" method="post" action="{% url 'contact' %}" novalidate>
+                        {% csrf_token %}
+
+                        <!-- Name -->
                         <div class="form-group">
-                            <label for="fullName">Your Name <span class="required">*</span></label>
-                            <input type="text" id="fullName" class="form-control" placeholder="Enter your full name" required />
+                            <label for="{{ form.name.id_for_label }}">{{ form.name.label }} <span class="required">*</span></label>
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                                <ul class="errorlist">{{ form.name.errors }}</ul>
+                            {% endif %}
                         </div>
+
+                        <!-- Email -->
                         <div class="form-group">
-                            <label for="emailAddress">Email Address <span class="required">*</span></label>
-                            <input type="email" id="emailAddress" class="form-control" placeholder="Enter your email" required />
+                            <label for="{{ form.email.id_for_label }}">{{ form.email.label }} <span class="required">*</span></label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <ul class="errorlist">{{ form.email.errors }}</ul>
+                            {% endif %}
                         </div>
+
+                        <!-- Phone -->
                         <div class="form-group">
-                            <label for="phoneNumber">Phone Number <span class="required">*</span></label>
-                            <input type="tel" id="phoneNumber" class="form-control" placeholder="Enter your phone number" required />
+                            <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }} <span class="required">*</span></label>
+                            {{ form.phone }}
+                            {% if form.phone.errors %}
+                                <ul class="errorlist">{{ form.phone.errors }}</ul>
+                            {% endif %}
                         </div>
+
+                        <!-- Subject -->
                         <div class="form-group">
-                            <label for="subjectLine">Subject <span class="required">*</span></label>
-                            <input type="text" id="subjectLine" class="form-control" placeholder="What is this about?" required />
+                            <label for="{{ form.subject.id_for_label }}">{{ form.subject.label }} <span class="required">*</span></label>
+                            {{ form.subject }}
+                            {% if form.subject.errors %}
+                                <ul class="errorlist">{{ form.subject.errors }}</ul>
+                            {% endif %}
                         </div>
+
+                        <!-- Message -->
                         <div class="form-group">
-                            <label for="messageText">Message <span class="required">*</span></label>
-                            <textarea id="messageText" class="form-control" placeholder="Tell us how we can help..." rows="4" required></textarea>
+                            <label for="{{ form.message.id_for_label }}">{{ form.message.label }} <span class="required">*</span></label>
+                            {{ form.message }}
+                            {% if form.message.errors %}
+                                <ul class="errorlist">{{ form.message.errors }}</ul>
+                            {% endif %}
                         </div>
+
                         <button type="submit" class="btn-submit">
-                            <i class="fas fa-paper-plane"></i> Send Message
+                            <i class="fas fa-paper-plane"></i> {% trans "Send Message" %}
                         </button>
                     </form>
-                    <div id="formFeedback" style="margin-top: 16px; padding: 12px 18px; border-radius: var(--radius-sm); display: none; align-items: center; gap: 10px; font-weight: 500; border-left: 4px solid transparent;"></div>
+
+                    <!-- Django messages will be displayed in the base template -->
                 </div>
 
                 <!-- ─── Right: Info & Hours ─── -->
@@ -1003,8 +680,8 @@
                     <div class="info-block animate-on-load">
                         <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
                         <div class="content">
-                            <h4>Address</h4>
-                            <p>CyberTech Digital Hub<br />देऊबाई कॉम्प्लेक्स, साईबाबा चौक,<br />Ranale, Maharashtra 425411</p>
+                            <h4>{% trans "Address" %}</h4>
+                            <p>{{ business.address|default:_("Not provided")|linebreaksbr }}</p>
                         </div>
                     </div>
 
@@ -1012,168 +689,90 @@
                     <div class="info-block animate-on-load">
                         <div class="icon"><i class="fas fa-phone-alt"></i></div>
                         <div class="content">
-                            <h4>Phone</h4>
-                            <a href="tel:+919876543210">+91 98765 43210</a>
+                            <h4>{% trans "Phone" %}</h4>
+                            <a href="tel:{{ business.phone }}">{{ business.phone|default:_("Not provided") }}</a>
                         </div>
                     </div>
 
                     <!-- WhatsApp -->
+                    {% if business.whatsapp %}
                     <div class="info-block animate-on-load">
                         <div class="icon"><i class="fab fa-whatsapp"></i></div>
                         <div class="content">
-                            <h4>WhatsApp</h4>
-                            <a href="https://wa.me/919876543210?text=Hello%2C%20I%20would%20like%20to%20know%20about%20your%20services." target="_blank" class="whatsapp-link">
-                                <i class="fab fa-whatsapp"></i> Chat with Us
+                            <h4>{% trans "WhatsApp" %}</h4>
+                            <a href="https://wa.me/{{ business.whatsapp|cut:'+' }}?text={% trans 'Hello, I would like to know about your services.' %}" target="_blank" class="whatsapp-link">
+                                <i class="fab fa-whatsapp"></i> {% trans "Chat with Us" %}
                             </a>
                         </div>
                     </div>
+                    {% endif %}
 
                     <!-- Email -->
                     <div class="info-block animate-on-load">
                         <div class="icon"><i class="fas fa-envelope"></i></div>
                         <div class="content">
-                            <h4>Email</h4>
-                            <a href="mailto:support@cybertech.com">support@cybertech.com</a>
+                            <h4>{% trans "Email" %}</h4>
+                            <a href="mailto:{{ business.email }}">{{ business.email|default:_("Not provided") }}</a>
                         </div>
                     </div>
 
-                    <!-- Hours -->
+                    <!-- Business Hours -->
                     <div class="hours-block animate-on-load">
-                        <h3><i class="fas fa-clock"></i> Business Hours</h3>
-                        <table class="hours-table">
-                            <tr><td>Monday</td><td>9:00 AM – 8:00 PM</td></tr>
-                            <tr><td>Tuesday</td><td>9:00 AM – 8:00 PM</td></tr>
-                            <tr><td>Wednesday</td><td>9:00 AM – 8:00 PM</td></tr>
-                            <tr><td>Thursday</td><td>9:00 AM – 8:00 PM</td></tr>
-                            <tr><td>Friday</td><td>9:00 AM – 8:00 PM</td></tr>
-                            <tr><td>Saturday</td><td>9:00 AM – 8:00 PM</td></tr>
-                            <tr class="highlight"><td>Sunday</td><td>10:00 AM – 2:00 PM</td></tr>
-                        </table>
+                        <h3><i class="fas fa-clock"></i> {% trans "Business Hours" %}</h3>
+                        {% if business.business_hours %}
+                            {{ business.business_hours|linebreaksbr }}
+                        {% else %}
+                            <p style="color: var(--gray-dark);">{% trans "Hours not set." %}</p>
+                        {% endif %}
                     </div>
 
                 </div>
             </div>
 
             <!-- ─── Map ─── -->
+            {% if business.google_map %}
             <div class="map-block animate-on-load">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d290.99334372828883!2d74.39469402087641!3d21.34436723602012!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bdf0fd00fae03e5%3A0xeb4fa60cf3743911!2zODlWVitRVzcsIOCkpuClh-CkiuCkrOCkvuCkiCDgpJXgpYngpK7gpY3gpKrgpY3gpLLgpYfgpJXgpY3gpLgsIOCkuOCkvuCkiOCkrOCkvuCkrOCkviDgpJrgpYzgpJUsIEhvbCBULiBSYW5hbGUsIFJhbmFsYSwgTWFoYXJhc2h0cmEgNDI1NDEx!5e1!3m2!1sen!2sin!4v1783429312785!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" 
-                loading="lazy" 
-                referrerpolicy="strict-origin-when-cross-origin"
-                title="Cyber Cafe Location Map"
-                ></iframe>
+                {{ business.google_map|safe }}
+            </div>
+            {% else %}
+            <div class="map-block animate-on-load" style="display:flex; align-items:center; justify-content:center; color:var(--gray-dark);">
+                <i class="fas fa-map-marked-alt" style="font-size:2rem; margin-right:12px;"></i>
+                {% trans "Map location not configured." %}
+            </div>
+            {% endif %}
+
         </div>
+    </section>
 
-    </div>
-</section>
-
-<!-- ================================================================
-CTA BANNER
-============================================================ -->
-<section class="cta-banner animate-on-load" id="cta">
-    <div class="container">
-        <h2>We're just a <span>click</span> away!</h2>
-        <p>Reach out to us for any queries or to book a service. We respond promptly.</p>
-        <div class="cta-buttons">
-            <a href="tel:+919876543210" class="btn-primary">
-                <i class="fas fa-phone"></i> Call Now
-            </a>
-            <a href="https://wa.me/919876543210?text=Hello%2C%20I%20would%20like%20to%20know%20about%20your%20services." target="_blank" class="btn-whatsapp">
-                <i class="fab fa-whatsapp"></i> Chat on WhatsApp
-            </a>
+    <!-- ================================================================
+         CTA BANNER
+         ================================================================ -->
+    <section class="cta-banner animate-on-load">
+        <div class="container">
+            <h2>{% trans "We're just a" %} <span>{% trans "click" %}</span> {% trans "away!" %}</h2>
+            <p>{% trans "Reach out to us for any queries or to book a service. We respond promptly." %}</p>
+            <div class="cta-buttons">
+                <a href="tel:{{ business.phone }}" class="btn-primary">
+                    <i class="fas fa-phone"></i> {% trans "Call Now" %}
+                </a>
+                {% if business.whatsapp %}
+                <a href="https://wa.me/{{ business.whatsapp|cut:'+' }}?text={% trans 'Hello, I would like to know about your services.' %}" target="_blank" class="btn-whatsapp">
+                    <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
+                </a>
+                {% endif %}
+            </div>
         </div>
-    </div>
-</section>
-
+    </section>
 {% endblock %}
 
 {% block extra_scripts %}
-<!-- ================================================================
-JAVASCRIPT — Hamburger + Form + Active nav
-============================================================ -->
+<!-- optional JavaScript (only for hamburger if needed, but base already handles it) -->
 <script>
     (function() {
         "use strict";
-
-        // ─── Hamburger ───
-        document.getElementById('hamburger').addEventListener('click', function() {
-            document.getElementById('navLinks').classList.toggle('open');
-        });
-
-        document.querySelectorAll('.nav-links a').forEach(function(link) {
-            link.addEventListener('click', function() {
-                document.getElementById('navLinks').classList.remove('open');
-            });
-        });
-
-        // ─── Active nav highlight on scroll ───
-        const sections = document.querySelectorAll('section[id]');
-        const navLinks = document.querySelectorAll('.nav-links a');
-        window.addEventListener('scroll', function() {
-            let current = '';
-            sections.forEach(function(section) {
-                const top = section.offsetTop - 120;
-                if (window.scrollY >= top) {
-                    current = section.getAttribute('id');
-                }
-            });
-            navLinks.forEach(function(link) {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === '#' + current) {
-                    link.classList.add('active');
-                }
-            });
-        });
-
-        // ─── Form Submission ───
-        const form = document.getElementById('contactForm');
-        const feedback = document.getElementById('formFeedback');
-
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const name = document.getElementById('fullName').value.trim();
-            const email = document.getElementById('emailAddress').value.trim();
-            const phone = document.getElementById('phoneNumber').value.trim();
-            const subject = document.getElementById('subjectLine').value.trim();
-            const message = document.getElementById('messageText').value.trim();
-
-            let errors = [];
-            if (!name) errors.push('Name is required.');
-            if (!email) errors.push('Email is required.');
-            if (!phone) errors.push('Phone number is required.');
-            if (!subject) errors.push('Subject is required.');
-            if (!message) errors.push('Message is required.');
-
-            if (errors.length > 0) {
-                feedback.style.display = 'flex';
-                feedback.className = 'error';
-                feedback.style.borderLeftColor = 'var(--accent)';
-                feedback.style.background = 'rgba(255,107,53,0.06)';
-                feedback.style.color = 'var(--accent)';
-                feedback.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + errors.join(' ');
-                return;
-            }
-
-            // Success simulation
-            feedback.style.display = 'flex';
-            feedback.className = 'success';
-            feedback.style.borderLeftColor = 'var(--neon-green)';
-            feedback.style.background = 'rgba(57,255,20,0.06)';
-            feedback.style.color = 'var(--neon-green)';
-            feedback.innerHTML = '<i class="fas fa-check-circle"></i> ✅ Thank you! Your message has been sent. We\'ll get back to you shortly.';
-
-            form.reset();
-
-            // Hide feedback after 6 seconds
-            setTimeout(function() {
-                feedback.style.display = 'none';
-            }, 6000);
-        });
-
-        console.log('📞 Contact page ready — gaming theme loaded.');
+        // If you need additional client-side logic, add it here.
+        // The hamburger and nav toggle are already in base.html.
+        console.log("📞 Contact page with dynamic data loaded.");
     })();
 </script>
 {% endblock %}
-
-</body>
-</html>

@@ -146,6 +146,31 @@
     .add-doc-form .form-actions {
         flex: 0 0 auto;
     }
+    /* toggle verification button */
+    .btn-verify {
+        background: transparent;
+        border: 1px solid var(--neon-cyan);
+        color: var(--neon-cyan);
+        padding: 0.1rem 0.6rem;
+        border-radius: 30px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    .btn-verify:hover {
+        background: var(--neon-cyan);
+        color: var(--bg-primary);
+        box-shadow: var(--glow-cyan);
+    }
+    .btn-verify.verified {
+        border-color: var(--neon-green);
+        color: var(--neon-green);
+    }
+    .btn-verify.verified:hover {
+        background: var(--neon-green);
+        color: var(--bg-primary);
+    }
     @media (max-width: 768px) {
         .app-detail .detail-row {
             flex-wrap: wrap;
@@ -225,10 +250,19 @@
                             <div class="label">{% trans "Address" %}:</div>
                             <div class="value">{{ application.address }}</div>
                         </div>
+
+                        <!-- Extra Data – only show if not empty -->
+                        {% if application.extra_data %}
                         <div class="detail-row">
                             <div class="label">{% trans "Extra Data" %}:</div>
-                            <div class="value">{{ application.extra_data|default:"null" }}</div>
+                            <div class="value">
+                                <pre style="margin:0; color:var(--text-muted); background:rgba(255,255,255,0.04); padding:0.4rem 0.8rem; border-radius:var(--radius-sm);">
+                                    {{ application.extra_data|json_script:"extra-data" }}
+                                    <code style="color:var(--text-white);">{{ application.extra_data|json_script:"extra-data" }}</code>
+                                </pre>
+                            </div>
                         </div>
+                        {% endif %}
 
                         <hr>
 
@@ -278,7 +312,7 @@
                                         <th>{% trans "Mandatory" %}</th>
                                         <th>{% trans "Verified by Admin" %}</th>
                                         <th>{% trans "Uploaded At" %}</th>
-                                        <th>{% trans "Delete" %}</th>
+                                        <th>{% trans "Actions" %}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -309,10 +343,22 @@
                                         </td>
                                         
                                         <td>{% if doc.is_mandatory %}<i class="fas fa-check-circle" style="color:var(--neon-green);"></i>{% else %}<i class="fas fa-times-circle" style="color:var(--text-dim);"></i>{% endif %}</td>
-                                        <td>{% if doc.verified %}<i class="fas fa-check-circle" style="color:var(--neon-green);"></i>{% else %}<i class="fas fa-clock" style="color:var(--neon-amber);"></i>{% endif %}</td>
+                                        <td>
+                                            <!-- Verification toggle -->
+                                            <form method="post" style="display:inline;">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="action" value="verify_document">
+                                                <input type="hidden" name="doc_id" value="{{ doc.id }}">
+                                                <button type="submit" class="btn-verify {% if doc.verified %}verified{% endif %}" title="{% trans "Toggle verification" %}">
+                                                    <i class="fas {% if doc.verified %}fa-check-circle{% else %}fa-circle{% endif %}"></i>
+                                                    {% if doc.verified %}{% trans "Verified" %}{% else %}{% trans "Unverified" %}{% endif %}
+                                                </button>
+                                            </form>
+                                        </td>
                                         <td>{{ doc.uploaded_at|date:"M d, Y, h:i a" }}</td>
                                         <td>
-                                            <form method="post" onsubmit="return confirm('{% trans "Delete this document?" %}');">
+                                            <!-- Delete document -->
+                                            <form method="post" onsubmit="return confirm('{% trans "Delete this document?" %}');" style="display:inline;">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="action" value="delete_document">
                                                 <input type="hidden" name="doc_id" value="{{ doc.id }}">

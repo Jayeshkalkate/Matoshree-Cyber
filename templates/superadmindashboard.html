@@ -1654,6 +1654,7 @@
     </script>
 <script>
     (function() {
+        // ---- Comma warning for required doc form ----
         const docNameInput = document.querySelector('#addRequiredDocFormElement input[name="document_name"]');
         const warningEl = document.getElementById('commaWarning');
         if (docNameInput && warningEl) {
@@ -1665,184 +1666,182 @@
                 }
             });
         }
+
+        // ----- Sidebar navigation -----
+        const navLinks = document.querySelectorAll(".sidebar nav ul li a");
+        const sections = document.querySelectorAll(".section");
+        const pageTitle = document.getElementById("pageTitle");
+
+        function showSection(sectionId) {
+            sections.forEach(sec => sec.classList.remove("active"));
+            const target = document.getElementById("section-" + sectionId);
+            if (target) target.classList.add("active");
+
+            navLinks.forEach(link => link.classList.remove("active"));
+            navLinks.forEach(link => {
+                if (link.dataset.section === sectionId) link.classList.add("active");
+            });
+
+            const titles = {
+                dashboard: "{% trans "Dashboard" %}",
+                services: "{% trans "Manage Services" %}",
+                prices: "{% trans "Update Prices" %}",
+                announcements: "{% trans "Announcements" %}",
+                jobs: "{% trans "Job Notifications" %}",
+                schemes: "{% trans "Government Schemes" %}",
+                appointments: "{% trans "Appointments" %}",
+                inquiries: "{% trans "Inquiries" %}",
+                forms: "{% trans "Upload Forms" %}",
+                users: "{% trans "User Management" %}",
+                gallery: "{% trans "Gallery" %}",
+                requireddocs: "{% trans "Required Documents" %}",
+                applications: "{% trans "Applications" %}",
+                settings: "{% trans "Settings" %}",
+            };
+            pageTitle.textContent = titles[sectionId] || "{% trans "Dashboard" %}";
+            document.getElementById("sidebar").classList.remove("open");
+        }
+
+        navLinks.forEach(link => {
+            link.addEventListener("click", function(e) {
+                e.preventDefault();
+                showSection(this.dataset.section);
+            });
+        });
+
+        // ----- Hamburger toggle -----
+        document.getElementById("hamburgerBtn").addEventListener("click", function() {
+            document.getElementById("sidebar").classList.toggle("open");
+        });
+
+        // ================================================================
+        // EDIT FUNCTIONS – all inside the same closure
+        // ================================================================
+
+        // ----- Edit service ----
+        window.editService = function(id, name, category, description, active, icon, color) {
+            document.getElementById("editServiceId").value = id;
+            document.getElementById("editSvcName").value = name;
+            document.getElementById("editSvcCategory").value = category;
+            document.getElementById("editSvcDesc").value = description;
+            document.getElementById("editSvcStatus").value = active === 'true' ? 'true' : 'false';
+            document.getElementById("editSvcIcon").value = icon || '';
+            document.getElementById("editSvcColor").value = color || '#00d4ff';
+            document.getElementById("editServiceForm").style.display = "grid";
+            document.getElementById("editServiceForm").scrollIntoView({ behavior: 'smooth' });
+        };
+
+        document.querySelector("#editServiceForm .btn-outline").addEventListener("click", function() {
+            document.getElementById("editServiceForm").style.display = "none";
+        });
+
+        // ----- Edit charge -----
+        window.editCharge = function(id, serviceId, charge) {
+            document.getElementById("editChargeId").value = id;
+            document.getElementById("editChargeService").value = serviceId;
+            document.getElementById("editChargeAmount").value = charge;
+            document.getElementById("editChargeForm").style.display = "grid";
+            document.getElementById("editChargeForm").scrollIntoView({ behavior: 'smooth' });
+        };
+
+        document.querySelector("#editChargeForm .btn-outline").addEventListener("click", function() {
+            document.getElementById("editChargeForm").style.display = "none";
+        });
+
+        // ----- Edit Announcement -----
+        window.editAnnouncement = function(id, title, category, description) {
+            document.getElementById("editAnnouncementId").value = id;
+            document.getElementById("editAnnTitle").value = title;
+            document.getElementById("editAnnCategory").value = category || 'General';
+            document.getElementById("editAnnDesc").value = description || '';
+            document.getElementById("editAnnouncementForm").style.display = "grid";
+            document.getElementById("editAnnouncementForm").scrollIntoView({ behavior: 'smooth' });
+        };
+
+        document.querySelector("#editAnnouncementForm .btn-outline").addEventListener("click", function() {
+            document.getElementById("editAnnouncementForm").style.display = "none";
+        });
+
+        // ----- Edit Job -----
+        window.editJob = function(id, title, organization, description, lastDate, applyLink, icon) {
+            document.getElementById("editJobId").value = id;
+            document.getElementById("editJobTitle").value = title;
+            document.getElementById("editJobOrg").value = organization;
+            document.getElementById("editJobDesc").value = description || '';
+            document.getElementById("editJobDate").value = lastDate || '';
+            document.getElementById("editJobLink").value = applyLink || '';
+            document.getElementById("editJobIcon").value = icon || '';
+            document.getElementById("editJobForm").style.display = "grid";
+            document.getElementById("editJobForm").scrollIntoView({ behavior: 'smooth' });
+        };
+
+        document.querySelector("#editJobForm .btn-outline").addEventListener("click", function() {
+            document.getElementById("editJobForm").style.display = "none";
+        });
+
+        // ----- Edit Scheme -----
+        window.editScheme = function(id, title, description, eligibility) {
+            document.getElementById("editSchemeId").value = id;
+            document.getElementById("editSchemeTitle").value = title;
+            document.getElementById("editSchemeDesc").value = description || '';
+            document.getElementById("editSchemeEligibility").value = eligibility || '';
+            document.getElementById("editSchemeForm").style.display = "grid";
+            document.getElementById("editSchemeForm").scrollIntoView({ behavior: 'smooth' });
+        };
+
+        document.querySelector("#editSchemeForm .btn-outline").addEventListener("click", function() {
+            document.getElementById("editSchemeForm").style.display = "none";
+        });
+
+        // ----- Edit Appointment -----
+        window.editAppointment = function(id, full_name, phone, email, serviceId, date, time, message, status) {
+            document.getElementById("editApptId").value = id;
+            document.getElementById("editApptName").value = full_name;
+            document.getElementById("editApptPhone").value = phone;
+            document.getElementById("editApptEmail").value = email;
+            document.getElementById("editApptService").value = serviceId;
+            document.getElementById("editApptDate").value = date;
+            document.getElementById("editApptTime").value = time;
+            document.getElementById("editApptMessage").value = message || '';
+            document.getElementById("editApptStatus").value = status || 'Pending';
+            document.getElementById("editAppointmentForm").style.display = "grid";
+            document.getElementById("editAppointmentForm").scrollIntoView({ behavior: 'smooth' });
+        };
+
+        document.querySelector("#editAppointmentForm .btn-outline").addEventListener("click", function() {
+            document.getElementById("editAppointmentForm").style.display = "none";
+        });
+
+        // ----- Edit Form (DownloadForm) -----
+        window.editForm = function(id, title, category) {
+            document.getElementById("editFormId").value = id;
+            document.getElementById("editFormTitle").value = title;
+            document.getElementById("editFormCategory").value = category || 'General';
+            document.getElementById("editFormForm").style.display = "grid";
+            document.getElementById("editFormForm").scrollIntoView({ behavior: 'smooth' });
+        };
+
+        document.querySelector("#editFormForm .btn-outline").addEventListener("click", function() {
+            document.getElementById("editFormForm").style.display = "none";
+        });
+
+        // ----- Edit Required Document (single definition) -----
+        window.editRequiredDoc = function(id, serviceId, docName) {
+            document.getElementById("editRequiredDocId").value = id;
+            document.getElementById("editRequiredDocService").value = serviceId;
+            document.getElementById("editRequiredDocName").value = docName;
+            document.getElementById("editRequiredDocForm").style.display = "grid";
+            document.getElementById("editRequiredDocForm").scrollIntoView({ behavior: 'smooth' });
+        };
+
+        document.querySelector("#editRequiredDocForm .btn-outline").addEventListener("click", function() {
+            document.getElementById("editRequiredDocForm").style.display = "none";
+        });
+
+        // ----- Start with dashboard active -----
+        showSection("dashboard");
     })();
 </script>
-    <script>
-        (function() {
-            "use strict";
-
-            // ----- Sidebar navigation -----
-            const navLinks = document.querySelectorAll(".sidebar nav ul li a");
-            const sections = document.querySelectorAll(".section");
-            const pageTitle = document.getElementById("pageTitle");
-
-            function showSection(sectionId) {
-                sections.forEach(sec => sec.classList.remove("active"));
-                const target = document.getElementById("section-" + sectionId);
-                if (target) target.classList.add("active");
-
-                navLinks.forEach(link => link.classList.remove("active"));
-                navLinks.forEach(link => {
-                    if (link.dataset.section === sectionId) link.classList.add("active");
-                });
-
-                const titles = {
-                    dashboard: "{% trans "Dashboard" %}",
-                    services: "{% trans "Manage Services" %}",
-                    prices: "{% trans "Update Prices" %}",
-                    announcements: "{% trans "Announcements" %}",
-                    jobs: "{% trans "Job Notifications" %}",
-                    schemes: "{% trans "Government Schemes" %}",
-                    appointments: "{% trans "Appointments" %}",
-                    inquiries: "{% trans "Inquiries" %}",
-                    forms: "{% trans "Upload Forms" %}",
-                    users: "{% trans "User Management" %}",
-                    gallery: "{% trans "Gallery" %}",
-                    requireddocs: "{% trans "Required Documents" %}",
-                    applications: "{% trans "Applications" %}",
-                    settings: "{% trans "Settings" %}",
-                };
-                pageTitle.textContent = titles[sectionId] || "{% trans "Dashboard" %}";
-                document.getElementById("sidebar").classList.remove("open");
-            }
-
-            navLinks.forEach(link => {
-                link.addEventListener("click", function(e) {
-                    e.preventDefault();
-                    showSection(this.dataset.section);
-                });
-            });
-
-            // ----- Hamburger toggle -----
-            document.getElementById("hamburgerBtn").addEventListener("click", function() {
-                document.getElementById("sidebar").classList.toggle("open");
-            });
-
-            // ----- Edit service ----
-            window.editService = function(id, name, category, description, active, icon, color) {
-                document.getElementById("editServiceId").value = id;
-                document.getElementById("editSvcName").value = name;
-                document.getElementById("editSvcCategory").value = category;
-                document.getElementById("editSvcDesc").value = description;
-                document.getElementById("editSvcStatus").value = active === 'true' ? 'true' : 'false';
-                document.getElementById("editSvcIcon").value = icon || '';
-                document.getElementById("editSvcColor").value = color || '#00d4ff';
-                document.getElementById("editServiceForm").style.display = "grid";
-                document.getElementById("editServiceForm").scrollIntoView({ behavior: 'smooth' });
-            };
-
-            document.querySelector("#editServiceForm .btn-outline").addEventListener("click", function() {
-                document.getElementById("editServiceForm").style.display = "none";
-            });
-
-            // ----- Edit charge -----
-            window.editCharge = function(id, serviceId, charge) {
-                document.getElementById("editChargeId").value = id;
-                document.getElementById("editChargeService").value = serviceId;
-                document.getElementById("editChargeAmount").value = charge;
-                document.getElementById("editChargeForm").style.display = "grid";
-                document.getElementById("editChargeForm").scrollIntoView({ behavior: 'smooth' });
-            };
-
-            document.querySelector("#editChargeForm .btn-outline").addEventListener("click", function() {
-                document.getElementById("editChargeForm").style.display = "none";
-            });
-
-            // ----- Edit Announcement -----
-            window.editAnnouncement = function(id, title, category, description) {
-                document.getElementById("editAnnouncementId").value = id;
-                document.getElementById("editAnnTitle").value = title;
-                document.getElementById("editAnnCategory").value = category || 'General';
-                document.getElementById("editAnnDesc").value = description || '';
-                document.getElementById("editAnnouncementForm").style.display = "grid";
-                document.getElementById("editAnnouncementForm").scrollIntoView({ behavior: 'smooth' });
-            };
-
-            document.querySelector("#editAnnouncementForm .btn-outline").addEventListener("click", function() {
-                document.getElementById("editAnnouncementForm").style.display = "none";
-            });
-
-            // ----- Edit Job -----
-            window.editJob = function(id, title, organization, description, lastDate, applyLink, icon) {
-                document.getElementById("editJobId").value = id;
-                document.getElementById("editJobTitle").value = title;
-                document.getElementById("editJobOrg").value = organization;
-                document.getElementById("editJobDesc").value = description || '';
-                document.getElementById("editJobDate").value = lastDate || '';
-                document.getElementById("editJobLink").value = applyLink || '';
-                document.getElementById("editJobIcon").value = icon || '';
-                document.getElementById("editJobForm").style.display = "grid";
-                document.getElementById("editJobForm").scrollIntoView({ behavior: 'smooth' });
-            };
-
-            document.querySelector("#editJobForm .btn-outline").addEventListener("click", function() {
-                document.getElementById("editJobForm").style.display = "none";
-            });
-
-            // ----- Edit Scheme -----
-            window.editScheme = function(id, title, description, eligibility) {
-                document.getElementById("editSchemeId").value = id;
-                document.getElementById("editSchemeTitle").value = title;
-                document.getElementById("editSchemeDesc").value = description || '';
-                document.getElementById("editSchemeEligibility").value = eligibility || '';
-                document.getElementById("editSchemeForm").style.display = "grid";
-                document.getElementById("editSchemeForm").scrollIntoView({ behavior: 'smooth' });
-            };
-
-            document.querySelector("#editSchemeForm .btn-outline").addEventListener("click", function() {
-                document.getElementById("editSchemeForm").style.display = "none";
-            });
-
-            // ----- Edit Appointment (NEW) -----
-            window.editAppointment = function(id, full_name, phone, email, serviceId, date, time, message, status) {
-                document.getElementById("editApptId").value = id;
-                document.getElementById("editApptName").value = full_name;
-                document.getElementById("editApptPhone").value = phone;
-                document.getElementById("editApptEmail").value = email;
-                document.getElementById("editApptService").value = serviceId;
-                document.getElementById("editApptDate").value = date;
-                document.getElementById("editApptTime").value = time;
-                document.getElementById("editApptMessage").value = message || '';
-                document.getElementById("editApptStatus").value = status || 'Pending';
-                document.getElementById("editAppointmentForm").style.display = "grid";
-                document.getElementById("editAppointmentForm").scrollIntoView({ behavior: 'smooth' });
-            };
-
-            document.querySelector("#editAppointmentForm .btn-outline").addEventListener("click", function() {
-                document.getElementById("editAppointmentForm").style.display = "none";
-            });
-
-            // ----- Edit Form (DownloadForm) -----
-            window.editForm = function(id, title, category) {
-                document.getElementById("editFormId").value = id;
-                document.getElementById("editFormTitle").value = title;
-                document.getElementById("editFormCategory").value = category || 'General';
-                document.getElementById("editFormForm").style.display = "grid";
-                document.getElementById("editFormForm").scrollIntoView({ behavior: 'smooth' });
-            };
-
-            document.querySelector("#editFormForm .btn-outline").addEventListener("click", function() {
-                document.getElementById("editFormForm").style.display = "none";
-            });
-
-            // ----- Start with dashboard active -----
-            showSection("dashboard");
-
-        })();
-
-// ---- Edit Required Document ----
-window.editRequiredDoc = function(id, serviceId, docName) {
-    document.getElementById("editRequiredDocId").value = id;
-    document.getElementById("editRequiredDocService").value = serviceId;
-    document.getElementById("editRequiredDocName").value = docName;
-    document.getElementById("editRequiredDocForm").style.display = "grid";
-    document.getElementById("editRequiredDocForm").scrollIntoView({ behavior: 'smooth' });
-};
-
-document.querySelector("#editRequiredDocForm .btn-outline").addEventListener("click", function() {
-    document.getElementById("editRequiredDocForm").style.display = "none";
-});
-    </script>
 {% endblock %}
 </body>
 </html>

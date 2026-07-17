@@ -1,50 +1,69 @@
-{% extends "base.html" %}
-{% load i18n %}
-
-{% block title %}{% trans "Application Details" %}{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% load i18n %} {% block title %}{% trans "Application
+Details" %}{% endblock %} {% block content %}
 <section class="page-hero">
-    <div class="container">
-        <h1>{% trans "Application Details" %}</h1>
-    </div>
+  <div class="container">
+    <h1>{% trans "Application Details" %}</h1>
+  </div>
 </section>
 
 <section class="app-detail">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8 offset-md-2">
-                <div class="card">
-                    <div class="card-body">
-                        <h5>{{ application.service.name }}</h5>
-                        <p><strong>{% trans "Status" %}:</strong> {{ application.get_status_display }}</p>
-                        <p><strong>{% trans "Submitted" %}:</strong> {{ application.created_at|date:"d M Y, H:i" }}</p>
-                        <hr>
-                        <h5>{% trans "Personal Details" %}</h5>
-                        <p><strong>{% trans "Name" %}:</strong> {{ application.full_name }}</p>
-                        <p><strong>{% trans "Phone" %}:</strong> {{ application.phone }}</p>
-                        <p><strong>{% trans "Email" %}:</strong> {{ application.email }}</p>
-                        <p><strong>{% trans "Address" %}:</strong> {{ application.address }}</p>
-                        <hr>
-                        <h5>{% trans "Uploaded Documents" %}</h5>
-                        <ul>
-                            {% for doc in documents %}
-                                <li>
-                                    {{ doc.document_name }}
-                                    <a href="{{ doc.file.url }}" target="_blank">{% trans "View" %}</a>
-                                    {% if doc.verified %}
-                                        <span class="badge badge-success">{% trans "Verified" %}</span>
-                                    {% endif %}
-                                </li>
-                            {% empty %}
-                                <li>{% trans "No documents uploaded." %}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-            </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="card">
+          <div class="card-body">
+            <h5>{{ application.service.name }}</h5>
+            <p>
+              <strong>{% trans "Status" %}:</strong> {{
+              application.get_status_display }}
+            </p>
+            <p>
+              <strong>{% trans "Submitted" %}:</strong> {{
+              application.created_at|date:"d M Y, H:i" }}
+            </p>
+            <hr />
+            <h5>{% trans "Personal Details" %}</h5>
+            <p>
+              <strong>{% trans "Name" %}:</strong> {{ application.full_name }}
+            </p>
+            <p><strong>{% trans "Phone" %}:</strong> {{ application.phone }}</p>
+            <p><strong>{% trans "Email" %}:</strong> {{ application.email }}</p>
+            <p>
+              <strong>{% trans "Address" %}:</strong> {{ application.address }}
+            </p>
+            <hr />
+            <h5>{% trans "Uploaded Documents" %}</h5>
+            <ul>
+              {% for doc in documents %}
+              <li>
+                {{ doc.document_name }}
+                <a
+                  href="{{ doc.file.url }}"
+                  target="_blank"
+                  class="btn btn-sm btn-outline-primary"
+                >
+                  <i class="fas fa-eye"></i> {% trans "View" %}
+                </a>
+                <a
+                  href="{{ doc.file.url }}"
+                  download
+                  class="btn btn-sm btn-outline-success"
+                >
+                  <i class="fas fa-download"></i> {% trans "Download" %}
+                </a>
+                {% if doc.verified %}
+                <span class="badge badge-success">{% trans "Verified" %}</span>
+                {% endif %}
+              </li>
+              {% empty %}
+              <li>{% trans "No documents uploaded." %}</li>
+              {% endfor %}
+            </ul>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </section>
 
 {% endblock %}

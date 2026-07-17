@@ -406,7 +406,7 @@
     }
 
     /* ============================================================
-           INFO ROW — timings + contact
+           INFO ROW — timings + contact (dynamic)
            ============================================================ */
     .info-row {
         padding: 60px 0;
@@ -457,33 +457,16 @@
         color: var(--neon-orange);
     }
 
-    .timings-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .timings-table tr {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-    }
-
-    .timings-table tr:last-child {
-        border-bottom: none;
-    }
-
-    .timings-table td {
-        padding: 10px 0;
+    /* Dynamic timings – use a styled block instead of a table */
+    .timings-block {
         color: var(--text-muted);
-        font-size: 0.92rem;
+        font-size: 0.95rem;
+        line-height: 1.8;
+        white-space: pre-wrap;
+        word-break: break-word;
     }
-
-    .timings-table td:last-child {
-        text-align: right;
+    .timings-block strong {
         color: var(--text-white);
-        font-weight: 600;
-    }
-
-    .timings-table .highlight td:last-child {
-        color: var(--neon-cyan);
     }
 
     .contact-card .phone {
@@ -524,7 +507,7 @@
     }
 
     /* ============================================================
-           LOCATION
+           LOCATION (dynamic)
            ============================================================ */
     .location {
         padding: 70px 0 80px;
@@ -783,6 +766,23 @@
         font-size: 1rem;
         opacity: 0.6;
     }
+
+    /* fallback for empty map */
+    .map-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        min-height: 280px;
+        color: var(--text-muted);
+        font-size: 1rem;
+        background: var(--bg-card);
+    }
+    .map-placeholder i {
+        font-size: 2rem;
+        margin-right: 12px;
+        opacity: 0.4;
+    }
 </style>
 {% endblock %}
 
@@ -901,12 +901,7 @@
                 <div class="caption">{{ img.title }}</div>
             </div>
             {% empty %}
-            {% for i in "1234"|make_list %}
-            <div class="gallery-item">
-                <div class="placeholder-icon"><i class="fas fa-image"></i></div>
-                <div class="caption">{% trans "Gallery image" %}</div>
-            </div>
-            {% endfor %}
+            <p class="no-data">{% trans "No images in the gallery yet." %}</p>
             {% endfor %}
         </div>
     </div>
@@ -948,32 +943,40 @@
 <hr />
 
 <!-- ============================================================
-     INFO ROW — Timings + Contact
+     INFO ROW — Timings + Contact (DYNAMIC)
      ============================================================ -->
 <section class="info-row animate-on-load" id="contact">
     <div class="container">
         <div class="timings-card">
             <h3><i class="fas fa-clock"></i> Business Timings</h3>
-            <table class="timings-table">
-                <tr><td>Monday – Saturday</td><td>9:00 AM – 8:00 PM</td></tr>
-                <tr class="highlight"><td>Sunday</td><td>10:00 AM – 2:00 PM</td></tr>
-                <tr><td>Holidays</td><td>Closed</td></tr>
-            </table>
+            {% if business.business_hours %}
+                <div class="timings-block">{{ business.business_hours|linebreaksbr }}</div>
+            {% else %}
+                <div class="timings-block">
+                    <strong>Monday – Saturday:</strong> 9:00 AM – 8:00 PM<br>
+                    <strong>Sunday:</strong> 10:00 AM – 2:00 PM<br>
+                    <strong>Holidays:</strong> Closed
+                </div>
+            {% endif %}
         </div>
         <div class="contact-card">
             <h3><i class="fas fa-phone-alt"></i> Get in Touch</h3>
             <div class="phone">
                 <i class="fas fa-mobile-alt"></i>
-                <a href="tel:+919876543210">+91 98765 43210</a>
+                <a href="tel:{{ business.phone|default:'+919876543210' }}">
+                    {{ business.phone|default:"+91 98765 43210" }}
+                </a>
             </div>
             <div class="sub">Call or WhatsApp for quick support.</div>
             <div class="contact-buttons">
-                <a href="tel:+919876543210" class="btn-primary">
+                <a href="tel:{{ business.phone|default:'+919876543210' }}" class="btn-primary">
                     <i class="fas fa-phone"></i> Call Now
                 </a>
-                <a href="https://wa.me/919876543210?text=Hello%2C%20I%20need%20assistance." target="_blank" class="btn-whatsapp">
+                {% with whatsapp_number=business.whatsapp|default:"919876543210" %}
+                <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20need%20assistance." target="_blank" class="btn-whatsapp">
                     <i class="fab fa-whatsapp"></i> WhatsApp
                 </a>
+                {% endwith %}
             </div>
         </div>
     </div>
@@ -982,36 +985,39 @@
 <hr />
 
 <!-- ============================================================
-     LOCATION
+     LOCATION (DYNAMIC)
      ============================================================ -->
 <section class="location animate-on-load" id="location">
     <div class="container">
         <div class="location-info">
             <h2>Find Us <span>Here</span></h2>
             <div class="address">
-                <p><i class="fas fa-map-marker-alt"></i> CyberTech Digital Hub</p>
-                <p style="padding-left: 28px;">
-                    देऊबाई कॉम्प्लेक्स, साईबाबा चौक,<br />
+                <i class="fas fa-map-marker-alt"></i>
+                {% if business.address %}
+                    {{ business.address|linebreaksbr }}
+                {% else %}
+                    CyberTech Digital Hub<br>
+                    देऊबाई कॉम्प्लेक्स, साईबाबा चौक,<br>
                     Ranale, Maharashtra 425411
-                </p>
+                {% endif %}
             </div>
-            <a href="https://maps.app.goo.gl/WcuRkjRWAR8DdMqRA" target="_blank" class="btn-primary" style="padding: 12px 32px; align-self: flex-start;">
+            {% with address_url=business.address|urlencode %}
+            <a href="https://www.google.com/maps/dir/?api=1&destination={{ address_url|default:'CyberTech+Digital+Hub,+Ranale,+Maharashtra' }}" target="_blank" class="btn-primary" style="padding: 12px 32px; align-self: flex-start;">
                 <i class="fas fa-directions"></i> Get Directions
             </a>
+            {% endwith %}
         </div>
         <div class="map-container">
-            <iframe
-            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d290.99334372828883!2d74.39469402087641!3d21.34436723602012!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bdf0fd00fae03e5%3A0xeb4fa60cf3743911!2zODlWVitRVzcsIOCkpuClh-CkiuCkrOCkvuCkiCDgpJXgpYngpK7gpY3gpKrgpY3gpLLgpYfgpJXgpY3gpLgsIOCkuOCkvuCkiOCkrOCkvuCkrOCkviDgpJrgpYzgpJUsIEhvbCBULiBSYW5hbGUsIFJhbmFsYSwgTWFoYXJhc2h0cmEgNDI1NDEx!5e1!3m2!1sen!2sin!4v1783429312785!5m2!1sen!2sin"
-            width="600"
-            height="450"
-            style="border:0;"
-            allowfullscreen=""
-            loading="lazy"
-            referrerpolicy="strict-origin-when-cross-origin"
-            title="Cyber Cafe Location Map"
-        ></iframe>
+            {% if business.google_map %}
+                {{ business.google_map|safe }}
+            {% else %}
+                <div class="map-placeholder">
+                    <i class="fas fa-map-marked-alt"></i>
+                    {% trans "Map location not configured." %}
+                </div>
+            {% endif %}
+        </div>
     </div>
-</div>
 </section>
 
 <hr />

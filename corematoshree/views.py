@@ -3,6 +3,8 @@
 # =============================================================================
 import os
 import tempfile
+from .models import Application, DocumentUpload
+from .forms import ApplicationForm, DocumentUploadForm
 from django.http import FileResponse, Http404
 from django.shortcuts import get_object_or_404, render
 from pypdf import PdfReader, PdfWriter
@@ -755,7 +757,7 @@ def documents(request):
     """
     Display a flat list of required documents with pagination.
     """
-    documents_qs = RequiredDocument.objects.select_related('service').all()
+    documents_qs = RequiredDocument.objects.select_related('service').all().order_by('service__name', 'document_name')
     paginator = Paginator(documents_qs, 20)   # 20 per page
     page = request.GET.get('page')
 
@@ -787,7 +789,7 @@ def charges(request):
 
 
 def reviews(request):
-    all_reviews = Review.objects.filter(approved=True)
+    all_reviews = Review.objects.filter(approved=True).order_by('-created_at')
     paginator = Paginator(all_reviews, 10)
     page = request.GET.get('page')
 
@@ -822,7 +824,7 @@ def submit_review(request):
 
 
 def announcements(request):
-    announcements_qs = Announcement.objects.all()
+    announcements_qs = Announcement.objects.all().order_by('-created_at')
     paginator = Paginator(announcements_qs, 10)
     page = request.GET.get('page')
 
@@ -840,7 +842,7 @@ def announcements(request):
 
 
 def government_schemes(request):
-    schemes_qs = GovernmentScheme.objects.all()
+    schemes_qs = GovernmentScheme.objects.all().order_by('-last_date')
     paginator = Paginator(schemes_qs, 10)
     page = request.GET.get('page')
 
@@ -1002,6 +1004,7 @@ def application_admin_detail(request, app_id):
             messages.success(request, _("Document deleted."))
             return redirect('application_admin_detail', app_id=app_id)
         
+        
         # --- Add Document ---
         elif action == 'add_document':
             doc_name = request.POST.get('document_name')
@@ -1016,6 +1019,15 @@ def application_admin_detail(request, app_id):
                 messages.success(request, _("Document uploaded."))
             else:
                 messages.error(request, _("Please provide both name and file."))
+            return redirect('application_admin_detail', app_id=app_id)
+        
+        # --- Verify / Unverify Document ---
+        elif action == 'verify_document':
+            doc_id = request.POST.get('doc_id')
+            doc = get_object_or_404(DocumentUpload, id=doc_id, application=application)
+            doc.verified = not doc.verified   # toggle
+            doc.save()
+            messages.success(request, _("Document verification toggled."))
             return redirect('application_admin_detail', app_id=app_id)
     
     # GET – show the form
@@ -1037,7 +1049,7 @@ def split_pdf(request, pk):
 
         pages = request.POST.get("pages")
 
-        reader = PdfReader(document.file.path)
+        reader = PdfReader(document.file)
         writer = PdfWriter()
 
         total_pages = len(reader.pages)

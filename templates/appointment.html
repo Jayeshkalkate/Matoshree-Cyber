@@ -193,6 +193,19 @@
     display: flex;
   }
 
+  /* Helper text for time */
+  .helper-text {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--gray-dark);
+    margin-top: 0.3rem;
+    opacity: 0.7;
+  }
+  .helper-text i {
+    margin-right: 0.3rem;
+    color: var(--secondary);
+  }
+
   .btn-book {
     width: 100%;
     padding: 1rem;
@@ -361,6 +374,10 @@
           <span class="required-star">*</span>
         </label>
         {{ form.appointment_time }}
+        <span class="helper-text">
+          <i class="fas fa-info-circle"></i>
+          {% trans "Available slots: 9:00 AM – 5:00 PM (15‑minute intervals)" %}
+        </span>
         {% if form.appointment_time.errors %}
           <div class="error-message">{{ form.appointment_time.errors }}</div>
         {% endif %}
@@ -422,6 +439,14 @@
     }
     setMinDate();
 
+    // Restrict time to business hours (09:00 – 17:00) and 15‑minute steps
+    function setTimeConstraints() {
+      timeInput.min = "09:00";
+      timeInput.max = "17:00";
+      timeInput.step = "900"; // 15 minutes in seconds
+    }
+    setTimeConstraints();
+
     // Clear all error states
     function clearErrors() {
       [nameGroup, phoneGroup, serviceGroup, dateGroup, timeGroup].forEach((g) =>
@@ -434,7 +459,7 @@
       group.classList.add("error");
     }
 
-    // Validate form
+    // Validate form (including time range)
     function validateForm() {
       let isValid = true;
       clearErrors();
@@ -473,10 +498,20 @@
         }
       }
 
-      // 5. Time (required)
-      if (!timeInput.value) {
+      // 5. Time (required, within 09:00 – 17:00)
+      const timeVal = timeInput.value;
+      if (!timeVal) {
         setError(timeGroup);
         isValid = false;
+      } else {
+        const [hours, minutes] = timeVal.split(":").map(Number);
+        const totalMinutes = hours * 60 + minutes;
+        const minMinutes = 9 * 60;   // 09:00
+        const maxMinutes = 17 * 60;  // 17:00
+        if (totalMinutes < minMinutes || totalMinutes > maxMinutes) {
+          setError(timeGroup);
+          isValid = false;
+        }
       }
 
       return isValid;
@@ -510,7 +545,13 @@
       }
     });
     timeInput.addEventListener("change", function () {
-      if (this.value) timeGroup.classList.remove("error");
+      if (this.value) {
+        const [hours, minutes] = this.value.split(":").map(Number);
+        const totalMinutes = hours * 60 + minutes;
+        if (totalMinutes >= 9 * 60 && totalMinutes <= 17 * 60) {
+          timeGroup.classList.remove("error");
+        }
+      }
     });
 
     // Form submission
@@ -543,7 +584,7 @@
       }
     });
 
-    console.log("📅 Appointment page ready — future dates only, 10-digit mobile validation.");
+    console.log("📅 Appointment page ready — future dates only, 10-digit mobile, business hours 09:00–17:00, 15‑min slots.");
   })();
 </script>
 {% endblock extra_scripts %}

@@ -2,7 +2,6 @@
 {% load i18n %}
 {% load static %}
 
-
 {% block title %}{% trans "Announcements" %}{% endblock %}
 
 {% block extra_head %}
@@ -600,7 +599,7 @@
     display: none !important;
   }
 </style>
-{% endblock %}
+{% endblock %} {# <-- Make sure this endblock is present #}
 
 {% block content %}
 <!-- ================================================================
@@ -776,7 +775,7 @@
     <h2>{% trans "Have Questions?" %} <span>{% trans "Reach Out" %}</span></h2>
     <p>{% trans "We're here to help with any of your digital service needs." %}</p>
     <div class="cta-buttons">
-      <a href="{% url 'home' %}#contact" class="btn-primary">
+      <a href="{% url 'contact' %}" class="btn-primary">
         <i class="fas fa-phone"></i> {% trans "Contact Us" %}
       </a>
       <a href="https://wa.me/919876543210?text=Hello%2C%20I%20have%20a%20question%20about%20your%20announcements." target="_blank" class="btn-whatsapp">
@@ -819,8 +818,7 @@
 
     if (announcements.length === 0) {
       filterBar.style.display = "none";
-      noResults.style.display = "block";
-      noResults.innerHTML = '<i class="fas fa-inbox"></i><p>{% trans "No announcements available."|escapejs %}</p>';
+      // noResults stays hidden (default display: none)
       return;
     }
 

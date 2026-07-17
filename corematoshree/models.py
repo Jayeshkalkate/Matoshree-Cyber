@@ -511,6 +511,19 @@ class BusinessInfo(models.Model):
     business_hours = models.TextField(
         _("Business Hours")
     )
+    
+    registration_number = models.CharField(
+        _("Registration Number"),
+        max_length=100,
+        blank=True,
+        help_text=_("e.g. UDYAM-XX-00-0000000")
+    )
+    
+    certifications = models.TextField(
+        _("Certifications / Authorizations"),
+        blank=True,
+        help_text=_("Enter each certification on a new line.")
+    )
 
     def save(self, *args, **kwargs):
         if not self.pk:
