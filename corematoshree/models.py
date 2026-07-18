@@ -6,28 +6,38 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 
 # ==========================
-# User
+# Phone Validator
+# ==========================
+phone_validator = RegexValidator(
+    regex=r"^\+?1?\d{10,15}$",
+    message=_("Enter a valid phone number (10–15 digits)."),
+)
+
+
+# ==========================
+# User Model (Custom)
 # ==========================
 class User(AbstractUser):
     ROLE_CHOICES = (
-        ('user', _('User')),
-        ('admin', _('Admin')),
-        ('superadmin', _('Super Admin')),
+        ("user", _("User")),
+        ("admin", _("Admin")),
+        ("superadmin", _("Super Admin")),
     )
     role = models.CharField(
         _("Role"),
         max_length=20,
         choices=ROLE_CHOICES,
-        default='user'
+        default="user",
     )
     phone = models.CharField(
         _("Phone"),
         max_length=15,
-        blank=True
+        blank=True,
+        validators=[phone_validator],
     )
     address = models.TextField(
         _("Address"),
-        blank=True
+        blank=True,
     )
 
     def __str__(self):
@@ -35,45 +45,24 @@ class User(AbstractUser):
 
 
 # ==========================
-# Validators
-# ==========================
-phone_validator = RegexValidator(
-    regex=r'^\+?1?\d{10,15}$',
-    message=_("Enter a valid phone number (10-15 digits).")
-)
-
-
-# ==========================
-# Services
+# Service
 # ==========================
 class Service(models.Model):
-    name = models.CharField(
-        _("Name"),
-        max_length=200
-    )
-    category = models.CharField(
-        _("Category"),
-        max_length=100
-    )
-    description = models.TextField(
-        _("Description"),
-        blank=True
-    )
-    active = models.BooleanField(
-        _("Active"),
-        default=True
-    )
+    name = models.CharField(_("Name"), max_length=200)
+    category = models.CharField(_("Category"), max_length=100)
+    description = models.TextField(_("Description"), blank=True)
+    active = models.BooleanField(_("Active"), default=True)
     icon = models.CharField(
         _("Icon"),
         max_length=50,
         default="cog",
-        help_text=_("Font Awesome icon class (e.g., 'fa-print')")
+        help_text=_("Font Awesome icon class (e.g., 'fa-print')"),
     )
     icon_color = models.CharField(
         _("Icon Color"),
         max_length=7,
-        default='#00d4ff',
-        help_text=_("Hex color for the icon circle (e.g., #ff6b35)")
+        default="#00d4ff",
+        help_text=_("Hex color for the icon circle (e.g., #ff6b35)"),
     )
 
     def __str__(self):
@@ -91,44 +80,24 @@ class Appointment(models.Model):
         ("Cancelled", _("Cancelled")),
     )
 
-    full_name = models.CharField(
-        _("Full Name"),
-        max_length=150
-    )
-    phone = models.CharField(
-        _("Phone"),
-        max_length=15,
-        validators=[phone_validator]
-    )
-    email = models.EmailField(
-        _("Email"),
-        blank=True
-    )
+    full_name = models.CharField(_("Full Name"), max_length=150)
+    phone = models.CharField(_("Phone"), max_length=15, validators=[phone_validator])
+    email = models.EmailField(_("Email"), blank=True)
     service = models.ForeignKey(
         Service,
         on_delete=models.CASCADE,
-        verbose_name=_("Service")
+        verbose_name=_("Service"),
     )
-    appointment_date = models.DateField(
-        _("Appointment Date")
-    )
-    appointment_time = models.TimeField(
-        _("Appointment Time")
-    )
-    message = models.TextField(
-        _("Message"),
-        blank=True
-    )
+    appointment_date = models.DateField(_("Appointment Date"))
+    appointment_time = models.TimeField(_("Appointment Time"))
+    message = models.TextField(_("Message"), blank=True)
     status = models.CharField(
         _("Status"),
         max_length=20,
         choices=STATUS,
-        default="Pending"
+        default="Pending",
     )
-    created_at = models.DateTimeField(
-        _("Created At"),
-        auto_now_add=True
-    )
+    created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
 
     class Meta:
         ordering = ["-created_at"]
@@ -136,14 +105,10 @@ class Appointment(models.Model):
         verbose_name_plural = _("Appointments")
 
     def clean(self):
-        if self.appointment_date is None:
-            return
-        if self.appointment_date < timezone.localdate():
+        if self.appointment_date and self.appointment_date < timezone.localdate():
             raise ValidationError(
                 {"appointment_date": _("Appointment date cannot be in the past.")}
             )
-        if self.appointment_time is None:
-            return
 
     def __str__(self):
         return f"{self.full_name} - {self.service.name}"
@@ -153,38 +118,14 @@ class Appointment(models.Model):
 # Contact
 # ==========================
 class Contact(models.Model):
-    name = models.CharField(
-        _("Name"),
-        max_length=150
-    )
-    email = models.EmailField(
-        _("Email")
-    )
-    phone = models.CharField(
-        _("Phone"),
-        max_length=15,
-        validators=[phone_validator]
-    )
-    subject = models.CharField(
-        _("Subject"),
-        max_length=200
-    )
-    message = models.TextField(
-        _("Message")
-    )
-    reply = models.TextField(
-        _("Reply"),
-        blank=True,
-        null=True          # <-- Added per Step 2.1
-    )
-    replied = models.BooleanField(
-        _("Replied"),
-        default=False
-    )
-    created_at = models.DateTimeField(
-        _("Created At"),
-        auto_now_add=True
-    )
+    name = models.CharField(_("Name"), max_length=150)
+    email = models.EmailField(_("Email"))
+    phone = models.CharField(_("Phone"), max_length=15, validators=[phone_validator])
+    subject = models.CharField(_("Subject"), max_length=200)
+    message = models.TextField(_("Message"))
+    reply = models.TextField(_("Reply"), blank=True, null=True)
+    replied = models.BooleanField(_("Replied"), default=False)
+    created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
 
     class Meta:
         ordering = ["-created_at"]
@@ -196,33 +137,15 @@ class Contact(models.Model):
 
 
 # ==========================
-# Reviews
+# Review
 # ==========================
 class Review(models.Model):
-    customer_name = models.CharField(
-        _("Customer Name"),
-        max_length=100
-    )
-    email = models.EmailField(
-        _("Email"),
-        blank=True,
-        null=True
-    )
-    review = models.TextField(
-        _("Review")
-    )
-    rating = models.PositiveSmallIntegerField(
-        _("Rating"),
-        default=5
-    )
-    approved = models.BooleanField(
-        _("Approved"),
-        default=True
-    )
-    created_at = models.DateTimeField(
-        _("Created At"),
-        auto_now_add=True
-    )
+    customer_name = models.CharField(_("Customer Name"), max_length=100)
+    email = models.EmailField(_("Email"), blank=True, null=True)
+    review = models.TextField(_("Review"))
+    rating = models.PositiveSmallIntegerField(_("Rating"), default=5)
+    approved = models.BooleanField(_("Approved"), default=True)
+    created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
 
     class Meta:
         ordering = ["-created_at"]
@@ -234,7 +157,7 @@ class Review(models.Model):
 
 
 # ==========================
-# Announcements
+# Announcement
 # ==========================
 class Announcement(models.Model):
     CATEGORY = (
@@ -245,22 +168,10 @@ class Announcement(models.Model):
         ("Notice", _("Notice")),
     )
 
-    title = models.CharField(
-        _("Title"),
-        max_length=200
-    )
-    category = models.CharField(
-        _("Category"),
-        max_length=50,
-        choices=CATEGORY
-    )
-    description = models.TextField(
-        _("Description")
-    )
-    created_at = models.DateTimeField(
-        _("Created At"),
-        auto_now_add=True
-    )
+    title = models.CharField(_("Title"), max_length=200)
+    category = models.CharField(_("Category"), max_length=50, choices=CATEGORY)
+    description = models.TextField(_("Description"))
+    created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
 
     class Meta:
         ordering = ["-created_at"]
@@ -283,19 +194,9 @@ class Gallery(models.Model):
         ("Office", _("Office")),
     )
 
-    title = models.CharField(
-        _("Title"),
-        max_length=100
-    )
-    category = models.CharField(
-        _("Category"),
-        max_length=50,
-        choices=CATEGORY
-    )
-    image = models.ImageField(
-        _("Image"),
-        upload_to="gallery/"
-    )
+    title = models.CharField(_("Title"), max_length=100)
+    category = models.CharField(_("Category"), max_length=50, choices=CATEGORY)
+    image = models.ImageField(_("Image"), upload_to="gallery/")
 
     class Meta:
         verbose_name = _("Gallery Image")
@@ -306,19 +207,15 @@ class Gallery(models.Model):
 
 
 # ==========================
-# Service Charges
+# Service Charge
 # ==========================
 class ServiceCharge(models.Model):
     service = models.ForeignKey(
         Service,
         on_delete=models.CASCADE,
-        verbose_name=_("Service")
+        verbose_name=_("Service"),
     )
-    charge = models.DecimalField(
-        _("Charge"),
-        max_digits=8,
-        decimal_places=2
-    )
+    charge = models.DecimalField(_("Charge"), max_digits=8, decimal_places=2)
 
     class Meta:
         verbose_name = _("Service Charge")
@@ -329,18 +226,15 @@ class ServiceCharge(models.Model):
 
 
 # ==========================
-# Required Documents
+# Required Document
 # ==========================
 class RequiredDocument(models.Model):
     service = models.ForeignKey(
         Service,
         on_delete=models.CASCADE,
-        verbose_name=_("Service")
+        verbose_name=_("Service"),
     )
-    document_name = models.CharField(
-        _("Document Name"),
-        max_length=200
-    )
+    document_name = models.CharField(_("Document Name"), max_length=200)
 
     class Meta:
         verbose_name = _("Required Document")
@@ -351,25 +245,13 @@ class RequiredDocument(models.Model):
 
 
 # ==========================
-# Download Forms
+# Download Form (PDF)
 # ==========================
 class DownloadForm(models.Model):
-    title = models.CharField(
-        _("Title"),
-        max_length=200
-    )
-    category = models.CharField(
-        _("Category"),
-        max_length=100
-    )
-    pdf = models.FileField(
-        _("PDF"),
-        upload_to="forms/"
-    )
-    uploaded_at = models.DateTimeField(
-        _("Uploaded At"),
-        auto_now_add=True
-    )
+    title = models.CharField(_("Title"), max_length=200)
+    category = models.CharField(_("Category"), max_length=100)
+    pdf = models.FileField(_("PDF"), upload_to="forms/")
+    uploaded_at = models.DateTimeField(_("Uploaded At"), auto_now_add=True)
 
     class Meta:
         verbose_name = _("Download Form")
@@ -380,31 +262,14 @@ class DownloadForm(models.Model):
 
 
 # ==========================
-# Government Schemes
+# Government Scheme
 # ==========================
 class GovernmentScheme(models.Model):
-    title = models.CharField(
-        _("Title"),
-        max_length=200
-    )
-    description = models.TextField(
-        _("Description")
-    )
-    eligibility = models.TextField(
-        _("Eligibility"),
-        blank=True
-    )
-    last_date = models.DateField(
-        _("Last Date"),
-        null=True,
-        blank=True
-    )
-    image = models.ImageField(
-        _("Image"),
-        upload_to='schemes/',
-        blank=True,
-        null=True
-    )
+    title = models.CharField(_("Title"), max_length=200)
+    description = models.TextField(_("Description"))
+    eligibility = models.TextField(_("Eligibility"), blank=True)
+    last_date = models.DateField(_("Last Date"), null=True, blank=True)
+    image = models.ImageField(_("Image"), upload_to="schemes/", blank=True, null=True)
 
     class Meta:
         verbose_name = _("Government Scheme")
@@ -415,32 +280,19 @@ class GovernmentScheme(models.Model):
 
 
 # ==========================
-# Job Notifications
+# Job Notification
 # ==========================
 class JobNotification(models.Model):
-    title = models.CharField(
-        _("Title"),
-        max_length=200
-    )
-    organization = models.CharField(
-        _("Organization"),
-        max_length=200
-    )
-    last_date = models.DateField(
-        _("Last Date")
-    )
-    apply_link = models.URLField(
-        _("Apply Link"),
-        blank=True
-    )
-    description = models.TextField(
-        _("Description")
-    )
+    title = models.CharField(_("Title"), max_length=200)
+    organization = models.CharField(_("Organization"), max_length=200)
+    last_date = models.DateField(_("Last Date"))
+    apply_link = models.URLField(_("Apply Link"), blank=True)
+    description = models.TextField(_("Description"))
     icon = models.CharField(
         _("Icon"),
         max_length=50,
-        default='briefcase',
-        help_text=_("Font Awesome icon (e.g. 'fa-briefcase')")
+        default="briefcase",
+        help_text=_("Font Awesome icon (e.g. 'fa-briefcase')"),
     )
 
     class Meta:
@@ -452,16 +304,11 @@ class JobNotification(models.Model):
 
 
 # ==========================
-# FAQs
+# FAQ
 # ==========================
 class FAQ(models.Model):
-    question = models.CharField(
-        _("Question"),
-        max_length=300
-    )
-    answer = models.TextField(
-        _("Answer")
-    )
+    question = models.CharField(_("Question"), max_length=300)
+    answer = models.TextField(_("Answer"))
 
     class Meta:
         verbose_name = _("FAQ")
@@ -472,57 +319,31 @@ class FAQ(models.Model):
 
 
 # ==========================
-# Business Information (Singleton)
+# Business Info (Singleton)
 # ==========================
 class BusinessInfo(models.Model):
-    business_name = models.CharField(
-        _("Business Name"),
-        max_length=200
-    )
-    logo = models.ImageField(
-        _("Logo"),
-        upload_to="logo/",
-        blank=True,
-        null=True
-    )
-    welcome_message = models.TextField(
-        _("Welcome Message")
-    )
-    address = models.TextField(
-        _("Address")
-    )
-    phone = models.CharField(
-        _("Phone"),
-        max_length=15,
-        validators=[phone_validator]
-    )
-    whatsapp = models.CharField(
-        _("WhatsApp"),
-        max_length=15,
-        validators=[phone_validator]
-    )
-    email = models.EmailField(
-        _("Email")
-    )
+    business_name = models.CharField(_("Business Name"), max_length=200)
+    logo = models.ImageField(_("Logo"), upload_to="logo/", blank=True, null=True)
+    welcome_message = models.TextField(_("Welcome Message"))
+    address = models.TextField(_("Address"))
+    phone = models.CharField(_("Phone"), max_length=15, validators=[phone_validator])
+    whatsapp = models.CharField(_("WhatsApp"), max_length=15, validators=[phone_validator])
+    email = models.EmailField(_("Email"))
     google_map = models.TextField(
         _("Google Map"),
-        help_text=_("Paste Google Maps Embed Code")
+        help_text=_("Paste Google Maps Embed Code"),
     )
-    business_hours = models.TextField(
-        _("Business Hours")
-    )
-    
+    business_hours = models.TextField(_("Business Hours"))
     registration_number = models.CharField(
         _("Registration Number"),
         max_length=100,
         blank=True,
-        help_text=_("e.g. UDYAM-XX-00-0000000")
+        help_text=_("e.g. UDYAM-XX-00-0000000"),
     )
-    
     certifications = models.TextField(
         _("Certifications / Authorizations"),
         blank=True,
-        help_text=_("Enter each certification on a new line.")
+        help_text=_("Enter each certification on a new line."),
     )
 
     def save(self, *args, **kwargs):
@@ -546,13 +367,17 @@ class BusinessInfo(models.Model):
 
     def __str__(self):
         return self.business_name
-    
+
+
+# ==========================
+# Application & Documents
+# ==========================
 class Application(models.Model):
     STATUS_CHOICES = (
-        ('pending', 'Pending'),
-        ('review', 'Under Review'),
-        ('approved', 'Approved'),
-        ('rejected', 'Rejected'),
+        ("pending", "Pending"),
+        ("review", "Under Review"),
+        ("approved", "Approved"),
+        ("rejected", "Rejected"),
     )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("User"))
@@ -561,14 +386,18 @@ class Application(models.Model):
     phone = models.CharField(_("Phone"), max_length=15, validators=[phone_validator])
     email = models.EmailField(_("Email"))
     address = models.TextField(_("Address"))
-    # Additional fields as needed (e.g., aadhar, pan, etc.)
-    extra_data = models.JSONField(_("Extra Data"), blank=True, null=True)  # flexible for future
-    status = models.CharField(_("Status"), max_length=20, choices=STATUS_CHOICES, default='pending')
+    extra_data = models.JSONField(_("Extra Data"), blank=True, null=True)
+    status = models.CharField(
+        _("Status"),
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="pending",
+    )
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated At"), auto_now=True)
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ["-created_at"]
         verbose_name = _("Application")
         verbose_name_plural = _("Applications")
 
@@ -577,9 +406,13 @@ class Application(models.Model):
 
 
 class DocumentUpload(models.Model):
-    application = models.ForeignKey(Application, on_delete=models.CASCADE, related_name='documents')
-    document_name = models.CharField(_("Document Name"), max_length=200)  # e.g., "Aadhaar Card"
-    file = models.FileField(_("File"), upload_to='applications/%Y/%m/%d/')
+    application = models.ForeignKey(
+        Application,
+        on_delete=models.CASCADE,
+        related_name="documents",
+    )
+    document_name = models.CharField(_("Document Name"), max_length=200)
+    file = models.FileField(_("File"), upload_to="applications/%Y/%m/%d/")
     is_mandatory = models.BooleanField(_("Mandatory"), default=True)
     uploaded_at = models.DateTimeField(_("Uploaded At"), auto_now_add=True)
     verified = models.BooleanField(_("Verified by Admin"), default=False)

@@ -1,27 +1,41 @@
+"""
+Django Admin Configuration for the core application.
+"""
 from django.contrib import admin
-from django.shortcuts import redirect
-from django.contrib import messages
 from django.contrib.auth.admin import UserAdmin
-from .models import Application, DocumentUpload
-from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+from django.contrib import messages
+
 from .models import (
-    Appointment, Contact, Review, Announcement, Gallery,
-    Service, ServiceCharge, RequiredDocument, DownloadForm,
-    GovernmentScheme, JobNotification, FAQ, BusinessInfo,
     User,
+    Service,
+    Appointment,
+    Contact,
+    Review,
+    Announcement,
+    Gallery,
+    ServiceCharge,
+    RequiredDocument,
+    DownloadForm,
+    GovernmentScheme,
+    JobNotification,
+    FAQ,
+    BusinessInfo,
+    Application,
+    DocumentUpload,
 )
 
 
 # ==========================
-# Custom UserAdmin 
+# Custom User Admin
 # ==========================
-
+@admin.register(User)
 class CustomUserAdmin(UserAdmin):
-    # The fields to be used in displaying the User model.
-    # These override the definitions on the base UserAdmin
-    # that reference specific fields on auth.User.
     list_display = ('username', 'email', 'first_name', 'last_name', 'role', 'is_staff')
     list_filter = ('role', 'is_staff', 'is_superuser', 'is_active')
+    search_fields = ('username', 'email', 'first_name', 'last_name')
+    ordering = ('username',)
+    filter_horizontal = ('groups', 'user_permissions')
+
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         ('Personal info', {'fields': ('first_name', 'last_name', 'email', 'phone', 'address')}),
@@ -34,160 +48,164 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('username', 'email', 'password1', 'password2', 'role'),
         }),
     )
-    search_fields = ('username', 'email', 'first_name', 'last_name')
-    ordering = ('username',)
-    filter_horizontal = ('groups', 'user_permissions',)
 
-# Register the custom User model with the custom admin
-admin.site.register(User, CustomUserAdmin)
 
 # ==========================
-# Appointment (with quick status updates)
+# Service Admin
+# ==========================
+@admin.register(Service)
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = ('name', 'category', 'active')
+    list_filter = ('category', 'active')
+    search_fields = ('name', 'category')
+    ordering = ('name',)
+
+
+# ==========================
+# Appointment Admin
 # ==========================
 @admin.register(Appointment)
 class AppointmentAdmin(admin.ModelAdmin):
-    list_display = (
-        "full_name",
-        "phone",
-        "service",
-        "appointment_date",
-        "appointment_time",
-        "status",
-    )
-    list_filter = ("status", "appointment_date")
-    search_fields = ("full_name", "phone", "email", "service")
-    ordering = ("-appointment_date",)
-
-    # ---- Inline editing for status ----
-    list_editable = ("status",)   # Allows direct editing from the list view
-
-    # ---- Custom batch actions ----
-    actions = ["mark_as_confirmed", "mark_as_completed", "mark_as_cancelled"]
+    list_display = ('full_name', 'phone', 'service', 'appointment_date', 'appointment_time', 'status')
+    list_filter = ('status', 'appointment_date', 'service')
+    search_fields = ('full_name', 'phone', 'email')
+    ordering = ('-appointment_date',)
+    list_editable = ('status',)   # Quick inline status updates
+    actions = ['mark_as_confirmed', 'mark_as_completed', 'mark_as_cancelled']
 
     def mark_as_confirmed(self, request, queryset):
-        updated = queryset.update(status="Confirmed")
-        self.message_user(request, f"{updated} appointment(s) marked as Confirmed.")
+        updated = queryset.update(status='Confirmed')
+        self.message_user(request, f"{updated} appointment(s) marked as Confirmed.", messages.SUCCESS)
     mark_as_confirmed.short_description = "Mark selected as Confirmed"
 
     def mark_as_completed(self, request, queryset):
-        updated = queryset.update(status="Completed")
-        self.message_user(request, f"{updated} appointment(s) marked as Completed.")
+        updated = queryset.update(status='Completed')
+        self.message_user(request, f"{updated} appointment(s) marked as Completed.", messages.SUCCESS)
     mark_as_completed.short_description = "Mark selected as Completed"
 
     def mark_as_cancelled(self, request, queryset):
-        updated = queryset.update(status="Cancelled")
-        self.message_user(request, f"{updated} appointment(s) marked as Cancelled.")
+        updated = queryset.update(status='Cancelled')
+        self.message_user(request, f"{updated} appointment(s) marked as Cancelled.", messages.SUCCESS)
     mark_as_cancelled.short_description = "Mark selected as Cancelled"
 
 
 # ==========================
-# Contact
+# Contact Admin
 # ==========================
 @admin.register(Contact)
 class ContactAdmin(admin.ModelAdmin):
-    list_display = ("name", "phone", "email", "subject", "replied")
-    list_filter = ("replied",)
-    search_fields = ("name", "phone", "email", "subject")
-    ordering = ("-created_at",)
+    list_display = ('name', 'phone', 'email', 'subject', 'replied', 'created_at')
+    list_filter = ('replied',)
+    search_fields = ('name', 'phone', 'email', 'subject')
+    ordering = ('-created_at',)
+    actions = ['mark_as_replied']
+
+    def mark_as_replied(self, request, queryset):
+        updated = queryset.update(replied=True)
+        self.message_user(request, f"{updated} contact(s) marked as replied.", messages.SUCCESS)
+    mark_as_replied.short_description = "Mark selected as Replied"
 
 
 # ==========================
-# Review
+# Review Admin
 # ==========================
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ("customer_name", "rating", "approved")
-    list_filter = ("rating", "approved")
-    search_fields = ("customer_name",)
+    list_display = ('customer_name', 'rating', 'approved', 'created_at')
+    list_filter = ('rating', 'approved')
+    search_fields = ('customer_name', 'email')
+    ordering = ('-created_at',)
+    actions = ['approve_reviews']
+
+    def approve_reviews(self, request, queryset):
+        updated = queryset.update(approved=True)
+        self.message_user(request, f"{updated} review(s) approved.", messages.SUCCESS)
+    approve_reviews.short_description = "Approve selected reviews"
 
 
 # ==========================
-# Announcement
+# Announcement Admin
 # ==========================
 @admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):
-    list_display = ("title", "category", "created_at")
-    list_filter = ("category",)
-    search_fields = ("title",)
+    list_display = ('title', 'category', 'created_at')
+    list_filter = ('category',)
+    search_fields = ('title',)
+    ordering = ('-created_at',)
 
 
 # ==========================
-# Gallery
+# Gallery Admin
 # ==========================
 @admin.register(Gallery)
 class GalleryAdmin(admin.ModelAdmin):
-    list_display = ("title", "category")
-    list_filter = ("category",)
-    search_fields = ("title",)
+    list_display = ('title', 'category')
+    list_filter = ('category',)
+    search_fields = ('title',)
 
 
 # ==========================
-# Services
-# ==========================
-@admin.register(Service)
-class ServiceAdmin(admin.ModelAdmin):
-    list_display = ("name", "category", "active")
-    list_filter = ("category", "active")
-    search_fields = ("name", "category")
-
-
-# ==========================
-# Service Charges
+# Service Charge Admin
 # ==========================
 @admin.register(ServiceCharge)
 class ServiceChargeAdmin(admin.ModelAdmin):
-    list_display = ("service", "charge")
-    search_fields = ("service__name",)
+    list_display = ('service', 'charge')
+    search_fields = ('service__name',)
+    ordering = ('service__name',)
 
 
 # ==========================
-# Required Documents
+# Required Document Admin
 # ==========================
 @admin.register(RequiredDocument)
 class RequiredDocumentAdmin(admin.ModelAdmin):
-    list_display = ("service", "document_name")
-    search_fields = ("service__name", "document_name")
+    list_display = ('service', 'document_name')
+    search_fields = ('service__name', 'document_name')
+    ordering = ('service__name', 'document_name')
 
 
 # ==========================
-# Download Forms
+# Download Form Admin
 # ==========================
 @admin.register(DownloadForm)
 class DownloadFormAdmin(admin.ModelAdmin):
-    list_display = ("title", "category", "uploaded_at")
-    list_filter = ("category",)
-    search_fields = ("title",)
+    list_display = ('title', 'category', 'uploaded_at')
+    list_filter = ('category',)
+    search_fields = ('title',)
+    ordering = ('-uploaded_at',)
 
 
 # ==========================
-# Government Schemes
+# Government Scheme Admin
 # ==========================
 @admin.register(GovernmentScheme)
 class GovernmentSchemeAdmin(admin.ModelAdmin):
-    list_display = ("title", "last_date")
-    search_fields = ("title",)
+    list_display = ('title', 'last_date')
+    search_fields = ('title',)
+    ordering = ('-last_date',)
 
 
 # ==========================
-# Job Notifications
+# Job Notification Admin
 # ==========================
 @admin.register(JobNotification)
 class JobNotificationAdmin(admin.ModelAdmin):
-    list_display = ("title", "organization", "last_date")
-    search_fields = ("title", "organization")
+    list_display = ('title', 'organization', 'last_date')
+    search_fields = ('title', 'organization')
+    ordering = ('last_date',)
 
 
 # ==========================
-# FAQ
+# FAQ Admin
 # ==========================
 @admin.register(FAQ)
 class FAQAdmin(admin.ModelAdmin):
-    list_display = ("question",)
-    search_fields = ("question",)
+    list_display = ('question',)
+    search_fields = ('question',)
 
 
 # ==========================
-# Business Information
+# Business Info Admin (Singleton)
 # ==========================
 @admin.register(BusinessInfo)
 class BusinessInfoAdmin(admin.ModelAdmin):
@@ -203,10 +221,15 @@ class BusinessInfoAdmin(admin.ModelAdmin):
         }),
     )
 
+
+# ==========================
+# Application & Document Upload (Inline)
+# ==========================
 class DocumentUploadInline(admin.TabularInline):
     model = DocumentUpload
     extra = 0
     readonly_fields = ('uploaded_at',)
+    fields = ('document_name', 'file', 'is_mandatory', 'verified', 'uploaded_at')
 
 
 @admin.register(Application)
@@ -221,3 +244,4 @@ class ApplicationAdmin(admin.ModelAdmin):
         ('Status', {'fields': ('status',)}),
         ('Timestamps', {'fields': ('created_at', 'updated_at')}),
     )
+    ordering = ('-created_at',)

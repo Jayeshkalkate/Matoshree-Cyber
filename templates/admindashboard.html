@@ -1,12 +1,11 @@
+{% extends "base.html" %}
 {% load i18n %}
 {% load static %}
 
-{% block extra_head %}
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% trans "Admin Dashboard – Cyber Café" %}</title>
+{% block title %}{% trans "Admin Dashboard – Cyber Café" %}{% endblock %}
 
-    <!-- Google Fonts & Font Awesome -->
+{% block extra_head %}
+    <!-- Google Fonts & Font Awesome (already in base, but keep for safety) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -17,7 +16,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
-    <!-- Bootstrap 5 (for collapsible forms) -->
+    <!-- Bootstrap 5 (already in base, but keep for collapsible forms) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
@@ -30,15 +29,14 @@
          to change — this is a pure re-skin.
       ========================================================================= */
 
-      /* Extra display font for headings/logo only. Body copy stays on Inter
-         (loaded in <head>) for readability. */
+      /* Extra display font for headings/logo only. Body copy stays on Inter */
       @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&display=swap');
 
       :root {
         /* ---- Surfaces ---- */
-        --bg-void:        #060814;                 /* page background */
-        --bg-panel:       rgba(18, 24, 44, 0.72);   /* glass card fill */
-        --bg-panel-solid: #0e1424;                  /* opaque panel fill */
+        --bg-void:        #060814;
+        --bg-panel:       rgba(18, 24, 44, 0.72);
+        --bg-panel-solid: #0e1424;
         --bg-sidebar:     #05060e;
         --bg-input:       #0b1120;
 
@@ -67,7 +65,7 @@
         /* ---- Motion ---- */
         --transition: all 0.3s ease;
 
-        /* ---- Glow shadows (reused everywhere for the "high-tech" feel) --- */
+        /* ---- Glow shadows ---- */
         --glow-cyan:   0 0 6px rgba(0, 230, 255, 0.55), 0 0 22px rgba(0, 230, 255, 0.25);
         --glow-purple: 0 0 6px rgba(168, 85, 247, 0.55), 0 0 22px rgba(168, 85, 247, 0.25);
         --glow-pink:   0 0 6px rgba(255, 46, 154, 0.55), 0 0 22px rgba(255, 46, 154, 0.25);
@@ -79,8 +77,7 @@
 
       /* ---------------------------------------------------------------------
          PAGE LOAD ANIMATION
-         A soft "digital" fade-in + slide-up used on first paint and whenever
-         a dashboard section is switched. -------------------------------- */
+      -------------------------------------------------------------------- */
       @keyframes fadeSlideUp {
         from { opacity: 0; transform: translateY(22px); }
         to   { opacity: 1; transform: translateY(0); }
@@ -89,10 +86,6 @@
         0%, 100% { box-shadow: 0 0 6px currentColor, 0 0 14px currentColor; }
         50%      { box-shadow: 0 0 14px currentColor, 0 0 32px currentColor; }
       }
-      @keyframes borderScan {
-        0%   { background-position: 0% 50%; }
-        100% { background-position: 200% 50%; }
-      }
 
       body {
         font-family: "Inter", sans-serif;
@@ -100,7 +93,7 @@
         color: var(--text-bright);
         display: flex;
         min-height: 100vh;
-        /* faint circuit-board grid for a high-tech backdrop */
+        /* faint circuit-board grid backdrop */
         background-image:
           linear-gradient(rgba(0, 230, 255, 0.05) 1px, transparent 1px),
           linear-gradient(90deg, rgba(0, 230, 255, 0.05) 1px, transparent 1px),
@@ -111,7 +104,7 @@
         animation: fadeSlideUp 0.6s ease both;
       }
 
-      /* Slim glowing scrollbars to keep the theme consistent everywhere */
+      /* Slim glowing scrollbars */
       ::-webkit-scrollbar { width: 10px; height: 10px; }
       ::-webkit-scrollbar-track { background: var(--bg-void); }
       ::-webkit-scrollbar-thumb {
@@ -181,7 +174,6 @@
         color: #fff;
         transform: translateX(3px);
       }
-      /* Active nav item: soft pulsing neon glow, like a powered-on console key */
       .sidebar nav ul li a.active {
         background: linear-gradient(90deg, rgba(0, 230, 255, 0.14), rgba(168, 85, 247, 0.08));
         border-left: 3px solid var(--neon-cyan);
@@ -240,7 +232,7 @@
       .hamburger { display: none; background: none; border: none; font-size: 1.6rem; color: var(--neon-cyan); cursor: pointer; transition: var(--transition); }
       .hamburger:hover { filter: drop-shadow(var(--glow-cyan)); transform: scale(1.1); }
 
-      /* ----- Stat cards ("pricing card" style: glass + neon hover) ----- */
+      /* ----- Stat cards ("pricing card" style) ----- */
       .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.2rem; margin-bottom: 2rem; }
       .stat-card {
         background: var(--bg-panel);
@@ -251,10 +243,9 @@
         display: flex;
         align-items: center;
         gap: 1rem;
-        transition: all 0.3s ease; /* smooth transition on every interactive card */
+        transition: all 0.3s ease;
         animation: fadeSlideUp 0.6s ease both;
       }
-      /* The signature "pricing card" hover: gentle scale-up + vibrant neon border */
       .stat-card:hover {
         transform: translateY(-4px) scale(1.03);
         border-color: var(--neon-cyan);
@@ -273,16 +264,15 @@
       .stat-card .info h4 { font-size: 1.5rem; font-weight: 700; color: #fff; }
       .stat-card .info p { color: var(--text-dim); font-size: 0.85rem; }
 
-      /* ----- Section containers: slide up when switched ----------------- */
+      /* ----- Section containers ----- */
       .section { display: none; animation: fadeSlideUp 0.35s ease; }
       .section.active { display: block; }
-      @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
       .section-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; margin-bottom: 1.5rem; }
       .section-header h3 { font-size: 1.3rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 0.5rem; }
       .section-header h3 i { color: var(--neon-cyan) !important; filter: drop-shadow(0 0 6px rgba(0,230,255,0.6)); }
 
-      /* ----- Buttons: neon pulsing glow on the primary action ----------- */
+      /* ----- Buttons ----- */
       .btn-primary {
         background: linear-gradient(135deg, #0d3a66, #08192e);
         color: var(--neon-cyan);
@@ -346,7 +336,7 @@
       }
       .btn-outline:hover { background: var(--neon-purple-soft); border-color: var(--neon-purple); color: #fff; }
 
-      /* ----- Tables: dark glass panel with neon row hover --------------- */
+      /* ----- Tables ----- */
       .table-wrap {
         overflow-x: auto;
         background: var(--bg-panel);
@@ -373,13 +363,12 @@
       tr:hover td { background: rgba(0, 230, 255, 0.045); }
       tr:last-child td { border-bottom: none; }
 
-      /* ----- Status badges: neon pill glow matched to meaning ------------ */
+      /* ----- Status badges ----- */
       .badge-status { padding: 0.2rem 0.7rem; border-radius: 30px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.02em; border: 1px solid transparent; transition: var(--transition); }
       .badge-status.pending   { background: rgba(255, 194, 60, 0.12); color: var(--neon-amber); border-color: var(--neon-amber); }
       .badge-status.confirmed { background: rgba(0, 230, 255, 0.12); color: var(--neon-cyan);  border-color: var(--neon-cyan); }
       .badge-status.completed { background: rgba(57, 255, 158, 0.12); color: var(--neon-green); border-color: var(--neon-green); }
       .badge-status.cancelled { background: rgba(255, 61, 95, 0.12); color: var(--neon-red);   border-color: var(--neon-red); }
-
       .badge-status.review {
         background: rgba(255, 194, 60, 0.12);
         color: var(--neon-amber);
@@ -395,8 +384,8 @@
         color: var(--neon-red);
         border-color: var(--neon-red);
       }
-      
-      /* ----- Forms: dark inputs with a cyan focus glow ------------------ */
+
+      /* ----- Forms ----- */
       .admin-form {
         background: var(--bg-panel);
         backdrop-filter: blur(10px);
@@ -449,13 +438,13 @@
         margin-top: 0.5rem;
       }
 
-      /* ---- NEW: Styling for forms that use {{ form.as_p }} ---- */
+      /* ---- Forms using {{ form.as_p }} ---- */
       .admin-form form {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 1rem 1.5rem;
         width: 100%;
-        grid-column: 1 / -1;  /* make the form itself span both columns */
+        grid-column: 1 / -1;
       }
       .admin-form form p {
         margin: 0;
@@ -464,11 +453,9 @@
         gap: 0.2rem;
         grid-column: span 1;
       }
-      /* Full‑width fields (e.g., textareas) – we target them via the element inside */
       .admin-form form p textarea {
-        grid-column: 1 / -1;  /* let textareas span the full row */
+        grid-column: 1 / -1;
       }
-      /* For fields that contain a checkbox (e.g., active) – we keep them as a single column */
       .admin-form form p input[type="checkbox"] {
         width: auto;
         margin-top: 0.3rem;
@@ -501,7 +488,6 @@
         border-color: var(--neon-cyan);
         box-shadow: 0 0 0 4px rgba(0, 230, 255, 0.1), var(--glow-cyan);
       }
-      /* The form-actions div is inside the form, so we need to target it */
       .admin-form form .form-actions {
         grid-column: 1 / -1;
         display: flex;
@@ -510,7 +496,7 @@
         margin-top: 0.5rem;
       }
 
-      /* ----- List items (announcements, jobs, schemes, forms...) -------- */
+      /* ----- List items ----- */
       .list-item {
         display: flex;
         justify-content: space-between;
@@ -536,25 +522,7 @@
       .list-item .info img { max-height: 50px; border-radius: 4px; margin-top: 4px; }
       .list-actions { display: flex; gap: 0.3rem; align-items: center; flex-wrap: wrap; }
 
-      /* ---- User management extras (superadmin: role badges + selector) - */
-      .role-badge { padding: 0.2rem 0.7rem; border-radius: 30px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; border: 1px solid transparent; transition: var(--transition); }
-      .role-badge.superadmin { background: rgba(168, 85, 247, 0.14); color: var(--neon-purple); border-color: var(--neon-purple); box-shadow: var(--glow-purple); }
-      .role-badge.admin      { background: rgba(0, 230, 255, 0.14); color: var(--neon-cyan); border-color: var(--neon-cyan); }
-      .role-badge.user       { background: rgba(148, 163, 199, 0.12); color: var(--text-soft); border-color: var(--border-soft); }
-
-      .form-select-sm {
-        padding: 0.2rem 0.6rem;
-        font-size: 0.8rem;
-        border-radius: 30px;
-        border: 1.5px solid var(--border-soft);
-        background: var(--bg-input);
-        color: var(--text-bright);
-        font-family: "Inter", sans-serif;
-        transition: var(--transition);
-      }
-      .form-select-sm:focus { outline: none; border-color: var(--neon-cyan); box-shadow: 0 0 0 3px rgba(0, 230, 255, 0.1); }
-
-      /* ----- Gallery grid: neon hover-zoom cards ------------------------- */
+      /* ----- Gallery grid ----- */
       .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem; }
       .gallery-item {
         position: relative;
@@ -575,12 +543,12 @@
       .gallery-item .caption { padding: 0.5rem; font-size: 0.8rem; text-align: center; color: var(--text-soft); }
       .gallery-item .delete-btn { position: absolute; top: 4px; right: 4px; }
 
-      /* ----- Small utility helpers (used in superadmin markup) ---------- */
+      /* ----- Helpers ----- */
       .mt-2 { margin-top: 1rem; }
       .mb-2 { margin-bottom: 1rem; }
       .flex { display: flex; gap: 0.8rem; flex-wrap: wrap; }
 
-      /* ----- Responsive layout ------------------------------------------- */
+      /* ----- Responsive ----- */
       @media (max-width: 992px) {
         .sidebar { transform: translateX(-100%); position: fixed; height: 100%; width: 280px; }
         .sidebar.open { transform: translateX(0); box-shadow: 0 0 40px rgba(0, 230, 255, 0.15); }
@@ -595,12 +563,9 @@
         .stat-card .info h4 { font-size: 1.2rem; }
       }
     </style>
-
-</head>
 {% endblock %}
 
 {% block content %}
-<body>
   <!-- ===== SIDEBAR ===== -->
   <aside class="sidebar" id="sidebar">
     <div class="logo"><i class="fas fa-laptop"></i> {% trans "Cyber Admin" %}</div>
@@ -616,9 +581,9 @@
         <li><a href="#" data-section="inquiries"><i class="fas fa-envelope"></i> {% trans "Inquiries" %}</a></li>
         <li><a href="#" data-section="forms"><i class="fas fa-file-pdf"></i> {% trans "Upload Forms" %}</a></li>
         <li><a href="#" data-section="gallery"><i class="fas fa-images"></i> {% trans "Gallery" %}</a></li>
-        <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> {% trans "Settings" %}</a></li>
         <li><a href="#" data-section="requireddocs"><i class="fas fa-list-ul"></i> {% trans "Required Docs" %}</a></li>
         <li><a href="#" data-section="applications"><i class="fas fa-file-alt"></i> {% trans "Applications" %}</a></li>
+        <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> {% trans "Settings" %}</a></li>
       </ul>
     </nav>
     <a href="{% url 'logout' %}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> {% trans "Logout" %}</a>
@@ -659,16 +624,16 @@
           <div class="info"><h4>{{ forms_list.count }}</h4><p>{% trans "Forms" %}</p></div>
         </div>
       </div>
-      <div style="background:#fff; border-radius:1rem; padding:1.5rem; border:1px solid #e9eef4;">
-        <h4 style="margin-bottom:0.8rem;"><i class="fas fa-clock" style="color:#0a66c2"></i> {% trans "Recent Activity" %}</h4>
+      <div style="background:var(--bg-panel); backdrop-filter:blur(10px); border-radius:1rem; padding:1.5rem; border:1px solid var(--border-soft);">
+        <h4 style="margin-bottom:0.8rem;"><i class="fas fa-clock" style="color:var(--neon-cyan)"></i> {% trans "Recent Activity" %}</h4>
         <ul style="list-style:none; padding:0">
           {% for appt in appointments|slice:":5" %}
-            <li style="display:flex; justify-content:space-between; padding:0.5rem 0; border-bottom:1px solid #f0f4fa;">
-              <span><i class="fas fa-calendar-check" style="color:#0a66c2"></i> {{ appt.full_name }} – {{ appt.service.name }}</span>
-              <span style="color:#6f85a0; font-size:0.85rem;">{{ appt.created_at|date:"d M, H:i" }}</span>
+            <li style="display:flex; justify-content:space-between; padding:0.5rem 0; border-bottom:1px solid var(--border-soft);">
+              <span><i class="fas fa-calendar-check" style="color:var(--neon-cyan)"></i> {{ appt.full_name }} – {{ appt.service.name }}</span>
+              <span style="color:var(--text-dim); font-size:0.85rem;">{{ appt.created_at|date:"d M, H:i" }}</span>
             </li>
           {% empty %}
-            <li style="color:#6f85a0; padding:0.5rem 0;">{% trans "No recent activity." %}</li>
+            <li style="color:var(--text-dim); padding:0.5rem 0;">{% trans "No recent activity." %}</li>
           {% endfor %}
         </ul>
       </div>
@@ -677,7 +642,7 @@
     <!-- ===== SECTION: MANAGE SERVICES ===== -->
     <div id="section-services" class="section">
       <div class="section-header">
-        <h3><i class="fas fa-concierge-bell" style="color:#0a66c2"></i> {% trans "Manage Services" %}</h3>
+        <h3><i class="fas fa-concierge-bell" style="color:var(--neon-cyan)"></i> {% trans "Manage Services" %}</h3>
         <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addServiceForm">{% trans "Add Service" %}</button>
       </div>
 
@@ -779,7 +744,7 @@
     <!-- ===== SECTION: SERVICE CHARGES ===== -->
     <div id="section-prices" class="section">
       <div class="section-header">
-        <h3><i class="fas fa-coins" style="color:#0a66c2"></i> {% trans "Service Charges" %}</h3>
+        <h3><i class="fas fa-coins" style="color:var(--neon-cyan)"></i> {% trans "Service Charges" %}</h3>
         <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addChargeForm">{% trans "Add Charge" %}</button>
       </div>
 
@@ -857,7 +822,7 @@
     <!-- ===== SECTION: REQUIRED DOCUMENTS ===== -->
     <div id="section-requireddocs" class="section">
       <div class="section-header">
-        <h3><i class="fas fa-list-ul" style="color:#0a66c2"></i> {% trans "Required Documents" %}</h3>
+        <h3><i class="fas fa-list-ul" style="color:var(--neon-cyan)"></i> {% trans "Required Documents" %}</h3>
         <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addRequiredDocForm">{% trans "Add Document" %}</button>
       </div>
 
@@ -876,7 +841,7 @@
             <small class="text-muted" style="display:block; margin-top:4px; color: var(--text-dim);">
               {% trans "Enter one document name at a time (e.g., 'Aadhaar Card')." %}
               <br>
-              <span style="color: var(--neon-orange);">{% trans "Do not use commas – add each document separately." %}</span>
+              <span style="color: var(--neon-red);">{% trans "Do not use commas – add each document separately." %}</span>
             </small>
             <div id="commaWarning" style="color: var(--neon-red); display:none; margin-top:4px;">
               <i class="fas fa-exclamation-triangle"></i> {% trans "Please remove commas and add each document separately." %}
@@ -950,7 +915,7 @@
     <!-- ===== SECTION: ANNOUNCEMENTS ===== -->
     <div id="section-announcements" class="section">
       <div class="section-header">
-        <h3><i class="fas fa-bullhorn" style="color:#0a66c2"></i> {% trans "Announcements" %}</h3>
+        <h3><i class="fas fa-bullhorn" style="color:var(--neon-cyan)"></i> {% trans "Announcements" %}</h3>
         <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addAnnouncementForm">{% trans "Add Announcement" %}</button>
       </div>
 
@@ -985,7 +950,7 @@
             </div>
           </div>
         {% empty %}
-          <p style="color:#6f85a0;">{% trans "No announcements." %}</p>
+          <p style="color:var(--text-dim);">{% trans "No announcements." %}</p>
         {% endfor %}
       </div>
 
@@ -1033,7 +998,7 @@
     <!-- ===== SECTION: JOB NOTIFICATIONS ===== -->
     <div id="section-jobs" class="section">
       <div class="section-header">
-        <h3><i class="fas fa-briefcase" style="color:#0a66c2"></i> {% trans "Job Notifications" %}</h3>
+        <h3><i class="fas fa-briefcase" style="color:var(--neon-cyan)"></i> {% trans "Job Notifications" %}</h3>
         <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addJobForm">{% trans "Add Job" %}</button>
       </div>
 
@@ -1068,7 +1033,7 @@
             </div>
           </div>
         {% empty %}
-          <p style="color:#6f85a0;">{% trans "No jobs." %}</p>
+          <p style="color:var(--text-dim);">{% trans "No jobs." %}</p>
         {% endfor %}
       </div>
 
@@ -1114,7 +1079,7 @@
     <!-- ===== SECTION: GOVERNMENT SCHEMES ===== -->
     <div id="section-schemes" class="section">
       <div class="section-header">
-        <h3><i class="fas fa-hand-holding-heart" style="color:#0a66c2"></i> {% trans "Government Schemes" %}</h3>
+        <h3><i class="fas fa-hand-holding-heart" style="color:var(--neon-cyan)"></i> {% trans "Government Schemes" %}</h3>
         <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addSchemeForm">{% trans "Add Scheme" %}</button>
       </div>
 
@@ -1152,7 +1117,7 @@
             </div>
           </div>
         {% empty %}
-          <p style="color:#6f85a0;">{% trans "No schemes." %}</p>
+          <p style="color:var(--text-dim);">{% trans "No schemes." %}</p>
         {% endfor %}
       </div>
 
@@ -1178,7 +1143,7 @@
           <div>
             <label>{% trans "Image" %}</label>
             <input type="file" name="image" id="editSchemeImage" accept="image/*">
-            <small style="color:#6f85a0; display:block; margin-top:0.2rem;">{% trans "Leave empty to keep current image." %}</small>
+            <small style="color:var(--text-dim); display:block; margin-top:0.2rem;">{% trans "Leave empty to keep current image." %}</small>
           </div>
           <div class="form-actions">
             <button type="button" class="btn-outline" onclick="document.getElementById('editSchemeForm').style.display='none'">{% trans "Cancel" %}</button>
@@ -1191,7 +1156,7 @@
     <!-- ===== SECTION: APPOINTMENTS ===== -->
     <div id="section-appointments" class="section">
       <div class="section-header">
-        <h3><i class="fas fa-calendar-check" style="color:#0a66c2"></i> {% trans "Appointments" %}</h3>
+        <h3><i class="fas fa-calendar-check" style="color:var(--neon-cyan)"></i> {% trans "Appointments" %}</h3>
       </div>
       <div class="table-wrap">
         <table>
@@ -1290,7 +1255,7 @@
     <!-- ===== SECTION: INQUIRIES ===== -->
     <div id="section-inquiries" class="section">
       <div class="section-header">
-        <h3><i class="fas fa-envelope" style="color:#0a66c2"></i> {% trans "Customer Inquiries" %}</h3>
+        <h3><i class="fas fa-envelope" style="color:var(--neon-cyan)"></i> {% trans "Customer Inquiries" %}</h3>
       </div>
       <div id="inquiryList">
         {% for contact in contacts %}
@@ -1303,7 +1268,7 @@
             </div>
             <div style="font-size:0.95rem;">{% trans "Q:" %} {{ contact.message|truncatechars:80 }}</div>
             {% if contact.reply %}
-              <div style="background:#eef3f9; padding:0.4rem 0.8rem; border-radius:8px; font-size:0.9rem;">
+              <div style="background:rgba(255,255,255,0.04); padding:0.4rem 0.8rem; border-radius:8px; font-size:0.9rem; border-left:3px solid var(--neon-cyan);">
                 <strong>{% trans "Reply:" %}</strong> {{ contact.reply }}
               </div>
             {% endif %}
@@ -1314,14 +1279,14 @@
                 <input type="hidden" name="model_type" value="contact">
                 <input type="hidden" name="id" value="{{ contact.id }}">
                 <div style="display:flex; gap:0.5rem;">
-                  <input type="text" name="reply" placeholder="{% trans "Write reply..." %}" style="flex:1; padding:0.3rem 0.8rem; border:1.5px solid #dce3ed; border-radius:30px; font-size:0.85rem;">
+                  <input type="text" name="reply" placeholder="{% trans "Write reply..." %}" style="flex:1; padding:0.3rem 0.8rem; border:1.5px solid var(--border-soft); border-radius:30px; font-size:0.85rem; background:var(--bg-input); color:var(--text-bright);">
                   <button type="submit" class="btn-primary" style="padding:0.3rem 1rem; font-size:0.8rem;"><i class="fas fa-reply"></i> {% trans "Reply" %}</button>
                 </div>
               </form>
             {% endif %}
           </div>
         {% empty %}
-          <p style="color:#6f85a0;">{% trans "No inquiries." %}</p>
+          <p style="color:var(--text-dim);">{% trans "No inquiries." %}</p>
         {% endfor %}
       </div>
     </div>
@@ -1329,7 +1294,7 @@
     <!-- ===== SECTION: UPLOAD FORMS ===== -->
     <div id="section-forms" class="section">
       <div class="section-header">
-        <h3><i class="fas fa-file-pdf" style="color:#0a66c2"></i> {% trans "Upload Forms" %}</h3>
+        <h3><i class="fas fa-file-pdf" style="color:var(--neon-cyan)"></i> {% trans "Upload Forms" %}</h3>
         <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addFormUpload">{% trans "Upload Form" %}</button>
       </div>
 
@@ -1364,7 +1329,7 @@
             </div>
           </div>
         {% empty %}
-          <p style="color:#6f85a0;">{% trans "No forms uploaded." %}</p>
+          <p style="color:var(--text-dim);">{% trans "No forms uploaded." %}</p>
         {% endfor %}
       </div>
 
@@ -1391,7 +1356,7 @@
           <div>
             <label>{% trans "PDF File" %}</label>
             <input type="file" name="pdf" id="editFormPdf" accept=".pdf">
-            <small style="color:#6f85a0; display:block; margin-top:0.2rem;">{% trans "Leave empty to keep current file." %}</small>
+            <small style="color:var(--text-dim); display:block; margin-top:0.2rem;">{% trans "Leave empty to keep current file." %}</small>
           </div>
           <div class="form-actions">
             <button type="button" class="btn-outline" onclick="document.getElementById('editFormForm').style.display='none'">{% trans "Cancel" %}</button>
@@ -1404,7 +1369,7 @@
     <!-- ===== SECTION: GALLERY ===== -->
     <div id="section-gallery" class="section">
       <div class="section-header">
-        <h3><i class="fas fa-images" style="color:#0a66c2"></i> {% trans "Manage Gallery" %}</h3>
+        <h3><i class="fas fa-images" style="color:var(--neon-cyan)"></i> {% trans "Manage Gallery" %}</h3>
         <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addGalleryForm">{% trans "Add Image" %}</button>
       </div>
 
@@ -1434,7 +1399,7 @@
             </form>
           </div>
         {% empty %}
-          <p style="grid-column:1/-1; color:#6f85a0;">{% trans "No images uploaded yet." %}</p>
+          <p style="grid-column:1/-1; color:var(--text-dim);">{% trans "No images uploaded yet." %}</p>
         {% endfor %}
       </div>
     </div>
@@ -1442,7 +1407,7 @@
     <!-- ===== SECTION: SETTINGS ===== -->
     <div id="section-settings" class="section">
       <div class="section-header">
-        <h3><i class="fas fa-cog" style="color:#0a66c2"></i> {% trans "Website Settings" %}</h3>
+        <h3><i class="fas fa-cog" style="color:var(--neon-cyan)"></i> {% trans "Website Settings" %}</h3>
       </div>
       <div class="admin-form">
         <form method="post" enctype="multipart/form-data">
@@ -1461,7 +1426,7 @@
     <!-- ===== SECTION: APPLICATIONS ===== -->
     <div id="section-applications" class="section">
       <div class="section-header">
-        <h3><i class="fas fa-file-alt" style="color:#0a66c2"></i> {% trans "Applications" %}</h3>
+        <h3><i class="fas fa-file-alt" style="color:var(--neon-cyan)"></i> {% trans "Applications" %}</h3>
       </div>
       <div class="table-wrap">
         <table>
@@ -1480,9 +1445,7 @@
                 <td>{{ app.full_name }}</td>
                 <td>{{ app.service.name }}</td>
                 <td>
-                  <span class="badge bg-{% if app.status == 'approved' %}success{% elif app.status == 'rejected' %}danger{% elif app.status == 'review' %}warning{% else %}secondary{% endif %}">
-                    {{ app.get_status_display }}
-                  </span>
+                  <span class="badge-status {{ app.status }}">{{ app.get_status_display }}</span>
                 </td>
                 <td>{{ app.created_at|date:"d M Y" }}</td>
                 <td>
@@ -1503,12 +1466,11 @@
     </div>
 
   </main>
-</body>
 {% endblock %}
-{% block extra_scripts %}
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
-  </script>
+
+{% block extra_js %}
+  <!-- Bootstrap JS (already in base, but keep for collapsible) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
     (function() {
@@ -1555,25 +1517,19 @@
       };
 
       function showSection(sectionId) {
-        // Hide all sections
         sections.forEach(sec => sec.classList.remove("active"));
         const target = document.getElementById("section-" + sectionId);
         if (target) target.classList.add("active");
 
-        // Update nav link active state
         navLinks.forEach(link => link.classList.remove("active"));
         navLinks.forEach(link => {
           if (link.dataset.section === sectionId) link.classList.add("active");
         });
 
-        // Update page title
         pageTitle.textContent = sectionTitles[sectionId] || "{% trans "Dashboard" %}";
-
-        // Close mobile sidebar
         sidebar.classList.remove("open");
       }
 
-      // Nav link click handlers
       navLinks.forEach(link => {
         link.addEventListener("click", function(e) {
           e.preventDefault();
@@ -1581,7 +1537,6 @@
         });
       });
 
-      // Hamburger toggle
       if (hamburgerBtn) {
         hamburgerBtn.addEventListener("click", function() {
           sidebar.classList.toggle("open");
@@ -1589,10 +1544,8 @@
       }
 
       // --------------------------------------------------------------------
-      // 3. Global edit functions (used by inline onclick attributes)
+      // 3. Global edit functions
       // --------------------------------------------------------------------
-
-      // ---- Edit Service ----
       window.editService = function(id, name, category, description, active, icon, color) {
         document.getElementById("editServiceId").value = id;
         document.getElementById("editSvcName").value = name;
@@ -1605,7 +1558,6 @@
         document.getElementById("editServiceForm").scrollIntoView({ behavior: 'smooth' });
       };
 
-      // ---- Edit Charge ----
       window.editCharge = function(id, serviceId, charge) {
         document.getElementById("editChargeId").value = id;
         document.getElementById("editChargeService").value = serviceId;
@@ -1614,7 +1566,6 @@
         document.getElementById("editChargeForm").scrollIntoView({ behavior: 'smooth' });
       };
 
-      // ---- Edit Announcement ----
       window.editAnnouncement = function(id, title, category, description) {
         document.getElementById("editAnnouncementId").value = id;
         document.getElementById("editAnnTitle").value = title;
@@ -1624,7 +1575,6 @@
         document.getElementById("editAnnouncementForm").scrollIntoView({ behavior: 'smooth' });
       };
 
-      // ---- Edit Job ----
       window.editJob = function(id, title, organization, description, lastDate, applyLink, icon) {
         document.getElementById("editJobId").value = id;
         document.getElementById("editJobTitle").value = title;
@@ -1637,7 +1587,6 @@
         document.getElementById("editJobForm").scrollIntoView({ behavior: 'smooth' });
       };
 
-      // ---- Edit Scheme ----
       window.editScheme = function(id, title, description, eligibility) {
         document.getElementById("editSchemeId").value = id;
         document.getElementById("editSchemeTitle").value = title;
@@ -1647,7 +1596,6 @@
         document.getElementById("editSchemeForm").scrollIntoView({ behavior: 'smooth' });
       };
 
-      // ---- Edit Appointment ----
       window.editAppointment = function(id, full_name, phone, email, serviceId, date, time, message, status) {
         document.getElementById("editApptId").value = id;
         document.getElementById("editApptName").value = full_name;
@@ -1662,7 +1610,6 @@
         document.getElementById("editAppointmentForm").scrollIntoView({ behavior: 'smooth' });
       };
 
-      // ---- Edit Form (Downloadable forms) ----
       window.editForm = function(id, title, category) {
         document.getElementById("editFormId").value = id;
         document.getElementById("editFormTitle").value = title;
@@ -1671,7 +1618,6 @@
         document.getElementById("editFormForm").scrollIntoView({ behavior: 'smooth' });
       };
 
-      // ---- Edit Required Document (single definition) ----
       window.editRequiredDoc = function(id, serviceId, docName) {
         document.getElementById("editRequiredDocId").value = id;
         document.getElementById("editRequiredDocService").value = serviceId;
@@ -1681,7 +1627,7 @@
       };
 
       // --------------------------------------------------------------------
-      // 4. Cancel buttons for inline edit forms (using class-based listeners)
+      // 4. Cancel buttons for inline edit forms
       // --------------------------------------------------------------------
       document.querySelectorAll('.admin-form .btn-outline').forEach(function(btn) {
         btn.addEventListener('click', function(e) {
@@ -1693,12 +1639,10 @@
       });
 
       // --------------------------------------------------------------------
-      // 5. Initialisation: show dashboard by default
+      // 5. Show dashboard by default
       // --------------------------------------------------------------------
       showSection("dashboard");
 
-    })(); // end IIFE
+    })();
   </script>
 {% endblock %}
-</body>
-</html>

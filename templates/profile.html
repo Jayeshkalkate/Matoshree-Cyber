@@ -4,13 +4,11 @@
 {% block title %}{% trans "My Profile" %}{% endblock %}
 
 {% block extra_head %}
-<!-- ================================================================
-     PROFILE PAGE – Futuristic Cyber / Gaming Theme
-     Uses global CSS variables from base.html.
-     Includes neon glow effects, glassmorphism, reveal animations,
-     and pricing cards with hover scaling + neon border.
-     ================================================================ -->
 <style>
+  /* ================================================================
+     PAGE-SPECIFIC STYLES – Profile
+     ================================================================ */
+
   /* ---- Section reveal animation (scroll-triggered) ---- */
   .reveal {
     opacity: 0;
@@ -22,7 +20,7 @@
     transform: translateY(0);
   }
 
-  /* ---- Profile card (glassmorphism) ---- */
+  /* ---- Profile Section ---- */
   .profile-section {
     padding: 70px 0 60px;
     background: var(--bg-secondary);
@@ -34,7 +32,7 @@
   .profile-card {
     background: var(--bg-card);
     border-radius: var(--radius);
-    padding: 2rem 2.5rem;
+    padding: 2.5rem 2.5rem 2.8rem;
     box-shadow: var(--shadow-card);
     border: 1px solid rgba(255, 255, 255, 0.04);
     backdrop-filter: blur(8px);
@@ -44,14 +42,35 @@
     border-color: var(--neon-cyan);
     box-shadow: var(--shadow-card), var(--glow-cyan);
   }
+
   .profile-card .avatar {
     text-align: center;
     margin-bottom: 1.5rem;
   }
-  .profile-card .avatar i {
-    font-size: 4rem;
+  .profile-card .avatar .avatar-icon {
+    font-size: 4.5rem;
     color: var(--neon-cyan);
-    text-shadow: 0 0 40px rgba(0, 240, 255, 0.3);
+    background: rgba(0, 240, 255, 0.06);
+    border-radius: 50%;
+    padding: 0.75rem;
+    display: inline-block;
+    text-shadow: 0 0 40px rgba(0, 240, 255, 0.2);
+    transition: var(--transition);
+  }
+  .profile-card .avatar .avatar-icon:hover {
+    transform: scale(1.05);
+    box-shadow: var(--glow-cyan);
+  }
+  .profile-card .avatar .user-name {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-white);
+    margin-top: 0.5rem;
+  }
+  .profile-card .avatar .user-email {
+    color: var(--text-muted);
+    font-size: 0.95rem;
   }
   .profile-card h2 {
     font-family: var(--font-display);
@@ -67,60 +86,91 @@
     font-size: 0.95rem;
   }
 
-  /* ---- Form fields (neon focus) ---- */
+  /* ---- Alert (error/success) ---- */
+  .alert {
+    padding: 0.8rem 1.2rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+  }
+  .alert-danger {
+    background: rgba(255, 45, 149, 0.08);
+    color: var(--neon-magenta);
+    border: 1px solid rgba(255, 45, 149, 0.15);
+  }
+  .alert-success {
+    background: rgba(34, 211, 238, 0.08);
+    color: var(--neon-green);
+    border: 1px solid rgba(34, 211, 238, 0.15);
+  }
+
+  /* ---- Form fields ---- */
   .form-group {
     margin-bottom: 1.25rem;
   }
   .form-group label {
     display: block;
     font-weight: 600;
-    color: var(--text-white);
+    color: var(--text-muted);
     margin-bottom: 0.3rem;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
   .form-group label .required {
-    color: var(--neon-magenta);
+    color: var(--neon-orange);
   }
+
   .form-control {
     width: 100%;
     padding: 0.7rem 1rem;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1.5px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.06) !important;
     border-radius: var(--radius-sm);
-    color: var(--text-white);
+    color: var(--text-white) !important;
     font-size: 1rem;
     transition: var(--transition);
     font-family: var(--font-body);
   }
   .form-control:focus {
-    border-color: var(--neon-cyan);
-    box-shadow: 0 0 0 4px rgba(0, 240, 255, 0.08), 0 0 30px rgba(0, 240, 255, 0.05);
+    border-color: var(--neon-cyan) !important;
+    box-shadow: 0 0 0 4px rgba(0, 240, 255, 0.08), 0 0 30px rgba(0, 240, 255, 0.05) !important;
     outline: none;
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(0, 240, 255, 0.04) !important;
   }
   .form-control::placeholder {
     color: var(--text-muted);
-    opacity: 0.6;
+    opacity: 0.5;
   }
+  .form-control.is-invalid {
+    border-color: var(--neon-orange) !important;
+  }
+
   .form-text {
     color: var(--text-muted);
     font-size: 0.8rem;
     margin-top: 0.2rem;
+    opacity: 0.7;
   }
   .invalid-feedback {
-    color: var(--neon-magenta);
+    color: var(--neon-orange);
     font-size: 0.85rem;
     margin-top: 0.2rem;
+    display: block;
   }
 
-  /* ---- Password toggle (neon styled) ---- */
+  /* ---- Password toggle ---- */
   .input-group {
     display: flex;
     align-items: stretch;
   }
   .input-group .form-control {
     border-radius: var(--radius-sm) 0 0 var(--radius-sm);
-    border-right: none;
+    border-right: none !important;
+  }
+  .input-group .form-control:focus {
+    border-right: none !important;
   }
   .input-group .toggle-password {
     background: rgba(255, 255, 255, 0.04);
@@ -133,6 +183,7 @@
     transition: var(--transition);
     display: flex;
     align-items: center;
+    font-size: 1rem;
   }
   .input-group .toggle-password:hover {
     background: rgba(0, 240, 255, 0.06);
@@ -140,7 +191,7 @@
     border-color: var(--neon-cyan);
   }
 
-  /* ---- Submit button (pulse & glow) ---- */
+  /* ---- Submit button ---- */
   .btn-submit {
     width: 100%;
     padding: 0.9rem;
@@ -167,7 +218,12 @@
     animation: neonPulse 1.5s ease-in-out infinite;
   }
 
-  /* ---- Secondary action (password change) ---- */
+  @keyframes neonPulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(0, 240, 255, 0.3); }
+    50% { box-shadow: 0 0 40px rgba(0, 240, 255, 0.7), 0 0 80px rgba(0, 240, 255, 0.2); }
+  }
+
+  /* ---- Action links ---- */
   .action-link {
     display: block;
     text-align: center;
@@ -185,14 +241,14 @@
     margin-right: 0.5rem;
   }
 
-  hr {
+  .profile-card hr {
     border: 0;
     height: 1px;
     background: rgba(255, 255, 255, 0.04);
     margin: 1.5rem 0;
   }
 
-  /* ---- Pricing Cards Section (reused from other pages) ---- */
+  /* ---- Pricing Cards (reused) ---- */
   .pricing-section {
     padding: 70px 0 80px;
     background: var(--bg-primary);
@@ -252,7 +308,6 @@
   .pricing-card:hover::before {
     opacity: 1;
   }
-  /* ---- The sleek hover interaction: scale up + neon border ---- */
   .pricing-card:hover {
     transform: scale(1.04) translateY(-8px);
     border-color: var(--neon-cyan);
@@ -303,24 +358,22 @@
     justify-content: center;
   }
 
-  /* ================================================================
-     RESPONSIVE
-     ================================================================ */
+  /* ---- Responsive ---- */
   @media (max-width: 1024px) {
     .pricing-grid {
       grid-template-columns: repeat(2, 1fr);
     }
   }
-
   @media (max-width: 768px) {
     .profile-card {
-      padding: 1.5rem;
+      padding: 1.8rem 1.2rem 2rem;
     }
-    .profile-card .avatar i {
-      font-size: 3rem;
+    .profile-card .avatar .avatar-icon {
+      font-size: 3.5rem;
+      padding: 0.6rem;
     }
-    .profile-card h2 {
-      font-size: 1.6rem;
+    .profile-card .avatar .user-name {
+      font-size: 1.2rem;
     }
     .pricing-grid {
       grid-template-columns: 1fr;
@@ -328,10 +381,12 @@
       margin: 0 auto;
     }
   }
-
   @media (max-width: 480px) {
     .profile-card {
-      padding: 1rem;
+      padding: 1.2rem 0.8rem 1.5rem;
+    }
+    .profile-card .avatar .avatar-icon {
+      font-size: 3rem;
     }
     .pricing-card .price {
       font-size: 2.2rem;
@@ -342,54 +397,69 @@
 
 {% block content %}
 <!-- ================================================================
-     PROFILE SECTION – Glassmorphism card with neon glow
+     PROFILE SECTION
      ================================================================ -->
 <section class="profile-section reveal">
   <div class="container">
     <div class="profile-card-wrapper">
       <div class="profile-card">
+        <!-- Avatar -->
         <div class="avatar">
-          <i class="fas fa-user-circle"></i>
+          <span class="avatar-icon"><i class="fas fa-user-circle"></i></span>
+          <div class="user-name">{{ user.get_full_name|default:user.username }}</div>
+          <div class="user-email">{{ user.email }}</div>
         </div>
-        <h2>{% trans "My Profile" %}</h2>
-        <p class="subhead">{% trans "Update your personal information" %}</p>
 
+        <!-- Non-field errors -->
         {% if form.non_field_errors %}
-        <div class="alert alert-danger" role="alert">
-          {% for error in form.non_field_errors %}{{ error }}{% endfor %}
-        </div>
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle"></i>
+            {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+          </div>
         {% endif %}
 
+        <!-- Success message (if any) -->
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %}">
+              <i class="fas fa-{% if message.tags == 'error' %}exclamation-circle{% else %}check-circle{% endif %}"></i>
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        <!-- Form -->
         <form method="post" novalidate>
           {% csrf_token %}
 
           {% for field in form %}
-          <div class="form-group">
-            <label for="{{ field.id_for_label }}">
-              {{ field.label }}
-              {% if field.field.required %}<span class="required">*</span>{% endif %}
-            </label>
+            <div class="form-group">
+              <label for="{{ field.id_for_label }}">
+                {{ field.label }}
+                {% if field.field.required %}<span class="required">*</span>{% endif %}
+              </label>
 
-            {% if field.field.widget.input_type == 'password' %}
-            <div class="input-group">
-              {{ field }}
-              <button class="toggle-password" type="button" data-target="{{ field.id_for_label }}">
-                <i class="fas fa-eye"></i>
-              </button>
+              {% if field.field.widget.input_type == 'password' %}
+                <div class="input-group">
+                  {{ field }}
+                  <button class="toggle-password" type="button" data-target="{{ field.id_for_label }}">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                </div>
+              {% else %}
+                {{ field }}
+              {% endif %}
+
+              {% if field.help_text %}
+                <div class="form-text">{{ field.help_text }}</div>
+              {% endif %}
+
+              {% if field.errors %}
+                <div class="invalid-feedback">
+                  {% for error in field.errors %}{{ error }}{% endfor %}
+                </div>
+              {% endif %}
             </div>
-            {% else %}
-              {{ field }}
-            {% endif %}
-
-            {% if field.help_text %}
-              <div class="form-text">{{ field.help_text }}</div>
-            {% endif %}
-            {% if field.errors %}
-              <div class="invalid-feedback">
-                {% for error in field.errors %}{{ error }}{% endfor %}
-              </div>
-            {% endif %}
-          </div>
           {% endfor %}
 
           <button type="submit" class="btn-submit">
@@ -399,6 +469,7 @@
 
         <hr>
 
+        <!-- Change Password Link -->
         <a href="{% url 'password_change' %}" class="action-link">
           <i class="fas fa-key"></i> {% trans "Change Password" %}
         </a>
@@ -408,8 +479,7 @@
 </section>
 
 <!-- ================================================================
-     PRICING CARDS – Service packages with neon hover effect
-     (Included to showcase the hover interaction as requested)
+     PRICING CARDS – Bonus section
      ================================================================ -->
 <section class="pricing-section reveal">
   <div class="container">
@@ -418,7 +488,7 @@
       <p>{% trans "Get the most out of our services with these convenient packages." %}</p>
     </div>
     <div class="pricing-grid">
-      <!-- Basic Package -->
+      <!-- Starter -->
       <div class="pricing-card">
         <div class="plan-name">{% trans "Starter" %}</div>
         <div class="price">₹99 <span>/ {% trans "session" %}</span></div>
@@ -430,7 +500,7 @@
         </ul>
         <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Get Started" %}</a>
       </div>
-      <!-- Standard Package (highlighted with pulse) -->
+      <!-- Pro -->
       <div class="pricing-card" style="border-color: rgba(0, 240, 255, 0.15);">
         <div class="plan-name">{% trans "Pro" %}</div>
         <div class="price">₹199 <span>/ {% trans "session" %}</span></div>
@@ -443,7 +513,7 @@
         </ul>
         <a href="{% url 'appointment' %}" class="btn-primary pulse">{% trans "Choose Plan" %}</a>
       </div>
-      <!-- Premium Package -->
+      <!-- Enterprise -->
       <div class="pricing-card">
         <div class="plan-name">{% trans "Enterprise" %}</div>
         <div class="price">₹299 <span>/ {% trans "session" %}</span></div>
@@ -462,12 +532,12 @@
 </section>
 {% endblock %}
 
-{% block extra_scripts %}
+{% block extra_js %}
 <script>
   (function() {
     'use strict';
 
-    // ---- Scroll-triggered reveal animation (Intersection Observer) ----
+    // ---- Scroll-triggered reveal animation ----
     const revealElements = document.querySelectorAll('.reveal');
     if (revealElements.length && 'IntersectionObserver' in window) {
       const observer = new IntersectionObserver((entries) => {
@@ -478,23 +548,22 @@
           }
         });
       }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
       revealElements.forEach(el => observer.observe(el));
     } else {
-      // Fallback: show all if no IntersectionObserver
       revealElements.forEach(el => el.classList.add('visible'));
     }
 
-    // ---- Toggle password visibility ----
-    document.querySelectorAll('.toggle-password').forEach((button) => {
+    // ---- Password toggle ----
+    document.querySelectorAll('.toggle-password').forEach(function(button) {
       button.addEventListener('click', function() {
         const targetId = this.getAttribute('data-target');
         const input = document.getElementById(targetId);
         if (input) {
           const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
           input.setAttribute('type', type);
-          this.querySelector('i').classList.toggle('fa-eye');
-          this.querySelector('i').classList.toggle('fa-eye-slash');
+          const icon = this.querySelector('i');
+          icon.classList.toggle('fa-eye');
+          icon.classList.toggle('fa-eye-slash');
         }
       });
     });

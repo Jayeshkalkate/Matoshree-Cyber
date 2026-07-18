@@ -2,332 +2,403 @@
 {% load i18n %}
 
 {% block title %}
-    {% trans "Apply for" %} {{ service.name }}
+  {% trans "Apply for" %} {{ service.name }}
 {% endblock %}
 
 {% block extra_head %}
 <style>
-    /* ---- Page-specific styling with visible text colours ---- */
-    .apply-section .card {
-        background: var(--bg-card);
-        border: 1px solid rgba(255,255,255,0.06);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow-card);
-        transition: var(--transition);
-        color: var(--text-white); /* Ensure all card text is white */
-    }
-    .apply-section .card:hover {
-        border-color: var(--neon-cyan);
-        box-shadow: var(--shadow-card), var(--glow-cyan);
-    }
+  /* ================================================================
+     PAGE-SPECIFIC STYLES – Apply Service
+     Uses global CSS variables from base.html.
+     ================================================================ */
 
-    .apply-section h4, 
-    .apply-section h5 {
-        color: var(--text-white);
-        font-weight: 700;
-    }
+  /* ---- Hero (matches other pages) ---- */
+  .page-hero {
+    padding: 70px 0 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-hero::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.04), transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .page-hero .container {
+    position: relative;
+    z-index: 1;
+  }
+  .page-hero h1 {
+    font-size: 2.8rem;
+    font-weight: 900;
+    font-family: var(--font-display);
+    color: var(--text-white);
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    text-shadow: 0 0 40px rgba(0, 240, 255, 0.12);
+  }
+  .page-hero p {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 620px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
 
-    .apply-section .form-group {
-        margin-bottom: 1.2rem;
-    }
+  /* ---- Apply Section ---- */
+  .apply-section {
+    padding: 40px 0 70px;
+    background: var(--bg-secondary);
+  }
 
-    .apply-section .form-group label {
-        font-weight: 600;
-        color: #c8d6e5;          /* Light blue-grey for labels */
-        display: block;
-        margin-bottom: 0.3rem;
-        font-size: 0.9rem;
-    }
+  .apply-card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    box-shadow: var(--shadow-card);
+    padding: 2.5rem 2.5rem 2.8rem;
+    transition: var(--transition);
+    max-width: 820px;
+    margin: 0 auto;
+  }
+  .apply-card:hover {
+    border-color: var(--neon-cyan);
+    box-shadow: var(--shadow-card), var(--glow-cyan);
+  }
 
-    .apply-section .form-control,
-    .apply-section input[type="text"],
-    .apply-section input[type="email"],
-    .apply-section input[type="tel"],
-    .apply-section input[type="number"],
-    .apply-section input[type="file"],
-    .apply-section textarea,
-    .apply-section select {
-        background: rgba(255,255,255,0.06) !important;
-        border: 1px solid rgba(255,255,255,0.12) !important;
-        color: #ffffff !important;           /* White text in inputs */
-        border-radius: var(--radius-sm);
-        padding: 10px 14px;
-        width: 100%;
-        transition: var(--transition);
-        font-size: 0.95rem;
-    }
+  .apply-card h4 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-white);
+    margin-bottom: 0.2rem;
+  }
+  .apply-card h5 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-white);
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .apply-card hr {
+    border: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.06);
+    margin: 1.5rem 0;
+  }
 
-    .apply-section .form-control:focus,
-    .apply-section input:focus,
-    .apply-section textarea:focus,
-    .apply-section select:focus {
-        border-color: var(--neon-cyan) !important;
-        box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.15);
-        outline: none;
-        background: rgba(255,255,255,0.08) !important;
-    }
+  /* ---- Required Documents List ---- */
+  .required-docs-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem 0;
+  }
+  .required-docs-list li {
+    padding: 6px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-muted);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  }
+  .required-docs-list li i {
+    color: var(--neon-cyan);
+    width: 20px;
+  }
+  .required-docs-list li .badge {
+    margin-left: auto;
+    background: var(--neon-magenta);
+    color: var(--text-white);
+    font-size: 0.7rem;
+    padding: 2px 12px;
+    border-radius: var(--radius-pill);
+  }
 
-    /* Placeholder text colour */
-    .apply-section .form-control::placeholder,
-    .apply-section input::placeholder,
-    .apply-section textarea::placeholder {
-        color: #7a8aa8 !important;   /* dim but visible */
-        opacity: 1;
-    }
+  /* ---- Form Elements ---- */
+  .apply-card .form-group {
+    margin-bottom: 1.2rem;
+  }
+  .apply-card .form-group label {
+    font-weight: 600;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+  }
+  .apply-card .form-control,
+  .apply-card input[type="text"],
+  .apply-card input[type="email"],
+  .apply-card input[type="tel"],
+  .apply-card input[type="number"],
+  .apply-card input[type="file"],
+  .apply-card textarea,
+  .apply-card select {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    color: var(--text-white) !important;
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    width: 100%;
+    transition: var(--transition);
+    font-size: 0.95rem;
+  }
+  .apply-card .form-control::placeholder,
+  .apply-card input::placeholder,
+  .apply-card textarea::placeholder {
+    color: var(--text-muted) !important;
+    opacity: 0.6;
+  }
+  .apply-card .form-control:focus,
+  .apply-card input:focus,
+  .apply-card textarea:focus,
+  .apply-card select:focus {
+    border-color: var(--neon-cyan) !important;
+    box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.12);
+    outline: none;
+    background: rgba(0, 240, 255, 0.04) !important;
+  }
 
-    /* File input styling */
-    .apply-section input[type="file"] {
-        padding: 8px 10px;
-        background: rgba(255,255,255,0.04) !important;
-        border: 1px dashed rgba(255,255,255,0.2) !important;
-        color: #c8d6e5 !important;
-    }
-    .apply-section input[type="file"]::file-selector-button {
-        background: var(--neon-cyan);
-        color: #0a0e1a;
-        border: none;
-        padding: 6px 16px;
-        border-radius: var(--radius-pill);
-        font-weight: 600;
-        cursor: pointer;
-        transition: var(--transition);
-    }
-    .apply-section input[type="file"]::file-selector-button:hover {
-        background: #00e5ff;
-        box-shadow: var(--glow-cyan);
-    }
+  /* File input */
+  .apply-card input[type="file"] {
+    padding: 8px 10px;
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: 1px dashed rgba(255, 255, 255, 0.15) !important;
+    color: var(--text-muted) !important;
+  }
+  .apply-card input[type="file"]::file-selector-button {
+    background: var(--neon-cyan);
+    color: var(--bg-primary);
+    border: none;
+    padding: 6px 16px;
+    border-radius: var(--radius-pill);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  .apply-card input[type="file"]::file-selector-button:hover {
+    background: #00e5ff;
+    box-shadow: var(--glow-cyan);
+  }
 
-    /* Upload groups */
-    .apply-section .upload-group {
-        background: rgba(255,255,255,0.02);
-        border-radius: var(--radius-sm);
-        border-left: 3px solid var(--neon-cyan);
-        padding: 1rem 1.2rem;
-        margin-bottom: 1.5rem;
-        transition: var(--transition);
-    }
-    .apply-section .upload-group:hover {
-        background: rgba(0, 240, 255, 0.04);
-        border-left-color: var(--neon-magenta);
-    }
+  /* ---- Upload Groups ---- */
+  .upload-group {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--neon-cyan);
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.5rem;
+    transition: var(--transition);
+  }
+  .upload-group:hover {
+    background: rgba(0, 240, 255, 0.04);
+    border-left-color: var(--neon-magenta);
+  }
+  .upload-group .doc-label {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    color: var(--text-white);
+    margin-bottom: 0.5rem;
+  }
+  .upload-group .doc-label i {
+    color: var(--neon-cyan);
+  }
+  .upload-group .badge {
+    font-size: 0.7rem;
+    background: var(--neon-magenta);
+    color: var(--text-white);
+    padding: 2px 10px;
+    border-radius: var(--radius-pill);
+  }
 
-    .apply-section .upload-group .doc-label {
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 1rem;
-        color: #ffffff !important;   /* white document name */
-        margin-bottom: 0.5rem;
-    }
-    .apply-section .upload-group .doc-label i {
-        color: var(--neon-cyan);
-    }
-    .apply-section .upload-group .badge {
-        font-size: 0.7rem;
-        background: var(--neon-red);
-        color: #fff;
-        padding: 2px 10px;
-        border-radius: var(--radius-pill);
-    }
+  /* ---- Merge Button (neon) ---- */
+  .btn-merge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.7rem 1.8rem;
+    background: transparent;
+    border: 1.5px solid var(--neon-cyan);
+    color: var(--neon-cyan);
+    border-radius: var(--radius-pill);
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: var(--transition);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .btn-merge i {
+    color: var(--neon-cyan);
+    font-size: 1.1rem;
+  }
+  .btn-merge:hover {
+    background: var(--neon-cyan);
+    color: var(--bg-primary);
+    box-shadow: var(--glow-cyan);
+    transform: translateY(-2px);
+  }
+  .btn-merge:hover i {
+    color: var(--bg-primary);
+  }
 
-    /* Required documents list */
-    .required-docs-list {
-        list-style: none;
-        padding: 0;
-        margin: 0 0 1.5rem 0;
-    }
-    .required-docs-list li {
-        padding: 6px 0;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        color: #c8d6e5;           /* light text for readability */
-        border-bottom: 1px solid rgba(255,255,255,0.04);
-    }
-    .required-docs-list li i {
-        color: var(--neon-cyan);
-        width: 20px;
-    }
-    .required-docs-list li .badge {
-        margin-left: auto;
-        background: var(--neon-red);
-        color: #fff;
-        font-size: 0.7rem;
-        padding: 2px 12px;
-        border-radius: var(--radius-pill);
-    }
+  /* ---- Errors ---- */
+  .text-danger {
+    color: var(--neon-orange) !important;
+    font-weight: 500;
+    margin-top: 0.3rem;
+  }
 
-    /* Helper text */
-    .text-muted {
-        color: #9aabca !important;  /* more visible than default */
+  /* ---- Responsive ---- */
+  @media (max-width: 768px) {
+    .apply-card {
+      padding: 1.8rem 1.2rem 2rem;
     }
-
-    /* Error messages */
-    .text-danger {
-        color: var(--neon-red) !important;
-        font-weight: 500;
-        margin-top: 0.3rem;
+    .page-hero h1 {
+      font-size: 2.2rem;
     }
-
-    /* Submit button already styled by base, but ensure icon colour */
-    .btn-primary i {
-        color: inherit;
+    .page-hero p {
+      font-size: 1rem;
     }
-
-    /* ---- NEW: Neon-styled merge button (consistent with theme) ---- */
     .btn-merge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.6rem;
-        padding: 0.7rem 1.8rem;
-        background: transparent;
-        border: 1.5px solid var(--neon-cyan);
-        color: var(--neon-cyan);
-        border-radius: var(--radius-pill);
-        font-weight: 700;
-        font-size: 0.95rem;
-        transition: var(--transition);
-        text-decoration: none;
-        cursor: pointer;
+      width: 100%;
+      justify-content: center;
     }
-    .btn-merge i {
-        color: var(--neon-cyan);
-        font-size: 1.1rem;
+  }
+  @media (max-width: 480px) {
+    .apply-card {
+      padding: 1.2rem 0.8rem 1.5rem;
     }
-    .btn-merge:hover {
-        background: var(--neon-cyan);
-        color: var(--bg-primary);
-        box-shadow: var(--glow-cyan);
-        transform: translateY(-2px);
+    .page-hero h1 {
+      font-size: 1.8rem;
     }
-    .btn-merge:hover i {
-        color: var(--bg-primary);
+    .upload-group {
+      padding: 0.8rem 0.8rem;
     }
+  }
 </style>
 {% endblock %}
 
 {% block content %}
-
+<!-- ================================================================
+     PAGE HERO
+     ================================================================ -->
 <section class="page-hero">
-    <div class="container">
-        <h1>{% trans "Apply for" %} {{ service.name }}</h1>
-        <p>{% trans "Please fill in your details and upload the required documents." %}</p>
-    </div>
+  <div class="container">
+    <h1>{% trans "Apply for" %} {{ service.name }}</h1>
+    <p>{% trans "Please fill in your details and upload the required documents." %}</p>
+  </div>
 </section>
 
+<!-- ================================================================
+     APPLICATION FORM
+     ================================================================ -->
 <section class="apply-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8 offset-md-2">
-                <div class="card">
-                    <div class="card-body">
+  <div class="container">
+    <div class="apply-card">
+      <h4>{% trans "Service" %}: {{ service.name }}</h4>
+      <p>{{ service.description }}</p>
+      <hr>
 
-                        <h4>{% trans "Service" %}: {{ service.name }}</h4>
-                        <p>{{ service.description }}</p>
-                        <hr>
+      <!-- Required Documents -->
+      <h5>{% trans "Required Documents" %}</h5>
+      <ul class="required-docs-list">
+        {% for doc in required_docs %}
+          <li>
+            <i class="fas fa-file-alt"></i>
+            {{ doc.document_name }}
+            <span class="badge">{% trans "Mandatory" %}</span>
+          </li>
+        {% empty %}
+          <li>{% trans "No specific documents required." %}</li>
+        {% endfor %}
+      </ul>
+      <hr>
 
-                        <!-- Required Documents -->
-                        <h5>{% trans "Required Documents" %}</h5>
-                        <ul class="required-docs-list">
-                            {% for doc in required_docs %}
-                                <li>
-                                    <i class="fas fa-file-alt"></i>
-                                    {{ doc.document_name }}
-                                    <span class="badge">{% trans "Mandatory" %}</span>
-                                </li>
-                            {% empty %}
-                                <li>{% trans "No specific documents required." %}</li>
-                            {% endfor %}
-                        </ul>
-                        <hr>
+      <!-- Form -->
+      <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
 
-                        <!-- Application Form -->
-                        <form method="post" enctype="multipart/form-data">
-                            {% csrf_token %}
+        <!-- Personal Details -->
+        <h5>{% trans "Personal Details" %}</h5>
 
-                            <!-- Personal Details -->
-                            <h5>{% trans "Personal Details" %}</h5>
-
-                            <div class="form-group">
-                                <label for="{{ form.full_name.id_for_label }}">{{ form.full_name.label }}</label>
-                                {{ form.full_name }}
-                                {% if form.full_name.errors %}
-                                    <div class="text-danger">{{ form.full_name.errors }}</div>
-                                {% endif %}
-                            </div>
-
-                            <div class="form-group">
-                                <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>
-                                {{ form.phone }}
-                                {% if form.phone.errors %}
-                                    <div class="text-danger">{{ form.phone.errors }}</div>
-                                {% endif %}
-                            </div>
-
-                            <div class="form-group">
-                                <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
-                                {{ form.email }}
-                                {% if form.email.errors %}
-                                    <div class="text-danger">{{ form.email.errors }}</div>
-                                {% endif %}
-                            </div>
-
-                            <div class="form-group">
-                                <label for="{{ form.address.id_for_label }}">{{ form.address.label }}</label>
-                                {{ form.address }}
-                                {% if form.address.errors %}
-                                    <div class="text-danger">{{ form.address.errors }}</div>
-                                {% endif %}
-                            </div>
-
-                            <hr>
-
-                            <!-- Document Uploads -->
-                            <h5>{% trans "Upload Documents" %}</h5>
-                            <p class="text-muted">{% trans "📄 Please upload a merged PDF containing all the required documents." %}</p>
-                            <p>{% trans "💡 You can merge your PDFs using an online tool before uploading." %}</p>
-                            <!-- Neo-themed merge button -->
-                            <a href="https://www.ilovepdf.com/" target="_blank" rel="noopener" class="btn-merge">
-                                <i class="fas fa-heart" style="color: var(--neon-magenta);"></i> 
-                                {% trans "Merge PDFs with iLovePDF" %}
-                            </a>
-                            <br><br>
-
-                            {{ formset.management_form }}
-
-                            {% for doc_form in formset %}
-                                <div class="upload-group">
-                                    {{ doc_form.document_name }}
-
-                                    <div class="doc-label">
-                                        <i class="fas fa-upload"></i>
-                                        {{ doc_form.document_name.value }}
-                                        <span class="badge">{% trans "Required" %}</span>
-                                    </div>
-
-                                    {{ doc_form.file }}
-
-                                    <small class="text-muted d-block mt-2">
-                                        {% trans "Allowed: PDF, JPG, JPEG, PNG" %}
-                                    </small>
-
-                                    {% if doc_form.file.errors %}
-                                        <div class="text-danger mt-2">{{ doc_form.file.errors }}</div>
-                                    {% endif %}
-                                </div>
-                            {% endfor %}
-
-                            <button type="submit" class="btn-primary">
-                                <i class="fas fa-paper-plane"></i> {% trans "Submit Application" %}
-                            </button>
-                        </form>
-
-                    </div>
-                </div>
-            </div>
+        <div class="form-group">
+          <label for="{{ form.full_name.id_for_label }}">{{ form.full_name.label }}</label>
+          {{ form.full_name }}
+          {% if form.full_name.errors %}
+            <div class="text-danger">{{ form.full_name.errors }}</div>
+          {% endif %}
         </div>
-    </div>
-</section>
 
+        <div class="form-group">
+          <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>
+          {{ form.phone }}
+          {% if form.phone.errors %}
+            <div class="text-danger">{{ form.phone.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+          {{ form.email }}
+          {% if form.email.errors %}
+            <div class="text-danger">{{ form.email.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ form.address.id_for_label }}">{{ form.address.label }}</label>
+          {{ form.address }}
+          {% if form.address.errors %}
+            <div class="text-danger">{{ form.address.errors }}</div>
+          {% endif %}
+        </div>
+
+        <hr>
+
+        <!-- Document Uploads -->
+        <h5>{% trans "Upload Documents" %}</h5>
+        <p class="text-muted">{% trans "📄 Please upload a merged PDF containing all the required documents." %}</p>
+        <p>{% trans "💡 You can merge your PDFs using an online tool before uploading." %}</p>
+
+        <a href="https://www.ilovepdf.com/" target="_blank" rel="noopener" class="btn-merge">
+          <i class="fas fa-heart" style="color: var(--neon-magenta);"></i>
+          {% trans "Merge PDFs with iLovePDF" %}
+        </a>
+        <br><br>
+
+        {{ formset.management_form }}
+
+        {% for doc_form in formset %}
+          <div class="upload-group">
+            {{ doc_form.document_name }}
+            <div class="doc-label">
+              <i class="fas fa-upload"></i>
+              {{ doc_form.document_name.value }}
+              <span class="badge">{% trans "Required" %}</span>
+            </div>
+            {{ doc_form.file }}
+            <small class="text-muted d-block mt-2">
+              {% trans "Allowed: PDF, JPG, JPEG, PNG" %}
+            </small>
+            {% if doc_form.file.errors %}
+              <div class="text-danger mt-2">{{ doc_form.file.errors }}</div>
+            {% endif %}
+          </div>
+        {% endfor %}
+
+        <button type="submit" class="btn-primary">
+          <i class="fas fa-paper-plane"></i> {% trans "Submit Application" %}
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
 {% endblock %}

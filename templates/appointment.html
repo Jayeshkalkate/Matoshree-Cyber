@@ -2,15 +2,19 @@
 {% load i18n %}
 {% load static %}
 
-{% block title %}{% trans "Appointment" %}{% endblock %}
+{% block title %}{% trans "Book Appointment" %}{% endblock %}
 
 {% block extra_head %}
-<!-- Page-specific styles for Appointment -->
 <style>
-  /* ===== APPOINTMENT CARD ===== */
+  /* ================================================================
+     PAGE-SPECIFIC STYLES – Appointment
+     Uses global CSS variables from base.html.
+     ================================================================ */
+
+  /* ---- Appointment Wrapper ---- */
   .appointment-wrapper {
     padding: 60px 0 70px;
-    background: var(--gray-light);
+    background: var(--bg-secondary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -20,12 +24,16 @@
   .appointment-card {
     max-width: 640px;
     width: 100%;
-    background: var(--white);
+    background: var(--bg-card);
     border-radius: var(--radius);
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-card);
     padding: 2.5rem 2.5rem 2.8rem;
     transition: transform 0.2s ease;
-    border: 1px solid rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+  }
+  .appointment-card:hover {
+    border-color: var(--neon-cyan);
+    box-shadow: var(--shadow-card), var(--glow-cyan);
   }
 
   @media (max-width: 500px) {
@@ -43,28 +51,28 @@
   }
   .card-header i {
     font-size: 2rem;
-    color: var(--secondary);
-    background: rgba(0, 212, 255, 0.12);
+    color: var(--neon-cyan);
+    background: rgba(0, 240, 255, 0.08);
     padding: 0.5rem;
     border-radius: 14px;
   }
   .card-header h1 {
     font-size: 1.8rem;
     font-weight: 700;
-    color: var(--primary);
+    color: var(--text-white);
     letter-spacing: -0.02em;
   }
 
   .subhead {
-    color: var(--gray-dark);
+    color: var(--text-muted);
     font-size: 0.95rem;
     margin-bottom: 2rem;
-    border-left: 3px solid var(--secondary);
+    border-left: 3px solid var(--neon-cyan);
     padding-left: 0.9rem;
     line-height: 1.5;
   }
 
-  /* ===== FORM ELEMENTS ===== */
+  /* ---- Form Elements ---- */
   .form-group {
     margin-bottom: 1.6rem;
   }
@@ -74,17 +82,17 @@
     gap: 0.5rem;
     font-weight: 600;
     font-size: 0.95rem;
-    color: var(--primary);
+    color: var(--text-white);
     margin-bottom: 0.5rem;
   }
   .form-group label i {
-    color: var(--secondary);
+    color: var(--neon-cyan);
     font-size: 1rem;
     width: 1.2rem;
     text-align: center;
   }
   .form-group label .required-star {
-    color: var(--accent);
+    color: var(--neon-orange);
     font-weight: 700;
     margin-left: 0.1rem;
   }
@@ -93,31 +101,35 @@
     width: 100%;
     padding: 0.8rem 1rem;
     font-size: 1rem;
-    font-family: "Inter", sans-serif;
-    border: 1.5px solid var(--gray);
+    font-family: var(--font-body);
+    border: 1.5px solid rgba(255, 255, 255, 0.06);
     border-radius: var(--radius-sm);
-    background: var(--gray-light);
+    background: rgba(255, 255, 255, 0.04);
     transition: var(--transition);
-    color: var(--text-dark);
+    color: var(--text-white);
   }
   .form-control:focus {
     outline: none;
-    border-color: var(--secondary);
-    box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.15);
-    background: var(--white);
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 0 4px rgba(0, 240, 255, 0.08), var(--glow-cyan);
+    background: rgba(0, 240, 255, 0.04);
   }
   .form-control::placeholder {
-    color: var(--gray-dark);
-    opacity: 0.6;
+    color: var(--text-muted);
+    opacity: 0.5;
   }
 
   select.form-control {
     cursor: pointer;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23475569' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a9bb5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 1rem center;
     padding-right: 2.8rem;
     appearance: none;
+  }
+  select.form-control option {
+    background: var(--bg-card);
+    color: var(--text-white);
   }
 
   input[type="date"].form-control,
@@ -130,30 +142,32 @@
     opacity: 0.6;
     padding: 0.2rem;
     cursor: pointer;
+    filter: invert(1);
   }
 
+  /* Phone input with country code */
   .mobile-input-wrapper {
     display: flex;
     align-items: center;
-    background: var(--gray-light);
-    border: 1.5px solid var(--gray);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1.5px solid rgba(255, 255, 255, 0.06);
     border-radius: var(--radius-sm);
     transition: var(--transition);
     overflow: hidden;
   }
   .mobile-input-wrapper:focus-within {
-    border-color: var(--secondary);
-    box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.15);
-    background: var(--white);
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 0 4px rgba(0, 240, 255, 0.08), var(--glow-cyan);
+    background: rgba(0, 240, 255, 0.04);
   }
   .country-code {
     padding: 0 0 0 1rem;
     font-weight: 600;
-    color: var(--primary);
+    color: var(--text-white);
     font-size: 1rem;
     background: transparent;
     white-space: nowrap;
-    border-right: 1.5px solid var(--gray);
+    border-right: 1.5px solid rgba(255, 255, 255, 0.06);
     padding-right: 0.8rem;
     line-height: 3.2rem;
     user-select: none;
@@ -163,27 +177,28 @@
     background: transparent;
     padding: 0.8rem 1rem 0.8rem 0.8rem;
     font-size: 1rem;
-    font-family: "Inter", sans-serif;
+    font-family: var(--font-body);
     width: 100%;
-    color: var(--text-dark);
+    color: var(--text-white);
     outline: none;
   }
   .mobile-input-wrapper input::placeholder {
-    color: var(--gray-dark);
-    opacity: 0.6;
+    color: var(--text-muted);
+    opacity: 0.5;
   }
 
+  /* Error states */
   .form-group.error .form-control,
   .form-group.error .mobile-input-wrapper {
-    border-color: var(--accent);
+    border-color: var(--neon-orange);
   }
   .form-group.error .form-control:focus,
   .form-group.error .mobile-input-wrapper:focus-within {
-    box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.15);
+    box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.15);
   }
   .error-message {
     display: none;
-    color: var(--accent);
+    color: var(--neon-orange);
     font-size: 0.85rem;
     margin-top: 0.4rem;
     align-items: center;
@@ -193,27 +208,27 @@
     display: flex;
   }
 
-  /* Helper text for time */
   .helper-text {
     display: block;
     font-size: 0.8rem;
-    color: var(--gray-dark);
+    color: var(--text-muted);
     margin-top: 0.3rem;
     opacity: 0.7;
   }
   .helper-text i {
     margin-right: 0.3rem;
-    color: var(--secondary);
+    color: var(--neon-cyan);
   }
 
+  /* ---- Submit Button ---- */
   .btn-book {
     width: 100%;
     padding: 1rem;
     font-size: 1.1rem;
     font-weight: 700;
-    font-family: "Inter", sans-serif;
-    color: var(--primary);
-    background: var(--secondary);
+    font-family: var(--font-body);
+    color: var(--bg-primary);
+    background: var(--neon-cyan);
     border: none;
     border-radius: var(--radius-sm);
     cursor: pointer;
@@ -223,7 +238,7 @@
     justify-content: center;
     gap: 0.6rem;
     margin-top: 0.5rem;
-    box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+    box-shadow: var(--glow-cyan);
   }
   .btn-book i {
     font-size: 1.1rem;
@@ -231,7 +246,7 @@
   .btn-book:hover {
     background: #00e5ff;
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 212, 255, 0.4);
+    box-shadow: 0 8px 24px rgba(0, 240, 255, 0.4);
   }
   .btn-book:active {
     transform: scale(0.98);
@@ -245,9 +260,9 @@
   .footer-note {
     margin-top: 2rem;
     font-size: 0.85rem;
-    color: var(--gray-dark);
+    color: var(--text-muted);
     text-align: center;
-    border-top: 1px solid var(--gray);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
     padding-top: 1.5rem;
     display: flex;
     align-items: center;
@@ -256,16 +271,17 @@
     flex-wrap: wrap;
   }
   .footer-note i {
-    color: var(--secondary);
+    color: var(--neon-cyan);
     opacity: 0.7;
   }
   .footer-note span {
-    background: var(--gray);
+    background: rgba(255, 255, 255, 0.04);
     padding: 0.2rem 0.7rem;
     border-radius: 20px;
     font-weight: 500;
-    color: var(--primary);
+    color: var(--text-white);
     font-size: 0.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.04);
   }
 
   @media (max-width: 480px) {
@@ -285,12 +301,14 @@
     }
   }
 </style>
-{% endblock extra_head %}
+{% endblock %}
 
 {% block content %}
-<!-- ===== APPOINTMENT SECTION ===== -->
+<!-- ================================================================
+     APPOINTMENT SECTION
+     ================================================================ -->
 <section class="appointment-wrapper">
-  <div class="appointment-card" id="appointmentCard">
+  <div class="appointment-card">
     <!-- Header -->
     <div class="card-header">
       <i class="fas fa-calendar-check"></i>
@@ -300,7 +318,7 @@
       {% trans "Select your service, choose a date &amp; time, and we’ll confirm your visit." %}
     </div>
 
-    <!-- ===== FORM ===== -->
+    <!-- Form -->
     <form method="post" action="{% url 'appointment' %}" novalidate id="appointmentForm">
       {% csrf_token %}
       {{ form.non_field_errors }}
@@ -407,11 +425,11 @@
     </div>
   </div>
 </section>
-{% endblock content %}
+{% endblock %}
 
 {% block extra_scripts %}
 <script>
-  (function () {
+  (function() {
     "use strict";
 
     // DOM refs
@@ -429,7 +447,7 @@
     const dateGroup = document.getElementById("dateGroup");
     const timeGroup = document.getElementById("timeGroup");
 
-    // Set min date to today (future dates only)
+    // ---- Set min date to today (future dates only) ----
     function setMinDate() {
       const today = new Date();
       const year = today.getFullYear();
@@ -439,7 +457,7 @@
     }
     setMinDate();
 
-    // Restrict time to business hours (09:00 – 17:00) and 15‑minute steps
+    // ---- Restrict time to 09:00 – 17:00, 15‑min steps ----
     function setTimeConstraints() {
       timeInput.min = "09:00";
       timeInput.max = "17:00";
@@ -447,19 +465,19 @@
     }
     setTimeConstraints();
 
-    // Clear all error states
+    // ---- Clear all error states ----
     function clearErrors() {
-      [nameGroup, phoneGroup, serviceGroup, dateGroup, timeGroup].forEach((g) =>
+      [nameGroup, phoneGroup, serviceGroup, dateGroup, timeGroup].forEach(g =>
         g.classList.remove("error")
       );
     }
 
-    // Set error on a group
+    // ---- Set error on a group ----
     function setError(group) {
       group.classList.add("error");
     }
 
-    // Validate form (including time range)
+    // ---- Validate form (client-side) ----
     function validateForm() {
       let isValid = true;
       clearErrors();
@@ -517,24 +535,24 @@
       return isValid;
     }
 
-    // Phone input: only digits, max 10
-    phone.addEventListener("input", function () {
+    // ---- Phone input: only digits, max 10 ----
+    phone.addEventListener("input", function() {
       this.value = this.value.replace(/\D/g, "").slice(0, 10);
       if (phoneGroup.classList.contains("error") && /^[0-9]{10}$/.test(this.value)) {
         phoneGroup.classList.remove("error");
       }
     });
 
-    // Clear errors on change/focus
-    fullName.addEventListener("input", function () {
+    // ---- Clear errors on input/change ----
+    fullName.addEventListener("input", function() {
       if (this.value.trim() && nameGroup.classList.contains("error")) {
         nameGroup.classList.remove("error");
       }
     });
-    service.addEventListener("change", function () {
+    service.addEventListener("change", function() {
       if (this.value) serviceGroup.classList.remove("error");
     });
-    dateInput.addEventListener("change", function () {
+    dateInput.addEventListener("change", function() {
       if (this.value) {
         const selected = new Date(this.value);
         const today = new Date();
@@ -544,7 +562,7 @@
         }
       }
     });
-    timeInput.addEventListener("change", function () {
+    timeInput.addEventListener("change", function() {
       if (this.value) {
         const [hours, minutes] = this.value.split(":").map(Number);
         const totalMinutes = hours * 60 + minutes;
@@ -554,8 +572,8 @@
       }
     });
 
-    // Form submission
-    form.addEventListener("submit", function (e) {
+    // ---- Form submission ----
+    form.addEventListener("submit", function(e) {
       if (!validateForm()) {
         e.preventDefault();
         const firstError = document.querySelector(".form-group.error");
@@ -571,8 +589,8 @@
       bookBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {% trans "Booking…"|escapejs %}';
     });
 
-    // Prevent past dates on blur
-    dateInput.addEventListener("blur", function () {
+    // ---- Prevent past dates on blur ----
+    dateInput.addEventListener("blur", function() {
       if (this.value) {
         const selected = new Date(this.value);
         const today = new Date();
@@ -584,7 +602,6 @@
       }
     });
 
-    console.log("📅 Appointment page ready — future dates only, 10-digit mobile, business hours 09:00–17:00, 15‑min slots.");
   })();
 </script>
-{% endblock extra_scripts %}
+{% endblock %}

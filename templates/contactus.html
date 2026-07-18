@@ -5,764 +5,656 @@
 {% block title %}{% trans "Contact Us" %}{% endblock %}
 
 {% block extra_head %}
-    <!-- ================================================================
-         CONTACT US – Futuristic Cyber / Gaming Theme
-         Dynamically pulls data from BusinessInfo model.
-         ================================================================ -->
-    <style>
-        /* ================================================================
-               CSS VARIABLES — consistent with base.html
-               ================================================================ */
-        :root {
-            --primary: #0a0e1a;
-            --primary-light: #141b2b;
-            --secondary: #00d4ff;
-            --accent: #ff6b35;
-            --neon-purple: #b44aff;
-            --neon-pink: #ff2d95;
-            --neon-green: #39ff14;
-            --neon-yellow: #ffe600;
-            --white: #f0f4ff;
-            --gray-light: #1a2332;
-            --gray: #2a3444;
-            --gray-dark: #8a9bb5;
-            --radius: 16px;
-            --radius-sm: 10px;
-            --shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
-            --shadow-sm: 0 8px 24px rgba(0, 0, 0, 0.4);
-            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            --font: 'Inter', 'Segoe UI', system-ui, sans-serif;
+<style>
+  /* ================================================================
+     PAGE-SPECIFIC STYLES – Contact Us
+     Uses global CSS variables from base.html.
+     ================================================================ */
 
-            --glow-secondary: 0 0 20px rgba(0, 212, 255, 0.5);
-            --glow-accent: 0 0 20px rgba(255, 107, 53, 0.5);
-            --glow-purple: 0 0 20px rgba(180, 74, 255, 0.5);
-            --glow-pink: 0 0 20px rgba(255, 45, 149, 0.5);
-            --glow-green: 0 0 20px rgba(57, 255, 20, 0.5);
-            --glow-yellow: 0 0 20px rgba(255, 230, 0, 0.5);
-        }
+  /* ---- Hero (matches other pages) ---- */
+  .page-hero {
+    padding: 70px 0 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-hero::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.04), transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .page-hero .container {
+    position: relative;
+    z-index: 1;
+  }
+  .page-hero .breadcrumb {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 16px;
+    letter-spacing: 0.3px;
+  }
+  .page-hero .breadcrumb a {
+    color: var(--text-muted);
+    transition: var(--transition);
+  }
+  .page-hero .breadcrumb a:hover {
+    color: var(--neon-cyan);
+  }
+  .page-hero .breadcrumb .current {
+    color: var(--neon-cyan);
+  }
+  .page-hero h1 {
+    font-size: 3rem;
+    font-weight: 900;
+    font-family: var(--font-display);
+    color: var(--text-white);
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    text-shadow: 0 0 40px rgba(0, 240, 255, 0.12);
+  }
+  .page-hero h1 span {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 30px rgba(0, 240, 255, 0.25);
+  }
+  .page-hero p {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 620px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+  .page-hero .glow-line {
+    display: inline-block;
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+    border-radius: 4px;
+    margin-top: 16px;
+    box-shadow: var(--glow-cyan);
+  }
 
-        /* ---- Page Hero (consistent with other pages) ---- */
-        .page-hero {
-            padding: 80px 0 60px;
-            position: relative;
-            overflow: hidden;
-            text-align: center;
-        }
-        .page-hero::before {
-            content: '';
-            position: absolute;
-            top: -40%;
-            right: -15%;
-            width: 700px;
-            height: 700px;
-            background: radial-gradient(circle, rgba(0, 212, 255, 0.06) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-        .page-hero::after {
-            content: '';
-            position: absolute;
-            bottom: -30%;
-            left: -10%;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(180, 74, 255, 0.05) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-        .page-hero .container {
-            position: relative;
-            z-index: 1;
-        }
-        .page-hero .breadcrumb {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 0.85rem;
-            font-weight: 500;
-            margin-bottom: 16px;
-            letter-spacing: 0.5px;
-        }
-        .page-hero .breadcrumb a {
-            color: rgba(255, 255, 255, 0.5);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-        .page-hero .breadcrumb a:hover {
-            color: var(--secondary);
-        }
-        .page-hero .breadcrumb .current {
-            color: var(--secondary);
-        }
-        .page-hero h1 {
-            font-size: 3.4rem;
-            font-weight: 800;
-            letter-spacing: -1px;
-            margin-bottom: 12px;
-            background: linear-gradient(135deg, var(--white), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .page-hero h1 span {
-            background: linear-gradient(135deg, var(--secondary), var(--neon-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .page-hero p {
-            font-size: 1.15rem;
-            color: var(--gray-dark);
-            max-width: 620px;
-            margin: 0 auto;
-            line-height: 1.8;
-        }
-        .page-hero .glow-line {
-            display: inline-block;
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(90deg, var(--secondary), var(--neon-purple));
-            border-radius: 4px;
-            margin-top: 16px;
-            box-shadow: var(--glow-secondary);
-        }
+  /* ---- Contact Section ---- */
+  .contact-section {
+    padding: 40px 0 70px;
+    background: var(--bg-secondary);
+  }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
 
-        /* ---- Contact Section ---- */
-        .contact-section {
-            padding: 60px 0 70px;
-            position: relative;
-        }
-        .contact-section::before {
-            content: '';
-            position: absolute;
-            top: 10%;
-            right: -5%;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(255, 45, 149, 0.03) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-        }
+  /* ---- Form Wrapper ---- */
+  .contact-form-wrapper {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 36px 32px;
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    transition: var(--transition);
+  }
+  .contact-form-wrapper:hover {
+    border-color: var(--neon-cyan);
+    box-shadow: var(--shadow-card), var(--glow-cyan);
+  }
+  .contact-form-wrapper h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-white);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .contact-form-wrapper h2 i {
+    color: var(--neon-cyan);
+  }
 
-        .contact-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-        }
+  /* ---- Form Elements ---- */
+  .contact-form .form-group {
+    margin-bottom: 18px;
+  }
+  .contact-form label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  .contact-form label .required {
+    color: var(--neon-orange);
+  }
+  .contact-form .form-control {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    transition: var(--transition);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-white);
+  }
+  .contact-form .form-control::placeholder {
+    color: var(--text-muted);
+    opacity: 0.5;
+  }
+  .contact-form .form-control:focus {
+    outline: none;
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 0 4px rgba(0, 240, 255, 0.08), var(--glow-cyan);
+    background: rgba(0, 240, 255, 0.04);
+  }
+  .contact-form textarea.form-control {
+    resize: vertical;
+    min-height: 100px;
+  }
+  .contact-form .errorlist {
+    list-style: none;
+    padding: 0;
+    margin: 4px 0 0;
+    color: var(--neon-orange);
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  .contact-form .errorlist li {
+    margin-bottom: 2px;
+  }
 
-        /* ---- Form Wrapper ---- */
-        .contact-form-wrapper {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: var(--radius);
-            padding: 36px 32px;
-            transition: var(--transition);
-        }
-        .contact-form-wrapper:hover {
-            border-color: rgba(0, 212, 255, 0.12);
-            box-shadow: var(--glow-secondary);
-        }
-        .contact-form-wrapper h2 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--white);
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .contact-form-wrapper h2 i {
-            color: var(--secondary);
-        }
+  /* ---- Submit Button ---- */
+  .btn-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 34px;
+    border-radius: var(--radius-pill);
+    font-weight: 700;
+    font-size: 1rem;
+    border: 2px solid var(--neon-yellow);
+    background: var(--neon-yellow);
+    color: var(--bg-primary);
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 0 20px rgba(255, 230, 0, 0.3);
+    animation: pulseGlowYellow 2.8s ease-in-out infinite;
+    font-family: var(--font-body);
+    width: 100%;
+    margin-top: 4px;
+  }
+  .btn-submit:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 0 40px rgba(255, 230, 0, 0.7), 0 0 80px rgba(255, 230, 0, 0.3);
+    background: #fff44f;
+    border-color: #fff44f;
+  }
+  @keyframes pulseGlowYellow {
+    0%, 100% { box-shadow: 0 0 20px rgba(255, 230, 0, 0.3); }
+    50% { box-shadow: 0 0 40px rgba(255, 230, 0, 0.7), 0 0 80px rgba(255, 230, 0, 0.2); }
+  }
 
-        /* ---- Form elements ---- */
-        .contact-form .form-group {
-            margin-bottom: 18px;
-        }
-        .contact-form label {
-            display: block;
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: var(--gray-dark);
-            margin-bottom: 4px;
-        }
-        .contact-form label .required {
-            color: var(--accent);
-        }
-        .contact-form .form-control {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1.5px solid rgba(255, 255, 255, 0.06);
-            border-radius: var(--radius-sm);
-            font-family: var(--font);
-            font-size: 1rem;
-            transition: var(--transition);
-            background: rgba(255, 255, 255, 0.04);
-            color: var(--white);
-        }
-        .contact-form .form-control::placeholder {
-            color: var(--gray-dark);
-            opacity: 0.5;
-        }
-        .contact-form .form-control:focus {
-            outline: none;
-            border-color: var(--secondary);
-            box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.08), var(--glow-secondary);
-            background: rgba(0, 212, 255, 0.04);
-        }
-        .contact-form textarea.form-control {
-            resize: vertical;
-            min-height: 100px;
-        }
-        .contact-form .errorlist {
-            list-style: none;
-            padding: 0;
-            margin: 4px 0 0;
-            color: var(--accent);
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-        .contact-form .errorlist li {
-            margin-bottom: 2px;
-        }
+  /* ---- Info Blocks ---- */
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .info-block {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: var(--radius-sm);
+    padding: 20px 22px;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+  }
+  .info-block:hover {
+    transform: translateX(6px) scale(1.01);
+    border-color: var(--neon-pink);
+    box-shadow: var(--shadow-card), 0 0 30px rgba(255, 45, 149, 0.12);
+    background: rgba(255, 45, 149, 0.04);
+  }
+  .info-block::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink), var(--neon-purple));
+    transform: scaleX(0);
+    transition: var(--transition);
+    transform-origin: left;
+    box-shadow: 0 0 20px rgba(255, 45, 149, 0.2);
+  }
+  .info-block:hover::after {
+    transform: scaleX(1);
+  }
+  .info-block .icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(0, 240, 255, 0.08);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--neon-cyan);
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: var(--transition);
+    border: 1px solid rgba(0, 240, 255, 0.08);
+  }
+  .info-block:hover .icon {
+    background: var(--gradient-cyan);
+    color: var(--bg-primary);
+    transform: scale(1.08) rotate(-4deg);
+    box-shadow: var(--glow-cyan);
+    border-color: var(--neon-cyan);
+  }
+  .info-block .content h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-white);
+    margin-bottom: 2px;
+  }
+  .info-block .content p,
+  .info-block .content a {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    transition: var(--transition);
+    text-decoration: none;
+  }
+  .info-block .content a:hover {
+    color: var(--neon-cyan);
+  }
 
-        /* ---- Submit button (yellow/neon) ---- */
-        .btn-submit {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 14px 34px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 1rem;
-            border: 2px solid var(--neon-yellow);
-            background: var(--neon-yellow);
-            color: var(--primary);
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: var(--glow-yellow);
-            animation: pulseGlowYellow 2.8s ease-in-out infinite;
-            font-family: var(--font);
-            width: 100%;
-            margin-top: 4px;
-        }
-        .btn-submit:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 0 40px rgba(255, 230, 0, 0.7), 0 0 80px rgba(255, 230, 0, 0.3);
-            background: #fff44f;
-            border-color: #fff44f;
-        }
-        @keyframes pulseGlowYellow {
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 230, 0, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(255, 230, 0, 0.7), 0 0 80px rgba(255, 230, 0, 0.2); }
-        }
+  /* ---- WhatsApp link inside info block ---- */
+  .whatsapp-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #25d366;
+    color: var(--text-white);
+    padding: 8px 18px;
+    border-radius: var(--radius-pill);
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: var(--transition);
+    margin-top: 4px;
+    text-decoration: none;
+    border: 2px solid transparent;
+    box-shadow: 0 0 20px rgba(37, 211, 102, 0.3);
+    animation: pulseGlowGreen 3.2s ease-in-out infinite;
+  }
+  .whatsapp-link:hover {
+    background: #1ebd5a;
+    transform: scale(1.04);
+    box-shadow: 0 0 40px rgba(57, 255, 20, 0.4);
+  }
+  @keyframes pulseGlowGreen {
+    0%, 100% { box-shadow: 0 0 20px rgba(57, 255, 20, 0.3); }
+    50% { box-shadow: 0 0 40px rgba(57, 255, 20, 0.7), 0 0 80px rgba(57, 255, 20, 0.2); }
+  }
 
-        /* ---- Info Blocks (gaming hover) ---- */
-        .contact-info {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
+  /* ---- Hours Block ---- */
+  .hours-block {
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin-top: 4px;
+    transition: var(--transition);
+    box-shadow: var(--shadow-card);
+  }
+  .hours-block:hover {
+    border-color: var(--neon-cyan);
+    box-shadow: var(--shadow-card), var(--glow-cyan);
+  }
+  .hours-block h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-white);
+    margin-bottom: 16px;
+  }
+  .hours-block h3 i {
+    color: var(--neon-cyan);
+  }
 
-        .info-block {
-            display: flex;
-            align-items: flex-start;
-            gap: 16px;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: var(--radius-sm);
-            padding: 20px 22px;
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-        .info-block:hover {
-            transform: translateX(6px) scale(1.01);
-            border-color: var(--neon-pink);
-            box-shadow: 0 0 30px rgba(255, 45, 149, 0.12), 0 8px 32px rgba(0, 0, 0, 0.3);
-            background: rgba(255, 45, 149, 0.04);
-        }
-        .info-block::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, var(--secondary), var(--neon-pink), var(--neon-purple));
-            transform: scaleX(0);
-            transition: var(--transition);
-            transform-origin: left;
-            box-shadow: 0 0 20px rgba(255, 45, 149, 0.2);
-        }
-        .info-block:hover::after {
-            transform: scaleX(1);
-        }
+  /* ---- Map Block ---- */
+  .map-block {
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    margin-top: 40px;
+    height: 300px;
+    background: var(--bg-card);
+    transition: var(--transition);
+    box-shadow: var(--shadow-card);
+  }
+  .map-block:hover {
+    border-color: var(--neon-cyan);
+    box-shadow: var(--shadow-card), var(--glow-cyan);
+  }
+  .map-block iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+  .map-block .map-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text-muted);
+    font-size: 1rem;
+    background: var(--bg-card);
+  }
+  .map-block .map-placeholder i {
+    font-size: 2rem;
+    margin-right: 12px;
+    opacity: 0.4;
+  }
 
-        .info-block .icon {
-            width: 44px;
-            height: 44px;
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.12), rgba(180, 74, 255, 0.08));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--secondary);
-            font-size: 1.2rem;
-            flex-shrink: 0;
-            margin-top: 2px;
-            transition: var(--transition);
-            border: 1px solid rgba(0, 212, 255, 0.08);
-        }
-        .info-block:hover .icon {
-            background: linear-gradient(135deg, var(--secondary), var(--neon-purple));
-            color: var(--primary);
-            transform: scale(1.08) rotate(-4deg);
-            box-shadow: var(--glow-secondary);
-            border-color: var(--secondary);
-        }
+  /* ---- CTA Banner (reuses base styles) ---- */
+  .cta-banner {
+    padding: 70px 0;
+    background: radial-gradient(ellipse at 30% 20%, rgba(0, 240, 255, 0.06), transparent 60%),
+                var(--bg-primary);
+    border-top: 1px solid rgba(0, 240, 255, 0.06);
+    border-bottom: 1px solid rgba(0, 240, 255, 0.06);
+    text-align: center;
+  }
+  .cta-banner .container {
+    max-width: 720px;
+  }
+  .cta-banner h2 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    font-family: var(--font-display);
+    color: var(--text-white);
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+  .cta-banner h2 span {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+  }
+  .cta-banner p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 28px;
+  }
+  .cta-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
 
-        .info-block .content h4 {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--white);
-            margin-bottom: 2px;
-        }
-        .info-block .content p,
-        .info-block .content a {
-            color: var(--gray-dark);
-            font-size: 0.95rem;
-            transition: var(--transition);
-            text-decoration: none;
-        }
-        .info-block .content a:hover {
-            color: var(--secondary);
-        }
-
-        /* WhatsApp link inside info block */
-        .whatsapp-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #25d366;
-            color: var(--white);
-            padding: 8px 18px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: var(--transition);
-            margin-top: 4px;
-            text-decoration: none;
-            border: 2px solid transparent;
-            box-shadow: var(--glow-green);
-            animation: pulseGlowGreen 3.2s ease-in-out infinite;
-        }
-        .whatsapp-link:hover {
-            background: #1ebd5a;
-            transform: scale(1.04);
-            box-shadow: 0 0 40px rgba(57, 255, 20, 0.4);
-        }
-        @keyframes pulseGlowGreen {
-            0%, 100% { box-shadow: 0 0 20px rgba(57, 255, 20, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(57, 255, 20, 0.7), 0 0 80px rgba(57, 255, 20, 0.2); }
-        }
-
-        /* ---- Hours Block ---- */
-        .hours-block {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: var(--radius);
-            padding: 24px 28px;
-            margin-top: 4px;
-            transition: var(--transition);
-        }
-        .hours-block:hover {
-            border-color: rgba(0, 212, 255, 0.15);
-            box-shadow: var(--glow-secondary);
-        }
-        .hours-block h3 {
-            font-size: 1.2rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: var(--white);
-            margin-bottom: 16px;
-        }
-        .hours-block h3 i {
-            color: var(--secondary);
-        }
-        .hours-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.95rem;
-        }
-        .hours-table tr {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-        }
-        .hours-table tr:last-child {
-            border-bottom: none;
-        }
-        .hours-table td {
-            padding: 8px 0;
-            color: var(--gray-dark);
-        }
-        .hours-table td:last-child {
-            text-align: right;
-            font-weight: 600;
-            color: var(--white);
-        }
-        .hours-table .highlight td:last-child {
-            color: var(--secondary);
-            text-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
-        }
-
-        /* ---- Map Block ---- */
-        .map-block {
-            border-radius: var(--radius);
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            margin-top: 40px;
-            height: 300px;
-            background: var(--gray-light);
-            transition: var(--transition);
-        }
-        .map-block:hover {
-            border-color: var(--secondary);
-            box-shadow: var(--glow-secondary);
-        }
-        .map-block iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: block;
-        }
-
-        /* ---- CTA Banner (already in base? we can keep or remove) ---- */
-        .cta-banner {
-            padding: 70px 0;
-            background: linear-gradient(135deg, rgba(10, 14, 26, 0.9), rgba(20, 27, 43, 0.9));
-            text-align: center;
-            border-top: 1px solid rgba(0, 212, 255, 0.06);
-            border-bottom: 1px solid rgba(0, 212, 255, 0.06);
-            position: relative;
-            overflow: hidden;
-        }
-        .cta-banner::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -10%;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(0, 212, 255, 0.05) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-        .cta-banner .container {
-            position: relative;
-            z-index: 1;
-            max-width: 720px;
-        }
-        .cta-banner h2 {
-            font-size: 2.4rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            margin-bottom: 8px;
-        }
-        .cta-banner h2 span {
-            background: linear-gradient(135deg, var(--secondary), var(--neon-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .cta-banner p {
-            color: var(--gray-dark);
-            font-size: 1.05rem;
-            margin-bottom: 28px;
-            line-height: 1.7;
-        }
-        .cta-banner .cta-buttons {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        /* ---- Responsive ---- */
-        @media (max-width: 1024px) {
-            .contact-grid {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-            .map-block {
-                height: 250px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .page-hero {
-                padding: 50px 0 40px;
-            }
-            .page-hero h1 {
-                font-size: 2.2rem;
-            }
-            .page-hero p {
-                font-size: 1rem;
-            }
-            .contact-form-wrapper {
-                padding: 24px 18px;
-            }
-            .contact-form-wrapper h2 {
-                font-size: 1.4rem;
-            }
-            .info-block {
-                padding: 16px 18px;
-                flex-wrap: wrap;
-            }
-            .hours-block {
-                padding: 18px 18px;
-            }
-            .cta-banner {
-                padding: 50px 0;
-            }
-            .cta-banner h2 {
-                font-size: 1.8rem;
-            }
-            .cta-banner .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            .cta-banner .cta-buttons .btn-primary,
-            .cta-banner .cta-buttons .btn-whatsapp {
-                width: 100%;
-                justify-content: center;
-            }
-            .map-block {
-                height: 220px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .page-hero h1 {
-                font-size: 1.8rem;
-            }
-            .info-block {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-            .info-block .icon {
-                margin-bottom: 4px;
-            }
-            .info-block .content a {
-                word-break: break-all;
-            }
-            .contact-form-wrapper {
-                padding: 18px 14px;
-            }
-            .contact-form .form-control {
-                padding: 10px 12px;
-                font-size: 0.9rem;
-            }
-            .btn-submit {
-                font-size: 0.95rem;
-                padding: 14px;
-            }
-            .hours-table td {
-                font-size: 0.85rem;
-                padding: 6px 0;
-            }
-            .hours-table td:last-child {
-                font-size: 0.85rem;
-            }
-            .map-block {
-                height: 180px;
-            }
-        }
-    </style>
+  /* ================================================================
+     RESPONSIVE
+     ================================================================ */
+  @media (max-width: 1024px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+    .map-block {
+      height: 250px;
+    }
+  }
+  @media (max-width: 768px) {
+    .page-hero h1 {
+      font-size: 2.4rem;
+    }
+    .page-hero p {
+      font-size: 1rem;
+    }
+    .contact-form-wrapper {
+      padding: 24px 18px;
+    }
+    .contact-form-wrapper h2 {
+      font-size: 1.4rem;
+    }
+    .info-block {
+      padding: 16px 18px;
+      flex-wrap: wrap;
+    }
+    .hours-block {
+      padding: 18px 18px;
+    }
+    .cta-banner h2 {
+      font-size: 2rem;
+    }
+    .cta-buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+    .cta-buttons .btn-primary,
+    .cta-buttons .btn-whatsapp {
+      width: 100%;
+      justify-content: center;
+    }
+    .map-block {
+      height: 220px;
+    }
+  }
+  @media (max-width: 480px) {
+    .page-hero h1 {
+      font-size: 1.8rem;
+    }
+    .info-block {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .info-block .icon {
+      margin-bottom: 4px;
+    }
+    .info-block .content a {
+      word-break: break-all;
+    }
+    .contact-form-wrapper {
+      padding: 18px 14px;
+    }
+    .contact-form .form-control {
+      padding: 10px 12px;
+      font-size: 0.9rem;
+    }
+    .btn-submit {
+      font-size: 0.95rem;
+      padding: 14px;
+    }
+    .map-block {
+      height: 180px;
+    }
+  }
+</style>
 {% endblock %}
 
 {% block content %}
-    <!-- ================================================================
-         PAGE HERO
-         ================================================================ -->
-    <section class="page-hero animate-on-load">
-        <div class="container">
-            <div class="breadcrumb">
-                <a href="{% url 'home' %}"><i class="fas fa-home"></i> {% trans "Home" %}</a>
-                <span><i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5;"></i></span>
-                <span class="current">{% trans "Contact Us" %}</span>
-            </div>
-            <h1>{% trans "Get in" %} <span>{% trans "Touch" %}</span></h1>
-            <p>{% trans "We're here to help. Send us a message and we'll get back to you promptly." %}</p>
-            <div class="glow-line"></div>
-        </div>
-    </section>
+<!-- ================================================================
+     PAGE HERO
+     ================================================================ -->
+<section class="page-hero">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="{% url 'home' %}"><i class="fas fa-home"></i> {% trans "Home" %}</a>
+      <span><i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5;"></i></span>
+      <span class="current">{% trans "Contact Us" %}</span>
+    </div>
+    <h1>{% trans "Get in" %} <span>{% trans "Touch" %}</span></h1>
+    <p>{% trans "We're here to help. Send us a message and we'll get back to you promptly." %}</p>
+    <div class="glow-line"></div>
+  </div>
+</section>
 
-    <!-- ================================================================
-         CONTACT SECTION
-         ================================================================ -->
-    <section class="contact-section" id="contact">
-        <div class="container">
+<!-- ================================================================
+     CONTACT SECTION
+     ================================================================ -->
+<section class="contact-section" id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <!-- Left: Form -->
+      <div class="contact-form-wrapper">
+        <h2><i class="fas fa-paper-plane"></i> {% trans "Send a Message" %}</h2>
 
-            <div class="contact-grid">
+        <form class="contact-form" method="post" action="{% url 'contact' %}" novalidate>
+          {% csrf_token %}
 
-                <!-- ─── Left: Form ─── -->
-                <div class="contact-form-wrapper animate-on-load">
-                    <h2><i class="fas fa-paper-plane"></i> {% trans "Send a Message" %}</h2>
-
-                    <form class="contact-form" method="post" action="{% url 'contact' %}" novalidate>
-                        {% csrf_token %}
-
-                        <!-- Name -->
-                        <div class="form-group">
-                            <label for="{{ form.name.id_for_label }}">{{ form.name.label }} <span class="required">*</span></label>
-                            {{ form.name }}
-                            {% if form.name.errors %}
-                                <ul class="errorlist">{{ form.name.errors }}</ul>
-                            {% endif %}
-                        </div>
-
-                        <!-- Email -->
-                        <div class="form-group">
-                            <label for="{{ form.email.id_for_label }}">{{ form.email.label }} <span class="required">*</span></label>
-                            {{ form.email }}
-                            {% if form.email.errors %}
-                                <ul class="errorlist">{{ form.email.errors }}</ul>
-                            {% endif %}
-                        </div>
-
-                        <!-- Phone -->
-                        <div class="form-group">
-                            <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }} <span class="required">*</span></label>
-                            {{ form.phone }}
-                            {% if form.phone.errors %}
-                                <ul class="errorlist">{{ form.phone.errors }}</ul>
-                            {% endif %}
-                        </div>
-
-                        <!-- Subject -->
-                        <div class="form-group">
-                            <label for="{{ form.subject.id_for_label }}">{{ form.subject.label }} <span class="required">*</span></label>
-                            {{ form.subject }}
-                            {% if form.subject.errors %}
-                                <ul class="errorlist">{{ form.subject.errors }}</ul>
-                            {% endif %}
-                        </div>
-
-                        <!-- Message -->
-                        <div class="form-group">
-                            <label for="{{ form.message.id_for_label }}">{{ form.message.label }} <span class="required">*</span></label>
-                            {{ form.message }}
-                            {% if form.message.errors %}
-                                <ul class="errorlist">{{ form.message.errors }}</ul>
-                            {% endif %}
-                        </div>
-
-                        <button type="submit" class="btn-submit">
-                            <i class="fas fa-paper-plane"></i> {% trans "Send Message" %}
-                        </button>
-                    </form>
-
-                    <!-- Django messages will be displayed in the base template -->
-                </div>
-
-                <!-- ─── Right: Info & Hours ─── -->
-                <div class="contact-info">
-
-                    <!-- Address -->
-                    <div class="info-block animate-on-load">
-                        <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
-                        <div class="content">
-                            <h4>{% trans "Address" %}</h4>
-                            <p>{{ business.address|default:_("Not provided")|linebreaksbr }}</p>
-                        </div>
-                    </div>
-
-                    <!-- Phone -->
-                    <div class="info-block animate-on-load">
-                        <div class="icon"><i class="fas fa-phone-alt"></i></div>
-                        <div class="content">
-                            <h4>{% trans "Phone" %}</h4>
-                            <a href="tel:{{ business.phone }}">{{ business.phone|default:_("Not provided") }}</a>
-                        </div>
-                    </div>
-
-                    <!-- WhatsApp -->
-                    {% if business.whatsapp %}
-                    <div class="info-block animate-on-load">
-                        <div class="icon"><i class="fab fa-whatsapp"></i></div>
-                        <div class="content">
-                            <h4>{% trans "WhatsApp" %}</h4>
-                            <a href="https://wa.me/{{ business.whatsapp|cut:'+' }}?text={% trans 'Hello, I would like to know about your services.' %}" target="_blank" class="whatsapp-link">
-                                <i class="fab fa-whatsapp"></i> {% trans "Chat with Us" %}
-                            </a>
-                        </div>
-                    </div>
-                    {% endif %}
-
-                    <!-- Email -->
-                    <div class="info-block animate-on-load">
-                        <div class="icon"><i class="fas fa-envelope"></i></div>
-                        <div class="content">
-                            <h4>{% trans "Email" %}</h4>
-                            <a href="mailto:{{ business.email }}">{{ business.email|default:_("Not provided") }}</a>
-                        </div>
-                    </div>
-
-                    <!-- Business Hours -->
-                    <div class="hours-block animate-on-load">
-                        <h3><i class="fas fa-clock"></i> {% trans "Business Hours" %}</h3>
-                        {% if business.business_hours %}
-                            {{ business.business_hours|linebreaksbr }}
-                        {% else %}
-                            <p style="color: var(--gray-dark);">{% trans "Hours not set." %}</p>
-                        {% endif %}
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- ─── Map ─── -->
-            {% if business.google_map %}
-            <div class="map-block animate-on-load">
-                {{ business.google_map|safe }}
-            </div>
-            {% else %}
-            <div class="map-block animate-on-load" style="display:flex; align-items:center; justify-content:center; color:var(--gray-dark);">
-                <i class="fas fa-map-marked-alt" style="font-size:2rem; margin-right:12px;"></i>
-                {% trans "Map location not configured." %}
-            </div>
+          <div class="form-group">
+            <label for="{{ form.name.id_for_label }}">{{ form.name.label }} <span class="required">*</span></label>
+            {{ form.name }}
+            {% if form.name.errors %}
+              <ul class="errorlist">{{ form.name.errors }}</ul>
             {% endif %}
+          </div>
 
-        </div>
-    </section>
+          <div class="form-group">
+            <label for="{{ form.email.id_for_label }}">{{ form.email.label }} <span class="required">*</span></label>
+            {{ form.email }}
+            {% if form.email.errors %}
+              <ul class="errorlist">{{ form.email.errors }}</ul>
+            {% endif %}
+          </div>
 
-    <!-- ================================================================
-         CTA BANNER
-         ================================================================ -->
-    <section class="cta-banner animate-on-load">
-        <div class="container">
-            <h2>{% trans "We're just a" %} <span>{% trans "click" %}</span> {% trans "away!" %}</h2>
-            <p>{% trans "Reach out to us for any queries or to book a service. We respond promptly." %}</p>
-            <div class="cta-buttons">
-                <a href="tel:{{ business.phone }}" class="btn-primary">
-                    <i class="fas fa-phone"></i> {% trans "Call Now" %}
-                </a>
-                {% if business.whatsapp %}
-                <a href="https://wa.me/{{ business.whatsapp|cut:'+' }}?text={% trans 'Hello, I would like to know about your services.' %}" target="_blank" class="btn-whatsapp">
-                    <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
-                </a>
-                {% endif %}
-            </div>
+          <div class="form-group">
+            <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }} <span class="required">*</span></label>
+            {{ form.phone }}
+            {% if form.phone.errors %}
+              <ul class="errorlist">{{ form.phone.errors }}</ul>
+            {% endif %}
+          </div>
+
+          <div class="form-group">
+            <label for="{{ form.subject.id_for_label }}">{{ form.subject.label }} <span class="required">*</span></label>
+            {{ form.subject }}
+            {% if form.subject.errors %}
+              <ul class="errorlist">{{ form.subject.errors }}</ul>
+            {% endif %}
+          </div>
+
+          <div class="form-group">
+            <label for="{{ form.message.id_for_label }}">{{ form.message.label }} <span class="required">*</span></label>
+            {{ form.message }}
+            {% if form.message.errors %}
+              <ul class="errorlist">{{ form.message.errors }}</ul>
+            {% endif %}
+          </div>
+
+          <button type="submit" class="btn-submit">
+            <i class="fas fa-paper-plane"></i> {% trans "Send Message" %}
+          </button>
+        </form>
+      </div>
+
+      <!-- Right: Info & Hours -->
+      <div class="contact-info">
+        <!-- Address -->
+        <div class="info-block">
+          <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
+          <div class="content">
+            <h4>{% trans "Address" %}</h4>
+            <p>{{ business.address|default:_("Not provided")|linebreaksbr }}</p>
+          </div>
         </div>
-    </section>
+
+        <!-- Phone -->
+        <div class="info-block">
+          <div class="icon"><i class="fas fa-phone-alt"></i></div>
+          <div class="content">
+            <h4>{% trans "Phone" %}</h4>
+            <a href="tel:{{ business.phone }}">{{ business.phone|default:_("Not provided") }}</a>
+          </div>
+        </div>
+
+        <!-- WhatsApp -->
+        {% if business.whatsapp %}
+        <div class="info-block">
+          <div class="icon"><i class="fab fa-whatsapp"></i></div>
+          <div class="content">
+            <h4>{% trans "WhatsApp" %}</h4>
+            <a href="https://wa.me/{{ business.whatsapp|cut:'+' }}?text={% trans 'Hello, I would like to know about your services.' %}" target="_blank" class="whatsapp-link">
+              <i class="fab fa-whatsapp"></i> {% trans "Chat with Us" %}
+            </a>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Email -->
+        <div class="info-block">
+          <div class="icon"><i class="fas fa-envelope"></i></div>
+          <div class="content">
+            <h4>{% trans "Email" %}</h4>
+            <a href="mailto:{{ business.email }}">{{ business.email|default:_("Not provided") }}</a>
+          </div>
+        </div>
+
+        <!-- Business Hours -->
+        <div class="hours-block">
+          <h3><i class="fas fa-clock"></i> {% trans "Business Hours" %}</h3>
+          {% if business.business_hours %}
+            <div style="color: var(--text-muted); line-height: 1.8;">{{ business.business_hours|linebreaksbr }}</div>
+          {% else %}
+            <p style="color: var(--text-muted);">{% trans "Hours not set." %}</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Map -->
+    <div class="map-block">
+      {% if business.google_map %}
+        {{ business.google_map|safe }}
+      {% else %}
+        <div class="map-placeholder">
+          <i class="fas fa-map-marked-alt"></i>
+          {% trans "Map location not configured." %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     CTA BANNER
+     ================================================================ -->
+<section class="cta-banner">
+  <div class="container">
+    <h2>{% trans "We're just a" %} <span>{% trans "click" %}</span> {% trans "away!" %}</h2>
+    <p>{% trans "Reach out to us for any queries or to book a service. We respond promptly." %}</p>
+    <div class="cta-buttons">
+      <a href="tel:{{ business.phone }}" class="btn-primary">
+        <i class="fas fa-phone"></i> {% trans "Call Now" %}
+      </a>
+      {% if business.whatsapp %}
+      <a href="https://wa.me/{{ business.whatsapp|cut:'+' }}?text={% trans 'Hello, I would like to know about your services.' %}" target="_blank" class="btn-whatsapp">
+        <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
+      </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
 {% endblock %}
 
 {% block extra_scripts %}

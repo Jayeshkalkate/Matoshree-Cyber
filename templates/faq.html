@@ -5,12 +5,12 @@
 {% block title %}{% trans "FAQ" %}{% endblock %}
 
 {% block extra_head %}
-<!-- ================================================================
-     FAQ PAGE – Futuristic Cyber / Gaming Theme
-     Uses global CSS variables from base.html for consistency.
-     Includes neon glow effects, card hover scaling, and scroll animations.
-     ================================================================ -->
 <style>
+  /* ================================================================
+     PAGE-SPECIFIC STYLES – FAQ
+     Uses global CSS variables from base.html.
+     ================================================================ */
+
   /* ---- Section reveal animation (scroll-triggered) ---- */
   .reveal {
     opacity: 0;
@@ -22,19 +22,15 @@
     transform: translateY(0);
   }
 
-  /* ---- Hero Section (glassmorphism with glow) ---- */
+  /* ---- Hero ---- */
   .page-hero {
-    background: radial-gradient(ellipse at 30% 20%, rgba(0, 240, 255, 0.08), transparent 60%),
-                radial-gradient(ellipse at 70% 80%, rgba(255, 45, 149, 0.05), transparent 60%),
-                var(--bg-primary);
-    padding: 80px 0 70px;
+    padding: 70px 0 50px;
+    text-align: center;
     position: relative;
     overflow: hidden;
-    text-align: center;
-    border-bottom: 1px solid rgba(0, 240, 255, 0.08);
   }
   .page-hero::before {
-    content: "";
+    content: '';
     position: absolute;
     top: -30%;
     right: -10%;
@@ -43,17 +39,7 @@
     background: radial-gradient(circle, rgba(0, 240, 255, 0.04), transparent 70%);
     border-radius: 50%;
     pointer-events: none;
-  }
-  .page-hero::after {
-    content: "";
-    position: absolute;
-    bottom: -30%;
-    left: -10%;
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(255, 45, 149, 0.03), transparent 70%);
-    border-radius: 50%;
-    pointer-events: none;
+    z-index: 0;
   }
   .page-hero .container {
     position: relative;
@@ -80,27 +66,31 @@
     color: var(--neon-cyan);
   }
   .page-hero h1 {
-    font-size: 3.4rem;
+    font-size: 3rem;
     font-weight: 900;
     font-family: var(--font-display);
     color: var(--text-white);
     letter-spacing: 1px;
-    margin-bottom: 12px;
-    text-shadow: 0 0 40px rgba(0, 240, 255, 0.15);
+    margin-bottom: 8px;
+    text-shadow: 0 0 40px rgba(0, 240, 255, 0.12);
   }
   .page-hero h1 span {
     color: var(--neon-cyan);
-    text-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+    text-shadow: 0 0 30px rgba(0, 240, 255, 0.25);
   }
   .page-hero .subhead {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     color: var(--text-muted);
-    max-width: 640px;
+    max-width: 620px;
     margin: 0 auto;
     line-height: 1.8;
   }
+  .page-hero h1 i {
+    color: var(--neon-cyan);
+    margin-right: 0.5rem;
+  }
 
-  /* ---- Search Bar (glassmorphism) ---- */
+  /* ---- Search Bar ---- */
   .search-container {
     max-width: 700px;
     margin: 0 auto 2.5rem;
@@ -170,7 +160,7 @@
     box-shadow: var(--glow-cyan);
   }
 
-  /* ---- FAQ Accordion (glassmorphism cards) ---- */
+  /* ---- FAQ Accordion ---- */
   .faq-section {
     padding: 40px 0 60px;
     background: var(--bg-secondary);
@@ -196,7 +186,6 @@
     border-color: var(--neon-cyan);
     box-shadow: var(--shadow-card), var(--glow-cyan);
   }
-  /* Hide default marker for <summary> and style custom */
   .faq-item summary {
     list-style: none;
     display: flex;
@@ -264,7 +253,43 @@
     display: block;
   }
 
-  /* ---- Pricing Cards Section (Neon hover effect) ---- */
+  /* ---- FAQ Footer ---- */
+  .faq-footer {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+  .faq-footer i {
+    color: var(--neon-cyan);
+    margin-right: 0.2rem;
+  }
+  .faq-footer a {
+    color: var(--neon-cyan);
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+  }
+  .faq-footer a:hover {
+    text-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+  }
+  .faq-footer .badge {
+    background: rgba(0, 240, 255, 0.06);
+    padding: 0.2rem 0.9rem;
+    border-radius: var(--radius-pill);
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: var(--text-white);
+    border: 1px solid rgba(0, 240, 255, 0.08);
+  }
+
+  /* ---- Pricing Cards (reuse from base, but ensure style) ---- */
   .pricing-section {
     padding: 70px 0 80px;
     background: var(--bg-primary);
@@ -324,7 +349,6 @@
   .pricing-card:hover::before {
     opacity: 1;
   }
-  /* ---- The sleek hover interaction: scale up + neon border ---- */
   .pricing-card:hover {
     transform: scale(1.04) translateY(-8px);
     border-color: var(--neon-cyan);
@@ -375,51 +399,14 @@
     justify-content: center;
   }
 
-  /* ---- FAQ Footer ---- */
-  .faq-footer {
-    margin-top: 2.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.04);
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-    color: var(--text-muted);
-  }
-  .faq-footer i {
-    color: var(--neon-cyan);
-    margin-right: 0.2rem;
-  }
-  .faq-footer a {
-    color: var(--neon-cyan);
-    text-decoration: none;
-    font-weight: 600;
-    transition: var(--transition);
-  }
-  .faq-footer a:hover {
-    text-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
-  }
-  .faq-footer .badge {
-    background: rgba(0, 240, 255, 0.06);
-    padding: 0.2rem 0.9rem;
-    border-radius: var(--radius-pill);
-    font-weight: 500;
-    font-size: 0.8rem;
-    color: var(--text-white);
-    border: 1px solid rgba(0, 240, 255, 0.08);
-  }
-
   /* ================================================================
-     RESPONSIVE ADJUSTMENTS
+     RESPONSIVE
      ================================================================ */
   @media (max-width: 1024px) {
     .pricing-grid {
       grid-template-columns: repeat(2, 1fr);
     }
   }
-
   @media (max-width: 768px) {
     .page-hero h1 {
       font-size: 2.4rem;
@@ -457,7 +444,6 @@
       gap: 0.3rem;
     }
   }
-
   @media (max-width: 480px) {
     .page-hero h1 {
       font-size: 1.8rem;
@@ -481,7 +467,7 @@
 
 {% block content %}
 <!-- ================================================================
-     PAGE HERO – Futuristic cyber header
+     PAGE HERO
      ================================================================ -->
 <section class="page-hero reveal">
   <div class="container">
@@ -490,13 +476,13 @@
       <i class="fas fa-chevron-right" style="font-size: 0.6rem"></i>
       <span class="current">{% trans "FAQ" %}</span>
     </div>
-    <h1><i class="fas fa-question-circle" style="color: var(--neon-cyan); margin-right: 0.5rem;"></i> {% trans "Frequently Asked" %} <span>{% trans "Questions" %}</span></h1>
+    <h1><i class="fas fa-question-circle"></i> {% trans "Frequently Asked" %} <span>{% trans "Questions" %}</span></h1>
     <p class="subhead">{% trans "Find quick answers to common questions about our services, documents, and charges." %}</p>
   </div>
 </section>
 
 <!-- ================================================================
-     SEARCH & FAQ LIST – Glassmorphism accordion
+     SEARCH & FAQ LIST
      ================================================================ -->
 <section class="faq-section reveal">
   <div class="container">
@@ -510,12 +496,7 @@
         aria-label="{% trans "Search FAQs" %}"
         autocomplete="off"
       />
-      <button
-        type="button"
-        class="clear-btn"
-        id="clearSearch"
-        aria-label="{% trans "Clear search" %}"
-      >
+      <button type="button" class="clear-btn" id="clearSearch" aria-label="{% trans "Clear search" %}">
         <i class="fas fa-times-circle"></i>
       </button>
       <button type="submit" id="searchSubmit" aria-label="{% trans "Submit search" %}">
@@ -526,11 +507,7 @@
     <!-- FAQ List (DYNAMIC) -->
     <div class="faq-list" id="faqList">
       {% for faq in faqs %}
-      <details
-        class="faq-item"
-        data-question="{{ faq.question|lower }}"
-        data-answer="{{ faq.answer|lower|striptags }}"
-      >
+      <details class="faq-item" data-question="{{ faq.question|lower }}" data-answer="{{ faq.answer|lower|striptags }}">
         <summary>
           <span>
             <i class="fas fa-question-circle question-icon"></i>
@@ -558,7 +535,7 @@
     <div class="faq-footer">
       <span>
         <i class="fas fa-lightbulb"></i> {% trans "Can't find what you need?" %}
-        <a href="{% url 'home' %}#contact">{% trans "Contact us" %}</a>
+        <a href="{% url 'contact' %}">{% trans "Contact us" %}</a>
       </span>
       <span class="badge">
         <i class="fas fa-file-alt"></i>
@@ -573,7 +550,7 @@
 </section>
 
 <!-- ================================================================
-     PRICING CARDS – Service packages with neon hover effect
+     PRICING CARDS
      ================================================================ -->
 <section class="pricing-section reveal">
   <div class="container">
@@ -582,7 +559,7 @@
       <p>{% trans "Get the most out of our services with these convenient packages." %}</p>
     </div>
     <div class="pricing-grid">
-      <!-- Basic Package -->
+      <!-- Basic -->
       <div class="pricing-card">
         <div class="plan-name">{% trans "Starter" %}</div>
         <div class="price">₹99 <span>/ {% trans "session" %}</span></div>
@@ -594,7 +571,7 @@
         </ul>
         <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Get Started" %}</a>
       </div>
-      <!-- Standard Package (highlighted with pulse) -->
+      <!-- Pro (highlighted) -->
       <div class="pricing-card" style="border-color: rgba(0, 240, 255, 0.15);">
         <div class="plan-name">{% trans "Pro" %}</div>
         <div class="price">₹199 <span>/ {% trans "session" %}</span></div>
@@ -607,7 +584,7 @@
         </ul>
         <a href="{% url 'appointment' %}" class="btn-primary pulse">{% trans "Choose Plan" %}</a>
       </div>
-      <!-- Premium Package -->
+      <!-- Enterprise -->
       <div class="pricing-card">
         <div class="plan-name">{% trans "Enterprise" %}</div>
         <div class="price">₹299 <span>/ {% trans "session" %}</span></div>
@@ -631,7 +608,7 @@
   (function() {
     'use strict';
 
-    // ---- Scroll-triggered reveal animation (Intersection Observer) ----
+    // ---- Scroll reveal ----
     const revealElements = document.querySelectorAll('.reveal');
     if (revealElements.length && 'IntersectionObserver' in window) {
       const observer = new IntersectionObserver((entries) => {
@@ -642,14 +619,12 @@
           }
         });
       }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
       revealElements.forEach(el => observer.observe(el));
     } else {
-      // Fallback: show all if no IntersectionObserver
       revealElements.forEach(el => el.classList.add('visible'));
     }
 
-    // ---- FAQ Search Functionality ----
+    // ---- FAQ Search ----
     const searchInput = document.getElementById('searchInput');
     const clearBtn = document.getElementById('clearSearch');
     const searchSubmit = document.getElementById('searchSubmit');
@@ -681,32 +656,24 @@
         noResults.style.display = 'none';
       }
 
-      if (q.length > 0) {
-        clearBtn.classList.add('visible');
-      } else {
-        clearBtn.classList.remove('visible');
-      }
+      clearBtn.classList.toggle('visible', q.length > 0);
     }
 
-    // Input event
     searchInput.addEventListener('input', function() {
       filterFAQs(this.value);
     });
 
-    // Clear button
     clearBtn.addEventListener('click', function() {
       searchInput.value = '';
       filterFAQs('');
       searchInput.focus();
     });
 
-    // Submit button
     searchSubmit.addEventListener('click', function(e) {
       e.preventDefault();
       filterFAQs(searchInput.value);
     });
 
-    // Enter key
     searchInput.addEventListener('keydown', function(e) {
       if (e.key === 'Enter') {
         e.preventDefault();
@@ -714,10 +681,9 @@
       }
     });
 
-    // Initial state
+    // Initial
     filterFAQs('');
 
-    // If no real FAQ items, hide no-results
     if (faqItems.length === 0) {
       noResults.style.display = 'none';
     }

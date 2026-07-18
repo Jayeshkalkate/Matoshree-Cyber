@@ -6,9 +6,8 @@
 
 {% block extra_head %}
 <!-- ================================================================
-     SERVICE CHARGES PAGE – Futuristic Cyber / Gaming Theme
+     PAGE-SPECIFIC STYLES – Service Charges
      Uses global CSS variables from base.html for consistency.
-     Includes neon glow effects, card hover scaling, and scroll animations.
      ================================================================ -->
 <style>
   /* ---- Section reveal animation (scroll-triggered) ---- */
@@ -289,6 +288,24 @@
     width: 100%;
     justify-content: center;
   }
+  .pricing-card.popular {
+    border-color: var(--neon-cyan);
+    box-shadow: var(--glow-cyan);
+  }
+  .pricing-card .badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--gradient-cyan);
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: var(--radius-pill);
+    letter-spacing: 0.5px;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
+  }
 
   /* ---- Disclaimer / Notes (glassmorphism) ---- */
   .charges-notes {
@@ -369,9 +386,15 @@
     flex-wrap: wrap;
     gap: 18px;
   }
-  .cta-buttons .btn-primary,
-  .cta-buttons .btn-whatsapp {
-    min-width: 180px;
+
+  /* ---- No data fallback ---- */
+  .no-data {
+    color: var(--text-muted);
+    text-align: center;
+    padding: 30px 0;
+    grid-column: 1 / -1;
+    font-size: 1rem;
+    opacity: 0.6;
   }
 
   /* ================================================================
@@ -438,7 +461,7 @@
 
 {% block content %}
 <!-- ================================================================
-     PAGE HERO – Futuristic cyber header
+     PAGE HERO
      ================================================================ -->
 <section class="page-hero reveal">
   <div class="container">
@@ -455,7 +478,7 @@
 </section>
 
 <!-- ================================================================
-     CHARGES TABLE – Glassmorphism with hover glow (DYNAMIC)
+     CHARGES TABLE
      ================================================================ -->
 <section class="charges-section reveal">
   <div class="container">
@@ -495,43 +518,39 @@
   </div>
 </section>
 
-
-<hr />
-
-<!-- ============================================================
-     PRICING CARDS
-     ============================================================ -->
-<section class="pricing animate-on-load" id="pricing">
-    <div class="container">
-        <div class="section-header">
-            <h2>Choose Your <span>Plan</span></h2>
-            <p>Flexible pricing for every need — hover to feel the power</p>
-        </div>
-        <div class="pricing-grid">
-            {% for charge in charges %}
-            <div class="pricing-card {% if forloop.counter == 2 %}popular{% endif %}">
-                {% if forloop.counter == 2 %}
-                <span class="badge">🔥 Popular</span>
-                {% endif %}
-                <div class="plan-name">{{ charge.service.name }}</div>
-                <div class="price">₹{{ charge.charge }} <small>/ session</small></div>
-                <div class="desc">Starting at affordable rates</div>
-                <ul>
-                    <li><i class="fas fa-check"></i> Professional service</li>
-                    <li><i class="fas fa-check"></i> Quick turnaround</li>
-                    <li><i class="fas fa-check"></i> Expert assistance</li>
-                </ul>
-                <a href="{% url 'appointment' %}" class="btn-primary">Book Now</a>
-            </div>
-            {% empty %}
-            <p class="no-data">{% trans "Pricing information coming soon." %}</p>
-            {% endfor %}
-        </div>
+<!-- ================================================================
+     PRICING CARDS (optional – matches homepage style)
+     ================================================================ -->
+<section class="pricing-section reveal">
+  <div class="container">
+    <div class="section-header">
+      <h2>{% trans "Choose Your" %} <span>{% trans "Plan" %}</span></h2>
+      <p>{% trans "Flexible pricing for every need — hover to feel the power" %}</p>
     </div>
+    <div class="pricing-grid">
+      {% for charge in charges %}
+      <div class="pricing-card {% if forloop.counter == 2 %}popular{% endif %}">
+        {% if forloop.counter == 2 %}
+        <span class="badge">🔥 {% trans "Popular" %}</span>
+        {% endif %}
+        <div class="plan-name">{{ charge.service.name }}</div>
+        <div class="price">₹{{ charge.charge }} <span> / {% trans "session" %}</span></div>
+        <ul class="features">
+          <li><i class="fas fa-check"></i> {% trans "Professional service" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Quick turnaround" %}</li>
+          <li><i class="fas fa-check"></i> {% trans "Expert assistance" %}</li>
+        </ul>
+        <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Book Now" %}</a>
+      </div>
+      {% empty %}
+      <p class="no-data">{% trans "Pricing information coming soon." %}</p>
+      {% endfor %}
+    </div>
+  </div>
 </section>
 
 <!-- ================================================================
-     DISCLAIMER / NOTES – Important information
+     DISCLAIMER / NOTES
      ================================================================ -->
 <section class="charges-notes reveal">
   <div class="container">
@@ -548,7 +567,7 @@
 </section>
 
 <!-- ================================================================
-     CTA BANNER – Call to action
+     CTA BANNER
      ================================================================ -->
 <section class="cta-banner reveal">
   <div class="container">
@@ -558,9 +577,11 @@
       <a href="{% url 'home' %}#contact" class="btn-primary">
         <i class="fas fa-phone-alt"></i> {% trans "Contact Us" %}
       </a>
-      <a href="https://wa.me/{{ business.whatsapp|cut:'+' }}?text=Hello%2C%20I%20want%20to%20know%20the%20charges%20for%20a%20service." target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
+      {% with whatsapp_number=business.whatsapp|default:"919876543210" %}
+      <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20want%20to%20know%20the%20charges%20for%20a%20service." target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
         <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
       </a>
+      {% endwith %}
     </div>
   </div>
 </section>

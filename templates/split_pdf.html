@@ -1,69 +1,327 @@
 {% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Split PDF" %}{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* ================================================================
+     PAGE-SPECIFIC STYLES – Split PDF
+     ================================================================ */
+
+  .page-hero {
+    padding: 70px 0 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-hero::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.04), transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .page-hero .container {
+    position: relative;
+    z-index: 1;
+  }
+  .page-hero h1 {
+    font-size: 2.8rem;
+    font-weight: 900;
+    font-family: var(--font-display);
+    color: var(--text-white);
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    text-shadow: 0 0 40px rgba(0, 240, 255, 0.12);
+  }
+  .page-hero p {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 620px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+
+  .split-section {
+    padding: 40px 0 70px;
+    background: var(--bg-secondary);
+  }
+
+  .split-card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    box-shadow: var(--shadow-card);
+    padding: 2.5rem 2.5rem 2.8rem;
+    transition: var(--transition);
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .split-card:hover {
+    border-color: var(--neon-cyan);
+    box-shadow: var(--shadow-card), var(--glow-cyan);
+  }
+
+  .split-card .card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .split-card .card-header i {
+    font-size: 2rem;
+    color: var(--neon-cyan);
+    background: rgba(0, 240, 255, 0.08);
+    padding: 0.5rem;
+    border-radius: 14px;
+  }
+  .split-card .card-header h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-white);
+    margin: 0;
+  }
+
+  .split-card .doc-info {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: var(--radius-sm);
+    padding: 0.8rem 1.2rem;
+    border-left: 3px solid var(--neon-cyan);
+    margin-bottom: 1.5rem;
+  }
+  .split-card .doc-info strong {
+    color: var(--text-white);
+  }
+  .split-card .doc-info span {
+    color: var(--text-muted);
+  }
+
+  /* Error alert */
+  .alert-error {
+    background: rgba(255, 45, 149, 0.08);
+    color: var(--neon-magenta);
+    border: 1px solid rgba(255, 45, 149, 0.15);
+    border-radius: var(--radius-sm);
+    padding: 0.8rem 1.2rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .alert-error i {
+    font-size: 1.2rem;
+  }
+
+  /* Form elements */
+  .split-card .form-group {
+    margin-bottom: 1.2rem;
+  }
+  .split-card .form-group label {
+    font-weight: 600;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 0.3rem;
+    font-size: 0.95rem;
+  }
+  .split-card .form-control {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    color: var(--text-white) !important;
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    width: 100%;
+    transition: var(--transition);
+    font-size: 0.95rem;
+  }
+  .split-card .form-control::placeholder {
+    color: var(--text-muted) !important;
+    opacity: 0.6;
+  }
+  .split-card .form-control:focus {
+    border-color: var(--neon-cyan) !important;
+    box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.12);
+    outline: none;
+    background: rgba(0, 240, 255, 0.04) !important;
+  }
+
+  .split-card .helper-text {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 0.4rem;
+    opacity: 0.7;
+  }
+  .split-card .helper-text code {
+    background: rgba(255, 255, 255, 0.06);
+    padding: 0.1rem 0.5rem;
+    border-radius: 4px;
+    font-family: monospace;
+    color: var(--text-white);
+  }
+  .split-card .helper-text .sep {
+    color: var(--text-muted);
+    padding: 0 0.2rem;
+  }
+
+  /* Submit button */
+  .btn-split {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.8rem 2rem;
+    border-radius: var(--radius-pill);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--bg-primary);
+    background: var(--neon-cyan);
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--glow-cyan);
+    font-family: var(--font-body);
+  }
+  .btn-split:hover {
+    background: #00e5ff;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 0 40px rgba(0, 240, 255, 0.5);
+  }
+  .btn-split i {
+    font-size: 1.1rem;
+  }
+
+  /* Back link */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: var(--transition);
+    margin-top: 1.5rem;
+    font-size: 0.95rem;
+  }
+  .back-link:hover {
+    color: var(--neon-cyan);
+  }
+  .back-link i {
+    font-size: 0.9rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .split-card {
+      padding: 1.8rem 1.2rem 2rem;
+    }
+    .page-hero h1 {
+      font-size: 2.2rem;
+    }
+    .page-hero p {
+      font-size: 1rem;
+    }
+    .split-card .card-header h2 {
+      font-size: 1.3rem;
+    }
+    .btn-split {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+  @media (max-width: 480px) {
+    .split-card {
+      padding: 1.2rem 0.8rem 1.5rem;
+    }
+    .page-hero h1 {
+      font-size: 1.8rem;
+    }
+    .split-card .card-header i {
+      font-size: 1.5rem;
+      padding: 0.4rem;
+    }
+    .split-card .card-header h2 {
+      font-size: 1.1rem;
+    }
+  }
+</style>
+{% endblock %}
 
 {% block content %}
+<!-- ================================================================
+     PAGE HERO
+     ================================================================ -->
+<section class="page-hero">
+  <div class="container">
+    <h1>{% trans "Split PDF" %}</h1>
+    <p>{% trans "Extract specific pages from a PDF document." %}</p>
+  </div>
+</section>
 
-<div class="container mt-5">
+<!-- ================================================================
+     SPLIT PDF FORM
+     ================================================================ -->
+<section class="split-section">
+  <div class="container">
+    <div class="split-card">
+      <!-- Header -->
+      <div class="card-header">
+        <i class="fas fa-cut"></i>
+        <h2>{% trans "Split PDF" %}</h2>
+      </div>
 
-    <div class="card">
+      <!-- Document Info -->
+      <div class="doc-info">
+        <strong>{% trans "Document" %}:</strong>
+        <span>{{ document.file.name }}</span>
+      </div>
 
-        <div class="card-header bg-primary text-white">
-            Split PDF
+      <!-- Error Message -->
+      {% if error %}
+        <div class="alert-error">
+          <i class="fas fa-exclamation-circle"></i>
+          {{ error }}
+        </div>
+      {% endif %}
+
+      <!-- Form -->
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+          <label for="pagesInput">{% trans "Pages" %}</label>
+          <input
+            type="text"
+            name="pages"
+            id="pagesInput"
+            class="form-control"
+            placeholder='{% trans "e.g. 1-3,5,7-10" %}'
+            required
+          />
+          <span class="helper-text">
+            <i class="fas fa-info-circle"></i>
+            {% trans "Examples:" %}
+            <code>1-5</code>
+            <span class="sep">|</span>
+            <code>1,3,6</code>
+            <span class="sep">|</span>
+            <code>1-3,7,9-10</code>
+          </span>
         </div>
 
-        <div class="card-body">
+        <button type="submit" class="btn-split">
+          <i class="fas fa-cut"></i> {% trans "Split PDF" %}
+        </button>
+      </form>
 
-            <p>
-                PDF :
-                <strong>{{ document.file.name }}</strong>
-            </p>
-
-            {% if error %}
-            <div class="alert alert-danger">
-                {{ error }}
-            </div>
-            {% endif %}
-
-            <form method="post">
-
-                {% csrf_token %}
-
-                <label class="form-label">
-                    Pages
-                </label>
-
-                <input
-                    type="text"
-                    name="pages"
-                    class="form-control"
-                    placeholder="Example: 1-3,5,7-10"
-                    required
-                >
-
-                <small class="text-muted">
-                    Examples:
-                    1-5
-                    &nbsp; | &nbsp;
-                    1,3,6
-                    &nbsp; | &nbsp;
-                    1-3,7,9-10
-                </small>
-
-                <br><br>
-
-                <button class="btn btn-warning">
-
-                    <i class="fas fa-cut"></i>
-
-                    Split PDF
-
-                </button>
-
-            </form>
-
-        </div>
-
+      <!-- Back Link -->
+      <a href="{% url 'application_admin_detail' document.application.id %}" class="back-link">
+        <i class="fas fa-arrow-left"></i> {% trans "Back to Application" %}
+      </a>
     </div>
-
-</div>
-
+  </div>
+</section>
 {% endblock %}

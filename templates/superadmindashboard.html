@@ -2,46 +2,23 @@
 {% load i18n %}
 {% load static %}
 
-{% block title %}{% trans "Super Admin" %}{% endblock %}
+{% block title %}{% trans "Super Admin Dashboard" %}{% endblock %}
 
 {% block extra_head %}
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% trans "Super Admin Dashboard – Cyber Café" %}</title>
-
-    <!-- Google Fonts & Font Awesome -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap"
-    rel="stylesheet"
-    />
-    <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
-    <!-- Bootstrap 5 (for modals / collapse) -->
+    <!-- Bootstrap 5 (for collapsible forms) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
       /* =====================================================================
          CYBER CAFE ADMIN — FUTURISTIC NEON THEME
-         ---------------------------------------------------------------------
-         Design language: dark "control room" glass panels, a faint circuit
-         grid backdrop, and cyan/violet neon accents. Every original class
-         name from the template is kept 1:1 so no HTML/Django logic needed
-         to change — this is a pure re-skin.
-      ========================================================================= */
-
-      /* Extra display font for headings/logo only. Body copy stays on Inter
-         (loaded in <head>) for readability. */
+         ========================================================================= */
       @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&display=swap');
 
       :root {
         /* ---- Surfaces ---- */
-        --bg-void:        #060814;                 /* page background */
-        --bg-panel:       rgba(18, 24, 44, 0.72);   /* glass card fill */
-        --bg-panel-solid: #0e1424;                  /* opaque panel fill */
+        --bg-void:        #060814;
+        --bg-panel:       rgba(18, 24, 44, 0.72);
+        --bg-panel-solid: #0e1424;
         --bg-sidebar:     #05060e;
         --bg-input:       #0b1120;
 
@@ -70,7 +47,7 @@
         /* ---- Motion ---- */
         --transition: all 0.3s ease;
 
-        /* ---- Glow shadows (reused everywhere for the "high-tech" feel) --- */
+        /* ---- Glow shadows ---- */
         --glow-cyan:   0 0 6px rgba(0, 230, 255, 0.55), 0 0 22px rgba(0, 230, 255, 0.25);
         --glow-purple: 0 0 6px rgba(168, 85, 247, 0.55), 0 0 22px rgba(168, 85, 247, 0.25);
         --glow-pink:   0 0 6px rgba(255, 46, 154, 0.55), 0 0 22px rgba(255, 46, 154, 0.25);
@@ -80,10 +57,7 @@
 
       * { margin: 0; padding: 0; box-sizing: border-box; }
 
-      /* ---------------------------------------------------------------------
-         PAGE LOAD ANIMATION
-         A soft "digital" fade-in + slide-up used on first paint and whenever
-         a dashboard section is switched. -------------------------------- */
+      /* ---- Page load animation ---- */
       @keyframes fadeSlideUp {
         from { opacity: 0; transform: translateY(22px); }
         to   { opacity: 1; transform: translateY(0); }
@@ -92,10 +66,6 @@
         0%, 100% { box-shadow: 0 0 6px currentColor, 0 0 14px currentColor; }
         50%      { box-shadow: 0 0 14px currentColor, 0 0 32px currentColor; }
       }
-      @keyframes borderScan {
-        0%   { background-position: 0% 50%; }
-        100% { background-position: 200% 50%; }
-      }
 
       body {
         font-family: "Inter", sans-serif;
@@ -103,7 +73,6 @@
         color: var(--text-bright);
         display: flex;
         min-height: 100vh;
-        /* faint circuit-board grid for a high-tech backdrop */
         background-image:
           linear-gradient(rgba(0, 230, 255, 0.05) 1px, transparent 1px),
           linear-gradient(90deg, rgba(0, 230, 255, 0.05) 1px, transparent 1px),
@@ -114,7 +83,6 @@
         animation: fadeSlideUp 0.6s ease both;
       }
 
-      /* Slim glowing scrollbars to keep the theme consistent everywhere */
       ::-webkit-scrollbar { width: 10px; height: 10px; }
       ::-webkit-scrollbar-track { background: var(--bg-void); }
       ::-webkit-scrollbar-thumb {
@@ -184,7 +152,6 @@
         color: #fff;
         transform: translateX(3px);
       }
-      /* Active nav item: soft pulsing neon glow, like a powered-on console key */
       .sidebar nav ul li a.active {
         background: linear-gradient(90deg, rgba(0, 230, 255, 0.14), rgba(168, 85, 247, 0.08));
         border-left: 3px solid var(--neon-cyan);
@@ -243,7 +210,7 @@
       .hamburger { display: none; background: none; border: none; font-size: 1.6rem; color: var(--neon-cyan); cursor: pointer; transition: var(--transition); }
       .hamburger:hover { filter: drop-shadow(var(--glow-cyan)); transform: scale(1.1); }
 
-      /* ----- Stat cards ("pricing card" style: glass + neon hover) ----- */
+      /* ----- Stat cards ----- */
       .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.2rem; margin-bottom: 2rem; }
       .stat-card {
         background: var(--bg-panel);
@@ -254,10 +221,9 @@
         display: flex;
         align-items: center;
         gap: 1rem;
-        transition: all 0.3s ease; /* smooth transition on every interactive card */
+        transition: all 0.3s ease;
         animation: fadeSlideUp 0.6s ease both;
       }
-      /* The signature "pricing card" hover: gentle scale-up + vibrant neon border */
       .stat-card:hover {
         transform: translateY(-4px) scale(1.03);
         border-color: var(--neon-cyan);
@@ -276,16 +242,15 @@
       .stat-card .info h4 { font-size: 1.5rem; font-weight: 700; color: #fff; }
       .stat-card .info p { color: var(--text-dim); font-size: 0.85rem; }
 
-      /* ----- Section containers: slide up when switched ----------------- */
+      /* ----- Section containers ----- */
       .section { display: none; animation: fadeSlideUp 0.35s ease; }
       .section.active { display: block; }
-      @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
       .section-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; margin-bottom: 1.5rem; }
       .section-header h3 { font-size: 1.3rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 0.5rem; }
       .section-header h3 i { color: var(--neon-cyan) !important; filter: drop-shadow(0 0 6px rgba(0,230,255,0.6)); }
 
-      /* ----- Buttons: neon pulsing glow on the primary action ----------- */
+      /* ----- Buttons ----- */
       .btn-primary {
         background: linear-gradient(135deg, #0d3a66, #08192e);
         color: var(--neon-cyan);
@@ -349,7 +314,7 @@
       }
       .btn-outline:hover { background: var(--neon-purple-soft); border-color: var(--neon-purple); color: #fff; }
 
-      /* ----- Tables: dark glass panel with neon row hover --------------- */
+      /* ----- Tables ----- */
       .table-wrap {
         overflow-x: auto;
         background: var(--bg-panel);
@@ -376,31 +341,29 @@
       tr:hover td { background: rgba(0, 230, 255, 0.045); }
       tr:last-child td { border-bottom: none; }
 
-      /* ----- Status badges: neon pill glow matched to meaning ------------ */
+      /* ----- Status badges ----- */
       .badge-status { padding: 0.2rem 0.7rem; border-radius: 30px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.02em; border: 1px solid transparent; transition: var(--transition); }
       .badge-status.pending   { background: rgba(255, 194, 60, 0.12); color: var(--neon-amber); border-color: var(--neon-amber); }
       .badge-status.confirmed { background: rgba(0, 230, 255, 0.12); color: var(--neon-cyan);  border-color: var(--neon-cyan); }
       .badge-status.completed { background: rgba(57, 255, 158, 0.12); color: var(--neon-green); border-color: var(--neon-green); }
       .badge-status.cancelled { background: rgba(255, 61, 95, 0.12); color: var(--neon-red);   border-color: var(--neon-red); }
-
       .badge-status.review {
         background: rgba(255, 194, 60, 0.12);
         color: var(--neon-amber);
         border-color: var(--neon-amber);
-        }
-
+      }
       .badge-status.approved {
-            background: rgba(57, 255, 158, 0.12);
-            color: var(--neon-green);
-            border-color: var(--neon-green);
+        background: rgba(57, 255, 158, 0.12);
+        color: var(--neon-green);
+        border-color: var(--neon-green);
       }
       .badge-status.rejected {
-            background: rgba(255, 61, 95, 0.12);
-            color: var(--neon-red);
-            border-color: var(--neon-red);
+        background: rgba(255, 61, 95, 0.12);
+        color: var(--neon-red);
+        border-color: var(--neon-red);
       }
 
-      /* ----- Forms: dark inputs with a cyan focus glow ------------------ */
+      /* ----- Forms ----- */
       .admin-form {
         background: var(--bg-panel);
         backdrop-filter: blur(10px);
@@ -415,7 +378,15 @@
         animation: fadeSlideUp 0.4s ease both;
       }
       .admin-form .full-width { grid-column: 1 / -1; }
-      .admin-form label { font-weight: 600; font-size: 0.85rem; color: var(--text-soft); display: block; margin-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 0.03em; }
+      .admin-form label { 
+        font-weight: 600; 
+        font-size: 0.85rem; 
+        color: var(--text-soft); 
+        display: block; 
+        margin-bottom: 0.3rem; 
+        text-transform: uppercase; 
+        letter-spacing: 0.03em; 
+      }
       .admin-form input,
       .admin-form select,
       .admin-form textarea {
@@ -437,9 +408,73 @@
         box-shadow: 0 0 0 4px rgba(0, 230, 255, 0.1), var(--glow-cyan);
       }
       .admin-form textarea { resize: vertical; min-height: 70px; }
-      .admin-form .form-actions { grid-column: 1 / -1; display: flex; gap: 0.8rem; justify-content: flex-end; }
+      .admin-form .form-actions { 
+        grid-column: 1 / -1; 
+        display: flex; 
+        gap: 0.8rem; 
+        justify-content: flex-end; 
+        margin-top: 0.5rem;
+      }
 
-      /* ----- List items (announcements, jobs, schemes, forms...) -------- */
+      /* ---- Forms using {{ form.as_p }} ---- */
+      .admin-form form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem 1.5rem;
+        width: 100%;
+        grid-column: 1 / -1;
+      }
+      .admin-form form p {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+        grid-column: span 1;
+      }
+      .admin-form form p textarea {
+        grid-column: 1 / -1;
+      }
+      .admin-form form p input[type="checkbox"] {
+        width: auto;
+        margin-top: 0.3rem;
+      }
+      .admin-form form p label {
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: var(--text-soft);
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        margin-bottom: 0.2rem;
+      }
+      .admin-form form p input,
+      .admin-form form p select,
+      .admin-form form p textarea {
+        width: 100%;
+        padding: 0.6rem 1rem;
+        border: 1.5px solid var(--border-soft);
+        border-radius: 10px;
+        font-family: "Inter", sans-serif;
+        font-size: 0.95rem;
+        background: var(--bg-input);
+        color: var(--text-bright);
+        transition: all 0.3s ease;
+      }
+      .admin-form form p input:focus,
+      .admin-form form p select:focus,
+      .admin-form form p textarea:focus {
+        outline: none;
+        border-color: var(--neon-cyan);
+        box-shadow: 0 0 0 4px rgba(0, 230, 255, 0.1), var(--glow-cyan);
+      }
+      .admin-form form .form-actions {
+        grid-column: 1 / -1;
+        display: flex;
+        gap: 0.8rem;
+        justify-content: flex-end;
+        margin-top: 0.5rem;
+      }
+
+      /* ----- List items ----- */
       .list-item {
         display: flex;
         justify-content: space-between;
@@ -465,25 +500,7 @@
       .list-item .info img { max-height: 50px; border-radius: 4px; margin-top: 4px; }
       .list-actions { display: flex; gap: 0.3rem; align-items: center; flex-wrap: wrap; }
 
-      /* ---- User management extras (superadmin: role badges + selector) - */
-      .role-badge { padding: 0.2rem 0.7rem; border-radius: 30px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; border: 1px solid transparent; transition: var(--transition); }
-      .role-badge.superadmin { background: rgba(168, 85, 247, 0.14); color: var(--neon-purple); border-color: var(--neon-purple); box-shadow: var(--glow-purple); }
-      .role-badge.admin      { background: rgba(0, 230, 255, 0.14); color: var(--neon-cyan); border-color: var(--neon-cyan); }
-      .role-badge.user       { background: rgba(148, 163, 199, 0.12); color: var(--text-soft); border-color: var(--border-soft); }
-
-      .form-select-sm {
-        padding: 0.2rem 0.6rem;
-        font-size: 0.8rem;
-        border-radius: 30px;
-        border: 1.5px solid var(--border-soft);
-        background: var(--bg-input);
-        color: var(--text-bright);
-        font-family: "Inter", sans-serif;
-        transition: var(--transition);
-      }
-      .form-select-sm:focus { outline: none; border-color: var(--neon-cyan); box-shadow: 0 0 0 3px rgba(0, 230, 255, 0.1); }
-
-      /* ----- Gallery grid: neon hover-zoom cards ------------------------- */
+      /* ----- Gallery grid ----- */
       .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem; }
       .gallery-item {
         position: relative;
@@ -504,12 +521,30 @@
       .gallery-item .caption { padding: 0.5rem; font-size: 0.8rem; text-align: center; color: var(--text-soft); }
       .gallery-item .delete-btn { position: absolute; top: 4px; right: 4px; }
 
-      /* ----- Small utility helpers (used in superadmin markup) ---------- */
+      /* ----- Role badges ----- */
+      .role-badge { padding: 0.2rem 0.7rem; border-radius: 30px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; border: 1px solid transparent; transition: var(--transition); }
+      .role-badge.superadmin { background: rgba(168, 85, 247, 0.14); color: var(--neon-purple); border-color: var(--neon-purple); box-shadow: var(--glow-purple); }
+      .role-badge.admin      { background: rgba(0, 230, 255, 0.14); color: var(--neon-cyan); border-color: var(--neon-cyan); }
+      .role-badge.user       { background: rgba(148, 163, 199, 0.12); color: var(--text-soft); border-color: var(--border-soft); }
+
+      .form-select-sm {
+        padding: 0.2rem 0.6rem;
+        font-size: 0.8rem;
+        border-radius: 30px;
+        border: 1.5px solid var(--border-soft);
+        background: var(--bg-input);
+        color: var(--text-bright);
+        font-family: "Inter", sans-serif;
+        transition: var(--transition);
+      }
+      .form-select-sm:focus { outline: none; border-color: var(--neon-cyan); box-shadow: 0 0 0 3px rgba(0, 230, 255, 0.1); }
+
+      /* ----- Helpers ----- */
       .mt-2 { margin-top: 1rem; }
       .mb-2 { margin-bottom: 1rem; }
       .flex { display: flex; gap: 0.8rem; flex-wrap: wrap; }
 
-      /* ----- Responsive layout ------------------------------------------- */
+      /* ----- Responsive ----- */
       @media (max-width: 992px) {
         .sidebar { transform: translateX(-100%); position: fixed; height: 100%; width: 280px; }
         .sidebar.open { transform: translateX(0); box-shadow: 0 0 40px rgba(0, 230, 255, 0.15); }
@@ -524,1324 +559,1131 @@
         .stat-card .info h4 { font-size: 1.2rem; }
       }
     </style>
-
-</head>
 {% endblock %}
 
 {% block content %}
-    <!-- ===== SIDEBAR ===== -->
-    <aside class="sidebar" id="sidebar">
-        <div class="logo">
-            <i class="fas fa-laptop"></i> {% trans "CyberAdmin" %}
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="logo"><i class="fas fa-laptop"></i> {% trans "CyberAdmin" %}</div>
+    <nav>
+      <ul>
+        <li><a href="#" class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> {% trans "Dashboard" %}</a></li>
+        <li><a href="#" data-section="services"><i class="fas fa-concierge-bell"></i> {% trans "Manage Services" %}</a></li>
+        <li><a href="#" data-section="prices"><i class="fas fa-coins"></i> {% trans "Update Prices" %}</a></li>
+        <li><a href="#" data-section="announcements"><i class="fas fa-bullhorn"></i> {% trans "Announcements" %}</a></li>
+        <li><a href="#" data-section="jobs"><i class="fas fa-briefcase"></i> {% trans "Job Notifications" %}</a></li>
+        <li><a href="#" data-section="schemes"><i class="fas fa-hand-holding-heart"></i> {% trans "Gov. Schemes" %}</a></li>
+        <li><a href="#" data-section="appointments"><i class="fas fa-calendar-check"></i> {% trans "Appointments" %}</a></li>
+        <li><a href="#" data-section="inquiries"><i class="fas fa-envelope"></i> {% trans "Inquiries" %}</a></li>
+        <li><a href="#" data-section="forms"><i class="fas fa-file-pdf"></i> {% trans "Upload Forms" %}</a></li>
+        <li><a href="#" data-section="users"><i class="fas fa-users"></i> {% trans "Users" %}</a></li>
+        <li><a href="#" data-section="gallery"><i class="fas fa-images"></i> {% trans "Gallery" %}</a></li>
+        <li><a href="#" data-section="requireddocs"><i class="fas fa-list-ul"></i> {% trans "Required Docs" %}</a></li>
+        <li><a href="#" data-section="applications"><i class="fas fa-file-alt"></i> {% trans "Applications" %}</a></li>
+        <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> {% trans "Settings" %}</a></li>
+      </ul>
+    </nav>
+    <a href="{% url 'logout' %}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> {% trans "Logout" %}</a>
+  </aside>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="main-content">
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div style="display:flex; align-items:center; gap:0.8rem">
+        <button class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></button>
+        <h2 id="pageTitle">{% trans "Dashboard" %}</h2>
+      </div>
+      <div class="user-info">
+        <span>{% trans "Super Admin" %}</span>
+        <div class="avatar">SA</div>
+      </div>
+    </div>
+
+    <!-- ===== SECTION: DASHBOARD ===== -->
+    <div id="section-dashboard" class="section active">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="icon"><i class="fas fa-concierge-bell"></i></div>
+          <div class="info"><h4>{{ services.count }}</h4><p>{% trans "Services" %}</p></div>
         </div>
-        <nav>
-            <ul>
-                <li><a href="#" class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> {% trans "Dashboard" %}</a></li>
-                <li><a href="#" data-section="services"><i class="fas fa-concierge-bell"></i> {% trans "Manage Services" %}</a></li>
-                <li><a href="#" data-section="prices"><i class="fas fa-coins"></i> {% trans "Update Prices" %}</a></li>
-                <li><a href="#" data-section="announcements"><i class="fas fa-bullhorn"></i> {% trans "Announcements" %}</a></li>
-                <li><a href="#" data-section="jobs"><i class="fas fa-briefcase"></i> {% trans "Job Notifications" %}</a></li>
-                <li><a href="#" data-section="schemes"><i class="fas fa-hand-holding-heart"></i> {% trans "Gov. Schemes" %}</a></li>
-                <li><a href="#" data-section="appointments"><i class="fas fa-calendar-check"></i> {% trans "Appointments" %}</a></li>
-                <li><a href="#" data-section="inquiries"><i class="fas fa-envelope"></i> {% trans "Inquiries" %}</a></li>
-                <li><a href="#" data-section="forms"><i class="fas fa-file-pdf"></i> {% trans "Upload Forms" %}</a></li>
-                <li><a href="#" data-section="users"><i class="fas fa-users"></i> {% trans "Users" %}</a></li>
-                <li><a href="#" data-section="gallery"><i class="fas fa-images"></i> {% trans "Gallery" %}</a></li>
-                <li><a href="#" data-section="requireddocs"><i class="fas fa-list-ul"></i> {% trans "Required Docs" %}</a></li>
-                <li><a href="#" data-section="applications"><i class="fas fa-file-alt"></i> {% trans "Applications" %}</a></li>
-                <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> {% trans "Settings" %}</a></li>
-            </ul>
-        </nav>
-        <a href="{% url 'logout' %}" class="logout-btn">
-            <i class="fas fa-sign-out-alt"></i> {% trans "Logout" %}
-        </a>
-    </aside>
-
-    <!-- ===== MAIN CONTENT ===== -->
-    <main class="main-content">
-
-        <!-- ===== TOP BAR ===== -->
-        <div class="top-bar">
-            <div style="display:flex; align-items:center; gap:0.8rem">
-                <button class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></button>
-                <h2 id="pageTitle">{% trans "Dashboard" %}</h2>
-            </div>
-            <div class="user-info">
-                <span>{% trans "Super Admin" %}</span>
-                <div class="avatar">SA</div>
-            </div>
+        <div class="stat-card">
+          <div class="icon"><i class="fas fa-calendar-check"></i></div>
+          <div class="info"><h4>{{ appointments.count }}</h4><p>{% trans "Appointments" %}</p></div>
         </div>
+        <div class="stat-card">
+          <div class="icon"><i class="fas fa-envelope"></i></div>
+          <div class="info"><h4>{{ contacts.count }}</h4><p>{% trans "Inquiries" %}</p></div>
+        </div>
+        <div class="stat-card">
+          <div class="icon"><i class="fas fa-file-pdf"></i></div>
+          <div class="info"><h4>{{ forms_list.count }}</h4><p>{% trans "Forms" %}</p></div>
+        </div>
+        <div class="stat-card">
+          <div class="icon"><i class="fas fa-users"></i></div>
+          <div class="info"><h4>{{ users.count }}</h4><p>{% trans "Users" %}</p></div>
+        </div>
+      </div>
+      <div style="background:var(--bg-panel); backdrop-filter:blur(10px); border-radius:1rem; padding:1.5rem; border:1px solid var(--border-soft);">
+        <h4 style="margin-bottom:0.8rem;"><i class="fas fa-clock" style="color:var(--neon-cyan)"></i> {% trans "Recent Activity" %}</h4>
+        <ul style="list-style:none; padding:0">
+          {% for appt in appointments|slice:":5" %}
+            <li style="display:flex; justify-content:space-between; padding:0.5rem 0; border-bottom:1px solid var(--border-soft);">
+              <span><i class="fas fa-calendar-check" style="color:var(--neon-cyan)"></i> {{ appt.full_name }} – {{ appt.service.name }}</span>
+              <span style="color:var(--text-dim); font-size:0.85rem;">{{ appt.created_at|date:"d M, H:i" }}</span>
+            </li>
+          {% empty %}
+            <li style="color:var(--text-dim); padding:0.5rem 0;">{% trans "No recent activity." %}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
 
-        <!-- ========================================================== -->
-        <!-- SECTION: REQUIRED DOCUMENTS                                -->
-        <!-- ========================================================== -->
-        <div id="section-requireddocs" class="section">
-            <div class="section-header">
-                <h3><i class="fas fa-list-ul" style="color:#0a66c2"></i> {% trans "Required Documents" %}</h3>
-                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addRequiredDocForm">
-                    {% trans "Add Document" %}
-                </button>
-            </div>
+    <!-- ===== SECTION: MANAGE SERVICES ===== -->
+    <div id="section-services" class="section">
+      <div class="section-header">
+        <h3><i class="fas fa-concierge-bell" style="color:var(--neon-cyan)"></i> {% trans "Manage Services" %}</h3>
+        <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addServiceForm">{% trans "Add Service" %}</button>
+      </div>
 
-            <div class="collapse admin-form" id="addRequiredDocForm">
-                <form method="post" id="addRequiredDocFormElement">
+      <div class="collapse admin-form" id="addServiceForm">
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="add">
+          <input type="hidden" name="model_type" value="service">
+          {{ service_form.as_p }}
+          <div class="form-actions">
+            <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save" %}</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{% trans "Name" %}</th>
+              <th>{% trans "Category" %}</th>
+              <th>{% trans "Status" %}</th>
+              <th>{% trans "Actions" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for service in services %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ service.name }}</td>
+                <td>{{ service.category }}</td>
+                <td><span class="badge-status {% if service.active %}confirmed{% else %}cancelled{% endif %}">{{ service.active|yesno:_("Active,Inactive") }}</span></td>
+                <td>
+                  <button class="btn-primary btn-sm" onclick="editService('{{ service.id }}', '{{ service.name|escapejs }}', '{{ service.category|escapejs }}', '{{ service.description|escapejs }}', '{{ service.active|yesno:"true,false" }}', '{{ service.icon|escapejs }}', '{{ service.icon_color|default:"#00d4ff" }}')"><i class="fas fa-edit"></i></button>
+                  <form method="post" style="display:inline;">
                     {% csrf_token %}
-                    <input type="hidden" name="action" value="add">
-                    <input type="hidden" name="model_type" value="requireddoc">
-                    <div>
-                        <label for="id_service">{% trans "Service" %} *</label>
-                        {{ required_doc_form.service }}
-                    </div>
-                    <div>
-                        <label for="id_document_name">{% trans "Document Name" %} *</label>
-                        {{ required_doc_form.document_name }}
-                        <small class="text-muted" style="display:block; margin-top:4px; color: var(--text-dim);">
-                            {% trans "Enter one document name at a time (e.g., 'Aadhaar Card')." %}
-                            <br>
-                            <span style="color: var(--neon-orange);">{% trans "Do not use commas – add each document separately." %}</span>
-                        </small>
-                        <div id="commaWarning" style="color: var(--neon-red); display:none; margin-top:4px;">
-                            <i class="fas fa-exclamation-triangle"></i> {% trans "Please remove commas and add each document separately." %}
-                        </div>
-                    </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save" %}</button>
-                    </div>
-                </form>
-            </div>
-
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>{% trans "Service" %}</th>
-                            <th>{% trans "Document Name" %}</th>
-                            <th>{% trans "Actions" %}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for doc in required_docs %}
-                            <tr>
-                                <td>{{ doc.service.name }}</td>
-                                <td>{{ doc.document_name }}</td>
-                                <td>
-                                    <button class="btn-primary btn-sm"
-                                        onclick="editRequiredDoc('{{ doc.id }}', '{{ doc.service.id }}', '{{ doc.document_name|escapejs }}')">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <form method="post" style="display:inline;">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="action" value="delete">
-                                        <input type="hidden" name="model_type" value="requireddoc">
-                                        <input type="hidden" name="id" value="{{ doc.id }}">
-                                        <button type="submit" class="btn-danger"
-                                            onclick="return confirm('{% trans "Delete this document requirement?"|escapejs %}')">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        {% empty %}
-                            <tr><td colspan="3">{% trans "No required documents defined." %}</td></tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Inline Edit Form for Required Documents -->
-            <div class="admin-form" id="editRequiredDocForm" style="display:none; margin-top:1rem;">
-                <form method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="action" value="edit">
-                    <input type="hidden" name="model_type" value="requireddoc">
-                    <input type="hidden" name="id" id="editRequiredDocId">
-                    <div>
-                        <label>{% trans "Service" %} *</label>
-                        <select name="service" id="editRequiredDocService" class="form-control">
-                            {% for service in services %}
-                                <option value="{{ service.id }}">{{ service.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div>
-                        <label>{% trans "Document Name" %} *</label>
-                        <input type="text" name="document_name" id="editRequiredDocName" required>
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" class="btn-outline"
-                            onclick="document.getElementById('editRequiredDocForm').style.display='none'">
-                            {% trans "Cancel" %}
-                        </button>
-                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- ========================================================== -->
-        <!-- SECTION: DASHBOARD                                         -->
-        <!-- ========================================================== -->
-        <div id="section-dashboard" class="section active">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="icon"><i class="fas fa-concierge-bell"></i></div>
-                    <div class="info">
-                        <h4>{{ services.count }}</h4>
-                        <p>{% trans "Services" %}</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="icon"><i class="fas fa-calendar-check"></i></div>
-                    <div class="info">
-                        <h4>{{ appointments.count }}</h4>
-                        <p>{% trans "Appointments" %}</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="icon"><i class="fas fa-envelope"></i></div>
-                    <div class="info">
-                        <h4>{{ contacts.count }}</h4>
-                        <p>{% trans "Inquiries" %}</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="icon"><i class="fas fa-file-pdf"></i></div>
-                    <div class="info">
-                        <h4>{{ forms_list.count }}</h4>
-                        <p>{% trans "Forms" %}</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="icon"><i class="fas fa-users"></i></div>
-                    <div class="info">
-                        <h4>{{ users.count }}</h4>
-                        <p>{% trans "Users" %}</p>
-                    </div>
-                </div>
-            </div>
-
-            <div style="background:#fff; border-radius:1rem; padding:1.5rem; border:1px solid #e9eef4;">
-                <h4 style="margin-bottom:0.8rem;"><i class="fas fa-clock" style="color:#0a66c2"></i> {% trans "Recent Activity" %}</h4>
-                <ul style="list-style:none; padding:0">
-                    {% if appointments %}
-                        {% for appt in appointments|slice:":5" %}
-                            <li style="display:flex; justify-content:space-between; padding:0.5rem 0; border-bottom:1px solid #f0f4fa;">
-                                <span><i class="fas fa-calendar-check" style="color:#0a66c2"></i> {{ appt.full_name }} – {{ appt.service.name }}</span>
-                                <span style="color:#6f85a0; font-size:0.85rem;">{{ appt.created_at|date:"d M, H:i" }}</span>
-                            </li>
-                        {% endfor %}
-                    {% else %}
-                        <li style="color:#6f85a0; padding:0.5rem 0;">{% trans "No recent activity." %}</li>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
-
-        <!-- ========================================================== -->
-        <!-- SECTION: MANAGE SERVICES                                   -->
-        <!-- ========================================================== -->
-        <div id="section-services" class="section">
-            <div class="section-header">
-                <h3><i class="fas fa-concierge-bell" style="color:#0a66c2"></i> {% trans "Manage Services" %}</h3>
-                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addServiceForm">
-                    {% trans "Add Service" %}
-                </button>
-            </div>
-
-            <!-- Add Service Form -->
-            <div class="collapse admin-form" id="addServiceForm">
-                <form method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="action" value="add">
+                    <input type="hidden" name="action" value="delete">
                     <input type="hidden" name="model_type" value="service">
-                    {{ service_form.as_p }}
-                    <div class="form-actions">
-                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save" %}</button>
-                    </div>
-                </form>
-            </div>
+                    <input type="hidden" name="id" value="{{ service.id }}">
+                    <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this service?"|escapejs %}')"><i class="fas fa-trash"></i></button>
+                  </form>
+                </td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="5">{% trans "No services." %}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
 
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>{% trans "Name" %}</th>
-                            <th>{% trans "Category" %}</th>
-                            <th>{% trans "Status" %}</th>
-                            <th>{% trans "Actions" %}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for service in services %}
-                            <tr>
-                                <td>{{ forloop.counter }}</td>
-                                <td>{{ service.name }}</td>
-                                <td>{{ service.category }}</td>
-                                <td><span class="badge-status {% if service.active %}confirmed{% else %}cancelled{% endif %}">
-                                    {{ service.active|yesno:_("Active,Inactive") }}
-                                </span></td>
-                                <td>
-                                    <button class="btn-primary btn-sm"
-                                        onclick="editService('{{ service.id }}', '{{ service.name|escapejs }}', '{{ service.category|escapejs }}', '{{ service.description|escapejs }}', '{{ service.active|yesno:"true,false" }}', '{{ service.icon|escapejs }}', '{{ service.icon_color|default:"#00d4ff" }}')">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <form method="post" style="display:inline;">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="action" value="delete">
-                                        <input type="hidden" name="model_type" value="service">
-                                        <input type="hidden" name="id" value="{{ service.id }}">
-                                        <button type="submit" class="btn-danger"
-                                            onclick="return confirm('{% trans "Delete this service?"|escapejs %}')">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        {% empty %}
-                            <tr><td colspan="5">{% trans "No services." %}</td></tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+      <!-- Inline Edit Form for Services -->
+      <div class="admin-form" id="editServiceForm" style="display:none; margin-top:1rem;">
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="edit">
+          <input type="hidden" name="model_type" value="service">
+          <input type="hidden" name="id" id="editServiceId">
+          <div>
+            <label>{% trans "Service Name" %} *</label>
+            <input type="text" name="name" id="editSvcName" required>
+          </div>
+          <div>
+            <label>{% trans "Category" %}</label>
+            <select name="category" id="editSvcCategory">
+              <option value="Government">{% trans "Government" %}</option>
+              <option value="Financial">{% trans "Financial" %}</option>
+              <option value="Printing">{% trans "Printing" %}</option>
+              <option value="Other">{% trans "Other" %}</option>
+            </select>
+          </div>
+          <div class="full-width">
+            <label>{% trans "Description" %}</label>
+            <textarea name="description" id="editSvcDesc" rows="2"></textarea>
+          </div>
+          <div>
+            <label>{% trans "Status" %}</label>
+            <select name="active" id="editSvcStatus">
+              <option value="true">{% trans "Active" %}</option>
+              <option value="false">{% trans "Inactive" %}</option>
+            </select>
+          </div>
+          <div>
+            <label>{% trans "Icon" %}</label>
+            <input type="text" name="icon" id="editSvcIcon" placeholder="{% trans "e.g. fa-print" %}">
+          </div>
+          <div>
+            <label>{% trans "Icon Color" %}</label>
+            <input type="color" name="icon_color" id="editSvcColor" value="#00d4ff">
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-outline" onclick="document.getElementById('editServiceForm').style.display='none'">{% trans "Cancel" %}</button>
+            <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
+          </div>
+        </form>
+      </div>
+    </div>
 
-            <!-- Inline edit form for services -->
-            <div class="admin-form" id="editServiceForm" style="display:none; margin-top:1rem;">
-                <form method="post">
+    <!-- ===== SECTION: SERVICE CHARGES ===== -->
+    <div id="section-prices" class="section">
+      <div class="section-header">
+        <h3><i class="fas fa-coins" style="color:var(--neon-cyan)"></i> {% trans "Service Charges" %}</h3>
+        <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addChargeForm">{% trans "Add Charge" %}</button>
+      </div>
+
+      <div class="collapse admin-form" id="addChargeForm">
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="add">
+          <input type="hidden" name="model_type" value="servicecharge">
+          {{ servicecharge_form.as_p }}
+          <div class="form-actions">
+            <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save" %}</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>{% trans "Service" %}</th>
+              <th>{% trans "Charge (₹)" %}</th>
+              <th>{% trans "Actions" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for charge in servicecharges %}
+              <tr>
+                <td>{{ charge.service.name }}</td>
+                <td>₹ {{ charge.charge }}</td>
+                <td>
+                  <button class="btn-primary btn-sm" onclick="editCharge('{{ charge.id }}', '{{ charge.service.id }}', '{{ charge.charge }}')"><i class="fas fa-edit"></i></button>
+                  <form method="post" style="display:inline;">
                     {% csrf_token %}
-                    <input type="hidden" name="action" value="edit">
-                    <input type="hidden" name="model_type" value="service">
-                    <input type="hidden" name="id" id="editServiceId">
-                    <div>
-                        <label>{% trans "Service Name" %} *</label>
-                        <input type="text" name="name" id="editSvcName" required>
-                    </div>
-                    <div>
-                        <label>{% trans "Category" %}</label>
-                        <select name="category" id="editSvcCategory">
-                            <option value="Government">{% trans "Government" %}</option>
-                            <option value="Financial">{% trans "Financial" %}</option>
-                            <option value="Printing">{% trans "Printing" %}</option>
-                            <option value="Other">{% trans "Other" %}</option>
-                        </select>
-                    </div>
-                    <div class="full-width">
-                        <label>{% trans "Description" %}</label>
-                        <textarea name="description" id="editSvcDesc" rows="2"></textarea>
-                    </div>
-                    <div>
-                        <label>{% trans "Status" %}</label>
-                        <select name="active" id="editSvcStatus">
-                            <option value="true">{% trans "Active" %}</option>
-                            <option value="false">{% trans "Inactive" %}</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>{% trans "Icon" %}</label>
-                        <input type="text" name="icon" id="editSvcIcon" placeholder="{% trans "e.g. fa-print" %}">
-                    </div>
-                    <div>
-                        <label>{% trans "Icon Color" %}</label>
-                        <input type="color" name="icon_color" id="editSvcColor" value="#00d4ff">
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" class="btn-outline"
-                            onclick="document.getElementById('editServiceForm').style.display='none'">
-                            {% trans "Cancel" %}
-                        </button>
-                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- ========================================================== -->
-        <!-- SECTION: UPDATE PRICES (Service Charges)                   -->
-        <!-- ========================================================== -->
-        <div id="section-prices" class="section">
-            <div class="section-header">
-                <h3><i class="fas fa-coins" style="color:#0a66c2"></i> {% trans "Service Charges" %}</h3>
-                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addChargeForm">
-                    {% trans "Add Charge" %}
-                </button>
-            </div>
-
-            <div class="collapse admin-form" id="addChargeForm">
-                <form method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="action" value="add">
+                    <input type="hidden" name="action" value="delete">
                     <input type="hidden" name="model_type" value="servicecharge">
-                    {{ servicecharge_form.as_p }}
-                    <div class="form-actions">
-                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save" %}</button>
-                    </div>
-                </form>
-            </div>
+                    <input type="hidden" name="id" value="{{ charge.id }}">
+                    <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this charge?"|escapejs %}')"><i class="fas fa-trash"></i></button>
+                  </form>
+                </td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="3">{% trans "No charges defined." %}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
 
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>{% trans "Service" %}</th>
-                            <th>{% trans "Charge (₹)" %}</th>
-                            <th>{% trans "Actions" %}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for charge in servicecharges %}
-                            <tr>
-                                <td>{{ charge.service.name }}</td>
-                                <td>₹ {{ charge.charge }}</td>
-                                <td>
-                                    <button class="btn-primary btn-sm"
-                                        onclick="editCharge('{{ charge.id }}', '{{ charge.service.id }}', '{{ charge.charge }}')">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <form method="post" style="display:inline;">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="action" value="delete">
-                                        <input type="hidden" name="model_type" value="servicecharge">
-                                        <input type="hidden" name="id" value="{{ charge.id }}">
-                                        <button type="submit" class="btn-danger"
-                                            onclick="return confirm('{% trans "Delete this charge?"|escapejs %}')">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        {% empty %}
-                            <tr><td colspan="3">{% trans "No charges defined." %}</td></tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+      <!-- Inline Edit Form for Charges -->
+      <div class="admin-form" id="editChargeForm" style="display:none; margin-top:1rem;">
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="edit">
+          <input type="hidden" name="model_type" value="servicecharge">
+          <input type="hidden" name="id" id="editChargeId">
+          <div>
+            <label>{% trans "Service" %}</label>
+            <select name="service" id="editChargeService" class="form-control">
+              {% for service in services %}
+                <option value="{{ service.id }}">{{ service.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label>{% trans "Charge (₹)" %}</label>
+            <input type="number" step="0.01" name="charge" id="editChargeAmount" required>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-outline" onclick="document.getElementById('editChargeForm').style.display='none'">{% trans "Cancel" %}</button>
+            <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
+          </div>
+        </form>
+      </div>
+    </div>
 
-            <!-- Inline edit form for charges -->
-            <div class="admin-form" id="editChargeForm" style="display:none; margin-top:1rem;">
-                <form method="post">
+    <!-- ===== SECTION: REQUIRED DOCUMENTS ===== -->
+    <div id="section-requireddocs" class="section">
+      <div class="section-header">
+        <h3><i class="fas fa-list-ul" style="color:var(--neon-cyan)"></i> {% trans "Required Documents" %}</h3>
+        <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addRequiredDocForm">{% trans "Add Document" %}</button>
+      </div>
+
+      <div class="collapse admin-form" id="addRequiredDocForm">
+        <form method="post" id="addRequiredDocFormElement">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="add">
+          <input type="hidden" name="model_type" value="requireddoc">
+          <div>
+            <label for="id_service">{% trans "Service" %} *</label>
+            {{ required_doc_form.service }}
+          </div>
+          <div>
+            <label for="id_document_name">{% trans "Document Name" %} *</label>
+            {{ required_doc_form.document_name }}
+            <small class="text-muted" style="display:block; margin-top:4px; color: var(--text-dim);">
+              {% trans "Enter one document name at a time (e.g., 'Aadhaar Card')." %}
+              <br>
+              <span style="color: var(--neon-red);">{% trans "Do not use commas – add each document separately." %}</span>
+            </small>
+            <div id="commaWarning" style="color: var(--neon-red); display:none; margin-top:4px;">
+              <i class="fas fa-exclamation-triangle"></i> {% trans "Please remove commas and add each document separately." %}
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save" %}</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>{% trans "Service" %}</th>
+              <th>{% trans "Document Name" %}</th>
+              <th>{% trans "Actions" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for doc in required_docs %}
+              <tr>
+                <td>{{ doc.service.name }}</td>
+                <td>{{ doc.document_name }}</td>
+                <td>
+                  <button class="btn-primary btn-sm" onclick="editRequiredDoc('{{ doc.id }}', '{{ doc.service.id }}', '{{ doc.document_name|escapejs }}')"><i class="fas fa-edit"></i></button>
+                  <form method="post" style="display:inline;">
                     {% csrf_token %}
-                    <input type="hidden" name="action" value="edit">
-                    <input type="hidden" name="model_type" value="servicecharge">
-                    <input type="hidden" name="id" id="editChargeId">
-                    <div>
-                        <label>{% trans "Service" %}</label>
-                        <select name="service" id="editChargeService" class="form-control">
-                            {% for service in services %}
-                                <option value="{{ service.id }}">{{ service.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div>
-                        <label>{% trans "Charge (₹)" %}</label>
-                        <input type="number" step="0.01" name="charge" id="editChargeAmount" required>
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" class="btn-outline"
-                            onclick="document.getElementById('editChargeForm').style.display='none'">
-                            {% trans "Cancel" %}
-                        </button>
-                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="model_type" value="requireddoc">
+                    <input type="hidden" name="id" value="{{ doc.id }}">
+                    <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this document requirement?"|escapejs %}')"><i class="fas fa-trash"></i></button>
+                  </form>
+                </td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="3">{% trans "No required documents defined." %}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
 
-        <!-- ========================================================== -->
-        <!-- SECTION: ANNOUNCEMENTS                                     -->
-        <!-- ========================================================== -->
-        <div id="section-announcements" class="section">
-            <div class="section-header">
-                <h3><i class="fas fa-bullhorn" style="color:#0a66c2"></i> {% trans "Announcements" %}</h3>
-                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addAnnouncementForm">
-                    {% trans "Add Announcement" %}
-                </button>
-            </div>
+      <!-- Inline Edit Form for Required Documents -->
+      <div class="admin-form" id="editRequiredDocForm" style="display:none; margin-top:1rem;">
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="edit">
+          <input type="hidden" name="model_type" value="requireddoc">
+          <input type="hidden" name="id" id="editRequiredDocId">
+          <div>
+            <label>{% trans "Service" %} *</label>
+            <select name="service" id="editRequiredDocService" class="form-control">
+              {% for service in services %}
+                <option value="{{ service.id }}">{{ service.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label>{% trans "Document Name" %} *</label>
+            <input type="text" name="document_name" id="editRequiredDocName" required>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-outline" onclick="document.getElementById('editRequiredDocForm').style.display='none'">{% trans "Cancel" %}</button>
+            <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
+          </div>
+        </form>
+      </div>
+    </div>
 
-            <div class="collapse admin-form" id="addAnnouncementForm">
-                <form method="post">
+    <!-- ===== SECTION: ANNOUNCEMENTS ===== -->
+    <div id="section-announcements" class="section">
+      <div class="section-header">
+        <h3><i class="fas fa-bullhorn" style="color:var(--neon-cyan)"></i> {% trans "Announcements" %}</h3>
+        <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addAnnouncementForm">{% trans "Add Announcement" %}</button>
+      </div>
+
+      <div class="collapse admin-form" id="addAnnouncementForm">
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="add">
+          <input type="hidden" name="model_type" value="announcement">
+          {{ announcement_form.as_p }}
+          <div class="form-actions">
+            <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save" %}</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="announcementList">
+        {% for ann in announcements %}
+          <div class="list-item">
+            <div class="info">
+              <span class="title">{{ ann.title }}</span>
+              <span class="sub">{{ ann.description|truncatechars:60 }} – {{ ann.category }}</span>
+            </div>
+            <div class="list-actions">
+              <button class="btn-primary btn-sm" onclick="editAnnouncement('{{ ann.id }}', '{{ ann.title|escapejs }}', '{{ ann.category|default:""|escapejs }}', '{{ ann.description|escapejs }}')"><i class="fas fa-edit"></i></button>
+              <form method="post" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="model_type" value="announcement">
+                <input type="hidden" name="id" value="{{ ann.id }}">
+                <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this announcement?"|escapejs %}')"><i class="fas fa-times"></i></button>
+              </form>
+            </div>
+          </div>
+        {% empty %}
+          <p style="color:var(--text-dim);">{% trans "No announcements." %}</p>
+        {% endfor %}
+      </div>
+
+      <!-- Inline Edit Form for Announcements -->
+      <div class="admin-form" id="editAnnouncementForm" style="display:none; margin-top:1rem;">
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="edit">
+          <input type="hidden" name="model_type" value="announcement">
+          <input type="hidden" name="id" id="editAnnouncementId">
+          <div>
+            <label>{% trans "Title" %} *</label>
+            <input type="text" name="title" id="editAnnTitle" required>
+          </div>
+          <div>
+            <label>{% trans "Category" %}</label>
+            <select name="category" id="editAnnCategory">
+              <option value="General">{% trans "General" %}</option>
+              <option value="Government Scheme">{% trans "Government Scheme" %}</option>
+              <option value="Recruitment">{% trans "Recruitment" %}</option>
+              <option value="Scholarship">{% trans "Scholarship" %}</option>
+              <option value="Holiday">{% trans "Holiday" %}</option>
+              <option value="Notice">{% trans "Notice" %}</option>
+            </select>
+          </div>
+          <div class="full-width">
+            <label>{% trans "Description" %}</label>
+            <textarea name="description" id="editAnnDesc" rows="3"></textarea>
+          </div>
+          <div class="full-width">
+            <label>{% trans "Urgent" %}</label>
+            <select name="is_urgent" id="editAnnUrgent">
+              <option value="false">{% trans "No" %}</option>
+              <option value="true">{% trans "Yes" %}</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-outline" onclick="document.getElementById('editAnnouncementForm').style.display='none'">{% trans "Cancel" %}</button>
+            <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ===== SECTION: JOB NOTIFICATIONS ===== -->
+    <div id="section-jobs" class="section">
+      <div class="section-header">
+        <h3><i class="fas fa-briefcase" style="color:var(--neon-cyan)"></i> {% trans "Job Notifications" %}</h3>
+        <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addJobForm">{% trans "Add Job" %}</button>
+      </div>
+
+      <div class="collapse admin-form" id="addJobForm">
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="add">
+          <input type="hidden" name="model_type" value="job">
+          {{ job_form.as_p }}
+          <div class="form-actions">
+            <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save" %}</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="jobList">
+        {% for job in jobs %}
+          <div class="list-item">
+            <div class="info">
+              <span class="title"><i class="fas fa-{{ job.icon|default:'briefcase' }}"></i> {{ job.title }}</span>
+              <span class="sub">{% blocktrans with org=job.organization date=job.last_date|date:"d M Y" %}{{ org }} – Last Date: {{ date }}{% endblocktrans %}</span>
+            </div>
+            <div class="list-actions">
+              <button class="btn-primary btn-sm" onclick="editJob('{{ job.id }}', '{{ job.title|escapejs }}', '{{ job.organization|escapejs }}', '{{ job.description|escapejs }}', '{{ job.last_date|date:"Y-m-d" }}', '{{ job.apply_link|escapejs }}', '{{ job.icon|default:""|escapejs }}')"><i class="fas fa-edit"></i></button>
+              <form method="post" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="model_type" value="job">
+                <input type="hidden" name="id" value="{{ job.id }}">
+                <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this job?"|escapejs %}')"><i class="fas fa-times"></i></button>
+              </form>
+            </div>
+          </div>
+        {% empty %}
+          <p style="color:var(--text-dim);">{% trans "No jobs." %}</p>
+        {% endfor %}
+      </div>
+
+      <!-- Inline Edit Form for Jobs -->
+      <div class="admin-form" id="editJobForm" style="display:none; margin-top:1rem;">
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="edit">
+          <input type="hidden" name="model_type" value="job">
+          <input type="hidden" name="id" id="editJobId">
+          <div>
+            <label>{% trans "Title" %} *</label>
+            <input type="text" name="title" id="editJobTitle" required>
+          </div>
+          <div>
+            <label>{% trans "Organization" %} *</label>
+            <input type="text" name="organization" id="editJobOrg" required>
+          </div>
+          <div class="full-width">
+            <label>{% trans "Description" %}</label>
+            <textarea name="description" id="editJobDesc" rows="3"></textarea>
+          </div>
+          <div>
+            <label>{% trans "Last Date" %}</label>
+            <input type="date" name="last_date" id="editJobDate">
+          </div>
+          <div>
+            <label>{% trans "Apply Link" %}</label>
+            <input type="url" name="apply_link" id="editJobLink" placeholder="https://...">
+          </div>
+          <div>
+            <label>{% trans "Icon" %}</label>
+            <input type="text" name="icon" id="editJobIcon" placeholder="{% trans "e.g. briefcase" %}">
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-outline" onclick="document.getElementById('editJobForm').style.display='none'">{% trans "Cancel" %}</button>
+            <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ===== SECTION: GOVERNMENT SCHEMES ===== -->
+    <div id="section-schemes" class="section">
+      <div class="section-header">
+        <h3><i class="fas fa-hand-holding-heart" style="color:var(--neon-cyan)"></i> {% trans "Government Schemes" %}</h3>
+        <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addSchemeForm">{% trans "Add Scheme" %}</button>
+      </div>
+
+      <div class="collapse admin-form" id="addSchemeForm">
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="add">
+          <input type="hidden" name="model_type" value="scheme">
+          {{ scheme_form.as_p }}
+          <div class="form-actions">
+            <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save" %}</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="schemeList">
+        {% for scheme in schemes %}
+          <div class="list-item">
+            <div class="info">
+              <span class="title">{{ scheme.title }}</span>
+              <span class="sub">{% blocktrans with desc=scheme.description|truncatechars:80 elig=scheme.eligibility|default:"N/A" %}{{ desc }} – Eligibility: {{ elig }}{% endblocktrans %}</span>
+              {% if scheme.image %}
+                <img src="{{ scheme.image.url }}" alt="{{ scheme.title }}">
+              {% endif %}
+            </div>
+            <div class="list-actions">
+              <button class="btn-primary btn-sm" onclick="editScheme('{{ scheme.id }}', '{{ scheme.title|escapejs }}', '{{ scheme.description|escapejs }}', '{{ scheme.eligibility|default:""|escapejs }}')"><i class="fas fa-edit"></i></button>
+              <form method="post" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="model_type" value="scheme">
+                <input type="hidden" name="id" value="{{ scheme.id }}">
+                <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this scheme?"|escapejs %}')"><i class="fas fa-times"></i></button>
+              </form>
+            </div>
+          </div>
+        {% empty %}
+          <p style="color:var(--text-dim);">{% trans "No schemes." %}</p>
+        {% endfor %}
+      </div>
+
+      <!-- Inline Edit Form for Schemes -->
+      <div class="admin-form" id="editSchemeForm" style="display:none; margin-top:1rem;">
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="edit">
+          <input type="hidden" name="model_type" value="scheme">
+          <input type="hidden" name="id" id="editSchemeId">
+          <div>
+            <label>{% trans "Title" %} *</label>
+            <input type="text" name="title" id="editSchemeTitle" required>
+          </div>
+          <div class="full-width">
+            <label>{% trans "Description" %}</label>
+            <textarea name="description" id="editSchemeDesc" rows="3"></textarea>
+          </div>
+          <div>
+            <label>{% trans "Eligibility" %}</label>
+            <input type="text" name="eligibility" id="editSchemeEligibility" placeholder="{% trans "e.g. All citizens above 18" %}">
+          </div>
+          <div>
+            <label>{% trans "Image" %}</label>
+            <input type="file" name="image" id="editSchemeImage" accept="image/*">
+            <small style="color:var(--text-dim); display:block; margin-top:0.2rem;">{% trans "Leave empty to keep current image." %}</small>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-outline" onclick="document.getElementById('editSchemeForm').style.display='none'">{% trans "Cancel" %}</button>
+            <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ===== SECTION: APPOINTMENTS ===== -->
+    <div id="section-appointments" class="section">
+      <div class="section-header">
+        <h3><i class="fas fa-calendar-check" style="color:var(--neon-cyan)"></i> {% trans "Appointments" %}</h3>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>{% trans "Customer" %}</th>
+              <th>{% trans "Service" %}</th>
+              <th>{% trans "Date" %}</th>
+              <th>{% trans "Time" %}</th>
+              <th>{% trans "Status" %}</th>
+              <th>{% trans "Actions" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for appt in appointments %}
+              <tr>
+                <td>{{ appt.full_name }}</td>
+                <td>{{ appt.service.name }}</td>
+                <td>{{ appt.appointment_date }}</td>
+                <td>{{ appt.appointment_time|time:"H:i" }}</td>
+                <td><span class="badge-status {{ appt.status|lower }}">{{ appt.status }}</span></td>
+                <td>
+                  <button class="btn-primary btn-sm" onclick="editAppointment('{{ appt.id }}', '{{ appt.full_name|escapejs }}', '{{ appt.phone|escapejs }}', '{{ appt.email|escapejs }}', '{{ appt.service.id }}', '{{ appt.appointment_date|date:"Y-m-d" }}', '{{ appt.appointment_time|time:"H:i" }}', '{{ appt.message|escapejs }}', '{{ appt.status|escapejs }}')"><i class="fas fa-edit"></i></button>
+                  <form method="post" style="display:inline;">
                     {% csrf_token %}
-                    <input type="hidden" name="action" value="add">
-                    <input type="hidden" name="model_type" value="announcement">
-                    {{ announcement_form.as_p }}
-                    <div class="form-actions">
-                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save" %}</button>
-                    </div>
-                </form>
-            </div>
-
-            <div id="announcementList">
-                {% for ann in announcements %}
-                    <div class="list-item">
-                        <div class="info">
-                            <span class="title">{{ ann.title }}</span>
-                            <span class="sub">{{ ann.description|truncatechars:60 }} – {{ ann.category }}</span>
-                        </div>
-                        <div class="list-actions">
-                            <button class="btn-primary btn-sm"
-                                onclick="editAnnouncement('{{ ann.id }}', '{{ ann.title|escapejs }}', '{{ ann.category|default:""|escapejs }}', '{{ ann.description|escapejs }}')">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <form method="post" style="display:inline;">
-                                {% csrf_token %}
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="model_type" value="announcement">
-                                <input type="hidden" name="id" value="{{ ann.id }}">
-                                <button type="submit" class="btn-danger"
-                                    onclick="return confirm('{% trans "Delete this announcement?"|escapejs %}')">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                {% empty %}
-                    <p style="color:#6f85a0;">{% trans "No announcements." %}</p>
-                {% endfor %}
-            </div>
-
-            <!-- Inline Edit Form for Announcements -->
-            <div class="admin-form" id="editAnnouncementForm" style="display:none; margin-top:1rem;">
-                <form method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="action" value="edit">
-                    <input type="hidden" name="model_type" value="announcement">
-                    <input type="hidden" name="id" id="editAnnouncementId">
-                    <div>
-                        <label>{% trans "Title" %} *</label>
-                        <input type="text" name="title" id="editAnnTitle" required>
-                    </div>
-                    <div>
-                        <label>{% trans "Category" %}</label>
-                        <select name="category" id="editAnnCategory">
-                            <option value="General">{% trans "General" %}</option>
-                            <option value="Government Scheme">{% trans "Government Scheme" %}</option>
-                            <option value="Recruitment">{% trans "Recruitment" %}</option>
-                            <option value="Scholarship">{% trans "Scholarship" %}</option>
-                            <option value="Holiday">{% trans "Holiday" %}</option>
-                            <option value="Notice">{% trans "Notice" %}</option>
-                        </select>
-                    </div>
-                    <div class="full-width">
-                        <label>{% trans "Description" %}</label>
-                        <textarea name="description" id="editAnnDesc" rows="3"></textarea>
-                    </div>
-                    <div class="full-width">
-                        <label>{% trans "Urgent" %}</label>
-                        <select name="is_urgent" id="editAnnUrgent">
-                            <option value="false">{% trans "No" %}</option>
-                            <option value="true">{% trans "Yes" %}</option>
-                        </select>
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" class="btn-outline"
-                            onclick="document.getElementById('editAnnouncementForm').style.display='none'">
-                            {% trans "Cancel" %}
-                        </button>
-                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- ========================================================== -->
-        <!-- SECTION: JOB NOTIFICATIONS                                 -->
-        <!-- ========================================================== -->
-        <div id="section-jobs" class="section">
-            <div class="section-header">
-                <h3><i class="fas fa-briefcase" style="color:#0a66c2"></i> {% trans "Job Notifications" %}</h3>
-                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addJobForm">
-                    {% trans "Add Job" %}
-                </button>
-            </div>
-
-            <div class="collapse admin-form" id="addJobForm">
-                <form method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="action" value="add">
-                    <input type="hidden" name="model_type" value="job">
-                    {{ job_form.as_p }}
-                    <div class="form-actions">
-                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save" %}</button>
-                    </div>
-                </form>
-            </div>
-
-            <div id="jobList">
-                {% for job in jobs %}
-                    <div class="list-item">
-                        <div class="info">
-                            <span class="title"><i class="fas fa-{{ job.icon|default:'briefcase' }}"></i> {{ job.title }}</span>
-                            <span class="sub">
-                                {% blocktrans with org=job.organization date=job.last_date|date:"d M Y" %}
-                                    {{ org }} – Last Date: {{ date }}
-                                {% endblocktrans %}
-                            </span>
-                        </div>
-                        <div class="list-actions">
-                            <button class="btn-primary btn-sm"
-                                onclick="editJob('{{ job.id }}', '{{ job.title|escapejs }}', '{{ job.organization|escapejs }}', '{{ job.description|escapejs }}', '{{ job.last_date|date:"Y-m-d" }}', '{{ job.apply_link|escapejs }}', '{{ job.icon|default:""|escapejs }}')">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <form method="post" style="display:inline;">
-                                {% csrf_token %}
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="model_type" value="job">
-                                <input type="hidden" name="id" value="{{ job.id }}">
-                                <button type="submit" class="btn-danger"
-                                    onclick="return confirm('{% trans "Delete this job?"|escapejs %}')">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                {% empty %}
-                    <p style="color:#6f85a0;">{% trans "No jobs." %}</p>
-                {% endfor %}
-            </div>
-
-            <!-- Inline Edit Form for Jobs -->
-            <div class="admin-form" id="editJobForm" style="display:none; margin-top:1rem;">
-                <form method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="action" value="edit">
-                    <input type="hidden" name="model_type" value="job">
-                    <input type="hidden" name="id" id="editJobId">
-                    <div>
-                        <label>{% trans "Title" %} *</label>
-                        <input type="text" name="title" id="editJobTitle" required>
-                    </div>
-                    <div>
-                        <label>{% trans "Organization" %} *</label>
-                        <input type="text" name="organization" id="editJobOrg" required>
-                    </div>
-                    <div class="full-width">
-                        <label>{% trans "Description" %}</label>
-                        <textarea name="description" id="editJobDesc" rows="3"></textarea>
-                    </div>
-                    <div>
-                        <label>{% trans "Last Date" %}</label>
-                        <input type="date" name="last_date" id="editJobDate">
-                    </div>
-                    <div>
-                        <label>{% trans "Apply Link" %}</label>
-                        <input type="url" name="apply_link" id="editJobLink" placeholder="https://...">
-                    </div>
-                    <div>
-                        <label>{% trans "Icon" %}</label>
-                        <input type="text" name="icon" id="editJobIcon" placeholder="{% trans "e.g. briefcase" %}">
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" class="btn-outline"
-                            onclick="document.getElementById('editJobForm').style.display='none'">
-                            {% trans "Cancel" %}
-                        </button>
-                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- ========================================================== -->
-        <!-- SECTION: GOVERNMENT SCHEMES                                -->
-        <!-- ========================================================== -->
-        <div id="section-schemes" class="section">
-            <div class="section-header">
-                <h3><i class="fas fa-hand-holding-heart" style="color:#0a66c2"></i> {% trans "Government Schemes" %}</h3>
-                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addSchemeForm">
-                    {% trans "Add Scheme" %}
-                </button>
-            </div>
-
-            <div class="collapse admin-form" id="addSchemeForm">
-                <form method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="hidden" name="action" value="add">
-                    <input type="hidden" name="model_type" value="scheme">
-                    {{ scheme_form.as_p }}
-                    <div class="form-actions">
-                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save" %}</button>
-                    </div>
-                </form>
-            </div>
-
-            <div id="schemeList">
-                {% for scheme in schemes %}
-                    <div class="list-item">
-                        <div class="info">
-                            <span class="title">{{ scheme.title }}</span>
-                            <span class="sub">
-                                {% blocktrans with desc=scheme.description|truncatechars:80 elig=scheme.eligibility|default:"N/A" %}
-                                    {{ desc }} – Eligibility: {{ elig }}
-                                {% endblocktrans %}
-                            </span>
-                            {% if scheme.image %}
-                                <img src="{{ scheme.image.url }}" alt="{{ scheme.title }}">
-                            {% endif %}
-                        </div>
-                        <div class="list-actions">
-                            <button class="btn-primary btn-sm"
-                                onclick="editScheme('{{ scheme.id }}', '{{ scheme.title|escapejs }}', '{{ scheme.description|escapejs }}', '{{ scheme.eligibility|default:""|escapejs }}')">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <form method="post" style="display:inline;">
-                                {% csrf_token %}
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="model_type" value="scheme">
-                                <input type="hidden" name="id" value="{{ scheme.id }}">
-                                <button type="submit" class="btn-danger"
-                                    onclick="return confirm('{% trans "Delete this scheme?"|escapejs %}')">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                {% empty %}
-                    <p style="color:#6f85a0;">{% trans "No schemes." %}</p>
-                {% endfor %}
-            </div>
-
-            <!-- Inline Edit Form for Schemes -->
-            <div class="admin-form" id="editSchemeForm" style="display:none; margin-top:1rem;">
-                <form method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="hidden" name="action" value="edit">
-                    <input type="hidden" name="model_type" value="scheme">
-                    <input type="hidden" name="id" id="editSchemeId">
-                    <div>
-                        <label>{% trans "Title" %} *</label>
-                        <input type="text" name="title" id="editSchemeTitle" required>
-                    </div>
-                    <div class="full-width">
-                        <label>{% trans "Description" %}</label>
-                        <textarea name="description" id="editSchemeDesc" rows="3"></textarea>
-                    </div>
-                    <div>
-                        <label>{% trans "Eligibility" %}</label>
-                        <input type="text" name="eligibility" id="editSchemeEligibility"
-                            placeholder="{% trans "e.g. All citizens above 18" %}">
-                    </div>
-                    <div>
-                        <label>{% trans "Image" %}</label>
-                        <input type="file" name="image" id="editSchemeImage" accept="image/*">
-                        <small style="color:#6f85a0; display:block; margin-top:0.2rem;">
-                            {% trans "Leave empty to keep current image." %}
-                        </small>
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" class="btn-outline"
-                            onclick="document.getElementById('editSchemeForm').style.display='none'">
-                            {% trans "Cancel" %}
-                        </button>
-                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- ========================================================== -->
-        <!-- SECTION: APPOINTMENTS                                      -->
-        <!-- ========================================================== -->
-        <div id="section-appointments" class="section">
-            <div class="section-header">
-                <h3><i class="fas fa-calendar-check" style="color:#0a66c2"></i> {% trans "Appointments" %}</h3>
-            </div>
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>{% trans "Customer" %}</th>
-                            <th>{% trans "Service" %}</th>
-                            <th>{% trans "Date" %}</th>
-                            <th>{% trans "Time" %}</th>
-                            <th>{% trans "Status" %}</th>
-                            <th>{% trans "Actions" %}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for appt in appointments %}
-                            <tr>
-                                <td>{{ appt.full_name }}</td>
-                                <td>{{ appt.service.name }}</td>
-                                <td>{{ appt.appointment_date }}</td>
-                                <td>{{ appt.appointment_time|time:"H:i" }}</td>
-                                <td><span class="badge-status {{ appt.status|lower }}">{{ appt.status }}</span></td>
-                                <td>
-                                    <button class="btn-primary btn-sm"
-                                        onclick="editAppointment('{{ appt.id }}', '{{ appt.full_name|escapejs }}', '{{ appt.phone|escapejs }}', '{{ appt.email|escapejs }}', '{{ appt.service.id }}', '{{ appt.appointment_date|date:"Y-m-d" }}', '{{ appt.appointment_time|time:"H:i" }}', '{{ appt.message|escapejs }}', '{{ appt.status|escapejs }}')">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <form method="post" style="display:inline;">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="action" value="delete">
-                                        <input type="hidden" name="model_type" value="appointment">
-                                        <input type="hidden" name="id" value="{{ appt.id }}">
-                                        <button type="submit" class="btn-danger"
-                                            onclick="return confirm('{% trans "Delete this appointment?"|escapejs %}')">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        {% empty %}
-                            <tr><td colspan="6">{% trans "No appointments." %}</td></tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Inline Edit Form for Appointments -->
-            <div class="admin-form" id="editAppointmentForm" style="display:none; margin-top:1rem;">
-                <form method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="action" value="edit">
+                    <input type="hidden" name="action" value="delete">
                     <input type="hidden" name="model_type" value="appointment">
-                    <input type="hidden" name="id" id="editApptId">
-                    <div>
-                        <label>{% trans "Full Name" %} *</label>
-                        <input type="text" name="full_name" id="editApptName" required>
-                    </div>
-                    <div>
-                        <label>{% trans "Phone" %} *</label>
-                        <input type="text" name="phone" id="editApptPhone" required>
-                    </div>
-                    <div>
-                        <label>{% trans "Email" %}</label>
-                        <input type="email" name="email" id="editApptEmail">
-                    </div>
-                    <div>
-                        <label>{% trans "Service" %} *</label>
-                        <select name="service" id="editApptService" required>
-                            {% for service in services %}
-                                <option value="{{ service.id }}">{{ service.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div>
-                        <label>{% trans "Date" %} *</label>
-                        <input type="date" name="appointment_date" id="editApptDate" required>
-                    </div>
-                    <div>
-                        <label>{% trans "Time" %} *</label>
-                        <input type="time" name="appointment_time" id="editApptTime" required>
-                    </div>
-                    <div>
-                        <label>{% trans "Status" %}</label>
-                        <select name="status" id="editApptStatus">
-                            <option value="Pending">{% trans "Pending" %}</option>
-                            <option value="Confirmed">{% trans "Confirmed" %}</option>
-                            <option value="Completed">{% trans "Completed" %}</option>
-                            <option value="Cancelled">{% trans "Cancelled" %}</option>
-                        </select>
-                    </div>
-                    <div class="full-width">
-                        <label>{% trans "Message" %}</label>
-                        <textarea name="message" id="editApptMessage" rows="2"></textarea>
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" class="btn-outline"
-                            onclick="document.getElementById('editAppointmentForm').style.display='none'">
-                            {% trans "Cancel" %}
-                        </button>
-                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+                    <input type="hidden" name="id" value="{{ appt.id }}">
+                    <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this appointment?"|escapejs %}')"><i class="fas fa-trash"></i></button>
+                  </form>
+                </td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="6">{% trans "No appointments." %}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
 
-        <!-- ========================================================== -->
-        <!-- SECTION: INQUIRIES                                         -->
-        <!-- ========================================================== -->
-        <div id="section-inquiries" class="section">
-            <div class="section-header">
-                <h3><i class="fas fa-envelope" style="color:#0a66c2"></i> {% trans "Customer Inquiries" %}</h3>
-            </div>
-            <div id="inquiryList">
-                {% for contact in contacts %}
-                    <div class="list-item" style="flex-direction:column; align-items:stretch; gap:0.5rem;">
-                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
-                            <div><strong>{{ contact.name }}</strong> ({{ contact.email }})</div>
-                            <span style="font-size:0.8rem; color:{% if contact.replied %}#1e8e3e{% else %}#d93c3c{% endif %};">
-                                {{ contact.replied|yesno:_("Resolved,Pending") }}
-                            </span>
-                        </div>
-                        <div style="font-size:0.95rem;">{% trans "Q:" %} {{ contact.message|truncatechars:80 }}</div>
-                        {% if contact.reply %}
-                            <div style="background:#eef3f9; padding:0.4rem 0.8rem; border-radius:8px; font-size:0.9rem;">
-                                <strong>{% trans "Reply:" %}</strong> {{ contact.reply }}
-                            </div>
-                        {% endif %}
-                        {% if not contact.replied %}
-                            <form method="post" style="margin-top:0.2rem;">
-                                {% csrf_token %}
-                                <input type="hidden" name="action" value="edit">
-                                <input type="hidden" name="model_type" value="contact">
-                                <input type="hidden" name="id" value="{{ contact.id }}">
-                                <div style="display:flex; gap:0.5rem;">
-                                    <input type="text" name="reply" placeholder="{% trans "Write reply..." %}"
-                                        style="flex:1; padding:0.3rem 0.8rem; border:1.5px solid #dce3ed; border-radius:30px; font-size:0.85rem;">
-                                    <button type="submit" class="btn-primary" style="padding:0.3rem 1rem; font-size:0.8rem;">
-                                        <i class="fas fa-reply"></i> {% trans "Reply" %}
-                                    </button>
-                                </div>
-                            </form>
-                        {% endif %}
-                    </div>
-                {% empty %}
-                    <p style="color:#6f85a0;">{% trans "No inquiries." %}</p>
-                {% endfor %}
-            </div>
-        </div>
+      <!-- Inline Edit Form for Appointments -->
+      <div class="admin-form" id="editAppointmentForm" style="display:none; margin-top:1rem;">
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="edit">
+          <input type="hidden" name="model_type" value="appointment">
+          <input type="hidden" name="id" id="editApptId">
+          <div>
+            <label>{% trans "Full Name" %} *</label>
+            <input type="text" name="full_name" id="editApptName" required>
+          </div>
+          <div>
+            <label>{% trans "Phone" %} *</label>
+            <input type="text" name="phone" id="editApptPhone" required>
+          </div>
+          <div>
+            <label>{% trans "Email" %}</label>
+            <input type="email" name="email" id="editApptEmail">
+          </div>
+          <div>
+            <label>{% trans "Service" %} *</label>
+            <select name="service" id="editApptService" required>
+              {% for service in services %}
+                <option value="{{ service.id }}">{{ service.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label>{% trans "Date" %} *</label>
+            <input type="date" name="appointment_date" id="editApptDate" required>
+          </div>
+          <div>
+            <label>{% trans "Time" %} *</label>
+            <input type="time" name="appointment_time" id="editApptTime" required>
+          </div>
+          <div>
+            <label>{% trans "Status" %}</label>
+            <select name="status" id="editApptStatus">
+              <option value="Pending">{% trans "Pending" %}</option>
+              <option value="Confirmed">{% trans "Confirmed" %}</option>
+              <option value="Completed">{% trans "Completed" %}</option>
+              <option value="Cancelled">{% trans "Cancelled" %}</option>
+            </select>
+          </div>
+          <div class="full-width">
+            <label>{% trans "Message" %}</label>
+            <textarea name="message" id="editApptMessage" rows="2"></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-outline" onclick="document.getElementById('editAppointmentForm').style.display='none'">{% trans "Cancel" %}</button>
+            <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
+          </div>
+        </form>
+      </div>
+    </div>
 
-        <!-- ========================================================== -->
-        <!-- SECTION: UPLOAD FORMS                                      -->
-        <!-- ========================================================== -->
-        <div id="section-forms" class="section">
-            <div class="section-header">
-                <h3><i class="fas fa-file-pdf" style="color:#0a66c2"></i> {% trans "Upload Forms" %}</h3>
-                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addFormUpload">
-                    {% trans "Upload Form" %}
-                </button>
+    <!-- ===== SECTION: INQUIRIES ===== -->
+    <div id="section-inquiries" class="section">
+      <div class="section-header">
+        <h3><i class="fas fa-envelope" style="color:var(--neon-cyan)"></i> {% trans "Customer Inquiries" %}</h3>
+      </div>
+      <div id="inquiryList">
+        {% for contact in contacts %}
+          <div class="list-item" style="flex-direction:column; align-items:stretch; gap:0.5rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+              <div><strong>{{ contact.name }}</strong> ({{ contact.email }})</div>
+              <span style="font-size:0.8rem; color:{% if contact.replied %}#1e8e3e{% else %}#d93c3c{% endif %};">
+                {{ contact.replied|yesno:_("Resolved,Pending") }}
+              </span>
             </div>
+            <div style="font-size:0.95rem;">{% trans "Q:" %} {{ contact.message|truncatechars:80 }}</div>
+            {% if contact.reply %}
+              <div style="background:rgba(255,255,255,0.04); padding:0.4rem 0.8rem; border-radius:8px; border-left:3px solid var(--neon-cyan);">
+                <strong>{% trans "Reply:" %}</strong> {{ contact.reply }}
+              </div>
+            {% endif %}
+            {% if not contact.replied %}
+              <form method="post" style="margin-top:0.2rem;">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="edit">
+                <input type="hidden" name="model_type" value="contact">
+                <input type="hidden" name="id" value="{{ contact.id }}">
+                <div style="display:flex; gap:0.5rem;">
+                  <input type="text" name="reply" placeholder="{% trans "Write reply..." %}" style="flex:1; padding:0.3rem 0.8rem; border:1.5px solid var(--border-soft); border-radius:30px; font-size:0.85rem; background:var(--bg-input); color:var(--text-bright);">
+                  <button type="submit" class="btn-primary" style="padding:0.3rem 1rem; font-size:0.8rem;"><i class="fas fa-reply"></i> {% trans "Reply" %}</button>
+                </div>
+              </form>
+            {% endif %}
+          </div>
+        {% empty %}
+          <p style="color:var(--text-dim);">{% trans "No inquiries." %}</p>
+        {% endfor %}
+      </div>
+    </div>
 
-            <div class="collapse admin-form" id="addFormUpload">
-                <form method="post" enctype="multipart/form-data">
+    <!-- ===== SECTION: UPLOAD FORMS ===== -->
+    <div id="section-forms" class="section">
+      <div class="section-header">
+        <h3><i class="fas fa-file-pdf" style="color:var(--neon-cyan)"></i> {% trans "Upload Forms" %}</h3>
+        <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addFormUpload">{% trans "Upload Form" %}</button>
+      </div>
+
+      <div class="collapse admin-form" id="addFormUpload">
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="add">
+          <input type="hidden" name="model_type" value="form">
+          {{ download_form.as_p }}
+          <div class="form-actions">
+            <button type="submit" class="btn-primary"><i class="fas fa-upload"></i> {% trans "Upload" %}</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="formList">
+        {% for f in forms_list %}
+          <div class="list-item">
+            <div class="info">
+              <span class="title">{{ f.title }}</span>
+              <span class="sub">{{ f.category }} – {{ f.pdf.name }}</span>
+            </div>
+            <div class="list-actions">
+              <button class="btn-primary btn-sm" onclick="editForm('{{ f.id }}', '{{ f.title|escapejs }}', '{{ f.category|default:""|escapejs }}')"><i class="fas fa-edit"></i></button>
+              <form method="post" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="model_type" value="form">
+                <input type="hidden" name="id" value="{{ f.id }}">
+                <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this form?"|escapejs %}')"><i class="fas fa-times"></i></button>
+              </form>
+            </div>
+          </div>
+        {% empty %}
+          <p style="color:var(--text-dim);">{% trans "No forms uploaded." %}</p>
+        {% endfor %}
+      </div>
+
+      <!-- Inline Edit Form for Download Forms -->
+      <div class="admin-form" id="editFormForm" style="display:none; margin-top:1rem;">
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="edit">
+          <input type="hidden" name="model_type" value="form">
+          <input type="hidden" name="id" id="editFormId">
+          <div>
+            <label>{% trans "Title" %} *</label>
+            <input type="text" name="title" id="editFormTitle" required>
+          </div>
+          <div>
+            <label>{% trans "Category" %}</label>
+            <select name="category" id="editFormCategory">
+              <option value="General">{% trans "General" %}</option>
+              <option value="Government">{% trans "Government" %}</option>
+              <option value="Financial">{% trans "Financial" %}</option>
+              <option value="Application">{% trans "Application" %}</option>
+            </select>
+          </div>
+          <div>
+            <label>{% trans "PDF File" %}</label>
+            <input type="file" name="pdf" id="editFormPdf" accept=".pdf">
+            <small style="color:var(--text-dim); display:block; margin-top:0.2rem;">{% trans "Leave empty to keep current file." %}</small>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-outline" onclick="document.getElementById('editFormForm').style.display='none'">{% trans "Cancel" %}</button>
+            <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ===== SECTION: USER MANAGEMENT ===== -->
+    <div id="section-users" class="section">
+      <div class="section-header">
+        <h3><i class="fas fa-users" style="color:var(--neon-cyan)"></i> {% trans "User Management" %}</h3>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>{% trans "Username" %}</th>
+              <th>{% trans "Email" %}</th>
+              <th>{% trans "Role" %}</th>
+              <th>{% trans "Staff" %}</th>
+              <th>{% trans "Action" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in users %}
+              <tr>
+                <td><strong>{{ user.username }}</strong></td>
+                <td>{{ user.email }}</td>
+                <td>
+                  <span class="role-badge {{ user.role }}">
+                    {{ user.get_role_display }}
+                  </span>
+                </td>
+                <td>{{ user.is_staff|yesno:_("Yes,No") }}</td>
+                <td>
+                  <form method="post" style="display:flex; gap:0.4rem; align-items:center; flex-wrap:wrap;">
                     {% csrf_token %}
-                    <input type="hidden" name="action" value="add">
-                    <input type="hidden" name="model_type" value="form">
-                    {{ download_form.as_p }}
-                    <div class="form-actions">
-                        <button type="submit" class="btn-primary"><i class="fas fa-upload"></i> {% trans "Upload" %}</button>
-                    </div>
-                </form>
-            </div>
+                    <input type="hidden" name="action" value="edit_user">
+                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                    <select name="new_role" class="form-select-sm">
+                      <option value="user" {% if user.role == 'user' %}selected{% endif %}>{% trans "User" %}</option>
+                      <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>{% trans "Admin" %}</option>
+                      <option value="superadmin" {% if user.role == 'superadmin' %}selected{% endif %}>{% trans "Super Admin" %}</option>
+                    </select>
+                    <button type="submit" class="btn-primary btn-sm"><i class="fas fa-sync-alt"></i> {% trans "Update" %}</button>
+                  </form>
+                </td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="5">{% trans "No users found." %}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-            <div id="formList">
-                {% for f in forms_list %}
-                    <div class="list-item">
-                        <div class="info">
-                            <span class="title">{{ f.title }}</span>
-                            <span class="sub">{{ f.category }} – {{ f.pdf.name }}</span>
-                        </div>
-                        <div class="list-actions">
-                            <button class="btn-primary btn-sm"
-                                onclick="editForm('{{ f.id }}', '{{ f.title|escapejs }}', '{{ f.category|default:""|escapejs }}')">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <form method="post" style="display:inline;">
-                                {% csrf_token %}
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="model_type" value="form">
-                                <input type="hidden" name="id" value="{{ f.id }}">
-                                <button type="submit" class="btn-danger"
-                                    onclick="return confirm('{% trans "Delete this form?"|escapejs %}')">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                {% empty %}
-                    <p style="color:#6f85a0;">{% trans "No forms uploaded." %}</p>
-                {% endfor %}
-            </div>
+    <!-- ===== SECTION: GALLERY ===== -->
+    <div id="section-gallery" class="section">
+      <div class="section-header">
+        <h3><i class="fas fa-images" style="color:var(--neon-cyan)"></i> {% trans "Manage Gallery" %}</h3>
+        <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addGalleryForm">{% trans "Add Image" %}</button>
+      </div>
 
-            <!-- Inline Edit Form for Download Forms -->
-            <div class="admin-form" id="editFormForm" style="display:none; margin-top:1rem;">
-                <form method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="hidden" name="action" value="edit">
-                    <input type="hidden" name="model_type" value="form">
-                    <input type="hidden" name="id" id="editFormId">
-                    <div>
-                        <label>{% trans "Title" %} *</label>
-                        <input type="text" name="title" id="editFormTitle" required>
-                    </div>
-                    <div>
-                        <label>{% trans "Category" %}</label>
-                        <select name="category" id="editFormCategory">
-                            <option value="General">{% trans "General" %}</option>
-                            <option value="Government">{% trans "Government" %}</option>
-                            <option value="Financial">{% trans "Financial" %}</option>
-                            <option value="Application">{% trans "Application" %}</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>{% trans "PDF File" %}</label>
-                        <input type="file" name="pdf" id="editFormPdf" accept=".pdf">
-                        <small style="color:#6f85a0; display:block; margin-top:0.2rem;">
-                            {% trans "Leave empty to keep current file." %}
-                        </small>
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" class="btn-outline"
-                            onclick="document.getElementById('editFormForm').style.display='none'">
-                            {% trans "Cancel" %}
-                        </button>
-                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+      <div class="collapse admin-form" id="addGalleryForm">
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="add">
+          <input type="hidden" name="model_type" value="gallery">
+          {{ gallery_form.as_p }}
+          <div class="form-actions">
+            <button type="submit" class="btn-primary"><i class="fas fa-upload"></i> {% trans "Upload" %}</button>
+          </div>
+        </form>
+      </div>
 
-        <!-- ========================================================== -->
-        <!-- SECTION: USER MANAGEMENT (SUPER ADMIN ONLY)                -->
-        <!-- ========================================================== -->
-        <div id="section-users" class="section">
-            <div class="section-header">
-                <h3><i class="fas fa-users" style="color:#0a66c2"></i> {% trans "User Management" %}</h3>
-            </div>
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>{% trans "Username" %}</th>
-                            <th>{% trans "Email" %}</th>
-                            <th>{% trans "Role" %}</th>
-                            <th>{% trans "Staff" %}</th>
-                            <th>{% trans "Action" %}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for user in users %}
-                            <tr>
-                                <td><strong>{{ user.username }}</strong></td>
-                                <td>{{ user.email }}</td>
-                                <td>
-                                    <span class="role-badge {{ user.role }}">
-                                        {{ user.get_role_display }}
-                                    </span>
-                                </td>
-                                <td>{{ user.is_staff|yesno:_("Yes,No") }}</td>
-                                <td>
-                                    <form method="post" style="display:flex; gap:0.4rem; align-items:center; flex-wrap:wrap;">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="action" value="edit_user">
-                                        <input type="hidden" name="user_id" value="{{ user.id }}">
-                                        <select name="new_role" class="form-select-sm">
-                                            <option value="user" {% if user.role == 'user' %}selected{% endif %}>{% trans "User" %}</option>
-                                            <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>{% trans "Admin" %}</option>
-                                            <option value="superadmin" {% if user.role == 'superadmin' %}selected{% endif %}>{% trans "Super Admin" %}</option>
-                                        </select>
-                                        <button type="submit" class="btn-primary btn-sm"><i class="fas fa-sync-alt"></i> {% trans "Update" %}</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        {% empty %}
-                            <tr><td colspan="5">{% trans "No users found." %}</td></tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
+      <div class="gallery-grid">
+        {% for img in gallery_images %}
+          <div class="gallery-item">
+            <img src="{{ img.image.url }}" alt="{{ img.title }}">
+            <div class="caption">{{ img.title }}</div>
+            <form method="post" class="delete-btn">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="delete">
+              <input type="hidden" name="model_type" value="gallery">
+              <input type="hidden" name="id" value="{{ img.id }}">
+              <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this image?"|escapejs %}')" style="padding:2px 6px; font-size:0.7rem;"><i class="fas fa-times"></i></button>
+            </form>
+          </div>
+        {% empty %}
+          <p style="grid-column:1/-1; color:var(--text-dim);">{% trans "No images uploaded yet." %}</p>
+        {% endfor %}
+      </div>
+    </div>
 
-        <!-- ========================================================== -->
-        <!-- SECTION: GALLERY                                           -->
-        <!-- ========================================================== -->
-        <div id="section-gallery" class="section">
-            <div class="section-header">
-                <h3><i class="fas fa-images" style="color:#0a66c2"></i> {% trans "Manage Gallery" %}</h3>
-                <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addGalleryForm">
-                    {% trans "Add Image" %}
-                </button>
-            </div>
+    <!-- ===== SECTION: SETTINGS ===== -->
+    <div id="section-settings" class="section">
+      <div class="section-header">
+        <h3><i class="fas fa-cog" style="color:var(--neon-cyan)"></i> {% trans "Website Settings" %}</h3>
+      </div>
+      <div class="admin-form">
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="edit">
+          <input type="hidden" name="model_type" value="businessinfo">
+          <input type="hidden" name="id" value="{{ business_info.id }}">
+          {{ businessinfo_form.as_p }}
+          <div class="form-actions">
+            <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save Settings" %}</button>
+          </div>
+        </form>
+      </div>
+    </div>
 
-            <div class="collapse admin-form" id="addGalleryForm">
-                <form method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="hidden" name="action" value="add">
-                    <input type="hidden" name="model_type" value="gallery">
-                    {{ gallery_form.as_p }}
-                    <div class="form-actions">
-                        <button type="submit" class="btn-primary"><i class="fas fa-upload"></i> {% trans "Upload" %}</button>
-                    </div>
-                </form>
-            </div>
+    <!-- ===== SECTION: APPLICATIONS ===== -->
+    <div id="section-applications" class="section">
+      <div class="section-header">
+        <h3><i class="fas fa-file-alt" style="color:var(--neon-cyan)"></i> {% trans "Applications" %}</h3>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>{% trans "Applicant" %}</th>
+              <th>{% trans "Service" %}</th>
+              <th>{% trans "Status" %}</th>
+              <th>{% trans "Submitted" %}</th>
+              <th>{% trans "Actions" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for app in applications %}
+              <tr>
+                <td>{{ app.full_name }}</td>
+                <td>{{ app.service.name }}</td>
+                <td>
+                  <span class="badge-status {{ app.status }}">{{ app.get_status_display }}</span>
+                </td>
+                <td>{{ app.created_at|date:"d M Y" }}</td>
+                <td>
+                  <a href="{% url 'application_admin_detail' app.id %}" class="btn-primary btn-sm">
+                    <i class="fas fa-eye"></i> {% trans "View" %}
+                  </a>
+                  <a href="{% url 'admin:corematoshree_application_change' app.id %}" class="btn-outline btn-sm" target="_blank">
+                    <i class="fas fa-external-link-alt"></i>
+                  </a>
+                </td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="5">{% trans "No applications yet." %}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-            <div class="gallery-grid">
-                {% for img in gallery_images %}
-                    <div class="gallery-item">
-                        <img src="{{ img.image.url }}" alt="{{ img.title }}">
-                        <div class="caption">{{ img.title }}</div>
-                        <form method="post" class="delete-btn">
-                            {% csrf_token %}
-                            <input type="hidden" name="action" value="delete">
-                            <input type="hidden" name="model_type" value="gallery">
-                            <input type="hidden" name="id" value="{{ img.id }}">
-                            <button type="submit" class="btn-danger"
-                                onclick="return confirm('{% trans "Delete this image?"|escapejs %}')"
-                                style="padding:2px 6px; font-size:0.7rem;">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </form>
-                    </div>
-                {% empty %}
-                    <p style="grid-column:1/-1; color:#6f85a0;">{% trans "No images uploaded yet." %}</p>
-                {% endfor %}
-            </div>
-        </div>
-
-        <!-- ========================================================== -->
-        <!-- SECTION: SETTINGS                                          -->
-        <!-- ========================================================== -->
-        <div id="section-settings" class="section">
-            <div class="section-header">
-                <h3><i class="fas fa-cog" style="color:#0a66c2"></i> {% trans "Website Settings" %}</h3>
-            </div>
-            <div class="admin-form">
-                <form method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="hidden" name="action" value="edit">
-                    <input type="hidden" name="model_type" value="businessinfo">
-                    <input type="hidden" name="id" value="{{ business_info.id }}">
-                    {{ businessinfo_form.as_p }}
-                    <div class="form-actions">
-                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save Settings" %}</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- ========================================================== -->
-        <!-- SECTION: APPLICATIONS                                      -->
-        <!-- ========================================================== -->
-        <div id="section-applications" class="section">
-            <div class="section-header">
-                <h3><i class="fas fa-file-alt" style="color:#0a66c2"></i> {% trans "Applications" %}</h3>
-            </div>
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>{% trans "Applicant" %}</th>
-                            <th>{% trans "Service" %}</th>
-                            <th>{% trans "Status" %}</th>
-                            <th>{% trans "Submitted" %}</th>
-                            <th>{% trans "Actions" %}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for app in applications %}
-                            <tr>
-                                <td>{{ app.full_name }}</td>
-                                <td>{{ app.service.name }}</td>
-                                <td>
-                                    <span class="badge bg-{% if app.status == 'approved' %}success{% elif app.status == 'rejected' %}danger{% elif app.status == 'review' %}warning{% else %}secondary{% endif %}">
-                                        {{ app.get_status_display }}
-                                    </span>
-                                </td>
-                                <td>{{ app.created_at|date:"d M Y" }}</td>
-                                <td>
-                                    <a href="{% url 'application_admin_detail' app.id %}" class="btn-primary btn-sm">
-                                      <i class="fas fa-eye"></i> {% trans "View" %}
-                                    </a>
-                                    <a href="{% url 'admin:corematoshree_application_change' app.id %}" class="btn-outline btn-sm" target="_blank">
-                                        <i class="fas fa-external-link-alt"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        {% empty %}
-                            <tr><td colspan="5">{% trans "No applications yet." %}</td></tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </main>
+  </main>
 {% endblock %}
 
-{% block extra_scripts %}
-    <!-- ===== Bootstrap JS ===== -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
-    </script>
-<script>
+{% block extra_js %}
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
     (function() {
-        // ---- Comma warning for required doc form ----
-        const docNameInput = document.querySelector('#addRequiredDocFormElement input[name="document_name"]');
-        const warningEl = document.getElementById('commaWarning');
-        if (docNameInput && warningEl) {
-            docNameInput.addEventListener('input', function() {
-                if (this.value.includes(',')) {
-                    warningEl.style.display = 'block';
-                } else {
-                    warningEl.style.display = 'none';
-                }
-            });
-        }
+      "use strict";
 
-        // ----- Sidebar navigation -----
-        const navLinks = document.querySelectorAll(".sidebar nav ul li a");
-        const sections = document.querySelectorAll(".section");
-        const pageTitle = document.getElementById("pageTitle");
+      // ---- Comma warning for required doc form ----
+      const docNameInput = document.querySelector('#addRequiredDocFormElement input[name="document_name"]');
+      const warningEl = document.getElementById('commaWarning');
+      if (docNameInput && warningEl) {
+        docNameInput.addEventListener('input', function() {
+          if (this.value.includes(',')) {
+            warningEl.style.display = 'block';
+          } else {
+            warningEl.style.display = 'none';
+          }
+        });
+      }
 
-        function showSection(sectionId) {
-            sections.forEach(sec => sec.classList.remove("active"));
-            const target = document.getElementById("section-" + sectionId);
-            if (target) target.classList.add("active");
+      // ---- Sidebar navigation ----
+      const navLinks = document.querySelectorAll(".sidebar nav ul li a");
+      const sections = document.querySelectorAll(".section");
+      const pageTitle = document.getElementById("pageTitle");
+      const sidebar = document.getElementById("sidebar");
+      const hamburgerBtn = document.getElementById("hamburgerBtn");
 
-            navLinks.forEach(link => link.classList.remove("active"));
-            navLinks.forEach(link => {
-                if (link.dataset.section === sectionId) link.classList.add("active");
-            });
+      const sectionTitles = {
+        dashboard: "{% trans "Dashboard" %}",
+        services: "{% trans "Manage Services" %}",
+        prices: "{% trans "Update Prices" %}",
+        announcements: "{% trans "Announcements" %}",
+        jobs: "{% trans "Job Notifications" %}",
+        schemes: "{% trans "Government Schemes" %}",
+        appointments: "{% trans "Appointments" %}",
+        inquiries: "{% trans "Inquiries" %}",
+        forms: "{% trans "Upload Forms" %}",
+        users: "{% trans "User Management" %}",
+        gallery: "{% trans "Gallery" %}",
+        requireddocs: "{% trans "Required Documents" %}",
+        applications: "{% trans "Applications" %}",
+        settings: "{% trans "Settings" %}",
+      };
 
-            const titles = {
-                dashboard: "{% trans "Dashboard" %}",
-                services: "{% trans "Manage Services" %}",
-                prices: "{% trans "Update Prices" %}",
-                announcements: "{% trans "Announcements" %}",
-                jobs: "{% trans "Job Notifications" %}",
-                schemes: "{% trans "Government Schemes" %}",
-                appointments: "{% trans "Appointments" %}",
-                inquiries: "{% trans "Inquiries" %}",
-                forms: "{% trans "Upload Forms" %}",
-                users: "{% trans "User Management" %}",
-                gallery: "{% trans "Gallery" %}",
-                requireddocs: "{% trans "Required Documents" %}",
-                applications: "{% trans "Applications" %}",
-                settings: "{% trans "Settings" %}",
-            };
-            pageTitle.textContent = titles[sectionId] || "{% trans "Dashboard" %}";
-            document.getElementById("sidebar").classList.remove("open");
-        }
+      function showSection(sectionId) {
+        sections.forEach(sec => sec.classList.remove("active"));
+        const target = document.getElementById("section-" + sectionId);
+        if (target) target.classList.add("active");
 
+        navLinks.forEach(link => link.classList.remove("active"));
         navLinks.forEach(link => {
-            link.addEventListener("click", function(e) {
-                e.preventDefault();
-                showSection(this.dataset.section);
-            });
+          if (link.dataset.section === sectionId) link.classList.add("active");
         });
 
-        // ----- Hamburger toggle -----
-        document.getElementById("hamburgerBtn").addEventListener("click", function() {
-            document.getElementById("sidebar").classList.toggle("open");
+        pageTitle.textContent = sectionTitles[sectionId] || "{% trans "Dashboard" %}";
+        sidebar.classList.remove("open");
+      }
+
+      navLinks.forEach(link => {
+        link.addEventListener("click", function(e) {
+          e.preventDefault();
+          showSection(this.dataset.section);
         });
+      });
 
-        // ================================================================
-        // EDIT FUNCTIONS – all inside the same closure
-        // ================================================================
-
-        // ----- Edit service ----
-        window.editService = function(id, name, category, description, active, icon, color) {
-            document.getElementById("editServiceId").value = id;
-            document.getElementById("editSvcName").value = name;
-            document.getElementById("editSvcCategory").value = category;
-            document.getElementById("editSvcDesc").value = description;
-            document.getElementById("editSvcStatus").value = active === 'true' ? 'true' : 'false';
-            document.getElementById("editSvcIcon").value = icon || '';
-            document.getElementById("editSvcColor").value = color || '#00d4ff';
-            document.getElementById("editServiceForm").style.display = "grid";
-            document.getElementById("editServiceForm").scrollIntoView({ behavior: 'smooth' });
-        };
-
-        document.querySelector("#editServiceForm .btn-outline").addEventListener("click", function() {
-            document.getElementById("editServiceForm").style.display = "none";
+      if (hamburgerBtn) {
+        hamburgerBtn.addEventListener("click", function() {
+          sidebar.classList.toggle("open");
         });
+      }
 
-        // ----- Edit charge -----
-        window.editCharge = function(id, serviceId, charge) {
-            document.getElementById("editChargeId").value = id;
-            document.getElementById("editChargeService").value = serviceId;
-            document.getElementById("editChargeAmount").value = charge;
-            document.getElementById("editChargeForm").style.display = "grid";
-            document.getElementById("editChargeForm").scrollIntoView({ behavior: 'smooth' });
-        };
+      // ---- Global edit functions ----
+      window.editService = function(id, name, category, description, active, icon, color) {
+        document.getElementById("editServiceId").value = id;
+        document.getElementById("editSvcName").value = name;
+        document.getElementById("editSvcCategory").value = category;
+        document.getElementById("editSvcDesc").value = description;
+        document.getElementById("editSvcStatus").value = active === 'true' ? 'true' : 'false';
+        document.getElementById("editSvcIcon").value = icon || '';
+        document.getElementById("editSvcColor").value = color || '#00d4ff';
+        document.getElementById("editServiceForm").style.display = "grid";
+        document.getElementById("editServiceForm").scrollIntoView({ behavior: 'smooth' });
+      };
 
-        document.querySelector("#editChargeForm .btn-outline").addEventListener("click", function() {
-            document.getElementById("editChargeForm").style.display = "none";
+      window.editCharge = function(id, serviceId, charge) {
+        document.getElementById("editChargeId").value = id;
+        document.getElementById("editChargeService").value = serviceId;
+        document.getElementById("editChargeAmount").value = charge;
+        document.getElementById("editChargeForm").style.display = "grid";
+        document.getElementById("editChargeForm").scrollIntoView({ behavior: 'smooth' });
+      };
+
+      window.editAnnouncement = function(id, title, category, description) {
+        document.getElementById("editAnnouncementId").value = id;
+        document.getElementById("editAnnTitle").value = title;
+        document.getElementById("editAnnCategory").value = category || 'General';
+        document.getElementById("editAnnDesc").value = description || '';
+        document.getElementById("editAnnouncementForm").style.display = "grid";
+        document.getElementById("editAnnouncementForm").scrollIntoView({ behavior: 'smooth' });
+      };
+
+      window.editJob = function(id, title, organization, description, lastDate, applyLink, icon) {
+        document.getElementById("editJobId").value = id;
+        document.getElementById("editJobTitle").value = title;
+        document.getElementById("editJobOrg").value = organization;
+        document.getElementById("editJobDesc").value = description || '';
+        document.getElementById("editJobDate").value = lastDate || '';
+        document.getElementById("editJobLink").value = applyLink || '';
+        document.getElementById("editJobIcon").value = icon || '';
+        document.getElementById("editJobForm").style.display = "grid";
+        document.getElementById("editJobForm").scrollIntoView({ behavior: 'smooth' });
+      };
+
+      window.editScheme = function(id, title, description, eligibility) {
+        document.getElementById("editSchemeId").value = id;
+        document.getElementById("editSchemeTitle").value = title;
+        document.getElementById("editSchemeDesc").value = description || '';
+        document.getElementById("editSchemeEligibility").value = eligibility || '';
+        document.getElementById("editSchemeForm").style.display = "grid";
+        document.getElementById("editSchemeForm").scrollIntoView({ behavior: 'smooth' });
+      };
+
+      window.editAppointment = function(id, full_name, phone, email, serviceId, date, time, message, status) {
+        document.getElementById("editApptId").value = id;
+        document.getElementById("editApptName").value = full_name;
+        document.getElementById("editApptPhone").value = phone;
+        document.getElementById("editApptEmail").value = email;
+        document.getElementById("editApptService").value = serviceId;
+        document.getElementById("editApptDate").value = date;
+        document.getElementById("editApptTime").value = time;
+        document.getElementById("editApptMessage").value = message || '';
+        document.getElementById("editApptStatus").value = status || 'Pending';
+        document.getElementById("editAppointmentForm").style.display = "grid";
+        document.getElementById("editAppointmentForm").scrollIntoView({ behavior: 'smooth' });
+      };
+
+      window.editForm = function(id, title, category) {
+        document.getElementById("editFormId").value = id;
+        document.getElementById("editFormTitle").value = title;
+        document.getElementById("editFormCategory").value = category || 'General';
+        document.getElementById("editFormForm").style.display = "grid";
+        document.getElementById("editFormForm").scrollIntoView({ behavior: 'smooth' });
+      };
+
+      window.editRequiredDoc = function(id, serviceId, docName) {
+        document.getElementById("editRequiredDocId").value = id;
+        document.getElementById("editRequiredDocService").value = serviceId;
+        document.getElementById("editRequiredDocName").value = docName;
+        document.getElementById("editRequiredDocForm").style.display = "grid";
+        document.getElementById("editRequiredDocForm").scrollIntoView({ behavior: 'smooth' });
+      };
+
+      // ---- Cancel buttons for inline edit forms ----
+      document.querySelectorAll('.admin-form .btn-outline').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          const form = this.closest('.admin-form');
+          if (form) {
+            form.style.display = 'none';
+          }
         });
+      });
 
-        // ----- Edit Announcement -----
-        window.editAnnouncement = function(id, title, category, description) {
-            document.getElementById("editAnnouncementId").value = id;
-            document.getElementById("editAnnTitle").value = title;
-            document.getElementById("editAnnCategory").value = category || 'General';
-            document.getElementById("editAnnDesc").value = description || '';
-            document.getElementById("editAnnouncementForm").style.display = "grid";
-            document.getElementById("editAnnouncementForm").scrollIntoView({ behavior: 'smooth' });
-        };
+      // ---- Show dashboard by default ----
+      showSection("dashboard");
 
-        document.querySelector("#editAnnouncementForm .btn-outline").addEventListener("click", function() {
-            document.getElementById("editAnnouncementForm").style.display = "none";
-        });
-
-        // ----- Edit Job -----
-        window.editJob = function(id, title, organization, description, lastDate, applyLink, icon) {
-            document.getElementById("editJobId").value = id;
-            document.getElementById("editJobTitle").value = title;
-            document.getElementById("editJobOrg").value = organization;
-            document.getElementById("editJobDesc").value = description || '';
-            document.getElementById("editJobDate").value = lastDate || '';
-            document.getElementById("editJobLink").value = applyLink || '';
-            document.getElementById("editJobIcon").value = icon || '';
-            document.getElementById("editJobForm").style.display = "grid";
-            document.getElementById("editJobForm").scrollIntoView({ behavior: 'smooth' });
-        };
-
-        document.querySelector("#editJobForm .btn-outline").addEventListener("click", function() {
-            document.getElementById("editJobForm").style.display = "none";
-        });
-
-        // ----- Edit Scheme -----
-        window.editScheme = function(id, title, description, eligibility) {
-            document.getElementById("editSchemeId").value = id;
-            document.getElementById("editSchemeTitle").value = title;
-            document.getElementById("editSchemeDesc").value = description || '';
-            document.getElementById("editSchemeEligibility").value = eligibility || '';
-            document.getElementById("editSchemeForm").style.display = "grid";
-            document.getElementById("editSchemeForm").scrollIntoView({ behavior: 'smooth' });
-        };
-
-        document.querySelector("#editSchemeForm .btn-outline").addEventListener("click", function() {
-            document.getElementById("editSchemeForm").style.display = "none";
-        });
-
-        // ----- Edit Appointment -----
-        window.editAppointment = function(id, full_name, phone, email, serviceId, date, time, message, status) {
-            document.getElementById("editApptId").value = id;
-            document.getElementById("editApptName").value = full_name;
-            document.getElementById("editApptPhone").value = phone;
-            document.getElementById("editApptEmail").value = email;
-            document.getElementById("editApptService").value = serviceId;
-            document.getElementById("editApptDate").value = date;
-            document.getElementById("editApptTime").value = time;
-            document.getElementById("editApptMessage").value = message || '';
-            document.getElementById("editApptStatus").value = status || 'Pending';
-            document.getElementById("editAppointmentForm").style.display = "grid";
-            document.getElementById("editAppointmentForm").scrollIntoView({ behavior: 'smooth' });
-        };
-
-        document.querySelector("#editAppointmentForm .btn-outline").addEventListener("click", function() {
-            document.getElementById("editAppointmentForm").style.display = "none";
-        });
-
-        // ----- Edit Form (DownloadForm) -----
-        window.editForm = function(id, title, category) {
-            document.getElementById("editFormId").value = id;
-            document.getElementById("editFormTitle").value = title;
-            document.getElementById("editFormCategory").value = category || 'General';
-            document.getElementById("editFormForm").style.display = "grid";
-            document.getElementById("editFormForm").scrollIntoView({ behavior: 'smooth' });
-        };
-
-        document.querySelector("#editFormForm .btn-outline").addEventListener("click", function() {
-            document.getElementById("editFormForm").style.display = "none";
-        });
-
-        // ----- Edit Required Document (single definition) -----
-        window.editRequiredDoc = function(id, serviceId, docName) {
-            document.getElementById("editRequiredDocId").value = id;
-            document.getElementById("editRequiredDocService").value = serviceId;
-            document.getElementById("editRequiredDocName").value = docName;
-            document.getElementById("editRequiredDocForm").style.display = "grid";
-            document.getElementById("editRequiredDocForm").scrollIntoView({ behavior: 'smooth' });
-        };
-
-        document.querySelector("#editRequiredDocForm .btn-outline").addEventListener("click", function() {
-            document.getElementById("editRequiredDocForm").style.display = "none";
-        });
-
-        // ----- Start with dashboard active -----
-        showSection("dashboard");
     })();
-</script>
+  </script>
 {% endblock %}
-</body>
-</html>

@@ -1,71 +1,61 @@
+"""
+URL Configuration for the core application.
+"""
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
 
+app_name = 'core'  # Optional: set if you use namespacing
+
 urlpatterns = [
-
-    # Home
+    # =============================================
+    # Public Pages
+    # =============================================
     path('', views.home, name='home'),
-
-    # About
     path('about/', views.about, name='about'),
-
-    # Services
     path('services/', views.services, name='services'),
-
-    # Gallery
     path('gallery/', views.gallery, name='gallery'),
-
-    # Contact
     path('contact/', views.contact, name='contact'),
-
-    # Appointment
     path('appointment/', views.appointment, name='appointment'),
-
-    # FAQ
     path('faq/', views.faq, name='faq'),
-
-    # Required Documents
     path('documents/', views.documents, name='documents'),
-
-    # Download Forms
     path('downloads/', views.downloads, name='downloads'),
-
-    # Service Charges
     path('charges/', views.charges, name='charges'),
-
-    # Customer Reviews
     path('reviews/', views.reviews, name='reviews'),
-
-    # Announcements
     path('announcements/', views.announcements, name='announcements'),
-
-    # Government Schemes
     path('government-schemes/', views.government_schemes, name='government_schemes'),
-
-    # Job Notifications
     path('jobs/', views.jobs, name='jobs'),
-    
+
+    # Review submission (POST only)
     path('submit-review/', views.submit_review, name='submit_review'),
-    
-    path('apply/<int:service_id>/', views.apply_service, name='apply_service'),
-    path('my-applications/', views.my_applications, name='my_applications'),
-    path('application/<int:app_id>/', views.application_detail, name='application_detail'),
-    path('application-detail/<int:app_id>/', views.application_detail_ajax, name='application_detail_ajax'),
-    path('admin/application/<int:app_id>/', views.application_admin_detail, name='application_admin_detail'),
 
-    path("pdf/<int:pk>/split/", views.split_pdf, name="split_pdf"),
-
-    # Profile & Auth
+    # =============================================
+    # User Authentication & Profile
+    # =============================================
     path('register/', views.register, name='register'),
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('profile/', views.profile, name='profile'),
-    
-    path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
-    path('superadmin-dashboard/', views.superadmin_dashboard, name='superadmin_dashboard'),
-
     path('password-change/', auth_views.PasswordChangeView.as_view(template_name='password_change.html'), name='password_change'),
     path('password-change/done/', auth_views.PasswordChangeDoneView.as_view(template_name='password_change_done.html'), name='password_change_done'),
 
+    # =============================================
+    # User Applications & Document Management
+    # =============================================
+    path('apply/<int:service_id>/', views.apply_service, name='apply_service'),
+    path('my-applications/', views.my_applications, name='my_applications'),
+    path('application/<int:app_id>/', views.application_detail, name='application_detail'),
+
+    # =============================================
+    # Admin Dashboard & Management
+    # =============================================
+    path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
+    path('superadmin-dashboard/', views.superadmin_dashboard, name='superadmin_dashboard'),
+
+    # Admin only: application details (via AJAX and full view)
+    path('application-detail/<int:app_id>/', views.application_detail_ajax, name='application_detail_ajax'),
+    path('admin/application/<int:app_id>/', views.application_admin_detail, name='application_admin_detail'),
+
+    # PDF splitting (admin only)
+    path('pdf/<int:pk>/split/', views.split_pdf, name='split_pdf'),
 ]

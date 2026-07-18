@@ -15,23 +15,30 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
     
+"""
+URL Configuration for Matoshree project.
+
+The `urlpatterns` list routes URLs to views. For more information see:
+    https://docs.djangoproject.com/en/6.0/topics/http/urls/
+"""
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls.i18n import i18n_patterns
-from corematoshree import views  # import views
 
 urlpatterns = [
-    # Custom admin detail - must come before admin.site.urls
-    path('admin/application/<int:app_id>/', views.application_admin_detail, name='application_admin_detail'),
-    
-    path('admin/', admin.site.urls),  # default admin
+    # Admin interface
+    path('admin/', admin.site.urls),
 
+    # All application URLs (home, about, services, etc.)
     path('', include('corematoshree.urls')),
-    
-    path('i18n/', include('django.conf.urls.i18n')), 
+
+    # Language selection (for i18n)
+    path('i18n/', include('django.conf.urls.i18n')),
 ]
 
+# Serve media files during development only
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    
