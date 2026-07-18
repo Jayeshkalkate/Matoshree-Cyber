@@ -25,7 +25,7 @@ if not SECRET_KEY:
     raise ValueError("SECRET_KEY environment variable is required.")
 
 # DEBUG = os.getenv("DEBUG", "False").lower() == "true"
-DEBUG = True
+DEBUG = True  # Set to False in production via environment
 
 ALLOWED_HOSTS = [
     host.strip() for host in os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",") if host.strip()
@@ -35,7 +35,6 @@ BASE_URL = os.getenv("BASE_URL", "")
 
 # CSRF trusted origins – add your domain in production
 CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
-# Ensure no empty strings
 CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in CSRF_TRUSTED_ORIGINS if origin.strip()]
 
 # =============================================================================
@@ -53,6 +52,7 @@ INSTALLED_APPS = [
     # Third-party
     "cloudinary",
     "cloudinary_storage",
+    "debug_toolbar",  # already added below
 
     # Local
     "corematoshree",
@@ -63,6 +63,7 @@ INSTALLED_APPS = [
 # =============================================================================
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",  # must be as early as possible
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",          # Must be after SecurityMiddleware
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -79,7 +80,6 @@ MIDDLEWARE = [
 # =============================================================================
 
 ROOT_URLCONF = "Matoshree.urls"
-
 WSGI_APPLICATION = "Matoshree.wsgi.application"
 
 # =============================================================================
@@ -247,3 +247,60 @@ LOGGING = {
         },
     },
 }
+
+# =============================================================================
+# Debug Toolbar (always enabled in development)
+# =============================================================================
+
+INTERNAL_IPS = ['127.0.0.1']   # adjust for your environment
+
+# =============================================================================
+# CACHES – Performance Optimisation
+# =============================================================================
+
+# Use Redis if available, otherwise fallback to local memory cache
+REDIS_URL = os.getenv("REDIS_URL")
+if REDIS_URL:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": REDIS_URL,
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+                "PARSER_CLASS": "redis.connection.HiredisParser",
+                "CONNECTION_POOL_CLASS": "redis.BlockingConnectionPool",
+                "CONNECTION_POOL_CLASS_KWARGS": {
+                    "max_connections": 50,
+                    "timeout": 20,
+                },
+                "MAX_CONNECTIONS": 1000,
+                "PICKLE_VERSION": -1,
+            },
+        }
+    }
+else:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+            "LOCATION": "unique-snowflake",
+            "TIMEOUT": 60 * 5,  # 5 minutes default
+            "OPTIONS": {
+                "MAX_ENTRIES": 2000,
+            }
+        }
+    }
+
+# Optional: Use cache-based sessions for better performance
+# SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+# SESSION_CACHE_ALIAS = "default"
+
+# =============================================================================
+# Performance: Database query logging (only for development)
+# =============================================================================
+
+if DEBUG:
+    LOGGING["loggers"]["django.db.backends"] = {
+        "level": "DEBUG",
+        "handlers": ["console"],
+        "propagate": False,
+    }

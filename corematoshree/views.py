@@ -7,6 +7,7 @@ import logging
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.cache import cache
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import OperationalError
@@ -15,6 +16,7 @@ from django.http import FileResponse, JsonResponse, Http404
 from django.shortcuts import get_object_or_404, render, redirect
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.cache import cache_page
 from pypdf import PdfReader, PdfWriter
 from django.db import ProgrammingError
 from .models import (
@@ -35,14 +37,20 @@ from .forms import (
 logger = logging.getLogger(__name__)
 
 # =============================================================================
-# HELPERS
+# HELPERS (with caching)
 # =============================================================================
-    
+
 def get_business():
-    try:
-        return BusinessInfo.objects.first()
-    except Exception:
-        return None
+    """Cache BusinessInfo to avoid repeated DB hits."""
+    cache_key = 'business_info'
+    business = cache.get(cache_key)
+    if business is None:
+        try:
+            business = BusinessInfo.objects.first()
+        except Exception:
+            business = None
+        cache.set(cache_key, business, 60 * 60)  # 1 hour
+    return business
 
 def is_admin(user):
     return user.is_authenticated and user.role in ('admin', 'superadmin')
@@ -85,25 +93,38 @@ def profile(request):
     })
 
 # =============================================================================
-# DASHBOARD (ADMIN & SUPERADMIN)
+# DASHBOARD (ADMIN & SUPERADMIN) – with caching
 # =============================================================================
 
 def _get_dashboard_common_data():
-    """Fetch common querysets and forms for admin/superadmin dashboards."""
-    return {
-        'services': Service.objects.all().order_by('name'),
-        'appointments': Appointment.objects.all().order_by('-appointment_date'),
-        'contacts': Contact.objects.all().order_by('-created_at'),
-        'announcements': Announcement.objects.all().order_by('-created_at'),
-        'jobs': JobNotification.objects.all().order_by('-last_date'),
-        'schemes': GovernmentScheme.objects.all().order_by('-last_date'),
-        'forms_list': DownloadForm.objects.all().order_by('-uploaded_at'),
-        'servicecharges': ServiceCharge.objects.select_related('service').all(),
-        'gallery_images': Gallery.objects.all(),
+    """Fetch common querysets for admin dashboards, cached for 5 minutes."""
+    cache_key = 'dashboard_common_data'
+    data = cache.get(cache_key)
+    if data is not None:
+        return data
+
+    data = {
+        'services': Service.objects.all().only('id', 'name', 'category', 'active', 'icon', 'icon_color'),
+        'appointments': Appointment.objects.select_related('service').only(
+            'id', 'full_name', 'phone', 'email', 'service__name',
+            'appointment_date', 'appointment_time', 'status', 'created_at'
+        ).order_by('-appointment_date')[:50],  # Limit to latest 50
+        'contacts': Contact.objects.all().only('id', 'name', 'email', 'phone', 'subject', 'message', 'reply', 'replied', 'created_at'),
+        'announcements': Announcement.objects.all().only('id', 'title', 'category', 'description', 'created_at'),
+        'jobs': JobNotification.objects.all().only('id', 'title', 'organization', 'last_date', 'apply_link', 'description', 'icon'),
+        'schemes': GovernmentScheme.objects.all().only('id', 'title', 'description', 'eligibility', 'last_date', 'image'),
+        'forms_list': DownloadForm.objects.all().only('id', 'title', 'category', 'pdf', 'uploaded_at'),
+        'servicecharges': ServiceCharge.objects.select_related('service').only('id', 'service__name', 'charge'),
+        'gallery_images': Gallery.objects.all().only('id', 'title', 'category', 'image'),
         'business_info': BusinessInfo.objects.first(),
-        'applications': Application.objects.all().order_by('-created_at'),
-        'required_docs': RequiredDocument.objects.select_related('service').all().order_by('service__name'),
-        # Forms for adding/editing
+        'applications': Application.objects.select_related('user', 'service').only(
+            'id', 'user__username', 'service__name', 'full_name', 'phone',
+            'email', 'address', 'status', 'created_at'
+        ).order_by('-created_at')[:50],
+        'required_docs': RequiredDocument.objects.select_related('service').only(
+            'id', 'service__name', 'document_name'
+        ).order_by('service__name'),
+        # Forms (unchanged)
         'service_form': ServiceForm(),
         'announcement_form': AnnouncementForm(),
         'job_form': JobNotificationForm(),
@@ -116,12 +137,11 @@ def _get_dashboard_common_data():
         'businessinfo_form': BusinessInfoForm(instance=BusinessInfo.objects.first()),
         'required_doc_form': RequiredDocumentForm(),
     }
+    cache.set(cache_key, data, 60 * 5)  # 5 minutes
+    return data
 
 def _handle_dashboard_post(request, is_super=False):
-    """
-    Process POST requests for admin/superadmin dashboards.
-    Returns a redirect if action was handled, else None.
-    """
+    """Process POST requests for admin/superadmin dashboards."""
     action = request.POST.get('action')
     model_type = request.POST.get('model_type')
     obj_id = request.POST.get('id')
@@ -197,6 +217,8 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.success(request, _('Gallery image uploaded.'))
             else:
                 messages.error(request, _('Error uploading gallery image.'))
+        # Clear cache after data change
+        cache.delete('dashboard_common_data')
         return redirect('superadmin_dashboard' if is_super else 'admin_dashboard')
 
     elif action == 'edit':
@@ -250,7 +272,6 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.error(request, _('Error updating appointment.'))
         elif model_type == 'contact' and obj_id:
             instance = get_object_or_404(Contact, id=obj_id)
-            # Handle reply separately if present
             if 'reply' in request.POST:
                 instance.reply = request.POST.get('reply')
                 instance.replied = True
@@ -287,6 +308,8 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.success(request, _('Business info updated.'))
             else:
                 messages.error(request, _('Error updating business info.'))
+        cache.delete('dashboard_common_data')
+        cache.delete('business_info')
         return redirect('superadmin_dashboard' if is_super else 'admin_dashboard')
 
     elif action == 'delete':
@@ -320,6 +343,7 @@ def _handle_dashboard_post(request, is_super=False):
         elif model_type == 'gallery' and obj_id:
             get_object_or_404(Gallery, id=obj_id).delete()
             messages.success(request, _('Gallery image deleted.'))
+        cache.delete('dashboard_common_data')
         return redirect('superadmin_dashboard' if is_super else 'admin_dashboard')
 
     # Superadmin specific: edit user role
@@ -350,7 +374,7 @@ def admin_dashboard(request):
 @user_passes_test(is_superadmin)
 def superadmin_dashboard(request):
     context = _get_dashboard_common_data()
-    context['users'] = User.objects.all().order_by('username')
+    context['users'] = User.objects.all().order_by('username').only('id', 'username', 'email', 'role', 'is_staff')
     if request.method == 'POST':
         response = _handle_dashboard_post(request, is_super=True)
         if response:
@@ -359,20 +383,67 @@ def superadmin_dashboard(request):
     return render(request, 'superadmindashboard.html', context)
 
 # =============================================================================
-# PUBLIC VIEWS
+# AJAX ENDPOINT FOR DASHBOARD SECTIONS (Lazy Loading)
 # =============================================================================
 
+@login_required
+@user_passes_test(is_admin)
+def dashboard_section_data(request, section):
+    """Return JSON data for a specific dashboard section."""
+    data = {}
+    if section == 'services':
+        data['services'] = list(Service.objects.values('id', 'name', 'category', 'active', 'icon', 'icon_color'))
+    elif section == 'appointments':
+        data['appointments'] = list(Appointment.objects.select_related('service').values(
+            'id', 'full_name', 'phone', 'email', 'service__name',
+            'appointment_date', 'appointment_time', 'status', 'created_at'
+        ).order_by('-appointment_date'))
+    elif section == 'contacts':
+        data['contacts'] = list(Contact.objects.values('id', 'name', 'email', 'phone', 'subject', 'message', 'reply', 'replied', 'created_at'))
+    elif section == 'announcements':
+        data['announcements'] = list(Announcement.objects.values('id', 'title', 'category', 'description', 'created_at'))
+    elif section == 'jobs':
+        data['jobs'] = list(JobNotification.objects.values('id', 'title', 'organization', 'last_date', 'apply_link', 'description', 'icon'))
+    elif section == 'schemes':
+        data['schemes'] = list(GovernmentScheme.objects.values('id', 'title', 'description', 'eligibility', 'last_date', 'image'))
+    elif section == 'forms':
+        data['forms'] = list(DownloadForm.objects.values('id', 'title', 'category', 'pdf', 'uploaded_at'))
+    elif section == 'servicecharges':
+        data['servicecharges'] = list(ServiceCharge.objects.select_related('service').values(
+            'id', 'service__name', 'charge'))
+    elif section == 'gallery':
+        data['gallery'] = list(Gallery.objects.values('id', 'title', 'category', 'image'))
+    elif section == 'requireddocs':
+        data['requireddocs'] = list(RequiredDocument.objects.select_related('service').values(
+            'id', 'service__name', 'document_name'))
+    elif section == 'applications':
+        data['applications'] = list(Application.objects.select_related('user', 'service').values(
+            'id', 'user__username', 'service__name', 'full_name', 'phone',
+            'email', 'address', 'status', 'created_at'
+        ).order_by('-created_at'))
+    elif section == 'users' and request.user.role == 'superadmin':
+        data['users'] = list(User.objects.values('id', 'username', 'email', 'role', 'is_staff'))
+    else:
+        data['error'] = _('Invalid section.')
+    return JsonResponse(data)
+
+# =============================================================================
+# PUBLIC VIEWS – with caching and pagination
+# =============================================================================
+
+@cache_page(60 * 5)  # 5 minutes
 def home(request):
     context = {
         'business': get_business(),
-        'services': Service.objects.filter(active=True)[:8],
-        'announcements': Announcement.objects.all()[:5],
-        'reviews': Review.objects.filter(approved=True)[:6],
-        'gallery': Gallery.objects.all()[:8],
-        'charges': ServiceCharge.objects.select_related('service').all()[:3],
+        'services': Service.objects.filter(active=True)[:8].only('name', 'description', 'icon', 'icon_color'),
+        'announcements': Announcement.objects.all()[:5].only('title', 'category', 'description', 'created_at'),
+        'reviews': Review.objects.filter(approved=True)[:6].only('customer_name', 'review', 'rating', 'created_at'),
+        'gallery': Gallery.objects.all()[:8].only('title', 'image'),
+        'charges': ServiceCharge.objects.select_related('service').all()[:3].only('service__name', 'charge'),
     }
     return render(request, 'homepage.html', context)
 
+@cache_page(60 * 15)  # 15 minutes
 def about(request):
     business = get_business()
     certifications = []
@@ -381,20 +452,29 @@ def about(request):
 
     context = {
         'business': business,
-        'services': Service.objects.filter(active=True),
-        'charges': ServiceCharge.objects.select_related('service').all(),
-        'certifications': certifications,   # <-- ADD THIS LINE
+        'services': Service.objects.filter(active=True).only('name', 'icon'),
+        'charges': ServiceCharge.objects.select_related('service').all().only('service__name', 'charge'),
+        'certifications': certifications,
     }
     return render(request, 'aboutus.html', context)
 
 def services(request):
+    services_qs = Service.objects.filter(active=True).only('id', 'name', 'description', 'icon', 'icon_color')
+    paginator = Paginator(services_qs, 12)
+    page = request.GET.get('page')
+    try:
+        services_page = paginator.page(page)
+    except PageNotAnInteger:
+        services_page = paginator.page(1)
+    except EmptyPage:
+        services_page = paginator.page(paginator.num_pages)
     return render(request, 'services.html', {
         'business': get_business(),
-        'services': Service.objects.filter(active=True),
+        'services': services_page,
     })
 
 def gallery(request):
-    images = Gallery.objects.all().order_by('-id')
+    images = Gallery.objects.all().order_by('-id').only('id', 'title', 'image')
     paginator = Paginator(images, 12)
     page = request.GET.get('page')
     try:
@@ -413,7 +493,6 @@ def contact(request):
         form = ContactForm(request.POST)
         if form.is_valid():
             contact = form.save()
-            # Send email notification
             try:
                 send_mail(
                     subject=f'New Contact Message from {contact.name}',
@@ -452,17 +531,20 @@ def appointment(request):
     return render(request, 'appointment.html', {
         'business': get_business(),
         'form': form,
-        'services': Service.objects.filter(active=True),
+        'services': Service.objects.filter(active=True).only('id', 'name'),
     })
 
+@cache_page(60 * 60)  # 1 hour
 def faq(request):
     return render(request, 'faq.html', {
         'business': get_business(),
-        'faqs': FAQ.objects.all(),
+        'faqs': FAQ.objects.all().only('question', 'answer'),
     })
 
 def documents(request):
-    documents_qs = RequiredDocument.objects.select_related('service').all().order_by('service__name', 'document_name')
+    documents_qs = RequiredDocument.objects.select_related('service').all().only(
+        'id', 'service__name', 'document_name'
+    ).order_by('service__name', 'document_name')
     paginator = Paginator(documents_qs, 20)
     page = request.GET.get('page')
     try:
@@ -477,19 +559,39 @@ def documents(request):
     })
 
 def downloads(request):
+    forms_qs = DownloadForm.objects.all().only('id', 'title', 'category', 'pdf')
+    paginator = Paginator(forms_qs, 20)
+    page = request.GET.get('page')
+    try:
+        forms_page = paginator.page(page)
+    except PageNotAnInteger:
+        forms_page = paginator.page(1)
+    except EmptyPage:
+        forms_page = paginator.page(paginator.num_pages)
     return render(request, 'download_forms.html', {
         'business': get_business(),
-        'forms': DownloadForm.objects.all(),
+        'forms': forms_page,
     })
 
 def charges(request):
+    charges_qs = ServiceCharge.objects.select_related('service').only('id', 'service__name', 'charge')
+    paginator = Paginator(charges_qs, 20)
+    page = request.GET.get('page')
+    try:
+        charges_page = paginator.page(page)
+    except PageNotAnInteger:
+        charges_page = paginator.page(1)
+    except EmptyPage:
+        charges_page = paginator.page(paginator.num_pages)
     return render(request, 'service_charges.html', {
         'business': get_business(),
-        'charges': ServiceCharge.objects.select_related('service'),
+        'charges': charges_page,
     })
 
 def reviews(request):
-    all_reviews = Review.objects.filter(approved=True).order_by('-created_at')
+    all_reviews = Review.objects.filter(approved=True).order_by('-created_at').only(
+        'id', 'customer_name', 'review', 'rating', 'created_at'
+    )
     paginator = Paginator(all_reviews, 10)
     page = request.GET.get('page')
     try:
@@ -517,7 +619,9 @@ def submit_review(request):
     return redirect('reviews')
 
 def announcements(request):
-    announcements_qs = Announcement.objects.all().order_by('-created_at')
+    announcements_qs = Announcement.objects.all().order_by('-created_at').only(
+        'id', 'title', 'category', 'description', 'created_at'
+    )
     paginator = Paginator(announcements_qs, 10)
     page = request.GET.get('page')
     try:
@@ -532,7 +636,9 @@ def announcements(request):
     })
 
 def government_schemes(request):
-    schemes_qs = GovernmentScheme.objects.all().order_by('-last_date')
+    schemes_qs = GovernmentScheme.objects.all().order_by('-last_date').only(
+        'id', 'title', 'description', 'eligibility', 'last_date', 'image'
+    )
     paginator = Paginator(schemes_qs, 10)
     page = request.GET.get('page')
     try:
@@ -547,7 +653,9 @@ def government_schemes(request):
     })
 
 def jobs(request):
-    jobs_qs = JobNotification.objects.order_by('last_date')
+    jobs_qs = JobNotification.objects.order_by('last_date').only(
+        'id', 'title', 'organization', 'last_date', 'apply_link', 'description', 'icon'
+    )
     paginator = Paginator(jobs_qs, 10)
     page = request.GET.get('page')
     try:
@@ -562,13 +670,13 @@ def jobs(request):
     })
 
 # =============================================================================
-# APPLICATION & DOCUMENT VIEWS (User)
+# APPLICATION & DOCUMENT VIEWS (User) – with pagination
 # =============================================================================
 
 @login_required
 def apply_service(request, service_id):
     service = get_object_or_404(Service, id=service_id, active=True)
-    required_docs = RequiredDocument.objects.filter(service=service)
+    required_docs = RequiredDocument.objects.filter(service=service).only('id', 'document_name')
 
     initial_data = {
         'full_name': request.user.get_full_name() or request.user.username,
@@ -616,18 +724,33 @@ def apply_service(request, service_id):
 
 @login_required
 def my_applications(request):
-    applications = Application.objects.filter(user=request.user).order_by('-created_at')
+    applications = Application.objects.filter(user=request.user).order_by('-created_at').only(
+        'id', 'service__name', 'status', 'created_at'
+    ).select_related('service')
+    paginator = Paginator(applications, 10)
+    page = request.GET.get('page')
+    try:
+        apps_page = paginator.page(page)
+    except PageNotAnInteger:
+        apps_page = paginator.page(1)
+    except EmptyPage:
+        apps_page = paginator.page(paginator.num_pages)
     return render(request, 'my_applications.html', {
-        'applications': applications,
+        'applications': apps_page,
         'business': get_business(),
     })
 
 @login_required
 def application_detail(request, app_id):
-    application = get_object_or_404(Application, id=app_id, user=request.user)
+    application = get_object_or_404(
+        Application.objects.select_related('service', 'user'),
+        id=app_id,
+        user=request.user
+    )
+    documents = application.documents.all().only('id', 'document_name', 'file', 'verified')
     return render(request, 'application_detail.html', {
         'application': application,
-        'documents': application.documents.all(),
+        'documents': documents,
         'business': get_business(),
     })
 
@@ -639,7 +762,7 @@ def application_detail(request, app_id):
 @user_passes_test(is_admin)
 def application_detail_ajax(request, app_id):
     app = get_object_or_404(Application, id=app_id)
-    documents = app.documents.all()
+    documents = app.documents.all().only('document_name', 'file', 'verified')
     data = {
         'full_name': app.full_name,
         'phone': app.phone,
@@ -662,7 +785,10 @@ def application_detail_ajax(request, app_id):
 @login_required
 @user_passes_test(is_admin)
 def application_admin_detail(request, app_id):
-    application = get_object_or_404(Application, id=app_id)
+    application = get_object_or_404(
+        Application.objects.select_related('service', 'user'),
+        id=app_id
+    )
 
     if request.method == 'POST':
         action = request.POST.get('action')
@@ -708,7 +834,7 @@ def application_admin_detail(request, app_id):
 
     return render(request, 'application_admin_detail.html', {
         'application': application,
-        'documents': application.documents.all(),
+        'documents': application.documents.all().only('id', 'document_name', 'file', 'is_mandatory', 'verified', 'uploaded_at'),
         'business': get_business(),
     })
 
@@ -729,7 +855,7 @@ def split_pdf(request, pk):
             })
 
         try:
-            reader = PdfReader(document.file.path)  # ensure file is on disk
+            reader = PdfReader(document.file.path)
             writer = PdfWriter()
             total_pages = len(reader.pages)
 
@@ -751,13 +877,11 @@ def split_pdf(request, pk):
                         raise ValueError
                     selected_pages.append(p)
 
-            # Remove duplicates and sort
             selected_pages = sorted(set(selected_pages))
 
             for page_num in selected_pages:
                 writer.add_page(reader.pages[page_num - 1])
 
-            # Write to temporary file
             with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp:
                 writer.write(tmp)
                 tmp_path = tmp.name
@@ -767,7 +891,6 @@ def split_pdf(request, pk):
                 as_attachment=True,
                 filename=f'split_{os.path.basename(document.file.name)}',
             )
-            # Clean up temp file after response is sent
             response._resource_closers = [lambda: os.unlink(tmp_path)]
             return response
 
@@ -782,11 +905,3 @@ def split_pdf(request, pk):
         'document': document,
         'business': get_business(),
     })
-
-
-# def test_view(request):
-#     from django.http import HttpResponse
-#     return HttpResponse("<h1>Test OK</h1>")
-
-# def test_template(request):
-#     return render(request, 'test_simple.html')

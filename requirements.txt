@@ -1,11 +1,42 @@
+# =============================================================================
+# CORE DJANGO & DEPLOYMENT
+# =============================================================================
 Django==6.0.2
-gunicorn==26.0.0
-whitenoise==6.12.0
-psycopg2-binary==2.9.12
-dj-database-url==3.1.2
+gunicorn==26.0.0                # Production WSGI server
+whitenoise==6.12.0              # Static file serving (no external server needed)
+
+# =============================================================================
+# DATABASE
+# =============================================================================
+psycopg2-binary==2.9.12         # PostgreSQL adapter (use psycopg2 for production)
+dj-database-url==3.1.2          # Parse DATABASE_URL env variable
+
+# =============================================================================
+# ENVIRONMENT VARIABLES
+# =============================================================================
 python-dotenv==1.2.2
+
+# =============================================================================
+# MEDIA FILES (Cloudinary)
+# =============================================================================
 cloudinary==1.44.2
 django-cloudinary-storage==0.3.0
-Pillow==12.1.1
-pypdf==6.14.2
+Pillow==12.1.1                  # Required for image processing
+
+# =============================================================================
+# PDF PROCESSING
+# =============================================================================
+pypdf==6.14.2                   # PDF splitting/merging
+
+# =============================================================================
+# PERFORMANCE & CACHING (Optional – uncomment if using Redis)
+# =============================================================================
+# redis==5.2.1                   # Redis client
+# hiredis==3.1.0                 # Faster Redis parser (optional)
+# django-redis==5.4.0            # Django cache backend for Redis
+
+# =============================================================================
+# DEVELOPMENT TOOLS (Optional – uncomment for local debugging)
+# =============================================================================
+# django-debug-toolbar==4.4.6    # Query debugging & performance profiling
 
