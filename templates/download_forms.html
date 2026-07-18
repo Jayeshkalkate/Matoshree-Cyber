@@ -488,25 +488,24 @@
     </div>
 
     <!-- Form Grid (DYNAMIC) -->
-    <div class="form-grid" id="formGrid">
-      {% for form in forms %}
-      <div class="form-card" data-form="{{ form.title|lower }}">
+    {% for form in forms %}
+    <div class="form-card" data-form="{{ form.title|lower }}">
         <div class="form-info">
-          <i class="fas fa-file-pdf"></i>
-          <span class="form-name">{{ form.title }}</span>
+            <i class="fas fa-file-pdf"></i>
+            <span class="form-name">{{ form.title }}</span>
         </div>
         <span class="form-category">{{ form.category|default:_("General") }}</span>
-        <a href="{{ form.pdf.url }}" target="_blank" class="btn-download" download>
-          <i class="fas fa-download"></i> {% trans "PDF" %}
-        </a>
-      </div>
-      {% empty %}
-      <div class="no-results" style="display: block;">
-        <i class="fas fa-file-alt"></i>
-        <p>{% trans "No forms available at the moment." %}</p>
+        {% if form.pdf %}
+          <a href="{{ form.pdf.url }}" target="_blank" class="btn-download" download>
+              <i class="fas fa-download"></i> {% trans "PDF" %}
+          </a>
+        {% else %}
+          <span class="btn-download disabled" style="opacity:0.5; cursor:not-allowed;">
+              <i class="fas fa-times"></i> {% trans "No file" %}
+          </span>
+        {% endif %}
       </div>
       {% endfor %}
-    </div>
 
     <!-- No Results (filter) -->
     <div class="no-results" id="noResults">

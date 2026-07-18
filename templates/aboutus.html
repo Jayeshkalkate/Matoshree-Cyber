@@ -8,19 +8,7 @@
 <style>
   /* ================================================================
      PAGE-SPECIFIC STYLES – Futuristic Cyber / Gaming Theme
-     Uses global CSS variables from base.html for consistency.
      ================================================================ */
-
-  /* ---- Section reveal animation (scroll-triggered) ---- */
-  .reveal {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
 
   /* ---- Hero Section (glassmorphism with glow) ---- */
   .page-hero {
@@ -784,7 +772,7 @@
 <!-- ================================================================
      PAGE HERO – Futuristic cyber header
      ================================================================ -->
-<section class="page-hero reveal">
+<section class="page-hero">
   <div class="container">
     <div class="breadcrumb">
       <a href="{% url 'home' %}">{% trans "Home" %}</a>
@@ -801,13 +789,14 @@
 <!-- ================================================================
      ABOUT INTRO – Who we are + stats
      ================================================================ -->
-<section class="about-intro reveal">
+<section class="about-intro">
   <div class="container">
     <div class="about-intro-text">
       <h2>{% trans "Who" %} <span>{% trans "We Are" %}</span></h2>
       <div class="subtitle">{% trans "Trusted Cyber Café &amp; Digital Service Center" %}</div>
       <p>
-        <strong>{{ business.business_name }}</strong> {% trans "is a trusted cyber café and digital service center dedicated to providing fast, reliable, and affordable online services. We help customers with government applications, printing, scanning, document services, and various digital solutions under one roof." %}
+        <strong>{{ business.business_name|default:"Matoshree" }}</strong>
+        {% trans "is a trusted cyber café and digital service center dedicated to providing fast, reliable, and affordable online services. We help customers with government applications, printing, scanning, document services, and various digital solutions under one roof." %}
       </p>
       <p>
         {% trans "Our mission is to bridge the digital divide by making essential online services accessible to everyone — from students and job seekers to business owners and senior citizens." %}
@@ -833,7 +822,7 @@
 <!-- ================================================================
      EXPERIENCE / MISSION – Our journey
      ================================================================ -->
-<section class="experience reveal">
+<section class="experience">
   <div class="container">
     <div class="experience-content">
       <div class="exp-badge">
@@ -841,7 +830,7 @@
       </div>
       <h2>{% trans "Decades of" %} <span>{% trans "Digital Service" %}</span> {% trans "Excellence" %}</h2>
       <p>
-        {% blocktrans %}We have over <strong>8 years of experience</strong> in providing digital and online services. Our experienced staff ensures every service is completed accurately and efficiently. From government form submissions to document processing, we've handled thousands of applications with precision.{% endblocktrans %}
+        {% trans "We have over 8 years of experience in providing digital and online services. Our experienced staff ensures every service is completed accurately and efficiently. From government form submissions to document processing, we've handled thousands of applications with precision." %}
       </p>
       <p>
         {% trans "Our team stays updated with the latest government portals, application procedures, and digital tools to ensure you get the best possible service every time." %}
@@ -862,7 +851,7 @@
 <!-- ================================================================
      SERVICES OVERVIEW – Grid of offered services (DYNAMIC)
      ================================================================ -->
-<section class="services-list reveal">
+<section class="services-list">
   <div class="container">
     <div class="section-header">
       <h2>{% trans "Our" %} <span>{% trans "Complete" %}</span> {% trans "Service List" %}</h2>
@@ -886,7 +875,7 @@
 <!-- ================================================================
      PRICING SECTION – Pricing cards with neon hover effect (DYNAMIC)
      ================================================================ -->
-<section class="pricing-section reveal">
+{% comment %} <section class="pricing-section">
   <div class="container">
     <div class="section-header">
       <h2>{% trans "Our" %} <span>{% trans "Service Plans" %}</span></h2>
@@ -894,7 +883,7 @@
     </div>
     <div class="pricing-grid">
       {% for charge in charges %}
-      <div class="pricing-card {% if forloop.counter == 2 %}style="border-color: rgba(0, 240, 255, 0.15);"{% endif %}">
+      <div class="pricing-card" {% if forloop.counter == 2 %}style="border-color: rgba(0, 240, 255, 0.15);"{% endif %}>
         <div class="plan-name">{{ charge.service.name }}</div>
         <div class="price">₹{{ charge.charge }} <span>/ {% trans "session" %}</span></div>
         <ul class="features">
@@ -914,12 +903,12 @@
       {% endfor %}
     </div>
   </div>
-</section>
+</section> {% endcomment %}
 
 <!-- ================================================================
      TRUST SECTION – Why choose us
      ================================================================ -->
-<section class="trust reveal">
+<section class="trust">
   <div class="container">
     <div class="section-header">
       <h2>{% trans "Why" %} <span>{% trans "Trust Us" %}</span></h2>
@@ -963,7 +952,8 @@
 <!-- ================================================================
      AUTHORIZED BADGE – Official recognition (DYNAMIC)
      ================================================================ -->
-<section class="authorized reveal">
+{% if business %}
+<section class="authorized">
   <div class="container">
     <div class="authorized-badge">
       <div class="badge-icon"><i class="fas fa-certificate"></i></div>
@@ -979,8 +969,8 @@
         {% endif %}
 
         <!-- Certifications (each on a new line) -->
-        {% if business.certifications %}
-          {% for cert in business.certifications.splitlines %}
+        {% if certifications %}
+          {% for cert in certifications %}
             <div class="item">
               <i class="fas fa-check-circle"></i>
               {{ cert }}
@@ -995,11 +985,12 @@
     </div>
   </div>
 </section>
+{% endif %}
 
 <!-- ================================================================
      CTA BANNER – Call to action
      ================================================================ -->
-<section class="cta-banner reveal">
+<section class="cta-banner">
   <div class="container">
     <h2>{% trans "Ready to" %} <span>{% trans "Experience" %}</span> {% trans "the Difference?" %}</h2>
     <p>{% trans "Visit us today or reach out to get started with any of our services." %}</p>
@@ -1013,31 +1004,4 @@
     </div>
   </div>
 </section>
-{% endblock %}
-
-{% block extra_scripts %}
-<script>
-  (function() {
-    'use strict';
-
-    // ---- Scroll-triggered reveal animation (Intersection Observer) ----
-    const revealElements = document.querySelectorAll('.reveal');
-    if (revealElements.length && 'IntersectionObserver' in window) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
-      revealElements.forEach(el => observer.observe(el));
-    } else {
-      // Fallback: show all if no IntersectionObserver
-      revealElements.forEach(el => el.classList.add('visible'));
-    }
-
-  })();
-</script>
 {% endblock %}

@@ -352,10 +352,13 @@ class BusinessInfo(models.Model):
             if existing:
                 self.pk = existing.pk
         super().save(*args, **kwargs)
-
+    
     @classmethod
     def get_instance(cls):
-        instance = cls.objects.first()
+        try:
+            instance = cls.objects.first()
+        except Exception:
+            instance = None
         if not instance:
             instance = cls()
             instance.save()

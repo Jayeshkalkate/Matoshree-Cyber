@@ -8,22 +8,9 @@
 <style>
   /* ================================================================
      PAGE-SPECIFIC STYLES – Required Documents
-     Uses global CSS variables from base.html for consistency.
-     Includes neon glow effects, card hover scaling, and responsive grid.
      ================================================================ */
 
-  /* ---- Section reveal animation (scroll-triggered) ---- */
-  .reveal {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* ---- Hero Section (glassmorphism with glow) ---- */
+  /* ---- Hero Section ---- */
   .page-hero {
     background: radial-gradient(ellipse at 30% 20%, rgba(0, 240, 255, 0.08), transparent 60%),
                 radial-gradient(ellipse at 70% 80%, rgba(255, 45, 149, 0.05), transparent 60%),
@@ -101,7 +88,7 @@
     line-height: 1.8;
   }
 
-  /* ---- Documents Table (glassmorphism) ---- */
+  /* ---- Documents Table ---- */
   .docs-section {
     padding: 70px 0 60px;
     background: var(--bg-secondary);
@@ -169,7 +156,7 @@
     text-shadow: 0 0 20px rgba(255, 45, 149, 0.3);
   }
 
-  /* ---- Pagination (neon-styled) ---- */
+  /* ---- Pagination ---- */
   .pagination-wrap {
     display: flex;
     justify-content: center;
@@ -226,7 +213,7 @@
     margin-right: 6px;
   }
 
-  /* ---- Disclaimer (glassmorphism) ---- */
+  /* ---- Disclaimer ---- */
   .disclaimer {
     padding: 40px 0 60px;
     background: var(--bg-primary);
@@ -262,7 +249,7 @@
     margin: 0;
   }
 
-  /* ---- Pricing Section (Neon hover cards) ---- */
+  /* ---- Pricing Cards (reuse) ---- */
   .pricing-section {
     padding: 70px 0 80px;
     background: var(--bg-secondary);
@@ -370,7 +357,7 @@
     justify-content: center;
   }
 
-  /* ---- CTA Banner (reuse from base) ---- */
+  /* ---- CTA Banner (reuse) ---- */
   .cta-banner {
     padding: 70px 0;
     background: radial-gradient(ellipse at 30% 20%, rgba(0, 240, 255, 0.06), transparent 60%),
@@ -410,70 +397,36 @@
     min-width: 180px;
   }
 
-  /* ================================================================
-     RESPONSIVE ADJUSTMENTS
-     ================================================================ */
+  /* ---- Responsive ---- */
   @media (max-width: 1024px) {
     .pricing-grid {
       grid-template-columns: repeat(2, 1fr);
     }
   }
-
   @media (max-width: 768px) {
-    .page-hero h1 {
-      font-size: 2.4rem;
-    }
-    .page-hero p {
-      font-size: 1rem;
-    }
-    .docs-section .container {
-      padding: 0 1rem;
-    }
-    th,
-    td {
-      padding: 0.7rem 0.9rem;
-      font-size: 0.85rem;
-    }
-    .disclaimer .box {
-      padding: 18px 16px;
-    }
-    .pricing-grid {
-      grid-template-columns: 1fr;
-      max-width: 400px;
-      margin: 0 auto;
-    }
-    .cta-banner h2 {
-      font-size: 2rem;
-    }
-    .cta-banner .cta-buttons {
-      flex-direction: column;
-      align-items: center;
-    }
+    .page-hero h1 { font-size: 2.4rem; }
+    .page-hero p { font-size: 1rem; }
+    .docs-section .container { padding: 0 1rem; }
+    th, td { padding: 0.7rem 0.9rem; font-size: 0.85rem; }
+    .disclaimer .box { padding: 18px 16px; }
+    .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+    .cta-banner h2 { font-size: 2rem; }
+    .cta-banner .cta-buttons { flex-direction: column; align-items: center; }
     .cta-banner .cta-buttons .btn-primary,
-    .cta-banner .cta-buttons .btn-whatsapp {
-      width: 100%;
-      justify-content: center;
-    }
+    .cta-banner .cta-buttons .btn-whatsapp { width: 100%; justify-content: center; }
   }
-
   @media (max-width: 480px) {
-    .pricing-card .price {
-      font-size: 2.2rem;
-    }
-    th,
-    td {
-      padding: 0.5rem 0.6rem;
-      font-size: 0.8rem;
-    }
+    .pricing-card .price { font-size: 2.2rem; }
+    th, td { padding: 0.5rem 0.6rem; font-size: 0.8rem; }
   }
 </style>
 {% endblock %}
 
 {% block content %}
 <!-- ================================================================
-     PAGE HERO – Futuristic cyber header
+     PAGE HERO
      ================================================================ -->
-<section class="page-hero reveal">
+<section class="page-hero">
   <div class="container">
     <div class="breadcrumb">
       <a href="{% url 'home' %}">{% trans "Home" %}</a>
@@ -488,9 +441,9 @@
 </section>
 
 <!-- ================================================================
-     DOCUMENTS TABLE – Glassmorphism with hover glow (DYNAMIC)
+     DOCUMENTS TABLE
      ================================================================ -->
-<section class="docs-section reveal">
+<section class="docs-section">
   <div class="container">
     <div class="table-wrap">
       <table>
@@ -524,16 +477,18 @@
     <div style="text-align: center; margin-top: 1.5rem;">
       <span class="total-badge">
         <i class="fas fa-file-alt"></i>
-        {% blocktrans count counter=documents_page.paginator.count trimmed %}
-          {{ counter }} document listed
-        {% plural %}
-          {{ counter }} documents listed
-        {% endblocktrans %}
+        {% with count=documents_page.paginator.count %}
+          {% if count == 1 %}
+            {% trans "1 document listed" %}
+          {% else %}
+            {{ count }} {% trans "documents listed" %}
+          {% endif %}
+        {% endwith %}
       </span>
     </div>
     {% endif %}
 
-    <!-- Pagination Controls -->
+    <!-- Pagination -->
     {% if documents_page.has_other_pages %}
     <div class="pagination-wrap">
       {% if documents_page.has_previous %}
@@ -562,9 +517,9 @@
 </section>
 
 <!-- ================================================================
-     DISCLAIMER – Important note with neon border
+     DISCLAIMER
      ================================================================ -->
-<section class="disclaimer reveal">
+<section class="disclaimer">
   <div class="container">
     <div class="box">
       <p>
@@ -576,16 +531,15 @@
 </section>
 
 <!-- ================================================================
-     PRICING SECTION – Service packages with neon hover effect
+     PRICING SECTION (optional, matches about page)
      ================================================================ -->
-<section class="pricing-section reveal">
+<section class="pricing-section">
   <div class="container">
     <div class="section-header">
       <h2>{% trans "Our" %} <span>{% trans "Service Plans" %}</span></h2>
       <p>{% trans "Choose a plan that fits your document processing needs. All plans include expert assistance." %}</p>
     </div>
     <div class="pricing-grid">
-      <!-- Basic Plan -->
       <div class="pricing-card">
         <div class="plan-name">{% trans "Basic" %}</div>
         <div class="price">₹99 <span>/ {% trans "session" %}</span></div>
@@ -597,7 +551,6 @@
         </ul>
         <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Get Started" %}</a>
       </div>
-      <!-- Standard Plan (highlighted with pulse) -->
       <div class="pricing-card" style="border-color: rgba(0, 240, 255, 0.15);">
         <div class="plan-name">{% trans "Standard" %}</div>
         <div class="price">₹199 <span>/ {% trans "session" %}</span></div>
@@ -610,7 +563,6 @@
         </ul>
         <a href="{% url 'appointment' %}" class="btn-primary pulse">{% trans "Choose Plan" %}</a>
       </div>
-      <!-- Premium Plan -->
       <div class="pricing-card">
         <div class="plan-name">{% trans "Premium" %}</div>
         <div class="price">₹299 <span>/ {% trans "session" %}</span></div>
@@ -629,9 +581,9 @@
 </section>
 
 <!-- ================================================================
-     CTA BANNER – Call to action
+     CTA BANNER
      ================================================================ -->
-<section class="cta-banner reveal">
+<section class="cta-banner">
   <div class="container">
     <h2>{% trans "Need Help Preparing" %} <span>{% trans "Documents?" %}</span></h2>
     <p>{% trans "We assist with document checking, photocopying, and attestation." %}</p>
@@ -645,31 +597,4 @@
     </div>
   </div>
 </section>
-{% endblock %}
-
-{% block extra_scripts %}
-<script>
-  (function() {
-    'use strict';
-
-    // ---- Scroll-triggered reveal animation (Intersection Observer) ----
-    const revealElements = document.querySelectorAll('.reveal');
-    if (revealElements.length && 'IntersectionObserver' in window) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
-      revealElements.forEach(el => observer.observe(el));
-    } else {
-      // Fallback: show all if no IntersectionObserver
-      revealElements.forEach(el => el.classList.add('visible'));
-    }
-
-  })();
-</script>
 {% endblock %}

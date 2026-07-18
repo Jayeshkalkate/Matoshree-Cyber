@@ -58,4 +58,7 @@ urlpatterns = [
 
     # PDF splitting (admin only)
     path('pdf/<int:pk>/split/', views.split_pdf, name='split_pdf'),
+    
+    # path('test/', views.test_view, name='test'),
 ]
+

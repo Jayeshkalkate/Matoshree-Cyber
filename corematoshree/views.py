@@ -16,7 +16,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from pypdf import PdfReader, PdfWriter
-
+from django.db import ProgrammingError
 from .models import (
     User, Contact, Appointment, Review, Service, Announcement,
     JobNotification, GovernmentScheme, DownloadForm, ServiceCharge,
@@ -37,12 +37,11 @@ logger = logging.getLogger(__name__)
 # =============================================================================
 # HELPERS
 # =============================================================================
-
+    
 def get_business():
-    """Return the first (and only) BusinessInfo instance, with safe DB access."""
     try:
         return BusinessInfo.objects.first()
-    except OperationalError:
+    except Exception:
         return None
 
 def is_admin(user):
@@ -375,10 +374,16 @@ def home(request):
     return render(request, 'homepage.html', context)
 
 def about(request):
+    business = get_business()
+    certifications = []
+    if business and business.certifications:
+        certifications = business.certifications.splitlines()
+
     context = {
-        'business': get_business(),
+        'business': business,
         'services': Service.objects.filter(active=True),
         'charges': ServiceCharge.objects.select_related('service').all(),
+        'certifications': certifications,   # <-- ADD THIS LINE
     }
     return render(request, 'aboutus.html', context)
 
@@ -777,3 +782,11 @@ def split_pdf(request, pk):
         'document': document,
         'business': get_business(),
     })
+
+
+# def test_view(request):
+#     from django.http import HttpResponse
+#     return HttpResponse("<h1>Test OK</h1>")
+
+# def test_template(request):
+#     return render(request, 'test_simple.html')

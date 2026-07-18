@@ -5,23 +5,11 @@
 {% block title %}{% trans "Service Charges" %}{% endblock %}
 
 {% block extra_head %}
-<!-- ================================================================
-     PAGE-SPECIFIC STYLES – Service Charges
-     Uses global CSS variables from base.html for consistency.
-     ================================================================ -->
 <style>
-  /* ---- Section reveal animation (scroll-triggered) ---- */
-  .reveal {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  /* ================================================================
+     PAGE-SPECIFIC STYLES – Service Charges
+     ================================================================ */
 
-  /* ---- Hero Section (glassmorphism with glow) ---- */
   .page-hero {
     background: radial-gradient(ellipse at 30% 20%, rgba(0, 240, 255, 0.08), transparent 60%),
                 radial-gradient(ellipse at 70% 80%, rgba(255, 45, 149, 0.05), transparent 60%),
@@ -99,14 +87,11 @@
     line-height: 1.8;
   }
 
-  /* ---- Charges Table (glassmorphism) ---- */
   .charges-section {
     padding: 70px 0 60px;
     background: var(--bg-secondary);
   }
-  .charges-section .container {
-    max-width: 900px;
-  }
+  .charges-section .container { max-width: 900px; }
   .section-header {
     text-align: center;
     margin-bottom: 40px;
@@ -141,7 +126,6 @@
     border-color: var(--neon-cyan);
     box-shadow: var(--shadow-card), var(--glow-cyan);
   }
-
   .charges-table {
     width: 100%;
     border-collapse: collapse;
@@ -160,9 +144,7 @@
     color: var(--neon-cyan);
     letter-spacing: 0.5px;
   }
-  .charges-table th:last-child {
-    text-align: right;
-  }
+  .charges-table th:last-child { text-align: right; }
   .charges-table td {
     padding: 0.9rem 1.4rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
@@ -173,9 +155,7 @@
     font-weight: 600;
     color: var(--neon-cyan);
   }
-  .charges-table tbody tr:last-child td {
-    border-bottom: none;
-  }
+  .charges-table tbody tr:last-child td { border-bottom: none; }
   .charges-table tbody tr:hover {
     background: rgba(0, 240, 255, 0.04);
   }
@@ -200,7 +180,7 @@
     text-shadow: 0 0 20px rgba(255, 45, 149, 0.3);
   }
 
-  /* ---- Pricing Cards Section (Neon hover effect) ---- */
+  /* Pricing Cards (same as about) */
   .pricing-section {
     padding: 70px 0 80px;
     background: var(--bg-primary);
@@ -236,9 +216,7 @@
     opacity: 0;
     transition: var(--transition);
   }
-  .pricing-card:hover::before {
-    opacity: 1;
-  }
+  .pricing-card:hover::before { opacity: 1; }
   .pricing-card:hover {
     transform: scale(1.04) translateY(-8px);
     border-color: var(--neon-cyan);
@@ -284,10 +262,7 @@
     width: 20px;
     font-size: 0.9rem;
   }
-  .pricing-card .btn-primary {
-    width: 100%;
-    justify-content: center;
-  }
+  .pricing-card .btn-primary { width: 100%; justify-content: center; }
   .pricing-card.popular {
     border-color: var(--neon-cyan);
     box-shadow: var(--glow-cyan);
@@ -307,14 +282,11 @@
     box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
   }
 
-  /* ---- Disclaimer / Notes (glassmorphism) ---- */
   .charges-notes {
     padding: 40px 0 60px;
     background: var(--bg-secondary);
   }
-  .charges-notes .container {
-    max-width: 820px;
-  }
+  .charges-notes .container { max-width: 820px; }
   .note-box {
     background: var(--bg-card);
     border-radius: var(--radius-sm);
@@ -337,9 +309,7 @@
     align-items: center;
     gap: 10px;
   }
-  .note-box h4 i {
-    color: var(--neon-orange);
-  }
+  .note-box h4 i { color: var(--neon-orange); }
   .note-box p {
     color: var(--text-muted);
     font-size: 0.95rem;
@@ -351,7 +321,6 @@
     margin-right: 6px;
   }
 
-  /* ---- CTA Banner (matches global style) ---- */
   .cta-banner {
     padding: 70px 0;
     background: radial-gradient(ellipse at 30% 20%, rgba(0, 240, 255, 0.06), transparent 60%),
@@ -360,9 +329,7 @@
     border-bottom: 1px solid rgba(0, 240, 255, 0.06);
     text-align: center;
   }
-  .cta-banner .container {
-    max-width: 720px;
-  }
+  .cta-banner .container { max-width: 720px; }
   .cta-banner h2 {
     font-size: 2.4rem;
     font-weight: 800;
@@ -387,7 +354,6 @@
     gap: 18px;
   }
 
-  /* ---- No data fallback ---- */
   .no-data {
     color: var(--text-muted);
     text-align: center;
@@ -397,73 +363,37 @@
     opacity: 0.6;
   }
 
-  /* ================================================================
-     RESPONSIVE ADJUSTMENTS
-     ================================================================ */
   @media (max-width: 1024px) {
-    .pricing-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
+    .pricing-grid { grid-template-columns: repeat(2, 1fr); }
   }
-
   @media (max-width: 768px) {
-    .page-hero h1 {
-      font-size: 2.4rem;
-    }
-    .page-hero p {
-      font-size: 1rem;
-    }
-    .charges-section .container {
-      padding: 0 1rem;
-    }
-    .charges-table th,
-    .charges-table td {
+    .page-hero h1 { font-size: 2.4rem; }
+    .page-hero p { font-size: 1rem; }
+    .charges-section .container { padding: 0 1rem; }
+    .charges-table th, .charges-table td {
       padding: 0.7rem 0.9rem;
       font-size: 0.85rem;
     }
-    .service-name i {
-      display: none;
-    }
-    .pricing-grid {
-      grid-template-columns: 1fr;
-      max-width: 400px;
-      margin: 0 auto;
-    }
-    .cta-banner h2 {
-      font-size: 2rem;
-    }
-    .cta-buttons {
-      flex-direction: column;
-      align-items: center;
-    }
+    .service-name i { display: none; }
+    .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+    .cta-banner h2 { font-size: 2rem; }
+    .cta-buttons { flex-direction: column; align-items: center; }
     .cta-buttons .btn-primary,
-    .cta-buttons .btn-whatsapp {
-      width: 100%;
-      justify-content: center;
-    }
+    .cta-buttons .btn-whatsapp { width: 100%; justify-content: center; }
   }
-
   @media (max-width: 480px) {
-    .pricing-card .price {
-      font-size: 2.2rem;
-    }
-    .charges-table th,
-    .charges-table td {
+    .pricing-card .price { font-size: 2.2rem; }
+    .charges-table th, .charges-table td {
       padding: 0.5rem 0.6rem;
       font-size: 0.8rem;
     }
-    .note-box {
-      padding: 18px 16px;
-    }
+    .note-box { padding: 18px 16px; }
   }
 </style>
 {% endblock %}
 
 {% block content %}
-<!-- ================================================================
-     PAGE HERO
-     ================================================================ -->
-<section class="page-hero reveal">
+<section class="page-hero">
   <div class="container">
     <div class="breadcrumb">
       <a href="{% url 'home' %}">{% trans "Home" %}</a>
@@ -477,10 +407,7 @@
   </div>
 </section>
 
-<!-- ================================================================
-     CHARGES TABLE
-     ================================================================ -->
-<section class="charges-section reveal">
+<section class="charges-section">
   <div class="container">
     <div class="section-header">
       <h2>{% trans "Our" %} <span>{% trans "Price List" %}</span></h2>
@@ -518,10 +445,7 @@
   </div>
 </section>
 
-<!-- ================================================================
-     PRICING CARDS (optional – matches homepage style)
-     ================================================================ -->
-<section class="pricing-section reveal">
+<section class="pricing-section">
   <div class="container">
     <div class="section-header">
       <h2>{% trans "Choose Your" %} <span>{% trans "Plan" %}</span></h2>
@@ -549,10 +473,7 @@
   </div>
 </section>
 
-<!-- ================================================================
-     DISCLAIMER / NOTES
-     ================================================================ -->
-<section class="charges-notes reveal">
+<section class="charges-notes">
   <div class="container">
     <div class="note-box">
       <h4><i class="fas fa-info-circle"></i> {% trans "Important Notes" %}</h4>
@@ -566,10 +487,7 @@
   </div>
 </section>
 
-<!-- ================================================================
-     CTA BANNER
-     ================================================================ -->
-<section class="cta-banner reveal">
+<section class="cta-banner">
   <div class="container">
     <h2>{% trans "Need" %} <span>{% trans "clarification" %}</span> {% trans "on pricing?" %}</h2>
     <p>{% trans "We're here to help. Reach out to us for any questions about our charges or services." %}</p>
@@ -577,39 +495,10 @@
       <a href="{% url 'home' %}#contact" class="btn-primary">
         <i class="fas fa-phone-alt"></i> {% trans "Contact Us" %}
       </a>
-      {% with whatsapp_number=business.whatsapp|default:"919876543210" %}
-      <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20want%20to%20know%20the%20charges%20for%20a%20service." target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
+      <a href="https://wa.me/919876543210?text=Hello%2C%20I%20want%20to%20know%20the%20charges%20for%20a%20service." target="_blank" class="btn-whatsapp">
         <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
       </a>
-      {% endwith %}
     </div>
   </div>
 </section>
-{% endblock %}
-
-{% block extra_scripts %}
-<script>
-  (function() {
-    'use strict';
-
-    // ---- Scroll-triggered reveal animation (Intersection Observer) ----
-    const revealElements = document.querySelectorAll('.reveal');
-    if (revealElements.length && 'IntersectionObserver' in window) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
-      revealElements.forEach(el => observer.observe(el));
-    } else {
-      // Fallback: show all if no IntersectionObserver
-      revealElements.forEach(el => el.classList.add('visible'));
-    }
-
-  })();
-</script>
 {% endblock %}
