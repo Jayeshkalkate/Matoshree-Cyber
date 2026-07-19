@@ -4,6 +4,8 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
+from django.core.cache import cache  # added for cache invalidation
+
 
 # ==========================
 # Phone Validator
@@ -28,7 +30,7 @@ class User(AbstractUser):
         max_length=20,
         choices=ROLE_CHOICES,
         default="user",
-        db_index=True,  # frequently filtered by role
+        db_index=True,
     )
     phone = models.CharField(
         _("Phone"),
@@ -46,8 +48,8 @@ class User(AbstractUser):
 
     class Meta:
         indexes = [
-            models.Index(fields=['role', 'is_active']),  # common filter combo
-            models.Index(fields=['email']),  # often searched
+            models.Index(fields=['role', 'is_active']),
+            models.Index(fields=['email']),
         ]
 
 
@@ -77,8 +79,8 @@ class Service(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=['active', 'category']),  # for filtering active services by category
-            models.Index(fields=['name']),  # for search
+            models.Index(fields=['active', 'category']),
+            models.Index(fields=['name']),
         ]
 
 
@@ -118,7 +120,7 @@ class Appointment(models.Model):
         verbose_name = _("Appointment")
         verbose_name_plural = _("Appointments")
         indexes = [
-            models.Index(fields=['status', 'appointment_date']),  # common filter
+            models.Index(fields=['status', 'appointment_date']),
             models.Index(fields=['service', 'appointment_date']),
             models.Index(fields=['created_at']),
         ]
@@ -177,7 +179,7 @@ class Review(models.Model):
         indexes = [
             models.Index(fields=['approved', 'rating']),
             models.Index(fields=['created_at']),
-            models.Index(fields=['approved', '-created_at']),  # for paginated approved reviews
+            models.Index(fields=['approved', '-created_at']),
         ]
 
     def __str__(self):
@@ -185,7 +187,7 @@ class Review(models.Model):
 
 
 # ==========================
-# Announcement
+# Announcement (UPDATED: added is_urgent)
 # ==========================
 class Announcement(models.Model):
     CATEGORY = (
@@ -199,6 +201,7 @@ class Announcement(models.Model):
     title = models.CharField(_("Title"), max_length=200, db_index=True)
     category = models.CharField(_("Category"), max_length=50, choices=CATEGORY, db_index=True)
     description = models.TextField(_("Description"))
+    is_urgent = models.BooleanField(_("Urgent"), default=False, db_index=True)   # NEW FIELD
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True, db_index=True)
 
     class Meta:
@@ -207,6 +210,7 @@ class Announcement(models.Model):
         verbose_name_plural = _("Announcements")
         indexes = [
             models.Index(fields=['category', 'created_at']),
+            models.Index(fields=['is_urgent']),   # added index for filtering urgent items
         ]
 
     def __str__(self):
@@ -277,7 +281,7 @@ class RequiredDocument(models.Model):
         verbose_name = _("Required Document")
         verbose_name_plural = _("Required Documents")
         indexes = [
-            models.Index(fields=['service', 'document_name']),  # for ordering/filtering
+            models.Index(fields=['service', 'document_name']),
         ]
 
     def __str__(self):
@@ -372,7 +376,7 @@ class FAQ(models.Model):
 
 
 # ==========================
-# Business Info (Singleton)
+# Business Info (Singleton) – UPDATED with cache invalidation
 # ==========================
 class BusinessInfo(models.Model):
     business_name = models.CharField(_("Business Name"), max_length=200)
@@ -405,7 +409,9 @@ class BusinessInfo(models.Model):
             if existing:
                 self.pk = existing.pk
         super().save(*args, **kwargs)
-    
+        # Invalidate the cached business info
+        cache.delete('business_info')
+
     @classmethod
     def get_instance(cls):
         try:
@@ -455,11 +461,11 @@ class Application(models.Model):
         verbose_name = _("Application")
         verbose_name_plural = _("Applications")
         indexes = [
-            models.Index(fields=['user', 'status']),           # user's applications by status
-            models.Index(fields=['service', 'status']),        # admin filtering
-            models.Index(fields=['status', 'created_at']),     # pagination
-            models.Index(fields=['email']),                    # search
-            models.Index(fields=['phone']),                    # search
+            models.Index(fields=['user', 'status']),
+            models.Index(fields=['service', 'status']),
+            models.Index(fields=['status', 'created_at']),
+            models.Index(fields=['email']),
+            models.Index(fields=['phone']),
         ]
 
     def __str__(self):
@@ -482,10 +488,11 @@ class DocumentUpload(models.Model):
         verbose_name = _("Document Upload")
         verbose_name_plural = _("Document Uploads")
         indexes = [
-            models.Index(fields=['application', 'verified']),   # admin verification
-            models.Index(fields=['document_name']),             # search
-            models.Index(fields=['is_mandatory']),              # filter mandatory docs
+            models.Index(fields=['application', 'verified']),
+            models.Index(fields=['document_name']),
+            models.Index(fields=['is_mandatory']),
         ]
 
     def __str__(self):
         return f"{self.document_name} – {self.application.full_name}"
+    

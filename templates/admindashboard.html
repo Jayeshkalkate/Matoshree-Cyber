@@ -834,14 +834,6 @@
                     <div>
                         <label for="id_document_name">{% trans "Document Name" %} *</label>
                         {{ required_doc_form.document_name }}
-                        <small class="text-muted" style="display:block; margin-top:4px; color: var(--text-dim);">
-                            {% trans "Enter one document name at a time (e.g., 'Aadhaar Card')." %}
-                            <br>
-                            <span style="color: var(--neon-red);">{% trans "Do not use commas – add each document separately." %}</span>
-                        </small>
-                        <div id="commaWarning" style="color: var(--neon-red); display:none; margin-top:4px;">
-                            <i class="fas fa-exclamation-triangle"></i> {% trans "Please remove commas and add each document separately." %}
-                        </div>
                     </div>
                     <div class="form-actions">
                         <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save" %}</button>
@@ -935,7 +927,7 @@
                             <span class="sub">{{ ann.description|truncatechars:60 }} – {{ ann.category }}</span>
                         </div>
                         <div class="list-actions">
-                            <button class="btn-primary btn-sm" onclick="editAnnouncement('{{ ann.id }}', '{{ ann.title|escapejs }}', '{{ ann.category|default:""|escapejs }}', '{{ ann.description|escapejs }}')"><i class="fas fa-edit"></i></button>
+                            <button class="btn-primary btn-sm" onclick="editAnnouncement('{{ ann.id }}', '{{ ann.title|escapejs }}', '{{ ann.category|default:""|escapejs }}', '{{ ann.description|escapejs }}', '{{ ann.is_urgent|yesno:"true,false" }}')"><i class="fas fa-edit"></i></button>
                             <form method="post" style="display:inline;">
                                 {% csrf_token %}
                                 <input type="hidden" name="action" value="delete">
@@ -1471,31 +1463,7 @@
             "use strict";
 
             // --------------------------------------------------------------------
-            // 1. Comma warning & validation for "Required Documents" form
-            // --------------------------------------------------------------------
-            const docForm = document.getElementById('addRequiredDocFormElement');
-            const docInput = docForm ? docForm.querySelector('input[name="document_name"]') : null;
-            const warningEl = document.getElementById('commaWarning');
-
-            if (docInput && warningEl) {
-                docInput.addEventListener('input', function() {
-                    if (this.value.includes(',')) {
-                        warningEl.style.display = 'block';
-                    } else {
-                        warningEl.style.display = 'none';
-                    }
-                });
-
-                docForm.addEventListener('submit', function(e) {
-                    if (docInput.value.includes(',')) {
-                        e.preventDefault();
-                        alert('{% trans "Please remove commas and add each document separately." %}');
-                    }
-                });
-            }
-
-            // --------------------------------------------------------------------
-            // 2. Sidebar navigation & section switching
+            // 1. Sidebar navigation & section switching
             // --------------------------------------------------------------------
             const navLinks = document.querySelectorAll(".sidebar nav ul li a");
             const sections = document.querySelectorAll(".section");
@@ -1551,7 +1519,7 @@
             }
 
             // --------------------------------------------------------------------
-            // 3. Global edit functions (unchanged, but keep)
+            // 2. Global edit functions
             // --------------------------------------------------------------------
             window.editService = function(id, name, category, description, active, icon, color) {
                 document.getElementById("editServiceId").value = id;
@@ -1573,11 +1541,12 @@
                 document.getElementById("editChargeForm").scrollIntoView({ behavior: 'smooth' });
             };
 
-            window.editAnnouncement = function(id, title, category, description) {
+            window.editAnnouncement = function(id, title, category, description, isUrgent) {
                 document.getElementById("editAnnouncementId").value = id;
                 document.getElementById("editAnnTitle").value = title;
                 document.getElementById("editAnnCategory").value = category || 'General';
                 document.getElementById("editAnnDesc").value = description || '';
+                document.getElementById("editAnnUrgent").value = isUrgent === 'true' ? 'true' : 'false';
                 document.getElementById("editAnnouncementForm").style.display = "grid";
                 document.getElementById("editAnnouncementForm").scrollIntoView({ behavior: 'smooth' });
             };
@@ -1634,27 +1603,24 @@
             };
 
             // --------------------------------------------------------------------
-            // 4. Cancel buttons: reset fields and hide form
+            // 3. Cancel buttons: reset fields and hide form
             // --------------------------------------------------------------------
             document.querySelectorAll('.admin-form .cancel-btn').forEach(function(btn) {
                 btn.addEventListener('click', function(e) {
                     const form = this.closest('.admin-form');
                     if (form) {
                         form.style.display = 'none';
-                        // Reset all input/select/textarea within the form (but not hidden fields)
                         form.querySelectorAll('input:not([type="hidden"]), select, textarea').forEach(function(el) {
                             if (el.type !== 'submit') {
                                 el.value = '';
                             }
                         });
-                        // Also reset hidden id if present (set to empty)
                         const idField = form.querySelector('input[name="id"]');
                         if (idField) idField.value = '';
                     }
                 });
             });
 
-            // Also support the original inline onclick cancel buttons (they use class .btn-outline without cancel-btn)
             document.querySelectorAll('.admin-form .btn-outline:not(.cancel-btn)').forEach(function(btn) {
                 btn.addEventListener('click', function(e) {
                     const form = this.closest('.admin-form');
@@ -1665,7 +1631,7 @@
             });
 
             // --------------------------------------------------------------------
-            // 5. Show dashboard by default
+            // 4. Show dashboard by default
             // --------------------------------------------------------------------
             showSection("dashboard");
 

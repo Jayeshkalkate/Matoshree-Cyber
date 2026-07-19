@@ -470,7 +470,7 @@
     color: var(--bg-primary);
     cursor: pointer;
     transition: var(--transition);
-    box-shadow: 0 0 20px rgba(255, 230, 0, 0.3);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.74);
     animation: pulseGlowYellow 2.8s ease-in-out infinite;
     font-family: var(--font-body);
     width: 100%;
@@ -478,9 +478,9 @@
   }
   .btn-submit:hover {
     transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 0 40px rgba(255, 230, 0, 0.7), 0 0 80px rgba(255, 230, 0, 0.3);
-    background: #fff44f;
-    border-color: #fff44f;
+    box-shadow: 0 0 40px rgba(255, 253, 234, 0.7), 0 0 80px rgba(255, 230, 0, 0.3);
+    background: #7cceab;
+    border-color: #cccccc;
   }
   @keyframes pulseGlowYellow {
     0%, 100% { box-shadow: 0 0 20px rgba(255, 230, 0, 0.3); }
@@ -728,17 +728,17 @@
 <section class="reviews-section" id="reviews">
   <div class="container">
 
-    <!-- Rating Summary -->
+    <!-- Rating Summary – DYNAMIC -->
     <div class="rating-summary">
       <div class="rating-big">
         <div class="rating-number">
-          {{ rating_avg|default:4.8|floatformat:1 }}<sup>/5</sup>
+          {{ rating_avg|floatformat:1 }}<sup>/5</sup>
         </div>
         <div class="rating-stars-big">
           <div class="stars">
-            {% with avg=rating_avg|default:4.8 %}
+            {% with avg=rating_avg|floatformat:"0"|add:"0" %}
               {% for i in "12345"|make_list %}
-                {% if forloop.counter <= avg|floatformat:"0"|add:"0" %}
+                {% if forloop.counter <= avg %}
                   <i class="fas fa-star"></i>
                 {% elif forloop.counter <= avg|add:"0.5" %}
                   <i class="fas fa-star-half-alt"></i>
@@ -749,9 +749,7 @@
             {% endwith %}
           </div>
           <span class="count">
-            {% blocktrans with total=total_reviews|default:reviews_page.paginator.count trimmed %}
-              Based on <strong>{{ total }}</strong> customer reviews
-            {% endblocktrans %}
+            <strong>{{ total_reviews }}</strong> customer review{{ total_reviews|pluralize }}
           </span>
         </div>
       </div>
@@ -768,7 +766,7 @@
             {% endfor %}
           {% endwith %}
         {% else %}
-          <!-- Fallback static bars if view doesn't provide rating_counts -->
+          <!-- Fallback static bars (should not be needed) -->
           <div class="rating-bar-row">
             <span class="star-label">5 ★</span>
             <div class="bar-track"><div class="bar-fill" style="width: 78%;"></div></div>
@@ -801,11 +799,7 @@
     <!-- Filter / Sort -->
     <div class="filter-row">
       <span class="reviews-count">
-        {% blocktrans count counter=reviews_page.paginator.count trimmed %}
-          <strong>{{ counter }}</strong> customer review
-        {% plural %}
-          <strong>{{ counter }}</strong> customer reviews
-        {% endblocktrans %}
+        <strong>{{ reviews_page.paginator.count }}</strong> customer review{{ reviews_page.paginator.count|pluralize }}
       </span>
       <div class="sort-options">
         <a href="?sort=newest{% if request.GET.page %}&page={{ request.GET.page }}{% endif %}" class="sort-btn {% if request.GET.sort == 'newest' or not request.GET.sort %}active{% endif %}" data-sort="newest">
@@ -922,11 +916,7 @@
     <div class="footer-note">
       <span><i class="fas fa-shield-alt"></i> {% trans "All reviews are from genuine customers." %}</span>
       <span class="badge"><i class="far fa-comments"></i> 
-        {% blocktrans count counter=reviews_page.paginator.count trimmed %}
-          {{ counter }} review
-        {% plural %}
-          {{ counter }} reviews
-        {% endblocktrans %}
+        {{ reviews_page.paginator.count }} review{{ reviews_page.paginator.count|pluralize }}
       </span>
     </div>
 

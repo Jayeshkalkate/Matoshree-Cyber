@@ -394,7 +394,8 @@
 <section class="schemes-section" id="schemes">
   <div class="container">
     <div class="schemes-grid">
-      {% for scheme in schemes_page %}
+      <!-- FIXED: use 'schemes' instead of 'schemes_page' -->
+      {% for scheme in schemes %}
       <div class="scheme-card">
         {% if scheme.image %}
           <img src="{{ scheme.image.url }}" alt="{{ scheme.title }}" class="scheme-image" loading="lazy" />
@@ -430,25 +431,25 @@
       {% endfor %}
     </div>
 
-    <!-- Pagination -->
-    {% if schemes_page.has_other_pages %}
+    <!-- Pagination – FIXED: use 'schemes' -->
+    {% if schemes.has_other_pages %}
     <div class="pagination-wrap">
-      {% if schemes_page.has_previous %}
-        <a href="?page={{ schemes_page.previous_page_number }}" class="page-link"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</a>
+      {% if schemes.has_previous %}
+        <a href="?page={{ schemes.previous_page_number }}" class="page-link"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</a>
       {% else %}
         <span class="page-link disabled"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</span>
       {% endif %}
 
-      {% for num in schemes_page.paginator.page_range %}
-        {% if schemes_page.number == num %}
+      {% for num in schemes.paginator.page_range %}
+        {% if schemes.number == num %}
           <span class="page-link active">{{ num }}</span>
-        {% elif num > schemes_page.number|add:'-3' and num < schemes_page.number|add:'3' %}
+        {% elif num > schemes.number|add:'-3' and num < schemes.number|add:'3' %}
           <a href="?page={{ num }}" class="page-link">{{ num }}</a>
         {% endif %}
       {% endfor %}
 
-      {% if schemes_page.has_next %}
-        <a href="?page={{ schemes_page.next_page_number }}" class="page-link">{% trans "Next" %} <i class="fas fa-chevron-right"></i></a>
+      {% if schemes.has_next %}
+        <a href="?page={{ schemes.next_page_number }}" class="page-link">{% trans "Next" %} <i class="fas fa-chevron-right"></i></a>
       {% else %}
         <span class="page-link disabled">{% trans "Next" %} <i class="fas fa-chevron-right"></i></span>
       {% endif %}
@@ -517,5 +518,4 @@
             console.log('🏛️ Government Schemes page ready — gaming theme loaded.');
         })();
     </script>
-
 {% endblock %}

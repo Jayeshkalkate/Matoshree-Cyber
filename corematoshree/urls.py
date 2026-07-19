@@ -54,7 +54,10 @@ urlpatterns = [
 
     # Admin only: application details (via AJAX and full view)
     path('application-detail/<int:app_id>/', views.application_detail_ajax, name='application_detail_ajax'),
-    path('admin/application/<int:app_id>/', views.application_admin_detail, name='application_admin_detail'),
+    
+    
+    # path('admin/application/<int:app_id>/', views.application_admin_detail, name='application_admin_detail'),
+    path('admin-app/<int:app_id>/', views.application_admin_detail, name='application_admin_detail'),
 
     # PDF splitting (admin only)
     path('pdf/<int:pk>/split/', views.split_pdf, name='split_pdf'),

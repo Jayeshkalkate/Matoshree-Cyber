@@ -322,6 +322,15 @@
     <form method="post" action="{% url 'appointment' %}" novalidate id="appointmentForm">
       {% csrf_token %}
       {{ form.non_field_errors }}
+      
+      {% if form.non_field_errors %}
+        <div class="alert-error" style="background: rgba(255,61,95,0.12); border:1px solid var(--neon-red); border-radius:var(--radius-sm); padding:0.8rem 1rem; margin-bottom:1.5rem; color:var(--neon-red); display:flex; align-items:center; gap:0.6rem;">
+          <i class="fas fa-exclamation-circle"></i>
+          {% for error in form.non_field_errors %}
+              {{ error }}
+          {% endfor %}
+        </div>
+      {% endif %}
 
       <!-- Full Name -->
       <div class="form-group" id="nameGroup">

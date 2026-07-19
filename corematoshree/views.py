@@ -5,6 +5,7 @@ import os
 import tempfile
 import logging
 from django.contrib import messages
+from django.db import models
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.mail import send_mail
@@ -96,8 +97,10 @@ def profile(request):
 # DASHBOARD (ADMIN & SUPERADMIN) – with caching
 # =============================================================================
 
+DASHBOARD_CACHE_KEY = 'dashboard_data_v2'   # single source of truth
+
 def _get_dashboard_common_data():
-    cache_key = 'dashboard_data_v2'          # new key, avoids old cached data
+    cache_key = DASHBOARD_CACHE_KEY
     cached = cache.get(cache_key)
 
     if cached is not None:
@@ -173,13 +176,35 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.success(request, _('Service added.'))
             else:
                 messages.error(request, _('Error adding service.'))
+
         elif model_type == 'requireddoc':
-            form = RequiredDocumentForm(request.POST)
-            if form.is_valid():
-                form.save()
-                messages.success(request, _('Required document added.'))
-            else:
-                messages.error(request, _('Error adding required document.'))
+            raw_docs = request.POST.get('document_name', '').strip()
+            service_id = request.POST.get('service')
+            if not service_id:
+                messages.error(request, _('Please select a service.'))
+                return redirect('superadmin_dashboard' if is_super else 'admin_dashboard')
+
+            # Split by comma, strip whitespace, remove empty strings
+            doc_names = [name.strip() for name in raw_docs.split(',') if name.strip()]
+            if not doc_names:
+                messages.error(request, _('Please enter at least one document name.'))
+                return redirect('superadmin_dashboard' if is_super else 'admin_dashboard')
+
+            service = get_object_or_404(Service, id=service_id)
+            created = 0
+            for doc_name in doc_names:
+                doc_obj, created_flag = RequiredDocument.objects.get_or_create(
+                    service=service, document_name=doc_name
+                )
+                if created_flag:
+                    created += 1
+            messages.success(request, _('{count} document(s) added for “{service}”.').format(
+                count=created, service=service.name
+            ))
+            # Clear cache so dashboard shows new documents immediately
+            cache.delete(DASHBOARD_CACHE_KEY)
+            return redirect('superadmin_dashboard' if is_super else 'admin_dashboard')
+
         elif model_type == 'announcement':
             form = AnnouncementForm(request.POST)
             if form.is_valid():
@@ -187,6 +212,7 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.success(request, _('Announcement added.'))
             else:
                 messages.error(request, _('Error adding announcement.'))
+
         elif model_type == 'job':
             form = JobNotificationForm(request.POST)
             if form.is_valid():
@@ -194,6 +220,7 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.success(request, _('Job notification added.'))
             else:
                 messages.error(request, _('Error adding job.'))
+
         elif model_type == 'scheme':
             form = GovernmentSchemeForm(request.POST, request.FILES)
             if form.is_valid():
@@ -201,6 +228,7 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.success(request, _('Scheme added.'))
             else:
                 messages.error(request, _('Error adding scheme.'))
+
         elif model_type == 'appointment':
             form = AppointmentFormDashboard(request.POST)
             if form.is_valid():
@@ -208,6 +236,7 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.success(request, _('Appointment added.'))
             else:
                 messages.error(request, _('Error adding appointment.'))
+
         elif model_type == 'contact':
             form = ContactFormDashboard(request.POST)
             if form.is_valid():
@@ -215,6 +244,7 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.success(request, _('Contact added.'))
             else:
                 messages.error(request, _('Error adding contact.'))
+
         elif model_type == 'form':
             form = DownloadFormForm(request.POST, request.FILES)
             if form.is_valid():
@@ -222,6 +252,7 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.success(request, _('Download form uploaded.'))
             else:
                 messages.error(request, _('Error uploading form.'))
+
         elif model_type == 'servicecharge':
             form = ServiceChargeForm(request.POST)
             if form.is_valid():
@@ -229,6 +260,7 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.success(request, _('Service charge added.'))
             else:
                 messages.error(request, _('Error adding service charge.'))
+
         elif model_type == 'gallery':
             form = GalleryForm(request.POST, request.FILES)
             if form.is_valid():
@@ -236,9 +268,9 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.success(request, _('Gallery image uploaded.'))
             else:
                 messages.error(request, _('Error uploading gallery image.'))
-        # Clear cache after data change
-        cache.delete('dashboard_common_data')
-        # cache.clear()
+
+        # Clear cache after any add operation (if not already cleared)
+        cache.delete(DASHBOARD_CACHE_KEY)
         return redirect('superadmin_dashboard' if is_super else 'admin_dashboard')
 
     elif action == 'edit':
@@ -250,6 +282,7 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.success(request, _('Service updated.'))
             else:
                 messages.error(request, _('Error updating service.'))
+
         elif model_type == 'requireddoc' and obj_id:
             instance = get_object_or_404(RequiredDocument, id=obj_id)
             form = RequiredDocumentForm(request.POST, instance=instance)
@@ -258,6 +291,7 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.success(request, _('Required document updated.'))
             else:
                 messages.error(request, _('Error updating required document.'))
+
         elif model_type == 'announcement' and obj_id:
             instance = get_object_or_404(Announcement, id=obj_id)
             form = AnnouncementForm(request.POST, instance=instance)
@@ -266,6 +300,7 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.success(request, _('Announcement updated.'))
             else:
                 messages.error(request, _('Error updating announcement.'))
+
         elif model_type == 'job' and obj_id:
             instance = get_object_or_404(JobNotification, id=obj_id)
             form = JobNotificationForm(request.POST, instance=instance)
@@ -274,6 +309,7 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.success(request, _('Job updated.'))
             else:
                 messages.error(request, _('Error updating job.'))
+
         elif model_type == 'scheme' and obj_id:
             instance = get_object_or_404(GovernmentScheme, id=obj_id)
             form = GovernmentSchemeForm(request.POST, request.FILES, instance=instance)
@@ -282,6 +318,7 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.success(request, _('Scheme updated.'))
             else:
                 messages.error(request, _('Error updating scheme.'))
+
         elif model_type == 'appointment' and obj_id:
             instance = get_object_or_404(Appointment, id=obj_id)
             form = AppointmentFormDashboard(request.POST, instance=instance)
@@ -290,6 +327,7 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.success(request, _('Appointment updated.'))
             else:
                 messages.error(request, _('Error updating appointment.'))
+
         elif model_type == 'contact' and obj_id:
             instance = get_object_or_404(Contact, id=obj_id)
             if 'reply' in request.POST:
@@ -304,6 +342,7 @@ def _handle_dashboard_post(request, is_super=False):
                     messages.success(request, _('Contact updated.'))
                 else:
                     messages.error(request, _('Error updating contact.'))
+
         elif model_type == 'form' and obj_id:
             instance = get_object_or_404(DownloadForm, id=obj_id)
             form = DownloadFormForm(request.POST, request.FILES, instance=instance)
@@ -312,6 +351,7 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.success(request, _('Form updated.'))
             else:
                 messages.error(request, _('Error updating form.'))
+
         elif model_type == 'servicecharge' and obj_id:
             instance = get_object_or_404(ServiceCharge, id=obj_id)
             form = ServiceChargeForm(request.POST, instance=instance)
@@ -320,6 +360,7 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.success(request, _('Service charge updated.'))
             else:
                 messages.error(request, _('Error updating service charge.'))
+
         elif model_type == 'businessinfo' and obj_id:
             instance = get_object_or_404(BusinessInfo, id=obj_id)
             form = BusinessInfoForm(request.POST, request.FILES, instance=instance)
@@ -328,9 +369,9 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.success(request, _('Business info updated.'))
             else:
                 messages.error(request, _('Error updating business info.'))
-        cache.delete('dashboard_common_data')
+
+        cache.delete(DASHBOARD_CACHE_KEY)
         cache.delete('business_info')
-        # cache.clear()
         return redirect('superadmin_dashboard' if is_super else 'admin_dashboard')
 
     elif action == 'delete':
@@ -364,8 +405,8 @@ def _handle_dashboard_post(request, is_super=False):
         elif model_type == 'gallery' and obj_id:
             get_object_or_404(Gallery, id=obj_id).delete()
             messages.success(request, _('Gallery image deleted.'))
-        cache.delete('dashboard_common_data')
-        # cache.clear()
+
+        cache.delete(DASHBOARD_CACHE_KEY)
         return redirect('superadmin_dashboard' if is_super else 'admin_dashboard')
 
     # Superadmin specific: edit user role
@@ -481,7 +522,7 @@ def about(request):
     return render(request, 'aboutus.html', context)
 
 def services(request):
-    services_qs = Service.objects.filter(active=True).only('id', 'name', 'description', 'icon', 'icon_color')
+    services_qs = Service.objects.filter(active=True).order_by('name').only('id', 'name', 'description', 'icon', 'icon_color')
     paginator = Paginator(services_qs, 12)
     page = request.GET.get('page')
     try:
@@ -622,10 +663,25 @@ def reviews(request):
         reviews_page = paginator.page(1)
     except EmptyPage:
         reviews_page = paginator.page(paginator.num_pages)
+
+    # Compute rating statistics (for the entire queryset, not just the page)
+    total_reviews = all_reviews.count()
+    if total_reviews > 0:
+        rating_avg = all_reviews.aggregate(avg=models.Avg('rating'))['avg']
+        rating_counts = {}
+        for i in range(1, 6):
+            rating_counts[i] = all_reviews.filter(rating=i).count()
+    else:
+        rating_avg = 0
+        rating_counts = {1:0, 2:0, 3:0, 4:0, 5:0}
+
     return render(request, 'customer_reviews.html', {
         'business': get_business(),
-        'reviews': reviews_page,
+        'reviews_page': reviews_page,
         'form': ReviewForm(),
+        'rating_avg': rating_avg,
+        'total_reviews': total_reviews,
+        'rating_counts': rating_counts,
     })
 
 def submit_review(request):
@@ -927,3 +983,4 @@ def split_pdf(request, pk):
         'document': document,
         'business': get_business(),
     })
+    

@@ -101,6 +101,18 @@ class ContactForm(forms.ModelForm):
 
 
 class AppointmentForm(forms.ModelForm):
+    def clean(self):
+        cleaned_data = super().clean()
+        appointment_time = cleaned_data.get('appointment_time')
+        if appointment_time:
+            # Convert to minutes since midnight
+            minutes = appointment_time.hour * 60 + appointment_time.minute
+            if minutes < 9 * 60 or minutes > 17 * 60:
+                raise forms.ValidationError(
+                    _("Appointment time must be between 09:00 AM and 05:00 PM.")
+                )
+        return cleaned_data
+
     class Meta:
         model = Appointment
         fields = (
@@ -183,11 +195,12 @@ class ServiceForm(forms.ModelForm):
 class AnnouncementForm(forms.ModelForm):
     class Meta:
         model = Announcement
-        fields = ("title", "category", "description")
+        fields = ("title", "category", "description", "is_urgent")   # added is_urgent
         labels = {
             "title": _("Title"),
             "category": _("Category"),
             "description": _("Description"),
+            "is_urgent": _("Urgent"),
         }
 
 
@@ -372,17 +385,17 @@ class RequiredDocumentForm(forms.ModelForm):
         fields = ("service", "document_name")
         labels = {
             "service": _("Service"),
-            "document_name": _("Document Name"),
+            "document_name": _("Document Names"),   # plural hint
         }
         widgets = {
             "service": forms.Select(attrs={"class": "form-select"}),
             "document_name": forms.TextInput(
                 attrs={
                     "class": "form-control",
-                    "placeholder": _("e.g. Aadhaar Card"),
+                    "placeholder": _("e.g. PAN Card, Aadhar Card, Birth Certificate"),
                 }
             ),
         }
         help_texts = {
-            "document_name": _("Enter one document per entry."),
+            "document_name": _("Separate multiple documents with commas."),
         }

@@ -119,6 +119,47 @@
     font-size: 0.9rem;
   }
 
+  /* ---- Pagination (neon-styled) ---- */
+  .pagination-wrap {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+  .pagination-wrap .page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: var(--transition);
+    text-decoration: none;
+    min-width: 44px;
+  }
+  .pagination-wrap .page-link:hover {
+    background: rgba(0, 240, 255, 0.08);
+    border-color: var(--neon-cyan);
+    color: var(--text-white);
+    box-shadow: var(--glow-cyan);
+    transform: translateY(-2px);
+  }
+  .pagination-wrap .page-link.active {
+    background: var(--neon-cyan);
+    color: var(--bg-primary);
+    border-color: var(--neon-cyan);
+    box-shadow: var(--glow-cyan);
+  }
+  .pagination-wrap .page-link.disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
   /* ---- No services fallback ---- */
   .no-data {
     color: var(--text-muted);
@@ -205,27 +246,48 @@
       <p class="no-data">{% trans "No services available at the moment. Please check back later." %}</p>
       {% endfor %}
     </div>
+
+    <!-- Pagination Controls (NEW) -->
+    {% if services.has_other_pages %}
+    <div class="pagination-wrap">
+      {% if services.has_previous %}
+        <a href="?page={{ services.previous_page_number }}" class="page-link"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</a>
+      {% else %}
+        <span class="page-link disabled"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</span>
+      {% endif %}
+
+      {% for num in services.paginator.page_range %}
+        {% if services.number == num %}
+          <span class="page-link active">{{ num }}</span>
+        {% elif num > services.number|add:'-3' and num < services.number|add:'3' %}
+          <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if services.has_next %}
+        <a href="?page={{ services.next_page_number }}" class="page-link">{% trans "Next" %} <i class="fas fa-chevron-right"></i></a>
+      {% else %}
+        <span class="page-link disabled">{% trans "Next" %} <i class="fas fa-chevron-right"></i></span>
+      {% endif %}
+    </div>
+    {% endif %}
+
   </div>
 </section>
 {% endblock %}
 
 {% block extra_scripts %}
-<!-- ============================================================
-     PAGE-SPECIFIC JAVASCRIPT — active nav highlight on scroll
-     ============================================================ -->
 <script>
     (function() {
         'use strict';
 
-        // ---- Active nav highlight on scroll ----
+        // ---- Active nav highlight on scroll (if needed) ----
         const sections = document.querySelectorAll('section[id]');
         const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
-
         if (sections.length && navLinks.length) {
             window.addEventListener('scroll', function() {
                 let current = '';
                 const scrollY = window.scrollY + 100;
-
                 sections.forEach(function(section) {
                     const top = section.offsetTop;
                     const height = section.offsetHeight;
@@ -233,7 +295,6 @@
                         current = section.getAttribute('id');
                     }
                 });
-
                 navLinks.forEach(function(link) {
                     link.classList.remove('active');
                     const href = link.getAttribute('href');
@@ -244,7 +305,7 @@
             }, { passive: true });
         }
 
-        // ---- Smooth scroll for anchor links (optional enhancement) ----
+        // ---- Smooth scroll for anchor links ----
         document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
             anchor.addEventListener('click', function(e) {
                 const targetId = this.getAttribute('href');
