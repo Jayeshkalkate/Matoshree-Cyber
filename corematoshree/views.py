@@ -97,34 +97,54 @@ def profile(request):
 # =============================================================================
 
 def _get_dashboard_common_data():
-    """Fetch common querysets for admin dashboards, cached for 5 minutes."""
-    cache_key = 'dashboard_common_data'
-    data = cache.get(cache_key)
-    if data is not None:
-        return data
+    cache_key = 'dashboard_data_v2'          # new key, avoids old cached data
+    cached = cache.get(cache_key)
 
-    data = {
-        'services': Service.objects.all().only('id', 'name', 'category', 'active', 'icon', 'icon_color'),
-        'appointments': Appointment.objects.select_related('service').only(
-            'id', 'full_name', 'phone', 'email', 'service__name',
-            'appointment_date', 'appointment_time', 'status', 'created_at'
-        ).order_by('-appointment_date')[:50],  # Limit to latest 50
-        'contacts': Contact.objects.all().only('id', 'name', 'email', 'phone', 'subject', 'message', 'reply', 'replied', 'created_at'),
-        'announcements': Announcement.objects.all().only('id', 'title', 'category', 'description', 'created_at'),
-        'jobs': JobNotification.objects.all().only('id', 'title', 'organization', 'last_date', 'apply_link', 'description', 'icon'),
-        'schemes': GovernmentScheme.objects.all().only('id', 'title', 'description', 'eligibility', 'last_date', 'image'),
-        'forms_list': DownloadForm.objects.all().only('id', 'title', 'category', 'pdf', 'uploaded_at'),
-        'servicecharges': ServiceCharge.objects.select_related('service').only('id', 'service__name', 'charge'),
-        'gallery_images': Gallery.objects.all().only('id', 'title', 'category', 'image'),
-        'business_info': BusinessInfo.objects.first(),
-        'applications': Application.objects.select_related('user', 'service').only(
-            'id', 'user__username', 'service__name', 'full_name', 'phone',
-            'email', 'address', 'status', 'created_at'
-        ).order_by('-created_at')[:50],
-        'required_docs': RequiredDocument.objects.select_related('service').only(
-            'id', 'service__name', 'document_name'
-        ).order_by('service__name'),
-        # Forms (unchanged)
+    if cached is not None:
+        # cached contains only querysets and business_info
+        data = {
+            'services': cached['services'],
+            'appointments': cached['appointments'],
+            'contacts': cached['contacts'],
+            'announcements': cached['announcements'],
+            'jobs': cached['jobs'],
+            'schemes': cached['schemes'],
+            'forms_list': cached['forms_list'],
+            'servicecharges': cached['servicecharges'],
+            'gallery_images': cached['gallery_images'],
+            'business_info': cached['business_info'],
+            'applications': cached['applications'],
+            'required_docs': cached['required_docs'],
+        }
+    else:
+        # Fetch all querysets (no forms)
+        data = {
+            'services': Service.objects.all().only('id', 'name', 'category', 'active', 'icon', 'icon_color'),
+            'appointments': Appointment.objects.select_related('service').only(
+                'id', 'full_name', 'phone', 'email', 'service__name',
+                'appointment_date', 'appointment_time', 'status', 'created_at'
+            ).order_by('-appointment_date')[:50],
+            'contacts': Contact.objects.all().only('id', 'name', 'email', 'phone', 'subject', 'message', 'reply', 'replied', 'created_at'),
+            'announcements': Announcement.objects.all().only('id', 'title', 'category', 'description', 'created_at'),
+            'jobs': JobNotification.objects.all().only('id', 'title', 'organization', 'last_date', 'apply_link', 'description', 'icon'),
+            'schemes': GovernmentScheme.objects.all().only('id', 'title', 'description', 'eligibility', 'last_date', 'image'),
+            'forms_list': DownloadForm.objects.all().only('id', 'title', 'category', 'pdf', 'uploaded_at'),
+            'servicecharges': ServiceCharge.objects.select_related('service').only('id', 'service__name', 'charge'),
+            'gallery_images': Gallery.objects.all().only('id', 'title', 'category', 'image'),
+            'business_info': BusinessInfo.objects.first(),
+            'applications': Application.objects.select_related('user', 'service').only(
+                'id', 'user__username', 'service__name', 'full_name', 'phone',
+                'email', 'address', 'status', 'created_at'
+            ).order_by('-created_at')[:50],
+            'required_docs': RequiredDocument.objects.select_related('service').only(
+                'id', 'service__name', 'document_name'
+            ).order_by('service__name'),
+        }
+        # Cache only the querysets / business_info (forms are excluded)
+        cache.set(cache_key, data, 60 * 5)
+
+    # Add fresh form instances (never cached)
+    data.update({
         'service_form': ServiceForm(),
         'announcement_form': AnnouncementForm(),
         'job_form': JobNotificationForm(),
@@ -136,8 +156,7 @@ def _get_dashboard_common_data():
         'gallery_form': GalleryForm(),
         'businessinfo_form': BusinessInfoForm(instance=BusinessInfo.objects.first()),
         'required_doc_form': RequiredDocumentForm(),
-    }
-    cache.set(cache_key, data, 60 * 5)  # 5 minutes
+    })
     return data
 
 def _handle_dashboard_post(request, is_super=False):

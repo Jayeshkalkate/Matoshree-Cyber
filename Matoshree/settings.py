@@ -22,7 +22,7 @@ if not SECRET_KEY:
     raise ValueError("SECRET_KEY environment variable is required.")
 
 # DEBUG – set to False in production via environment variable
-DEBUG = os.getenv("DEBUG", "True").lower() == "true"   # ← ADD THIS LINE
+DEBUG = os.getenv("DEBUG", "True").lower() == "true"
 
 ALLOWED_HOSTS = [
     host.strip() for host in os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",") if host.strip()
