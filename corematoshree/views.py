@@ -238,7 +238,7 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.error(request, _('Error uploading gallery image.'))
         # Clear cache after data change
         cache.delete('dashboard_common_data')
-        cache.clear()
+        # cache.clear()
         return redirect('superadmin_dashboard' if is_super else 'admin_dashboard')
 
     elif action == 'edit':
@@ -330,7 +330,7 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.error(request, _('Error updating business info.'))
         cache.delete('dashboard_common_data')
         cache.delete('business_info')
-        cache.clear()
+        # cache.clear()
         return redirect('superadmin_dashboard' if is_super else 'admin_dashboard')
 
     elif action == 'delete':
@@ -365,7 +365,7 @@ def _handle_dashboard_post(request, is_super=False):
             get_object_or_404(Gallery, id=obj_id).delete()
             messages.success(request, _('Gallery image deleted.'))
         cache.delete('dashboard_common_data')
-        cache.clear()
+        # cache.clear()
         return redirect('superadmin_dashboard' if is_super else 'admin_dashboard')
 
     # Superadmin specific: edit user role
