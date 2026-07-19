@@ -7,7 +7,6 @@ import logging
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.core.cache import cache
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import OperationalError
@@ -18,6 +17,7 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import cache_page
 from pypdf import PdfReader, PdfWriter
+from django.core.cache import cache
 from django.db import ProgrammingError
 from .models import (
     User, Contact, Appointment, Review, Service, Announcement,
@@ -238,6 +238,7 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.error(request, _('Error uploading gallery image.'))
         # Clear cache after data change
         cache.delete('dashboard_common_data')
+        cache.clear()
         return redirect('superadmin_dashboard' if is_super else 'admin_dashboard')
 
     elif action == 'edit':
@@ -329,6 +330,7 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.error(request, _('Error updating business info.'))
         cache.delete('dashboard_common_data')
         cache.delete('business_info')
+        cache.clear()
         return redirect('superadmin_dashboard' if is_super else 'admin_dashboard')
 
     elif action == 'delete':
@@ -363,6 +365,7 @@ def _handle_dashboard_post(request, is_super=False):
             get_object_or_404(Gallery, id=obj_id).delete()
             messages.success(request, _('Gallery image deleted.'))
         cache.delete('dashboard_common_data')
+        cache.clear()
         return redirect('superadmin_dashboard' if is_super else 'admin_dashboard')
 
     # Superadmin specific: edit user role
