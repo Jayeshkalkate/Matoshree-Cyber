@@ -4,52 +4,97 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
+    <!-- Mobile viewport – will be dynamically adjusted by desktop toggle -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="theme-color" content="#0a0e1a" />
     <title>{% block title %}{% trans "Cyber Services" %}{% endblock %}</title>
 
-    <!-- Google Fonts (Inter) with display=swap -->
+    <!-- Google Fonts (Inter) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
 
-    <!-- Font Awesome (CDN) – replace with local static if preferred -->
+    <!-- Font Awesome (CDN) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="{% static 'manifest.json' %}">
+    <meta name="theme-color" content="#0a0e1a">
 
     {% block extra_head %}{% endblock %}
 
-    <!-- ============================================================
-         GLOBAL BASE STYLES (shared across all pages)
-         ============================================================ -->
     <style>
-        /* -------- Reset & base -------- */
-        *, *::before, *::after {
+        /* ============================================================
+               GLOBAL BASE STYLES – Clean, accessible, responsive
+               ============================================================ */
+
+        /* ----- Reset & base ----- */
+        *,
+        *::before,
+        *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
+
+        :root {
+            /* Colours – high contrast */
+            --bg-primary: #0a0e1a;
+            --bg-card: rgba(255, 255, 255, 0.04);
+            --bg-card-hover: rgba(255, 255, 255, 0.09);
+            --text-white: #f0f4ff;
+            --text-muted: #94a3b8;
+            --text-muted-hover: #c0d0e8;
+            --neon-cyan: #00f0ff;
+            --neon-magenta: #ff2d95;
+            --neon-purple: #a855f7;
+            --neon-orange: #f97316;
+            --gradient-cyan: linear-gradient(135deg, #00f0ff, #0ea5e9);
+            --gradient-cyber: linear-gradient(135deg, #00f0ff, #a855f7);
+            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.5);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --radius-pill: 50px;
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-display: 'Inter', system-ui, -apple-system, sans-serif;
+            --fluid-h1: clamp(1.8rem, 5vw, 3.6rem);
+            --fluid-h2: clamp(1.6rem, 4vw, 2.8rem);
+            --fluid-h3: clamp(1.1rem, 2.5vw, 1.4rem);
+            --fluid-body: clamp(0.88rem, 1.2vw, 1.05rem);
+            --fluid-small: clamp(0.7rem, 0.9vw, 0.88rem);
+        }
+
         html {
             scroll-behavior: smooth;
             -webkit-text-size-adjust: 100%;
             -webkit-tap-highlight-color: transparent;
         }
+
         body {
-            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0a0e1a;
-            color: #f0f4ff;
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-white);
             min-height: 100vh;
             overflow-x: hidden;
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
+
         a {
             color: inherit;
             text-decoration: none;
         }
 
-        /* -------- Global container -------- */
+        /* Focus states for accessibility */
+        :focus-visible {
+            outline: 2px solid var(--neon-cyan);
+            outline-offset: 2px;
+        }
+
+        /* ----- Container ----- */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -57,10 +102,9 @@
             width: 100%;
         }
 
-        /* -------- Header / Navigation -------- */
+        /* ----- Header / Navbar (sticky, glassmorphism) ----- */
         .header {
             background: rgba(10, 14, 26, 0.85);
-            /* fallback for browsers without backdrop-filter */
             background: rgba(10, 14, 26, 0.92);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
@@ -71,7 +115,7 @@
             z-index: 1000;
             width: 100%;
         }
-        /* Fallback for browsers not supporting backdrop-filter */
+
         @supports not (backdrop-filter: blur(12px)) {
             .header {
                 background: rgba(10, 14, 26, 0.96);
@@ -86,22 +130,22 @@
             gap: 12px 20px;
             position: relative;
         }
+
         .nav-brand a {
             font-size: 1.6rem;
             font-weight: 800;
-            color: #f0f4ff;
-            font-family: 'Inter', sans-serif;
+            color: var(--text-white);
             letter-spacing: -0.5px;
             display: inline-block;
         }
         .nav-brand a span {
-            background: linear-gradient(135deg, #00f0ff, #a855f7);
+            background: var(--gradient-cyber);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        /* ---------- Hamburger button ---------- */
+        /* ----- Hamburger (mobile) ----- */
         .hamburger {
             display: none;
             flex-direction: column;
@@ -113,7 +157,6 @@
             z-index: 1001;
             transition: transform 0.3s ease;
             touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
             min-width: 44px;
             min-height: 44px;
             justify-content: center;
@@ -123,7 +166,7 @@
             display: block;
             width: 28px;
             height: 3px;
-            background: #f0f4ff;
+            background: var(--text-white);
             border-radius: 10px;
             transition: all 0.3s ease;
             transform-origin: center;
@@ -138,11 +181,11 @@
             transform: translateY(-8px) rotate(-45deg);
         }
         .hamburger:hover .bar {
-            background: #00f0ff;
+            background: var(--neon-cyan);
             box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
         }
 
-        /* ---------- Navigation links (desktop) ---------- */
+        /* ----- Navigation links (desktop) ----- */
         .nav-links {
             display: flex;
             flex-wrap: wrap;
@@ -158,10 +201,10 @@
         }
         .nav-links > li > a,
         .nav-links > li > .dropdown-trigger {
-            color: #94a3b8;
+            color: var(--text-muted);
             font-size: 0.95rem;
             font-weight: 500;
-            transition: color 0.2s ease, border-color 0.2s ease;
+            transition: color 0.2s, border-color 0.2s;
             padding: 4px 0;
             border-bottom: 2px solid transparent;
             display: inline-block;
@@ -174,15 +217,50 @@
         .nav-links > li > a:hover,
         .nav-links > li > a.active,
         .nav-links > li > .dropdown-trigger:hover {
-            color: #00f0ff;
-            border-bottom-color: #00f0ff;
+            color: var(--neon-cyan);
+            border-bottom-color: var(--neon-cyan);
         }
         .nav-links > li > .dropdown-trigger i {
             margin-left: 4px;
             font-size: 0.8rem;
         }
 
-        /* ---------- Dropdown menus (desktop) ---------- */
+        /* ----- Install & Desktop toggle buttons (neon) ----- */
+        .install-btn,
+        .desktop-toggle-btn {
+            padding: 6px 16px;
+            border-radius: var(--radius-pill);
+            font-weight: 700;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            background: var(--gradient-cyan);
+            color: var(--bg-primary) !important;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+        .install-btn:hover,
+        .desktop-toggle-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.6);
+        }
+        .desktop-toggle-btn {
+            background: transparent;
+            color: var(--text-muted) !important;
+            box-shadow: none;
+            border: 2px solid rgba(255, 255, 255, 0.06);
+        }
+        .desktop-toggle-btn:hover {
+            background: rgba(0, 240, 255, 0.08);
+            border-color: var(--neon-cyan);
+            color: var(--text-white) !important;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
+        }
+
+        /* ----- Dropdown menus (desktop) ----- */
         .dropdown-menu {
             display: none;
             position: absolute;
@@ -218,13 +296,15 @@
         .dropdown-menu li .lang-option {
             display: block;
             padding: 10px 20px;
-            color: #94a3b8;
+            color: var(--text-muted);
             font-size: 0.9rem;
             font-weight: 500;
             transition: background 0.2s, color 0.2s, border-color 0.2s;
             border-left: 3px solid transparent;
             background: none;
-            border: none;
+            border-right: none;
+            border-top: none;
+            border-bottom: none;
             width: 100%;
             text-align: left;
             cursor: pointer;
@@ -235,13 +315,13 @@
         .dropdown-menu li .logout-btn:hover,
         .dropdown-menu li .lang-option:hover {
             background: rgba(0, 240, 255, 0.06);
-            border-left-color: #00f0ff;
-            color: #00f0ff;
+            border-left-color: var(--neon-cyan);
+            color: var(--neon-cyan);
         }
         .dropdown-menu li .logout-btn:hover {
             background: rgba(255, 45, 149, 0.08);
-            border-left-color: #ff2d95;
-            color: #ff2d95;
+            border-left-color: var(--neon-magenta);
+            color: var(--neon-magenta);
         }
         .dropdown-menu li .lang-option {
             display: flex;
@@ -253,24 +333,25 @@
             text-align: center;
         }
 
-        /* Language dropdown: positioned to the right */
+        /* Language dropdown – right aligned */
         .lang-dropdown .dropdown-menu {
             left: auto;
             right: 0;
         }
 
-        /* User dropdown: avatar + name */
+        /* User dropdown */
         .user-dropdown .dropdown-trigger {
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        /* Removed .avatar styling since it's no longer used */
         .user-dropdown .dropdown-trigger .username {
             display: inline-block;
         }
 
-        /* ---------- Responsive: mobile dropdown ---------- */
+        /* ============================================================
+               RESPONSIVE: Mobile nav (hamburger)
+               ============================================================ */
         @media (max-width: 768px) {
             .hamburger {
                 display: flex;
@@ -327,11 +408,10 @@
             .nav-links > li > a.active,
             .nav-links > li > .dropdown-trigger:hover {
                 background: rgba(0, 240, 255, 0.06);
-                border-left-color: #00f0ff;
-                color: #00f0ff;
+                border-left-color: var(--neon-cyan);
+                color: var(--neon-cyan);
                 border-bottom: none;
             }
-            /* Dropdown menus become inline on mobile */
             .dropdown-menu {
                 position: static;
                 display: none;
@@ -365,13 +445,12 @@
             .dropdown-menu li .logout-btn:hover,
             .dropdown-menu li .lang-option:hover {
                 background: rgba(0, 240, 255, 0.04);
-                border-left-color: #00f0ff;
+                border-left-color: var(--neon-cyan);
             }
             .dropdown-menu li .logout-btn:hover {
                 background: rgba(255, 45, 149, 0.06);
-                border-left-color: #ff2d95;
+                border-left-color: var(--neon-magenta);
             }
-            /* Remove absolute positioning for language dropdown on mobile */
             .lang-dropdown .dropdown-menu {
                 left: 0;
                 right: 0;
@@ -379,7 +458,6 @@
             .user-dropdown .dropdown-trigger .username {
                 display: inline;
             }
-            /* Brand and hamburger layout */
             .navbar {
                 flex-wrap: nowrap;
             }
@@ -393,6 +471,37 @@
             .nav-links {
                 order: 3;
                 width: 100%;
+            }
+            /* Install & desktop toggle buttons on mobile */
+            .install-btn,
+            .desktop-toggle-btn {
+                display: flex;
+                width: 100%;
+                justify-content: center;
+                border-radius: 0;
+                padding: 14px 20px;
+                background: transparent;
+                color: var(--text-muted) !important;
+                box-shadow: none;
+                border-left: 3px solid transparent;
+                font-weight: 500;
+                font-size: 1rem;
+            }
+            .install-btn:hover,
+            .desktop-toggle-btn:hover {
+                background: rgba(0, 240, 255, 0.06);
+                border-left-color: var(--neon-cyan);
+                color: var(--neon-cyan) !important;
+                transform: none;
+            }
+            .install-btn i,
+            .desktop-toggle-btn i {
+                width: 1.4rem;
+                text-align: center;
+            }
+            .nav-links > li > .install-btn,
+            .nav-links > li > .desktop-toggle-btn {
+                padding: 14px 20px;
             }
         }
 
@@ -427,9 +536,9 @@
             }
         }
 
-        /* -------- Utilities (shared) -------- */
+        /* ----- Utilities ----- */
         .no-data {
-            color: #94a3b8;
+            color: var(--text-muted);
             text-align: center;
             padding: 30px 0;
             opacity: 0.6;
@@ -439,18 +548,18 @@
             margin-bottom: 40px;
         }
         .section-header h2 {
-            font-size: clamp(1.6rem, 4vw, 2.8rem);
+            font-size: var(--fluid-h2);
             font-weight: 800;
             letter-spacing: -0.5px;
         }
         .section-header h2 span {
-            background: linear-gradient(135deg, #00f0ff, #a855f7);
+            background: var(--gradient-cyber);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
         .section-header p {
-            color: #94a3b8;
+            color: var(--text-muted);
             font-size: 1rem;
             margin-top: 4px;
         }
@@ -459,8 +568,7 @@
             border-top: 1px solid rgba(255, 255, 255, 0.04);
             margin: 0;
         }
-
-        /* -------- Responsive utilities for section headers -------- */
+        /* Responsive section headers */
         @media (max-width: 768px) {
             .section-header {
                 margin-bottom: 28px;
@@ -481,98 +589,178 @@
             }
         }
 
-        /* -------- Shared CSS variables -------- */
-        :root {
-            --fluid-h1: clamp(1.8rem, 5vw, 3.6rem);
-            --fluid-h2: clamp(1.6rem, 4vw, 2.8rem);
-            --fluid-h3: clamp(1.1rem, 2.5vw, 1.4rem);
-            --fluid-body: clamp(0.88rem, 1.2vw, 1.05rem);
-            --fluid-small: clamp(0.7rem, 0.9vw, 0.88rem);
-            --bg-primary: #0a0e1a;
-            --bg-card: rgba(255, 255, 255, 0.04);
-            --bg-card-hover: rgba(255, 255, 255, 0.09);
-            --text-white: #f0f4ff;
-            --text-muted: #94a3b8;
-            --neon-cyan: #00f0ff;
-            --neon-magenta: #ff2d95;
-            --neon-purple: #a855f7;
-            --neon-orange: #f97316;
-            --gradient-cyan: linear-gradient(135deg, #00f0ff, #0ea5e9);
-            --gradient-cyber: linear-gradient(135deg, #00f0ff, #a855f7);
-            --gradient-magenta: linear-gradient(135deg, #ff2d95, #a855f7);
-            --glow-cyan: 0 0 30px rgba(0, 240, 255, 0.25);
-            --glow-magenta: 0 0 30px rgba(255, 45, 149, 0.25);
-            --glow-purple: 0 0 30px rgba(168, 85, 247, 0.25);
-            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.5);
-            --radius: 16px;
-            --radius-sm: 10px;
-            --radius-pill: 50px;
-            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            --font-display: 'Inter', system-ui, -apple-system, sans-serif;
-            --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+        /* ----- Install Modal (accessible) ----- */
+        #installModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        #installModal[aria-hidden="false"] {
+            display: flex;
+        }
+        .modal-content {
+            background: var(--bg-primary);
+            max-width: 360px;
+            width: 100%;
+            padding: 24px;
+            border-radius: var(--radius);
+            border: 1px solid var(--neon-cyan);
+            box-shadow: 0 0 40px rgba(0, 240, 255, 0.2);
+            text-align: center;
+            position: relative;
+        }
+        .modal-content i {
+            font-size: 3rem;
+            color: var(--neon-cyan);
+        }
+        .modal-content h3 {
+            margin: 16px 0 8px;
+            color: var(--text-white);
+            font-size: 1.25rem;
+        }
+        .modal-content p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        .modal-content .btn-close-modal {
+            background: transparent;
+            border: 1px solid var(--text-muted);
+            color: var(--text-muted);
+            padding: 8px 24px;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 16px;
+        }
+        .modal-content .btn-close-modal:hover {
+            background: var(--neon-cyan);
+            color: var(--bg-primary);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+        }
+
+        /* ============================================================
+               REDUCED MOTION
+               ============================================================ */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            html {
+                scroll-behavior: auto !important;
+            }
+        }
+
+        /* ============================================================
+               PRINT STYLES
+               ============================================================ */
+        @media print {
+            .header,
+            .footer,
+            .install-btn,
+            .desktop-toggle-btn,
+            #installModal {
+                display: none !important;
+            }
+            body {
+                background: #fff !important;
+                color: #000 !important;
+            }
+            .container {
+                max-width: 100% !important;
+                padding: 0 !important;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- ============================== HEADER / NAV ============================== -->
-    <header class="header">
+    <!-- ============================== HEADER ============================== -->
+    <header class="header" role="banner">
         <div class="container">
-            <nav class="navbar" role="navigation" aria-label="Main navigation">
+            <nav class="navbar" role="navigation" aria-label="{% trans 'Main navigation' %}">
                 <div class="nav-brand">
-                    <a href="{% url 'home' %}">
+                    <a href="{% url 'home' %}" aria-label="{% trans 'Home' %}">
                         {{ business.business_name|default:"Matoshree Cyber Cafe"|safe }}
                     </a>
                 </div>
 
-                <!-- Hamburger button -->
-                <button class="hamburger" id="hamburgerBtn" aria-controls="navLinks" aria-expanded="false" aria-label="Toggle navigation menu" type="button">
+                <!-- Hamburger -->
+                <button class="hamburger" id="hamburgerBtn" aria-controls="navLinks" aria-expanded="false" aria-label="{% trans 'Toggle navigation menu' %}" type="button">
                     <span class="bar"></span>
                     <span class="bar"></span>
                     <span class="bar"></span>
                 </button>
 
-                <!-- Navigation links -->
-                <ul class="nav-links" id="navLinks">
+                <!-- Navigation -->
+                <ul class="nav-links" id="navLinks" role="menubar">
                     <!-- Public links -->
-                    <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
-                    <li><a href="{% url 'about' %}">{% trans "About" %}</a></li>
-                    <li><a href="{% url 'services' %}">{% trans "Services" %}</a></li>
-                    <li><a href="{% url 'gallery' %}">{% trans "Gallery" %}</a></li>
-                    <li><a href="{% url 'reviews' %}">{% trans "Reviews" %}</a></li>
-                    <li><a href="{% url 'contact' %}">{% trans "Contact" %}</a></li>
+                    <li role="none"><a href="{% url 'home' %}" role="menuitem">{% trans "Home" %}</a></li>
+                    <li role="none"><a href="{% url 'about' %}" role="menuitem">{% trans "About" %}</a></li>
+                    <li role="none"><a href="{% url 'services' %}" role="menuitem">{% trans "Services" %}</a></li>
+                    <li role="none"><a href="{% url 'gallery' %}" role="menuitem">{% trans "Gallery" %}</a></li>
+                    <li role="none"><a href="{% url 'reviews' %}" role="menuitem">{% trans "Reviews" %}</a></li>
+                    <li role="none"><a href="{% url 'contact' %}" role="menuitem">{% trans "Contact" %}</a></li>
+
+                    <!-- Install App Button -->
+                    <li role="none">
+                        <button id="installAppBtn" class="install-btn" role="menuitem" aria-label="{% trans 'Install App' %}">
+                            <i class="fas fa-download" aria-hidden="true"></i> {% trans "Install App" %}
+                        </button>
+                    </li>
+
+                    <!-- Desktop Toggle -->
+                    <li role="none">
+                        <button id="desktopToggleBtn" class="desktop-toggle-btn" role="menuitem" aria-label="{% trans 'Toggle desktop view' %}">
+                            <i class="fas fa-desktop" aria-hidden="true"></i>
+                            <span id="desktopToggleLabel">{% trans "Desktop View" %}</span>
+                        </button>
+                    </li>
 
                     {# ─── Language Dropdown ─── #}
-                    <li class="lang-dropdown">
-                        <button class="dropdown-trigger" aria-haspopup="true" aria-expanded="false" aria-label="Select language" type="button">
-                            <i class="fas fa-globe"></i>
-                            <i class="fas fa-chevron-down" style="font-size:0.7rem;"></i>
+                    <li class="lang-dropdown" role="none">
+                        <button class="dropdown-trigger" aria-haspopup="true" aria-expanded="false" aria-label="{% trans 'Select language' %}" role="menuitem" type="button">
+                            <i class="fas fa-globe" aria-hidden="true"></i>
+                            <i class="fas fa-chevron-down" aria-hidden="true" style="font-size:0.7rem;"></i>
                         </button>
                         <ul class="dropdown-menu" role="menu">
-                            <li>
+                            <li role="none">
                                 <form action="{% url 'set_language' %}" method="post" class="lang-form">
                                     {% csrf_token %}
                                     <input name="next" type="hidden" value="{{ request.get_full_path }}" />
-                                    <button type="submit" name="language" value="en" class="lang-option">
-                                        <i class="fas fa-flag"></i> English
+                                    <button type="submit" name="language" value="en" class="lang-option" role="menuitem">
+                                        <i class="fas fa-flag" aria-hidden="true"></i> English
                                     </button>
                                 </form>
                             </li>
-                            <li>
+                            <li role="none">
                                 <form action="{% url 'set_language' %}" method="post" class="lang-form">
                                     {% csrf_token %}
                                     <input name="next" type="hidden" value="{{ request.get_full_path }}" />
-                                    <button type="submit" name="language" value="hi" class="lang-option">
-                                        <i class="fas fa-flag"></i> हिन्दी
+                                    <button type="submit" name="language" value="hi" class="lang-option" role="menuitem">
+                                        <i class="fas fa-flag" aria-hidden="true"></i> हिन्दी
                                     </button>
                                 </form>
                             </li>
-                            <li>
+                            <li role="none">
                                 <form action="{% url 'set_language' %}" method="post" class="lang-form">
                                     {% csrf_token %}
                                     <input name="next" type="hidden" value="{{ request.get_full_path }}" />
-                                    <button type="submit" name="language" value="mr" class="lang-option">
-                                        <i class="fas fa-flag"></i> मराठी
+                                    <button type="submit" name="language" value="mr" class="lang-option" role="menuitem">
+                                        <i class="fas fa-flag" aria-hidden="true"></i> मराठी
                                     </button>
                                 </form>
                             </li>
@@ -581,32 +769,31 @@
 
                     {# ─── User / Auth Dropdown ─── #}
                     {% if user.is_authenticated %}
-                        <li class="user-dropdown">
-                            <button class="dropdown-trigger" aria-haspopup="true" aria-expanded="false" aria-label="User menu" type="button">
-                                <!-- Avatar removed -->
+                        <li class="user-dropdown" role="none">
+                            <button class="dropdown-trigger" aria-haspopup="true" aria-expanded="false" aria-label="{% trans 'User menu' %}" role="menuitem" type="button">
                                 <span class="username">{{ user.username }}</span>
-                                <i class="fas fa-chevron-down" style="font-size:0.7rem;"></i>
+                                <i class="fas fa-chevron-down" aria-hidden="true" style="font-size:0.7rem;"></i>
                             </button>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="{% url 'profile' %}"><i class="fas fa-user"></i> {% trans "Profile" %}</a></li>
-                                <li><a href="{% url 'my_applications' %}"><i class="fas fa-file-alt"></i> {% trans "My Applications" %}</a></li>
+                                <li role="none"><a href="{% url 'profile' %}" role="menuitem"><i class="fas fa-user" aria-hidden="true"></i> {% trans "Profile" %}</a></li>
+                                <li role="none"><a href="{% url 'my_applications' %}" role="menuitem"><i class="fas fa-file-alt" aria-hidden="true"></i> {% trans "My Applications" %}</a></li>
                                 {% if user.role == 'admin' or user.role == 'superadmin' %}
-                                    <li><a href="{% url 'admin_dashboard' %}"><i class="fas fa-tachometer-alt"></i> {% trans "Admin Dashboard" %}</a></li>
+                                    <li role="none"><a href="{% url 'admin_dashboard' %}" role="menuitem"><i class="fas fa-tachometer-alt" aria-hidden="true"></i> {% trans "Admin Dashboard" %}</a></li>
                                 {% endif %}
                                 {% if user.role == 'superadmin' %}
-                                    <li><a href="{% url 'superadmin_dashboard' %}"><i class="fas fa-crown"></i> {% trans "Super Admin" %}</a></li>
+                                    <li role="none"><a href="{% url 'superadmin_dashboard' %}" role="menuitem"><i class="fas fa-crown" aria-hidden="true"></i> {% trans "Super Admin" %}</a></li>
                                 {% endif %}
-                                <li>
+                                <li role="none">
                                     <form method="post" action="{% url 'logout' %}" style="display:block; width:100%;">
                                         {% csrf_token %}
-                                        <button type="submit" class="logout-btn"><i class="fas fa-sign-out-alt"></i> {% trans "Logout" %}</button>
+                                        <button type="submit" class="logout-btn" role="menuitem"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> {% trans "Logout" %}</button>
                                     </form>
                                 </li>
                             </ul>
                         </li>
                     {% else %}
-                        <li><a href="{% url 'login' %}">{% trans "Login" %}</a></li>
-                        <li><a href="{% url 'register' %}">{% trans "Register" %}</a></li>
+                        <li role="none"><a href="{% url 'login' %}" role="menuitem">{% trans "Login" %}</a></li>
+                        <li role="none"><a href="{% url 'register' %}" role="menuitem">{% trans "Register" %}</a></li>
                     {% endif %}
                 </ul>
             </nav>
@@ -616,7 +803,15 @@
     <!-- ============================== MAIN CONTENT ============================== -->
     <main>
         {% block content %}
-        <!-- Override in child templates -->
+            <!-- Install Instructions Modal (for iOS / fallback) -->
+            <div id="installModal" role="dialog" aria-modal="true" aria-labelledby="installModalTitle" aria-hidden="true">
+                <div class="modal-content">
+                    <i class="fas fa-mobile-alt" aria-hidden="true"></i>
+                    <h3 id="installModalTitle">{% trans "Add to Home Screen" %}</h3>
+                    <p>{% trans "Tap the Share button and select 'Add to Home Screen' to install this app." %}</p>
+                    <button id="installModalClose" class="btn-close-modal" aria-label="{% trans 'Close' %}">{% trans "Close" %}</button>
+                </div>
+            </div>
         {% endblock %}
     </main>
 
@@ -626,7 +821,7 @@
     <!-- ============================== EXTRA SCRIPTS ============================== -->
     {% block extra_js %}{% endblock %}
 
-    <!-- ============================== DROPDOWN & HAMBURGER TOGGLE SCRIPT ============================== -->
+    <!-- ============================== DROPDOWN & HAMBURGER TOGGLE ============================== -->
     <script>
         (function() {
             "use strict";
@@ -649,7 +844,7 @@
 
                 hamburger.addEventListener('click', toggleMenu);
 
-                // Close nav-links when a link is clicked (including logout button and language options)
+                // Close when a link is clicked
                 navLinks.addEventListener('click', function(e) {
                     const target = e.target;
                     if (target.tagName === 'A' || target.classList.contains('logout-btn') || target.closest('.lang-option')) {
@@ -657,7 +852,7 @@
                     }
                 });
 
-                // Close on window resize to desktop
+                // Close on resize to desktop
                 let resizeTimer;
                 window.addEventListener('resize', function() {
                     clearTimeout(resizeTimer);
@@ -668,7 +863,7 @@
                     }, 200);
                 }, { passive: true });
 
-                // Close on Escape key
+                // Close on Escape
                 document.addEventListener('keydown', function(e) {
                     if (e.key === 'Escape' && navLinks.classList.contains('open')) {
                         closeMenu();
@@ -676,7 +871,7 @@
                 });
             }
 
-            // ---- Dropdown toggles (language & user) ----
+            // ---- Dropdown toggles ----
             const dropdownTriggers = document.querySelectorAll('.dropdown-trigger');
             dropdownTriggers.forEach(function(trigger) {
                 trigger.addEventListener('click', function(e) {
@@ -686,7 +881,7 @@
                     const menu = parentLi.querySelector('.dropdown-menu');
                     if (!menu) return;
 
-                    // Close other open dropdowns
+                    // Close others
                     document.querySelectorAll('.dropdown-menu.open').forEach(function(otherMenu) {
                         if (otherMenu !== menu) {
                             otherMenu.classList.remove('open');
@@ -700,7 +895,7 @@
                 });
             });
 
-            // Close dropdowns when clicking outside
+            // Close dropdowns on outside click
             document.addEventListener('click', function(e) {
                 document.querySelectorAll('.dropdown-menu.open').forEach(function(menu) {
                     const parentLi = menu.closest('li');
@@ -712,10 +907,9 @@
                 });
             });
 
-            // ---- Language form auto-submit and close dropdown ----
+            // Language form auto-submit and close
             document.querySelectorAll('.lang-form').forEach(function(form) {
-                form.addEventListener('submit', function(e) {
-                    // Close the dropdown after submission
+                form.addEventListener('submit', function() {
                     const parentLi = form.closest('li');
                     if (parentLi) {
                         const menu = parentLi.closest('.dropdown-menu');
@@ -728,13 +922,115 @@
                 });
             });
 
-            // ---- Close dropdowns when a language option is clicked (just in case) ----
-            document.querySelectorAll('.lang-option').forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    // The form submit event will handle closing
-                });
+        })();
+    </script>
+
+    <!-- ============================== PWA SERVICE WORKER ============================== -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('{% static "sw.js" %}')
+                .then(() => console.log('Service Worker registered'))
+                .catch(err => console.log('SW registration failed:', err));
+        }
+    </script>
+
+    <!-- ============================== INSTALL APP LOGIC ============================== -->
+    <script>
+        (function() {
+            let deferredPrompt;
+            const installBtn = document.getElementById('installAppBtn');
+            const modal = document.getElementById('installModal');
+            const modalClose = document.getElementById('installModalClose');
+
+            // Initially hide the button (will show if beforeinstallprompt fires)
+            if (installBtn) installBtn.style.display = 'none';
+
+            // Show install prompt if supported
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                if (installBtn) installBtn.style.display = 'inline-flex';
             });
 
+            // Install button click
+            installBtn?.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const result = await deferredPrompt.userChoice;
+                    console.log('User choice:', result.outcome);
+                    deferredPrompt = null;
+                    installBtn.style.display = 'none';
+                } else {
+                    // Fallback: show iOS instructions modal
+                    showInstallModal();
+                }
+            });
+
+            // Hide button if already installed
+            if (window.matchMedia('(display-mode: standalone)').matches) {
+                if (installBtn) installBtn.style.display = 'none';
+            }
+
+            // Modal controls
+            function showInstallModal() {
+                if (modal) {
+                    modal.setAttribute('aria-hidden', 'false');
+                    modal.style.display = 'flex';
+                    modal.focus();
+                }
+            }
+            function hideInstallModal() {
+                if (modal) {
+                    modal.setAttribute('aria-hidden', 'true');
+                    modal.style.display = 'none';
+                }
+            }
+
+            modalClose?.addEventListener('click', hideInstallModal);
+            modal?.addEventListener('click', function(e) {
+                if (e.target === this) hideInstallModal();
+            });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal && modal.style.display === 'flex') {
+                    hideInstallModal();
+                }
+            });
+
+            // Expose for global use (if needed)
+            window.showInstallModal = showInstallModal;
+            window.hideInstallModal = hideInstallModal;
+
+        })();
+    </script>
+
+    <!-- ============================== DESKTOP TOGGLE ============================== -->
+    <script>
+        (function() {
+            const toggleBtn = document.getElementById('desktopToggleBtn');
+            const labelSpan = document.getElementById('desktopToggleLabel');
+            const metaViewport = document.querySelector('meta[name="viewport"]');
+            if (!metaViewport) return;
+
+            // Load stored preference
+            const isDesktop = localStorage.getItem('desktopMode') === 'true';
+            if (isDesktop) {
+                metaViewport.content = 'width=1024, initial-scale=1.0';
+                if (labelSpan) labelSpan.textContent = '{% trans "Mobile View" %}';
+            }
+
+            toggleBtn?.addEventListener('click', function(e) {
+                e.preventDefault();
+                const current = localStorage.getItem('desktopMode') === 'true';
+                const newMode = !current;
+                if (newMode) {
+                    metaViewport.content = 'width=1024, initial-scale=1.0';
+                    if (labelSpan) labelSpan.textContent = '{% trans "Mobile View" %}';
+                } else {
+                    metaViewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes';
+                    if (labelSpan) labelSpan.textContent = '{% trans "Desktop View" %}';
+                }
+                localStorage.setItem('desktopMode', newMode);
+            });
         })();
     </script>
 
