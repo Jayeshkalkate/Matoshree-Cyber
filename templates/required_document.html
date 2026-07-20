@@ -12,9 +12,18 @@
 
   /* ---- Hero Section ---- */
   .page-hero {
-    background: radial-gradient(ellipse at 30% 20%, rgba(0, 240, 255, 0.08), transparent 60%),
-                radial-gradient(ellipse at 70% 80%, rgba(255, 45, 149, 0.05), transparent 60%),
-                var(--bg-primary);
+    background:
+      radial-gradient(
+        ellipse at 30% 20%,
+        rgba(0, 240, 255, 0.08),
+        transparent 60%
+      ),
+      radial-gradient(
+        ellipse at 70% 80%,
+        rgba(255, 45, 149, 0.05),
+        transparent 60%
+      ),
+      var(--bg-primary);
     padding: 80px 0 70px;
     position: relative;
     overflow: hidden;
@@ -28,7 +37,11 @@
     right: -10%;
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(0, 240, 255, 0.04), transparent 70%);
+    background: radial-gradient(
+      circle,
+      rgba(0, 240, 255, 0.04),
+      transparent 70%
+    );
     border-radius: 50%;
     pointer-events: none;
   }
@@ -39,7 +52,11 @@
     left: -10%;
     width: 500px;
     height: 500px;
-    background: radial-gradient(circle, rgba(255, 45, 149, 0.03), transparent 70%);
+    background: radial-gradient(
+      circle,
+      rgba(255, 45, 149, 0.03),
+      transparent 70%
+    );
     border-radius: 50%;
     pointer-events: none;
   }
@@ -299,7 +316,11 @@
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle at 30% 20%, rgba(0, 240, 255, 0.02), transparent 70%);
+    background: radial-gradient(
+      circle at 30% 20%,
+      rgba(0, 240, 255, 0.02),
+      transparent 70%
+    );
     pointer-events: none;
     opacity: 0;
     transition: var(--transition);
@@ -310,7 +331,10 @@
   .pricing-card:hover {
     transform: scale(1.04) translateY(-8px);
     border-color: var(--neon-cyan);
-    box-shadow: var(--shadow-card), var(--glow-cyan), 0 0 60px rgba(0, 240, 255, 0.05);
+    box-shadow:
+      var(--shadow-card),
+      var(--glow-cyan),
+      0 0 60px rgba(0, 240, 255, 0.05);
   }
   .pricing-card .plan-name {
     font-family: var(--font-display);
@@ -360,8 +384,13 @@
   /* ---- CTA Banner (reuse) ---- */
   .cta-banner {
     padding: 70px 0;
-    background: radial-gradient(ellipse at 30% 20%, rgba(0, 240, 255, 0.06), transparent 60%),
-                var(--bg-primary);
+    background:
+      radial-gradient(
+        ellipse at 30% 20%,
+        rgba(0, 240, 255, 0.06),
+        transparent 60%
+      ),
+      var(--bg-primary);
     border-top: 1px solid rgba(0, 240, 255, 0.06);
     border-bottom: 1px solid rgba(0, 240, 255, 0.06);
     text-align: center;
@@ -404,20 +433,50 @@
     }
   }
   @media (max-width: 768px) {
-    .page-hero h1 { font-size: 2.4rem; }
-    .page-hero p { font-size: 1rem; }
-    .docs-section .container { padding: 0 1rem; }
-    th, td { padding: 0.7rem 0.9rem; font-size: 0.85rem; }
-    .disclaimer .box { padding: 18px 16px; }
-    .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
-    .cta-banner h2 { font-size: 2rem; }
-    .cta-banner .cta-buttons { flex-direction: column; align-items: center; }
+    .page-hero h1 {
+      font-size: 2.4rem;
+    }
+    .page-hero p {
+      font-size: 1rem;
+    }
+    .docs-section .container {
+      padding: 0 1rem;
+    }
+    th,
+    td {
+      padding: 0.7rem 0.9rem;
+      font-size: 0.85rem;
+    }
+    .disclaimer .box {
+      padding: 18px 16px;
+    }
+    .pricing-grid {
+      grid-template-columns: 1fr;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .cta-banner h2 {
+      font-size: 2rem;
+    }
+    .cta-banner .cta-buttons {
+      flex-direction: column;
+      align-items: center;
+    }
     .cta-banner .cta-buttons .btn-primary,
-    .cta-banner .cta-buttons .btn-whatsapp { width: 100%; justify-content: center; }
+    .cta-banner .cta-buttons .btn-whatsapp {
+      width: 100%;
+      justify-content: center;
+    }
   }
   @media (max-width: 480px) {
-    .pricing-card .price { font-size: 2.2rem; }
-    th, td { padding: 0.5rem 0.6rem; font-size: 0.8rem; }
+    .pricing-card .price {
+      font-size: 2.2rem;
+    }
+    th,
+    td {
+      padding: 0.5rem 0.6rem;
+      font-size: 0.8rem;
+    }
   }
 </style>
 {% endblock %}
@@ -463,7 +522,7 @@
           </tr>
           {% empty %}
           <tr>
-            <td colspan="2" style="text-align: center; color: var(--text-muted); padding: 2rem">
+            <td colspan="2" style="text-align: center; color: var(--text-muted); padding: 2rem;">
               {% trans "No documents listed." %}
             </td>
           </tr>
@@ -474,7 +533,7 @@
 
     <!-- Total count badge -->
     {% if documents_page.paginator.count > 0 %}
-    <div style="text-align: center; margin-top: 1.5rem;">
+    <div style="text-align: center; margin-top: 1.5rem">
       <span class="total-badge">
         <i class="fas fa-file-alt"></i>
         {% with count=documents_page.paginator.count %}
@@ -488,13 +547,17 @@
     </div>
     {% endif %}
 
-    <!-- Pagination -->
+    <!-- Pagination (corrected) -->
     {% if documents_page.has_other_pages %}
     <div class="pagination-wrap">
       {% if documents_page.has_previous %}
-        <a href="?page={{ documents_page.previous_page_number }}" class="page-link"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</a>
+      <a href="?page={{ documents_page.previous_page_number }}" class="page-link">
+        <i class="fas fa-chevron-left"></i> {% trans "Prev" %}
+      </a>
       {% else %}
-        <span class="page-link disabled"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</span>
+      <span class="page-link disabled">
+        <i class="fas fa-chevron-left"></i> {% trans "Prev" %}
+      </span>
       {% endif %}
 
       {% for num in documents_page.paginator.page_range %}
@@ -506,13 +569,16 @@
       {% endfor %}
 
       {% if documents_page.has_next %}
-        <a href="?page={{ documents_page.next_page_number }}" class="page-link">{% trans "Next" %} <i class="fas fa-chevron-right"></i></a>
+      <a href="?page={{ documents_page.next_page_number }}" class="page-link">
+        {% trans "Next" %} <i class="fas fa-chevron-right"></i>
+      </a>
       {% else %}
-        <span class="page-link disabled">{% trans "Next" %} <i class="fas fa-chevron-right"></i></span>
+      <span class="page-link disabled">
+        {% trans "Next" %} <i class="fas fa-chevron-right"></i>
+      </span>
       {% endif %}
     </div>
     {% endif %}
-
   </div>
 </section>
 
@@ -537,7 +603,9 @@
   <div class="container">
     <div class="section-header">
       <h2>{% trans "Our" %} <span>{% trans "Service Plans" %}</span></h2>
-      <p>{% trans "Choose a plan that fits your document processing needs. All plans include expert assistance." %}</p>
+      <p>
+        {% trans "Choose a plan that fits your document processing needs. All plans include expert assistance." %}
+      </p>
     </div>
     <div class="pricing-grid">
       <div class="pricing-card">
@@ -551,7 +619,7 @@
         </ul>
         <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Get Started" %}</a>
       </div>
-      <div class="pricing-card" style="border-color: rgba(0, 240, 255, 0.15);">
+      <div class="pricing-card" style="border-color: rgba(0, 240, 255, 0.15)">
         <div class="plan-name">{% trans "Standard" %}</div>
         <div class="price">₹199 <span>/ {% trans "session" %}</span></div>
         <ul class="features">

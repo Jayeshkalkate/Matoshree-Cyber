@@ -18,13 +18,17 @@
     overflow: hidden;
   }
   .page-hero::before {
-    content: '';
+    content: "";
     position: absolute;
     top: -30%;
     right: -10%;
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(0, 240, 255, 0.04), transparent 70%);
+    background: radial-gradient(
+      circle,
+      rgba(0, 240, 255, 0.04),
+      transparent 70%
+    );
     border-radius: 50%;
     pointer-events: none;
     z-index: 0;
@@ -238,22 +242,31 @@
         </div>
         <h3>{{ service.name }}</h3>
         <div class="desc">{{ service.description|truncatechars:80 }}</div>
-        <a href="{% url 'apply_service' service.id %}" class="btn-primary btn-apply">
+        <a
+          href="{% url 'apply_service' service.id %}"
+          class="btn-primary btn-apply"
+        >
           <i class="fas fa-paper-plane"></i> {% trans "Apply Online" %}
         </a>
       </div>
       {% empty %}
-      <p class="no-data">{% trans "No services available at the moment. Please check back later." %}</p>
+      <p class="no-data">
+        {% trans "No services available at the moment. Please check back later." %}
+      </p>
       {% endfor %}
     </div>
 
-    <!-- Pagination Controls (NEW) -->
+    <!-- Pagination Controls (corrected) -->
     {% if services.has_other_pages %}
     <div class="pagination-wrap">
       {% if services.has_previous %}
-        <a href="?page={{ services.previous_page_number }}" class="page-link"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</a>
+      <a href="?page={{ services.previous_page_number }}" class="page-link">
+        <i class="fas fa-chevron-left"></i> {% trans "Prev" %}
+      </a>
       {% else %}
-        <span class="page-link disabled"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</span>
+      <span class="page-link disabled">
+        <i class="fas fa-chevron-left"></i> {% trans "Prev" %}
+      </span>
       {% endif %}
 
       {% for num in services.paginator.page_range %}
@@ -265,61 +278,71 @@
       {% endfor %}
 
       {% if services.has_next %}
-        <a href="?page={{ services.next_page_number }}" class="page-link">{% trans "Next" %} <i class="fas fa-chevron-right"></i></a>
+      <a href="?page={{ services.next_page_number }}" class="page-link">
+        {% trans "Next" %} <i class="fas fa-chevron-right"></i>
+      </a>
       {% else %}
-        <span class="page-link disabled">{% trans "Next" %} <i class="fas fa-chevron-right"></i></span>
+      <span class="page-link disabled">
+        {% trans "Next" %} <i class="fas fa-chevron-right"></i>
+      </span>
       {% endif %}
     </div>
     {% endif %}
-
   </div>
 </section>
 {% endblock %}
 
 {% block extra_scripts %}
 <script>
-    (function() {
-        'use strict';
+  (function () {
+    "use strict";
 
-        // ---- Active nav highlight on scroll (if needed) ----
-        const sections = document.querySelectorAll('section[id]');
-        const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
-        if (sections.length && navLinks.length) {
-            window.addEventListener('scroll', function() {
-                let current = '';
-                const scrollY = window.scrollY + 100;
-                sections.forEach(function(section) {
-                    const top = section.offsetTop;
-                    const height = section.offsetHeight;
-                    if (scrollY >= top && scrollY < top + height) {
-                        current = section.getAttribute('id');
-                    }
-                });
-                navLinks.forEach(function(link) {
-                    link.classList.remove('active');
-                    const href = link.getAttribute('href');
-                    if (href === '#' + current) {
-                        link.classList.add('active');
-                    }
-                });
-            }, { passive: true });
+    // ---- Active nav highlight on scroll (if needed) ----
+    const sections = document.querySelectorAll("section[id]");
+    const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+    if (sections.length && navLinks.length) {
+      window.addEventListener(
+        "scroll",
+        function () {
+          let current = "";
+          const scrollY = window.scrollY + 100;
+          sections.forEach(function (section) {
+            const top = section.offsetTop;
+            const height = section.offsetHeight;
+            if (scrollY >= top && scrollY < top + height) {
+              current = section.getAttribute("id");
+            }
+          });
+          navLinks.forEach(function (link) {
+            link.classList.remove("active");
+            const href = link.getAttribute("href");
+            if (href === "#" + current) {
+              link.classList.add("active");
+            }
+          });
+        },
+        { passive: true },
+      );
+    }
+
+    // ---- Smooth scroll for anchor links ----
+    document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+      anchor.addEventListener("click", function (e) {
+        const targetId = this.getAttribute("href");
+        if (targetId === "#") return;
+        const targetEl = document.querySelector(targetId);
+        if (targetEl) {
+          e.preventDefault();
+          const headerHeight =
+            document.querySelector(".header")?.offsetHeight || 70;
+          const top =
+            targetEl.getBoundingClientRect().top +
+            window.pageYOffset -
+            headerHeight;
+          window.scrollTo({ top: top, behavior: "smooth" });
         }
-
-        // ---- Smooth scroll for anchor links ----
-        document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
-            anchor.addEventListener('click', function(e) {
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                const targetEl = document.querySelector(targetId);
-                if (targetEl) {
-                    e.preventDefault();
-                    const headerHeight = document.querySelector('.header')?.offsetHeight || 70;
-                    const top = targetEl.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-                    window.scrollTo({ top: top, behavior: 'smooth' });
-                }
-            });
-        });
-
-    })();
+      });
+    });
+  })();
 </script>
 {% endblock %}

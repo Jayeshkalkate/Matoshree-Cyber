@@ -1,9 +1,5 @@
-{% extends "base.html" %}
-{% load i18n %}
-
-{% block title %}{% trans "My Applications" %}{% endblock %}
-
-{% block extra_head %}
+{% extends "base.html" %} {% load i18n %} {% block title %}{% trans "My
+Applications" %}{% endblock %} {% block extra_head %}
 <style>
   /* ================================================================
      PAGE-SPECIFIC STYLES – My Applications
@@ -16,13 +12,17 @@
     overflow: hidden;
   }
   .page-hero::before {
-    content: '';
+    content: "";
     position: absolute;
     top: -30%;
     right: -10%;
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(0, 240, 255, 0.04), transparent 70%);
+    background: radial-gradient(
+      circle,
+      rgba(0, 240, 255, 0.04),
+      transparent 70%
+    );
     border-radius: 50%;
     pointer-events: none;
     z-index: 0;
@@ -74,7 +74,7 @@
     transform: translateY(-6px) scale(1.01);
   }
   .app-card::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 0;
     left: 0;
@@ -217,9 +217,7 @@
     }
   }
 </style>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <!-- ================================================================
      PAGE HERO
      ================================================================ -->
@@ -235,34 +233,34 @@
 <section class="applications-list">
   <div class="container">
     {% if applications %}
-      <div class="app-grid">
-        {% for app in applications %}
-          <a href="{% url 'application_detail' app.id %}" class="app-card">
-            <div class="app-header">
-              <span class="service-name">{{ app.service.name }}</span>
-              <span class="app-date">{{ app.created_at|date:"d M Y" }}</span>
-            </div>
-            <div class="app-status">
-              <span class="status-badge {{ app.status }}">
-                {{ app.get_status_display }}
-              </span>
-            </div>
-            <div class="app-footer">
-              <span class="btn-detail">
-                <i class="fas fa-arrow-right"></i> {% trans "View Details" %}
-              </span>
-            </div>
-          </a>
-        {% endfor %}
-      </div>
+    <div class="app-grid">
+      {% for app in applications %}
+      <a href="{% url 'application_detail' app.id %}" class="app-card">
+        <div class="app-header">
+          <span class="service-name">{{ app.service.name }}</span>
+          <span class="app-date">{{ app.created_at|date:"d M Y" }}</span>
+        </div>
+        <div class="app-status">
+          <span class="status-badge {{ app.status }}">
+            {{ app.get_status_display }}
+          </span>
+        </div>
+        <div class="app-footer">
+          <span class="btn-detail">
+            <i class="fas fa-arrow-right"></i> {% trans "View Details" %}
+          </span>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
     {% else %}
-      <div class="empty-state">
-        <i class="fas fa-file-alt"></i>
-        <p>{% trans "You have not submitted any applications yet." %}</p>
-        <a href="{% url 'services' %}" class="btn-primary">
-          <i class="fas fa-plus"></i> {% trans "Browse Services" %}
-        </a>
-      </div>
+    <div class="empty-state">
+      <i class="fas fa-file-alt"></i>
+      <p>{% trans "You have not submitted any applications yet." %}</p>
+      <a href="{% url 'services' %}" class="btn-primary">
+        <i class="fas fa-plus"></i> {% trans "Browse Services" %}
+      </a>
+    </div>
     {% endif %}
   </div>
 </section>

@@ -1,9 +1,5 @@
-{% extends "base.html" %}
-{% load i18n %}
-
-{% block title %}{% trans "My Profile" %}{% endblock %}
-
-{% block extra_head %}
+{% extends "base.html" %} {% load i18n %} {% block title %}{% trans "My Profile"
+%}{% endblock %} {% block extra_head %}
 <style>
   /* ================================================================
      PAGE-SPECIFIC STYLES – Profile
@@ -13,7 +9,9 @@
   .reveal {
     opacity: 0;
     transform: translateY(40px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
+    transition:
+      opacity 0.8s ease,
+      transform 0.8s ease;
   }
   .reveal.visible {
     opacity: 1;
@@ -135,7 +133,9 @@
   }
   .form-control:focus {
     border-color: var(--neon-cyan) !important;
-    box-shadow: 0 0 0 4px rgba(0, 240, 255, 0.08), 0 0 30px rgba(0, 240, 255, 0.05) !important;
+    box-shadow:
+      0 0 0 4px rgba(0, 240, 255, 0.08),
+      0 0 30px rgba(0, 240, 255, 0.05) !important;
     outline: none;
     background: rgba(0, 240, 255, 0.04) !important;
   }
@@ -219,8 +219,15 @@
   }
 
   @keyframes neonPulse {
-    0%, 100% { box-shadow: 0 0 20px rgba(0, 240, 255, 0.3); }
-    50% { box-shadow: 0 0 40px rgba(0, 240, 255, 0.7), 0 0 80px rgba(0, 240, 255, 0.2); }
+    0%,
+    100% {
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+    }
+    50% {
+      box-shadow:
+        0 0 40px rgba(0, 240, 255, 0.7),
+        0 0 80px rgba(0, 240, 255, 0.2);
+    }
   }
 
   /* ---- Action links ---- */
@@ -300,7 +307,11 @@
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle at 30% 20%, rgba(0, 240, 255, 0.02), transparent 70%);
+    background: radial-gradient(
+      circle at 30% 20%,
+      rgba(0, 240, 255, 0.02),
+      transparent 70%
+    );
     pointer-events: none;
     opacity: 0;
     transition: var(--transition);
@@ -311,7 +322,10 @@
   .pricing-card:hover {
     transform: scale(1.04) translateY(-8px);
     border-color: var(--neon-cyan);
-    box-shadow: var(--shadow-card), var(--glow-cyan), 0 0 60px rgba(0, 240, 255, 0.05);
+    box-shadow:
+      var(--shadow-card),
+      var(--glow-cyan),
+      0 0 60px rgba(0, 240, 255, 0.05);
   }
   .pricing-card .plan-name {
     font-family: var(--font-display);
@@ -393,9 +407,7 @@
     }
   }
 </style>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <!-- ================================================================
      PROFILE SECTION
      ================================================================ -->
@@ -406,60 +418,62 @@
         <!-- Avatar -->
         <div class="avatar">
           <span class="avatar-icon"><i class="fas fa-user-circle"></i></span>
-          <div class="user-name">{{ user.get_full_name|default:user.username }}</div>
+          <div class="user-name">
+            {{ user.get_full_name|default:user.username }}
+          </div>
           <div class="user-email">{{ user.email }}</div>
         </div>
 
         <!-- Non-field errors -->
         {% if form.non_field_errors %}
-          <div class="alert alert-danger">
-            <i class="fas fa-exclamation-circle"></i>
-            {% for error in form.non_field_errors %}{{ error }}{% endfor %}
-          </div>
+        <div class="alert alert-danger">
+          <i class="fas fa-exclamation-circle"></i>
+          {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+        </div>
         {% endif %}
 
         <!-- Success message (if any) -->
-        {% if messages %}
-          {% for message in messages %}
-            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %}">
-              <i class="fas fa-{% if message.tags == 'error' %}exclamation-circle{% else %}check-circle{% endif %}"></i>
-              {{ message }}
-            </div>
-          {% endfor %}
-        {% endif %}
+        {% if messages %} {% for message in messages %}
+        <div
+          class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %}"
+        >
+          <i
+            class="fas fa-{% if message.tags == 'error' %}exclamation-circle{% else %}check-circle{% endif %}"
+          ></i>
+          {{ message }}
+        </div>
+        {% endfor %} {% endif %}
 
         <!-- Form -->
         <form method="post" novalidate>
-          {% csrf_token %}
+          {% csrf_token %} {% for field in form %}
+          <div class="form-group">
+            <label for="{{ field.id_for_label }}">
+              {{ field.label }} {% if field.field.required %}<span
+                class="required"
+                >*</span
+              >{% endif %}
+            </label>
 
-          {% for field in form %}
-            <div class="form-group">
-              <label for="{{ field.id_for_label }}">
-                {{ field.label }}
-                {% if field.field.required %}<span class="required">*</span>{% endif %}
-              </label>
-
-              {% if field.field.widget.input_type == 'password' %}
-                <div class="input-group">
-                  {{ field }}
-                  <button class="toggle-password" type="button" data-target="{{ field.id_for_label }}">
-                    <i class="fas fa-eye"></i>
-                  </button>
-                </div>
-              {% else %}
-                {{ field }}
-              {% endif %}
-
-              {% if field.help_text %}
-                <div class="form-text">{{ field.help_text }}</div>
-              {% endif %}
-
-              {% if field.errors %}
-                <div class="invalid-feedback">
-                  {% for error in field.errors %}{{ error }}{% endfor %}
-                </div>
-              {% endif %}
+            {% if field.field.widget.input_type == 'password' %}
+            <div class="input-group">
+              {{ field }}
+              <button
+                class="toggle-password"
+                type="button"
+                data-target="{{ field.id_for_label }}"
+              >
+                <i class="fas fa-eye"></i>
+              </button>
             </div>
+            {% else %} {{ field }} {% endif %} {% if field.help_text %}
+            <div class="form-text">{{ field.help_text }}</div>
+            {% endif %} {% if field.errors %}
+            <div class="invalid-feedback">
+              {% for error in field.errors %}{{ error }}{% endfor %}
+            </div>
+            {% endif %}
+          </div>
           {% endfor %}
 
           <button type="submit" class="btn-submit">
@@ -467,7 +481,7 @@
           </button>
         </form>
 
-        <hr>
+        <hr />
 
         <!-- Change Password Link -->
         <a href="{% url 'password_change' %}" class="action-link">
@@ -485,7 +499,10 @@
   <div class="container">
     <div class="section-header">
       <h2>{% trans "Popular" %} <span>{% trans "Service Packages" %}</span></h2>
-      <p>{% trans "Get the most out of our services with these convenient packages." %}</p>
+      <p>
+        {% trans "Get the most out of our services with these convenient
+        packages." %}
+      </p>
     </div>
     <div class="pricing-grid">
       <!-- Starter -->
@@ -493,81 +510,126 @@
         <div class="plan-name">{% trans "Starter" %}</div>
         <div class="price">₹99 <span>/ {% trans "session" %}</span></div>
         <ul class="features">
-          <li><i class="fas fa-check"></i> {% trans "Printing (10 pages B&W)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Photocopy (10 pages)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Email & Internet (30 min)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Document Scanning (5 pages)" %}</li>
+          <li>
+            <i class="fas fa-check"></i> {% trans "Printing (10 pages B&W)" %}
+          </li>
+          <li>
+            <i class="fas fa-check"></i> {% trans "Photocopy (10 pages)" %}
+          </li>
+          <li>
+            <i class="fas fa-check"></i> {% trans "Email & Internet (30 min)" %}
+          </li>
+          <li>
+            <i class="fas fa-check"></i> {% trans "Document Scanning (5 pages)"
+            %}
+          </li>
         </ul>
-        <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Get Started" %}</a>
+        <a href="{% url 'appointment' %}" class="btn-primary"
+          >{% trans "Get Started" %}</a
+        >
       </div>
       <!-- Pro -->
-      <div class="pricing-card" style="border-color: rgba(0, 240, 255, 0.15);">
+      <div class="pricing-card" style="border-color: rgba(0, 240, 255, 0.15)">
         <div class="plan-name">{% trans "Pro" %}</div>
         <div class="price">₹199 <span>/ {% trans "session" %}</span></div>
         <ul class="features">
-          <li><i class="fas fa-check"></i> {% trans "Printing (30 pages B&W / 10 color)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Photocopy (30 pages)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Email & Internet (60 min)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Document Scanning (15 pages)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Passport-size photos (4 copies)" %}</li>
+          <li>
+            <i class="fas fa-check"></i> {% trans "Printing (30 pages B&W / 10
+            color)" %}
+          </li>
+          <li>
+            <i class="fas fa-check"></i> {% trans "Photocopy (30 pages)" %}
+          </li>
+          <li>
+            <i class="fas fa-check"></i> {% trans "Email & Internet (60 min)" %}
+          </li>
+          <li>
+            <i class="fas fa-check"></i> {% trans "Document Scanning (15 pages)"
+            %}
+          </li>
+          <li>
+            <i class="fas fa-check"></i> {% trans "Passport-size photos (4
+            copies)" %}
+          </li>
         </ul>
-        <a href="{% url 'appointment' %}" class="btn-primary pulse">{% trans "Choose Plan" %}</a>
+        <a href="{% url 'appointment' %}" class="btn-primary pulse"
+          >{% trans "Choose Plan" %}</a
+        >
       </div>
       <!-- Enterprise -->
       <div class="pricing-card">
         <div class="plan-name">{% trans "Enterprise" %}</div>
         <div class="price">₹299 <span>/ {% trans "session" %}</span></div>
         <ul class="features">
-          <li><i class="fas fa-check"></i> {% trans "Printing (50 pages B&W / 20 color)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Photocopy (50 pages)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Email & Internet (90 min)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Document Scanning (30 pages)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Passport-size photos (8 copies)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Priority support & assistance" %}</li>
+          <li>
+            <i class="fas fa-check"></i> {% trans "Printing (50 pages B&W / 20
+            color)" %}
+          </li>
+          <li>
+            <i class="fas fa-check"></i> {% trans "Photocopy (50 pages)" %}
+          </li>
+          <li>
+            <i class="fas fa-check"></i> {% trans "Email & Internet (90 min)" %}
+          </li>
+          <li>
+            <i class="fas fa-check"></i> {% trans "Document Scanning (30 pages)"
+            %}
+          </li>
+          <li>
+            <i class="fas fa-check"></i> {% trans "Passport-size photos (8
+            copies)" %}
+          </li>
+          <li>
+            <i class="fas fa-check"></i> {% trans "Priority support &
+            assistance" %}
+          </li>
         </ul>
-        <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Go Premium" %}</a>
+        <a href="{% url 'appointment' %}" class="btn-primary"
+          >{% trans "Go Premium" %}</a
+        >
       </div>
     </div>
   </div>
 </section>
-{% endblock %}
-
-{% block extra_js %}
+{% endblock %} {% block extra_js %}
 <script>
-  (function() {
-    'use strict';
+  (function () {
+    "use strict";
 
     // ---- Scroll-triggered reveal animation ----
-    const revealElements = document.querySelectorAll('.reveal');
-    if (revealElements.length && 'IntersectionObserver' in window) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-      revealElements.forEach(el => observer.observe(el));
+    const revealElements = document.querySelectorAll(".reveal");
+    if (revealElements.length && "IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.1, rootMargin: "0px 0px -50px 0px" },
+      );
+      revealElements.forEach((el) => observer.observe(el));
     } else {
-      revealElements.forEach(el => el.classList.add('visible'));
+      revealElements.forEach((el) => el.classList.add("visible"));
     }
 
     // ---- Password toggle ----
-    document.querySelectorAll('.toggle-password').forEach(function(button) {
-      button.addEventListener('click', function() {
-        const targetId = this.getAttribute('data-target');
+    document.querySelectorAll(".toggle-password").forEach(function (button) {
+      button.addEventListener("click", function () {
+        const targetId = this.getAttribute("data-target");
         const input = document.getElementById(targetId);
         if (input) {
-          const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
-          input.setAttribute('type', type);
-          const icon = this.querySelector('i');
-          icon.classList.toggle('fa-eye');
-          icon.classList.toggle('fa-eye-slash');
+          const type =
+            input.getAttribute("type") === "password" ? "text" : "password";
+          input.setAttribute("type", type);
+          const icon = this.querySelector("i");
+          icon.classList.toggle("fa-eye");
+          icon.classList.toggle("fa-eye-slash");
         }
       });
     });
-
   })();
 </script>
 {% endblock %}

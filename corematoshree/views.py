@@ -93,6 +93,7 @@ def profile(request):
         'business': get_business(),
     })
 
+
 # =============================================================================
 # DASHBOARD (ADMIN & SUPERADMIN) – with caching
 # =============================================================================
@@ -924,11 +925,14 @@ def application_admin_detail(request, app_id):
 @user_passes_test(is_admin)
 def split_pdf(request, pk):
     document = get_object_or_404(DocumentUpload, pk=pk)
+    app = document.application  # get the associated application
+
     if request.method == 'POST':
         pages_input = request.POST.get('pages', '').strip()
         if not pages_input:
             return render(request, 'split_pdf.html', {
                 'document': document,
+                'app': app,
                 'error': _('Please enter page numbers.'),
             })
 
@@ -976,11 +980,13 @@ def split_pdf(request, pk):
             logger.warning(f"PDF split error: {e}")
             return render(request, 'split_pdf.html', {
                 'document': document,
+                'app': app,
                 'error': _('Invalid page numbers.'),
             })
 
+    # GET request
     return render(request, 'split_pdf.html', {
         'document': document,
+        'app': app,
         'business': get_business(),
     })
-    

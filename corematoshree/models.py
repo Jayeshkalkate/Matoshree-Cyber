@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
-from django.core.cache import cache  # added for cache invalidation
+from django.core.cache import cache
 
 
 # ==========================
@@ -126,10 +126,19 @@ class Appointment(models.Model):
         ]
 
     def clean(self):
+        # Validate date is not in the past
         if self.appointment_date and self.appointment_date < timezone.localdate():
             raise ValidationError(
                 {"appointment_date": _("Appointment date cannot be in the past.")}
             )
+
+        # Validate time is within business hours (9:00 AM – 5:00 PM)
+        if self.appointment_time:
+            minutes = self.appointment_time.hour * 60 + self.appointment_time.minute
+            if minutes < 9 * 60 or minutes > 17 * 60:
+                raise ValidationError(
+                    {"appointment_time": _("Appointment time must be between 09:00 AM and 05:00 PM.")}
+                )
 
     def __str__(self):
         return f"{self.full_name} - {self.service.name}"
@@ -187,10 +196,11 @@ class Review(models.Model):
 
 
 # ==========================
-# Announcement (UPDATED: added is_urgent)
+# Announcement
 # ==========================
 class Announcement(models.Model):
     CATEGORY = (
+        ("General", _("General")),                    # ADDED
         ("Government Scheme", _("Government Scheme")),
         ("Recruitment", _("Recruitment")),
         ("Scholarship", _("Scholarship")),
@@ -201,7 +211,7 @@ class Announcement(models.Model):
     title = models.CharField(_("Title"), max_length=200, db_index=True)
     category = models.CharField(_("Category"), max_length=50, choices=CATEGORY, db_index=True)
     description = models.TextField(_("Description"))
-    is_urgent = models.BooleanField(_("Urgent"), default=False, db_index=True)   # NEW FIELD
+    is_urgent = models.BooleanField(_("Urgent"), default=False, db_index=True)
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True, db_index=True)
 
     class Meta:
@@ -210,7 +220,7 @@ class Announcement(models.Model):
         verbose_name_plural = _("Announcements")
         indexes = [
             models.Index(fields=['category', 'created_at']),
-            models.Index(fields=['is_urgent']),   # added index for filtering urgent items
+            models.Index(fields=['is_urgent']),
         ]
 
     def __str__(self):
@@ -376,7 +386,7 @@ class FAQ(models.Model):
 
 
 # ==========================
-# Business Info (Singleton) – UPDATED with cache invalidation
+# Business Info (Singleton)
 # ==========================
 class BusinessInfo(models.Model):
     business_name = models.CharField(_("Business Name"), max_length=200)
@@ -409,11 +419,11 @@ class BusinessInfo(models.Model):
             if existing:
                 self.pk = existing.pk
         super().save(*args, **kwargs)
-        # Invalidate the cached business info
         cache.delete('business_info')
 
     @classmethod
     def get_instance(cls):
+        """Return the singleton BusinessInfo instance, creating one if it doesn't exist."""
         try:
             instance = cls.objects.first()
         except Exception:
@@ -495,4 +505,3 @@ class DocumentUpload(models.Model):
 
     def __str__(self):
         return f"{self.document_name} – {self.application.full_name}"
-    

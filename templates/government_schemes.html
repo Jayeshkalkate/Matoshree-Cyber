@@ -5,27 +5,59 @@
 {% block title %}{% trans "Government Schemes" %}{% endblock %}
 
 {% block extra_head %}
+<!-- ============================================================
+     META – viewport & compatibility
+     ============================================================ -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
 <style>
   /* ================================================================
-     PAGE-SPECIFIC STYLES – Government Schemes
-     Uses global CSS variables from base.html.
+     PAGE-SPECIFIC STYLES – Fully responsive + cross‑browser
      ================================================================ */
 
-  /* ---- Hero (page header) ---- */
+  /* ----- Base resets ----- */
+  .schemes-section *,
+  .schemes-section *::before,
+  .schemes-section *::after {
+    box-sizing: border-box;
+  }
+
+  .schemes-section .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    width: 100%;
+  }
+
+  /* ---- Hero (matches other pages) ---- */
   .page-hero {
-    padding: 70px 0 50px;
+    padding: clamp(30px, 6vw, 70px) 0 clamp(20px, 4vw, 50px);
     text-align: center;
     position: relative;
     overflow: hidden;
+    background:
+      radial-gradient(
+        ellipse at 30% 20%,
+        rgba(0, 240, 255, 0.05),
+        transparent 60%
+      ),
+      var(--bg-primary, #0a0e1a);
+    border-bottom: 1px solid rgba(0, 240, 255, 0.06);
+    width: 100%;
   }
   .page-hero::before {
-    content: '';
+    content: "";
     position: absolute;
     top: -30%;
     right: -10%;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(0, 240, 255, 0.04), transparent 70%);
+    width: min(600px, 80vw);
+    height: min(600px, 80vw);
+    background: radial-gradient(
+      circle,
+      rgba(0, 240, 255, 0.04),
+      transparent 70%
+    );
     border-radius: 50%;
     pointer-events: none;
     z-index: 0;
@@ -37,107 +69,127 @@
   .page-hero .breadcrumb {
     display: inline-flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 8px;
-    color: var(--text-muted);
-    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    font-size: clamp(0.75rem, 1vw, 0.85rem);
     font-weight: 500;
     margin-bottom: 16px;
     letter-spacing: 0.3px;
   }
   .page-hero .breadcrumb a {
-    color: var(--text-muted);
-    transition: var(--transition);
+    color: var(--text-muted, #94a3b8);
+    transition: color 0.3s ease;
+    text-decoration: none;
   }
   .page-hero .breadcrumb a:hover {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
   }
   .page-hero .breadcrumb .current {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
   }
   .page-hero h1 {
-    font-size: 3rem;
+    font-size: clamp(1.8rem, 5vw, 3rem);
     font-weight: 900;
-    font-family: var(--font-display);
-    color: var(--text-white);
+    font-family: var(--font-display, "Inter", sans-serif);
+    color: var(--text-white, #f0f4ff);
     letter-spacing: 1px;
     margin-bottom: 8px;
     text-shadow: 0 0 40px rgba(0, 240, 255, 0.12);
   }
   .page-hero h1 span {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
     text-shadow: 0 0 30px rgba(0, 240, 255, 0.25);
   }
   .page-hero p {
-    font-size: 1.15rem;
-    color: var(--text-muted);
+    font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+    color: var(--text-muted, #94a3b8);
     max-width: 620px;
     margin: 0 auto;
     line-height: 1.8;
+    padding: 0 10px;
   }
   .page-hero .glow-line {
     display: inline-block;
     width: 80px;
     height: 3px;
-    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+    background: linear-gradient(
+      90deg,
+      var(--neon-cyan, #00f0ff),
+      var(--neon-purple, #a855f7)
+    );
     border-radius: 4px;
     margin-top: 16px;
-    box-shadow: var(--glow-cyan);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
   }
 
   /* ---- Schemes grid ---- */
   .schemes-section {
-    padding: 40px 0 70px;
-    background: var(--bg-secondary);
+    padding: clamp(30px, 5vw, 40px) 0 clamp(40px, 8vw, 70px);
+    background: var(--bg-secondary, rgba(10, 14, 26, 0.6));
+    width: 100%;
   }
   .schemes-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 28px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: clamp(20px, 2.5vw, 28px);
   }
 
   /* ---- Scheme card (gaming hover) ---- */
   .scheme-card {
-    background: var(--bg-card);
-    border-radius: var(--radius);
-    padding: 24px 22px 20px;
+    background: var(--bg-card, rgba(255, 255, 255, 0.04));
+    border-radius: var(--radius, 12px);
+    padding: clamp(1.2rem, 2vw, 1.8rem) clamp(1rem, 2vw, 1.6rem)
+      clamp(1rem, 1.8vw, 1.5rem);
     border: 1px solid rgba(255, 255, 255, 0.04);
-    transition: var(--transition);
+    transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
     position: relative;
     overflow: hidden;
-    box-shadow: var(--shadow-card);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   }
   /* Top neon line */
   .scheme-card::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 4px;
-    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
-    box-shadow: var(--glow-cyan);
-    transition: var(--transition);
+    background: linear-gradient(
+      90deg,
+      var(--neon-cyan, #00f0ff),
+      var(--neon-purple, #a855f7)
+    );
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
+    transition: all 0.3s ease;
   }
   .scheme-card:hover {
     transform: translateY(-8px) scale(1.01);
-    border-color: var(--neon-magenta);
-    box-shadow: var(--shadow-card), 0 0 30px rgba(255, 45, 149, 0.15);
+    border-color: var(--neon-magenta, #ff2d95);
+    box-shadow:
+      0 8px 30px rgba(0, 0, 0, 0.2),
+      0 0 30px rgba(255, 45, 149, 0.12);
     background: rgba(255, 45, 149, 0.04);
   }
   .scheme-card::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     height: 3px;
-    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta), var(--neon-purple));
+    background: linear-gradient(
+      90deg,
+      var(--neon-cyan, #00f0ff),
+      var(--neon-magenta, #ff2d95),
+      var(--neon-purple, #a855f7)
+    );
     transform: scaleX(0);
-    transition: var(--transition);
+    transition: all 0.3s ease;
     transform-origin: left;
-    box-shadow: 0 0 20px rgba(255, 45, 149, 0.3);
+    box-shadow: 0 0 20px rgba(255, 45, 149, 0.2);
   }
   .scheme-card:hover::after {
     transform: scaleX(1);
@@ -145,33 +197,34 @@
 
   .scheme-image {
     width: 100%;
-    height: 180px;
+    height: clamp(140px, 25vw, 180px);
     object-fit: cover;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-sm, 8px);
     margin-bottom: 14px;
     border: 1px solid rgba(255, 255, 255, 0.04);
-    transition: var(--transition);
+    transition: all 0.3s ease;
   }
   .scheme-card:hover .scheme-image {
-    border-color: var(--neon-cyan);
-    box-shadow: var(--glow-cyan);
+    border-color: var(--neon-cyan, #00f0ff);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.06);
   }
 
   .scheme-title {
-    font-size: 1.2rem;
+    font-size: clamp(1.05rem, 1.3vw, 1.2rem);
     font-weight: 700;
-    color: var(--text-white);
+    color: var(--text-white, #f0f4ff);
     margin-bottom: 6px;
-    transition: var(--transition);
+    transition: all 0.3s ease;
+    word-break: break-word;
   }
   .scheme-card:hover .scheme-title {
-    color: var(--neon-cyan);
-    text-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+    color: var(--neon-cyan, #00f0ff);
+    text-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
   }
 
   .scheme-description {
-    color: var(--text-muted);
-    font-size: 0.95rem;
+    color: var(--text-muted, #94a3b8);
+    font-size: clamp(0.9rem, 1vw, 0.95rem);
     line-height: 1.6;
     flex: 1;
     margin-bottom: 12px;
@@ -183,29 +236,30 @@
     gap: 8px 16px;
     padding-top: 14px;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
-    font-size: 0.85rem;
-    color: var(--text-muted);
+    font-size: clamp(0.8rem, 0.9vw, 0.85rem);
+    color: var(--text-muted, #94a3b8);
   }
   .scheme-meta .meta-item {
     display: flex;
     align-items: center;
     gap: 6px;
+    flex-wrap: wrap;
   }
   .scheme-meta .meta-item i {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
     font-size: 0.9rem;
-    transition: var(--transition);
+    transition: all 0.3s ease;
   }
   .scheme-card:hover .scheme-meta .meta-item i {
-    color: var(--neon-magenta);
-    filter: drop-shadow(0 0 8px rgba(255, 45, 149, 0.3));
+    color: var(--neon-magenta, #ff2d95);
+    filter: drop-shadow(0 0 8px rgba(255, 45, 149, 0.2));
   }
   .scheme-meta .meta-item .label {
     font-weight: 600;
-    color: var(--text-muted);
+    color: var(--text-muted, #94a3b8);
   }
   .scheme-meta .meta-item .value {
-    color: var(--text-white);
+    color: var(--text-white, #f0f4ff);
   }
   .scheme-meta .eligibility {
     flex-basis: 100%;
@@ -215,18 +269,18 @@
   .no-schemes {
     grid-column: 1 / -1;
     text-align: center;
-    padding: 4rem 0;
-    color: var(--text-muted);
+    padding: 3rem 0;
+    color: var(--text-muted, #94a3b8);
   }
   .no-schemes i {
-    font-size: 3.5rem;
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
     display: block;
     margin-bottom: 0.75rem;
-    color: var(--text-muted);
+    color: var(--text-muted, #94a3b8);
     opacity: 0.3;
   }
   .no-schemes p {
-    font-size: 1.1rem;
+    font-size: clamp(1rem, 1.2vw, 1.1rem);
   }
 
   /* ---- Pagination ---- */
@@ -245,25 +299,27 @@
     border-radius: 30px;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.06);
-    color: var(--text-muted);
+    color: var(--text-muted, #94a3b8);
     font-weight: 600;
-    font-size: 0.9rem;
-    transition: var(--transition);
+    font-size: clamp(0.8rem, 0.9vw, 0.9rem);
+    transition: all 0.3s ease;
     text-decoration: none;
     min-width: 44px;
+    min-height: 44px;
+    touch-action: manipulation;
   }
   .pagination-wrap .page-link:hover {
     background: rgba(0, 240, 255, 0.08);
-    border-color: var(--neon-cyan);
-    color: var(--text-white);
-    box-shadow: var(--glow-cyan);
+    border-color: var(--neon-cyan, #00f0ff);
+    color: var(--text-white, #f0f4ff);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.06);
     transform: translateY(-2px);
   }
   .pagination-wrap .page-link.active {
-    background: var(--neon-cyan);
-    color: var(--bg-primary);
-    border-color: var(--neon-cyan);
-    box-shadow: var(--glow-cyan);
+    background: var(--neon-cyan, #00f0ff);
+    color: var(--bg-primary, #0a0e1a);
+    border-color: var(--neon-cyan, #00f0ff);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
   }
   .pagination-wrap .page-link.disabled {
     opacity: 0.3;
@@ -272,31 +328,39 @@
 
   /* ---- CTA Banner (reuse from base) ---- */
   .cta-banner {
-    padding: 70px 0;
-    background: radial-gradient(ellipse at 30% 20%, rgba(0, 240, 255, 0.06), transparent 60%),
-                var(--bg-primary);
+    padding: clamp(40px, 8vw, 70px) 0;
+    background:
+      radial-gradient(
+        ellipse at 30% 20%,
+        rgba(0, 240, 255, 0.06),
+        transparent 60%
+      ),
+      var(--bg-primary, #0a0e1a);
     border-top: 1px solid rgba(0, 240, 255, 0.06);
     border-bottom: 1px solid rgba(0, 240, 255, 0.06);
     text-align: center;
+    width: 100%;
   }
   .cta-banner .container {
     max-width: 720px;
+    margin: 0 auto;
+    padding: 0 20px;
   }
   .cta-banner h2 {
-    font-size: 2.4rem;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
     font-weight: 800;
-    font-family: var(--font-display);
-    color: var(--text-white);
+    font-family: var(--font-display, "Inter", sans-serif);
+    color: var(--text-white, #f0f4ff);
     letter-spacing: -0.5px;
     margin-bottom: 8px;
   }
   .cta-banner h2 span {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
     text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
   }
   .cta-banner p {
-    color: var(--text-muted);
-    font-size: 1.1rem;
+    color: var(--text-muted, #94a3b8);
+    font-size: clamp(0.95rem, 1.2vw, 1.1rem);
     margin-bottom: 28px;
   }
   .cta-buttons {
@@ -305,40 +369,77 @@
     flex-wrap: wrap;
     gap: 18px;
   }
+  .cta-buttons .btn-primary,
+  .cta-buttons .btn-whatsapp {
+    padding: clamp(0.8rem, 1.5vw, 1rem) clamp(1.5rem, 3vw, 2.5rem);
+    font-size: clamp(0.9rem, 1vw, 1rem);
+    min-height: 48px;
+    min-width: 180px;
+    justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: none;
+    border-radius: var(--radius-sm, 8px);
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    touch-action: manipulation;
+    cursor: pointer;
+  }
+  .cta-buttons .btn-primary {
+    background: var(--gradient-cyan, linear-gradient(135deg, #00f0ff, #0ea5e9));
+    color: var(--bg-primary, #0a0e1a);
+    box-shadow: 0 0 24px rgba(0, 240, 255, 0.2);
+  }
+  .cta-buttons .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 40px rgba(0, 240, 255, 0.35);
+  }
+  .cta-buttons .btn-whatsapp {
+    background: #25d366;
+    color: #fff;
+  }
+  .cta-buttons .btn-whatsapp:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(37, 211, 102, 0.35);
+  }
 
   /* ================================================================
-     RESPONSIVE
+     RESPONSIVE BREAKPOINTS
      ================================================================ */
+
   @media (max-width: 1024px) {
     .schemes-grid {
       grid-template-columns: repeat(2, 1fr);
     }
   }
+
   @media (max-width: 768px) {
     .page-hero h1 {
-      font-size: 2.4rem;
+      font-size: clamp(1.6rem, 5vw, 2.4rem);
     }
     .page-hero p {
-      font-size: 1rem;
+      font-size: clamp(0.9rem, 2vw, 1rem);
     }
     .schemes-grid {
       grid-template-columns: 1fr;
-      gap: 20px;
+      gap: 18px;
     }
     .scheme-card {
-      padding: 20px 18px 18px;
+      padding: 1.2rem 1rem 1rem;
     }
     .scheme-image {
-      height: 160px;
+      height: clamp(120px, 25vw, 160px);
     }
     .scheme-title {
-      font-size: 1.05rem;
+      font-size: clamp(1rem, 2.5vw, 1.05rem);
     }
     .scheme-description {
-      font-size: 0.9rem;
+      font-size: clamp(0.85rem, 1.8vw, 0.9rem);
     }
     .cta-banner h2 {
-      font-size: 2rem;
+      font-size: clamp(1.6rem, 5vw, 2rem);
     }
     .cta-buttons {
       flex-direction: column;
@@ -347,15 +448,17 @@
     .cta-buttons .btn-primary,
     .cta-buttons .btn-whatsapp {
       width: 100%;
+      max-width: 280px;
       justify-content: center;
     }
   }
+
   @media (max-width: 480px) {
     .page-hero h1 {
-      font-size: 1.8rem;
+      font-size: clamp(1.4rem, 5vw, 1.8rem);
     }
     .scheme-image {
-      height: 140px;
+      height: 120px;
     }
     .scheme-meta {
       flex-direction: column;
@@ -365,7 +468,218 @@
       flex-basis: auto;
     }
     .scheme-meta .meta-item {
+      font-size: clamp(0.75rem, 1.5vw, 0.8rem);
+    }
+    .pagination-wrap .page-link {
+      min-width: 38px;
+      min-height: 38px;
+      padding: 6px 12px;
       font-size: 0.8rem;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .scheme-card {
+      padding: 0.8rem 0.8rem 0.8rem;
+    }
+    .scheme-image {
+      height: 100px;
+    }
+    .scheme-title {
+      font-size: 0.95rem;
+    }
+    .scheme-description {
+      font-size: 0.8rem;
+    }
+  }
+
+  /* ================================================================
+     CROSS‑BROWSER FALLBACKS
+     ================================================================ */
+
+  /* ----- Flexbox fallback for older IE ----- */
+  @supports not (display: flex) {
+    .page-hero .breadcrumb {
+      display: block;
+      text-align: center;
+    }
+    .page-hero .breadcrumb a,
+    .page-hero .breadcrumb .current {
+      display: inline-block;
+      margin: 0 4px;
+    }
+    .scheme-meta {
+      display: block;
+    }
+    .scheme-meta .meta-item {
+      display: block;
+      margin-bottom: 4px;
+    }
+    .scheme-meta .meta-item i {
+      display: inline-block;
+      width: 1.2rem;
+    }
+    .pagination-wrap {
+      display: block;
+      text-align: center;
+    }
+    .pagination-wrap .page-link {
+      display: inline-block;
+      margin: 0 4px 8px 4px;
+    }
+    .cta-buttons {
+      display: block;
+    }
+    .cta-buttons .btn-primary,
+    .cta-buttons .btn-whatsapp {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto 12px auto;
+    }
+  }
+
+  /* ----- Grid fallback for older browsers ----- */
+  @supports not (display: grid) {
+    .schemes-grid {
+      display: block;
+    }
+    .scheme-card {
+      max-width: 400px;
+      margin: 0 auto 20px auto;
+    }
+  }
+
+  /* ----- backdrop-filter fallback ----- */
+  @supports not (backdrop-filter: blur(4px)) {
+    .scheme-card {
+      background: rgba(10, 14, 26, 0.95) !important;
+    }
+  }
+
+  /* ----- Touch devices: larger tap targets & disable hover effects ----- */
+  @media (hover: none) and (pointer: coarse) {
+    .scheme-card:hover {
+      transform: none !important;
+      border-color: rgba(255, 255, 255, 0.04);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      background: var(--bg-card, rgba(255, 255, 255, 0.04));
+    }
+    .scheme-card:hover::after {
+      transform: scaleX(0);
+    }
+    .scheme-card:hover .scheme-title {
+      color: var(--text-white, #f0f4ff);
+      text-shadow: none;
+    }
+    .scheme-card:hover .scheme-image {
+      border-color: rgba(255, 255, 255, 0.04);
+      box-shadow: none;
+    }
+    .scheme-card:hover .scheme-meta .meta-item i {
+      color: var(--neon-cyan, #00f0ff);
+      filter: none;
+    }
+    .pagination-wrap .page-link {
+      min-height: 48px;
+      min-width: 48px;
+    }
+    .pagination-wrap .page-link:hover {
+      transform: none !important;
+    }
+    .cta-buttons .btn-primary:hover,
+    .cta-buttons .btn-whatsapp:hover {
+      transform: none !important;
+    }
+  }
+
+  /* ----- Reduced motion ----- */
+  @media (prefers-reduced-motion: reduce) {
+    .scheme-card,
+    .scheme-card::before,
+    .scheme-card::after,
+    .scheme-image,
+    .scheme-title,
+    .scheme-meta .meta-item i,
+    .pagination-wrap .page-link {
+      transition: none !important;
+    }
+    .scheme-card:hover {
+      transform: none !important;
+    }
+    .scheme-card:hover::after {
+      transform: scaleX(0);
+    }
+  }
+
+  /* ----- Print styles ----- */
+  @media print {
+    .page-hero {
+      background: #fff !important;
+      border-bottom: 1px solid #ccc;
+    }
+    .page-hero h1,
+    .page-hero h1 span,
+    .cta-banner h2 span {
+      -webkit-text-fill-color: #000 !important;
+      color: #000 !important;
+      background: none !important;
+    }
+    .page-hero p {
+      color: #000 !important;
+    }
+    .page-hero .glow-line {
+      background: #000 !important;
+      box-shadow: none !important;
+    }
+    .schemes-section {
+      background: #fff !important;
+    }
+    .scheme-card {
+      border: 1px solid #ccc !important;
+      box-shadow: none !important;
+      background: #fff !important;
+      break-inside: avoid;
+      padding: 1rem !important;
+    }
+    .scheme-card::before,
+    .scheme-card::after {
+      display: none !important;
+    }
+    .scheme-title {
+      color: #000 !important;
+    }
+    .scheme-description {
+      color: #000 !important;
+    }
+    .scheme-meta {
+      border-top: 1px solid #ccc !important;
+      color: #000 !important;
+    }
+    .scheme-meta .meta-item .label {
+      color: #000 !important;
+    }
+    .scheme-meta .meta-item .value {
+      color: #000 !important;
+    }
+    .scheme-meta .meta-item i {
+      color: #000 !important !important;
+    }
+    .scheme-image {
+      border: 1px solid #ccc !important;
+    }
+    .pagination-wrap,
+    .cta-banner {
+      display: none !important;
+    }
+    .no-schemes i {
+      color: #000 !important;
+    }
+    .no-schemes p {
+      color: #000 !important;
+    }
+    .page-hero::before {
+      display: none !important;
     }
   }
 </style>
@@ -383,7 +697,9 @@
       <span class="current">{% trans "Government Schemes" %}</span>
     </div>
     <h1>{% trans "Government" %} <span>{% trans "Schemes" %}</span></h1>
-    <p>{% trans "Explore the latest government schemes and initiatives designed to benefit citizens, businesses, and communities." %}</p>
+    <p>
+      {% trans "Explore the latest government schemes and initiatives designed to benefit citizens, businesses, and communities." %}
+    </p>
     <div class="glow-line"></div>
   </div>
 </section>
@@ -394,16 +710,17 @@
 <section class="schemes-section" id="schemes">
   <div class="container">
     <div class="schemes-grid">
-      <!-- FIXED: use 'schemes' instead of 'schemes_page' -->
       {% for scheme in schemes %}
       <div class="scheme-card">
         {% if scheme.image %}
-          <img src="{{ scheme.image.url }}" alt="{{ scheme.title }}" class="scheme-image" loading="lazy" />
+        <img src="{{ scheme.image.url }}" alt="{{ scheme.title }}" class="scheme-image" loading="lazy" />
         {% else %}
-          <img src="https://picsum.photos/seed/{{ scheme.id }}/400/300" alt="{{ scheme.title }}" class="scheme-image" loading="lazy" />
+        <img src="https://picsum.photos/seed/{{ scheme.id }}/400/300" alt="{{ scheme.title }}" class="scheme-image" loading="lazy" />
         {% endif %}
         <h3 class="scheme-title">{{ scheme.title }}</h3>
-        <p class="scheme-description">{{ scheme.description|truncatechars:150 }}</p>
+        <p class="scheme-description">
+          {{ scheme.description|truncatechars:150 }}
+        </p>
         <div class="scheme-meta">
           <div class="meta-item eligibility">
             <i class="fas fa-check-circle"></i>
@@ -414,11 +731,7 @@
             <i class="far fa-calendar-alt"></i>
             <span class="label">{% trans "Last Date:" %}</span>
             <span class="value">
-              {% if scheme.last_date %}
-                {{ scheme.last_date|date:"d M Y" }}
-              {% else %}
-                {% trans "Ongoing" %}
-              {% endif %}
+              {% if scheme.last_date %}{{ scheme.last_date|date:"d M Y" }}{% else %}{% trans "Ongoing" %}{% endif %}
             </span>
           </div>
         </div>
@@ -431,13 +744,17 @@
       {% endfor %}
     </div>
 
-    <!-- Pagination – FIXED: use 'schemes' -->
+    <!-- Pagination (corrected) -->
     {% if schemes.has_other_pages %}
     <div class="pagination-wrap">
       {% if schemes.has_previous %}
-        <a href="?page={{ schemes.previous_page_number }}" class="page-link"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</a>
+        <a href="?page={{ schemes.previous_page_number }}" class="page-link">
+          <i class="fas fa-chevron-left"></i> {% trans "Prev" %}
+        </a>
       {% else %}
-        <span class="page-link disabled"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</span>
+        <span class="page-link disabled">
+          <i class="fas fa-chevron-left"></i> {% trans "Prev" %}
+        </span>
       {% endif %}
 
       {% for num in schemes.paginator.page_range %}
@@ -449,9 +766,13 @@
       {% endfor %}
 
       {% if schemes.has_next %}
-        <a href="?page={{ schemes.next_page_number }}" class="page-link">{% trans "Next" %} <i class="fas fa-chevron-right"></i></a>
+        <a href="?page={{ schemes.next_page_number }}" class="page-link">
+          {% trans "Next" %} <i class="fas fa-chevron-right"></i>
+        </a>
       {% else %}
-        <span class="page-link disabled">{% trans "Next" %} <i class="fas fa-chevron-right"></i></span>
+        <span class="page-link disabled">
+          {% trans "Next" %} <i class="fas fa-chevron-right"></i>
+        </span>
       {% endif %}
     </div>
     {% endif %}
@@ -464,13 +785,15 @@
 <section class="cta-banner" id="contact">
   <div class="container">
     <h2>{% trans "Need Help Applying for" %} <span>{% trans "Schemes?" %}</span></h2>
-    <p>{% trans "We assist with scheme applications, document verification, and form filling. Let us guide you through the process." %}</p>
+    <p>
+      {% trans "We assist with scheme applications, document verification, and form filling. Let us guide you through the process." %}
+    </p>
     <div class="cta-buttons">
       <a href="{% url 'contact' %}" class="btn-primary">
         <i class="fas fa-phone"></i> {% trans "Contact Us" %}
       </a>
       {% with whatsapp_number=business.whatsapp|default:"919876543210" %}
-      <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20need%20help%20with%20government%20scheme%20applications." target="_blank" class="btn-whatsapp">
+      <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20need%20help%20with%20government%20scheme%20applications." target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
         <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
       </a>
       {% endwith %}
@@ -480,42 +803,59 @@
 {% endblock %}
 
 {% block extra_scripts %}
-    <!-- ================================================================
-    JAVASCRIPT — Hamburger + Active nav
+<!-- ================================================================
+    JAVASCRIPT — Hamburger + Active nav (safe for all pages)
     ================================================================ -->
-    <script>
-        (function() {
-            // ─── Hamburger ───
-            document.getElementById('hamburger').addEventListener('click', function() {
-                document.getElementById('navLinks').classList.toggle('open');
-            });
+<script>
+  (function () {
+    "use strict";
 
-            document.querySelectorAll('.nav-links a').forEach(function(link) {
-                link.addEventListener('click', function() {
-                    document.getElementById('navLinks').classList.remove('open');
-                });
-            });
+    // ─── Hamburger ───
+    var hamburger = document.getElementById("hamburger");
+    var navLinks = document.getElementById("navLinks");
+    if (hamburger && navLinks) {
+      hamburger.addEventListener("click", function () {
+        navLinks.classList.toggle("open");
+      });
 
-            // ─── Active nav highlight on scroll ───
-            const sections = document.querySelectorAll('section[id]');
-            const navLinks = document.querySelectorAll('.nav-links a');
-            window.addEventListener('scroll', function() {
-                let current = '';
-                sections.forEach(function(section) {
-                    const top = section.offsetTop - 120;
-                    if (window.scrollY >= top) {
-                        current = section.getAttribute('id');
-                    }
-                });
-                navLinks.forEach(function(link) {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === '#' + current) {
-                        link.classList.add('active');
-                    }
-                });
-            });
+      document.querySelectorAll(".nav-links a").forEach(function (link) {
+        link.addEventListener("click", function () {
+          navLinks.classList.remove("open");
+        });
+      });
+    }
 
-            console.log('🏛️ Government Schemes page ready — gaming theme loaded.');
-        })();
-    </script>
+    // ─── Active nav highlight on scroll ───
+    var sections = document.querySelectorAll("section[id]");
+    var navLinksAll = document.querySelectorAll(".nav-links a");
+    if (sections.length && navLinksAll.length) {
+      window.addEventListener(
+        "scroll",
+        function () {
+          var current = "";
+          var scrollY = window.scrollY + 120;
+          sections.forEach(function (section) {
+            var top = section.offsetTop;
+            var height = section.offsetHeight;
+            if (scrollY >= top && scrollY < top + height) {
+              current = section.getAttribute("id");
+            }
+          });
+          navLinksAll.forEach(function (link) {
+            link.classList.remove("active");
+            var href = link.getAttribute("href");
+            if (href === "#" + current) {
+              link.classList.add("active");
+            }
+          });
+        },
+        { passive: true },
+      );
+    }
+
+    console.log(
+      "🏛️ Government Schemes page loaded with responsive enhancements.",
+    );
+  })();
+</script>
 {% endblock %}

@@ -5,27 +5,59 @@
 {% block title %}{% trans "Gallery" %}{% endblock %}
 
 {% block extra_head %}
+<!-- ============================================================
+     META – viewport & compatibility
+     ============================================================ -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
 <style>
   /* ================================================================
-     PAGE-SPECIFIC STYLES – Gallery
-     Uses global CSS variables from base.html.
+     PAGE-SPECIFIC STYLES – Fully responsive + cross‑browser
      ================================================================ */
 
-  /* ---- Hero (page header) ---- */
+  /* ----- Base resets ----- */
+  .gallery-section *,
+  .gallery-section *::before,
+  .gallery-section *::after {
+    box-sizing: border-box;
+  }
+
+  .gallery-section .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    width: 100%;
+  }
+
+  /* ---- Hero (matches other pages) ---- */
   .page-hero {
-    padding: 70px 0 50px;
+    padding: clamp(30px, 6vw, 70px) 0 clamp(20px, 4vw, 50px);
     text-align: center;
     position: relative;
     overflow: hidden;
+    background:
+      radial-gradient(
+        ellipse at 30% 20%,
+        rgba(0, 240, 255, 0.05),
+        transparent 60%
+      ),
+      var(--bg-primary, #0a0e1a);
+    border-bottom: 1px solid rgba(0, 240, 255, 0.06);
+    width: 100%;
   }
   .page-hero::before {
-    content: '';
+    content: "";
     position: absolute;
     top: -30%;
     right: -10%;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(0, 240, 255, 0.04), transparent 70%);
+    width: min(600px, 80vw);
+    height: min(600px, 80vw);
+    background: radial-gradient(
+      circle,
+      rgba(0, 240, 255, 0.04),
+      transparent 70%
+    );
     border-radius: 50%;
     pointer-events: none;
     z-index: 0;
@@ -37,157 +69,178 @@
   .page-hero .breadcrumb {
     display: inline-flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 8px;
-    color: var(--text-muted);
-    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    font-size: clamp(0.75rem, 1vw, 0.85rem);
     font-weight: 500;
     margin-bottom: 16px;
     letter-spacing: 0.3px;
   }
   .page-hero .breadcrumb a {
-    color: var(--text-muted);
-    transition: var(--transition);
+    color: var(--text-muted, #94a3b8);
+    transition: color 0.3s ease;
+    text-decoration: none;
   }
   .page-hero .breadcrumb a:hover {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
   }
   .page-hero .breadcrumb .current {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
   }
   .page-hero h1 {
-    font-size: 3rem;
+    font-size: clamp(1.8rem, 5vw, 3rem);
     font-weight: 900;
-    font-family: var(--font-display);
-    color: var(--text-white);
+    font-family: var(--font-display, "Inter", sans-serif);
+    color: var(--text-white, #f0f4ff);
     letter-spacing: 1px;
     margin-bottom: 8px;
     text-shadow: 0 0 40px rgba(0, 240, 255, 0.12);
   }
   .page-hero h1 span {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
     text-shadow: 0 0 30px rgba(0, 240, 255, 0.25);
   }
   .page-hero p {
-    font-size: 1.15rem;
-    color: var(--text-muted);
+    font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+    color: var(--text-muted, #94a3b8);
     max-width: 620px;
     margin: 0 auto;
     line-height: 1.8;
+    padding: 0 10px;
   }
   .page-hero .glow-line {
     display: inline-block;
     width: 80px;
     height: 3px;
-    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+    background: linear-gradient(
+      90deg,
+      var(--neon-cyan, #00f0ff),
+      var(--neon-purple, #a855f7)
+    );
     border-radius: 4px;
     margin-top: 16px;
-    box-shadow: var(--glow-cyan);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
   }
 
   /* ---- Gallery Section ---- */
   .gallery-section {
-    padding: 40px 0 70px;
-    background: var(--bg-secondary);
+    padding: clamp(30px, 5vw, 40px) 0 clamp(40px, 8vw, 70px);
+    background: var(--bg-secondary, rgba(10, 14, 26, 0.6));
+    width: 100%;
   }
   .category-header {
     display: flex;
     align-items: center;
     gap: 14px;
     margin-bottom: 24px;
+    flex-wrap: wrap;
   }
   .category-header .icon {
-    width: 44px;
-    height: 44px;
-    background: var(--neon-cyan);
+    width: clamp(2.5rem, 5vw, 3rem);
+    height: clamp(2.5rem, 5vw, 3rem);
+    background: var(--neon-cyan, #00f0ff);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--bg-primary);
-    font-size: 1.4rem;
-    box-shadow: var(--glow-cyan);
+    color: var(--bg-primary, #0a0e1a);
+    font-size: clamp(1.2rem, 2vw, 1.4rem);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
+    flex-shrink: 0;
   }
   .category-header h2 {
-    font-size: 1.8rem;
+    font-size: clamp(1.4rem, 3vw, 1.8rem);
     font-weight: 700;
-    color: var(--text-white);
+    color: var(--text-white, #f0f4ff);
     letter-spacing: -0.3px;
   }
   .category-header .badge {
-    background: var(--neon-orange);
-    color: var(--text-white);
-    font-size: 0.7rem;
+    background: var(--neon-orange, #f97316);
+    color: var(--text-white, #f0f4ff);
+    font-size: clamp(0.6rem, 0.8vw, 0.7rem);
     font-weight: 700;
     padding: 2px 14px;
     border-radius: 50px;
     letter-spacing: 0.3px;
     box-shadow: 0 0 20px rgba(249, 115, 22, 0.3);
+    white-space: nowrap;
   }
 
   /* ---- Gallery Grid ---- */
   .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: clamp(16px, 2vw, 24px);
   }
 
   /* ---- Gallery Card (gaming hover) ---- */
   .gallery-card {
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-sm, 8px);
     overflow: hidden;
     background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     border: 2px solid rgba(255, 255, 255, 0.05);
     cursor: pointer;
-    transition: var(--transition);
+    transition: all 0.3s ease;
     position: relative;
   }
   .gallery-card:hover {
     transform: translateY(-8px) scale(1.02);
-    border-color: var(--neon-magenta);
-    box-shadow: 0 0 30px rgba(255, 45, 149, 0.2), var(--shadow-card);
+    border-color: var(--neon-magenta, #ff2d95);
+    box-shadow:
+      0 0 30px rgba(255, 45, 149, 0.15),
+      0 8px 30px rgba(0, 0, 0, 0.2);
     background: rgba(255, 45, 149, 0.04);
   }
   .gallery-card::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     height: 3px;
-    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta), var(--neon-purple));
+    background: linear-gradient(
+      90deg,
+      var(--neon-cyan, #00f0ff),
+      var(--neon-magenta, #ff2d95),
+      var(--neon-purple, #a855f7)
+    );
     transform: scaleX(0);
-    transition: var(--transition);
+    transition: all 0.3s ease;
     transform-origin: left;
-    box-shadow: 0 0 20px rgba(255, 45, 149, 0.3);
+    box-shadow: 0 0 20px rgba(255, 45, 149, 0.2);
   }
   .gallery-card:hover::after {
     transform: scaleX(1);
   }
   .gallery-card img {
     width: 100%;
-    height: 200px;
+    height: clamp(140px, 25vw, 200px);
     object-fit: cover;
     display: block;
-    transition: var(--transition);
+    transition: all 0.3s ease;
   }
   .gallery-card:hover img {
     transform: scale(1.04);
   }
   .gallery-card .caption {
-    padding: 12px 16px;
-    font-size: 0.9rem;
+    padding: clamp(0.5rem, 1vw, 0.8rem) clamp(0.8rem, 1.2vw, 1rem);
+    font-size: clamp(0.8rem, 1vw, 0.9rem);
     font-weight: 600;
-    color: var(--text-white);
+    color: var(--text-white, #f0f4ff);
     text-align: center;
     background: rgba(10, 14, 26, 0.6);
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     border-top: 1px solid rgba(255, 255, 255, 0.05);
-    transition: var(--transition);
+    transition: all 0.3s ease;
+    word-break: break-word;
   }
   .gallery-card:hover .caption {
-    color: var(--neon-cyan);
-    text-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+    color: var(--neon-cyan, #00f0ff);
+    text-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
   }
 
   /* ---- Pagination (neon-styled) ---- */
@@ -206,25 +259,27 @@
     border-radius: 30px;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.06);
-    color: var(--text-muted);
+    color: var(--text-muted, #94a3b8);
     font-weight: 600;
-    font-size: 0.9rem;
-    transition: var(--transition);
+    font-size: clamp(0.8rem, 0.9vw, 0.9rem);
+    transition: all 0.3s ease;
     text-decoration: none;
     min-width: 44px;
+    min-height: 44px;
+    touch-action: manipulation;
   }
   .pagination-wrap .page-link:hover {
     background: rgba(0, 240, 255, 0.08);
-    border-color: var(--neon-cyan);
-    color: var(--text-white);
-    box-shadow: var(--glow-cyan);
+    border-color: var(--neon-cyan, #00f0ff);
+    color: var(--text-white, #f0f4ff);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.06);
     transform: translateY(-2px);
   }
   .pagination-wrap .page-link.active {
-    background: var(--neon-cyan);
-    color: var(--bg-primary);
-    border-color: var(--neon-cyan);
-    box-shadow: var(--glow-cyan);
+    background: var(--neon-cyan, #00f0ff);
+    color: var(--bg-primary, #0a0e1a);
+    border-color: var(--neon-cyan, #00f0ff);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
   }
   .pagination-wrap .page-link.disabled {
     opacity: 0.3;
@@ -233,78 +288,128 @@
 
   /* ---- Note Box ---- */
   .gallery-note {
-    padding: 30px 0 60px;
-    background: var(--bg-primary);
+    padding: clamp(30px, 6vw, 40px) 0 clamp(30px, 6vw, 60px);
+    background: var(--bg-primary, #0a0e1a);
+    width: 100%;
+  }
+  .gallery-note .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
   }
   .gallery-note .note-box {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: var(--radius-sm);
-    padding: 24px 28px;
-    border-left: 4px solid var(--neon-orange);
-    transition: var(--transition);
+    border-radius: var(--radius-sm, 8px);
+    padding: clamp(1.2rem, 2vw, 1.8rem) clamp(1rem, 2vw, 1.8rem);
+    border-left: 4px solid var(--neon-orange, #f97316);
+    transition: all 0.3s ease;
   }
   .gallery-note .note-box:hover {
-    border-left-color: var(--neon-cyan);
-    box-shadow: var(--glow-cyan);
+    border-left-color: var(--neon-cyan, #00f0ff);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.06);
   }
   .gallery-note .note-box h4 {
-    font-size: 1.1rem;
+    font-size: clamp(1rem, 1.3vw, 1.1rem);
     font-weight: 700;
-    color: var(--text-white);
+    color: var(--text-white, #f0f4ff);
     margin-bottom: 8px;
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-wrap: wrap;
   }
   .gallery-note .note-box h4 i {
-    color: var(--neon-orange);
+    color: var(--neon-orange, #f97316);
   }
   .gallery-note .note-box p {
-    color: var(--text-muted);
-    font-size: 0.95rem;
+    color: var(--text-muted, #94a3b8);
+    font-size: clamp(0.9rem, 1vw, 0.95rem);
     line-height: 1.7;
     margin: 0;
   }
   .gallery-note .note-box p i {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
     margin-right: 6px;
   }
 
   /* ---- CTA Banner (reuses base styles, but ensure it's present) ---- */
   .cta-banner {
-    padding: 70px 0;
-    background: radial-gradient(ellipse at 30% 20%, rgba(0, 240, 255, 0.06), transparent 60%),
-                var(--bg-primary);
+    padding: clamp(40px, 8vw, 70px) 0;
+    background:
+      radial-gradient(
+        ellipse at 30% 20%,
+        rgba(0, 240, 255, 0.06),
+        transparent 60%
+      ),
+      var(--bg-primary, #0a0e1a);
     border-top: 1px solid rgba(0, 240, 255, 0.06);
     border-bottom: 1px solid rgba(0, 240, 255, 0.06);
     text-align: center;
+    width: 100%;
   }
   .cta-banner .container {
     max-width: 720px;
+    margin: 0 auto;
+    padding: 0 20px;
   }
   .cta-banner h2 {
-    font-size: 2.4rem;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
     font-weight: 800;
-    font-family: var(--font-display);
-    color: var(--text-white);
+    font-family: var(--font-display, "Inter", sans-serif);
+    color: var(--text-white, #f0f4ff);
     letter-spacing: -0.5px;
     margin-bottom: 8px;
   }
   .cta-banner h2 span {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
     text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
   }
   .cta-banner p {
-    color: var(--text-muted);
-    font-size: 1.1rem;
+    color: var(--text-muted, #94a3b8);
+    font-size: clamp(0.95rem, 1.2vw, 1.1rem);
     margin-bottom: 28px;
   }
-  .cta-banner .cta-buttons {
+  .cta-buttons {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
     gap: 18px;
+  }
+  .cta-buttons .btn-primary,
+  .cta-buttons .btn-whatsapp {
+    padding: clamp(0.8rem, 1.5vw, 1rem) clamp(1.5rem, 3vw, 2.5rem);
+    font-size: clamp(0.9rem, 1vw, 1rem);
+    min-height: 48px;
+    min-width: 180px;
+    justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: none;
+    border-radius: var(--radius-sm, 8px);
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    touch-action: manipulation;
+    cursor: pointer;
+  }
+  .cta-buttons .btn-primary {
+    background: var(--gradient-cyan, linear-gradient(135deg, #00f0ff, #0ea5e9));
+    color: var(--bg-primary, #0a0e1a);
+    box-shadow: 0 0 24px rgba(0, 240, 255, 0.2);
+  }
+  .cta-buttons .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 40px rgba(0, 240, 255, 0.35);
+  }
+  .cta-buttons .btn-whatsapp {
+    background: #25d366;
+    color: #fff;
+  }
+  .cta-buttons .btn-whatsapp:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(37, 211, 102, 0.35);
   }
 
   /* ---- Lightbox ---- */
@@ -317,10 +422,11 @@
     height: 100%;
     background: rgba(0, 0, 0, 0.92);
     backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     z-index: 9999;
     justify-content: center;
     align-items: center;
-    padding: 30px;
+    padding: 20px;
     animation: fadeIn 0.3s ease;
   }
   .lightbox.open {
@@ -329,32 +435,38 @@
   .lightbox .lightbox-content {
     max-width: 90%;
     max-height: 80%;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-sm, 8px);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
     object-fit: contain;
     border: 2px solid rgba(255, 255, 255, 0.06);
   }
   .lightbox .close-btn {
     position: absolute;
-    top: 30px;
-    right: 40px;
-    color: var(--text-white);
-    font-size: 3rem;
+    top: clamp(20px, 4vw, 40px);
+    right: clamp(20px, 4vw, 40px);
+    color: var(--text-white, #f0f4ff);
+    font-size: clamp(2rem, 5vw, 3rem);
     cursor: pointer;
-    transition: var(--transition);
+    transition: all 0.3s ease;
     background: none;
     border: none;
     line-height: 1;
     text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    touch-action: manipulation;
+    min-width: 48px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .lightbox .close-btn:hover {
     transform: rotate(90deg);
-    color: var(--neon-cyan);
-    text-shadow: var(--glow-cyan);
+    color: var(--neon-cyan, #00f0ff);
+    text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
   }
   .lightbox .lightbox-caption {
-    color: var(--text-white);
-    font-size: 1rem;
+    color: var(--text-white, #f0f4ff);
+    font-size: clamp(0.9rem, 1.2vw, 1rem);
     text-align: center;
     margin-top: 20px;
     max-width: 80%;
@@ -362,6 +474,7 @@
     padding: 8px 24px;
     border-radius: 50px;
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     border: 1px solid rgba(255, 255, 255, 0.06);
   }
   .lightbox .nav-btn {
@@ -370,69 +483,86 @@
     transform: translateY(-50%);
     background: rgba(255, 255, 255, 0.08);
     border: 2px solid rgba(255, 255, 255, 0.08);
-    color: var(--text-white);
-    font-size: 2.5rem;
-    padding: 12px 18px;
+    color: var(--text-white, #f0f4ff);
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    padding: clamp(0.5rem, 1vw, 0.8rem) clamp(0.8rem, 1.5vw, 1.2rem);
     border-radius: 50%;
     cursor: pointer;
-    transition: var(--transition);
+    transition: all 0.3s ease;
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    touch-action: manipulation;
+    min-width: 48px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .lightbox .nav-btn:hover {
     background: rgba(255, 255, 255, 0.2);
-    border-color: var(--neon-cyan);
-    box-shadow: var(--glow-cyan);
+    border-color: var(--neon-cyan, #00f0ff);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.1);
     transform: translateY(-50%) scale(1.1);
   }
   .lightbox .nav-btn.prev {
-    left: 20px;
+    left: clamp(10px, 2vw, 20px);
   }
   .lightbox .nav-btn.next {
-    right: 20px;
+    right: clamp(10px, 2vw, 20px);
   }
 
   @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 
   /* ================================================================
-     RESPONSIVE
+     RESPONSIVE BREAKPOINTS
      ================================================================ */
+
   @media (max-width: 1024px) {
     .gallery-grid {
       grid-template-columns: repeat(3, 1fr);
     }
   }
+
   @media (max-width: 768px) {
     .page-hero h1 {
-      font-size: 2.2rem;
+      font-size: clamp(1.6rem, 5vw, 2.2rem);
     }
     .page-hero p {
-      font-size: 1rem;
+      font-size: clamp(0.9rem, 2vw, 1rem);
     }
     .gallery-grid {
       grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
+      gap: 14px;
     }
     .gallery-card img {
-      height: 160px;
+      height: clamp(120px, 20vw, 160px);
     }
     .category-header h2 {
-      font-size: 1.4rem;
+      font-size: clamp(1.2rem, 3vw, 1.4rem);
     }
     .lightbox .lightbox-content {
       max-width: 95%;
       max-height: 70%;
     }
     .lightbox .close-btn {
-      top: 20px;
-      right: 20px;
-      font-size: 2.5rem;
+      top: 15px;
+      right: 15px;
+      font-size: 2rem;
     }
     .lightbox .nav-btn {
-      font-size: 1.8rem;
-      padding: 8px 12px;
+      font-size: 1.5rem;
+      padding: 0.5rem 0.8rem;
+      min-width: 40px;
+      min-height: 40px;
     }
     .lightbox .nav-btn.prev {
       left: 10px;
@@ -441,44 +571,289 @@
       right: 10px;
     }
     .cta-banner h2 {
-      font-size: 2rem;
+      font-size: clamp(1.6rem, 5vw, 2rem);
     }
-    .cta-banner .cta-buttons {
+    .cta-buttons {
       flex-direction: column;
       align-items: center;
     }
-    .cta-banner .cta-buttons .btn-primary,
-    .cta-banner .cta-buttons .btn-whatsapp {
+    .cta-buttons .btn-primary,
+    .cta-buttons .btn-whatsapp {
       width: 100%;
+      max-width: 280px;
       justify-content: center;
     }
   }
+
   @media (max-width: 480px) {
     .page-hero h1 {
-      font-size: 1.8rem;
+      font-size: clamp(1.4rem, 5vw, 1.8rem);
     }
     .gallery-grid {
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      gap: 10px;
     }
     .gallery-card img {
-      height: 120px;
+      height: clamp(100px, 25vw, 120px);
     }
     .gallery-card .caption {
-      font-size: 0.75rem;
-      padding: 8px 10px;
+      font-size: 0.7rem;
+      padding: 6px 8px;
     }
     .category-header .icon {
-      width: 36px;
-      height: 36px;
-      font-size: 1rem;
+      width: 2rem;
+      height: 2rem;
+      font-size: 0.9rem;
     }
     .category-header h2 {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
     }
     .category-header .badge {
+      font-size: 0.55rem;
+      padding: 1px 8px;
+    }
+    .lightbox .nav-btn {
+      font-size: 1.2rem;
+      padding: 0.3rem 0.6rem;
+      min-width: 36px;
+      min-height: 36px;
+    }
+    .lightbox .lightbox-caption {
+      font-size: 0.8rem;
+      padding: 6px 16px;
+      max-width: 90%;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .gallery-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .gallery-card img {
+      height: 90px;
+    }
+    .gallery-card .caption {
       font-size: 0.6rem;
-      padding: 1px 10px;
+      padding: 4px 6px;
+    }
+  }
+
+  /* ================================================================
+     CROSS‑BROWSER FALLBACKS
+     ================================================================ */
+
+  /* ----- Flexbox fallback for older IE ----- */
+  @supports not (display: flex) {
+    .category-header {
+      display: block;
+      text-align: center;
+    }
+    .category-header .icon {
+      display: inline-block;
+    }
+    .category-header .badge {
+      display: inline-block;
+    }
+    .pagination-wrap {
+      display: block;
+      text-align: center;
+    }
+    .pagination-wrap .page-link {
+      display: inline-block;
+      margin: 0 4px 8px 4px;
+    }
+    .cta-buttons {
+      display: block;
+    }
+    .cta-buttons .btn-primary,
+    .cta-buttons .btn-whatsapp {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto 12px auto;
+    }
+    .gallery-note .note-box h4 {
+      display: block;
+    }
+    .lightbox .close-btn,
+    .lightbox .nav-btn {
+      display: block;
+    }
+  }
+
+  /* ----- Grid fallback for older browsers ----- */
+  @supports not (display: grid) {
+    .gallery-grid {
+      display: block;
+      text-align: center;
+    }
+    .gallery-card {
+      display: inline-block;
+      width: 200px;
+      margin: 8px;
+      vertical-align: top;
+    }
+    .gallery-card img {
+      width: 100%;
+    }
+  }
+
+  /* ----- backdrop-filter fallback ----- */
+  @supports not (backdrop-filter: blur(4px)) {
+    .gallery-card,
+    .gallery-card .caption,
+    .lightbox .lightbox-caption,
+    .lightbox .nav-btn {
+      background: rgba(10, 14, 26, 0.95) !important;
+    }
+  }
+
+  /* ----- Touch devices: larger tap targets & disable hover effects ----- */
+  @media (hover: none) and (pointer: coarse) {
+    .gallery-card:hover {
+      transform: none !important;
+      border-color: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .gallery-card:hover::after {
+      transform: scaleX(0);
+    }
+    .gallery-card:hover img {
+      transform: none !important;
+    }
+    .gallery-card:hover .caption {
+      color: var(--text-white, #f0f4ff);
+      text-shadow: none;
+    }
+    .pagination-wrap .page-link {
+      min-height: 48px;
+      min-width: 48px;
+    }
+    .pagination-wrap .page-link:hover {
+      transform: none !important;
+    }
+    .cta-buttons .btn-primary:hover,
+    .cta-buttons .btn-whatsapp:hover {
+      transform: none !important;
+    }
+    .gallery-note .note-box:hover {
+      border-left-color: var(--neon-orange, #f97316);
+      box-shadow: none;
+    }
+    .lightbox .close-btn,
+    .lightbox .nav-btn {
+      min-width: 48px;
+      min-height: 48px;
+    }
+    .lightbox .close-btn:hover {
+      transform: none;
+      color: var(--text-white, #f0f4ff);
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+    .lightbox .nav-btn:hover {
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.08);
+      box-shadow: none;
+    }
+  }
+
+  /* ----- Reduced motion ----- */
+  @media (prefers-reduced-motion: reduce) {
+    .gallery-card,
+    .gallery-card img,
+    .gallery-card .caption,
+    .pagination-wrap .page-link,
+    .lightbox .close-btn,
+    .lightbox .nav-btn {
+      transition: none !important;
+    }
+    .gallery-card:hover {
+      transform: none !important;
+    }
+    .gallery-card:hover img {
+      transform: none !important;
+    }
+    .lightbox {
+      animation: none !important;
+    }
+  }
+
+  /* ----- Print styles ----- */
+  @media print {
+    .page-hero {
+      background: #fff !important;
+      border-bottom: 1px solid #ccc;
+    }
+    .page-hero h1,
+    .page-hero h1 span,
+    .cta-banner h2 span {
+      -webkit-text-fill-color: #000 !important;
+      color: #000 !important;
+      background: none !important;
+    }
+    .page-hero p {
+      color: #000 !important;
+    }
+    .page-hero .glow-line {
+      background: #000 !important;
+      box-shadow: none !important;
+    }
+    .gallery-section {
+      background: #fff !important;
+    }
+    .category-header .icon {
+      background: #000 !important;
+      color: #fff !important;
+      box-shadow: none !important;
+    }
+    .category-header h2 {
+      color: #000 !important;
+    }
+    .category-header .badge {
+      background: #000 !important;
+      color: #fff !important;
+      box-shadow: none !important;
+    }
+    .gallery-card {
+      border: 1px solid #ccc !important;
+      box-shadow: none !important;
+      background: #fff !important;
+      break-inside: avoid;
+    }
+    .gallery-card img {
+      height: 120px !important;
+    }
+    .gallery-card .caption {
+      color: #000 !important;
+      background: #f5f5f5 !important;
+      border-top: 1px solid #ccc;
+    }
+    .pagination-wrap,
+    .cta-banner,
+    .lightbox {
+      display: none !important;
+    }
+    .gallery-note {
+      background: #fff !important;
+    }
+    .gallery-note .note-box {
+      border-left: 4px solid #000 !important;
+      background: #f9f9f9 !important;
+    }
+    .gallery-note .note-box h4 {
+      color: #000 !important;
+    }
+    .gallery-note .note-box p {
+      color: #000 !important;
+    }
+    .gallery-note .note-box p i {
+      color: #000 !important;
+    }
+    .page-hero::before {
+      display: none !important;
     }
   }
 </style>
@@ -527,20 +902,24 @@
         <div class="caption">{{ image.title }}</div>
       </div>
       {% empty %}
-      <p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem 0;">
-        <i class="fas fa-images" style="font-size: 3rem; display: block; margin-bottom: 0.5rem; opacity: 0.3;"></i>
+      <p style="grid-column: 1/-1; text-align: center; color: var(--text-muted, #94a3b8); padding: 3rem 0;">
+        <i class="fas fa-images" style="font-size: clamp(2rem, 5vw, 3rem); display: block; margin-bottom: 0.5rem; opacity: 0.3;"></i>
         {% trans "No images have been uploaded yet." %}
       </p>
       {% endfor %}
     </div>
 
-    <!-- Pagination Controls -->
+    <!-- Pagination Controls (corrected) -->
     {% if images.has_other_pages %}
     <div class="pagination-wrap">
       {% if images.has_previous %}
-        <a href="?page={{ images.previous_page_number }}" class="page-link"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</a>
+        <a href="?page={{ images.previous_page_number }}" class="page-link">
+          <i class="fas fa-chevron-left"></i> {% trans "Prev" %}
+        </a>
       {% else %}
-        <span class="page-link disabled"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</span>
+        <span class="page-link disabled">
+          <i class="fas fa-chevron-left"></i> {% trans "Prev" %}
+        </span>
       {% endif %}
 
       {% for num in images.paginator.page_range %}
@@ -552,9 +931,13 @@
       {% endfor %}
 
       {% if images.has_next %}
-        <a href="?page={{ images.next_page_number }}" class="page-link">{% trans "Next" %} <i class="fas fa-chevron-right"></i></a>
+        <a href="?page={{ images.next_page_number }}" class="page-link">
+          {% trans "Next" %} <i class="fas fa-chevron-right"></i>
+        </a>
       {% else %}
-        <span class="page-link disabled">{% trans "Next" %} <i class="fas fa-chevron-right"></i></span>
+        <span class="page-link disabled">
+          {% trans "Next" %} <i class="fas fa-chevron-right"></i>
+        </span>
       {% endif %}
     </div>
     {% endif %}
@@ -589,7 +972,7 @@
         <i class="fas fa-phone"></i> {% trans "Contact Us" %}
       </a>
       {% with whatsapp_number=business.whatsapp|default:"919876543210" %}
-      <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20want%20to%20visit%20your%20cyber%20cafe." target="_blank" class="btn-whatsapp">
+      <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20want%20to%20visit%20your%20cyber%20cafe." target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
         <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
       </a>
       {% endwith %}
@@ -602,90 +985,101 @@
      ================================================================ -->
 <div class="lightbox" id="lightbox">
   <button class="close-btn" id="lightbox-close">&times;</button>
-  <button class="nav-btn prev" id="lightbox-prev">
-    <i class="fas fa-chevron-left"></i>
-  </button>
+  <button class="nav-btn prev" id="lightbox-prev"><i class="fas fa-chevron-left"></i></button>
   <img class="lightbox-content" id="lightbox-img" src="" alt="Gallery Image" />
-  <button class="nav-btn next" id="lightbox-next">
-    <i class="fas fa-chevron-right"></i>
-  </button>
+  <button class="nav-btn next" id="lightbox-next"><i class="fas fa-chevron-right"></i></button>
   <div class="lightbox-caption" id="lightbox-caption"></div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-  (function() {
-    'use strict';
+  (function () {
+    "use strict";
 
     // ─── Lightbox ───
-    const galleryCards = document.querySelectorAll('.gallery-card');
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    const lightboxCaption = document.getElementById('lightbox-caption');
-    const closeBtn = document.getElementById('lightbox-close');
-    const prevBtn = document.getElementById('lightbox-prev');
-    const nextBtn = document.getElementById('lightbox-next');
+    var galleryCards = document.querySelectorAll(".gallery-card");
+    var lightbox = document.getElementById("lightbox");
+    var lightboxImg = document.getElementById("lightbox-img");
+    var lightboxCaption = document.getElementById("lightbox-caption");
+    var closeBtn = document.getElementById("lightbox-close");
+    var prevBtn = document.getElementById("lightbox-prev");
+    var nextBtn = document.getElementById("lightbox-next");
 
-    let currentIndex = 0;
-    const itemsArray = Array.from(galleryCards);
+    var currentIndex = 0;
+    var itemsArray = Array.prototype.slice.call(galleryCards);
 
     function openLightbox(index) {
-      const card = itemsArray[index];
+      var card = itemsArray[index];
       if (!card) return;
-      const img = card.querySelector('img');
-      const caption = card.getAttribute('data-caption') ||
-          card.querySelector('.caption')?.textContent ||
-          '';
+      var img = card.querySelector("img");
+      var caption = card.getAttribute("data-caption") || "";
+      if (!caption) {
+        var captionEl = card.querySelector(".caption");
+        if (captionEl) caption = captionEl.textContent || "";
+      }
       lightboxImg.src = img.src;
-      lightboxImg.alt = img.alt;
-      lightboxCaption.textContent = caption;
+      lightboxImg.alt = img.alt || "";
+      lightboxCaption.textContent = caption || "";
       currentIndex = index;
-      lightbox.classList.add('open');
-      document.body.style.overflow = 'hidden';
+      lightbox.classList.add("open");
+      document.body.style.overflow = "hidden";
     }
 
     function closeLightbox() {
-      lightbox.classList.remove('open');
-      document.body.style.overflow = '';
+      lightbox.classList.remove("open");
+      document.body.style.overflow = "";
     }
 
     function showPrev() {
-      const newIndex = (currentIndex - 1 + itemsArray.length) % itemsArray.length;
+      if (itemsArray.length === 0) return;
+      var newIndex = (currentIndex - 1 + itemsArray.length) % itemsArray.length;
       openLightbox(newIndex);
     }
 
     function showNext() {
-      const newIndex = (currentIndex + 1) % itemsArray.length;
+      if (itemsArray.length === 0) return;
+      var newIndex = (currentIndex + 1) % itemsArray.length;
       openLightbox(newIndex);
     }
 
     // Attach click events
-    galleryCards.forEach((card, index) => {
-      card.addEventListener('click', () => openLightbox(index));
+    for (var i = 0; i < galleryCards.length; i++) {
+      (function (index) {
+        galleryCards[index].addEventListener("click", function () {
+          openLightbox(index);
+        });
+      })(i);
+    }
+
+    if (closeBtn) {
+      closeBtn.addEventListener("click", closeLightbox);
+    }
+    if (prevBtn) {
+      prevBtn.addEventListener("click", showPrev);
+    }
+    if (nextBtn) {
+      nextBtn.addEventListener("click", showNext);
+    }
+
+    // Keyboard events
+    document.addEventListener("keydown", function (e) {
+      if (!lightbox.classList.contains("open")) return;
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowLeft") showPrev();
+      if (e.key === "ArrowRight") showNext();
     });
 
-    closeBtn.addEventListener('click', closeLightbox);
-    prevBtn.addEventListener('click', showPrev);
-    nextBtn.addEventListener('click', showNext);
-
-    document.addEventListener('keydown', (e) => {
-      if (!lightbox.classList.contains('open')) return;
-      if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowLeft') showPrev();
-      if (e.key === 'ArrowRight') showNext();
-    });
-
-    lightbox.addEventListener('click', (e) => {
+    // Click on background to close
+    lightbox.addEventListener("click", function (e) {
       if (e.target === lightbox) closeLightbox();
     });
 
     // Hide nav buttons if no items
     if (itemsArray.length === 0) {
-      prevBtn.style.display = 'none';
-      nextBtn.style.display = 'none';
+      if (prevBtn) prevBtn.style.display = "none";
+      if (nextBtn) nextBtn.style.display = "none";
     }
-
   })();
 </script>
 {% endblock %}

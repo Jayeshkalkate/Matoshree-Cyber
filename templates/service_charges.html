@@ -1,19 +1,23 @@
-{% extends "base.html" %}
-{% load i18n %}
-{% load static %}
-
-{% block title %}{% trans "Service Charges" %}{% endblock %}
-
-{% block extra_head %}
+{% extends "base.html" %} {% load i18n %} {% load static %} {% block title %}{%
+trans "Service Charges" %}{% endblock %} {% block extra_head %}
 <style>
   /* ================================================================
      PAGE-SPECIFIC STYLES – Service Charges
      ================================================================ */
 
   .page-hero {
-    background: radial-gradient(ellipse at 30% 20%, rgba(0, 240, 255, 0.08), transparent 60%),
-                radial-gradient(ellipse at 70% 80%, rgba(255, 45, 149, 0.05), transparent 60%),
-                var(--bg-primary);
+    background:
+      radial-gradient(
+        ellipse at 30% 20%,
+        rgba(0, 240, 255, 0.08),
+        transparent 60%
+      ),
+      radial-gradient(
+        ellipse at 70% 80%,
+        rgba(255, 45, 149, 0.05),
+        transparent 60%
+      ),
+      var(--bg-primary);
     padding: 80px 0 70px;
     position: relative;
     overflow: hidden;
@@ -27,7 +31,11 @@
     right: -10%;
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(0, 240, 255, 0.04), transparent 70%);
+    background: radial-gradient(
+      circle,
+      rgba(0, 240, 255, 0.04),
+      transparent 70%
+    );
     border-radius: 50%;
     pointer-events: none;
   }
@@ -38,7 +46,11 @@
     left: -10%;
     width: 500px;
     height: 500px;
-    background: radial-gradient(circle, rgba(255, 45, 149, 0.03), transparent 70%);
+    background: radial-gradient(
+      circle,
+      rgba(255, 45, 149, 0.03),
+      transparent 70%
+    );
     border-radius: 50%;
     pointer-events: none;
   }
@@ -91,7 +103,9 @@
     padding: 70px 0 60px;
     background: var(--bg-secondary);
   }
-  .charges-section .container { max-width: 900px; }
+  .charges-section .container {
+    max-width: 900px;
+  }
   .section-header {
     text-align: center;
     margin-bottom: 40px;
@@ -144,7 +158,9 @@
     color: var(--neon-cyan);
     letter-spacing: 0.5px;
   }
-  .charges-table th:last-child { text-align: right; }
+  .charges-table th:last-child {
+    text-align: right;
+  }
   .charges-table td {
     padding: 0.9rem 1.4rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
@@ -155,7 +171,9 @@
     font-weight: 600;
     color: var(--neon-cyan);
   }
-  .charges-table tbody tr:last-child td { border-bottom: none; }
+  .charges-table tbody tr:last-child td {
+    border-bottom: none;
+  }
   .charges-table tbody tr:hover {
     background: rgba(0, 240, 255, 0.04);
   }
@@ -211,16 +229,25 @@
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle at 30% 20%, rgba(0, 240, 255, 0.02), transparent 70%);
+    background: radial-gradient(
+      circle at 30% 20%,
+      rgba(0, 240, 255, 0.02),
+      transparent 70%
+    );
     pointer-events: none;
     opacity: 0;
     transition: var(--transition);
   }
-  .pricing-card:hover::before { opacity: 1; }
+  .pricing-card:hover::before {
+    opacity: 1;
+  }
   .pricing-card:hover {
     transform: scale(1.04) translateY(-8px);
     border-color: var(--neon-cyan);
-    box-shadow: var(--shadow-card), var(--glow-cyan), 0 0 60px rgba(0, 240, 255, 0.05);
+    box-shadow:
+      var(--shadow-card),
+      var(--glow-cyan),
+      0 0 60px rgba(0, 240, 255, 0.05);
   }
   .pricing-card .plan-name {
     font-family: var(--font-display);
@@ -262,7 +289,10 @@
     width: 20px;
     font-size: 0.9rem;
   }
-  .pricing-card .btn-primary { width: 100%; justify-content: center; }
+  .pricing-card .btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
   .pricing-card.popular {
     border-color: var(--neon-cyan);
     box-shadow: var(--glow-cyan);
@@ -286,7 +316,9 @@
     padding: 40px 0 60px;
     background: var(--bg-secondary);
   }
-  .charges-notes .container { max-width: 820px; }
+  .charges-notes .container {
+    max-width: 820px;
+  }
   .note-box {
     background: var(--bg-card);
     border-radius: var(--radius-sm);
@@ -309,7 +341,9 @@
     align-items: center;
     gap: 10px;
   }
-  .note-box h4 i { color: var(--neon-orange); }
+  .note-box h4 i {
+    color: var(--neon-orange);
+  }
   .note-box p {
     color: var(--text-muted);
     font-size: 0.95rem;
@@ -323,13 +357,20 @@
 
   .cta-banner {
     padding: 70px 0;
-    background: radial-gradient(ellipse at 30% 20%, rgba(0, 240, 255, 0.06), transparent 60%),
-                var(--bg-primary);
+    background:
+      radial-gradient(
+        ellipse at 30% 20%,
+        rgba(0, 240, 255, 0.06),
+        transparent 60%
+      ),
+      var(--bg-primary);
     border-top: 1px solid rgba(0, 240, 255, 0.06);
     border-bottom: 1px solid rgba(0, 240, 255, 0.06);
     text-align: center;
   }
-  .cta-banner .container { max-width: 720px; }
+  .cta-banner .container {
+    max-width: 720px;
+  }
   .cta-banner h2 {
     font-size: 2.4rem;
     font-weight: 800;
@@ -364,35 +405,61 @@
   }
 
   @media (max-width: 1024px) {
-    .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+    .pricing-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
   @media (max-width: 768px) {
-    .page-hero h1 { font-size: 2.4rem; }
-    .page-hero p { font-size: 1rem; }
-    .charges-section .container { padding: 0 1rem; }
-    .charges-table th, .charges-table td {
+    .page-hero h1 {
+      font-size: 2.4rem;
+    }
+    .page-hero p {
+      font-size: 1rem;
+    }
+    .charges-section .container {
+      padding: 0 1rem;
+    }
+    .charges-table th,
+    .charges-table td {
       padding: 0.7rem 0.9rem;
       font-size: 0.85rem;
     }
-    .service-name i { display: none; }
-    .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
-    .cta-banner h2 { font-size: 2rem; }
-    .cta-buttons { flex-direction: column; align-items: center; }
+    .service-name i {
+      display: none;
+    }
+    .pricing-grid {
+      grid-template-columns: 1fr;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .cta-banner h2 {
+      font-size: 2rem;
+    }
+    .cta-buttons {
+      flex-direction: column;
+      align-items: center;
+    }
     .cta-buttons .btn-primary,
-    .cta-buttons .btn-whatsapp { width: 100%; justify-content: center; }
+    .cta-buttons .btn-whatsapp {
+      width: 100%;
+      justify-content: center;
+    }
   }
   @media (max-width: 480px) {
-    .pricing-card .price { font-size: 2.2rem; }
-    .charges-table th, .charges-table td {
+    .pricing-card .price {
+      font-size: 2.2rem;
+    }
+    .charges-table th,
+    .charges-table td {
       padding: 0.5rem 0.6rem;
       font-size: 0.8rem;
     }
-    .note-box { padding: 18px 16px; }
+    .note-box {
+      padding: 18px 16px;
+    }
   }
 </style>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <section class="page-hero">
   <div class="container">
     <div class="breadcrumb">
@@ -402,7 +469,8 @@
     </div>
     <h1>{% trans "Service" %} <span>{% trans "Charges" %}</span></h1>
     <p>
-      {% trans "Transparent pricing for all our services. Know the cost before you come in." %}
+      {% trans "Transparent pricing for all our services. Know the cost before
+      you come in." %}
     </p>
   </div>
 </section>
@@ -411,7 +479,10 @@
   <div class="container">
     <div class="section-header">
       <h2>{% trans "Our" %} <span>{% trans "Price List" %}</span></h2>
-      <p>{% trans "All charges are inclusive of service fees unless stated otherwise." %}</p>
+      <p>
+        {% trans "All charges are inclusive of service fees unless stated
+        otherwise." %}
+      </p>
     </div>
     <div class="table-wrapper">
       <table class="charges-table">
@@ -434,7 +505,14 @@
           </tr>
           {% empty %}
           <tr>
-            <td colspan="2" style="text-align: center; padding: 30px; color: var(--text-muted);">
+            <td
+              colspan="2"
+              style="
+                text-align: center;
+                padding: 30px;
+                color: var(--text-muted);
+              "
+            >
               {% trans "No service charges available." %}
             </td>
           </tr>
@@ -449,7 +527,9 @@
   <div class="container">
     <div class="section-header">
       <h2>{% trans "Choose Your" %} <span>{% trans "Plan" %}</span></h2>
-      <p>{% trans "Flexible pricing for every need — hover to feel the power" %}</p>
+      <p>
+        {% trans "Flexible pricing for every need — hover to feel the power" %}
+      </p>
     </div>
     <div class="pricing-grid">
       {% for charge in charges %}
@@ -458,13 +538,19 @@
         <span class="badge">🔥 {% trans "Popular" %}</span>
         {% endif %}
         <div class="plan-name">{{ charge.service.name }}</div>
-        <div class="price">₹{{ charge.charge }} <span> / {% trans "session" %}</span></div>
+        <div class="price">
+          ₹{{ charge.charge }} <span> / {% trans "session" %}</span>
+        </div>
         <ul class="features">
-          <li><i class="fas fa-check"></i> {% trans "Professional service" %}</li>
+          <li>
+            <i class="fas fa-check"></i> {% trans "Professional service" %}
+          </li>
           <li><i class="fas fa-check"></i> {% trans "Quick turnaround" %}</li>
           <li><i class="fas fa-check"></i> {% trans "Expert assistance" %}</li>
         </ul>
-        <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Book Now" %}</a>
+        <a href="{% url 'appointment' %}" class="btn-primary"
+          >{% trans "Book Now" %}</a
+        >
       </div>
       {% empty %}
       <p class="no-data">{% trans "Pricing information coming soon." %}</p>
@@ -478,10 +564,14 @@
     <div class="note-box">
       <h4><i class="fas fa-info-circle"></i> {% trans "Important Notes" %}</h4>
       <p>
-        <i class="fas fa-check-circle"></i> {% trans "Prices are subject to change without prior notice." %}<br>
-        <i class="fas fa-check-circle"></i> {% trans "GST (if applicable) will be added to the final bill." %}<br>
-        <i class="fas fa-check-circle"></i> {% trans "Discounts may be available for bulk orders or regular customers." %}<br>
-        <i class="fas fa-check-circle"></i> {% trans "For exact pricing, please contact our support team." %}
+        <i class="fas fa-check-circle"></i> {% trans "Prices are subject to
+        change without prior notice." %}<br />
+        <i class="fas fa-check-circle"></i> {% trans "GST (if applicable) will
+        be added to the final bill." %}<br />
+        <i class="fas fa-check-circle"></i> {% trans "Discounts may be available
+        for bulk orders or regular customers." %}<br />
+        <i class="fas fa-check-circle"></i> {% trans "For exact pricing, please
+        contact our support team." %}
       </p>
     </div>
   </div>
@@ -489,13 +579,23 @@
 
 <section class="cta-banner">
   <div class="container">
-    <h2>{% trans "Need" %} <span>{% trans "clarification" %}</span> {% trans "on pricing?" %}</h2>
-    <p>{% trans "We're here to help. Reach out to us for any questions about our charges or services." %}</p>
+    <h2>
+      {% trans "Need" %} <span>{% trans "clarification" %}</span> {% trans "on
+      pricing?" %}
+    </h2>
+    <p>
+      {% trans "We're here to help. Reach out to us for any questions about our
+      charges or services." %}
+    </p>
     <div class="cta-buttons">
       <a href="{% url 'home' %}#contact" class="btn-primary">
         <i class="fas fa-phone-alt"></i> {% trans "Contact Us" %}
       </a>
-      <a href="https://wa.me/919876543210?text=Hello%2C%20I%20want%20to%20know%20the%20charges%20for%20a%20service." target="_blank" class="btn-whatsapp">
+      <a
+        href="https://wa.me/919876543210?text=Hello%2C%20I%20want%20to%20know%20the%20charges%20for%20a%20service."
+        target="_blank"
+        class="btn-whatsapp"
+      >
         <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
       </a>
     </div>

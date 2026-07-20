@@ -162,7 +162,8 @@ class ReviewForm(forms.ModelForm):
             "review": forms.Textarea(
                 attrs={"class": "form-control", "rows": 4, "placeholder": _("Write your review...")}
             ),
-            "rating": forms.NumberInput(attrs={"class": "form-control", "min": 1, "max": 5}),
+            # Rating is hidden because the template uses a custom star selector
+            "rating": forms.HiddenInput(),
         }
 
     def clean_rating(self):
@@ -195,7 +196,7 @@ class ServiceForm(forms.ModelForm):
 class AnnouncementForm(forms.ModelForm):
     class Meta:
         model = Announcement
-        fields = ("title", "category", "description", "is_urgent")   # added is_urgent
+        fields = ("title", "category", "description", "is_urgent")
         labels = {
             "title": _("Title"),
             "category": _("Category"),
@@ -371,6 +372,10 @@ class DocumentUploadForm(forms.ModelForm):
     def clean_file(self):
         file = self.cleaned_data.get("file")
         if file:
+            # Validate file size (max 10MB)
+            if file.size > 10 * 1024 * 1024:  # 10 MB
+                raise forms.ValidationError(_("File size must be under 10 MB."))
+
             ext = file.name.split(".")[-1].lower()
             if ext not in ("pdf", "jpg", "jpeg", "png"):
                 raise forms.ValidationError(_("Only PDF, JPG, JPEG, and PNG files are allowed."))
@@ -385,7 +390,7 @@ class RequiredDocumentForm(forms.ModelForm):
         fields = ("service", "document_name")
         labels = {
             "service": _("Service"),
-            "document_name": _("Document Names"),   # plural hint
+            "document_name": _("Document Names"),
         }
         widgets = {
             "service": forms.Select(attrs={"class": "form-select"}),

@@ -1,9 +1,5 @@
-{% extends "base.html" %}
-{% load i18n %}
-
-{% block title %}{% trans "Split PDF" %}{% endblock %}
-
-{% block extra_head %}
+{% extends "base.html" %} {% load i18n %} {% block title %}{% trans "Split PDF"
+%}{% endblock %} {% block extra_head %}
 <style>
   /* ================================================================
      PAGE-SPECIFIC STYLES – Split PDF
@@ -16,13 +12,17 @@
     overflow: hidden;
   }
   .page-hero::before {
-    content: '';
+    content: "";
     position: absolute;
     top: -30%;
     right: -10%;
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(0, 240, 255, 0.04), transparent 70%);
+    background: radial-gradient(
+      circle,
+      rgba(0, 240, 255, 0.04),
+      transparent 70%
+    );
     border-radius: 50%;
     pointer-events: none;
     z-index: 0;
@@ -248,9 +248,7 @@
     }
   }
 </style>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <!-- ================================================================
      PAGE HERO
      ================================================================ -->
@@ -281,10 +279,10 @@
 
       <!-- Error Message -->
       {% if error %}
-        <div class="alert-error">
-          <i class="fas fa-exclamation-circle"></i>
-          {{ error }}
-        </div>
+      <div class="alert-error">
+        <i class="fas fa-exclamation-circle"></i>
+        {{ error }}
+      </div>
       {% endif %}
 
       <!-- Form -->
@@ -318,8 +316,11 @@
       </form>
 
       <!-- Back Link -->
-      <a href="{% url 'application_admin_detail' app.id %}" class="btn-primary btn-sm">
-          <i class="fas fa-eye"></i> {% trans "View" %}
+      <a
+        href="{% url 'application_admin_detail' app.id %}"
+        class="btn-primary btn-sm"
+      >
+        <i class="fas fa-eye"></i> {% trans "View" %}
       </a>
     </div>
   </div>

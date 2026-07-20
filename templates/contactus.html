@@ -1,31 +1,61 @@
-{% extends "base.html" %}
-{% load i18n %}
-{% load static %}
+{% extends "base.html" %} {% load i18n %} {% load static %} {% block title %}{%
+trans "Contact Us" %}{% endblock %} {% block extra_head %}
+<!-- ============================================================
+     META – viewport & compatibility
+     ============================================================ -->
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"
+/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-{% block title %}{% trans "Contact Us" %}{% endblock %}
-
-{% block extra_head %}
 <style>
   /* ================================================================
-     PAGE-SPECIFIC STYLES – Contact Us
-     Uses global CSS variables from base.html.
+     PAGE-SPECIFIC STYLES – Fully responsive + cross‑browser
      ================================================================ */
+
+  /* ----- Base resets ----- */
+  .contact-section *,
+  .contact-section *::before,
+  .contact-section *::after {
+    box-sizing: border-box;
+  }
+
+  .contact-section .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    width: 100%;
+  }
 
   /* ---- Hero (matches other pages) ---- */
   .page-hero {
-    padding: 70px 0 50px;
+    padding: clamp(30px, 6vw, 70px) 0 clamp(20px, 4vw, 50px);
     text-align: center;
     position: relative;
     overflow: hidden;
+    background:
+      radial-gradient(
+        ellipse at 30% 20%,
+        rgba(0, 240, 255, 0.05),
+        transparent 60%
+      ),
+      var(--bg-primary, #0a0e1a);
+    border-bottom: 1px solid rgba(0, 240, 255, 0.06);
+    width: 100%;
   }
   .page-hero::before {
-    content: '';
+    content: "";
     position: absolute;
     top: -30%;
     right: -10%;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(0, 240, 255, 0.04), transparent 70%);
+    width: min(600px, 80vw);
+    height: min(600px, 80vw);
+    background: radial-gradient(
+      circle,
+      rgba(0, 240, 255, 0.04),
+      transparent 70%
+    );
     border-radius: 50%;
     pointer-events: none;
     z-index: 0;
@@ -37,88 +67,99 @@
   .page-hero .breadcrumb {
     display: inline-flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 8px;
-    color: var(--text-muted);
-    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    font-size: clamp(0.75rem, 1vw, 0.85rem);
     font-weight: 500;
     margin-bottom: 16px;
     letter-spacing: 0.3px;
   }
   .page-hero .breadcrumb a {
-    color: var(--text-muted);
-    transition: var(--transition);
+    color: var(--text-muted, #94a3b8);
+    transition: color 0.3s ease;
+    text-decoration: none;
   }
   .page-hero .breadcrumb a:hover {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
   }
   .page-hero .breadcrumb .current {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
   }
   .page-hero h1 {
-    font-size: 3rem;
+    font-size: clamp(1.8rem, 5vw, 3rem);
     font-weight: 900;
-    font-family: var(--font-display);
-    color: var(--text-white);
+    font-family: var(--font-display, "Inter", sans-serif);
+    color: var(--text-white, #f0f4ff);
     letter-spacing: 1px;
     margin-bottom: 8px;
     text-shadow: 0 0 40px rgba(0, 240, 255, 0.12);
   }
   .page-hero h1 span {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
     text-shadow: 0 0 30px rgba(0, 240, 255, 0.25);
   }
   .page-hero p {
-    font-size: 1.15rem;
-    color: var(--text-muted);
+    font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+    color: var(--text-muted, #94a3b8);
     max-width: 620px;
     margin: 0 auto;
     line-height: 1.8;
+    padding: 0 10px;
   }
   .page-hero .glow-line {
     display: inline-block;
     width: 80px;
     height: 3px;
-    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+    background: linear-gradient(
+      90deg,
+      var(--neon-cyan, #00f0ff),
+      var(--neon-purple, #a855f7)
+    );
     border-radius: 4px;
     margin-top: 16px;
-    box-shadow: var(--glow-cyan);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
   }
 
   /* ---- Contact Section ---- */
   .contact-section {
-    padding: 40px 0 70px;
-    background: var(--bg-secondary);
+    padding: clamp(30px, 5vw, 40px) 0 clamp(40px, 8vw, 70px);
+    background: var(--bg-secondary, rgba(10, 14, 26, 0.6));
+    width: 100%;
   }
   .contact-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 40px;
+    gap: clamp(30px, 5vw, 40px);
   }
 
   /* ---- Form Wrapper ---- */
   .contact-form-wrapper {
-    background: var(--bg-card);
-    border-radius: var(--radius);
-    padding: 36px 32px;
-    box-shadow: var(--shadow-card);
+    background: var(--bg-card, rgba(255, 255, 255, 0.04));
+    border-radius: var(--radius, 12px);
+    padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1rem, 2.5vw, 2rem);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
     border: 1px solid rgba(255, 255, 255, 0.04);
-    transition: var(--transition);
+    transition: all 0.3s ease;
   }
   .contact-form-wrapper:hover {
-    border-color: var(--neon-cyan);
-    box-shadow: var(--shadow-card), var(--glow-cyan);
+    border-color: var(--neon-cyan, #00f0ff);
+    box-shadow:
+      0 8px 30px rgba(0, 0, 0, 0.2),
+      0 0 30px rgba(0, 240, 255, 0.06);
   }
   .contact-form-wrapper h2 {
-    font-size: 1.8rem;
+    font-size: clamp(1.4rem, 3vw, 1.8rem);
     font-weight: 700;
-    color: var(--text-white);
+    color: var(--text-white, #f0f4ff);
     margin-bottom: 24px;
     display: flex;
     align-items: center;
     gap: 12px;
+    flex-wrap: wrap;
   }
   .contact-form-wrapper h2 i {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
   }
 
   /* ---- Form Elements ---- */
@@ -128,32 +169,37 @@
   .contact-form label {
     display: block;
     font-weight: 600;
-    font-size: 0.9rem;
-    color: var(--text-muted);
+    font-size: clamp(0.85rem, 1vw, 0.9rem);
+    color: var(--text-muted, #94a3b8);
     margin-bottom: 4px;
   }
   .contact-form label .required {
-    color: var(--neon-orange);
+    color: var(--neon-orange, #f97316);
   }
   .contact-form .form-control {
     width: 100%;
-    padding: 12px 16px;
+    padding: clamp(0.6rem, 1vw, 0.8rem) clamp(0.8rem, 1.2vw, 1rem);
     border: 1.5px solid rgba(255, 255, 255, 0.06);
-    border-radius: var(--radius-sm);
-    font-family: var(--font-body);
-    font-size: 1rem;
-    transition: var(--transition);
+    border-radius: var(--radius-sm, 8px);
+    font-family: var(--font-body, "Inter", sans-serif);
+    font-size: clamp(0.9rem, 1vw, 1rem);
+    transition: all 0.3s ease;
     background: rgba(255, 255, 255, 0.04);
-    color: var(--text-white);
+    color: var(--text-white, #f0f4ff);
+    min-height: 48px;
+    -webkit-appearance: none;
+    appearance: none;
   }
   .contact-form .form-control::placeholder {
-    color: var(--text-muted);
+    color: var(--text-muted, #94a3b8);
     opacity: 0.5;
   }
   .contact-form .form-control:focus {
     outline: none;
-    border-color: var(--neon-cyan);
-    box-shadow: 0 0 0 4px rgba(0, 240, 255, 0.08), var(--glow-cyan);
+    border-color: var(--neon-cyan, #00f0ff);
+    box-shadow:
+      0 0 0 4px rgba(0, 240, 255, 0.08),
+      0 0 30px rgba(0, 240, 255, 0.06);
     background: rgba(0, 240, 255, 0.04);
   }
   .contact-form textarea.form-control {
@@ -164,8 +210,8 @@
     list-style: none;
     padding: 0;
     margin: 4px 0 0;
-    color: var(--neon-orange);
-    font-size: 0.8rem;
+    color: var(--neon-orange, #f97316);
+    font-size: clamp(0.75rem, 0.9vw, 0.8rem);
     font-weight: 500;
   }
   .contact-form .errorlist li {
@@ -178,30 +224,41 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
-    padding: 14px 34px;
-    border-radius: var(--radius-pill);
+    padding: clamp(0.8rem, 1.5vw, 1rem) clamp(1.5rem, 3vw, 2.5rem);
+    border-radius: var(--radius-pill, 50px);
     font-weight: 700;
-    font-size: 1rem;
-    border: 2px solid var(--neon-yellow);
-    background: var(--neon-yellow);
-    color: var(--bg-primary);
+    font-size: clamp(0.95rem, 1.1vw, 1rem);
+    border: 2px solid var(--neon-yellow, #ffe600);
+    background: var(--neon-yellow, #ffe600);
+    color: var(--bg-primary, #0a0e1a);
     cursor: pointer;
-    transition: var(--transition);
+    transition: all 0.3s ease;
     box-shadow: 0 0 20px rgba(255, 230, 0, 0.3);
     animation: pulseGlowYellow 2.8s ease-in-out infinite;
-    font-family: var(--font-body);
+    font-family: var(--font-body, "Inter", sans-serif);
     width: 100%;
     margin-top: 4px;
+    touch-action: manipulation;
+    min-height: 56px;
   }
   .btn-submit:hover {
     transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 0 40px rgba(255, 230, 0, 0.7), 0 0 80px rgba(255, 230, 0, 0.3);
+    box-shadow:
+      0 0 40px rgba(255, 230, 0, 0.7),
+      0 0 80px rgba(255, 230, 0, 0.3);
     background: #fff44f;
     border-color: #fff44f;
   }
   @keyframes pulseGlowYellow {
-    0%, 100% { box-shadow: 0 0 20px rgba(255, 230, 0, 0.3); }
-    50% { box-shadow: 0 0 40px rgba(255, 230, 0, 0.7), 0 0 80px rgba(255, 230, 0, 0.2); }
+    0%,
+    100% {
+      box-shadow: 0 0 20px rgba(255, 230, 0, 0.3);
+    }
+    50% {
+      box-shadow:
+        0 0 40px rgba(255, 230, 0, 0.7),
+        0 0 80px rgba(255, 230, 0, 0.2);
+    }
   }
 
   /* ---- Info Blocks ---- */
@@ -214,31 +271,38 @@
     display: flex;
     align-items: flex-start;
     gap: 16px;
-    background: var(--bg-card);
+    background: var(--bg-card, rgba(255, 255, 255, 0.04));
     border: 1px solid rgba(255, 255, 255, 0.04);
-    border-radius: var(--radius-sm);
-    padding: 20px 22px;
-    transition: var(--transition);
+    border-radius: var(--radius-sm, 8px);
+    padding: clamp(1rem, 2vw, 1.4rem) clamp(1rem, 2vw, 1.4rem);
+    transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    box-shadow: var(--shadow-card);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   }
   .info-block:hover {
     transform: translateX(6px) scale(1.01);
-    border-color: var(--neon-pink);
-    box-shadow: var(--shadow-card), 0 0 30px rgba(255, 45, 149, 0.12);
+    border-color: var(--neon-pink, #ff2d95);
+    box-shadow:
+      0 8px 30px rgba(0, 0, 0, 0.15),
+      0 0 30px rgba(255, 45, 149, 0.08);
     background: rgba(255, 45, 149, 0.04);
   }
   .info-block::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     height: 2px;
-    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink), var(--neon-purple));
+    background: linear-gradient(
+      90deg,
+      var(--neon-cyan, #00f0ff),
+      var(--neon-pink, #ff2d95),
+      var(--neon-purple, #a855f7)
+    );
     transform: scaleX(0);
-    transition: var(--transition);
+    transition: all 0.3s ease;
     transform-origin: left;
     box-shadow: 0 0 20px rgba(255, 45, 149, 0.2);
   }
@@ -246,42 +310,42 @@
     transform: scaleX(1);
   }
   .info-block .icon {
-    width: 44px;
-    height: 44px;
+    width: clamp(2.5rem, 4vw, 3rem);
+    height: clamp(2.5rem, 4vw, 3rem);
     background: rgba(0, 240, 255, 0.08);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--neon-cyan);
-    font-size: 1.2rem;
+    color: var(--neon-cyan, #00f0ff);
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
     flex-shrink: 0;
     margin-top: 2px;
-    transition: var(--transition);
+    transition: all 0.3s ease;
     border: 1px solid rgba(0, 240, 255, 0.08);
   }
   .info-block:hover .icon {
-    background: var(--gradient-cyan);
-    color: var(--bg-primary);
+    background: var(--gradient-cyan, linear-gradient(135deg, #00f0ff, #0ea5e9));
+    color: var(--bg-primary, #0a0e1a);
     transform: scale(1.08) rotate(-4deg);
-    box-shadow: var(--glow-cyan);
-    border-color: var(--neon-cyan);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
+    border-color: var(--neon-cyan, #00f0ff);
   }
   .info-block .content h4 {
-    font-size: 1rem;
+    font-size: clamp(0.95rem, 1.2vw, 1rem);
     font-weight: 700;
-    color: var(--text-white);
+    color: var(--text-white, #f0f4ff);
     margin-bottom: 2px;
   }
   .info-block .content p,
   .info-block .content a {
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    transition: var(--transition);
+    color: var(--text-muted, #94a3b8);
+    font-size: clamp(0.85rem, 1vw, 0.95rem);
+    transition: color 0.3s ease;
     text-decoration: none;
   }
   .info-block .content a:hover {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
   }
 
   /* ---- WhatsApp link inside info block ---- */
@@ -290,17 +354,19 @@
     align-items: center;
     gap: 8px;
     background: #25d366;
-    color: var(--text-white);
-    padding: 8px 18px;
-    border-radius: var(--radius-pill);
+    color: var(--text-white, #f0f4ff);
+    padding: clamp(0.4rem, 1vw, 0.6rem) clamp(1rem, 2vw, 1.4rem);
+    border-radius: var(--radius-pill, 50px);
     font-weight: 600;
-    font-size: 0.85rem;
-    transition: var(--transition);
+    font-size: clamp(0.8rem, 1vw, 0.85rem);
+    transition: all 0.3s ease;
     margin-top: 4px;
     text-decoration: none;
     border: 2px solid transparent;
     box-shadow: 0 0 20px rgba(37, 211, 102, 0.3);
     animation: pulseGlowGreen 3.2s ease-in-out infinite;
+    touch-action: manipulation;
+    min-height: 44px;
   }
   .whatsapp-link:hover {
     background: #1ebd5a;
@@ -308,51 +374,74 @@
     box-shadow: 0 0 40px rgba(57, 255, 20, 0.4);
   }
   @keyframes pulseGlowGreen {
-    0%, 100% { box-shadow: 0 0 20px rgba(57, 255, 20, 0.3); }
-    50% { box-shadow: 0 0 40px rgba(57, 255, 20, 0.7), 0 0 80px rgba(57, 255, 20, 0.2); }
+    0%,
+    100% {
+      box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
+    }
+    50% {
+      box-shadow:
+        0 0 40px rgba(57, 255, 20, 0.7),
+        0 0 80px rgba(57, 255, 20, 0.2);
+    }
   }
 
   /* ---- Hours Block ---- */
   .hours-block {
-    background: var(--bg-card);
+    background: var(--bg-card, rgba(255, 255, 255, 0.04));
     border: 1px solid rgba(255, 255, 255, 0.04);
-    border-radius: var(--radius);
-    padding: 24px 28px;
+    border-radius: var(--radius, 12px);
+    padding: clamp(1.2rem, 2vw, 1.8rem) clamp(1.2rem, 2vw, 1.8rem);
     margin-top: 4px;
-    transition: var(--transition);
-    box-shadow: var(--shadow-card);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   }
   .hours-block:hover {
-    border-color: var(--neon-cyan);
-    box-shadow: var(--shadow-card), var(--glow-cyan);
+    border-color: var(--neon-cyan, #00f0ff);
+    box-shadow:
+      0 8px 30px rgba(0, 0, 0, 0.15),
+      0 0 30px rgba(0, 240, 255, 0.06);
   }
   .hours-block h3 {
-    font-size: 1.2rem;
+    font-size: clamp(1.1rem, 1.5vw, 1.2rem);
     font-weight: 700;
     display: flex;
     align-items: center;
     gap: 12px;
-    color: var(--text-white);
+    color: var(--text-white, #f0f4ff);
     margin-bottom: 16px;
+    flex-wrap: wrap;
   }
   .hours-block h3 i {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
+  }
+  .hours-block p {
+    color: var(--text-muted, #94a3b8);
+    font-size: clamp(0.9rem, 1vw, 1rem);
+    line-height: 1.8;
+    margin: 0;
+  }
+  .hours-block div {
+    color: var(--text-muted, #94a3b8);
+    font-size: clamp(0.9rem, 1vw, 1rem);
+    line-height: 1.8;
   }
 
   /* ---- Map Block ---- */
   .map-block {
-    border-radius: var(--radius);
+    border-radius: var(--radius, 12px);
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.04);
     margin-top: 40px;
-    height: 300px;
-    background: var(--bg-card);
-    transition: var(--transition);
-    box-shadow: var(--shadow-card);
+    height: clamp(200px, 30vw, 300px);
+    background: var(--bg-card, rgba(255, 255, 255, 0.04));
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
   }
   .map-block:hover {
-    border-color: var(--neon-cyan);
-    box-shadow: var(--shadow-card), var(--glow-cyan);
+    border-color: var(--neon-cyan, #00f0ff);
+    box-shadow:
+      0 8px 30px rgba(0, 0, 0, 0.15),
+      0 0 30px rgba(0, 240, 255, 0.06);
   }
   .map-block iframe {
     width: 100%;
@@ -365,43 +454,56 @@
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: var(--text-muted);
-    font-size: 1rem;
-    background: var(--bg-card);
+    color: var(--text-muted, #94a3b8);
+    font-size: clamp(0.9rem, 1vw, 1rem);
+    background: var(--bg-card, rgba(255, 255, 255, 0.04));
+    padding: 20px;
+    text-align: center;
+    flex-wrap: wrap;
+    gap: 12px;
   }
   .map-block .map-placeholder i {
-    font-size: 2rem;
-    margin-right: 12px;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin-right: 8px;
     opacity: 0.4;
+    flex-shrink: 0;
   }
 
   /* ---- CTA Banner (reuses base styles) ---- */
   .cta-banner {
-    padding: 70px 0;
-    background: radial-gradient(ellipse at 30% 20%, rgba(0, 240, 255, 0.06), transparent 60%),
-                var(--bg-primary);
+    padding: clamp(40px, 8vw, 70px) 0;
+    background:
+      radial-gradient(
+        ellipse at 30% 20%,
+        rgba(0, 240, 255, 0.06),
+        transparent 60%
+      ),
+      var(--bg-primary, #0a0e1a);
     border-top: 1px solid rgba(0, 240, 255, 0.06);
     border-bottom: 1px solid rgba(0, 240, 255, 0.06);
     text-align: center;
+    width: 100%;
   }
   .cta-banner .container {
     max-width: 720px;
+    margin: 0 auto;
+    padding: 0 20px;
   }
   .cta-banner h2 {
-    font-size: 2.4rem;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
     font-weight: 800;
-    font-family: var(--font-display);
-    color: var(--text-white);
+    font-family: var(--font-display, "Inter", sans-serif);
+    color: var(--text-white, #f0f4ff);
     letter-spacing: -0.5px;
     margin-bottom: 8px;
   }
   .cta-banner h2 span {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
     text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
   }
   .cta-banner p {
-    color: var(--text-muted);
-    font-size: 1.1rem;
+    color: var(--text-muted, #94a3b8);
+    font-size: clamp(0.95rem, 1.2vw, 1.1rem);
     margin-bottom: 28px;
   }
   .cta-buttons {
@@ -410,10 +512,46 @@
     flex-wrap: wrap;
     gap: 18px;
   }
+  .cta-buttons .btn-primary,
+  .cta-buttons .btn-whatsapp {
+    padding: clamp(0.8rem, 1.5vw, 1rem) clamp(1.5rem, 3vw, 2.5rem);
+    font-size: clamp(0.9rem, 1vw, 1rem);
+    min-height: 48px;
+    min-width: 180px;
+    justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: none;
+    border-radius: var(--radius-sm, 8px);
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    touch-action: manipulation;
+    cursor: pointer;
+  }
+  .cta-buttons .btn-primary {
+    background: var(--gradient-cyan, linear-gradient(135deg, #00f0ff, #0ea5e9));
+    color: var(--bg-primary, #0a0e1a);
+    box-shadow: 0 0 24px rgba(0, 240, 255, 0.2);
+  }
+  .cta-buttons .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 40px rgba(0, 240, 255, 0.35);
+  }
+  .cta-buttons .btn-whatsapp {
+    background: #25d366;
+    color: #fff;
+  }
+  .cta-buttons .btn-whatsapp:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(37, 211, 102, 0.35);
+  }
 
   /* ================================================================
-     RESPONSIVE
+     RESPONSIVE BREAKPOINTS
      ================================================================ */
+
   @media (max-width: 1024px) {
     .contact-grid {
       grid-template-columns: 1fr;
@@ -423,28 +561,33 @@
       height: 250px;
     }
   }
+
   @media (max-width: 768px) {
     .page-hero h1 {
-      font-size: 2.4rem;
+      font-size: clamp(1.6rem, 5vw, 2.4rem);
     }
     .page-hero p {
-      font-size: 1rem;
+      font-size: clamp(0.9rem, 2vw, 1rem);
     }
     .contact-form-wrapper {
-      padding: 24px 18px;
+      padding: 1.5rem 1rem 1.8rem;
     }
     .contact-form-wrapper h2 {
       font-size: 1.4rem;
     }
     .info-block {
-      padding: 16px 18px;
+      padding: 1rem 1rem;
       flex-wrap: wrap;
     }
+    .info-block .content {
+      flex: 1;
+      min-width: 140px;
+    }
     .hours-block {
-      padding: 18px 18px;
+      padding: 1.2rem 1rem;
     }
     .cta-banner h2 {
-      font-size: 2rem;
+      font-size: clamp(1.6rem, 5vw, 2rem);
     }
     .cta-buttons {
       flex-direction: column;
@@ -453,15 +596,17 @@
     .cta-buttons .btn-primary,
     .cta-buttons .btn-whatsapp {
       width: 100%;
+      max-width: 280px;
       justify-content: center;
     }
     .map-block {
       height: 220px;
     }
   }
+
   @media (max-width: 480px) {
     .page-hero h1 {
-      font-size: 1.8rem;
+      font-size: clamp(1.4rem, 5vw, 1.8rem);
     }
     .info-block {
       flex-direction: column;
@@ -475,36 +620,241 @@
       word-break: break-all;
     }
     .contact-form-wrapper {
-      padding: 18px 14px;
+      padding: 1.2rem 0.8rem 1.5rem;
     }
     .contact-form .form-control {
-      padding: 10px 12px;
+      padding: 0.6rem 0.8rem;
       font-size: 0.9rem;
+      min-height: 44px;
     }
     .btn-submit {
-      font-size: 0.95rem;
-      padding: 14px;
+      font-size: 0.9rem;
+      padding: 0.8rem;
+      min-height: 50px;
     }
     .map-block {
       height: 180px;
     }
+    .whatsapp-link {
+      min-height: 40px;
+      padding: 0.4rem 1rem;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .contact-form-wrapper {
+      padding: 1rem 0.5rem 1.2rem;
+    }
+    .info-block {
+      padding: 0.8rem 0.8rem;
+    }
+    .btn-submit {
+      font-size: 0.85rem;
+      min-height: 44px;
+    }
+    .map-block {
+      height: 150px;
+    }
+  }
+
+  /* ================================================================
+     CROSS‑BROWSER FALLBACKS
+     ================================================================ */
+
+  /* ----- Flexbox fallback for older IE ----- */
+  @supports not (display: flex) {
+    .contact-grid {
+      display: block;
+    }
+    .contact-form-wrapper,
+    .contact-info {
+      width: 100%;
+      margin-bottom: 30px;
+    }
+    .info-block {
+      display: block;
+      text-align: center;
+    }
+    .info-block .icon {
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+    .hours-block h3 {
+      display: block;
+    }
+    .cta-buttons {
+      display: block;
+    }
+    .cta-buttons .btn-primary,
+    .cta-buttons .btn-whatsapp {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto 12px auto;
+    }
+    .btn-submit {
+      display: block;
+      width: 100%;
+    }
+  }
+
+  /* ----- backdrop-filter fallback ----- */
+  @supports not (backdrop-filter: blur(4px)) {
+    .contact-form-wrapper,
+    .info-block,
+    .hours-block,
+    .map-block,
+    .contact-form .form-control {
+      background: rgba(10, 14, 26, 0.95) !important;
+    }
+  }
+
+  /* ----- Touch devices: larger tap targets & disable hover effects ----- */
+  @media (hover: none) and (pointer: coarse) {
+    .contact-form-wrapper:hover {
+      border-color: rgba(255, 255, 255, 0.04);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      transform: none !important;
+    }
+    .info-block:hover {
+      transform: none !important;
+      border-color: rgba(255, 255, 255, 0.04);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      background: var(--bg-card, rgba(255, 255, 255, 0.04));
+    }
+    .info-block:hover::after {
+      transform: scaleX(0);
+    }
+    .info-block:hover .icon {
+      background: rgba(0, 240, 255, 0.08);
+      color: var(--neon-cyan, #00f0ff);
+      transform: none;
+      box-shadow: none;
+    }
+    .btn-submit {
+      min-height: 56px;
+    }
+    .btn-submit:hover {
+      transform: none !important;
+    }
+    .whatsapp-link {
+      min-height: 48px;
+    }
+    .whatsapp-link:hover {
+      transform: none !important;
+    }
+    .cta-buttons .btn-primary:hover,
+    .cta-buttons .btn-whatsapp:hover {
+      transform: none !important;
+    }
+    .contact-form .form-control {
+      min-height: 48px;
+    }
+  }
+
+  /* ----- Reduced motion ----- */
+  @media (prefers-reduced-motion: reduce) {
+    .btn-submit,
+    .whatsapp-link {
+      animation: none !important;
+    }
+    .btn-submit,
+    .whatsapp-link,
+    .info-block,
+    .contact-form-wrapper,
+    .map-block,
+    .hours-block,
+    .contact-form .form-control {
+      transition: none !important;
+    }
+    .btn-submit:hover,
+    .whatsapp-link:hover {
+      transform: none !important;
+    }
+  }
+
+  /* ----- Print styles ----- */
+  @media print {
+    .page-hero {
+      background: #fff !important;
+      border-bottom: 1px solid #ccc;
+    }
+    .page-hero h1,
+    .page-hero h1 span,
+    .cta-banner h2 span {
+      -webkit-text-fill-color: #000 !important;
+      color: #000 !important;
+      background: none !important;
+    }
+    .page-hero p {
+      color: #000 !important;
+    }
+    .contact-form-wrapper,
+    .info-block,
+    .hours-block,
+    .map-block {
+      border: 1px solid #ccc !important;
+      box-shadow: none !important;
+      background: #fff !important;
+    }
+    .contact-form-wrapper h2,
+    .info-block .content h4,
+    .hours-block h3 {
+      color: #000 !important;
+    }
+    .info-block .content p,
+    .info-block .content a,
+    .hours-block p,
+    .hours-block div {
+      color: #000 !important;
+    }
+    .contact-form .form-control {
+      border: 1px solid #ccc !important;
+      color: #000 !important;
+      background: #f9f9f9 !important;
+    }
+    .btn-submit,
+    .whatsapp-link,
+    .cta-buttons .btn-primary,
+    .cta-buttons .btn-whatsapp {
+      display: none !important;
+    }
+    .info-block .icon {
+      background: #eee !important;
+      color: #000 !important;
+    }
+    .map-block {
+      height: 200px !important;
+    }
+    .page-hero .glow-line {
+      background: #000 !important;
+      box-shadow: none !important;
+    }
   }
 </style>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <!-- ================================================================
      PAGE HERO
      ================================================================ -->
 <section class="page-hero">
   <div class="container">
     <div class="breadcrumb">
-      <a href="{% url 'home' %}"><i class="fas fa-home"></i> {% trans "Home" %}</a>
-      <span><i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5;"></i></span>
+      <a href="{% url 'home' %}"
+        ><i class="fas fa-home"></i> {% trans "Home" %}</a
+      >
+      <span
+        ><i
+          class="fas fa-chevron-right"
+          style="font-size: 0.6rem; opacity: 0.5"
+        ></i
+      ></span>
       <span class="current">{% trans "Contact Us" %}</span>
     </div>
     <h1>{% trans "Get in" %} <span>{% trans "Touch" %}</span></h1>
-    <p>{% trans "We're here to help. Send us a message and we'll get back to you promptly." %}</p>
+    <p>
+      {% trans "We're here to help. Send us a message and we'll get back to you
+      promptly." %}
+    </p>
     <div class="glow-line"></div>
   </div>
 </section>
@@ -519,46 +869,66 @@
       <div class="contact-form-wrapper">
         <h2><i class="fas fa-paper-plane"></i> {% trans "Send a Message" %}</h2>
 
-        <form class="contact-form" method="post" action="{% url 'contact' %}" novalidate>
+        <form
+          class="contact-form"
+          method="post"
+          action="{% url 'contact' %}"
+          novalidate
+        >
           {% csrf_token %}
 
           <div class="form-group">
-            <label for="{{ form.name.id_for_label }}">{{ form.name.label }} <span class="required">*</span></label>
-            {{ form.name }}
-            {% if form.name.errors %}
-              <ul class="errorlist">{{ form.name.errors }}</ul>
+            <label for="{{ form.name.id_for_label }}"
+              >{{ form.name.label }} <span class="required">*</span></label
+            >
+            {{ form.name }} {% if form.name.errors %}
+            <ul class="errorlist">
+              {{ form.name.errors }}
+            </ul>
             {% endif %}
           </div>
 
           <div class="form-group">
-            <label for="{{ form.email.id_for_label }}">{{ form.email.label }} <span class="required">*</span></label>
-            {{ form.email }}
-            {% if form.email.errors %}
-              <ul class="errorlist">{{ form.email.errors }}</ul>
+            <label for="{{ form.email.id_for_label }}"
+              >{{ form.email.label }} <span class="required">*</span></label
+            >
+            {{ form.email }} {% if form.email.errors %}
+            <ul class="errorlist">
+              {{ form.email.errors }}
+            </ul>
             {% endif %}
           </div>
 
           <div class="form-group">
-            <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }} <span class="required">*</span></label>
-            {{ form.phone }}
-            {% if form.phone.errors %}
-              <ul class="errorlist">{{ form.phone.errors }}</ul>
+            <label for="{{ form.phone.id_for_label }}"
+              >{{ form.phone.label }} <span class="required">*</span></label
+            >
+            {{ form.phone }} {% if form.phone.errors %}
+            <ul class="errorlist">
+              {{ form.phone.errors }}
+            </ul>
             {% endif %}
           </div>
 
           <div class="form-group">
-            <label for="{{ form.subject.id_for_label }}">{{ form.subject.label }} <span class="required">*</span></label>
-            {{ form.subject }}
-            {% if form.subject.errors %}
-              <ul class="errorlist">{{ form.subject.errors }}</ul>
+            <label for="{{ form.subject.id_for_label }}"
+              >{{ form.subject.label }} <span class="required">*</span></label
+            >
+            {{ form.subject }} {% if form.subject.errors %}
+            <ul class="errorlist">
+              {{ form.subject.errors }}
+            </ul>
             {% endif %}
           </div>
 
           <div class="form-group">
-            <label for="{{ form.message.id_for_label }}">{{ form.message.label }} <span class="required">*</span></label>
-            {{ form.message }}
-            {% if form.message.errors %}
-              <ul class="errorlist">{{ form.message.errors }}</ul>
+            <label for="{{ form.message.id_for_label }}"
+              >{{ form.message.label }} <span class="required">*</span></label
+            >
+            {{ form.message }} {% if form.message.errors %}
+            <ul class="errorlist">
+              {{ form.message.errors }}
+            </ul>
             {% endif %}
           </div>
 
@@ -584,7 +954,9 @@
           <div class="icon"><i class="fas fa-phone-alt"></i></div>
           <div class="content">
             <h4>{% trans "Phone" %}</h4>
-            <a href="tel:{{ business.phone }}">{{ business.phone|default:_("Not provided") }}</a>
+            <a href="tel:{{ business.phone }}"
+              >{{ business.phone|default:_("Not provided") }}</a
+            >
           </div>
         </div>
 
@@ -594,7 +966,12 @@
           <div class="icon"><i class="fab fa-whatsapp"></i></div>
           <div class="content">
             <h4>{% trans "WhatsApp" %}</h4>
-            <a href="https://wa.me/{{ business.whatsapp|cut:'+' }}?text={% trans 'Hello, I would like to know about your services.' %}" target="_blank" class="whatsapp-link">
+            <a
+              href="https://wa.me/{{ business.whatsapp|cut:'+' }}?text={% trans 'Hello, I would like to know about your services.' %}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="whatsapp-link"
+            >
               <i class="fab fa-whatsapp"></i> {% trans "Chat with Us" %}
             </a>
           </div>
@@ -606,7 +983,9 @@
           <div class="icon"><i class="fas fa-envelope"></i></div>
           <div class="content">
             <h4>{% trans "Email" %}</h4>
-            <a href="mailto:{{ business.email }}">{{ business.email|default:_("Not provided") }}</a>
+            <a href="mailto:{{ business.email }}"
+              >{{ business.email|default:_("Not provided") }}</a
+            >
           </div>
         </div>
 
@@ -614,9 +993,9 @@
         <div class="hours-block">
           <h3><i class="fas fa-clock"></i> {% trans "Business Hours" %}</h3>
           {% if business.business_hours %}
-            <div style="color: var(--text-muted); line-height: 1.8;">{{ business.business_hours|linebreaksbr }}</div>
+          <div>{{ business.business_hours|linebreaksbr }}</div>
           {% else %}
-            <p style="color: var(--text-muted);">{% trans "Hours not set." %}</p>
+          <p>{% trans "Hours not set." %}</p>
           {% endif %}
         </div>
       </div>
@@ -624,13 +1003,11 @@
 
     <!-- Map -->
     <div class="map-block">
-      {% if business.google_map %}
-        {{ business.google_map|safe }}
-      {% else %}
-        <div class="map-placeholder">
-          <i class="fas fa-map-marked-alt"></i>
-          {% trans "Map location not configured." %}
-        </div>
+      {% if business.google_map %} {{ business.google_map|safe }} {% else %}
+      <div class="map-placeholder">
+        <i class="fas fa-map-marked-alt"></i>
+        {% trans "Map location not configured." %}
+      </div>
       {% endif %}
     </div>
   </div>
@@ -641,30 +1018,37 @@
      ================================================================ -->
 <section class="cta-banner">
   <div class="container">
-    <h2>{% trans "We're just a" %} <span>{% trans "click" %}</span> {% trans "away!" %}</h2>
-    <p>{% trans "Reach out to us for any queries or to book a service. We respond promptly." %}</p>
+    <h2>
+      {% trans "We're just a" %} <span>{% trans "click" %}</span> {% trans
+      "away!" %}
+    </h2>
+    <p>
+      {% trans "Reach out to us for any queries or to book a service. We respond
+      promptly." %}
+    </p>
     <div class="cta-buttons">
       <a href="tel:{{ business.phone }}" class="btn-primary">
         <i class="fas fa-phone"></i> {% trans "Call Now" %}
       </a>
       {% if business.whatsapp %}
-      <a href="https://wa.me/{{ business.whatsapp|cut:'+' }}?text={% trans 'Hello, I would like to know about your services.' %}" target="_blank" class="btn-whatsapp">
+      <a
+        href="https://wa.me/{{ business.whatsapp|cut:'+' }}?text={% trans 'Hello, I would like to know about your services.' %}"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn-whatsapp"
+      >
         <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
       </a>
       {% endif %}
     </div>
   </div>
 </section>
-{% endblock %}
-
-{% block extra_scripts %}
-<!-- optional JavaScript (only for hamburger if needed, but base already handles it) -->
+{% endblock %} {% block extra_scripts %}
 <script>
-    (function() {
-        "use strict";
-        // If you need additional client-side logic, add it here.
-        // The hamburger and nav toggle are already in base.html.
-        console.log("📞 Contact page with dynamic data loaded.");
-    })();
+  (function () {
+    "use strict";
+    // Optional: any client-side enhancements
+    console.log("📞 Contact page loaded with responsive enhancements.");
+  })();
 </script>
 {% endblock %}

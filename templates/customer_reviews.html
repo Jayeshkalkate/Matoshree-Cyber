@@ -5,27 +5,59 @@
 {% block title %}{% trans "Customer Reviews" %}{% endblock %}
 
 {% block extra_head %}
+<!-- ============================================================
+     META – viewport & compatibility
+     ============================================================ -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
 <style>
   /* ================================================================
-     PAGE-SPECIFIC STYLES – Customer Reviews
-     Uses global CSS variables from base.html.
+     PAGE-SPECIFIC STYLES – Fully responsive + cross‑browser
      ================================================================ */
+
+  /* ----- Base resets ----- */
+  .reviews-section *,
+  .reviews-section *::before,
+  .reviews-section *::after {
+    box-sizing: border-box;
+  }
+
+  .reviews-section .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    width: 100%;
+  }
 
   /* ---- Hero (matches other pages) ---- */
   .page-hero {
-    padding: 70px 0 50px;
+    padding: clamp(30px, 6vw, 70px) 0 clamp(20px, 4vw, 50px);
     text-align: center;
     position: relative;
     overflow: hidden;
+    background:
+      radial-gradient(
+        ellipse at 30% 20%,
+        rgba(0, 240, 255, 0.05),
+        transparent 60%
+      ),
+      var(--bg-primary, #0a0e1a);
+    border-bottom: 1px solid rgba(0, 240, 255, 0.06);
+    width: 100%;
   }
   .page-hero::before {
-    content: '';
+    content: "";
     position: absolute;
     top: -30%;
     right: -10%;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(0, 240, 255, 0.04), transparent 70%);
+    width: min(600px, 80vw);
+    height: min(600px, 80vw);
+    background: radial-gradient(
+      circle,
+      rgba(0, 240, 255, 0.04),
+      transparent 70%
+    );
     border-radius: 50%;
     pointer-events: none;
     z-index: 0;
@@ -37,112 +69,123 @@
   .page-hero .breadcrumb {
     display: inline-flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 8px;
-    color: var(--text-muted);
-    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    font-size: clamp(0.75rem, 1vw, 0.85rem);
     font-weight: 500;
     margin-bottom: 16px;
     letter-spacing: 0.3px;
   }
   .page-hero .breadcrumb a {
-    color: var(--text-muted);
-    transition: var(--transition);
+    color: var(--text-muted, #94a3b8);
+    transition: color 0.3s ease;
+    text-decoration: none;
   }
   .page-hero .breadcrumb a:hover {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
   }
   .page-hero .breadcrumb .current {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
   }
   .page-hero h1 {
-    font-size: 3rem;
+    font-size: clamp(1.8rem, 5vw, 3rem);
     font-weight: 900;
-    font-family: var(--font-display);
-    color: var(--text-white);
+    font-family: var(--font-display, "Inter", sans-serif);
+    color: var(--text-white, #f0f4ff);
     letter-spacing: 1px;
     margin-bottom: 8px;
     text-shadow: 0 0 40px rgba(0, 240, 255, 0.12);
   }
   .page-hero h1 span {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
     text-shadow: 0 0 30px rgba(0, 240, 255, 0.25);
   }
   .page-hero h1 i {
-    color: var(--neon-yellow);
+    color: var(--neon-yellow, #ffe600);
     margin-right: 0.5rem;
   }
   .page-hero p {
-    font-size: 1.15rem;
-    color: var(--text-muted);
+    font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+    color: var(--text-muted, #94a3b8);
     max-width: 620px;
     margin: 0 auto;
     line-height: 1.8;
+    padding: 0 10px;
   }
   .page-hero .glow-line {
     display: inline-block;
     width: 80px;
     height: 3px;
-    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+    background: linear-gradient(
+      90deg,
+      var(--neon-cyan, #00f0ff),
+      var(--neon-purple, #a855f7)
+    );
     border-radius: 4px;
     margin-top: 16px;
-    box-shadow: var(--glow-cyan);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
   }
 
   /* ---- Rating Summary (glassmorphism) ---- */
   .rating-summary {
-    background: var(--bg-card);
+    background: var(--bg-card, rgba(255, 255, 255, 0.04));
     border: 1px solid rgba(255, 255, 255, 0.04);
-    border-radius: var(--radius);
-    padding: 28px 32px;
+    border-radius: var(--radius, 12px);
+    padding: clamp(1.2rem, 2.5vw, 2rem) clamp(1rem, 2.5vw, 2rem);
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    gap: 2rem 3rem;
+    gap: 1.5rem 2.5rem;
     margin-bottom: 32px;
-    box-shadow: var(--shadow-card);
-    transition: var(--transition);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
   }
   .rating-summary:hover {
-    border-color: var(--neon-cyan);
-    box-shadow: var(--shadow-card), var(--glow-cyan);
+    border-color: var(--neon-cyan, #00f0ff);
+    box-shadow:
+      0 8px 30px rgba(0, 0, 0, 0.15),
+      0 0 30px rgba(0, 240, 255, 0.06);
   }
   .rating-big {
     display: flex;
     align-items: center;
     gap: 1.2rem;
+    flex-wrap: wrap;
+    justify-content: center;
   }
   .rating-number {
-    font-size: 3.2rem;
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
     font-weight: 800;
-    color: var(--text-white);
+    color: var(--text-white, #f0f4ff);
     line-height: 1;
   }
   .rating-number sup {
-    font-size: 1.4rem;
+    font-size: clamp(1rem, 1.5vw, 1.4rem);
     font-weight: 500;
-    color: var(--text-muted);
+    color: var(--text-muted, #94a3b8);
     top: -0.8rem;
   }
   .rating-stars-big .stars {
-    font-size: 1.6rem;
+    font-size: clamp(1.2rem, 2.5vw, 1.6rem);
     letter-spacing: 2px;
-    color: var(--neon-yellow);
+    color: var(--neon-yellow, #ffe600);
   }
   .rating-stars-big .stars .empty-star {
-    color: var(--text-muted);
+    color: var(--text-muted, #94a3b8);
     opacity: 0.3;
   }
   .rating-stars-big .count {
-    font-size: 0.9rem;
-    color: var(--text-muted);
+    font-size: clamp(0.8rem, 1vw, 0.9rem);
+    color: var(--text-muted, #94a3b8);
   }
   .rating-stars-big .count strong {
-    color: var(--text-white);
+    color: var(--text-white, #f0f4ff);
   }
   .rating-bars {
     flex: 1;
-    min-width: 200px;
+    min-width: 180px;
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -151,13 +194,14 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 0.85rem;
+    font-size: clamp(0.75rem, 0.9vw, 0.85rem);
   }
   .rating-bar-row .star-label {
     width: 3.2rem;
-    color: var(--text-muted);
+    color: var(--text-muted, #94a3b8);
     font-weight: 600;
     text-align: right;
+    flex-shrink: 0;
   }
   .rating-bar-row .bar-track {
     flex: 1;
@@ -169,14 +213,20 @@
   .rating-bar-row .bar-fill {
     height: 100%;
     border-radius: 10px;
-    background: linear-gradient(90deg, var(--neon-yellow), var(--neon-orange));
+    background: linear-gradient(
+      90deg,
+      var(--neon-yellow, #ffe600),
+      var(--neon-orange, #f97316)
+    );
     box-shadow: 0 0 12px rgba(255, 230, 0, 0.2);
     transition: width 0.6s ease;
   }
   .rating-bar-row .bar-percent {
     width: 2.8rem;
-    color: var(--text-muted);
+    color: var(--text-muted, #94a3b8);
     font-weight: 500;
+    text-align: right;
+    flex-shrink: 0;
   }
 
   /* ---- Filter / Sort Row ---- */
@@ -189,11 +239,11 @@
     gap: 12px;
   }
   .filter-row .reviews-count {
-    font-size: 0.95rem;
-    color: var(--text-muted);
+    font-size: clamp(0.85rem, 1vw, 0.95rem);
+    color: var(--text-muted, #94a3b8);
   }
   .filter-row .reviews-count strong {
-    color: var(--text-white);
+    color: var(--text-white, #f0f4ff);
   }
   .sort-options {
     display: flex;
@@ -204,95 +254,105 @@
     background: transparent;
     border: 1.5px solid rgba(255, 255, 255, 0.08);
     padding: 6px 16px;
-    border-radius: var(--radius-pill);
-    font-size: 0.8rem;
+    border-radius: var(--radius-pill, 50px);
+    font-size: clamp(0.7rem, 0.9vw, 0.8rem);
     font-weight: 600;
-    color: var(--text-muted);
+    color: var(--text-muted, #94a3b8);
     cursor: pointer;
-    transition: var(--transition);
-    font-family: var(--font-body);
+    transition: all 0.3s ease;
+    font-family: var(--font-body, "Inter", sans-serif);
     text-transform: uppercase;
     letter-spacing: 0.3px;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
     gap: 4px;
+    touch-action: manipulation;
+    min-height: 44px;
   }
   .sort-btn:hover {
-    border-color: var(--neon-cyan);
-    color: var(--text-white);
-    box-shadow: var(--glow-cyan);
+    border-color: var(--neon-cyan, #00f0ff);
+    color: var(--text-white, #f0f4ff);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.06);
     transform: translateY(-2px);
   }
   .sort-btn.active {
-    background: var(--neon-cyan);
-    border-color: var(--neon-cyan);
-    color: var(--bg-primary);
-    box-shadow: var(--glow-cyan);
+    background: var(--neon-cyan, #00f0ff);
+    border-color: var(--neon-cyan, #00f0ff);
+    color: var(--bg-primary, #0a0e1a);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
   }
 
   /* ---- Reviews Grid ---- */
   .reviews-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: clamp(16px, 2vw, 24px);
     margin-bottom: 32px;
   }
 
   /* ---- Review Card (gaming hover) ---- */
   .review-card {
-    background: var(--bg-card);
+    background: var(--bg-card, rgba(255, 255, 255, 0.04));
     border: 1px solid rgba(255, 255, 255, 0.04);
-    border-radius: var(--radius);
-    padding: 24px 24px 20px;
-    transition: var(--transition);
+    border-radius: var(--radius, 12px);
+    padding: clamp(1.2rem, 2vw, 1.8rem) clamp(1rem, 2vw, 1.8rem)
+      clamp(1rem, 1.8vw, 1.5rem);
+    transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
     position: relative;
     overflow: hidden;
-    box-shadow: var(--shadow-card);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   }
   .review-card:hover {
     transform: translateY(-6px) scale(1.01);
-    border-color: var(--neon-magenta);
-    box-shadow: var(--shadow-card), 0 0 30px rgba(255, 45, 149, 0.15);
+    border-color: var(--neon-magenta, #ff2d95);
+    box-shadow:
+      0 8px 30px rgba(0, 0, 0, 0.15),
+      0 0 30px rgba(255, 45, 149, 0.08);
     background: rgba(255, 45, 149, 0.04);
   }
   .review-card::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     height: 3px;
-    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta), var(--neon-purple));
+    background: linear-gradient(
+      90deg,
+      var(--neon-cyan, #00f0ff),
+      var(--neon-magenta, #ff2d95),
+      var(--neon-purple, #a855f7)
+    );
     transform: scaleX(0);
-    transition: var(--transition);
+    transition: all 0.3s ease;
     transform-origin: left;
-    box-shadow: 0 0 20px rgba(255, 45, 149, 0.3);
+    box-shadow: 0 0 20px rgba(255, 45, 149, 0.2);
   }
   .review-card:hover::after {
     transform: scaleX(1);
   }
   .review-card .stars {
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
     letter-spacing: 1px;
-    color: var(--neon-yellow);
+    color: var(--neon-yellow, #ffe600);
     margin-bottom: 8px;
   }
   .review-card .stars .empty-star {
-    color: var(--text-muted);
+    color: var(--text-muted, #94a3b8);
     opacity: 0.3;
   }
   .review-card .review-text {
-    font-size: 0.98rem;
+    font-size: clamp(0.9rem, 1.1vw, 0.98rem);
     line-height: 1.7;
-    color: var(--text-muted);
+    color: var(--text-muted, #94a3b8);
     margin-bottom: 12px;
     flex: 1;
   }
   .review-card:hover .review-text {
-    color: var(--text-white);
+    color: var(--text-white, #f0f4ff);
   }
   .review-card .review-footer {
     display: flex;
@@ -306,10 +366,11 @@
   }
   .review-card .customer-name {
     font-weight: 700;
-    color: var(--text-white);
+    color: var(--text-white, #f0f4ff);
     display: flex;
     align-items: center;
     gap: 8px;
+    flex-wrap: wrap;
   }
   .review-card .customer-name .initials {
     display: inline-flex;
@@ -317,19 +378,19 @@
     justify-content: center;
     width: 32px;
     height: 32px;
-    background: var(--gradient-cyan);
-    color: var(--bg-primary);
+    background: var(--gradient-cyan, linear-gradient(135deg, #00f0ff, #0ea5e9));
+    color: var(--bg-primary, #0a0e1a);
     border-radius: 50%;
     font-size: 0.75rem;
     font-weight: 800;
     flex-shrink: 0;
   }
   .review-card .verified-badge {
-    font-size: 0.65rem;
-    color: var(--neon-green);
+    font-size: clamp(0.6rem, 0.7vw, 0.65rem);
+    color: var(--neon-green, #22d3ee);
     background: rgba(34, 211, 238, 0.08);
     padding: 2px 10px;
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-pill, 50px);
     font-weight: 600;
     display: inline-flex;
     align-items: center;
@@ -337,38 +398,41 @@
     border: 1px solid rgba(34, 211, 238, 0.1);
   }
   .review-card .review-date {
-    font-size: 0.75rem;
-    color: var(--text-muted);
+    font-size: clamp(0.7rem, 0.8vw, 0.75rem);
+    color: var(--text-muted, #94a3b8);
   }
 
   /* ---- Submit Review Section ---- */
   .submit-section {
-    background: var(--bg-card);
+    background: var(--bg-card, rgba(255, 255, 255, 0.04));
     border: 1px solid rgba(255, 255, 255, 0.04);
-    border-radius: var(--radius);
-    padding: 32px 36px;
-    box-shadow: var(--shadow-card);
-    transition: var(--transition);
+    border-radius: var(--radius, 12px);
+    padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1rem, 2.5vw, 2.5rem);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
   }
   .submit-section:hover {
-    border-color: var(--neon-cyan);
-    box-shadow: var(--shadow-card), var(--glow-cyan);
+    border-color: var(--neon-cyan, #00f0ff);
+    box-shadow:
+      0 8px 30px rgba(0, 0, 0, 0.15),
+      0 0 30px rgba(0, 240, 255, 0.06);
   }
   .submit-section h2 {
-    font-size: 1.6rem;
+    font-size: clamp(1.3rem, 2.5vw, 1.6rem);
     font-weight: 700;
     display: flex;
     align-items: center;
     gap: 10px;
-    color: var(--text-white);
+    color: var(--text-white, #f0f4ff);
     margin-bottom: 4px;
+    flex-wrap: wrap;
   }
   .submit-section h2 i {
-    color: var(--neon-yellow);
+    color: var(--neon-yellow, #ffe600);
   }
   .submit-section .form-subhead {
-    color: var(--text-muted);
-    font-size: 0.95rem;
+    color: var(--text-muted, #94a3b8);
+    font-size: clamp(0.9rem, 1vw, 0.95rem);
     margin-bottom: 20px;
   }
 
@@ -382,36 +446,41 @@
   }
   .review-form label {
     font-weight: 600;
-    font-size: 0.9rem;
-    color: var(--text-muted);
+    font-size: clamp(0.85rem, 1vw, 0.9rem);
+    color: var(--text-muted, #94a3b8);
     display: block;
     margin-bottom: 4px;
   }
   .review-form label .required {
-    color: var(--neon-orange);
+    color: var(--neon-orange, #f97316);
   }
   .review-form input,
   .review-form textarea {
     width: 100%;
-    padding: 10px 14px;
-    font-family: var(--font-body);
-    font-size: 0.95rem;
+    padding: clamp(0.6rem, 1vw, 0.8rem) clamp(0.8rem, 1.2vw, 1rem);
+    font-family: var(--font-body, "Inter", sans-serif);
+    font-size: clamp(0.9rem, 1vw, 0.95rem);
     border: 1.5px solid rgba(255, 255, 255, 0.06);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-sm, 8px);
     background: rgba(255, 255, 255, 0.04);
-    transition: var(--transition);
-    color: var(--text-white);
+    transition: all 0.3s ease;
+    color: var(--text-white, #f0f4ff);
+    min-height: 48px;
+    -webkit-appearance: none;
+    appearance: none;
   }
   .review-form input::placeholder,
   .review-form textarea::placeholder {
-    color: var(--text-muted);
+    color: var(--text-muted, #94a3b8);
     opacity: 0.5;
   }
   .review-form input:focus,
   .review-form textarea:focus {
     outline: none;
-    border-color: var(--neon-cyan);
-    box-shadow: 0 0 0 4px rgba(0, 240, 255, 0.08), var(--glow-cyan);
+    border-color: var(--neon-cyan, #00f0ff);
+    box-shadow:
+      0 0 0 4px rgba(0, 240, 255, 0.08),
+      0 0 30px rgba(0, 240, 255, 0.06);
     background: rgba(0, 240, 255, 0.04);
   }
   .review-form textarea {
@@ -428,30 +497,36 @@
     flex-wrap: wrap;
   }
   .star-select .star-option {
-    font-size: 2rem;
+    font-size: clamp(1.6rem, 3vw, 2rem);
     cursor: pointer;
-    color: var(--text-muted);
-    transition: var(--transition);
+    color: var(--text-muted, #94a3b8);
+    transition: all 0.3s ease;
     background: none;
     border: none;
     padding: 0 2px;
-    font-family: var(--font-body);
+    font-family: var(--font-body, "Inter", sans-serif);
     line-height: 1;
     opacity: 0.3;
+    touch-action: manipulation;
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
   .star-select .star-option:hover,
   .star-select .star-option.active {
-    color: var(--neon-yellow);
+    color: var(--neon-yellow, #ffe600);
     transform: scale(1.15);
     text-shadow: 0 0 20px rgba(255, 230, 0, 0.3);
     opacity: 1;
   }
-  .star-select .star-option:hover~.star-option {
+  .star-select .star-option:hover ~ .star-option {
     opacity: 0.3;
   }
   .star-select .star-label {
-    font-size: 0.9rem;
-    color: var(--text-muted);
+    font-size: clamp(0.85rem, 1vw, 0.9rem);
+    color: var(--text-muted, #94a3b8);
     margin-left: 6px;
     font-weight: 500;
   }
@@ -461,33 +536,44 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
-    padding: 14px 34px;
-    border-radius: var(--radius-pill);
+    padding: clamp(0.8rem, 1.5vw, 1rem) clamp(1.5rem, 3vw, 2.5rem);
+    border-radius: var(--radius-pill, 50px);
     font-weight: 700;
-    font-size: 1rem;
-    border: 2px solid var(--neon-yellow);
-    background: var(--neon-yellow);
-    color: var(--bg-primary);
+    font-size: clamp(0.95rem, 1.1vw, 1rem);
+    border: 2px solid var(--neon-yellow, #ffe600);
+    background: var(--neon-yellow, #ffe600);
+    color: var(--bg-primary, #0a0e1a);
     cursor: pointer;
-    transition: var(--transition);
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.74);
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(255, 230, 0, 0.3);
     animation: pulseGlowYellow 2.8s ease-in-out infinite;
-    font-family: var(--font-body);
+    font-family: var(--font-body, "Inter", sans-serif);
     width: 100%;
     margin-top: 4px;
+    touch-action: manipulation;
+    min-height: 56px;
   }
   .btn-submit:hover {
     transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 0 40px rgba(255, 253, 234, 0.7), 0 0 80px rgba(255, 230, 0, 0.3);
-    background: #7cceab;
-    border-color: #cccccc;
+    box-shadow:
+      0 0 40px rgba(255, 230, 0, 0.7),
+      0 0 80px rgba(255, 230, 0, 0.3);
+    background: #fff44f;
+    border-color: #fff44f;
   }
   @keyframes pulseGlowYellow {
-    0%, 100% { box-shadow: 0 0 20px rgba(255, 230, 0, 0.3); }
-    50% { box-shadow: 0 0 40px rgba(255, 230, 0, 0.7), 0 0 80px rgba(255, 230, 0, 0.2); }
+    0%,
+    100% {
+      box-shadow: 0 0 20px rgba(255, 230, 0, 0.3);
+    }
+    50% {
+      box-shadow:
+        0 0 40px rgba(255, 230, 0, 0.7),
+        0 0 80px rgba(255, 230, 0, 0.2);
+    }
   }
 
-  /* ---- Pagination (reuses base styles) ---- */
+  /* ---- Pagination ---- */
   .pagination-wrap {
     display: flex;
     justify-content: center;
@@ -503,25 +589,27 @@
     border-radius: 30px;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.06);
-    color: var(--text-muted);
+    color: var(--text-muted, #94a3b8);
     font-weight: 600;
-    font-size: 0.9rem;
-    transition: var(--transition);
+    font-size: clamp(0.8rem, 0.9vw, 0.9rem);
+    transition: all 0.3s ease;
     text-decoration: none;
     min-width: 44px;
+    min-height: 44px;
+    touch-action: manipulation;
   }
   .pagination-wrap .page-link:hover {
     background: rgba(0, 240, 255, 0.08);
-    border-color: var(--neon-cyan);
-    color: var(--text-white);
-    box-shadow: var(--glow-cyan);
+    border-color: var(--neon-cyan, #00f0ff);
+    color: var(--text-white, #f0f4ff);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.06);
     transform: translateY(-2px);
   }
   .pagination-wrap .page-link.active {
-    background: var(--neon-cyan);
-    color: var(--bg-primary);
-    border-color: var(--neon-cyan);
-    box-shadow: var(--glow-cyan);
+    background: var(--neon-cyan, #00f0ff);
+    color: var(--bg-primary, #0a0e1a);
+    border-color: var(--neon-cyan, #00f0ff);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
   }
   .pagination-wrap .page-link.disabled {
     opacity: 0.3;
@@ -538,56 +626,65 @@
     justify-content: space-between;
     align-items: center;
     gap: 12px;
-    font-size: 0.9rem;
-    color: var(--text-muted);
+    font-size: clamp(0.85rem, 0.9vw, 0.9rem);
+    color: var(--text-muted, #94a3b8);
   }
   .footer-note i {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
     margin-right: 4px;
   }
   .footer-note .badge {
     background: rgba(255, 255, 255, 0.04);
     padding: 4px 16px;
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-pill, 50px);
     font-weight: 500;
-    font-size: 0.8rem;
-    color: var(--text-muted);
+    font-size: clamp(0.75rem, 0.8vw, 0.8rem);
+    color: var(--text-muted, #94a3b8);
     border: 1px solid rgba(255, 255, 255, 0.04);
-    transition: var(--transition);
+    transition: all 0.3s ease;
+    white-space: nowrap;
   }
   .footer-note .badge:hover {
-    border-color: var(--neon-cyan);
-    color: var(--neon-cyan);
-    box-shadow: var(--glow-cyan);
+    border-color: var(--neon-cyan, #00f0ff);
+    color: var(--neon-cyan, #00f0ff);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.06);
   }
 
   /* ---- CTA Banner (reuses base styles) ---- */
   .cta-banner {
-    padding: 70px 0;
-    background: radial-gradient(ellipse at 30% 20%, rgba(0, 240, 255, 0.06), transparent 60%),
-                var(--bg-primary);
+    padding: clamp(40px, 8vw, 70px) 0;
+    background:
+      radial-gradient(
+        ellipse at 30% 20%,
+        rgba(0, 240, 255, 0.06),
+        transparent 60%
+      ),
+      var(--bg-primary, #0a0e1a);
     border-top: 1px solid rgba(0, 240, 255, 0.06);
     border-bottom: 1px solid rgba(0, 240, 255, 0.06);
     text-align: center;
+    width: 100%;
   }
   .cta-banner .container {
     max-width: 720px;
+    margin: 0 auto;
+    padding: 0 20px;
   }
   .cta-banner h2 {
-    font-size: 2.4rem;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
     font-weight: 800;
-    font-family: var(--font-display);
-    color: var(--text-white);
+    font-family: var(--font-display, "Inter", sans-serif);
+    color: var(--text-white, #f0f4ff);
     letter-spacing: -0.5px;
     margin-bottom: 8px;
   }
   .cta-banner h2 span {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
     text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
   }
   .cta-banner p {
-    color: var(--text-muted);
-    font-size: 1.1rem;
+    color: var(--text-muted, #94a3b8);
+    font-size: clamp(0.95rem, 1.2vw, 1.1rem);
     margin-bottom: 28px;
   }
   .cta-buttons {
@@ -596,33 +693,70 @@
     flex-wrap: wrap;
     gap: 18px;
   }
+  .cta-buttons .btn-primary,
+  .cta-buttons .btn-whatsapp {
+    padding: clamp(0.8rem, 1.5vw, 1rem) clamp(1.5rem, 3vw, 2.5rem);
+    font-size: clamp(0.9rem, 1vw, 1rem);
+    min-height: 48px;
+    min-width: 180px;
+    justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: none;
+    border-radius: var(--radius-sm, 8px);
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    touch-action: manipulation;
+    cursor: pointer;
+  }
+  .cta-buttons .btn-primary {
+    background: var(--gradient-cyan, linear-gradient(135deg, #00f0ff, #0ea5e9));
+    color: var(--bg-primary, #0a0e1a);
+    box-shadow: 0 0 24px rgba(0, 240, 255, 0.2);
+  }
+  .cta-buttons .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 40px rgba(0, 240, 255, 0.35);
+  }
+  .cta-buttons .btn-whatsapp {
+    background: #25d366;
+    color: #fff;
+  }
+  .cta-buttons .btn-whatsapp:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(37, 211, 102, 0.35);
+  }
 
   /* ================================================================
-     RESPONSIVE
+     RESPONSIVE BREAKPOINTS
      ================================================================ */
+
   @media (max-width: 1024px) {
     .reviews-grid {
       grid-template-columns: 1fr 1fr;
     }
   }
+
   @media (max-width: 768px) {
     .page-hero h1 {
-      font-size: 2.4rem;
+      font-size: clamp(1.6rem, 5vw, 2.4rem);
     }
     .page-hero p {
-      font-size: 1rem;
+      font-size: clamp(0.9rem, 2vw, 1rem);
     }
     .rating-summary {
       flex-direction: column;
       align-items: stretch;
       gap: 16px;
-      padding: 20px;
+      padding: 1.2rem;
     }
     .rating-big {
       justify-content: center;
     }
     .rating-number {
-      font-size: 2.6rem;
+      font-size: clamp(2rem, 6vw, 2.6rem);
     }
     .rating-bars {
       min-width: unset;
@@ -634,13 +768,14 @@
     }
     .sort-options {
       flex-wrap: wrap;
+      justify-content: center;
     }
     .reviews-grid {
       grid-template-columns: 1fr;
       gap: 16px;
     }
     .review-card {
-      padding: 18px 18px 16px;
+      padding: 1.2rem 1.2rem 1rem;
     }
     .review-card .review-footer {
       flex-direction: column;
@@ -648,10 +783,10 @@
       gap: 4px;
     }
     .submit-section {
-      padding: 20px 16px;
+      padding: 1.2rem 1rem 1.5rem;
     }
     .submit-section h2 {
-      font-size: 1.3rem;
+      font-size: clamp(1.2rem, 3vw, 1.3rem);
     }
     .review-form {
       grid-template-columns: 1fr;
@@ -665,7 +800,7 @@
       justify-content: center;
     }
     .cta-banner h2 {
-      font-size: 2rem;
+      font-size: clamp(1.6rem, 5vw, 2rem);
     }
     .cta-buttons {
       flex-direction: column;
@@ -674,6 +809,7 @@
     .cta-buttons .btn-primary,
     .cta-buttons .btn-whatsapp {
       width: 100%;
+      max-width: 280px;
       justify-content: center;
     }
     .footer-note {
@@ -681,25 +817,374 @@
       text-align: center;
       gap: 8px;
     }
+    .footer-note .badge {
+      white-space: normal;
+    }
   }
+
   @media (max-width: 480px) {
     .page-hero h1 {
-      font-size: 1.8rem;
+      font-size: clamp(1.4rem, 5vw, 1.8rem);
     }
     .rating-number {
-      font-size: 2.2rem;
+      font-size: clamp(1.8rem, 6vw, 2.2rem);
     }
     .rating-stars-big .stars {
-      font-size: 1.2rem;
+      font-size: clamp(1rem, 3vw, 1.2rem);
     }
     .review-card .stars {
-      font-size: 1rem;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
     }
     .review-card .review-text {
-      font-size: 0.9rem;
+      font-size: clamp(0.85rem, 2vw, 0.9rem);
     }
     .star-select .star-option {
-      font-size: 1.6rem;
+      font-size: clamp(1.4rem, 4vw, 1.6rem);
+      min-width: 36px;
+      min-height: 36px;
+    }
+    .sort-btn {
+      font-size: 0.7rem;
+      padding: 4px 12px;
+      min-height: 38px;
+    }
+    .pagination-wrap .page-link {
+      min-width: 38px;
+      min-height: 38px;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+    }
+    .btn-submit {
+      min-height: 50px;
+      font-size: 0.9rem;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .rating-summary {
+      padding: 0.8rem;
+      gap: 12px;
+    }
+    .rating-big {
+      gap: 0.8rem;
+    }
+    .review-card {
+      padding: 0.8rem;
+    }
+    .submit-section {
+      padding: 0.8rem;
+    }
+    .review-form input,
+    .review-form textarea {
+      font-size: 0.85rem;
+      padding: 0.6rem;
+    }
+    .star-select .star-option {
+      font-size: 1.2rem;
+      min-width: 32px;
+      min-height: 32px;
+    }
+  }
+
+  /* ================================================================
+     CROSS‑BROWSER FALLBACKS
+     ================================================================ */
+
+  /* ----- Flexbox fallback for older IE ----- */
+  @supports not (display: flex) {
+    .rating-summary {
+      display: block;
+      text-align: center;
+    }
+    .rating-big {
+      display: inline-block;
+    }
+    .rating-bars {
+      display: block;
+    }
+    .filter-row {
+      display: block;
+      text-align: center;
+    }
+    .sort-options {
+      display: inline-block;
+    }
+    .sort-btn {
+      display: inline-block;
+      margin: 0 4px 8px 4px;
+    }
+    .review-card .review-footer {
+      display: block;
+      text-align: left;
+    }
+    .review-card .customer-name {
+      display: inline-block;
+    }
+    .review-card .review-date {
+      display: block;
+    }
+    .footer-note {
+      display: block;
+      text-align: center;
+    }
+    .footer-note .badge {
+      display: inline-block;
+      margin-top: 4px;
+    }
+    .cta-buttons {
+      display: block;
+    }
+    .cta-buttons .btn-primary,
+    .cta-buttons .btn-whatsapp {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto 12px auto;
+    }
+    .reviews-grid {
+      display: block;
+    }
+    .review-card {
+      margin-bottom: 16px;
+    }
+    .star-select {
+      display: inline-block;
+    }
+    .star-select .star-option {
+      display: inline-block;
+    }
+    .star-select .star-label {
+      display: inline-block;
+      margin-left: 10px;
+    }
+  }
+
+  /* ----- Grid fallback for older browsers ----- */
+  @supports not (display: grid) {
+    .reviews-grid {
+      display: block;
+    }
+    .review-card {
+      margin-bottom: 16px;
+    }
+    .review-form {
+      display: block;
+    }
+    .review-form .full-width {
+      display: block;
+    }
+    .review-form > div {
+      margin-bottom: 12px;
+    }
+    .rating-bars {
+      display: block;
+    }
+    .rating-bar-row {
+      display: block;
+      margin-bottom: 6px;
+    }
+    .rating-bar-row .star-label {
+      display: inline-block;
+      width: 3.2rem;
+    }
+    .rating-bar-row .bar-track {
+      display: inline-block;
+      width: 60%;
+      vertical-align: middle;
+    }
+    .rating-bar-row .bar-percent {
+      display: inline-block;
+      width: 2.8rem;
+      vertical-align: middle;
+    }
+  }
+
+  /* ----- backdrop-filter fallback ----- */
+  @supports not (backdrop-filter: blur(4px)) {
+    .rating-summary,
+    .review-card,
+    .submit-section,
+    .footer-note .badge {
+      background: rgba(10, 14, 26, 0.95) !important;
+    }
+    .review-form input,
+    .review-form textarea {
+      background: rgba(10, 14, 26, 0.9) !important;
+    }
+  }
+
+  /* ----- Touch devices: larger tap targets & disable hover effects ----- */
+  @media (hover: none) and (pointer: coarse) {
+    .rating-summary:hover {
+      border-color: rgba(255, 255, 255, 0.04);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      transform: none !important;
+    }
+    .review-card:hover {
+      transform: none !important;
+      border-color: rgba(255, 255, 255, 0.04);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      background: var(--bg-card, rgba(255, 255, 255, 0.04));
+    }
+    .review-card:hover::after {
+      transform: scaleX(0);
+    }
+    .review-card:hover .review-text {
+      color: var(--text-muted, #94a3b8);
+    }
+    .submit-section:hover {
+      border-color: rgba(255, 255, 255, 0.04);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      transform: none !important;
+    }
+    .sort-btn {
+      min-height: 48px;
+    }
+    .sort-btn:hover {
+      transform: none !important;
+    }
+    .btn-submit {
+      min-height: 56px;
+    }
+    .btn-submit:hover {
+      transform: none !important;
+    }
+    .pagination-wrap .page-link:hover {
+      transform: none !important;
+    }
+    .cta-buttons .btn-primary:hover,
+    .cta-buttons .btn-whatsapp:hover {
+      transform: none !important;
+    }
+    .footer-note .badge:hover {
+      border-color: rgba(255, 255, 255, 0.04);
+      color: var(--text-muted, #94a3b8);
+      box-shadow: none;
+    }
+    .star-select .star-option {
+      min-width: 48px;
+      min-height: 48px;
+    }
+  }
+
+  /* ----- Reduced motion ----- */
+  @media (prefers-reduced-motion: reduce) {
+    .btn-submit,
+    .rating-bar-row .bar-fill {
+      animation: none !important;
+    }
+    .btn-submit,
+    .sort-btn,
+    .pagination-wrap .page-link,
+    .footer-note .badge,
+    .review-card,
+    .submit-section,
+    .rating-summary {
+      transition: none !important;
+    }
+    .btn-submit:hover,
+    .sort-btn:hover,
+    .pagination-wrap .page-link:hover {
+      transform: none !important;
+    }
+    .rating-bar-row .bar-fill {
+      transition: none !important;
+    }
+  }
+
+  /* ----- Print styles ----- */
+  @media print {
+    .page-hero {
+      background: #fff !important;
+      border-bottom: 1px solid #ccc;
+    }
+    .page-hero h1,
+    .page-hero h1 span,
+    .cta-banner h2 span {
+      -webkit-text-fill-color: #000 !important;
+      color: #000 !important;
+      background: none !important;
+    }
+    .page-hero p {
+      color: #000 !important;
+    }
+    .rating-summary,
+    .review-card,
+    .submit-section {
+      border: 1px solid #ccc !important;
+      box-shadow: none !important;
+      background: #fff !important;
+    }
+    .rating-number,
+    .rating-stars-big .count,
+    .filter-row .reviews-count,
+    .review-card .customer-name,
+    .review-card .review-text,
+    .review-card .review-date,
+    .submit-section h2,
+    .submit-section .form-subhead,
+    .footer-note,
+    .footer-note .badge,
+    .cta-banner h2,
+    .cta-banner p {
+      color: #000 !important;
+    }
+    .rating-stars-big .stars {
+      color: #000 !important;
+    }
+    .rating-bar-row .star-label,
+    .rating-bar-row .bar-percent {
+      color: #000 !important;
+    }
+    .rating-bar-row .bar-track {
+      background: #eee !important;
+    }
+    .rating-bar-row .bar-fill {
+      background: #000 !important;
+      box-shadow: none !important;
+    }
+    .review-card .stars {
+      color: #000 !important;
+    }
+    .review-card .stars .empty-star {
+      color: #ccc !important;
+      opacity: 1;
+    }
+    .review-card .verified-badge {
+      border: 1px solid #000 !important;
+      color: #000 !important;
+      background: #f5f5f5 !important;
+    }
+    .review-card .customer-name .initials {
+      background: #000 !important;
+      color: #fff !important;
+    }
+    .review-form input,
+    .review-form textarea {
+      border: 1px solid #ccc !important;
+      color: #000 !important;
+      background: #f9f9f9 !important;
+    }
+    .sort-btn,
+    .btn-submit,
+    .cta-buttons .btn-primary,
+    .cta-buttons .btn-whatsapp,
+    .pagination-wrap {
+      display: none !important;
+    }
+    .submit-section {
+      border-top: 2px solid #000 !important;
+      padding: 0.5in !important;
+    }
+    .submit-section .form-subhead {
+      display: none !important;
+    }
+    .page-hero .glow-line {
+      background: #000 !important;
+      box-shadow: none !important;
+    }
+    .footer-note .badge {
+      border: 1px solid #000 !important;
     }
   }
 </style>
@@ -716,8 +1201,13 @@
       <span><i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5;"></i></span>
       <span class="current">{% trans "Customer Reviews" %}</span>
     </div>
-    <h1><i class="fas fa-star"></i> {% trans "Customer" %} <span>{% trans "Reviews" %}</span></h1>
-    <p>{% trans "Real feedback from customers who have used our services. See why they trust us." %}</p>
+    <h1>
+      <i class="fas fa-star"></i> {% trans "Customer" %}
+      <span>{% trans "Reviews" %}</span>
+    </h1>
+    <p>
+      {% trans "Real feedback from customers who have used our services. See why they trust us." %}
+    </p>
     <div class="glow-line"></div>
   </div>
 </section>
@@ -727,7 +1217,6 @@
      ================================================================ -->
 <section class="reviews-section" id="reviews">
   <div class="container">
-
     <!-- Rating Summary – DYNAMIC -->
     <div class="rating-summary">
       <div class="rating-big">
@@ -760,38 +1249,20 @@
             {% for star, count in rating_counts.items %}
               <div class="rating-bar-row">
                 <span class="star-label">{{ star }} ★</span>
-                <div class="bar-track"><div class="bar-fill" style="width: {% widthratio count total 100 %}%;"></div></div>
+                <div class="bar-track">
+                  <div class="bar-fill" style="width: {% widthratio count total 100 %}%;"></div>
+                </div>
                 <span class="bar-percent">{% widthratio count total 100 %}%</span>
               </div>
             {% endfor %}
           {% endwith %}
         {% else %}
-          <!-- Fallback static bars (should not be needed) -->
-          <div class="rating-bar-row">
-            <span class="star-label">5 ★</span>
-            <div class="bar-track"><div class="bar-fill" style="width: 78%;"></div></div>
-            <span class="bar-percent">78%</span>
-          </div>
-          <div class="rating-bar-row">
-            <span class="star-label">4 ★</span>
-            <div class="bar-track"><div class="bar-fill" style="width: 15%;"></div></div>
-            <span class="bar-percent">15%</span>
-          </div>
-          <div class="rating-bar-row">
-            <span class="star-label">3 ★</span>
-            <div class="bar-track"><div class="bar-fill" style="width: 5%;"></div></div>
-            <span class="bar-percent">5%</span>
-          </div>
-          <div class="rating-bar-row">
-            <span class="star-label">2 ★</span>
-            <div class="bar-track"><div class="bar-fill" style="width: 1.5%;"></div></div>
-            <span class="bar-percent">1.5%</span>
-          </div>
-          <div class="rating-bar-row">
-            <span class="star-label">1 ★</span>
-            <div class="bar-track"><div class="bar-fill" style="width: 0.5%;"></div></div>
-            <span class="bar-percent">0.5%</span>
-          </div>
+          <!-- Fallback static bars -->
+          <div class="rating-bar-row"><span class="star-label">5 ★</span><div class="bar-track"><div class="bar-fill" style="width: 78%"></div></div><span class="bar-percent">78%</span></div>
+          <div class="rating-bar-row"><span class="star-label">4 ★</span><div class="bar-track"><div class="bar-fill" style="width: 15%"></div></div><span class="bar-percent">15%</span></div>
+          <div class="rating-bar-row"><span class="star-label">3 ★</span><div class="bar-track"><div class="bar-fill" style="width: 5%"></div></div><span class="bar-percent">5%</span></div>
+          <div class="rating-bar-row"><span class="star-label">2 ★</span><div class="bar-track"><div class="bar-fill" style="width: 1.5%"></div></div><span class="bar-percent">1.5%</span></div>
+          <div class="rating-bar-row"><span class="star-label">1 ★</span><div class="bar-track"><div class="bar-fill" style="width: 0.5%"></div></div><span class="bar-percent">0.5%</span></div>
         {% endif %}
       </div>
     </div>
@@ -817,65 +1288,77 @@
     <!-- Reviews Grid -->
     <div class="reviews-grid">
       {% for review in reviews_page %}
-      <div class="review-card" data-rating="{{ review.rating }}" data-date="{{ review.created_at|date:'Y-m-d' }}">
-        <div class="stars">
-          {% for i in "12345"|make_list %}
-            {% if forloop.counter <= review.rating %}
-              <i class="fas fa-star"></i>
-            {% else %}
-              <i class="fas fa-star empty-star"></i>
-            {% endif %}
-          {% endfor %}
+        <div class="review-card" data-rating="{{ review.rating }}" data-date="{{ review.created_at|date:'Y-m-d' }}">
+          <div class="stars">
+            {% for i in "12345"|make_list %}
+              {% if forloop.counter <= review.rating %}
+                <i class="fas fa-star"></i>
+              {% else %}
+                <i class="fas fa-star empty-star"></i>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <p class="review-text">"{{ review.review }}"</p>
+          <div class="review-footer">
+            <span class="customer-name">
+              <span class="initials">{{ review.customer_name|slice:":2"|upper }}</span>
+              {{ review.customer_name }}
+              {% if review.approved %}
+                <span class="verified-badge"><i class="fas fa-check-circle"></i> {% trans "Verified" %}</span>
+              {% endif %}
+            </span>
+            <span class="review-date"><i class="far fa-calendar-alt"></i> {{ review.created_at|date:"d M Y" }}</span>
+          </div>
         </div>
-        <p class="review-text">"{{ review.review }}"</p>
-        <div class="review-footer">
-          <span class="customer-name">
-            <span class="initials">{{ review.customer_name|slice:":2"|upper }}</span>
-            {{ review.customer_name }}
-            {% if review.approved %}
-            <span class="verified-badge"><i class="fas fa-check-circle"></i> {% trans "Verified" %}</span>
-            {% endif %}
-          </span>
-          <span class="review-date"><i class="far fa-calendar-alt"></i> {{ review.created_at|date:"d M Y" }}</span>
-        </div>
-      </div>
       {% empty %}
-      <div style="grid-column: 1/-1; text-align: center; padding: 3rem 0; color: var(--text-muted);">
-        <i class="fas fa-star" style="font-size: 3rem; display: block; margin-bottom: 0.5rem; opacity: 0.3;"></i>
-        {% trans "No customer reviews yet. Be the first to share your experience!" %}
-      </div>
+        <div style="grid-column: 1/-1; text-align: center; padding: 3rem 0; color: var(--text-muted, #94a3b8);">
+          <i class="fas fa-star" style="font-size: 3rem; display: block; margin-bottom: 0.5rem; opacity: 0.3;"></i>
+          {% trans "No customer reviews yet. Be the first to share your experience!" %}
+        </div>
       {% endfor %}
     </div>
 
-    <!-- Pagination -->
+    <!-- Pagination (corrected) -->
     {% if reviews_page.has_other_pages %}
-    <div class="pagination-wrap">
-      {% if reviews_page.has_previous %}
-        <a href="?page={{ reviews_page.previous_page_number }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" class="page-link"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</a>
-      {% else %}
-        <span class="page-link disabled"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</span>
-      {% endif %}
-
-      {% for num in reviews_page.paginator.page_range %}
-        {% if reviews_page.number == num %}
-          <span class="page-link active">{{ num }}</span>
-        {% elif num > reviews_page.number|add:'-3' and num < reviews_page.number|add:'3' %}
-          <a href="?page={{ num }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" class="page-link">{{ num }}</a>
+      <div class="pagination-wrap">
+        {% if reviews_page.has_previous %}
+          <a href="?page={{ reviews_page.previous_page_number }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" class="page-link">
+            <i class="fas fa-chevron-left"></i> {% trans "Prev" %}
+          </a>
+        {% else %}
+          <span class="page-link disabled">
+            <i class="fas fa-chevron-left"></i> {% trans "Prev" %}
+          </span>
         {% endif %}
-      {% endfor %}
 
-      {% if reviews_page.has_next %}
-        <a href="?page={{ reviews_page.next_page_number }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" class="page-link">{% trans "Next" %} <i class="fas fa-chevron-right"></i></a>
-      {% else %}
-        <span class="page-link disabled">{% trans "Next" %} <i class="fas fa-chevron-right"></i></span>
-      {% endif %}
-    </div>
+        {% for num in reviews_page.paginator.page_range %}
+          {% if reviews_page.number == num %}
+            <span class="page-link active">{{ num }}</span>
+          {% elif num > reviews_page.number|add:'-3' and num < reviews_page.number|add:'3' %}
+            <a href="?page={{ num }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" class="page-link">{{ num }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if reviews_page.has_next %}
+          <a href="?page={{ reviews_page.next_page_number }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" class="page-link">
+            {% trans "Next" %} <i class="fas fa-chevron-right"></i>
+          </a>
+        {% else %}
+          <span class="page-link disabled">
+            {% trans "Next" %} <i class="fas fa-chevron-right"></i>
+          </span>
+        {% endif %}
+      </div>
     {% endif %}
 
     <!-- Submit Review Section -->
     <div class="submit-section">
-      <h2><i class="fas fa-pen-fancy"></i> {% trans "Share Your Experience" %}</h2>
-      <p class="form-subhead">{% trans "We value your feedback. Let us know how we did!" %}</p>
+      <h2>
+        <i class="fas fa-pen-fancy"></i> {% trans "Share Your Experience" %}
+      </h2>
+      <p class="form-subhead">
+        {% trans "We value your feedback. Let us know how we did!" %}
+      </p>
 
       <form class="review-form" id="reviewForm" action="{% url 'submit_review' %}" method="post" novalidate>
         {% csrf_token %}
@@ -907,7 +1390,9 @@
         </div>
 
         <div class="full-width">
-          <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> {% trans "Submit Review" %}</button>
+          <button type="submit" class="btn-submit">
+            <i class="fas fa-paper-plane"></i> {% trans "Submit Review" %}
+          </button>
         </div>
       </form>
     </div>
@@ -915,11 +1400,8 @@
     <!-- Footer Note -->
     <div class="footer-note">
       <span><i class="fas fa-shield-alt"></i> {% trans "All reviews are from genuine customers." %}</span>
-      <span class="badge"><i class="far fa-comments"></i> 
-        {{ reviews_page.paginator.count }} review{{ reviews_page.paginator.count|pluralize }}
-      </span>
+      <span class="badge"><i class="far fa-comments"></i> {{ reviews_page.paginator.count }} review{{ reviews_page.paginator.count|pluralize }}</span>
     </div>
-
   </div>
 </section>
 
@@ -935,9 +1417,9 @@
         <i class="fas fa-phone"></i> {% trans "Contact Us" %}
       </a>
       {% with whatsapp_number=business.whatsapp|default:"919876543210" %}
-      <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20want%20to%20visit%20your%20cyber%20cafe." target="_blank" class="btn-whatsapp">
-        <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
-      </a>
+        <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20want%20to%20visit%20your%20cyber%20cafe." target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
+          <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
+        </a>
       {% endwith %}
     </div>
   </div>
@@ -950,30 +1432,32 @@
     "use strict";
 
     // ---- Star selection ----
-    const starOptions = document.querySelectorAll('.star-option');
-    const starLabel = document.getElementById('starLabel');
-    const ratingInput = document.getElementById('ratingValue');
-    const ratingLabels = ["", "{% trans "Terrible" %}", "{% trans "Poor" %}", "{% trans "Average" %}", "{% trans "Good" %}", "{% trans "Excellent" %}"];
+    var starOptions = document.querySelectorAll('.star-option');
+    var starLabel = document.getElementById('starLabel');
+    var ratingInput = document.getElementById('ratingValue');
+    var ratingLabels = ["", "{% trans "Terrible" %}", "{% trans "Poor" %}", "{% trans "Average" %}", "{% trans "Good" %}", "{% trans "Excellent" %}"];
 
-    starOptions.forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        const val = parseInt(this.dataset.value);
-        starOptions.forEach(function(b) { b.classList.remove('active'); });
+    for (var i = 0; i < starOptions.length; i++) {
+      starOptions[i].addEventListener('click', function() {
+        var val = parseInt(this.dataset.value);
+        for (var j = 0; j < starOptions.length; j++) {
+          starOptions[j].classList.remove('active');
+        }
         this.classList.add('active');
         starLabel.textContent = ratingLabels[val] || '{% trans "Select a rating" %}';
         ratingInput.value = val;
       });
-    });
+    }
 
     // ---- Form validation (client-side) ----
-    const form = document.getElementById('reviewForm');
+    var form = document.getElementById('reviewForm');
     form.addEventListener('submit', function(e) {
-      const name = document.getElementById('id_customer_name').value.trim();
-      const email = document.getElementById('id_email').value.trim();
-      const rating = document.getElementById('ratingValue').value;
-      const comment = document.getElementById('id_review').value.trim();
+      var name = document.getElementById('id_customer_name').value.trim();
+      var email = document.getElementById('id_email').value.trim();
+      var rating = document.getElementById('ratingValue').value;
+      var comment = document.getElementById('id_review').value.trim();
 
-      let errors = [];
+      var errors = [];
       if (!name) errors.push('{% trans "Name is required."|escapejs %}');
       if (!email) errors.push('{% trans "Email is required."|escapejs %}');
       if (!rating) errors.push('{% trans "Please select a rating."|escapejs %}');

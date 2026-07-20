@@ -5,17 +5,25 @@
 {% block title %}{% trans "Announcements" %}{% endblock %}
 
 {% block extra_head %}
+<!-- ============================================================
+     META – viewport & compatibility 
+     ============================================================ -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="theme-color" content="#0a0e1a" />
+
 <style>
   /* ================================================================
-     PAGE-SPECIFIC STYLES – Announcements
-     Uses global CSS variables from base.html.
+     PAGE-SPECIFIC STYLES – Fully responsive + cross‑browser
      ================================================================ */
 
   /* ---- Section reveal animation (scroll-triggered) ---- */
   .reveal {
     opacity: 0;
     transform: translateY(40px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
+    transition:
+      opacity 0.8s ease,
+      transform 0.8s ease;
   }
   .reveal.visible {
     opacity: 1;
@@ -24,19 +32,24 @@
 
   /* ---- Hero ---- */
   .page-hero {
-    padding: 70px 0 50px;
+    padding: clamp(30px, 6vw, 70px) 0 clamp(20px, 4vw, 50px);
     text-align: center;
     position: relative;
     overflow: hidden;
+    width: 100%;
   }
   .page-hero::before {
-    content: '';
+    content: "";
     position: absolute;
     top: -30%;
     right: -10%;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(0, 240, 255, 0.04), transparent 70%);
+    width: min(600px, 80vw);
+    height: min(600px, 80vw);
+    background: radial-gradient(
+      circle,
+      rgba(0, 240, 255, 0.04),
+      transparent 70%
+    );
     border-radius: 50%;
     pointer-events: none;
     z-index: 0;
@@ -44,46 +57,52 @@
   .page-hero .container {
     position: relative;
     z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
   }
   .page-hero .breadcrumb {
     display: inline-flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 8px;
-    color: var(--text-muted);
-    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    font-size: clamp(0.75rem, 1vw, 0.85rem);
     font-weight: 500;
     margin-bottom: 16px;
     letter-spacing: 0.3px;
   }
   .page-hero .breadcrumb a {
-    color: var(--text-muted);
-    transition: var(--transition);
+    color: var(--text-muted, #94a3b8);
+    transition: color 0.3s ease;
+    text-decoration: none;
   }
   .page-hero .breadcrumb a:hover {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
   }
   .page-hero .breadcrumb .current {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
   }
   .page-hero h1 {
-    font-size: 3rem;
+    font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 900;
-    font-family: var(--font-display);
-    color: var(--text-white);
+    font-family: var(--font-display, "Inter", sans-serif);
+    color: var(--text-white, #f0f4ff);
     letter-spacing: 1px;
     margin-bottom: 8px;
     text-shadow: 0 0 40px rgba(0, 240, 255, 0.12);
   }
   .page-hero h1 span {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
     text-shadow: 0 0 30px rgba(0, 240, 255, 0.25);
   }
   .page-hero p {
-    font-size: 1.15rem;
-    color: var(--text-muted);
+    font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+    color: var(--text-muted, #94a3b8);
     max-width: 620px;
     margin: 0 auto;
     line-height: 1.8;
+    padding: 0 10px;
   }
 
   /* ---- Filter Bar ---- */
@@ -99,17 +118,22 @@
     background: transparent;
     border: 1.5px solid rgba(255, 255, 255, 0.08);
     padding: 0.5rem 1.4rem;
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-pill, 50px);
     font-weight: 600;
-    font-size: 0.85rem;
-    color: var(--text-muted);
+    font-size: clamp(0.75rem, 1vw, 0.85rem);
+    color: var(--text-muted, #94a3b8);
     cursor: pointer;
-    transition: var(--transition);
-    font-family: var(--font-body);
+    transition: all 0.3s ease;
+    font-family: var(--font-body, "Inter", sans-serif);
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+    -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
+    touch-action: manipulation;
+    min-height: 44px;
+    min-width: 44px;
+    justify-content: center;
   }
   .filter-btn i {
     font-size: 0.8rem;
@@ -117,14 +141,14 @@
   }
   .filter-btn:hover {
     background: rgba(0, 240, 255, 0.06);
-    border-color: var(--neon-cyan);
-    color: var(--text-white);
+    border-color: var(--neon-cyan, #00f0ff);
+    color: var(--text-white, #f0f4ff);
     box-shadow: 0 0 20px rgba(0, 240, 255, 0.05);
   }
   .filter-btn.active {
-    background: var(--gradient-cyan);
-    border-color: var(--neon-cyan);
-    color: var(--bg-primary);
+    background: var(--gradient-cyan, linear-gradient(135deg, #00f0ff, #0ea5e9));
+    border-color: var(--neon-cyan, #00f0ff);
+    color: var(--bg-primary, #0a0e1a);
     box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
   }
   .filter-btn.active i {
@@ -133,11 +157,14 @@
 
   /* ---- Announcement Cards ---- */
   .announcements-section {
-    padding: 40px 0 60px;
-    background: var(--bg-secondary);
+    padding: clamp(30px, 6vw, 40px) 0 clamp(40px, 8vw, 60px);
+    background: var(--bg-secondary, rgba(10, 14, 26, 0.6));
+    width: 100%;
   }
   .announcements-section .container {
     max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
   }
   .announcements-list {
     display: flex;
@@ -145,49 +172,53 @@
     gap: 1.2rem;
   }
   .announcement-card {
-    background: var(--bg-card);
-    border-radius: var(--radius);
-    padding: 1.4rem 1.8rem;
-    box-shadow: var(--shadow-card);
+    background: var(--bg-card, rgba(255, 255, 255, 0.04));
+    border-radius: var(--radius, 12px);
+    padding: clamp(1rem, 2vw, 1.4rem) clamp(1.2rem, 2vw, 1.8rem);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.04);
-    transition: var(--transition);
+    transition: all 0.3s ease;
     display: flex;
     gap: 1rem;
     align-items: flex-start;
+    -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
   }
   .announcement-card:hover {
-    border-color: var(--neon-cyan);
-    box-shadow: var(--shadow-card), var(--glow-cyan);
+    border-color: var(--neon-cyan, #00f0ff);
+    box-shadow:
+      0 8px 30px rgba(0, 0, 0, 0.15),
+      0 0 30px rgba(0, 240, 255, 0.06);
     transform: translateY(-4px);
   }
   .announcement-card.urgent {
-    border-left: 5px solid var(--neon-magenta);
+    border-left: 5px solid var(--neon-magenta, #ff2d95);
     background: rgba(255, 45, 149, 0.04);
   }
   .announcement-card.urgent .badge-urgent {
-    background: var(--neon-magenta);
-    color: var(--text-white);
+    background: var(--neon-magenta, #ff2d95);
+    color: var(--text-white, #f0f4ff);
     padding: 0.1rem 0.7rem;
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-pill, 50px);
     font-size: 0.7rem;
     font-weight: 700;
     margin-left: 0.5rem;
     text-transform: uppercase;
     box-shadow: 0 0 20px rgba(255, 45, 149, 0.3);
+    display: inline-block;
   }
   .announcement-icon {
     flex-shrink: 0;
-    width: 3rem;
-    height: 3rem;
+    width: clamp(2.5rem, 4vw, 3rem);
+    height: clamp(2.5rem, 4vw, 3rem);
     background: rgba(0, 240, 255, 0.08);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--neon-cyan);
-    font-size: 1.3rem;
-    transition: var(--transition);
+    color: var(--neon-cyan, #00f0ff);
+    font-size: clamp(1rem, 1.5vw, 1.3rem);
+    transition: all 0.3s ease;
   }
   .announcement-card:hover .announcement-icon {
     background: rgba(0, 240, 255, 0.15);
@@ -205,8 +236,8 @@
     margin-bottom: 0.3rem;
   }
   .announcement-date {
-    font-size: 0.8rem;
-    color: var(--text-muted);
+    font-size: clamp(0.7rem, 0.9vw, 0.8rem);
+    color: var(--text-muted, #94a3b8);
     display: flex;
     align-items: center;
     gap: 0.3rem;
@@ -215,52 +246,55 @@
     font-size: 0.7rem;
   }
   .category-badge {
-    font-size: 0.7rem;
+    font-size: clamp(0.6rem, 0.8vw, 0.7rem);
     font-weight: 600;
     padding: 0.2rem 0.8rem;
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-pill, 50px);
     background: rgba(255, 255, 255, 0.04);
-    color: var(--text-muted);
+    color: var(--text-muted, #94a3b8);
     text-transform: uppercase;
     letter-spacing: 0.02em;
     border: 1px solid rgba(255, 255, 255, 0.04);
+    white-space: nowrap;
   }
   .category-badge.scheme {
     background: rgba(0, 240, 255, 0.12);
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
   }
   .category-badge.recruitment {
     background: rgba(255, 45, 149, 0.1);
-    color: var(--neon-magenta);
+    color: var(--neon-magenta, #ff2d95);
   }
   .category-badge.scholarship {
     background: rgba(34, 211, 238, 0.1);
-    color: var(--neon-green);
+    color: var(--neon-green, #22d3ee);
   }
   .category-badge.holiday {
     background: rgba(249, 115, 22, 0.1);
-    color: var(--neon-orange);
+    color: var(--neon-orange, #f97316);
   }
   .category-badge.notice {
     background: rgba(168, 85, 247, 0.1);
-    color: var(--neon-purple);
+    color: var(--neon-purple, #a855f7);
   }
   .announcement-title {
-    font-size: 1.1rem;
+    font-size: clamp(1rem, 1.3vw, 1.1rem);
     font-weight: 700;
-    color: var(--text-white);
+    color: var(--text-white, #f0f4ff);
     margin: 0.2rem 0 0.3rem;
+    word-break: break-word;
   }
   .announcement-desc {
-    font-size: 0.95rem;
-    color: var(--text-muted);
+    font-size: clamp(0.85rem, 1vw, 0.95rem);
+    color: var(--text-muted, #94a3b8);
     line-height: 1.6;
+    word-break: break-word;
   }
   .announcement-desc a {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
     text-decoration: none;
     font-weight: 500;
-    transition: var(--transition);
+    transition: color 0.3s ease;
   }
   .announcement-desc a:hover {
     text-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
@@ -270,7 +304,7 @@
   .no-results {
     text-align: center;
     padding: 3rem 0;
-    color: var(--text-muted);
+    color: var(--text-muted, #94a3b8);
     display: none;
   }
   .no-results i {
@@ -299,25 +333,27 @@
     border-radius: 30px;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.06);
-    color: var(--text-muted);
+    color: var(--text-muted, #94a3b8);
     font-weight: 600;
-    font-size: 0.9rem;
-    transition: var(--transition);
+    font-size: clamp(0.8rem, 1vw, 0.9rem);
+    transition: all 0.3s ease;
     text-decoration: none;
     min-width: 44px;
+    min-height: 44px;
+    touch-action: manipulation;
   }
   .pagination-wrap .page-link:hover {
     background: rgba(0, 240, 255, 0.08);
-    border-color: var(--neon-cyan);
-    color: var(--text-white);
-    box-shadow: var(--glow-cyan);
+    border-color: var(--neon-cyan, #00f0ff);
+    color: var(--text-white, #f0f4ff);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.06);
     transform: translateY(-2px);
   }
   .pagination-wrap .page-link.active {
-    background: var(--neon-cyan);
-    color: var(--bg-primary);
-    border-color: var(--neon-cyan);
-    box-shadow: var(--glow-cyan);
+    background: var(--neon-cyan, #00f0ff);
+    color: var(--bg-primary, #0a0e1a);
+    border-color: var(--neon-cyan, #00f0ff);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
   }
   .pagination-wrap .page-link.disabled {
     opacity: 0.3;
@@ -334,50 +370,59 @@
     justify-content: space-between;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.9rem;
-    color: var(--text-muted);
+    font-size: clamp(0.8rem, 0.9vw, 0.9rem);
+    color: var(--text-muted, #94a3b8);
   }
   .footer-note i {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
     margin-right: 0.2rem;
   }
   .footer-note .badge {
     background: rgba(0, 240, 255, 0.06);
     padding: 0.2rem 0.9rem;
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-pill, 50px);
     font-weight: 500;
-    font-size: 0.8rem;
-    color: var(--text-white);
+    font-size: clamp(0.7rem, 0.8vw, 0.8rem);
+    color: var(--text-white, #f0f4ff);
     border: 1px solid rgba(0, 240, 255, 0.08);
+    white-space: nowrap;
   }
 
   /* ---- CTA Banner (reuse from base) ---- */
   .cta-banner {
-    padding: 70px 0;
-    background: radial-gradient(ellipse at 30% 20%, rgba(0, 240, 255, 0.06), transparent 60%),
-                var(--bg-primary);
+    padding: clamp(40px, 8vw, 70px) 0;
+    background:
+      radial-gradient(
+        ellipse at 30% 20%,
+        rgba(0, 240, 255, 0.06),
+        transparent 60%
+      ),
+      var(--bg-primary, #0a0e1a);
     border-top: 1px solid rgba(0, 240, 255, 0.06);
     border-bottom: 1px solid rgba(0, 240, 255, 0.06);
     text-align: center;
+    width: 100%;
   }
   .cta-banner .container {
     max-width: 720px;
+    margin: 0 auto;
+    padding: 0 20px;
   }
   .cta-banner h2 {
-    font-size: 2.4rem;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
     font-weight: 800;
-    font-family: var(--font-display);
-    color: var(--text-white);
+    font-family: var(--font-display, "Inter", sans-serif);
+    color: var(--text-white, #f0f4ff);
     letter-spacing: -0.5px;
     margin-bottom: 8px;
   }
   .cta-banner h2 span {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
     text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
   }
   .cta-banner p {
-    color: var(--text-muted);
-    font-size: 1.1rem;
+    color: var(--text-muted, #94a3b8);
+    font-size: clamp(0.95rem, 1.2vw, 1.1rem);
     margin-bottom: 28px;
   }
   .cta-buttons {
@@ -386,28 +431,288 @@
     flex-wrap: wrap;
     gap: 18px;
   }
+  .cta-buttons .btn-primary,
+  .cta-buttons .btn-whatsapp {
+    padding: 12px 28px;
+    font-size: clamp(0.9rem, 1vw, 1rem);
+    min-height: 48px;
+    min-width: 160px;
+    justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: none;
+    border-radius: var(--radius-sm, 8px);
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    touch-action: manipulation;
+    cursor: pointer;
+  }
+  .cta-buttons .btn-primary {
+    background: var(--gradient-cyan, linear-gradient(135deg, #00f0ff, #0ea5e9));
+    color: #fff;
+    box-shadow: 0 0 24px rgba(0, 240, 255, 0.2);
+  }
+  .cta-buttons .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 40px rgba(0, 240, 255, 0.35);
+  }
+  .cta-buttons .btn-whatsapp {
+    background: #25d366;
+    color: #fff;
+  }
+  .cta-buttons .btn-whatsapp:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(37, 211, 102, 0.35);
+  }
 
   /* ================================================================
-     RESPONSIVE
+     RESPONSIVE BREAKPOINTS
      ================================================================ */
+
   @media (max-width: 768px) {
-    .page-hero h1 { font-size: 2.4rem; }
-    .page-hero p { font-size: 1rem; }
-    .filter-bar { gap: 0.4rem; }
-    .filter-btn { font-size: 0.75rem; padding: 0.3rem 0.9rem; }
-    .announcement-card { padding: 1rem 1.2rem; flex-direction: column; align-items: stretch; }
-    .announcement-icon { width: 2.5rem; height: 2.5rem; font-size: 1rem; }
-    .announcement-title { font-size: 1rem; }
-    .cta-banner h2 { font-size: 2rem; }
-    .cta-buttons { flex-direction: column; align-items: center; }
+    .page-hero h1 {
+      font-size: clamp(1.8rem, 6vw, 2.4rem);
+    }
+    .page-hero p {
+      font-size: clamp(0.9rem, 2vw, 1rem);
+    }
+    .filter-bar {
+      gap: 0.4rem;
+    }
+    .filter-btn {
+      font-size: clamp(0.7rem, 1.5vw, 0.8rem);
+      padding: 0.3rem 0.9rem;
+      min-height: 38px;
+      min-width: 38px;
+    }
+    .announcement-card {
+      padding: 1rem 1.2rem;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .announcement-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      font-size: 1rem;
+    }
+    .announcement-title {
+      font-size: clamp(0.95rem, 2vw, 1rem);
+    }
+    .cta-banner h2 {
+      font-size: clamp(1.6rem, 5vw, 2rem);
+    }
+    .cta-buttons {
+      flex-direction: column;
+      align-items: center;
+    }
     .cta-buttons .btn-primary,
-    .cta-buttons .btn-whatsapp { width: 100%; justify-content: center; }
-    .footer-note { flex-direction: column; align-items: flex-start; gap: 0.3rem; }
+    .cta-buttons .btn-whatsapp {
+      width: 100%;
+      max-width: 280px;
+      justify-content: center;
+    }
+    .footer-note {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.3rem;
+    }
+    .footer-note .badge {
+      white-space: normal;
+    }
   }
+
   @media (max-width: 480px) {
-    .filter-bar { gap: 0.3rem; }
-    .filter-btn { flex: 1 1 auto; justify-content: center; }
-    .announcement-meta { flex-direction: column; align-items: flex-start; gap: 0.3rem; }
+    .filter-bar {
+      gap: 0.3rem;
+      justify-content: center;
+    }
+    .filter-btn {
+      flex: 1 1 auto;
+      justify-content: center;
+      min-width: 60px;
+      padding: 0.3rem 0.6rem;
+      font-size: 0.7rem;
+    }
+    .announcement-meta {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.3rem;
+    }
+    .announcement-card {
+      padding: 0.8rem 0.9rem;
+    }
+    .pagination-wrap .page-link {
+      min-width: 38px;
+      min-height: 38px;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .filter-btn {
+      font-size: 0.65rem;
+      padding: 0.2rem 0.5rem;
+      min-width: 50px;
+    }
+    .announcement-title {
+      font-size: 0.9rem;
+    }
+    .announcement-desc {
+      font-size: 0.8rem;
+    }
+  }
+
+  /* ================================================================
+     CROSS‑BROWSER FALLBACKS
+     ================================================================ */
+
+  /* ----- Edge / IE: flex fallback for filter bar ----- */
+  @supports not (display: flex) {
+    .filter-bar {
+      display: block;
+      text-align: center;
+    }
+    .filter-btn {
+      display: inline-block;
+      margin: 0.2rem;
+    }
+    .announcement-card {
+      display: block;
+    }
+    .announcement-icon {
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+    .footer-note {
+      display: block;
+      text-align: center;
+    }
+    .footer-note .badge {
+      display: inline-block;
+      margin-top: 0.3rem;
+    }
+  }
+
+  /* ----- Safari < 15.4: background-clip text fallback ----- */
+  @supports not (background-clip: text) {
+    .page-hero h1 span,
+    .cta-banner h2 span {
+      -webkit-text-fill-color: #00f0ff;
+      color: #00f0ff;
+      background: none;
+    }
+  }
+
+  /* ----- backdrop-filter fallback ----- */
+  @supports not (backdrop-filter: blur(4px)) {
+    .filter-btn,
+    .announcement-card {
+      background: rgba(10, 14, 26, 0.9);
+    }
+  }
+
+  /* ----- Touch devices: larger tap targets & no hover scale ----- */
+  @media (hover: none) and (pointer: coarse) {
+    .filter-btn,
+    .pagination-wrap .page-link,
+    .cta-buttons a {
+      min-height: 48px;
+      min-width: 48px;
+      padding: 10px 18px;
+    }
+    .announcement-card:hover {
+      transform: none !important;
+    }
+    .filter-btn:hover {
+      background: transparent;
+      border-color: rgba(255, 255, 255, 0.08);
+      color: var(--text-muted, #94a3b8);
+      box-shadow: none;
+    }
+    .filter-btn.active:hover {
+      background: var(
+        --gradient-cyan,
+        linear-gradient(135deg, #00f0ff, #0ea5e9)
+      );
+      color: var(--bg-primary, #0a0e1a);
+    }
+    .pagination-wrap .page-link:hover {
+      transform: none !important;
+    }
+    .cta-buttons a:hover {
+      transform: none !important;
+    }
+  }
+
+  /* ----- Reduced motion ----- */
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* ----- Print styles ----- */
+  @media print {
+    .page-hero::before {
+      display: none !important;
+    }
+    .page-hero {
+      background: #fff !important;
+      border-bottom: 1px solid #ccc;
+    }
+    .page-hero h1,
+    .page-hero h1 span,
+    .cta-banner h2 span {
+      -webkit-text-fill-color: #000 !important;
+      color: #000 !important;
+      background: none !important;
+    }
+    .page-hero p,
+    .announcement-desc,
+    .footer-note,
+    .cta-banner p {
+      color: #333 !important;
+    }
+    .announcement-card {
+      border: 1px solid #ccc !important;
+      box-shadow: none !important;
+      background: #fff !important;
+    }
+    .announcement-card.urgent {
+      border-left: 5px solid #000 !important;
+      background: #f9f9f9 !important;
+    }
+    .announcement-title {
+      color: #000 !important;
+    }
+    .filter-bar,
+    .pagination-wrap,
+    .cta-buttons,
+    .cta-banner .btn-primary,
+    .cta-banner .btn-whatsapp {
+      display: none !important;
+    }
+    .cta-banner {
+      border-top: 1px solid #ccc !important;
+      border-bottom: 1px solid #ccc !important;
+      background: #fff !important;
+    }
+    .footer-note .badge {
+      border: 1px solid #ccc !important;
+      color: #000 !important;
+    }
   }
 </style>
 {% endblock %}
@@ -461,11 +766,13 @@
             {% endif %}
           </div>
           <h3 class="announcement-title">{{ announcement.title }}</h3>
-          <p class="announcement-desc">{{ announcement.description|linebreaksbr }}</p>
+          <p class="announcement-desc">
+            {{ announcement.description|linebreaksbr }}
+          </p>
         </div>
       </div>
       {% empty %}
-      <p style="text-align: center; padding: 40px; color: var(--text-muted);">
+      <p style="text-align: center; padding: 40px; color: var(--text-muted, #94a3b8);">
         {% trans "No announcements available at the moment." %}
       </p>
       {% endfor %}
@@ -477,13 +784,17 @@
       <p>{% trans "No announcements match the selected filter." %}</p>
     </div>
 
-    <!-- Pagination -->
+    <!-- Pagination (corrected) -->
     {% if announcements.has_other_pages %}
     <div class="pagination-wrap">
       {% if announcements.has_previous %}
-        <a href="?page={{ announcements.previous_page_number }}" class="page-link"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</a>
+        <a href="?page={{ announcements.previous_page_number }}" class="page-link">
+          <i class="fas fa-chevron-left"></i> {% trans "Prev" %}
+        </a>
       {% else %}
-        <span class="page-link disabled"><i class="fas fa-chevron-left"></i> {% trans "Prev" %}</span>
+        <span class="page-link disabled">
+          <i class="fas fa-chevron-left"></i> {% trans "Prev" %}
+        </span>
       {% endif %}
 
       {% for num in announcements.paginator.page_range %}
@@ -495,9 +806,13 @@
       {% endfor %}
 
       {% if announcements.has_next %}
-        <a href="?page={{ announcements.next_page_number }}" class="page-link">{% trans "Next" %} <i class="fas fa-chevron-right"></i></a>
+        <a href="?page={{ announcements.next_page_number }}" class="page-link">
+          {% trans "Next" %} <i class="fas fa-chevron-right"></i>
+        </a>
       {% else %}
-        <span class="page-link disabled">{% trans "Next" %} <i class="fas fa-chevron-right"></i></span>
+        <span class="page-link disabled">
+          {% trans "Next" %} <i class="fas fa-chevron-right"></i>
+        </span>
       {% endif %}
     </div>
     {% endif %}
@@ -510,15 +825,15 @@
       <span class="badge" id="countBadge">
         <i class="far fa-bell"></i>
         {% with total=announcements.paginator.count %}
-        {% if total > 0 %}
-          {% blocktrans count counter=total trimmed %}
-            <span id="announcementCount">{{ counter }}</span> active notice
-          {% plural %}
-            <span id="announcementCount">{{ counter }}</span> active notices
-          {% endblocktrans %}
-        {% else %}
-          {% trans "No notices" %}
-        {% endif %}
+          {% if total > 0 %}
+            {% blocktrans count counter=total trimmed %}
+              <span id="announcementCount">{{ counter }}</span> active notice
+            {% plural %}
+              <span id="announcementCount">{{ counter }}</span> active notices
+            {% endblocktrans %}
+          {% else %}
+            {% trans "No notices" %}
+          {% endif %}
         {% endwith %}
       </span>
     </div>
@@ -531,13 +846,15 @@
 <section class="cta-banner reveal">
   <div class="container">
     <h2>{% trans "Have Questions?" %} <span>{% trans "Reach Out" %}</span></h2>
-    <p>{% trans "We're here to help with any of your digital service needs." %}</p>
+    <p>
+      {% trans "We're here to help with any of your digital service needs." %}
+    </p>
     <div class="cta-buttons">
       <a href="{% url 'contact' %}" class="btn-primary">
         <i class="fas fa-phone"></i> {% trans "Contact Us" %}
       </a>
       {% with whatsapp_number=business.whatsapp|default:"919876543210" %}
-      <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20have%20a%20question%20about%20your%20announcements." target="_blank" class="btn-whatsapp">
+      <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20have%20a%20question%20about%20your%20announcements." target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
         <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
       </a>
       {% endwith %}
@@ -548,50 +865,52 @@
 
 {% block extra_js %}
 <script>
-  (function() {
-    'use strict';
+  (function () {
+    "use strict";
 
     // ---- Scroll reveal (Intersection Observer) ----
-    const revealElements = document.querySelectorAll('.reveal');
-    if (revealElements.length && 'IntersectionObserver' in window) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-      revealElements.forEach(el => observer.observe(el));
+    const revealElements = document.querySelectorAll(".reveal");
+    if (revealElements.length && "IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.1, rootMargin: "0px 0px -50px 0px" },
+      );
+      revealElements.forEach((el) => observer.observe(el));
     } else {
-      revealElements.forEach(el => el.classList.add('visible'));
+      revealElements.forEach((el) => el.classList.add("visible"));
     }
 
     // ---- Client-side filter by category ----
-    const announcementCards = document.querySelectorAll('.announcement-card');
-    const filterBar = document.getElementById('filterBar');
-    const noResults = document.getElementById('noResults');
-    const countSpan = document.getElementById('announcementCount');
-    const countBadge = document.getElementById('countBadge');
+    const announcementCards = document.querySelectorAll(".announcement-card");
+    const filterBar = document.getElementById("filterBar");
+    const noResults = document.getElementById("noResults");
+    const countSpan = document.getElementById("announcementCount");
+    const countBadge = document.getElementById("countBadge");
 
     if (announcementCards.length === 0) {
-      // No announcements: hide filter bar, but leave noResults hidden
-      filterBar.style.display = 'none';
+      filterBar.style.display = "none";
       return;
     }
 
     // Gather unique categories from data-category
     const categoriesSet = new Set();
-    announcementCards.forEach(card => {
-      const cat = card.dataset.category || 'general';
+    announcementCards.forEach((card) => {
+      const cat = card.dataset.category || "general";
       categoriesSet.add(cat);
     });
 
     // Add filter buttons for each category (excluding 'all')
-    categoriesSet.forEach(cat => {
-      if (cat === 'all' || cat === '') return;
-      const btn = document.createElement('button');
-      btn.className = 'filter-btn';
+    categoriesSet.forEach((cat) => {
+      if (cat === "all" || cat === "") return;
+      const btn = document.createElement("button");
+      btn.className = "filter-btn";
       btn.dataset.filter = cat;
       btn.innerHTML = `<i class="fas fa-tag"></i> ${cat.charAt(0).toUpperCase() + cat.slice(1)}`;
       filterBar.appendChild(btn);
@@ -600,42 +919,41 @@
     // Filter function
     function filterAnnouncements(category) {
       let visibleCount = 0;
-      announcementCards.forEach(card => {
-        const cardCat = card.dataset.category || 'general';
-        const match = category === 'all' || cardCat === category;
+      announcementCards.forEach((card) => {
+        const cardCat = card.dataset.category || "general";
+        const match = category === "all" || cardCat === category;
         if (match) {
-          card.classList.remove('hidden-announcement');
+          card.classList.remove("hidden-announcement");
           visibleCount++;
         } else {
-          card.classList.add('hidden-announcement');
+          card.classList.add("hidden-announcement");
         }
       });
 
-      noResults.style.display = (visibleCount === 0) ? 'block' : 'none';
+      noResults.style.display = visibleCount === 0 ? "block" : "none";
 
       // Update active button
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.filter === category);
+      document.querySelectorAll(".filter-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.filter === category);
       });
 
       // Update count badge (visible on current page)
       if (countSpan) countSpan.textContent = visibleCount;
       if (countBadge) {
-        const label = visibleCount === 1 ? 'active notice' : 'active notices';
+        const label = visibleCount === 1 ? "active notice" : "active notices";
         countBadge.innerHTML = `<i class="far fa-bell"></i> ${visibleCount} ${label}`;
       }
     }
 
     // Attach click listeners
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
+    document.querySelectorAll(".filter-btn").forEach((btn) => {
+      btn.addEventListener("click", function () {
         filterAnnouncements(this.dataset.filter);
       });
     });
 
     // Initial: show all
-    filterAnnouncements('all');
-
+    filterAnnouncements("all");
   })();
 </script>
 {% endblock %}

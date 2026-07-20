@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-06 20:27+0530\n"
+"POT-Creation-Date: 2026-07-20 13:14+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,1593 +18,2044 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\corematoshree\forms.py:15 .\corematoshree\forms.py:52
-#: .\corematoshree\forms.py:72 .\corematoshree\forms.py:119
-#: .\corematoshree\forms.py:261 .\corematoshree\forms.py:275
-#: .\corematoshree\forms.py:334 .\corematoshree\models.py:101
-#: .\corematoshree\models.py:157 .\corematoshree\models.py:197
-#: .\corematoshree\models.py:486 .\templates\contactus.html:359
-#: .\templates\customer_reviews.html:675
-#: .\templates\superadmindashboard.html:1223
+#: .\corematoshree\forms.py:28 .\corematoshree\forms.py:65
+#: .\corematoshree\forms.py:87 .\corematoshree\forms.py:130
+#: .\corematoshree\forms.py:251 .\corematoshree\forms.py:266
+#: .\corematoshree\forms.py:327 .\corematoshree\models.py:100
+#: .\corematoshree\models.py:152 .\corematoshree\models.py:178
+#: .\corematoshree\models.py:398 .\corematoshree\models.py:456
+#: .\templates\admindashboard.html:1601
+#: .\templates\application_admin_detail.html:702
+#: .\templates\application_detail.html:495 .\templates\contactus.html:985
+#: .\templates\customer_reviews.html:1370
+#: .\templates\superadmindashboard.html:1929
+#: .\templates\superadmindashboard.html:2091
 msgid "Email"
 msgstr ""
 
-#: .\corematoshree\forms.py:19 .\corematoshree\forms.py:53
-#: .\corematoshree\forms.py:73 .\corematoshree\forms.py:118
-#: .\corematoshree\forms.py:260 .\corematoshree\forms.py:276
-#: .\corematoshree\forms.py:332 .\corematoshree\models.py:24
-#: .\corematoshree\models.py:96 .\corematoshree\models.py:160
-#: .\corematoshree\models.py:476 .\templates\contactus.html:337
+#: .\corematoshree\forms.py:30 .\corematoshree\forms.py:66
+#: .\corematoshree\forms.py:88 .\corematoshree\forms.py:129
+#: .\corematoshree\forms.py:250 .\corematoshree\forms.py:267
+#: .\corematoshree\forms.py:325 .\corematoshree\models.py:36
+#: .\corematoshree\models.py:99 .\corematoshree\models.py:153
+#: .\corematoshree\models.py:396 .\corematoshree\models.py:455
+#: .\templates\admindashboard.html:1597
+#: .\templates\application_admin_detail.html:698
+#: .\templates\application_detail.html:491 .\templates\contactus.html:956
+#: .\templates\superadmindashboard.html:1925
 msgid "Phone"
 msgstr ""
 
-#: .\corematoshree\forms.py:24 .\corematoshree\forms.py:54
-#: .\corematoshree\forms.py:331 .\corematoshree\models.py:29
-#: .\corematoshree\models.py:473 .\templates\contactus.html:327
+#: .\corematoshree\forms.py:36 .\corematoshree\forms.py:67
+#: .\corematoshree\forms.py:324 .\corematoshree\forms.py:359
+#: .\corematoshree\models.py:42 .\corematoshree\models.py:395
+#: .\corematoshree\models.py:457 .\templates\application_admin_detail.html:706
+#: .\templates\application_detail.html:499 .\templates\contactus.html:947
 msgid "Address"
 msgstr ""
 
-#: .\corematoshree\forms.py:33 .\templates\superadmindashboard.html:1222
+#: .\corematoshree\forms.py:45 .\templates\login.html:331
+#: .\templates\superadmindashboard.html:2090
 msgid "Username"
 msgstr ""
 
-#: .\corematoshree\forms.py:34
+#: .\corematoshree\forms.py:46 .\templates\login.html:353
 msgid "Password"
 msgstr ""
 
-#: .\corematoshree\forms.py:35
+#: .\corematoshree\forms.py:47
 msgid "Confirm Password"
 msgstr ""
 
-#: .\corematoshree\forms.py:50
+#: .\corematoshree\forms.py:63
 msgid "First Name"
 msgstr ""
 
-#: .\corematoshree\forms.py:51
+#: .\corematoshree\forms.py:64
 msgid "Last Name"
 msgstr ""
 
-#: .\corematoshree\forms.py:71 .\corematoshree\forms.py:212
-#: .\corematoshree\forms.py:274 .\corematoshree\models.py:49
-#: .\corematoshree\models.py:153 .\templates\admindashboard.html:220
-#: .\templates\superadmindashboard.html:682
+#: .\corematoshree\forms.py:86 .\corematoshree\forms.py:184
+#: .\corematoshree\forms.py:265 .\corematoshree\models.py:60
+#: .\corematoshree\models.py:151 .\templates\admindashboard.html:1060
+#: .\templates\application_detail.html:487
+#: .\templates\superadmindashboard.html:1388
 msgid "Name"
 msgstr ""
 
-#: .\corematoshree\forms.py:74 .\corematoshree\forms.py:92
-#: .\corematoshree\forms.py:277 .\corematoshree\models.py:165
-#: .\templates\contactus.html:293
+#: .\corematoshree\forms.py:89 .\corematoshree\forms.py:96
+#: .\corematoshree\forms.py:268 .\corematoshree\models.py:154
 msgid "Subject"
 msgstr ""
 
-#: .\corematoshree\forms.py:75 .\corematoshree\forms.py:265
-#: .\corematoshree\forms.py:278 .\corematoshree\models.py:116
-#: .\corematoshree\models.py:169 .\templates\contactus.html:301
+#: .\corematoshree\forms.py:90 .\corematoshree\forms.py:255
+#: .\corematoshree\forms.py:269 .\corematoshree\models.py:108
+#: .\corematoshree\models.py:155 .\templates\admindashboard.html:1630
+#: .\templates\superadmindashboard.html:1958
 msgid "Message"
 msgstr ""
 
-#: .\corematoshree\forms.py:80 .\corematoshree\forms.py:169
-#: .\corematoshree\forms.py:177 .\templates\contactus.html:269
+#: .\corematoshree\forms.py:93 .\corematoshree\forms.py:154
+#: .\corematoshree\forms.py:160
 msgid "Your Name"
 msgstr ""
 
-#: .\corematoshree\forms.py:84 .\corematoshree\forms.py:136
-#: .\corematoshree\forms.py:170 .\corematoshree\forms.py:181
-#: .\templates\appointment.html:323 .\templates\contactus.html:277
+#: .\corematoshree\forms.py:94 .\corematoshree\forms.py:139
+#: .\corematoshree\forms.py:155 .\corematoshree\forms.py:161
+#: .\corematoshree\forms.py:358 .\templates\appointment.html:626
 msgid "Email Address"
 msgstr ""
 
-#: .\corematoshree\forms.py:88 .\corematoshree\forms.py:132
-#: .\templates\appointment.html:308 .\templates\contactus.html:285
+#: .\corematoshree\forms.py:95 .\corematoshree\forms.py:138
+#: .\corematoshree\forms.py:357 .\templates\appointment.html:611
 msgid "Phone Number"
 msgstr ""
 
-#: .\corematoshree\forms.py:97
+#: .\corematoshree\forms.py:98
 msgid "Write your message..."
 msgstr ""
 
-#: .\corematoshree\forms.py:117 .\corematoshree\forms.py:128
-#: .\corematoshree\forms.py:259 .\corematoshree\models.py:92
-#: .\templates\appointment.html:296 .\templates\customer_reviews.html:669
+#: .\corematoshree\forms.py:112 .\corematoshree\models.py:140
+msgid "Appointment time must be between 09:00 AM and 05:00 PM."
+msgstr ""
+
+#: .\corematoshree\forms.py:128 .\corematoshree\forms.py:137
+#: .\corematoshree\forms.py:249 .\corematoshree\forms.py:356
+#: .\corematoshree\models.py:98 .\corematoshree\models.py:454
+#: .\templates\admindashboard.html:1593
+#: .\templates\application_admin_detail.html:694
+#: .\templates\appointment.html:600 .\templates\customer_reviews.html:1366
+#: .\templates\superadmindashboard.html:1921
 msgid "Full Name"
 msgstr ""
 
-#: .\corematoshree\forms.py:120 .\corematoshree\forms.py:262
-#: .\corematoshree\forms.py:300 .\corematoshree\models.py:107
-#: .\corematoshree\models.py:302 .\corematoshree\models.py:324
-#: .\templates\admindashboard.html:312 .\templates\admindashboard.html:342
-#: .\templates\admindashboard.html:601 .\templates\appointment.html:334
-#: .\templates\required_document.html:207 .\templates\service_charges.html:412
-#: .\templates\service_charges.html:444 .\templates\services.html:176
-#: .\templates\superadmindashboard.html:776
-#: .\templates\superadmindashboard.html:806
-#: .\templates\superadmindashboard.html:1075
+#: .\corematoshree\forms.py:131 .\corematoshree\forms.py:252
+#: .\corematoshree\forms.py:291 .\corematoshree\forms.py:392
+#: .\corematoshree\models.py:104 .\corematoshree\models.py:264
+#: .\corematoshree\models.py:286 .\corematoshree\models.py:453
+#: .\templates\admindashboard.html:1161 .\templates\admindashboard.html:1197
+#: .\templates\admindashboard.html:1229 .\templates\admindashboard.html:1246
+#: .\templates\admindashboard.html:1282 .\templates\admindashboard.html:1552
+#: .\templates\admindashboard.html:1605 .\templates\admindashboard.html:1822
+#: .\templates\application_admin_detail.html:685
+#: .\templates\apply_service.html:591 .\templates\appointment.html:636
+#: .\templates\required_document.html:511 .\templates\service_charges.html:470
+#: .\templates\service_charges.html:491
+#: .\templates\superadmindashboard.html:1489
+#: .\templates\superadmindashboard.html:1525
+#: .\templates\superadmindashboard.html:1557
+#: .\templates\superadmindashboard.html:1574
+#: .\templates\superadmindashboard.html:1610
+#: .\templates\superadmindashboard.html:1880
+#: .\templates\superadmindashboard.html:1933
+#: .\templates\superadmindashboard.html:2197
 msgid "Service"
 msgstr ""
 
-#: .\corematoshree\forms.py:121 .\corematoshree\forms.py:263
-#: .\corematoshree\models.py:110 .\templates\appointment.html:346
+#: .\corematoshree\forms.py:132 .\corematoshree\forms.py:253
+#: .\corematoshree\models.py:106 .\templates\appointment.html:647
 msgid "Appointment Date"
 msgstr ""
 
-#: .\corematoshree\forms.py:122 .\corematoshree\forms.py:264
-#: .\corematoshree\models.py:113 .\templates\appointment.html:358
+#: .\corematoshree\forms.py:133 .\corematoshree\forms.py:254
+#: .\corematoshree\models.py:107 .\templates\appointment.html:658
 msgid "Appointment Time"
 msgstr ""
 
-#: .\corematoshree\forms.py:123 .\templates\appointment.html:370
+#: .\corematoshree\forms.py:134 .\templates\appointment.html:674
 msgid "Additional Message"
 msgstr ""
 
-#: .\corematoshree\forms.py:152
+#: .\corematoshree\forms.py:144
 msgid "Additional Message (Optional)"
 msgstr ""
 
-#: .\corematoshree\forms.py:171 .\corematoshree\models.py:202
-#: .\corematoshree\models.py:219
+#: .\corematoshree\forms.py:156 .\corematoshree\models.py:179
+#: .\corematoshree\models.py:186
 msgid "Review"
 msgstr ""
 
-#: .\corematoshree\forms.py:172 .\corematoshree\models.py:205
-#: .\templates\customer_reviews.html:681
+#: .\corematoshree\forms.py:157 .\corematoshree\models.py:180
+#: .\templates\customer_reviews.html:1375
 msgid "Rating"
 msgstr ""
 
-#: .\corematoshree\forms.py:186
+#: .\corematoshree\forms.py:163
 msgid "Write your review..."
 msgstr ""
 
-#: .\corematoshree\forms.py:198
+#: .\corematoshree\forms.py:172
 msgid "Rating must be between 1 and 5."
 msgstr ""
 
-#: .\corematoshree\forms.py:213 .\corematoshree\forms.py:225
-#: .\corematoshree\forms.py:288 .\corematoshree\forms.py:314
-#: .\corematoshree\models.py:53 .\corematoshree\models.py:242
-#: .\corematoshree\models.py:279 .\corematoshree\models.py:347
-#: .\templates\admindashboard.html:220 .\templates\admindashboard.html:256
-#: .\templates\admindashboard.html:413 .\templates\admindashboard.html:710
-#: .\templates\superadmindashboard.html:682
-#: .\templates\superadmindashboard.html:718
-#: .\templates\superadmindashboard.html:879
-#: .\templates\superadmindashboard.html:1190
+#: .\corematoshree\forms.py:185 .\corematoshree\forms.py:202
+#: .\corematoshree\forms.py:281 .\corematoshree\forms.py:306
+#: .\corematoshree\models.py:61 .\corematoshree\models.py:212
+#: .\corematoshree\models.py:243 .\corematoshree\models.py:306
+#: .\templates\admindashboard.html:1061 .\templates\admindashboard.html:1103
+#: .\templates\admindashboard.html:1355 .\templates\admindashboard.html:1734
+#: .\templates\superadmindashboard.html:1389
+#: .\templates\superadmindashboard.html:1431
+#: .\templates\superadmindashboard.html:1683
+#: .\templates\superadmindashboard.html:2060
 msgid "Category"
 msgstr ""
 
-#: .\corematoshree\forms.py:214 .\corematoshree\forms.py:226
-#: .\corematoshree\forms.py:238 .\corematoshree\forms.py:248
-#: .\corematoshree\models.py:57 .\corematoshree\models.py:247
-#: .\corematoshree\models.py:375 .\corematoshree\models.py:420
-#: .\templates\admindashboard.html:265 .\templates\admindashboard.html:424
-#: .\templates\admindashboard.html:498 .\templates\admindashboard.html:576
-#: .\templates\superadmindashboard.html:727
-#: .\templates\superadmindashboard.html:890
-#: .\templates\superadmindashboard.html:966
-#: .\templates\superadmindashboard.html:1046
+#: .\corematoshree\forms.py:186 .\corematoshree\forms.py:203
+#: .\corematoshree\forms.py:217 .\corematoshree\forms.py:228
+#: .\corematoshree\models.py:62 .\corematoshree\models.py:213
+#: .\corematoshree\models.py:326 .\corematoshree\models.py:350
+#: .\templates\admindashboard.html:1112 .\templates\admindashboard.html:1366
+#: .\templates\admindashboard.html:1442 .\templates\admindashboard.html:1522
+#: .\templates\superadmindashboard.html:1440
+#: .\templates\superadmindashboard.html:1694
+#: .\templates\superadmindashboard.html:1770
+#: .\templates\superadmindashboard.html:1850
 msgid "Description"
 msgstr ""
 
-#: .\corematoshree\forms.py:215 .\corematoshree\models.py:61
-#: .\templates\admindashboard.html:271 .\templates\superadmindashboard.html:733
+#: .\corematoshree\forms.py:187 .\corematoshree\models.py:63
+#: .\templates\admindashboard.html:1118
+#: .\templates\superadmindashboard.html:1446
 msgid "Active"
 msgstr ""
 
-#: .\corematoshree\forms.py:216 .\corematoshree\forms.py:239
-#: .\corematoshree\models.py:65 .\corematoshree\models.py:423
-#: .\templates\admindashboard.html:276 .\templates\admindashboard.html:510
-#: .\templates\superadmindashboard.html:738
-#: .\templates\superadmindashboard.html:978
+#: .\corematoshree\forms.py:188 .\corematoshree\forms.py:218
+#: .\corematoshree\models.py:65 .\corematoshree\models.py:352
+#: .\templates\admindashboard.html:1123 .\templates\admindashboard.html:1454
+#: .\templates\superadmindashboard.html:1451
+#: .\templates\superadmindashboard.html:1782
 msgid "Icon"
 msgstr ""
 
-#: .\corematoshree\forms.py:224 .\corematoshree\forms.py:234
-#: .\corematoshree\forms.py:247 .\corematoshree\forms.py:287
-#: .\corematoshree\forms.py:313 .\corematoshree\models.py:238
-#: .\corematoshree\models.py:275 .\corematoshree\models.py:343
-#: .\corematoshree\models.py:371 .\corematoshree\models.py:405
-#: .\templates\admindashboard.html:409 .\templates\admindashboard.html:490
-#: .\templates\admindashboard.html:572 .\templates\admindashboard.html:706
-#: .\templates\superadmindashboard.html:875
-#: .\templates\superadmindashboard.html:958
-#: .\templates\superadmindashboard.html:1042
-#: .\templates\superadmindashboard.html:1186
+#: .\corematoshree\forms.py:189 .\corematoshree\models.py:71
+#: .\templates\admindashboard.html:1127
+#: .\templates\superadmindashboard.html:1455
+msgid "Icon Color"
+msgstr ""
+
+#: .\corematoshree\forms.py:201 .\corematoshree\forms.py:213
+#: .\corematoshree\forms.py:227 .\corematoshree\forms.py:280
+#: .\corematoshree\forms.py:305 .\corematoshree\models.py:211
+#: .\corematoshree\models.py:242 .\corematoshree\models.py:305
+#: .\corematoshree\models.py:325 .\corematoshree\models.py:346
+#: .\templates\admindashboard.html:1351 .\templates\admindashboard.html:1434
+#: .\templates\admindashboard.html:1518 .\templates\admindashboard.html:1730
+#: .\templates\superadmindashboard.html:1679
+#: .\templates\superadmindashboard.html:1762
+#: .\templates\superadmindashboard.html:1846
+#: .\templates\superadmindashboard.html:2056
 msgid "Title"
 msgstr ""
 
-#: .\corematoshree\forms.py:235 .\corematoshree\models.py:409
-#: .\templates\admindashboard.html:494 .\templates\superadmindashboard.html:962
+#: .\corematoshree\forms.py:204 .\corematoshree\models.py:214
+#: .\templates\admindashboard.html:1370 .\templates\announcements.html:765
+#: .\templates\superadmindashboard.html:1698
+msgid "Urgent"
+msgstr ""
+
+#: .\corematoshree\forms.py:214 .\corematoshree\models.py:347
+#: .\templates\admindashboard.html:1438
+#: .\templates\superadmindashboard.html:1766
 msgid "Organization"
 msgstr ""
 
-#: .\corematoshree\forms.py:236 .\corematoshree\forms.py:250
-#: .\corematoshree\models.py:382 .\corematoshree\models.py:413
-#: .\templates\admindashboard.html:502 .\templates\superadmindashboard.html:970
+#: .\corematoshree\forms.py:215 .\corematoshree\forms.py:230
+#: .\corematoshree\models.py:328 .\corematoshree\models.py:348
+#: .\templates\admindashboard.html:1446
+#: .\templates\superadmindashboard.html:1774
 msgid "Last Date"
 msgstr ""
 
-#: .\corematoshree\forms.py:237 .\corematoshree\models.py:416
-#: .\templates\admindashboard.html:506 .\templates\superadmindashboard.html:974
+#: .\corematoshree\forms.py:216 .\corematoshree\models.py:349
+#: .\templates\admindashboard.html:1450
+#: .\templates\superadmindashboard.html:1778
 msgid "Apply Link"
 msgstr ""
 
-#: .\corematoshree\forms.py:249 .\corematoshree\models.py:378
-#: .\templates\admindashboard.html:580
-#: .\templates\superadmindashboard.html:1050
+#: .\corematoshree\forms.py:229 .\corematoshree\models.py:327
+#: .\templates\admindashboard.html:1526
+#: .\templates\superadmindashboard.html:1854
 msgid "Eligibility"
 msgstr ""
 
-#: .\corematoshree\forms.py:251 .\corematoshree\forms.py:315
-#: .\corematoshree\models.py:284 .\corematoshree\models.py:387
-#: .\templates\admindashboard.html:584
-#: .\templates\superadmindashboard.html:1054
+#: .\corematoshree\forms.py:231 .\corematoshree\forms.py:307
+#: .\corematoshree\models.py:244 .\corematoshree\models.py:329
+#: .\templates\admindashboard.html:1530
+#: .\templates\superadmindashboard.html:1858
 #: .\venv\Lib\site-packages\django\db\models\fields\files.py:420
 msgid "Image"
 msgstr ""
 
-#: .\corematoshree\forms.py:266 .\corematoshree\models.py:120
-#: .\templates\admindashboard.html:220 .\templates\admindashboard.html:269
-#: .\templates\admindashboard.html:601 .\templates\superadmindashboard.html:682
-#: .\templates\superadmindashboard.html:731
-#: .\templates\superadmindashboard.html:1075
+#: .\corematoshree\forms.py:256 .\corematoshree\models.py:110
+#: .\corematoshree\models.py:460 .\templates\admindashboard.html:1062
+#: .\templates\admindashboard.html:1116 .\templates\admindashboard.html:1555
+#: .\templates\admindashboard.html:1621 .\templates\admindashboard.html:1823
+#: .\templates\application_admin_detail.html:723
+#: .\templates\application_detail.html:468
+#: .\templates\superadmindashboard.html:1390
+#: .\templates\superadmindashboard.html:1444
+#: .\templates\superadmindashboard.html:1883
+#: .\templates\superadmindashboard.html:1949
+#: .\templates\superadmindashboard.html:2198
 msgid "Status"
 msgstr ""
 
-#: .\corematoshree\forms.py:279 .\corematoshree\models.py:172
-#: .\templates\admindashboard.html:640
-#: .\templates\superadmindashboard.html:1118
+#: .\corematoshree\forms.py:270 .\corematoshree\models.py:157
 msgid "Replied"
 msgstr ""
 
-#: .\corematoshree\forms.py:289 .\corematoshree\models.py:351
-#: .\templates\download_forms.html:399
+#: .\corematoshree\forms.py:271 .\corematoshree\models.py:156
+#: .\templates\admindashboard.html:1669
+#: .\templates\superadmindashboard.html:1996
+msgid "Reply"
+msgstr ""
+
+#: .\corematoshree\forms.py:282 .\corematoshree\models.py:307
+#: .\templates\download_forms.html:884
 msgid "PDF"
 msgstr ""
 
-#: .\corematoshree\forms.py:301 .\corematoshree\models.py:305
+#: .\corematoshree\forms.py:292 .\corematoshree\models.py:266
 msgid "Charge"
 msgstr ""
 
-#: .\corematoshree\forms.py:318
+#: .\corematoshree\forms.py:310
 msgid "Image Title"
 msgstr ""
 
-#: .\corematoshree\forms.py:328 .\corematoshree\models.py:460
+#: .\corematoshree\forms.py:321 .\corematoshree\models.py:392
 msgid "Business Name"
 msgstr ""
 
-#: .\corematoshree\forms.py:329 .\corematoshree\models.py:464
+#: .\corematoshree\forms.py:322 .\corematoshree\models.py:393
 msgid "Logo"
 msgstr ""
 
-#: .\corematoshree\forms.py:330 .\corematoshree\models.py:470
+#: .\corematoshree\forms.py:323 .\corematoshree\models.py:394
 msgid "Welcome Message"
 msgstr ""
 
-#: .\corematoshree\forms.py:333 .\corematoshree\models.py:481
-#: .\templates\contactus.html:346
+#: .\corematoshree\forms.py:326 .\corematoshree\models.py:397
+#: .\templates\contactus.html:968
 msgid "WhatsApp"
 msgstr ""
 
-#: .\corematoshree\forms.py:335 .\corematoshree\models.py:489
+#: .\corematoshree\forms.py:328 .\corematoshree\models.py:400
 msgid "Google Map"
 msgstr ""
 
-#: .\corematoshree\forms.py:336 .\corematoshree\models.py:493
-#: .\templates\contactus.html:369
+#: .\corematoshree\forms.py:329 .\corematoshree\models.py:403
+#: .\templates\contactus.html:994
 msgid "Business Hours"
 msgstr ""
 
-#: .\corematoshree\models.py:13 .\templates\superadmindashboard.html:1246
+#: .\corematoshree\forms.py:330 .\corematoshree\models.py:405
+msgid "Registration Number"
+msgstr ""
+
+#: .\corematoshree\forms.py:331 .\corematoshree\models.py:411
+msgid "Certifications / Authorizations"
+msgstr ""
+
+#: .\corematoshree\forms.py:377
+msgid "File size must be under 10 MB."
+msgstr ""
+
+#: .\corematoshree\forms.py:381
+msgid "Only PDF, JPG, JPEG, and PNG files are allowed."
+msgstr ""
+
+#: .\corematoshree\forms.py:383
+msgid "No file selected."
+msgstr ""
+
+#: .\corematoshree\forms.py:393
+msgid "Document Names"
+msgstr ""
+
+#: .\corematoshree\forms.py:400
+msgid "e.g. PAN Card, Aadhar Card, Birth Certificate"
+msgstr ""
+
+#: .\corematoshree\forms.py:405
+msgid "Separate multiple documents with commas."
+msgstr ""
+
+#: .\corematoshree\models.py:15
+msgid "Enter a valid phone number (10–15 digits)."
+msgstr ""
+
+#: .\corematoshree\models.py:24 .\corematoshree\models.py:452
+#: .\templates\application_admin_detail.html:681
+#: .\templates\superadmindashboard.html:2114
 msgid "User"
 msgstr ""
 
-#: .\corematoshree\models.py:14 .\templates\admindashboard.html:159
-#: .\templates\superadmindashboard.html:1247
+#: .\corematoshree\models.py:25 .\templates\admindashboard.html:996
+#: .\templates\superadmindashboard.html:2115
 msgid "Admin"
 msgstr ""
 
-#: .\corematoshree\models.py:15 .\templates\base.html:490
-#: .\templates\superadmindashboard.html:594
-#: .\templates\superadmindashboard.html:1248
+#: .\corematoshree\models.py:26 .\templates\superadmindashboard.html:1320
+#: .\templates\superadmindashboard.html:2116
 msgid "Super Admin"
 msgstr ""
 
-#: .\corematoshree\models.py:18 .\templates\superadmindashboard.html:1224
+#: .\corematoshree\models.py:29 .\templates\superadmindashboard.html:2092
 msgid "Role"
-msgstr ""
-
-#: .\corematoshree\models.py:41
-msgid "Enter a valid phone number (10-15 digits)."
 msgstr ""
 
 #: .\corematoshree\models.py:68
 msgid "Font Awesome icon class (e.g., 'fa-print')"
 msgstr ""
 
-#: .\corematoshree\models.py:71 .\templates\admindashboard.html:280
-#: .\templates\superadmindashboard.html:742
-msgid "Icon Color"
-msgstr ""
-
 #: .\corematoshree\models.py:74
 msgid "Hex color for the icon circle (e.g., #ff6b35)"
 msgstr ""
 
-#: .\corematoshree\models.py:85
+#: .\corematoshree\models.py:92 .\templates\admindashboard.html:1623
+#: .\templates\superadmindashboard.html:1951
 msgid "Pending"
 msgstr ""
 
-#: .\corematoshree\models.py:86
+#: .\corematoshree\models.py:93 .\templates\admindashboard.html:1624
+#: .\templates\superadmindashboard.html:1952
 msgid "Confirmed"
 msgstr ""
 
-#: .\corematoshree\models.py:87
+#: .\corematoshree\models.py:94 .\templates\admindashboard.html:1625
+#: .\templates\superadmindashboard.html:1953
 msgid "Completed"
 msgstr ""
 
-#: .\corematoshree\models.py:88
+#: .\corematoshree\models.py:95 .\templates\admindashboard.html:1626
+#: .\templates\superadmindashboard.html:1954
 msgid "Cancelled"
 msgstr ""
 
-#: .\corematoshree\models.py:126 .\corematoshree\models.py:176
-#: .\corematoshree\models.py:213 .\corematoshree\models.py:250
+#: .\corematoshree\models.py:116 .\corematoshree\models.py:158
+#: .\corematoshree\models.py:182 .\corematoshree\models.py:215
+#: .\corematoshree\models.py:466 .\templates\application_admin_detail.html:749
 msgid "Created At"
 msgstr ""
 
-#: .\corematoshree\models.py:132
+#: .\corematoshree\models.py:120
 msgid "Appointment"
 msgstr ""
 
-#: .\corematoshree\models.py:133 .\templates\admindashboard.html:140
-#: .\templates\admindashboard.html:173 .\templates\admindashboard.html:598
-#: .\templates\admindashboard.html:818 .\templates\superadmindashboard.html:573
-#: .\templates\superadmindashboard.html:615
-#: .\templates\superadmindashboard.html:1071
-#: .\templates\superadmindashboard.html:1355
+#: .\corematoshree\models.py:121 .\templates\admindashboard.html:974
+#: .\templates\admindashboard.html:1010 .\templates\admindashboard.html:1545
+#: .\templates\admindashboard.html:1879
+#: .\templates\superadmindashboard.html:1295
+#: .\templates\superadmindashboard.html:1334
+#: .\templates\superadmindashboard.html:1873
+#: .\templates\superadmindashboard.html:2254
 msgid "Appointments"
 msgstr ""
 
-#: .\corematoshree\models.py:140
+#: .\corematoshree\models.py:132
 msgid "Appointment date cannot be in the past."
 msgstr ""
 
-#: .\corematoshree\models.py:182 .\templates\base.html:479
+#: .\corematoshree\models.py:162 .\templates\base.html:249
+#: .\templates\footer.html:33
 msgid "Contact"
 msgstr ""
 
-#: .\corematoshree\models.py:183
+#: .\corematoshree\models.py:163
 msgid "Contacts"
 msgstr ""
 
-#: .\corematoshree\models.py:193
+#: .\corematoshree\models.py:177
 msgid "Customer Name"
 msgstr ""
 
-#: .\corematoshree\models.py:209
+#: .\corematoshree\models.py:181
 msgid "Approved"
 msgstr ""
 
-#: .\corematoshree\models.py:220
+#: .\corematoshree\models.py:187 .\templates\base.html:248
+#: .\templates\customer_reviews.html:1206 .\templates\footer.html:32
 msgid "Reviews"
 msgstr ""
 
-#: .\corematoshree\models.py:230 .\corematoshree\models.py:394
-#: .\templates\admindashboard.html:416 .\templates\superadmindashboard.html:882
-msgid "Government Scheme"
-msgstr ""
-
-#: .\corematoshree\models.py:231 .\templates\admindashboard.html:417
-#: .\templates\superadmindashboard.html:883
-msgid "Recruitment"
-msgstr ""
-
-#: .\corematoshree\models.py:232 .\templates\admindashboard.html:418
-#: .\templates\superadmindashboard.html:884
-msgid "Scholarship"
-msgstr ""
-
-#: .\corematoshree\models.py:233 .\templates\admindashboard.html:419
-#: .\templates\superadmindashboard.html:885
-msgid "Holiday"
-msgstr ""
-
-#: .\corematoshree\models.py:234 .\templates\admindashboard.html:420
-#: .\templates\superadmindashboard.html:886
-msgid "Notice"
-msgstr ""
-
-#: .\corematoshree\models.py:256
-msgid "Announcement"
-msgstr ""
-
-#: .\corematoshree\models.py:257 .\templates\admindashboard.html:137
-#: .\templates\admindashboard.html:364 .\templates\admindashboard.html:815
-#: .\templates\announcements.html:393 .\templates\base.html:473
-#: .\templates\homepage.html:910 .\templates\superadmindashboard.html:570
-#: .\templates\superadmindashboard.html:830
-#: .\templates\superadmindashboard.html:1352
-msgid "Announcements"
-msgstr ""
-
-#: .\corematoshree\models.py:267
-msgid "Cyber Cafe"
-msgstr ""
-
-#: .\corematoshree\models.py:268
-msgid "Customers"
-msgstr ""
-
-#: .\corematoshree\models.py:269
-msgid "Certificates"
-msgstr ""
-
-#: .\corematoshree\models.py:270
-msgid "Equipment"
-msgstr ""
-
-#: .\corematoshree\models.py:271
-msgid "Office"
-msgstr ""
-
-#: .\corematoshree\models.py:289 .\templates\gallery.html:488
-msgid "Gallery Image"
-msgstr ""
-
-#: .\corematoshree\models.py:290
-msgid "Gallery Images"
-msgstr ""
-
-#: .\corematoshree\models.py:311
-msgid "Service Charge"
-msgstr ""
-
-#: .\corematoshree\models.py:312 .\templates\admindashboard.html:294
-#: .\templates\base.html:461 .\templates\service_charges.html:410
-#: .\templates\superadmindashboard.html:758
-msgid "Service Charges"
-msgstr ""
-
-#: .\corematoshree\models.py:327
-msgid "Document Name"
-msgstr ""
-
-#: .\corematoshree\models.py:332 .\templates\required_document.html:208
-msgid "Required Document"
-msgstr ""
-
-#: .\corematoshree\models.py:333 .\templates\base.html:459
-msgid "Required Documents"
-msgstr ""
-
-#: .\corematoshree\models.py:355
-msgid "Uploaded At"
-msgstr ""
-
-#: .\corematoshree\models.py:360
-msgid "Download Form"
-msgstr ""
-
-#: .\corematoshree\models.py:361 .\templates\base.html:460
-msgid "Download Forms"
-msgstr ""
-
-#: .\corematoshree\models.py:395 .\templates\admindashboard.html:524
-#: .\templates\admindashboard.html:817 .\templates\base.html:474
-#: .\templates\government_schemes.html:265
-#: .\templates\superadmindashboard.html:994
-#: .\templates\superadmindashboard.html:1354
-msgid "Government Schemes"
-msgstr ""
-
-#: .\corematoshree\models.py:426
-msgid "Font Awesome icon (e.g. 'fa-briefcase')"
-msgstr ""
-
-#: .\corematoshree\models.py:430
-msgid "Job Notification"
-msgstr ""
-
-#: .\corematoshree\models.py:431 .\templates\admindashboard.html:138
-#: .\templates\admindashboard.html:445 .\templates\admindashboard.html:816
-#: .\templates\base.html:475 .\templates\superadmindashboard.html:571
-#: .\templates\superadmindashboard.html:913
-#: .\templates\superadmindashboard.html:1353
-msgid "Job Notifications"
-msgstr ""
-
-#: .\corematoshree\models.py:441
-msgid "Question"
-msgstr ""
-
-#: .\corematoshree\models.py:445
-msgid "Answer"
-msgstr ""
-
-#: .\corematoshree\models.py:449 .\templates\base.html:471
-msgid "FAQ"
-msgstr ""
-
-#: .\corematoshree\models.py:450
-msgid "FAQs"
-msgstr ""
-
-#: .\corematoshree\models.py:490
-msgid "Paste Google Maps Embed Code"
-msgstr ""
-
-#: .\corematoshree\models.py:512 .\corematoshree\models.py:513
-msgid "Business Information"
-msgstr ""
-
-#: .\templates\aboutus.html:704 .\templates\base.html:451
-#: .\templates\government_schemes.html:263
-msgid "Home"
-msgstr ""
-
-#: .\templates\aboutus.html:706
-msgid "About Us"
-msgstr ""
-
-#: .\templates\aboutus.html:708 .\templates\base.html:452
-msgid "About"
-msgstr ""
-
-#: .\templates\aboutus.html:708
-msgid "CyberTech"
-msgstr ""
-
-#: .\templates\aboutus.html:721
-msgid "Who"
-msgstr ""
-
-#: .\templates\aboutus.html:721
-msgid "We Are"
-msgstr ""
-
-#: .\templates\aboutus.html:723
-msgid "Trusted Cyber Café &amp; Digital Service Center"
-msgstr ""
-
-#: .\templates\aboutus.html:726
-msgid "Matoshree Cyber Cafe"
-msgstr ""
-
-#: .\templates\aboutus.html:741
-msgid "Years of Excellence"
-msgstr ""
-
-#: .\templates\aboutus.html:745 .\templates\homepage.html:780
-msgid "Happy Customers"
-msgstr ""
-
-#: .\templates\aboutus.html:749
-msgid "Services Offered"
-msgstr ""
-
-#: .\templates\aboutus.html:764
-msgid "Decades of"
-msgstr ""
-
-#: .\templates\aboutus.html:764
-msgid "Digital Service"
-msgstr ""
-
-#: .\templates\aboutus.html:768
-msgid ""
-"We have over <strong>8 years of experience</strong> in\n"
-"        providing digital and online services. Our experienced staff "
-"ensures\n"
-"        every service is completed accurately and efficiently. From "
-"government\n"
-"        form submissions to document processing, we've handled thousands of\n"
-"        applications with precision."
-msgstr ""
-
-#: .\templates\aboutus.html:790
-msgid "Your Trusted Digital Partner"
-msgstr ""
-
-#: .\templates\aboutus.html:791
-msgid "Reliable · Fast · Transparent · Secure"
-msgstr ""
-
-#: .\templates\aboutus.html:801 .\templates\gallery.html:403
-#: .\templates\homepage.html:808 .\templates\service_charges.html:424
-#: .\templates\services.html:164
-msgid "Our"
-msgstr ""
-
-#: .\templates\aboutus.html:801
-msgid "Complete"
-msgstr ""
-
-#: .\templates\aboutus.html:812
-msgid "Online Government Applications"
-msgstr ""
-
-#: .\templates\aboutus.html:816
-msgid "Aadhaar Assistance"
-msgstr ""
-
-#: .\templates\aboutus.html:820
-msgid "PAN Card Services"
-msgstr ""
-
-#: .\templates\aboutus.html:824
-msgid "Passport Application Support"
-msgstr ""
-
-#: .\templates\aboutus.html:828
-msgid "Printing (B&amp;W &amp; Color)"
-msgstr ""
-
-#: .\templates\aboutus.html:832
-msgid "Photocopy (Xerox)"
-msgstr ""
-
-#: .\templates\aboutus.html:836
-msgid "Document Scanning"
-msgstr ""
-
-#: .\templates\aboutus.html:840
-msgid "Email &amp; Internet Services"
-msgstr ""
-
-#: .\templates\aboutus.html:844
-msgid "Resume / Biodata Creation"
-msgstr ""
-
-#: .\templates\aboutus.html:848 .\templates\homepage.html:757
-msgid "Lamination"
-msgstr ""
-
-#: .\templates\aboutus.html:852
-msgid "Passport-size Photo Printing"
-msgstr ""
-
-#: .\templates\aboutus.html:856
-msgid "Online Bill Payments"
-msgstr ""
-
-#: .\templates\aboutus.html:860
-msgid "Exam &amp; Admission Form Filling"
-msgstr ""
-
-#: .\templates\aboutus.html:864
-msgid "Document Attestation &amp; Notary"
-msgstr ""
-
-#: .\templates\aboutus.html:868
-msgid "Digital Signature &amp; e-Sign"
-msgstr ""
-
-#: .\templates\aboutus.html:872
-msgid "Cloud Storage &amp; Data Transfer"
-msgstr ""
-
-#: .\templates\aboutus.html:882
-msgid "Why"
-msgstr ""
-
-#: .\templates\aboutus.html:882
-msgid "Trust Us"
-msgstr ""
-
-#: .\templates\aboutus.html:891
-msgid "Experienced Staff"
-msgstr ""
-
-#: .\templates\aboutus.html:899
-msgid "Fast &amp; Accurate Service"
-msgstr ""
-
-#: .\templates\aboutus.html:907
-msgid "Transparent Pricing"
-msgstr ""
-
-#: .\templates\aboutus.html:915
-msgid "Customer Satisfaction"
-msgstr ""
-
-#: .\templates\aboutus.html:923
-msgid "Data Privacy &amp; Security"
-msgstr ""
-
-#: .\templates\aboutus.html:931
-msgid "Friendly Customer Support"
-msgstr ""
-
-#: .\templates\aboutus.html:947
-msgid "Authorized"
-msgstr ""
-
-#: .\templates\aboutus.html:947
-msgid "Service Provider"
-msgstr ""
-
-#: .\templates\aboutus.html:950
-msgid "Officially recognized for excellence in digital services"
-msgstr ""
-
-#: .\templates\aboutus.html:955
-msgid "XYZ Digital Services"
-msgstr ""
-
-#: .\templates\aboutus.html:959
-msgid "ABC Government Service Center"
-msgstr ""
-
-#: .\templates\aboutus.html:963
-msgid "Registration No.: 123456789"
-msgstr ""
-
-#: .\templates\aboutus.html:979 .\templates\gallery.html:465
-#: .\templates\jobs.html:466
-msgid "Ready to"
-msgstr ""
-
-#: .\templates\aboutus.html:979 .\templates\gallery.html:465
-msgid "Experience"
-msgstr ""
-
-#: .\templates\aboutus.html:988 .\templates\announcements.html:470
-#: .\templates\download_forms.html:448 .\templates\gallery.html:469
-#: .\templates\government_schemes.html:324 .\templates\jobs.html:475
-#: .\templates\required_document.html:262 .\templates\service_charges.html:513
-msgid "Contact Us"
-msgstr ""
-
-#: .\templates\aboutus.html:995 .\templates\announcements.html:473
-#: .\templates\base.html:563 .\templates\contactus.html:501
-#: .\templates\download_forms.html:455 .\templates\gallery.html:476
-#: .\templates\government_schemes.html:331 .\templates\homepage.html:898
-#: .\templates\jobs.html:483 .\templates\required_document.html:269
-#: .\templates\service_charges.html:521
-msgid "Chat on WhatsApp"
-msgstr ""
-
-#: .\templates\admindashboard.html:9
-msgid "Admin Dashboard – Cyber Café"
-msgstr ""
-
-#: .\templates\admindashboard.html:131 .\templates\superadmindashboard.html:564
-msgid "CyberAdmin"
-msgstr ""
-
-#: .\templates\admindashboard.html:134 .\templates\admindashboard.html:156
-#: .\templates\admindashboard.html:812 .\templates\admindashboard.html:824
-#: .\templates\base.html:487 .\templates\superadmindashboard.html:567
-#: .\templates\superadmindashboard.html:591
-#: .\templates\superadmindashboard.html:1349
-#: .\templates\superadmindashboard.html:1362
-msgid "Dashboard"
-msgstr ""
-
-#: .\templates\admindashboard.html:135 .\templates\admindashboard.html:202
-#: .\templates\admindashboard.html:813 .\templates\superadmindashboard.html:568
-#: .\templates\superadmindashboard.html:663
-#: .\templates\superadmindashboard.html:1350
-msgid "Manage Services"
-msgstr ""
-
-#: .\templates\admindashboard.html:136 .\templates\admindashboard.html:814
-#: .\templates\superadmindashboard.html:569
-#: .\templates\superadmindashboard.html:1351
-msgid "Update Prices"
-msgstr ""
-
-#: .\templates\admindashboard.html:139 .\templates\superadmindashboard.html:572
-msgid "Gov. Schemes"
-msgstr ""
-
-#: .\templates\admindashboard.html:141 .\templates\admindashboard.html:177
-#: .\templates\admindashboard.html:819 .\templates\superadmindashboard.html:574
-#: .\templates\superadmindashboard.html:622
-#: .\templates\superadmindashboard.html:1356
-msgid "Inquiries"
-msgstr ""
-
-#: .\templates\admindashboard.html:142 .\templates\admindashboard.html:661
-#: .\templates\admindashboard.html:820 .\templates\superadmindashboard.html:575
-#: .\templates\superadmindashboard.html:1141
-#: .\templates\superadmindashboard.html:1357
-msgid "Upload Forms"
-msgstr ""
-
-#: .\templates\admindashboard.html:143 .\templates\admindashboard.html:821
-#: .\templates\base.html:465 .\templates\gallery.html:403
-#: .\templates\gallery.html:416 .\templates\homepage.html:808
-#: .\templates\superadmindashboard.html:577
-#: .\templates\superadmindashboard.html:1359
-msgid "Gallery"
-msgstr ""
-
-#: .\templates\admindashboard.html:144 .\templates\admindashboard.html:822
-#: .\templates\superadmindashboard.html:578
-#: .\templates\superadmindashboard.html:1360
-msgid "Settings"
-msgstr ""
-
-#: .\templates\admindashboard.html:147 .\templates\base.html:495
-#: .\templates\superadmindashboard.html:581
-msgid "Logout"
-msgstr ""
-
-#: .\templates\admindashboard.html:169 .\templates\base.html:456
-#: .\templates\homepage.html:784 .\templates\services.html:164
-#: .\templates\superadmindashboard.html:608
-msgid "Services"
-msgstr ""
-
-#: .\templates\admindashboard.html:181 .\templates\superadmindashboard.html:629
-msgid "Forms"
-msgstr ""
-
-#: .\templates\admindashboard.html:185 .\templates\superadmindashboard.html:642
-msgid "Recent Activity"
-msgstr ""
-
-#: .\templates\admindashboard.html:193 .\templates\superadmindashboard.html:652
-msgid "No recent activity."
-msgstr ""
-
-#: .\templates\admindashboard.html:203 .\templates\superadmindashboard.html:664
-msgid "Add Service"
-msgstr ""
-
-#: .\templates\admindashboard.html:213 .\templates\admindashboard.html:305
-#: .\templates\admindashboard.html:375 .\templates\admindashboard.html:456
-#: .\templates\admindashboard.html:535 .\templates\superadmindashboard.html:675
-#: .\templates\superadmindashboard.html:769
-#: .\templates\superadmindashboard.html:841
-#: .\templates\superadmindashboard.html:924
-#: .\templates\superadmindashboard.html:1005
-msgid "Save"
-msgstr ""
-
-#: .\templates\admindashboard.html:220 .\templates\admindashboard.html:312
-#: .\templates\superadmindashboard.html:682
-#: .\templates\superadmindashboard.html:776
-msgid "Actions"
-msgstr ""
-
-#: .\templates\admindashboard.html:227 .\templates\superadmindashboard.html:689
-msgid "Active,Inactive"
-msgstr ""
-
-#: .\templates\admindashboard.html:235 .\templates\superadmindashboard.html:697
-msgid "Delete this service?"
-msgstr ""
-
-#: .\templates\admindashboard.html:239 .\templates\superadmindashboard.html:701
-msgid "No services."
-msgstr ""
-
-#: .\templates\admindashboard.html:252 .\templates\superadmindashboard.html:714
-msgid "Service Name"
-msgstr ""
-
-#: .\templates\admindashboard.html:258 .\templates\admindashboard.html:713
-#: .\templates\government_schemes.html:267
-#: .\templates\superadmindashboard.html:720
-#: .\templates\superadmindashboard.html:1193
-msgid "Government"
-msgstr ""
-
-#: .\templates\admindashboard.html:259 .\templates\admindashboard.html:714
-#: .\templates\superadmindashboard.html:721
-#: .\templates\superadmindashboard.html:1194
-msgid "Financial"
-msgstr ""
-
-#: .\templates\admindashboard.html:260 .\templates\superadmindashboard.html:722
-msgid "Printing"
-msgstr ""
-
-#: .\templates\admindashboard.html:261 .\templates\superadmindashboard.html:723
-msgid "Other"
-msgstr ""
-
-#: .\templates\admindashboard.html:272 .\templates\superadmindashboard.html:734
-msgid "Inactive"
-msgstr ""
-
-#: .\templates\admindashboard.html:277 .\templates\superadmindashboard.html:739
-msgid "e.g. fa-print"
-msgstr ""
-
-#: .\templates\admindashboard.html:284 .\templates\admindashboard.html:354
-#: .\templates\admindashboard.html:435 .\templates\admindashboard.html:514
-#: .\templates\admindashboard.html:589 .\templates\admindashboard.html:724
-#: .\templates\superadmindashboard.html:746
-#: .\templates\superadmindashboard.html:818
-#: .\templates\superadmindashboard.html:901
-#: .\templates\superadmindashboard.html:982
-#: .\templates\superadmindashboard.html:1059
-#: .\templates\superadmindashboard.html:1204
-msgid "Cancel"
-msgstr ""
-
-#: .\templates\admindashboard.html:285 .\templates\admindashboard.html:355
-#: .\templates\admindashboard.html:436 .\templates\admindashboard.html:515
-#: .\templates\admindashboard.html:590 .\templates\admindashboard.html:725
-#: .\templates\superadmindashboard.html:747
-#: .\templates\superadmindashboard.html:819
-#: .\templates\superadmindashboard.html:902
-#: .\templates\superadmindashboard.html:983
-#: .\templates\superadmindashboard.html:1060
-#: .\templates\superadmindashboard.html:1205
-#: .\templates\superadmindashboard.html:1250
-msgid "Update"
-msgstr ""
-
-#: .\templates\admindashboard.html:295 .\templates\superadmindashboard.html:759
-msgid "Add Charge"
-msgstr ""
-
-#: .\templates\admindashboard.html:312 .\templates\admindashboard.html:350
-#: .\templates\service_charges.html:445
-#: .\templates\superadmindashboard.html:776
-#: .\templates\superadmindashboard.html:814
-msgid "Charge (₹)"
-msgstr ""
-
-#: .\templates\admindashboard.html:325 .\templates\superadmindashboard.html:789
-msgid "Delete this charge?"
-msgstr ""
-
-#: .\templates\admindashboard.html:329 .\templates\superadmindashboard.html:793
-msgid "No charges defined."
-msgstr ""
-
-#: .\templates\admindashboard.html:365 .\templates\superadmindashboard.html:831
-msgid "Add Announcement"
-msgstr ""
-
-#: .\templates\admindashboard.html:394 .\templates\superadmindashboard.html:860
-msgid "Delete this announcement?"
-msgstr ""
-
-#: .\templates\admindashboard.html:398 .\templates\superadmindashboard.html:864
-msgid "No announcements."
-msgstr ""
-
-#: .\templates\admindashboard.html:415 .\templates\admindashboard.html:712
-#: .\templates\announcements.html:421 .\templates\download_forms.html:396
-#: .\templates\superadmindashboard.html:881
-#: .\templates\superadmindashboard.html:1192
+#: .\corematoshree\models.py:203 .\templates\admindashboard.html:1357
+#: .\templates\admindashboard.html:1736 .\templates\announcements.html:762
+#: .\templates\download_forms.html:881
+#: .\templates\superadmindashboard.html:1685
+#: .\templates\superadmindashboard.html:2062
 msgid "General"
 msgstr ""
 
-#: .\templates\admindashboard.html:428 .\templates\announcements.html:424
-#: .\templates\superadmindashboard.html:894
-msgid "Urgent"
+#: .\corematoshree\models.py:204 .\corematoshree\models.py:332
+#: .\templates\admindashboard.html:1358
+#: .\templates\superadmindashboard.html:1686
+msgid "Government Scheme"
 msgstr ""
 
-#: .\templates\admindashboard.html:430 .\templates\superadmindashboard.html:896
+#: .\corematoshree\models.py:205 .\templates\admindashboard.html:1359
+#: .\templates\superadmindashboard.html:1687
+msgid "Recruitment"
+msgstr ""
+
+#: .\corematoshree\models.py:206 .\templates\admindashboard.html:1360
+#: .\templates\superadmindashboard.html:1688
+msgid "Scholarship"
+msgstr ""
+
+#: .\corematoshree\models.py:207 .\templates\admindashboard.html:1361
+#: .\templates\superadmindashboard.html:1689
+msgid "Holiday"
+msgstr ""
+
+#: .\corematoshree\models.py:208 .\templates\admindashboard.html:1362
+#: .\templates\superadmindashboard.html:1690
+msgid "Notice"
+msgstr ""
+
+#: .\corematoshree\models.py:219
+msgid "Announcement"
+msgstr ""
+
+#: .\corematoshree\models.py:220 .\templates\admindashboard.html:971
+#: .\templates\admindashboard.html:1304 .\templates\admindashboard.html:1876
+#: .\templates\announcements.html:5 .\templates\announcements.html:729
+#: .\templates\announcements.html:731 .\templates\footer.html:52
+#: .\templates\superadmindashboard.html:1292
+#: .\templates\superadmindashboard.html:1632
+#: .\templates\superadmindashboard.html:2251
+msgid "Announcements"
+msgstr ""
+
+#: .\corematoshree\models.py:235
+msgid "Cyber Cafe"
+msgstr ""
+
+#: .\corematoshree\models.py:236
+msgid "Customers"
+msgstr ""
+
+#: .\corematoshree\models.py:237
+msgid "Certificates"
+msgstr ""
+
+#: .\corematoshree\models.py:238
+msgid "Equipment"
+msgstr ""
+
+#: .\corematoshree\models.py:239
+msgid "Office"
+msgstr ""
+
+#: .\corematoshree\models.py:247
+msgid "Gallery Image"
+msgstr ""
+
+#: .\corematoshree\models.py:248
+msgid "Gallery Images"
+msgstr ""
+
+#: .\corematoshree\models.py:269
+msgid "Service Charge"
+msgstr ""
+
+#: .\corematoshree\models.py:270 .\templates\admindashboard.html:1141
+#: .\templates\footer.html:44 .\templates\service_charges.html:468
+#: .\templates\superadmindashboard.html:1469
+msgid "Service Charges"
+msgstr ""
+
+#: .\corematoshree\models.py:288 .\corematoshree\models.py:491
+#: .\templates\admindashboard.html:1233 .\templates\admindashboard.html:1247
+#: .\templates\admindashboard.html:1290
+#: .\templates\application_admin_detail.html:766
+#: .\templates\superadmindashboard.html:1561
+#: .\templates\superadmindashboard.html:1575
+#: .\templates\superadmindashboard.html:1618
+msgid "Document Name"
+msgstr ""
+
+#: .\corematoshree\models.py:291 .\templates\required_document.html:512
+msgid "Required Document"
+msgstr ""
+
+#: .\corematoshree\models.py:292 .\templates\admindashboard.html:1219
+#: .\templates\admindashboard.html:1883 .\templates\apply_service.html:596
+#: .\templates\footer.html:42 .\templates\required_document.html:5
+#: .\templates\required_document.html:493
+#: .\templates\superadmindashboard.html:1547
+#: .\templates\superadmindashboard.html:2259
+msgid "Required Documents"
+msgstr ""
+
+#: .\corematoshree\models.py:308 .\corematoshree\models.py:494
+#: .\templates\application_admin_detail.html:770
+msgid "Uploaded At"
+msgstr ""
+
+#: .\corematoshree\models.py:311
+msgid "Download Form"
+msgstr ""
+
+#: .\corematoshree\models.py:312 .\templates\download_forms.html:6
+#: .\templates\download_forms.html:845 .\templates\footer.html:43
+msgid "Download Forms"
+msgstr ""
+
+#: .\corematoshree\models.py:333 .\templates\admindashboard.html:1468
+#: .\templates\admindashboard.html:1878 .\templates\footer.html:53
+#: .\templates\government_schemes.html:5
+#: .\templates\government_schemes.html:697
+#: .\templates\superadmindashboard.html:1796
+#: .\templates\superadmindashboard.html:2253
+msgid "Government Schemes"
+msgstr ""
+
+#: .\corematoshree\models.py:355
+msgid "Font Awesome icon (e.g. 'fa-briefcase')"
+msgstr ""
+
+#: .\corematoshree\models.py:359
+msgid "Job Notification"
+msgstr ""
+
+#: .\corematoshree\models.py:360 .\templates\admindashboard.html:972
+#: .\templates\admindashboard.html:1387 .\templates\admindashboard.html:1877
+#: .\templates\footer.html:54 .\templates\jobs.html:5
+#: .\templates\superadmindashboard.html:1293
+#: .\templates\superadmindashboard.html:1715
+#: .\templates\superadmindashboard.html:2252
+msgid "Job Notifications"
+msgstr ""
+
+#: .\corematoshree\models.py:374
+msgid "Question"
+msgstr ""
+
+#: .\corematoshree\models.py:375
+msgid "Answer"
+msgstr ""
+
+#: .\corematoshree\models.py:378 .\templates\faq.html:6
+#: .\templates\faq.html:806
+msgid "FAQ"
+msgstr ""
+
+#: .\corematoshree\models.py:379
+msgid "FAQs"
+msgstr ""
+
+#: .\corematoshree\models.py:401
+msgid "Paste Google Maps Embed Code"
+msgstr ""
+
+#: .\corematoshree\models.py:408
+msgid "e.g. UDYAM-XX-00-0000000"
+msgstr ""
+
+#: .\corematoshree\models.py:413
+msgid "Enter each certification on a new line."
+msgstr ""
+
+#: .\corematoshree\models.py:437 .\corematoshree\models.py:438
+msgid "Business Information"
+msgstr ""
+
+#: .\corematoshree\models.py:458 .\templates\application_admin_detail.html:713
+msgid "Extra Data"
+msgstr ""
+
+#: .\corematoshree\models.py:467 .\templates\application_admin_detail.html:753
+msgid "Updated At"
+msgstr ""
+
+#: .\corematoshree\models.py:471 .\templates\admindashboard.html:1739
+#: .\templates\superadmindashboard.html:2065
+msgid "Application"
+msgstr ""
+
+#: .\corematoshree\models.py:472 .\templates\admindashboard.html:979
+#: .\templates\admindashboard.html:1815 .\templates\admindashboard.html:1884
+#: .\templates\superadmindashboard.html:1301
+#: .\templates\superadmindashboard.html:2190
+#: .\templates\superadmindashboard.html:2260
+msgid "Applications"
+msgstr ""
+
+#: .\corematoshree\models.py:492 .\templates\application_admin_detail.html:767
+#: .\venv\Lib\site-packages\django\db\models\fields\files.py:244
+msgid "File"
+msgstr ""
+
+#: .\corematoshree\models.py:493 .\templates\application_admin_detail.html:768
+#: .\templates\apply_service.html:602
+msgid "Mandatory"
+msgstr ""
+
+#: .\corematoshree\models.py:495 .\templates\application_admin_detail.html:769
+msgid "Verified by Admin"
+msgstr ""
+
+#: .\corematoshree\models.py:498
+msgid "Document Upload"
+msgstr ""
+
+#: .\corematoshree\models.py:499 .\templates\application_admin_detail.html:760
+msgid "Document Uploads"
+msgstr ""
+
+#: .\corematoshree\views.py:72
+msgid "Account created successfully!"
+msgstr ""
+
+#: .\corematoshree\views.py:87
+msgid "Profile updated successfully!"
+msgstr ""
+
+#: .\corematoshree\views.py:177
+msgid "Service added."
+msgstr ""
+
+#: .\corematoshree\views.py:179
+msgid "Error adding service."
+msgstr ""
+
+#: .\corematoshree\views.py:185
+msgid "Please select a service."
+msgstr ""
+
+#: .\corematoshree\views.py:191
+msgid "Please enter at least one document name."
+msgstr ""
+
+#: .\corematoshree\views.py:202
+#, python-brace-format
+msgid "{count} document(s) added for “{service}”."
+msgstr ""
+
+#: .\corematoshree\views.py:213
+msgid "Announcement added."
+msgstr ""
+
+#: .\corematoshree\views.py:215
+msgid "Error adding announcement."
+msgstr ""
+
+#: .\corematoshree\views.py:221
+msgid "Job notification added."
+msgstr ""
+
+#: .\corematoshree\views.py:223
+msgid "Error adding job."
+msgstr ""
+
+#: .\corematoshree\views.py:229
+msgid "Scheme added."
+msgstr ""
+
+#: .\corematoshree\views.py:231
+msgid "Error adding scheme."
+msgstr ""
+
+#: .\corematoshree\views.py:237
+msgid "Appointment added."
+msgstr ""
+
+#: .\corematoshree\views.py:239
+msgid "Error adding appointment."
+msgstr ""
+
+#: .\corematoshree\views.py:245
+msgid "Contact added."
+msgstr ""
+
+#: .\corematoshree\views.py:247
+msgid "Error adding contact."
+msgstr ""
+
+#: .\corematoshree\views.py:253
+msgid "Download form uploaded."
+msgstr ""
+
+#: .\corematoshree\views.py:255
+msgid "Error uploading form."
+msgstr ""
+
+#: .\corematoshree\views.py:261
+msgid "Service charge added."
+msgstr ""
+
+#: .\corematoshree\views.py:263
+msgid "Error adding service charge."
+msgstr ""
+
+#: .\corematoshree\views.py:269
+msgid "Gallery image uploaded."
+msgstr ""
+
+#: .\corematoshree\views.py:271
+msgid "Error uploading gallery image."
+msgstr ""
+
+#: .\corematoshree\views.py:283
+msgid "Service updated."
+msgstr ""
+
+#: .\corematoshree\views.py:285
+msgid "Error updating service."
+msgstr ""
+
+#: .\corematoshree\views.py:292
+msgid "Required document updated."
+msgstr ""
+
+#: .\corematoshree\views.py:294
+msgid "Error updating required document."
+msgstr ""
+
+#: .\corematoshree\views.py:301
+msgid "Announcement updated."
+msgstr ""
+
+#: .\corematoshree\views.py:303
+msgid "Error updating announcement."
+msgstr ""
+
+#: .\corematoshree\views.py:310
+msgid "Job updated."
+msgstr ""
+
+#: .\corematoshree\views.py:312
+msgid "Error updating job."
+msgstr ""
+
+#: .\corematoshree\views.py:319
+msgid "Scheme updated."
+msgstr ""
+
+#: .\corematoshree\views.py:321
+msgid "Error updating scheme."
+msgstr ""
+
+#: .\corematoshree\views.py:328
+msgid "Appointment updated."
+msgstr ""
+
+#: .\corematoshree\views.py:330
+msgid "Error updating appointment."
+msgstr ""
+
+#: .\corematoshree\views.py:338
+msgid "Reply saved."
+msgstr ""
+
+#: .\corematoshree\views.py:343
+msgid "Contact updated."
+msgstr ""
+
+#: .\corematoshree\views.py:345
+msgid "Error updating contact."
+msgstr ""
+
+#: .\corematoshree\views.py:352
+msgid "Form updated."
+msgstr ""
+
+#: .\corematoshree\views.py:354
+msgid "Error updating form."
+msgstr ""
+
+#: .\corematoshree\views.py:361
+msgid "Service charge updated."
+msgstr ""
+
+#: .\corematoshree\views.py:363
+msgid "Error updating service charge."
+msgstr ""
+
+#: .\corematoshree\views.py:370
+msgid "Business info updated."
+msgstr ""
+
+#: .\corematoshree\views.py:372
+msgid "Error updating business info."
+msgstr ""
+
+#: .\corematoshree\views.py:381
+msgid "Service deleted."
+msgstr ""
+
+#: .\corematoshree\views.py:384
+msgid "Announcement deleted."
+msgstr ""
+
+#: .\corematoshree\views.py:387
+msgid "Required document deleted."
+msgstr ""
+
+#: .\corematoshree\views.py:390
+msgid "Job deleted."
+msgstr ""
+
+#: .\corematoshree\views.py:393
+msgid "Scheme deleted."
+msgstr ""
+
+#: .\corematoshree\views.py:396
+msgid "Appointment deleted."
+msgstr ""
+
+#: .\corematoshree\views.py:399
+msgid "Contact deleted."
+msgstr ""
+
+#: .\corematoshree\views.py:402
+msgid "Form deleted."
+msgstr ""
+
+#: .\corematoshree\views.py:405
+msgid "Service charge deleted."
+msgstr ""
+
+#: .\corematoshree\views.py:408
+msgid "Gallery image deleted."
+msgstr ""
+
+#: .\corematoshree\views.py:421
+msgid "User role updated."
+msgstr ""
+
+#: .\corematoshree\views.py:491
+msgid "Invalid section."
+msgstr ""
+
+#: .\corematoshree\views.py:575
+msgid "Your message has been sent successfully."
+msgstr ""
+
+#: .\corematoshree\views.py:589
+msgid "Appointment booked successfully."
+msgstr ""
+
+#: .\corematoshree\views.py:592 .\corematoshree\views.py:790
+msgid "Please correct the errors below."
+msgstr ""
+
+#: .\corematoshree\views.py:695
+msgid "Thank you! Your review will appear after admin approval."
+msgstr ""
+
+#: .\corematoshree\views.py:697
+msgid "Please correct the errors in the review form."
+msgstr ""
+
+#: .\corematoshree\views.py:787
+msgid "Your application has been submitted successfully."
+msgstr ""
+
+#: .\corematoshree\views.py:879
+msgid "Status updated successfully."
+msgstr ""
+
+#: .\corematoshree\views.py:881
+msgid "Invalid status."
+msgstr ""
+
+#: .\corematoshree\views.py:888
+msgid "Document deleted."
+msgstr ""
+
+#: .\corematoshree\views.py:901
+msgid "Document uploaded."
+msgstr ""
+
+#: .\corematoshree\views.py:903
+msgid "Please provide both name and file."
+msgstr ""
+
+#: .\corematoshree\views.py:911
+msgid "Document verification toggled."
+msgstr ""
+
+#: .\corematoshree\views.py:936
+msgid "Please enter page numbers."
+msgstr ""
+
+#: .\corematoshree\views.py:984
+msgid "Invalid page numbers."
+msgstr ""
+
+#: .\templates\aboutus.html:1017 .\templates\announcements.html:727
+#: .\templates\base.html:244 .\templates\contactus.html:843
+#: .\templates\customer_reviews.html:1200 .\templates\download_forms.html:843
+#: .\templates\faq.html:804 .\templates\footer.html:28
+#: .\templates\gallery.html:869 .\templates\government_schemes.html:695
+#: .\templates\jobs.html:390 .\templates\required_document.html:491
+#: .\templates\service_charges.html:466
+msgid "Home"
+msgstr ""
+
+#: .\templates\aboutus.html:1019
+msgid "About Us"
+msgstr ""
+
+#: .\templates\aboutus.html:1021 .\templates\base.html:245
+#: .\templates\footer.html:29
+msgid "About"
+msgstr ""
+
+#: .\templates\aboutus.html:1021
+msgid "CyberTech"
+msgstr ""
+
+#: .\templates\aboutus.html:1036
+msgid "Who"
+msgstr ""
+
+#: .\templates\aboutus.html:1036
+msgid "We Are"
+msgstr ""
+
+#: .\templates\aboutus.html:1038
+msgid "Trusted Cyber Café &amp; Digital Service Center"
+msgstr ""
+
+#: .\templates\aboutus.html:1056
+msgid "Years of Excellence"
+msgstr ""
+
+#: .\templates\aboutus.html:1060
+msgid "Happy Customers"
+msgstr ""
+
+#: .\templates\aboutus.html:1064
+msgid "Services Offered"
+msgstr ""
+
+#: .\templates\aboutus.html:1081
+msgid "Decades of"
+msgstr ""
+
+#: .\templates\aboutus.html:1081
+msgid "Digital Service"
+msgstr ""
+
+#: .\templates\aboutus.html:1107
+msgid "Your Trusted Digital Partner"
+msgstr ""
+
+#: .\templates\aboutus.html:1108
+msgid "Reliable · Fast · Transparent · Secure"
+msgstr ""
+
+#: .\templates\aboutus.html:1120 .\templates\gallery.html:873
+#: .\templates\required_document.html:605 .\templates\service_charges.html:481
+#: .\templates\services.html:225
+msgid "Our"
+msgstr ""
+
+#: .\templates\aboutus.html:1120
+msgid "Complete"
+msgstr ""
+
+#: .\templates\aboutus.html:1142 .\templates\homepage.html:989
+msgid "No services available at the moment."
+msgstr ""
+
+#: .\templates\aboutus.html:1155
+msgid "Why"
+msgstr ""
+
+#: .\templates\aboutus.html:1155
+msgid "Trust Us"
+msgstr ""
+
+#: .\templates\aboutus.html:1164
+msgid "Experienced Staff"
+msgstr ""
+
+#: .\templates\aboutus.html:1172
+msgid "Fast &amp; Accurate Service"
+msgstr ""
+
+#: .\templates\aboutus.html:1180
+msgid "Transparent Pricing"
+msgstr ""
+
+#: .\templates\aboutus.html:1188
+msgid "Customer Satisfaction"
+msgstr ""
+
+#: .\templates\aboutus.html:1196
+msgid "Data Privacy &amp; Security"
+msgstr ""
+
+#: .\templates\aboutus.html:1204
+msgid "Friendly Customer Support"
+msgstr ""
+
+#: .\templates\aboutus.html:1223
+msgid "Authorized"
+msgstr ""
+
+#: .\templates\aboutus.html:1223
+msgid "Service Provider"
+msgstr ""
+
+#: .\templates\aboutus.html:1226
+msgid "Officially recognized for excellence in digital services"
+msgstr ""
+
+#: .\templates\aboutus.html:1232
+msgid "Registration No.:"
+msgstr ""
+
+#: .\templates\aboutus.html:1257 .\templates\customer_reviews.html:1413
+#: .\templates\gallery.html:968 .\templates\jobs.html:490
+msgid "Ready to"
+msgstr ""
+
+#: .\templates\aboutus.html:1257 .\templates\customer_reviews.html:1413
+#: .\templates\gallery.html:968
+msgid "Experience"
+msgstr ""
+
+#: .\templates\aboutus.html:1266 .\templates\announcements.html:854
+#: .\templates\contactus.html:851 .\templates\customer_reviews.html:1417
+#: .\templates\download_forms.html:929 .\templates\gallery.html:972
+#: .\templates\government_schemes.html:793 .\templates\jobs.html:497
+#: .\templates\required_document.html:660 .\templates\service_charges.html:592
+msgid "Contact Us"
+msgstr ""
+
+#: .\templates\aboutus.html:1274 .\templates\announcements.html:858
+#: .\templates\contactus.html:1040 .\templates\customer_reviews.html:1421
+#: .\templates\download_forms.html:933 .\templates\gallery.html:976
+#: .\templates\government_schemes.html:797 .\templates\jobs.html:502
+#: .\templates\required_document.html:663 .\templates\service_charges.html:599
+msgid "Chat on WhatsApp"
+msgstr ""
+
+#: .\templates\admindashboard.html:8
+msgid "Admin Dashboard – Cyber Café"
+msgstr ""
+
+#: .\templates\admindashboard.html:965
+msgid "Cyber Admin"
+msgstr ""
+
+#: .\templates\admindashboard.html:968 .\templates\admindashboard.html:993
+#: .\templates\admindashboard.html:1873 .\templates\admindashboard.html:1898
+#: .\templates\superadmindashboard.html:1289
+#: .\templates\superadmindashboard.html:1317
+#: .\templates\superadmindashboard.html:2248
+#: .\templates\superadmindashboard.html:2300
+msgid "Dashboard"
+msgstr ""
+
+#: .\templates\admindashboard.html:969 .\templates\admindashboard.html:1039
+#: .\templates\admindashboard.html:1874
+#: .\templates\superadmindashboard.html:1290
+#: .\templates\superadmindashboard.html:1367
+#: .\templates\superadmindashboard.html:2249
+msgid "Manage Services"
+msgstr ""
+
+#: .\templates\admindashboard.html:970 .\templates\admindashboard.html:1875
+#: .\templates\superadmindashboard.html:1291
+#: .\templates\superadmindashboard.html:2250
+msgid "Update Prices"
+msgstr ""
+
+#: .\templates\admindashboard.html:973
+#: .\templates\superadmindashboard.html:1294
+msgid "Gov. Schemes"
+msgstr ""
+
+#: .\templates\admindashboard.html:975 .\templates\admindashboard.html:1014
+#: .\templates\admindashboard.html:1880
+#: .\templates\superadmindashboard.html:1296
+#: .\templates\superadmindashboard.html:1338
+#: .\templates\superadmindashboard.html:2255
+msgid "Inquiries"
+msgstr ""
+
+#: .\templates\admindashboard.html:976 .\templates\admindashboard.html:1683
+#: .\templates\admindashboard.html:1881
+#: .\templates\superadmindashboard.html:1297
+#: .\templates\superadmindashboard.html:2009
+#: .\templates\superadmindashboard.html:2256
+msgid "Upload Forms"
+msgstr ""
+
+#: .\templates\admindashboard.html:977 .\templates\admindashboard.html:1882
+#: .\templates\base.html:247 .\templates\footer.html:31
+#: .\templates\gallery.html:5 .\templates\gallery.html:871
+#: .\templates\gallery.html:873 .\templates\gallery.html:887
+#: .\templates\superadmindashboard.html:1299
+#: .\templates\superadmindashboard.html:2258
+msgid "Gallery"
+msgstr ""
+
+#: .\templates\admindashboard.html:978
+#: .\templates\superadmindashboard.html:1300
+msgid "Required Docs"
+msgstr ""
+
+#: .\templates\admindashboard.html:980 .\templates\admindashboard.html:1885
+#: .\templates\superadmindashboard.html:1302
+#: .\templates\superadmindashboard.html:2261
+msgid "Settings"
+msgstr ""
+
+#: .\templates\admindashboard.html:983
+#: .\templates\superadmindashboard.html:1305
+msgid "Logout"
+msgstr ""
+
+#: .\templates\admindashboard.html:1006 .\templates\base.html:246
+#: .\templates\footer.html:30 .\templates\services.html:225
+#: .\templates\superadmindashboard.html:1330
+msgid "Services"
+msgstr ""
+
+#: .\templates\admindashboard.html:1018
+#: .\templates\superadmindashboard.html:1342
+msgid "Forms"
+msgstr ""
+
+#: .\templates\admindashboard.html:1022
+#: .\templates\superadmindashboard.html:1350
+msgid "Recent Activity"
+msgstr ""
+
+#: .\templates\admindashboard.html:1030
+#: .\templates\superadmindashboard.html:1358
+msgid "No recent activity."
+msgstr ""
+
+#: .\templates\admindashboard.html:1040
+#: .\templates\superadmindashboard.html:1368
+msgid "Add Service"
+msgstr ""
+
+#: .\templates\admindashboard.html:1050 .\templates\admindashboard.html:1152
+#: .\templates\admindashboard.html:1237 .\templates\admindashboard.html:1315
+#: .\templates\admindashboard.html:1398 .\templates\admindashboard.html:1479
+#: .\templates\superadmindashboard.html:1378
+#: .\templates\superadmindashboard.html:1480
+#: .\templates\superadmindashboard.html:1565
+#: .\templates\superadmindashboard.html:1643
+#: .\templates\superadmindashboard.html:1726
+#: .\templates\superadmindashboard.html:1807
+msgid "Save"
+msgstr ""
+
+#: .\templates\admindashboard.html:1063 .\templates\admindashboard.html:1163
+#: .\templates\admindashboard.html:1248 .\templates\admindashboard.html:1556
+#: .\templates\admindashboard.html:1825
+#: .\templates\application_admin_detail.html:771
+#: .\templates\superadmindashboard.html:1391
+#: .\templates\superadmindashboard.html:1491
+#: .\templates\superadmindashboard.html:1576
+#: .\templates\superadmindashboard.html:1884
+#: .\templates\superadmindashboard.html:2200
+msgid "Actions"
+msgstr ""
+
+#: .\templates\admindashboard.html:1072
+#: .\templates\superadmindashboard.html:1400
+msgid "Active,Inactive"
+msgstr ""
+
+#: .\templates\admindashboard.html:1080
+#: .\templates\superadmindashboard.html:1408
+msgid "Delete this service?"
+msgstr ""
+
+#: .\templates\admindashboard.html:1085
+#: .\templates\superadmindashboard.html:1413
+msgid "No services."
+msgstr ""
+
+#: .\templates\admindashboard.html:1099
+#: .\templates\superadmindashboard.html:1427
+msgid "Service Name"
+msgstr ""
+
+#: .\templates\admindashboard.html:1105 .\templates\admindashboard.html:1737
+#: .\templates\government_schemes.html:699
+#: .\templates\superadmindashboard.html:1433
+#: .\templates\superadmindashboard.html:2063
+msgid "Government"
+msgstr ""
+
+#: .\templates\admindashboard.html:1106 .\templates\admindashboard.html:1738
+#: .\templates\superadmindashboard.html:1434
+#: .\templates\superadmindashboard.html:2064
+msgid "Financial"
+msgstr ""
+
+#: .\templates\admindashboard.html:1107
+#: .\templates\superadmindashboard.html:1435
+msgid "Printing"
+msgstr ""
+
+#: .\templates\admindashboard.html:1108
+#: .\templates\superadmindashboard.html:1436
+msgid "Other"
+msgstr ""
+
+#: .\templates\admindashboard.html:1119
+#: .\templates\superadmindashboard.html:1447
+msgid "Inactive"
+msgstr ""
+
+#: .\templates\admindashboard.html:1124
+#: .\templates\superadmindashboard.html:1452
+msgid "e.g. fa-print"
+msgstr ""
+
+#: .\templates\admindashboard.html:1131 .\templates\admindashboard.html:1209
+#: .\templates\admindashboard.html:1294 .\templates\admindashboard.html:1377
+#: .\templates\admindashboard.html:1458 .\templates\admindashboard.html:1535
+#: .\templates\admindashboard.html:1634 .\templates\admindashboard.html:1748
+#: .\templates\superadmindashboard.html:1459
+#: .\templates\superadmindashboard.html:1537
+#: .\templates\superadmindashboard.html:1622
+#: .\templates\superadmindashboard.html:1705
+#: .\templates\superadmindashboard.html:1786
+#: .\templates\superadmindashboard.html:1863
+#: .\templates\superadmindashboard.html:1962
+#: .\templates\superadmindashboard.html:2074
+msgid "Cancel"
+msgstr ""
+
+#: .\templates\admindashboard.html:1132 .\templates\admindashboard.html:1210
+#: .\templates\admindashboard.html:1295 .\templates\admindashboard.html:1378
+#: .\templates\admindashboard.html:1459 .\templates\admindashboard.html:1536
+#: .\templates\admindashboard.html:1635 .\templates\admindashboard.html:1749
+#: .\templates\superadmindashboard.html:1460
+#: .\templates\superadmindashboard.html:1538
+#: .\templates\superadmindashboard.html:1623
+#: .\templates\superadmindashboard.html:1706
+#: .\templates\superadmindashboard.html:1787
+#: .\templates\superadmindashboard.html:1864
+#: .\templates\superadmindashboard.html:1963
+#: .\templates\superadmindashboard.html:2075
+#: .\templates\superadmindashboard.html:2118
+msgid "Update"
+msgstr ""
+
+#: .\templates\admindashboard.html:1142
+#: .\templates\superadmindashboard.html:1470
+msgid "Add Charge"
+msgstr ""
+
+#: .\templates\admindashboard.html:1162 .\templates\admindashboard.html:1205
+#: .\templates\service_charges.html:492
+#: .\templates\superadmindashboard.html:1490
+#: .\templates\superadmindashboard.html:1533
+msgid "Charge (₹)"
+msgstr ""
+
+#: .\templates\admindashboard.html:1178
+#: .\templates\superadmindashboard.html:1506
+msgid "Delete this charge?"
+msgstr ""
+
+#: .\templates\admindashboard.html:1183
+#: .\templates\superadmindashboard.html:1511
+msgid "No charges defined."
+msgstr ""
+
+#: .\templates\admindashboard.html:1220
+#: .\templates\superadmindashboard.html:1548
+msgid "Add Document"
+msgstr ""
+
+#: .\templates\admindashboard.html:1263
+#: .\templates\superadmindashboard.html:1591
+msgid "Delete this document requirement?"
+msgstr ""
+
+#: .\templates\admindashboard.html:1268
+#: .\templates\superadmindashboard.html:1596
+msgid "No required documents defined."
+msgstr ""
+
+#: .\templates\admindashboard.html:1305
+#: .\templates\superadmindashboard.html:1633
+msgid "Add Announcement"
+msgstr ""
+
+#: .\templates\admindashboard.html:1334
+#: .\templates\superadmindashboard.html:1662
+msgid "Delete this announcement?"
+msgstr ""
+
+#: .\templates\admindashboard.html:1339
+#: .\templates\superadmindashboard.html:1667
+msgid "No announcements."
+msgstr ""
+
+#: .\templates\admindashboard.html:1372
+#: .\templates\superadmindashboard.html:1700
 #: .\venv\Lib\site-packages\django\forms\widgets.py:871
 msgid "No"
 msgstr ""
 
-#: .\templates\admindashboard.html:431 .\templates\superadmindashboard.html:897
+#: .\templates\admindashboard.html:1373
+#: .\templates\superadmindashboard.html:1701
 #: .\venv\Lib\site-packages\django\forms\widgets.py:870
 msgid "Yes"
 msgstr ""
 
-#: .\templates\admindashboard.html:446 .\templates\superadmindashboard.html:914
+#: .\templates\admindashboard.html:1388
+#: .\templates\superadmindashboard.html:1716
 msgid "Add Job"
 msgstr ""
 
-#: .\templates\admindashboard.html:466 .\templates\superadmindashboard.html:934
+#: .\templates\admindashboard.html:1408
+#: .\templates\superadmindashboard.html:1736
 #, python-format
 msgid "%(org)s – Last Date: %(date)s"
 msgstr ""
 
-#: .\templates\admindashboard.html:475 .\templates\superadmindashboard.html:943
+#: .\templates\admindashboard.html:1417
+#: .\templates\superadmindashboard.html:1745
 msgid "Delete this job?"
 msgstr ""
 
-#: .\templates\admindashboard.html:479 .\templates\superadmindashboard.html:947
+#: .\templates\admindashboard.html:1422
+#: .\templates\superadmindashboard.html:1750
 msgid "No jobs."
 msgstr ""
 
-#: .\templates\admindashboard.html:511 .\templates\superadmindashboard.html:979
+#: .\templates\admindashboard.html:1455
+#: .\templates\superadmindashboard.html:1783
 msgid "e.g. briefcase"
 msgstr ""
 
-#: .\templates\admindashboard.html:525 .\templates\superadmindashboard.html:995
+#: .\templates\admindashboard.html:1469
+#: .\templates\superadmindashboard.html:1797
 msgid "Add Scheme"
 msgstr ""
 
-#: .\templates\admindashboard.html:545
-#: .\templates\superadmindashboard.html:1015
+#: .\templates\admindashboard.html:1489
+#: .\templates\superadmindashboard.html:1817
 #, python-format
 msgid "%(desc)s – Eligibility: %(elig)s"
 msgstr ""
 
-#: .\templates\admindashboard.html:557
-#: .\templates\superadmindashboard.html:1027
+#: .\templates\admindashboard.html:1501
+#: .\templates\superadmindashboard.html:1829
 msgid "Delete this scheme?"
 msgstr ""
 
-#: .\templates\admindashboard.html:561
-#: .\templates\superadmindashboard.html:1031
+#: .\templates\admindashboard.html:1506
+#: .\templates\superadmindashboard.html:1834
 msgid "No schemes."
 msgstr ""
 
-#: .\templates\admindashboard.html:581
-#: .\templates\superadmindashboard.html:1051
+#: .\templates\admindashboard.html:1527
+#: .\templates\superadmindashboard.html:1855
 msgid "e.g. All citizens above 18"
 msgstr ""
 
-#: .\templates\admindashboard.html:586
-#: .\templates\superadmindashboard.html:1056
+#: .\templates\admindashboard.html:1532
+#: .\templates\superadmindashboard.html:1860
 msgid "Leave empty to keep current image."
 msgstr ""
 
-#: .\templates\admindashboard.html:601
-#: .\templates\superadmindashboard.html:1075
+#: .\templates\admindashboard.html:1551 .\templates\customer_reviews.html:1205
+#: .\templates\superadmindashboard.html:1879
 msgid "Customer"
 msgstr ""
 
-#: .\templates\admindashboard.html:601
-#: .\templates\superadmindashboard.html:1075
+#: .\templates\admindashboard.html:1553 .\templates\admindashboard.html:1613
+#: .\templates\superadmindashboard.html:1881
+#: .\templates\superadmindashboard.html:1941
 msgid "Date"
 msgstr ""
 
-#: .\templates\admindashboard.html:601
-#: .\templates\superadmindashboard.html:1075
+#: .\templates\admindashboard.html:1554 .\templates\admindashboard.html:1617
+#: .\templates\superadmindashboard.html:1882
+#: .\templates\superadmindashboard.html:1945
 #: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2534
 msgid "Time"
 msgstr ""
 
-#: .\templates\admindashboard.html:601
-#: .\templates\superadmindashboard.html:1075
-#: .\templates\superadmindashboard.html:1226
-msgid "Action"
-msgstr ""
-
-#: .\templates\admindashboard.html:616
-#: .\templates\superadmindashboard.html:1090
+#: .\templates\admindashboard.html:1574
+#: .\templates\superadmindashboard.html:1902
 msgid "Delete this appointment?"
 msgstr ""
 
-#: .\templates\admindashboard.html:620
-#: .\templates\superadmindashboard.html:1094
+#: .\templates\admindashboard.html:1579
+#: .\templates\superadmindashboard.html:1907
 msgid "No appointments."
 msgstr ""
 
-#: .\templates\admindashboard.html:628
-#: .\templates\superadmindashboard.html:1105
+#: .\templates\admindashboard.html:1644
+#: .\templates\superadmindashboard.html:1972
 msgid "Customer Inquiries"
 msgstr ""
 
-#: .\templates\admindashboard.html:635
-#: .\templates\superadmindashboard.html:1113
+#: .\templates\admindashboard.html:1652
+#: .\templates\superadmindashboard.html:1980
 msgid "Resolved,Pending"
 msgstr ""
 
-#: .\templates\admindashboard.html:638
-#: .\templates\superadmindashboard.html:1116
+#: .\templates\admindashboard.html:1655
+#: .\templates\superadmindashboard.html:1983
 msgid "Q:"
 msgstr ""
 
-#: .\templates\admindashboard.html:648
-#: .\templates\superadmindashboard.html:1126
+#: .\templates\admindashboard.html:1658
+#: .\templates\superadmindashboard.html:1986
+msgid "Reply:"
+msgstr ""
+
+#: .\templates\admindashboard.html:1668
+#: .\templates\superadmindashboard.html:1995
 msgid "Write reply..."
 msgstr ""
 
-#: .\templates\admindashboard.html:649
-#: .\templates\superadmindashboard.html:1127
-msgid "Reply"
-msgstr ""
-
-#: .\templates\admindashboard.html:654
-#: .\templates\superadmindashboard.html:1132
+#: .\templates\admindashboard.html:1675
+#: .\templates\superadmindashboard.html:2001
 msgid "No inquiries."
 msgstr ""
 
-#: .\templates\admindashboard.html:662
-#: .\templates\superadmindashboard.html:1142
+#: .\templates\admindashboard.html:1684
+#: .\templates\superadmindashboard.html:2010
 msgid "Upload Form"
 msgstr ""
 
-#: .\templates\admindashboard.html:672 .\templates\admindashboard.html:745
-#: .\templates\superadmindashboard.html:1152
-#: .\templates\superadmindashboard.html:1278
+#: .\templates\admindashboard.html:1694 .\templates\admindashboard.html:1769
+#: .\templates\superadmindashboard.html:2020
+#: .\templates\superadmindashboard.html:2144
 msgid "Upload"
 msgstr ""
 
-#: .\templates\admindashboard.html:691
-#: .\templates\superadmindashboard.html:1171
+#: .\templates\admindashboard.html:1713
+#: .\templates\superadmindashboard.html:2039
 msgid "Delete this form?"
 msgstr ""
 
-#: .\templates\admindashboard.html:695
-#: .\templates\superadmindashboard.html:1175
+#: .\templates\admindashboard.html:1718
+#: .\templates\superadmindashboard.html:2044
 msgid "No forms uploaded."
 msgstr ""
 
-#: .\templates\admindashboard.html:715
-#: .\templates\superadmindashboard.html:1195
-msgid "Application"
-msgstr ""
-
-#: .\templates\admindashboard.html:719
-#: .\templates\superadmindashboard.html:1199
+#: .\templates\admindashboard.html:1743
+#: .\templates\superadmindashboard.html:2069
 msgid "PDF File"
 msgstr ""
 
-#: .\templates\admindashboard.html:721
-#: .\templates\superadmindashboard.html:1201
+#: .\templates\admindashboard.html:1745
+#: .\templates\superadmindashboard.html:2071
 msgid "Leave empty to keep current file."
 msgstr ""
 
-#: .\templates\admindashboard.html:734
-#: .\templates\superadmindashboard.html:1267
+#: .\templates\admindashboard.html:1758
+#: .\templates\superadmindashboard.html:2133
 msgid "Manage Gallery"
 msgstr ""
 
-#: .\templates\admindashboard.html:735
-#: .\templates\superadmindashboard.html:1268
+#: .\templates\admindashboard.html:1759
+#: .\templates\superadmindashboard.html:2134
 msgid "Add Image"
 msgstr ""
 
-#: .\templates\admindashboard.html:760
-#: .\templates\superadmindashboard.html:1293
+#: .\templates\admindashboard.html:1784
+#: .\templates\superadmindashboard.html:2159
 msgid "Delete this image?"
 msgstr ""
 
-#: .\templates\admindashboard.html:764
-#: .\templates\superadmindashboard.html:1297
+#: .\templates\admindashboard.html:1788
+#: .\templates\superadmindashboard.html:2163
 msgid "No images uploaded yet."
 msgstr ""
 
-#: .\templates\admindashboard.html:772
-#: .\templates\superadmindashboard.html:1307
+#: .\templates\admindashboard.html:1796
+#: .\templates\superadmindashboard.html:2171
 msgid "Website Settings"
 msgstr ""
 
-#: .\templates\admindashboard.html:782
-#: .\templates\superadmindashboard.html:1317
+#: .\templates\admindashboard.html:1806
+#: .\templates\superadmindashboard.html:2181
 msgid "Save Settings"
 msgstr ""
 
-#: .\templates\announcements.html:394
+#: .\templates\admindashboard.html:1821
+#: .\templates\superadmindashboard.html:2196
+msgid "Applicant"
+msgstr ""
+
+#: .\templates\admindashboard.html:1824 .\templates\application_detail.html:476
+#: .\templates\superadmindashboard.html:2199
+msgid "Submitted"
+msgstr ""
+
+#: .\templates\admindashboard.html:1839 .\templates\application_detail.html:524
+#: .\templates\split_pdf.html:323 .\templates\superadmindashboard.html:2214
+msgid "View"
+msgstr ""
+
+#: .\templates\admindashboard.html:1847
+#: .\templates\superadmindashboard.html:2222
+msgid "No applications yet."
+msgstr ""
+
+#: .\templates\announcements.html:732
 msgid "Stay informed with the latest updates from our centre."
 msgstr ""
 
-#: .\templates\announcements.html:404
+#: .\templates\announcements.html:744
 msgid "All"
 msgstr ""
 
-#: .\templates\announcements.html:435
+#: .\templates\announcements.html:776
 msgid "No announcements available at the moment."
 msgstr ""
 
-#: .\templates\announcements.html:443
+#: .\templates\announcements.html:784
 msgid "No announcements match the selected filter."
 msgstr ""
 
-#: .\templates\announcements.html:449
+#: .\templates\announcements.html:792 .\templates\announcements.html:796
+#: .\templates\customer_reviews.html:1326
+#: .\templates\customer_reviews.html:1330 .\templates\gallery.html:917
+#: .\templates\gallery.html:921 .\templates\government_schemes.html:752
+#: .\templates\government_schemes.html:756 .\templates\jobs.html:454
+#: .\templates\jobs.html:458 .\templates\required_document.html:555
+#: .\templates\required_document.html:559 .\templates\services.html:264
+#: .\templates\services.html:268
+msgid "Prev"
+msgstr ""
+
+#: .\templates\announcements.html:810 .\templates\announcements.html:814
+#: .\templates\customer_reviews.html:1344
+#: .\templates\customer_reviews.html:1348 .\templates\gallery.html:935
+#: .\templates\gallery.html:939 .\templates\government_schemes.html:770
+#: .\templates\government_schemes.html:774 .\templates\jobs.html:472
+#: .\templates\jobs.html:476 .\templates\required_document.html:573
+#: .\templates\required_document.html:577 .\templates\services.html:282
+#: .\templates\services.html:286
+msgid "Next"
+msgstr ""
+
+#: .\templates\announcements.html:823
 msgid "Stay updated with our latest announcements."
 msgstr ""
 
-#: .\templates\announcements.html:453
+#: .\templates\announcements.html:829
 #, python-format
 msgid "<span id=\"announcementCount\">%(counter)s</span> active notice"
 msgid_plural "<span id=\"announcementCount\">%(counter)s</span> active notices"
 msgstr[0] ""
 msgstr[1] ""
 
-#: .\templates\announcements.html:466
+#: .\templates\announcements.html:835
+msgid "No notices"
+msgstr ""
+
+#: .\templates\announcements.html:848
 msgid "Have Questions?"
 msgstr ""
 
-#: .\templates\announcements.html:466
+#: .\templates\announcements.html:848
 msgid "Reach Out"
 msgstr ""
 
-#: .\templates\announcements.html:467
+#: .\templates\announcements.html:850
 msgid "We're here to help with any of your digital service needs."
 msgstr ""
 
-#: .\templates\announcements.html:491 .\templates\homepage.html:926
-msgid "No announcements available."
+#: .\templates\application_admin_detail.html:5
+#: .\templates\application_admin_detail.html:653
+msgid "Application Detail"
 msgstr ""
 
-#: .\templates\appointment.html:282
+#: .\templates\application_admin_detail.html:654
+msgid "Review and manage the application."
+msgstr ""
+
+#: .\templates\application_admin_detail.html:664
+msgid "Back to Applications"
+msgstr ""
+
+#: .\templates\application_admin_detail.html:692
+#: .\templates\application_detail.html:485 .\templates\apply_service.html:615
+msgid "Personal Details"
+msgstr ""
+
+#: .\templates\application_admin_detail.html:728
+msgid "Change Status"
+msgstr ""
+
+#: .\templates\application_admin_detail.html:739
+msgid "Update Status"
+msgstr ""
+
+#: .\templates\application_admin_detail.html:747
+msgid "Timestamps"
+msgstr ""
+
+#: .\templates\application_admin_detail.html:804
+msgid "Toggle verification"
+msgstr ""
+
+#: .\templates\application_admin_detail.html:806
+#: .\templates\application_detail.html:531
+#: .\templates\customer_reviews.html:1307
+msgid "Verified"
+msgstr ""
+
+#: .\templates\application_admin_detail.html:806
+msgid "Unverified"
+msgstr ""
+
+#: .\templates\application_admin_detail.html:813
+msgid "Delete this document?"
+msgstr ""
+
+#: .\templates\application_admin_detail.html:822
+#: .\templates\application_detail.html:537
+msgid "No documents uploaded."
+msgstr ""
+
+#: .\templates\application_detail.html:455
+msgid "Application Details"
+msgstr ""
+
+#: .\templates\application_detail.html:506
+msgid "Uploaded Documents"
+msgstr ""
+
+#: .\templates\application_detail.html:527 .\templates\download_forms.html:847
+msgid "Download"
+msgstr ""
+
+#: .\templates\apply_service.html:577
+msgid "Apply for"
+msgstr ""
+
+#: .\templates\apply_service.html:605
+msgid "No specific documents required."
+msgstr ""
+
+#: .\templates\apply_service.html:656
+msgid "Upload Documents"
+msgstr ""
+
+#: .\templates\apply_service.html:676
+msgid "Merge PDFs with iLovePDF"
+msgstr ""
+
+#: .\templates\apply_service.html:686 .\templates\required_document.html:495
+msgid "Required"
+msgstr ""
+
+#: .\templates\apply_service.html:690
+msgid "Allowed: PDF, JPG, JPEG, PNG"
+msgstr ""
+
+#: .\templates\apply_service.html:699
+msgid "Submit Application"
+msgstr ""
+
+#: .\templates\appointment.html:576
 msgid "Book an Appointment"
 msgstr ""
 
-#: .\templates\appointment.html:285
-msgid ""
-"Select your service, choose a date &amp; time, and we’ll confirm your visit."
+#: .\templates\appointment.html:664
+msgid "Available slots: 9:00 AM – 5:00 PM (15‑minute intervals)"
 msgstr ""
 
-#: .\templates\appointment.html:379 .\templates\base.html:480
+#: .\templates\appointment.html:682 .\templates\footer.html:55
 msgid "Book Appointment"
 msgstr ""
 
-#: .\templates\appointment.html:386
+#: .\templates\appointment.html:689
 msgid "Your details are secure."
 msgstr ""
 
-#: .\templates\appointment.html:387
+#: .\templates\appointment.html:690
 msgid "9:00 AM – 5:00 PM"
 msgstr ""
 
-#: .\templates\appointment.html:528
+#: .\templates\appointment.html:866
 msgid "Booking…"
 msgstr ""
 
-#: .\templates\base.html:9
-msgid ""
-"Matoshree – Cyber Café & Digital Services. Reliable, fast, and affordable "
-"digital solutions."
+#: .\templates\base.html:10
+msgid "Cyber Services"
 msgstr ""
 
-#: .\templates\base.html:11
-msgid "Matoshree – Cyber Café & Digital Services"
-msgstr ""
-
-#: .\templates\base.html:439
-msgid "Matoshree Logo"
-msgstr ""
-
-#: .\templates\base.html:445
-msgid "Toggle navigation"
-msgstr ""
-
-#: .\templates\base.html:458
-msgid "All Services"
-msgstr ""
-
-#: .\templates\base.html:469
-msgid "Resources"
-msgstr ""
-
-#: .\templates\base.html:472 .\templates\customer_reviews.html:565
-msgid "Customer Reviews"
-msgstr ""
-
-#: .\templates\base.html:492
-msgid "Profile"
-msgstr ""
-
-#: .\templates\base.html:498
-msgid "Login"
-msgstr ""
-
-#: .\templates\base.html:499
-msgid "Register"
-msgstr ""
-
-#: .\templates\base.html:546
-#, python-format
-msgid ""
-"\n"
-"                    &copy; %(year)s %(name)s. All rights reserved.\n"
-"                "
-msgstr ""
-
-#: .\templates\base.html:551
-msgid "Facebook"
-msgstr ""
-
-#: .\templates\base.html:552
-msgid "Instagram"
-msgstr ""
-
-#: .\templates\base.html:553
-msgid "YouTube"
-msgstr ""
-
-#: .\templates\base.html:554
-msgid "Twitter"
-msgstr ""
-
-#: .\templates\contactus.html:229
+#: .\templates\contactus.html:853
 msgid "Get in"
 msgstr ""
 
-#: .\templates\contactus.html:230
+#: .\templates\contactus.html:853
 msgid "Touch"
 msgstr ""
 
-#: .\templates\contactus.html:258
+#: .\templates\contactus.html:870
 msgid "Send a Message"
 msgstr ""
 
-#: .\templates\contactus.html:317
+#: .\templates\contactus.html:936
 msgid "Send Message"
 msgstr ""
 
-#: .\templates\contactus.html:329
-#, python-format
-msgid "%(address)s"
+#: .\templates\contactus.html:948 .\templates\contactus.html:958
+#: .\templates\contactus.html:987
+msgid "Not provided"
 msgstr ""
 
-#: .\templates\contactus.html:330
-#, python-format
-msgid "%(name)s"
+#: .\templates\contactus.html:970 .\templates\contactus.html:1035
+msgid "Hello, I would like to know about your services."
 msgstr ""
 
-#: .\templates\contactus.html:352
+#: .\templates\contactus.html:975
 msgid "Chat with Us"
 msgstr ""
 
-#: .\templates\contactus.html:374
-#: .\venv\Lib\site-packages\django\utils\dates.py:7
-msgid "Monday"
+#: .\templates\contactus.html:998
+msgid "Hours not set."
 msgstr ""
 
-#: .\templates\contactus.html:375 .\templates\contactus.html:379
-#: .\templates\contactus.html:383 .\templates\contactus.html:387
-#: .\templates\contactus.html:391 .\templates\contactus.html:395
-msgid "9:00 AM – 8:00 PM"
+#: .\templates\contactus.html:1009 .\templates\homepage.html:1156
+msgid "Map location not configured."
 msgstr ""
 
-#: .\templates\contactus.html:378
-#: .\venv\Lib\site-packages\django\utils\dates.py:8
-msgid "Tuesday"
-msgstr ""
-
-#: .\templates\contactus.html:382
-#: .\venv\Lib\site-packages\django\utils\dates.py:9
-msgid "Wednesday"
-msgstr ""
-
-#: .\templates\contactus.html:386
-#: .\venv\Lib\site-packages\django\utils\dates.py:10
-msgid "Thursday"
-msgstr ""
-
-#: .\templates\contactus.html:390
-#: .\venv\Lib\site-packages\django\utils\dates.py:11
-msgid "Friday"
-msgstr ""
-
-#: .\templates\contactus.html:394
-#: .\venv\Lib\site-packages\django\utils\dates.py:12
-msgid "Saturday"
-msgstr ""
-
-#: .\templates\contactus.html:398
-#: .\venv\Lib\site-packages\django\utils\dates.py:13
-msgid "Sunday"
-msgstr ""
-
-#: .\templates\contactus.html:399
-msgid "10:00 AM – 2:00 PM"
-msgstr ""
-
-#: .\templates\contactus.html:440
+#: .\templates\contactus.html:1022
 msgid "We're just a"
 msgstr ""
 
-#: .\templates\contactus.html:441
+#: .\templates\contactus.html:1022
 msgid "click"
 msgstr ""
 
-#: .\templates\contactus.html:478
+#: .\templates\contactus.html:1031
 msgid "Call Now"
 msgstr ""
 
-#: .\templates\customer_reviews.html:567
+#: .\templates\customer_reviews.html:5 .\templates\customer_reviews.html:1202
+msgid "Customer Reviews"
+msgstr ""
+
+#: .\templates\customer_reviews.html:1209
 msgid ""
 "Real feedback from customers who have used our services. See why they trust "
 "us."
 msgstr ""
 
-#: .\templates\customer_reviews.html:592
-#, python-format
-msgid " Based on <strong>%(total)s</strong> customer reviews "
-msgstr ""
-
-#: .\templates\customer_reviews.html:613
-#, python-format
-msgid ""
-"\n"
-"        <strong>%(count)s</strong> customer reviews\n"
-"        "
-msgstr ""
-
-#: .\templates\customer_reviews.html:618
+#: .\templates\customer_reviews.html:1277
 msgid "Newest"
 msgstr ""
 
-#: .\templates\customer_reviews.html:619
+#: .\templates\customer_reviews.html:1280
 msgid "Highest"
 msgstr ""
 
-#: .\templates\customer_reviews.html:620
+#: .\templates\customer_reviews.html:1283
 msgid "Lowest"
 msgstr ""
 
-#: .\templates\customer_reviews.html:645
-msgid "Verified"
+#: .\templates\customer_reviews.html:1316
+msgid "No customer reviews yet. Be the first to share your experience!"
 msgstr ""
 
-#: .\templates\customer_reviews.html:654
-msgid "No reviews yet. Be the first to share your experience!"
-msgstr ""
-
-#: .\templates\customer_reviews.html:661
+#: .\templates\customer_reviews.html:1357
 msgid "Share Your Experience"
 msgstr ""
 
-#: .\templates\customer_reviews.html:662
+#: .\templates\customer_reviews.html:1360
 msgid "We value your feedback. Let us know how we did!"
 msgstr ""
 
-#: .\templates\customer_reviews.html:688 .\templates\customer_reviews.html:746
-#: .\templates\customer_reviews.html:756
+#: .\templates\customer_reviews.html:1367
+msgid "Enter your full name"
+msgstr ""
+
+#: .\templates\customer_reviews.html:1371
+msgid "Enter your email"
+msgstr ""
+
+#: .\templates\customer_reviews.html:1382
+#: .\templates\customer_reviews.html:1447
 msgid "Select a rating"
 msgstr ""
 
-#: .\templates\customer_reviews.html:695
+#: .\templates\customer_reviews.html:1388
 msgid "Your Review"
 msgstr ""
 
-#: .\templates\customer_reviews.html:701
+#: .\templates\customer_reviews.html:1389
+msgid "Tell us about your experience..."
+msgstr ""
+
+#: .\templates\customer_reviews.html:1394
 msgid "Submit Review"
 msgstr ""
 
-#: .\templates\customer_reviews.html:707
-msgid "Thank you for your review!"
-msgstr ""
-
-#: .\templates\customer_reviews.html:713
+#: .\templates\customer_reviews.html:1402
 msgid "All reviews are from genuine customers."
 msgstr ""
 
-#: .\templates\customer_reviews.html:714
-#, python-format
-msgid "%(total)s reviews and counting"
+#: .\templates\customer_reviews.html:1413 .\templates\gallery.html:968
+msgid "Our Services?"
 msgstr ""
 
-#: .\templates\customer_reviews.html:728
+#: .\templates\customer_reviews.html:1414 .\templates\gallery.html:969
+msgid "Visit us today or reach out to get started with any of our services."
+msgstr ""
+
+#: .\templates\customer_reviews.html:1438
 msgid "Terrible"
 msgstr ""
 
-#: .\templates\customer_reviews.html:729
+#: .\templates\customer_reviews.html:1438
 msgid "Poor"
 msgstr ""
 
-#: .\templates\customer_reviews.html:730
+#: .\templates\customer_reviews.html:1438
 msgid "Average"
 msgstr ""
 
-#: .\templates\customer_reviews.html:731
+#: .\templates\customer_reviews.html:1438
 msgid "Good"
 msgstr ""
 
-#: .\templates\customer_reviews.html:732
+#: .\templates\customer_reviews.html:1438
 msgid "Excellent"
 msgstr ""
 
-#: .\templates\customer_reviews.html:774
+#: .\templates\customer_reviews.html:1461
 msgid "Name is required."
 msgstr ""
 
-#: .\templates\customer_reviews.html:775
+#: .\templates\customer_reviews.html:1462
 msgid "Email is required."
 msgstr ""
 
-#: .\templates\customer_reviews.html:776
+#: .\templates\customer_reviews.html:1463
 msgid "Please select a rating."
 msgstr ""
 
-#: .\templates\customer_reviews.html:777
+#: .\templates\customer_reviews.html:1464
 msgid "Please write your review."
 msgstr ""
 
-#: .\templates\download_forms.html:369
-msgid "Download"
-msgstr ""
-
-#: .\templates\download_forms.html:369
+#: .\templates\download_forms.html:847
 msgid "Government Forms"
 msgstr ""
 
-#: .\templates\download_forms.html:370
-msgid "Access and download official forms for various services."
+#: .\templates\download_forms.html:848
+msgid ""
+"Access and download official forms for various services — fast, secure, and "
+"always up-to-date."
 msgstr ""
 
-#: .\templates\download_forms.html:383
+#: .\templates\download_forms.html:865
 msgid "Search forms by name..."
 msgstr ""
 
-#: .\templates\download_forms.html:384
+#: .\templates\download_forms.html:866
 msgid "Search forms"
 msgstr ""
 
-#: .\templates\download_forms.html:386 .\templates\faq.html:375
+#: .\templates\download_forms.html:868 .\templates\faq.html:828
 msgid "Clear search"
 msgstr ""
 
-#: .\templates\download_forms.html:386
+#: .\templates\download_forms.html:869
 #: .\venv\Lib\site-packages\django\forms\widgets.py:528
 msgid "Clear"
 msgstr ""
 
-#: .\templates\download_forms.html:403
+#: .\templates\download_forms.html:888
 msgid "No file"
 msgstr ""
 
-#: .\templates\download_forms.html:416
-msgid "No forms available."
-msgstr ""
-
-#: .\templates\download_forms.html:424
+#: .\templates\download_forms.html:898
 msgid "No forms match your search."
 msgstr ""
 
-#: .\templates\download_forms.html:430
+#: .\templates\download_forms.html:905
 msgid "All forms are official and up-to-date."
 msgstr ""
 
-#: .\templates\download_forms.html:435
+#: .\templates\download_forms.html:909
 #, python-format
-msgid "Updated: %(current_month_year)s"
-msgstr ""
+msgid "%(counter)s form available"
+msgid_plural "%(counter)s forms available"
+msgstr[0] ""
+msgstr[1] ""
 
-#: .\templates\download_forms.html:444
+#: .\templates\download_forms.html:925
 msgid "Need Assistance with"
 msgstr ""
 
-#: .\templates\download_forms.html:444
+#: .\templates\download_forms.html:925
 msgid "Forms?"
 msgstr ""
 
-#: .\templates\download_forms.html:445
-msgid "We're here to help you fill, print, and submit your documents."
+#: .\templates\download_forms.html:926
+msgid ""
+"We're here to help you fill, print, and submit your documents with ease."
 msgstr ""
 
-#: .\templates\faq.html:354
+#: .\templates\download_forms.html:960
+msgid "No forms available at the moment."
+msgstr ""
+
+#: .\templates\faq.html:808
 msgid "Frequently Asked"
 msgstr ""
 
-#: .\templates\faq.html:354
+#: .\templates\faq.html:808
 msgid "Questions"
 msgstr ""
 
-#: .\templates\faq.html:357
+#: .\templates\faq.html:809
 msgid ""
 "Find quick answers to common questions about our services, documents, and "
 "charges."
 msgstr ""
 
-#: .\templates\faq.html:367
+#: .\templates\faq.html:824
 msgid "Search for questions..."
 msgstr ""
 
-#: .\templates\faq.html:368
+#: .\templates\faq.html:825
 msgid "Search FAQs"
 msgstr ""
 
-#: .\templates\faq.html:379
+#: .\templates\faq.html:831
 msgid "Submit search"
 msgstr ""
 
-#: .\templates\faq.html:416
+#: .\templates\faq.html:852
 msgid "No FAQs have been added yet. Please check back later."
 msgstr ""
 
-#: .\templates\faq.html:424
+#: .\templates\faq.html:860
 msgid "No questions match your search. Try a different keyword."
 msgstr ""
 
-#: .\templates\faq.html:430
+#: .\templates\faq.html:866
 msgid "Can't find what you need?"
 msgstr ""
 
-#: .\templates\faq.html:435
+#: .\templates\faq.html:867
 msgid "Contact us"
 msgstr ""
 
-#: .\templates\faq.html:440
+#: .\templates\faq.html:871
 #, python-format
 msgid ""
 "\n"
@@ -1617,408 +2068,752 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: .\templates\gallery.html:405
+#: .\templates\faq.html:887 .\templates\profile.html:501
+#: .\templates\service_charges.html:538
+msgid "Popular"
+msgstr ""
+
+#: .\templates\faq.html:887 .\templates\profile.html:501
+msgid "Service Packages"
+msgstr ""
+
+#: .\templates\faq.html:888
+msgid "Get the most out of our services with these convenient packages."
+msgstr ""
+
+#: .\templates\faq.html:893 .\templates\profile.html:510
+msgid "Starter"
+msgstr ""
+
+#: .\templates\faq.html:894 .\templates\faq.html:906 .\templates\faq.html:919
+#: .\templates\profile.html:511 .\templates\profile.html:534
+#: .\templates\profile.html:562 .\templates\required_document.html:613
+#: .\templates\required_document.html:624
+#: .\templates\required_document.html:636 .\templates\service_charges.html:542
+msgid "session"
+msgstr ""
+
+#: .\templates\faq.html:896 .\templates\profile.html:514
+msgid "Printing (10 pages B&W)"
+msgstr ""
+
+#: .\templates\faq.html:897 .\templates\profile.html:517
+msgid "Photocopy (10 pages)"
+msgstr ""
+
+#: .\templates\faq.html:898 .\templates\profile.html:520
+msgid "Email & Internet (30 min)"
+msgstr ""
+
+#: .\templates\faq.html:899
+msgid "Document Scanning (5 pages)"
+msgstr ""
+
+#: .\templates\faq.html:901 .\templates\profile.html:528
+#: .\templates\required_document.html:620
+msgid "Get Started"
+msgstr ""
+
+#: .\templates\faq.html:905 .\templates\profile.html:533
+msgid "Pro"
+msgstr ""
+
+#: .\templates\faq.html:908
+msgid "Printing (30 pages B&W / 10 color)"
+msgstr ""
+
+#: .\templates\faq.html:909 .\templates\profile.html:541
+msgid "Photocopy (30 pages)"
+msgstr ""
+
+#: .\templates\faq.html:910 .\templates\profile.html:544
+msgid "Email & Internet (60 min)"
+msgstr ""
+
+#: .\templates\faq.html:911
+msgid "Document Scanning (15 pages)"
+msgstr ""
+
+#: .\templates\faq.html:912
+msgid "Passport-size photos (4 copies)"
+msgstr ""
+
+#: .\templates\faq.html:914 .\templates\profile.html:556
+#: .\templates\required_document.html:632
+msgid "Choose Plan"
+msgstr ""
+
+#: .\templates\faq.html:918 .\templates\profile.html:561
+msgid "Enterprise"
+msgstr ""
+
+#: .\templates\faq.html:921
+msgid "Printing (50 pages B&W / 20 color)"
+msgstr ""
+
+#: .\templates\faq.html:922 .\templates\profile.html:569
+msgid "Photocopy (50 pages)"
+msgstr ""
+
+#: .\templates\faq.html:923 .\templates\profile.html:572
+msgid "Email & Internet (90 min)"
+msgstr ""
+
+#: .\templates\faq.html:924
+msgid "Document Scanning (30 pages)"
+msgstr ""
+
+#: .\templates\faq.html:925
+msgid "Passport-size photos (8 copies)"
+msgstr ""
+
+#: .\templates\faq.html:926
+msgid "Priority support & assistance"
+msgstr ""
+
+#: .\templates\faq.html:928 .\templates\profile.html:588
+#: .\templates\required_document.html:645
+msgid "Go Premium"
+msgstr ""
+
+#: .\templates\footer.html:16
+msgid "Digital services at your doorstep."
+msgstr ""
+
+#: .\templates\footer.html:26
+msgid "Quick Links"
+msgstr ""
+
+#: .\templates\footer.html:39 .\templates\services.html:5
+msgid "Our Services"
+msgstr ""
+
+#: .\templates\footer.html:41
+msgid "All Services"
+msgstr ""
+
+#: .\templates\footer.html:50
+msgid "Resources"
+msgstr ""
+
+#: .\templates\footer.html:64
+#, python-format
+msgid "&copy; %(year)s %(name)s. All rights reserved."
+msgstr ""
+
+#: .\templates\gallery.html:874
 msgid ""
 "Take a visual tour of our cyber café, facilities, equipment, and "
 "achievements."
 msgstr ""
 
-#: .\templates\gallery.html:417
-msgid "All Images"
+#: .\templates\gallery.html:890
+msgid "Images"
 msgstr ""
 
-#: .\templates\gallery.html:438 .\templates\homepage.html:816
-msgid "No images available."
+#: .\templates\gallery.html:892
+msgid "No Images"
 msgstr ""
 
-#: .\templates\gallery.html:450
+#: .\templates\gallery.html:907
+msgid "No images have been uploaded yet."
+msgstr ""
+
+#: .\templates\gallery.html:953
 msgid "About Our Gallery"
 msgstr ""
 
-#: .\templates\gallery.html:452
+#: .\templates\gallery.html:955
 msgid "All images are from our actual cyber café and service center."
 msgstr ""
 
-#: .\templates\gallery.html:454
+#: .\templates\gallery.html:956
 msgid ""
 "We regularly update our gallery to showcase our latest facilities and events."
 msgstr ""
 
-#: .\templates\gallery.html:456
+#: .\templates\gallery.html:957
 msgid "Click on any image to view it in full size."
 msgstr ""
 
-#: .\templates\gallery.html:465
-msgid "Our Services?"
-msgstr ""
-
-#: .\templates\gallery.html:466
-msgid "Visit us today or reach out to get started with any of our services."
-msgstr ""
-
-#: .\templates\government_schemes.html:267
+#: .\templates\government_schemes.html:699
 msgid "Schemes"
 msgstr ""
 
-#: .\templates\government_schemes.html:269
+#: .\templates\government_schemes.html:701
 msgid ""
 "Explore the latest government schemes and initiatives designed to benefit "
 "citizens, businesses, and communities."
 msgstr ""
 
-#: .\templates\government_schemes.html:289
+#: .\templates\government_schemes.html:727
 msgid "Eligibility:"
 msgstr ""
 
-#: .\templates\government_schemes.html:296 .\templates\jobs.html:440
+#: .\templates\government_schemes.html:728
+msgid "Not specified"
+msgstr ""
+
+#: .\templates\government_schemes.html:732 .\templates\jobs.html:434
 msgid "Last Date:"
 msgstr ""
 
-#: .\templates\government_schemes.html:305
+#: .\templates\government_schemes.html:734
+msgid "Ongoing"
+msgstr ""
+
+#: .\templates\government_schemes.html:742
 msgid "No government schemes available at the moment."
 msgstr ""
 
-#: .\templates\government_schemes.html:307
-msgid "Please check back later for updates."
-msgstr ""
-
-#: .\templates\government_schemes.html:318
+#: .\templates\government_schemes.html:787
 msgid "Need Help Applying for"
 msgstr ""
 
-#: .\templates\government_schemes.html:318
+#: .\templates\government_schemes.html:787
 msgid "Schemes?"
 msgstr ""
 
-#: .\templates\government_schemes.html:320
+#: .\templates\government_schemes.html:789
 msgid ""
 "We assist with scheme applications, document verification, and form filling. "
 "Let us guide you through the process."
 msgstr ""
 
-#: .\templates\homepage.html:715
-msgid "Fast, Reliable &amp;"
+#: .\templates\homepage.html:5
+msgid "Homepage"
 msgstr ""
 
-#: .\templates\homepage.html:716
-msgid "Affordable"
+#: .\templates\homepage.html:1023 .\templates\service_charges.html:556
+msgid "Pricing information coming soon."
 msgstr ""
 
-#: .\templates\homepage.html:716
-msgid "Cyber Services"
+#: .\templates\homepage.html:1046
+msgid "No images in the gallery yet."
 msgstr ""
 
-#: .\templates\homepage.html:740
-msgid "Online Forms"
+#: .\templates\homepage.html:1080
+msgid "No reviews yet. Be the first!"
 msgstr ""
 
-#: .\templates\homepage.html:744
-msgid "Aadhaar Services"
-msgstr ""
-
-#: .\templates\homepage.html:747
-msgid "PAN Card"
-msgstr ""
-
-#: .\templates\homepage.html:750
-msgid "Passport"
-msgstr ""
-
-#: .\templates\homepage.html:754
-msgid "Printing &amp; Scan"
-msgstr ""
-
-#: .\templates\homepage.html:768
-msgid "Welcome to"
-msgstr ""
-
-#: .\templates\homepage.html:771
-msgid "Your One-Stop Digital Service Hub"
-msgstr ""
-
-#: .\templates\homepage.html:788
-msgid "Customer Rating"
-msgstr ""
-
-#: .\templates\homepage.html:794
-msgid "Trusted &amp; Secure"
-msgstr ""
-
-#: .\templates\homepage.html:809
-msgid "Take a look at our work and facilities"
-msgstr ""
-
-#: .\templates\homepage.html:823
-msgid "View Full Gallery"
-msgstr ""
-
-#: .\templates\homepage.html:834
-msgid "What Our"
-msgstr ""
-
-#: .\templates\homepage.html:834
-msgid "Customers Say"
-msgstr ""
-
-#: .\templates\homepage.html:835
-msgid "Real feedback from our valued clients"
-msgstr ""
-
-#: .\templates\homepage.html:845
-msgid "No reviews yet."
-msgstr ""
-
-#: .\templates\homepage.html:852
-msgid "Read All Reviews"
-msgstr ""
-
-#: .\templates\homepage.html:863
-msgid "Business Timings"
-msgstr ""
-
-#: .\templates\homepage.html:867
-msgid "Monday – Saturday: 9:00 AM – 8:00 PM"
-msgstr ""
-
-#: .\templates\homepage.html:868
-msgid "Sunday: 10:00 AM – 2:00 PM"
-msgstr ""
-
-#: .\templates\homepage.html:873
-msgid "Get in Touch"
-msgstr ""
-
-#: .\templates\homepage.html:881
-msgid "Call us for inquiries, support, or to place an order."
-msgstr ""
-
-#: .\templates\homepage.html:910
-msgid "Recent"
-msgstr ""
-
-#: .\templates\homepage.html:933
-msgid "View All Announcements"
-msgstr ""
-
-#: .\templates\homepage.html:944
-msgid "Find Us"
-msgstr ""
-
-#: .\templates\homepage.html:944
-msgid "Here"
-msgstr ""
-
-#: .\templates\jobs.html:400
+#: .\templates\jobs.html:392
 msgid "Jobs"
 msgstr ""
 
-#: .\templates\jobs.html:402
+#: .\templates\jobs.html:394
 msgid "Current"
 msgstr ""
 
-#: .\templates\jobs.html:402
+#: .\templates\jobs.html:394
 msgid "Job Openings"
 msgstr ""
 
-#: .\templates\jobs.html:414
+#: .\templates\jobs.html:396
+msgid "Explore opportunities to work with us or our partner organizations."
+msgstr ""
+
+#: .\templates\jobs.html:407
 msgid "Available"
 msgstr ""
 
-#: .\templates\jobs.html:414
+#: .\templates\jobs.html:407
 msgid "Positions"
 msgstr ""
 
-#: .\templates\jobs.html:448
+#: .\templates\jobs.html:409
+msgid "Check out the latest openings and apply before the deadline."
+msgstr ""
+
+#: .\templates\jobs.html:414
+#, python-format
+msgid "%(counter)s job"
+msgid_plural "%(counter)s jobs"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .\templates\jobs.html:437
 msgid "Apply Now"
 msgstr ""
 
-#: .\templates\jobs.html:455
+#: .\templates\jobs.html:444
 msgid "No job openings available at the moment."
 msgstr ""
 
-#: .\templates\jobs.html:466
+#: .\templates\jobs.html:490
 msgid "join"
 msgstr ""
 
-#: .\templates\password_change.html:4
-msgid "Change Password – Cyber Café"
+#: .\templates\jobs.html:490
+msgid "our team?"
 msgstr ""
 
-#: .\templates\password_change.html:14 .\templates\password_change.html:61
-#: .\templates\profile.html:66
+#: .\templates\jobs.html:493
+msgid ""
+"Have questions about a role or want to send us your CV? Reach out to us "
+"anytime."
+msgstr ""
+
+#: .\templates\login.html:312
+msgid "Welcome Back"
+msgstr ""
+
+#: .\templates\login.html:313
+msgid "Sign in to your account"
+msgstr ""
+
+#: .\templates\login.html:339
+msgid "Enter your username"
+msgstr ""
+
+#: .\templates\login.html:361
+msgid "••••••••"
+msgstr ""
+
+#: .\templates\login.html:368
+msgid "Toggle password visibility"
+msgstr ""
+
+#: .\templates\login.html:384
+msgid "Remember me"
+msgstr ""
+
+#: .\templates\login.html:386
+msgid "Forgot password?"
+msgstr ""
+
+#: .\templates\login.html:391
+msgid "Sign In"
+msgstr ""
+
+#: .\templates\login.html:399
+msgid "Don't have an account?"
+msgstr ""
+
+#: .\templates\login.html:400
+msgid "Sign up"
+msgstr ""
+
+#: .\templates\my_applications.html:226
+msgid "My Applications"
+msgstr ""
+
+#: .\templates\my_applications.html:250
+msgid "View Details"
+msgstr ""
+
+#: .\templates\my_applications.html:259
+msgid "You have not submitted any applications yet."
+msgstr ""
+
+#: .\templates\my_applications.html:261
+msgid "Browse Services"
+msgstr ""
+
+#: .\templates\password_change.html:238 .\templates\password_change.html:284
+#: .\templates\profile.html:488
 msgid "Change Password"
 msgstr ""
 
-#: .\templates\password_change.html:15
+#: .\templates\password_change.html:239
 msgid "Update your password to keep your account secure"
 msgstr ""
 
-#: .\templates\password_change.html:70
+#: .\templates\password_change.html:293
 msgid "Back to Profile"
 msgstr ""
 
-#: .\templates\password_change_done.html:4
-msgid "Password Changed – Cyber Café"
-msgstr ""
-
-#: .\templates\password_change_done.html:14
+#: .\templates\password_change_done.html:157
 msgid "Password Changed!"
 msgstr ""
 
-#: .\templates\password_change_done.html:15
+#: .\templates\password_change_done.html:158
 msgid "Your password has been updated successfully."
 msgstr ""
 
-#: .\templates\password_change_done.html:20
+#: .\templates\password_change_done.html:164
 msgid "Return to Profile"
 msgstr ""
 
-#: .\templates\password_change_done.html:23
+#: .\templates\password_change_done.html:167
 msgid "Go to Dashboard"
 msgstr ""
 
-#: .\templates\profile.html:4
-msgid "My Profile – Cyber Café"
-msgstr ""
-
-#: .\templates\profile.html:14
-msgid "My Profile"
-msgstr ""
-
-#: .\templates\profile.html:15
-msgid "Update your personal information"
-msgstr ""
-
-#: .\templates\profile.html:57
+#: .\templates\profile.html:480
 msgid "Update Profile"
 msgstr ""
 
-#: .\templates\register.html:4
-msgid "Register – Cyber Café"
-msgstr ""
-
-#: .\templates\register.html:14
+#: .\templates\register.html:256
 msgid "Create Account"
 msgstr ""
 
-#: .\templates\register.html:15
+#: .\templates\register.html:257
 msgid "Join us to access exclusive services"
 msgstr ""
 
-#: .\templates\register.html:65
+#: .\templates\register.html:314
 msgid "Sign Up"
 msgstr ""
 
-#: .\templates\register.html:73
+#: .\templates\register.html:322
 msgid "Already have an account?"
 msgstr ""
 
-#: .\templates\register.html:74
+#: .\templates\register.html:323
 msgid "Log in"
 msgstr ""
 
-#: .\templates\register.html:80
+#: .\templates\register.html:328
 msgid "By registering, you agree to our"
 msgstr ""
 
-#: .\templates\register.html:81
+#: .\templates\register.html:329
 msgid "Terms of Service"
 msgstr ""
 
-#: .\templates\register.html:82
+#: .\templates\register.html:330
 #: .\venv\Lib\site-packages\django\db\models\base.py:1633
 #: .\venv\Lib\site-packages\django\forms\models.py:932
 msgid "and"
 msgstr ""
 
-#: .\templates\register.html:83
+#: .\templates\register.html:331
 msgid "Privacy Policy"
 msgstr ""
 
-#: .\templates\required_document.html:192
-msgid "Required"
-msgstr ""
-
-#: .\templates\required_document.html:192
+#: .\templates\required_document.html:495
 msgid "Documents"
 msgstr ""
 
-#: .\templates\required_document.html:225
+#: .\templates\required_document.html:497
+msgid ""
+"Know exactly what to bring before you visit. Save time and get your services "
+"done faster."
+msgstr ""
+
+#: .\templates\required_document.html:526
 msgid "No documents listed."
 msgstr ""
 
-#: .\templates\required_document.html:241
+#: .\templates\required_document.html:541
+msgid "1 document listed"
+msgstr ""
+
+#: .\templates\required_document.html:543
+msgid "documents listed"
+msgstr ""
+
+#: .\templates\required_document.html:593
 msgid "Important:"
 msgstr ""
 
-#: .\templates\required_document.html:254
+#: .\templates\required_document.html:593
+msgid ""
+"Requirements may vary based on service type and government guidelines. "
+"Please contact us for the most up-to-date document checklist before your "
+"visit."
+msgstr ""
+
+#: .\templates\required_document.html:605
+msgid "Service Plans"
+msgstr ""
+
+#: .\templates\required_document.html:607
+msgid ""
+"Choose a plan that fits your document processing needs. All plans include "
+"expert assistance."
+msgstr ""
+
+#: .\templates\required_document.html:612
+msgid "Basic"
+msgstr ""
+
+#: .\templates\required_document.html:615
+msgid "Document checklist consultation"
+msgstr ""
+
+#: .\templates\required_document.html:616
+msgid "Photocopy & scanning (up to 10 pages)"
+msgstr ""
+
+#: .\templates\required_document.html:617
+msgid "Email & internet access (30 min)"
+msgstr ""
+
+#: .\templates\required_document.html:618
+msgid "Basic form filling assistance"
+msgstr ""
+
+#: .\templates\required_document.html:623
+msgid "Standard"
+msgstr ""
+
+#: .\templates\required_document.html:626
+msgid "Complete document pre-check"
+msgstr ""
+
+#: .\templates\required_document.html:627
+msgid "Photocopy & scanning (up to 30 pages)"
+msgstr ""
+
+#: .\templates\required_document.html:628
+msgid "Email & internet access (60 min)"
+msgstr ""
+
+#: .\templates\required_document.html:629
+msgid "Passport-size photo printing (4 copies)"
+msgstr ""
+
+#: .\templates\required_document.html:630
+msgid "Priority assistance"
+msgstr ""
+
+#: .\templates\required_document.html:635
+msgid "Premium"
+msgstr ""
+
+#: .\templates\required_document.html:638
+msgid "Full document verification & attestation"
+msgstr ""
+
+#: .\templates\required_document.html:639
+msgid "Photocopy & scanning (unlimited pages)"
+msgstr ""
+
+#: .\templates\required_document.html:640
+msgid "Email & internet access (90 min)"
+msgstr ""
+
+#: .\templates\required_document.html:641
+msgid "Passport-size photo printing (8 copies)"
+msgstr ""
+
+#: .\templates\required_document.html:642
+msgid "Dedicated service expert"
+msgstr ""
+
+#: .\templates\required_document.html:643
+msgid "Same-day processing"
+msgstr ""
+
+#: .\templates\required_document.html:656
 msgid "Need Help Preparing"
 msgstr ""
 
-#: .\templates\required_document.html:254
+#: .\templates\required_document.html:656
 msgid "Documents?"
 msgstr ""
 
-#: .\templates\service_charges.html:412
+#: .\templates\required_document.html:657
+msgid "We assist with document checking, photocopying, and attestation."
+msgstr ""
+
+#: .\templates\service_charges.html:470
 msgid "Charges"
 msgstr ""
 
-#: .\templates\service_charges.html:424
+#: .\templates\service_charges.html:481
 msgid "Price List"
 msgstr ""
 
-#: .\templates\service_charges.html:469
+#: .\templates\service_charges.html:516
 msgid "No service charges available."
 msgstr ""
 
-#: .\templates\service_charges.html:484
+#: .\templates\service_charges.html:529
+msgid "Choose Your"
+msgstr ""
+
+#: .\templates\service_charges.html:529
+msgid "Plan"
+msgstr ""
+
+#: .\templates\service_charges.html:531
+msgid "Flexible pricing for every need — hover to feel the power"
+msgstr ""
+
+#: .\templates\service_charges.html:546
+msgid "Professional service"
+msgstr ""
+
+#: .\templates\service_charges.html:548
+msgid "Quick turnaround"
+msgstr ""
+
+#: .\templates\service_charges.html:549
+msgid "Expert assistance"
+msgstr ""
+
+#: .\templates\service_charges.html:552
+msgid "Book Now"
+msgstr ""
+
+#: .\templates\service_charges.html:565
 msgid "Important Notes"
 msgstr ""
 
-#: .\templates\service_charges.html:504
+#: .\templates\service_charges.html:583
 msgid "Need"
 msgstr ""
 
-#: .\templates\service_charges.html:504
+#: .\templates\service_charges.html:583
 msgid "clarification"
 msgstr ""
 
-#: .\templates\services.html:5
-msgid "Our Services – Matoshree Cyber Café"
+#: .\templates\services.html:227
+msgid ""
+"Explore the full range of digital services we offer — from government "
+"applications to document processing, all under one roof."
 msgstr ""
 
-#: .\templates\services.html:165
-msgid "Fast, reliable &amp; affordable — all under one roof"
+#: .\templates\services.html:249
+msgid "Apply Online"
 msgstr ""
 
-#: .\templates\services.html:181
-msgid "No services available at the moment."
+#: .\templates\services.html:254
+msgid "No services available at the moment. Please check back later."
 msgstr ""
 
-#: .\templates\superadmindashboard.html:9
+#: .\templates\split_pdf.html:257 .\templates\split_pdf.html:271
+#: .\templates\split_pdf.html:314
+msgid "Split PDF"
+msgstr ""
+
+#: .\templates\split_pdf.html:258
+msgid "Extract specific pages from a PDF document."
+msgstr ""
+
+#: .\templates\split_pdf.html:276
+msgid "Document"
+msgstr ""
+
+#: .\templates\split_pdf.html:293
+msgid "Pages"
+msgstr ""
+
+#: .\templates\split_pdf.html:299
+msgid "e.g. 1-3,5,7-10"
+msgstr ""
+
+#: .\templates\split_pdf.html:304
+msgid "Examples:"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:8
 msgid "Super Admin Dashboard – Cyber Café"
 msgstr ""
 
-#: .\templates\superadmindashboard.html:576
-#: .\templates\superadmindashboard.html:636
+#: .\templates\superadmindashboard.html:1285
+msgid "Main navigation"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:1286
+msgid "CyberAdmin"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:1298
+#: .\templates\superadmindashboard.html:1346
 msgid "Users"
 msgstr ""
 
-#: .\templates\superadmindashboard.html:1216
-#: .\templates\superadmindashboard.html:1358
+#: .\templates\superadmindashboard.html:1314
+msgid "Toggle navigation"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:1321
+msgid "User avatar"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:1402
+msgid "Edit service"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:1408
+msgid "Delete service"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:1500
+msgid "Edit charge"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:1506
+msgid "Delete charge"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:1585
+msgid "Edit document"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:1591
+msgid "Delete document"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:1656
+msgid "Edit announcement"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:1662
+msgid "Delete announcement"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:1739
+msgid "Edit job"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:1745
+msgid "Delete job"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:1823
+msgid "Edit scheme"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:1829
+msgid "Delete scheme"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:1896
+msgid "Edit appointment"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:1902
+msgid "Delete appointment"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:1995
+msgid "Reply message"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:2033
+msgid "Edit form"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:2039
+msgid "Delete form"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:2084
+#: .\templates\superadmindashboard.html:2257
 msgid "User Management"
 msgstr ""
 
-#: .\templates\superadmindashboard.html:1225
+#: .\templates\superadmindashboard.html:2093
 msgid "Staff"
 msgstr ""
 
-#: .\templates\superadmindashboard.html:1239
+#: .\templates\superadmindashboard.html:2094
+msgid "Action"
+msgstr ""
+
+#: .\templates\superadmindashboard.html:2107
 msgid "Yes,No"
 msgstr ""
 
-#: .\templates\superadmindashboard.html:1255
+#: .\templates\superadmindashboard.html:2123
 msgid "No users found."
+msgstr ""
+
+#: .\templates\superadmindashboard.html:2159
+msgid "Delete image"
 msgstr ""
 
 #: .\venv\Lib\site-packages\cloudinary\forms.py:55
@@ -2436,10 +3231,6 @@ msgstr ""
 msgid "Universally unique identifier"
 msgstr ""
 
-#: .\venv\Lib\site-packages\django\db\models\fields\files.py:244
-msgid "File"
-msgstr ""
-
 #: .\venv\Lib\site-packages\django\db\models\fields\json.py:24
 msgid "A JSON object"
 msgstr ""
@@ -2741,6 +3532,34 @@ msgstr ""
 
 #: .\venv\Lib\site-packages\django\utils\dateformat.py:155
 msgid "noon"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:7
+msgid "Monday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:8
+msgid "Tuesday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:9
+msgid "Wednesday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:10
+msgid "Thursday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:11
+msgid "Friday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:12
+msgid "Saturday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:13
+msgid "Sunday"
 msgstr ""
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:16

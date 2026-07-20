@@ -1,0 +1,442 @@
+{% load i18n %}
+{% load static %}
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <!-- Column 1: Brand & Contact -->
+      <div class="footer-col">
+        <div class="brand-small">
+          <div class="icon"><i class="fas fa-laptop-code"></i></div>
+          <div class="name">
+            {{ business.business_name|default:"Cyber<span>Tech</span>"|safe }}
+          </div>
+        </div>
+        <p class="footer-address">
+          {{ business.address|default:_("Digital services at your doorstep.") }}
+        </p>
+        <div class="footer-contact">
+          <p><i class="fas fa-phone"></i> {{ business.phone|default:"+91 98765 43210" }}</p>
+          <p><i class="fas fa-envelope"></i> {{ business.email|default:"info@cybertech.com" }}</p>
+        </div>
+      </div>
+
+      <!-- Column 2: Quick Links -->
+      <div class="footer-col">
+        <h4>{% trans "Quick Links" %}</h4>
+        <ul>
+          <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
+          <li><a href="{% url 'about' %}">{% trans "About" %}</a></li>
+          <li><a href="{% url 'services' %}">{% trans "Services" %}</a></li>
+          <li><a href="{% url 'gallery' %}">{% trans "Gallery" %}</a></li>
+          <li><a href="{% url 'reviews' %}">{% trans "Reviews" %}</a></li>
+          <li><a href="{% url 'contact' %}">{% trans "Contact" %}</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 3: Our Services -->
+      <div class="footer-col">
+        <h4>{% trans "Our Services" %}</h4>
+        <ul>
+          <li><a href="{% url 'services' %}">{% trans "All Services" %}</a></li>
+          <li><a href="{% url 'documents' %}">{% trans "Required Documents" %}</a></li>
+          <li><a href="{% url 'downloads' %}">{% trans "Download Forms" %}</a></li>
+          <li><a href="{% url 'charges' %}">{% trans "Service Charges" %}</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 4: Resources -->
+      <div class="footer-col">
+        <h4>{% trans "Resources" %}</h4>
+        <ul>
+          <li><a href="{% url 'announcements' %}">{% trans "Announcements" %}</a></li>
+          <li><a href="{% url 'government_schemes' %}">{% trans "Government Schemes" %}</a></li>
+          <li><a href="{% url 'jobs' %}">{% trans "Job Notifications" %}</a></li>
+          <li><a href="{% url 'appointment' %}">{% trans "Book Appointment" %}</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bottom row: copyright + socials -->
+    <div class="footer-bottom">
+      <p>
+        {% now "Y" as current_year %}
+        {% blocktrans with year=current_year name=business.business_name|default:"Matoshree Cyber Cafe" trimmed %}
+          &copy; {{ year }} {{ name }}. All rights reserved.
+        {% endblocktrans %}
+      </p>
+      <div class="socials">
+        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     RESPONSIVE FOOTER STYLES (embedded for portability)
+     ============================================================ -->
+<style>
+  /* ----- Reset / base for footer ----- */
+  .footer {
+    background: var(--bg-card, rgba(10, 14, 26, 0.95));
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 50px 0 20px;
+    width: 100%;
+    color: var(--text-muted, #94a3b8);
+    font-family: var(--font-body, 'Inter', system-ui, -apple-system, sans-serif);
+  }
+
+  .footer .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    width: 100%;
+  }
+
+  /* ----- Grid layout (desktop first) ----- */
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 20px;
+  }
+
+  .footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .footer-col h4 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-white, #f0f4ff);
+    margin: 0 0 4px 0;
+  }
+
+  .footer-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .footer-col ul li a {
+    color: var(--text-muted, #94a3b8);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    font-size: 0.92rem;
+    display: inline-block;
+    padding: 2px 0;
+    touch-action: manipulation;
+  }
+
+  .footer-col ul li a:hover {
+    color: var(--neon-cyan, #00f0ff);
+  }
+
+  /* ----- Brand and contact ----- */
+  .brand-small {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .brand-small .icon {
+    font-size: 1.6rem;
+    color: var(--neon-cyan, #00f0ff);
+    width: 40px;
+    text-align: center;
+  }
+
+  .brand-small .name {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text-white, #f0f4ff);
+    font-family: var(--font-display, 'Inter', sans-serif);
+  }
+
+  .brand-small .name span {
+    background: var(--gradient-cyber, linear-gradient(135deg, #00f0ff, #a855f7));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .footer-address {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin: 0 0 10px 0;
+    word-break: break-word;
+  }
+
+  .footer-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .footer-contact p {
+    margin: 0;
+    font-size: 0.88rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    word-break: break-all;
+  }
+
+  .footer-contact p i {
+    color: var(--neon-cyan, #00f0ff);
+    width: 18px;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+
+  /* ----- Footer bottom (copyright + socials) ----- */
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.88rem;
+    padding-top: 4px;
+  }
+
+  .footer-bottom p {
+    margin: 0;
+    color: var(--text-muted, #94a3b8);
+  }
+
+  .socials {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .socials a {
+    color: var(--text-muted, #94a3b8);
+    font-size: 1.1rem;
+    transition: color 0.2s ease, transform 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+    text-decoration: none;
+    touch-action: manipulation;
+  }
+
+  .socials a:hover {
+    color: var(--neon-cyan, #00f0ff);
+    transform: translateY(-2px);
+    background: rgba(0, 240, 255, 0.08);
+  }
+
+  /* ============================================================
+     RESPONSIVE BREAKPOINTS
+     ============================================================ */
+
+  /* ----- 1024px and below (tablets) ----- */
+  @media (max-width: 1024px) {
+    .footer-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+    }
+  }
+
+  /* ----- 768px and below (large phones) ----- */
+  @media (max-width: 768px) {
+    .footer {
+      padding: 40px 0 16px;
+    }
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 24px 20px;
+      padding-bottom: 24px;
+    }
+    .footer-col h4 {
+      font-size: 0.98rem;
+    }
+    .brand-small .name {
+      font-size: 1.2rem;
+    }
+    .footer-bottom {
+      flex-direction: column;
+      text-align: center;
+      gap: 8px;
+    }
+    .socials {
+      justify-content: center;
+    }
+    .socials a {
+      width: 44px;
+      height: 44px;
+      font-size: 1.2rem;
+    }
+  }
+
+  /* ----- 600px and below (small phones) ----- */
+  @media (max-width: 600px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+      gap: 28px;
+      padding-bottom: 20px;
+    }
+    .footer-col {
+      text-align: center;
+      align-items: center;
+    }
+    .footer-col ul {
+      align-items: center;
+    }
+    .footer-col ul li a {
+      padding: 4px 0;
+    }
+    .brand-small {
+      justify-content: center;
+    }
+    .footer-contact p {
+      justify-content: center;
+    }
+    .footer-bottom {
+      font-size: 0.82rem;
+    }
+    .footer .container {
+      padding: 0 16px;
+    }
+    .footer-address {
+      text-align: center;
+    }
+  }
+
+  /* ----- 400px and below (very small phones) ----- */
+  @media (max-width: 400px) {
+    .footer {
+      padding: 30px 0 12px;
+    }
+    .footer-grid {
+      gap: 20px;
+    }
+    .brand-small .name {
+      font-size: 1.0rem;
+    }
+    .brand-small .icon {
+      font-size: 1.2rem;
+      width: 32px;
+    }
+    .footer-col h4 {
+      font-size: 0.88rem;
+    }
+    .footer-col ul li a {
+      font-size: 0.82rem;
+    }
+    .footer-contact p {
+      font-size: 0.8rem;
+    }
+    .socials a {
+      width: 40px;
+      height: 40px;
+      font-size: 1rem;
+    }
+    .footer-bottom p {
+      font-size: 0.75rem;
+    }
+  }
+
+  /* ============================================================
+     CROSS‑BROWSER FALLBACKS
+     ============================================================ */
+
+  /* ----- Edge / IE: flexbox fallback for older browsers ----- */
+  @supports not (display: grid) {
+    .footer-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .footer-col {
+      flex: 1 1 180px;
+      margin: 0 10px 20px 10px;
+      min-width: 150px;
+    }
+  }
+
+  /* ----- Safari < 15.4: background-clip text fallback ----- */
+  @supports not (background-clip: text) {
+    .brand-small .name span {
+      -webkit-text-fill-color: #00f0ff;
+      color: #00f0ff;
+      background: none;
+    }
+  }
+
+  /* ----- Touch devices: increase tap targets ----- */
+  @media (hover: none) and (pointer: coarse) {
+    .footer-col ul li a {
+      padding: 8px 0;
+      display: block;
+    }
+    .socials a {
+      min-width: 48px;
+      min-height: 48px;
+    }
+    .footer-contact p {
+      padding: 4px 0;
+    }
+  }
+
+  /* ----- Reduced motion ----- */
+  @media (prefers-reduced-motion: reduce) {
+    .socials a {
+      transition: none;
+    }
+    .footer-col ul li a {
+      transition: none;
+    }
+  }
+
+  /* ----- Print styles ----- */
+  @media print {
+    .footer {
+      background: #fff !important;
+      color: #000 !important;
+      border-top: 1px solid #ccc;
+    }
+    .footer-col h4 {
+      color: #000 !important;
+    }
+    .footer-col ul li a {
+      color: #000 !important;
+    }
+    .brand-small .name {
+      color: #000 !important;
+    }
+    .brand-small .name span {
+      -webkit-text-fill-color: #000 !important;
+      color: #000 !important;
+      background: none !important;
+    }
+    .socials a {
+      color: #000 !important;
+      background: none !important;
+      border: 1px solid #ccc;
+    }
+    .footer-bottom p {
+      color: #000 !important;
+    }
+    .footer-contact p i {
+      color: #000 !important;
+    }
+  }
+</style>

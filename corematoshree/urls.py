@@ -5,7 +5,7 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
 
-# app_name = 'core'  # Optional: set if you use namespacing
+# app_name = 'core'  # Commented out to avoid breaking existing templates
 
 urlpatterns = [
     # =============================================
@@ -55,13 +55,9 @@ urlpatterns = [
     # Admin only: application details (via AJAX and full view)
     path('application-detail/<int:app_id>/', views.application_detail_ajax, name='application_detail_ajax'),
     
-    
-    # path('admin/application/<int:app_id>/', views.application_admin_detail, name='application_admin_detail'),
+    # Admin full view for application details (with document management)
     path('admin-app/<int:app_id>/', views.application_admin_detail, name='application_admin_detail'),
 
     # PDF splitting (admin only)
     path('pdf/<int:pk>/split/', views.split_pdf, name='split_pdf'),
-    
-    # path('test/', views.test_view, name='test'),
 ]
-

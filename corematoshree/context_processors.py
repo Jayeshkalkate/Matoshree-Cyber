@@ -1,6 +1,4 @@
 from .models import BusinessInfo
-    
-from .models import BusinessInfo
 
 def business_info(request):
     try:

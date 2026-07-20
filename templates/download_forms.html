@@ -1,30 +1,54 @@
 {% extends "base.html" %}
+
 {% load i18n %}
 {% load static %}
 
 {% block title %}{% trans "Download Forms" %}{% endblock %}
 
 {% block extra_head %}
+<!-- ============================================================
+     META – viewport & compatibility
+     ============================================================ -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
 <style>
   /* ================================================================
-     PAGE-SPECIFIC STYLES – Download Forms
-     Uses global CSS variables from base.html.
+     PAGE-SPECIFIC STYLES – Fully responsive + cross‑browser
      ================================================================ */
 
-  /* ---- Hero (page header) ---- */
+  /* ----- Base resets ----- */
+  .downloads-section *,
+  .downloads-section *::before,
+  .downloads-section *::after {
+    box-sizing: border-box;
+  }
+
+  .downloads-section .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    width: 100%;
+  }
+
+  /* ---- Hero (matches other pages) ---- */
   .page-hero {
-    padding: 70px 0 50px;
+    padding: clamp(30px, 6vw, 70px) 0 clamp(20px, 4vw, 50px);
     text-align: center;
     position: relative;
     overflow: hidden;
+    background: radial-gradient(ellipse at 30% 20%, rgba(0, 240, 255, 0.05), transparent 60%),
+                var(--bg-primary, #0a0e1a);
+    border-bottom: 1px solid rgba(0, 240, 255, 0.06);
+    width: 100%;
   }
   .page-hero::before {
-    content: '';
+    content: "";
     position: absolute;
     top: -30%;
     right: -10%;
-    width: 600px;
-    height: 600px;
+    width: min(600px, 80vw);
+    height: min(600px, 80vw);
     background: radial-gradient(circle, rgba(0, 240, 255, 0.04), transparent 70%);
     border-radius: 50%;
     pointer-events: none;
@@ -37,51 +61,54 @@
   .page-hero .breadcrumb {
     display: inline-flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 8px;
-    color: var(--text-muted);
-    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    font-size: clamp(0.75rem, 1vw, 0.85rem);
     font-weight: 500;
     margin-bottom: 16px;
     letter-spacing: 0.3px;
   }
   .page-hero .breadcrumb a {
-    color: var(--text-muted);
-    transition: var(--transition);
+    color: var(--text-muted, #94a3b8);
+    transition: color 0.3s ease;
+    text-decoration: none;
   }
   .page-hero .breadcrumb a:hover {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
   }
   .page-hero .breadcrumb .current {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
   }
   .page-hero h1 {
-    font-size: 3rem;
+    font-size: clamp(1.8rem, 5vw, 3rem);
     font-weight: 900;
-    font-family: var(--font-display);
-    color: var(--text-white);
+    font-family: var(--font-display, 'Inter', sans-serif);
+    color: var(--text-white, #f0f4ff);
     letter-spacing: 1px;
     margin-bottom: 8px;
     text-shadow: 0 0 40px rgba(0, 240, 255, 0.12);
   }
   .page-hero h1 span {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
     text-shadow: 0 0 30px rgba(0, 240, 255, 0.25);
   }
   .page-hero p {
-    font-size: 1.15rem;
-    color: var(--text-muted);
+    font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+    color: var(--text-muted, #94a3b8);
     max-width: 620px;
     margin: 0 auto;
     line-height: 1.8;
+    padding: 0 10px;
   }
   .page-hero .glow-line {
     display: inline-block;
     width: 80px;
     height: 3px;
-    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+    background: linear-gradient(90deg, var(--neon-cyan, #00f0ff), var(--neon-purple, #a855f7));
     border-radius: 4px;
     margin-top: 16px;
-    box-shadow: var(--glow-cyan);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
   }
 
   /* ---- Search Bar ---- */
@@ -90,67 +117,77 @@
     align-items: center;
     background: rgba(255, 255, 255, 0.04);
     backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border: 2px solid rgba(255, 255, 255, 0.06);
     border-radius: 60px;
     padding: 0.3rem 0.3rem 0.3rem 1.5rem;
-    transition: var(--transition);
+    transition: all 0.3s ease;
     max-width: 520px;
     margin: 0 auto 2.8rem;
-    box-shadow: var(--shadow-card);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    min-height: 56px;
   }
   .search-wrap:focus-within {
-    border-color: var(--neon-cyan);
-    box-shadow: 0 0 0 4px rgba(0, 240, 255, 0.12), var(--glow-cyan);
+    border-color: var(--neon-cyan, #00f0ff);
+    box-shadow: 0 0 0 4px rgba(0, 240, 255, 0.12), 0 0 30px rgba(0, 240, 255, 0.06);
     transform: scale(1.01);
   }
   .search-wrap i {
-    color: var(--text-muted);
-    font-size: 1rem;
+    color: var(--text-muted, #94a3b8);
+    font-size: clamp(0.9rem, 1vw, 1rem);
     opacity: 0.7;
+    flex-shrink: 0;
   }
   .search-wrap input {
     border: none;
     background: transparent;
     padding: 0.8rem 0.8rem;
-    font-size: 1rem;
-    font-family: var(--font-body);
+    font-size: clamp(0.9rem, 1vw, 1rem);
+    font-family: var(--font-body, 'Inter', sans-serif);
     width: 100%;
     outline: none;
-    color: var(--text-white);
+    color: var(--text-white, #f0f4ff);
+    min-height: 44px;
   }
   .search-wrap input::placeholder {
-    color: var(--text-muted);
+    color: var(--text-muted, #94a3b8);
     opacity: 0.5;
   }
   .search-wrap .clear-btn {
     background: rgba(255, 255, 255, 0.06);
     border: none;
-    color: var(--text-muted);
+    color: var(--text-muted, #94a3b8);
     padding: 0.5rem 1.2rem;
     border-radius: 40px;
     font-weight: 600;
-    font-size: 0.85rem;
+    font-size: clamp(0.75rem, 0.9vw, 0.85rem);
     cursor: pointer;
-    transition: var(--transition);
+    transition: all 0.3s ease;
     white-space: nowrap;
-    font-family: var(--font-body);
+    font-family: var(--font-body, 'Inter', sans-serif);
+    touch-action: manipulation;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
   }
   .search-wrap .clear-btn:hover {
-    background: var(--neon-cyan);
-    color: var(--bg-primary);
-    box-shadow: var(--glow-cyan);
+    background: var(--neon-cyan, #00f0ff);
+    color: var(--bg-primary, #0a0e1a);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
     transform: scale(1.04);
   }
 
   /* ---- Form Grid ---- */
   .downloads-section {
-    padding: 40px 0 70px;
-    background: var(--bg-secondary);
+    padding: clamp(30px, 5vw, 40px) 0 clamp(40px, 8vw, 70px);
+    background: var(--bg-secondary, rgba(10, 14, 26, 0.6));
+    width: 100%;
   }
   .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 18px;
+    gap: clamp(14px, 2vw, 18px);
   }
 
   /* ---- Form Card (gaming hover) ---- */
@@ -158,35 +195,37 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 20px 16px 24px;
+    padding: clamp(0.8rem, 1.5vw, 1rem) clamp(1rem, 2vw, 1.4rem) clamp(0.8rem, 1.5vw, 1rem) clamp(1.2rem, 2vw, 1.6rem);
     background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     border: 2px solid rgba(255, 255, 255, 0.05);
-    border-radius: var(--radius-sm);
-    transition: var(--transition);
+    border-radius: var(--radius-sm, 8px);
+    transition: all 0.3s ease;
     gap: 12px;
     cursor: default;
     position: relative;
     overflow: hidden;
+    min-height: 64px;
   }
   .form-card:hover {
     transform: translateY(-4px) scale(1.01);
-    border-color: var(--neon-magenta);
-    box-shadow: 0 0 30px rgba(255, 45, 149, 0.15), var(--shadow-card);
+    border-color: var(--neon-magenta, #ff2d95);
+    box-shadow: 0 0 30px rgba(255, 45, 149, 0.12), 0 8px 30px rgba(0, 0, 0, 0.15);
     background: rgba(255, 45, 149, 0.04);
   }
   .form-card::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     height: 2px;
-    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta), var(--neon-purple));
+    background: linear-gradient(90deg, var(--neon-cyan, #00f0ff), var(--neon-magenta, #ff2d95), var(--neon-purple, #a855f7));
     transform: scaleX(0);
-    transition: var(--transition);
+    transition: all 0.3s ease;
     transform-origin: left;
-    box-shadow: 0 0 20px rgba(255, 45, 149, 0.3);
+    box-shadow: 0 0 20px rgba(255, 45, 149, 0.2);
   }
   .form-card:hover::after {
     transform: scaleX(1);
@@ -195,49 +234,47 @@
   .form-card .form-info {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: clamp(10px, 1.5vw, 14px);
     flex: 1;
     min-width: 0;
   }
   .form-card .form-info i {
-    color: var(--neon-cyan);
-    font-size: 1.3rem;
+    color: var(--neon-cyan, #00f0ff);
+    font-size: clamp(1rem, 1.5vw, 1.3rem);
     flex-shrink: 0;
-    transition: var(--transition);
+    transition: all 0.3s ease;
   }
   .form-card:hover .form-info i {
-    color: var(--neon-magenta);
+    color: var(--neon-magenta, #ff2d95);
     transform: scale(1.1) rotate(-3deg);
     filter: drop-shadow(0 0 8px rgba(255, 45, 149, 0.3));
   }
   .form-card .form-name {
-    font-size: 0.95rem;
+    font-size: clamp(0.85rem, 1.1vw, 0.95rem);
     font-weight: 600;
-    color: var(--text-white);
-    transition: var(--transition);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    color: var(--text-white, #f0f4ff);
+    transition: all 0.3s ease;
+    word-break: break-word;
   }
   .form-card:hover .form-name {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
   }
   .form-card .form-category {
-    font-size: 0.65rem;
+    font-size: clamp(0.55rem, 0.8vw, 0.65rem);
     font-weight: 700;
     padding: 2px 12px;
     border-radius: 30px;
     background: rgba(255, 255, 255, 0.06);
-    color: var(--text-muted);
+    color: var(--text-muted, #94a3b8);
     text-transform: uppercase;
     letter-spacing: 0.04em;
     flex-shrink: 0;
     border: 1px solid rgba(255, 255, 255, 0.04);
-    transition: var(--transition);
+    transition: all 0.3s ease;
   }
   .form-card:hover .form-category {
     background: rgba(0, 240, 255, 0.08);
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
     border-color: rgba(0, 240, 255, 0.15);
   }
 
@@ -248,19 +285,34 @@
     padding: 6px 18px;
     border-radius: 40px;
     font-weight: 700;
-    font-size: 0.8rem;
-    color: var(--neon-cyan);
-    border: 2px solid var(--neon-cyan);
+    font-size: clamp(0.7rem, 0.9vw, 0.8rem);
+    color: var(--neon-cyan, #00f0ff);
+    border: 2px solid var(--neon-cyan, #00f0ff);
     background: transparent;
-    transition: var(--transition);
+    transition: all 0.3s ease;
     text-decoration: none;
     flex-shrink: 0;
+    touch-action: manipulation;
+    min-height: 40px;
+    min-width: 44px;
+    justify-content: center;
   }
   .btn-download:hover {
-    background: var(--neon-cyan);
-    color: var(--bg-primary);
+    background: var(--neon-cyan, #00f0ff);
+    color: var(--bg-primary, #0a0e1a);
     transform: translateY(-2px) scale(1.04);
-    box-shadow: var(--glow-cyan);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
+  }
+  .btn-download.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: var(--text-muted, #94a3b8);
+    color: var(--text-muted, #94a3b8);
+  }
+  .btn-download.disabled:hover {
+    transform: none;
+    background: transparent;
+    box-shadow: none;
   }
 
   /* ---- Hidden state for search ---- */
@@ -273,18 +325,18 @@
     grid-column: 1 / -1;
     text-align: center;
     padding: 3rem 0;
-    color: var(--text-muted);
+    color: var(--text-muted, #94a3b8);
     display: none;
   }
   .no-results i {
-    font-size: 3rem;
+    font-size: clamp(2rem, 4vw, 3rem);
     display: block;
     margin-bottom: 0.75rem;
     opacity: 0.3;
-    color: var(--text-muted);
+    color: var(--text-muted, #94a3b8);
   }
   .no-results p {
-    font-size: 1.1rem;
+    font-size: clamp(1rem, 1.2vw, 1.1rem);
   }
 
   /* ---- Footer Note ---- */
@@ -297,11 +349,11 @@
     justify-content: space-between;
     align-items: center;
     gap: 12px;
-    font-size: 0.9rem;
-    color: var(--text-muted);
+    font-size: clamp(0.85rem, 0.9vw, 0.9rem);
+    color: var(--text-muted, #94a3b8);
   }
   .footer-note i {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
     margin-right: 6px;
   }
   .footer-note .badge {
@@ -309,55 +361,96 @@
     padding: 4px 16px;
     border-radius: 30px;
     font-weight: 500;
-    font-size: 0.8rem;
-    color: var(--text-muted);
+    font-size: clamp(0.7rem, 0.8vw, 0.8rem);
+    color: var(--text-muted, #94a3b8);
     border: 1px solid rgba(255, 255, 255, 0.04);
-    transition: var(--transition);
+    transition: all 0.3s ease;
+    white-space: nowrap;
   }
   .footer-note .badge:hover {
-    border-color: var(--neon-cyan);
-    color: var(--neon-cyan);
+    border-color: var(--neon-cyan, #00f0ff);
+    color: var(--neon-cyan, #00f0ff);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.06);
   }
 
-  /* ---- CTA Banner (reuse from base styles) ---- */
+  /* ---- CTA Banner (reuses base styles) ---- */
   .cta-banner {
-    padding: 70px 0;
+    padding: clamp(40px, 8vw, 70px) 0;
     background: radial-gradient(ellipse at 30% 20%, rgba(0, 240, 255, 0.06), transparent 60%),
-                var(--bg-primary);
+                var(--bg-primary, #0a0e1a);
     border-top: 1px solid rgba(0, 240, 255, 0.06);
     border-bottom: 1px solid rgba(0, 240, 255, 0.06);
     text-align: center;
+    width: 100%;
   }
   .cta-banner .container {
     max-width: 720px;
+    margin: 0 auto;
+    padding: 0 20px;
   }
   .cta-banner h2 {
-    font-size: 2.4rem;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
     font-weight: 800;
-    font-family: var(--font-display);
-    color: var(--text-white);
+    font-family: var(--font-display, 'Inter', sans-serif);
+    color: var(--text-white, #f0f4ff);
     letter-spacing: -0.5px;
     margin-bottom: 8px;
   }
   .cta-banner h2 span {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
     text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
   }
   .cta-banner p {
-    color: var(--text-muted);
-    font-size: 1.1rem;
+    color: var(--text-muted, #94a3b8);
+    font-size: clamp(0.95rem, 1.2vw, 1.1rem);
     margin-bottom: 28px;
   }
-  .cta-banner .cta-buttons {
+  .cta-buttons {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
     gap: 18px;
   }
+  .cta-buttons .btn-primary,
+  .cta-buttons .btn-whatsapp {
+    padding: clamp(0.8rem, 1.5vw, 1rem) clamp(1.5rem, 3vw, 2.5rem);
+    font-size: clamp(0.9rem, 1vw, 1rem);
+    min-height: 48px;
+    min-width: 180px;
+    justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: none;
+    border-radius: var(--radius-sm, 8px);
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    touch-action: manipulation;
+    cursor: pointer;
+  }
+  .cta-buttons .btn-primary {
+    background: var(--gradient-cyan, linear-gradient(135deg, #00f0ff, #0ea5e9));
+    color: var(--bg-primary, #0a0e1a);
+    box-shadow: 0 0 24px rgba(0, 240, 255, 0.2);
+  }
+  .cta-buttons .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 40px rgba(0, 240, 255, 0.35);
+  }
+  .cta-buttons .btn-whatsapp {
+    background: #25d366;
+    color: #fff;
+  }
+  .cta-buttons .btn-whatsapp:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(37, 211, 102, 0.35);
+  }
 
   /* ================================================================
-     RESPONSIVE
+     RESPONSIVE BREAKPOINTS
      ================================================================ */
+
   @media (max-width: 1024px) {
     .form-grid {
       grid-template-columns: 1fr 1fr;
@@ -366,58 +459,64 @@
 
   @media (max-width: 768px) {
     .page-hero h1 {
-      font-size: 2.2rem;
+      font-size: clamp(1.6rem, 5vw, 2.2rem);
     }
     .page-hero p {
-      font-size: 1rem;
+      font-size: clamp(0.9rem, 2vw, 1rem);
     }
     .search-wrap {
       max-width: 100%;
       padding: 0.2rem 0.2rem 0.2rem 1rem;
+      min-height: 48px;
     }
     .search-wrap input {
-      font-size: 0.9rem;
+      font-size: clamp(0.85rem, 1.5vw, 0.9rem);
       padding: 0.6rem 0.6rem;
     }
     .search-wrap .clear-btn {
       padding: 0.4rem 1rem;
-      font-size: 0.75rem;
+      font-size: clamp(0.7rem, 1.2vw, 0.75rem);
+      min-height: 38px;
     }
     .form-grid {
       grid-template-columns: 1fr;
       gap: 14px;
     }
     .form-card {
-      padding: 14px 16px 14px 18px;
+      padding: 0.8rem 0.8rem 0.8rem 1rem;
       flex-wrap: wrap;
       gap: 8px;
+      min-height: 56px;
     }
     .form-card .form-info {
       flex: 1 1 100%;
       gap: 10px;
     }
     .form-card .form-name {
-      font-size: 0.85rem;
+      font-size: clamp(0.8rem, 1.8vw, 0.85rem);
       white-space: normal;
     }
     .form-card .form-category {
-      font-size: 0.6rem;
+      font-size: 0.55rem;
       padding: 1px 10px;
     }
     .btn-download {
       padding: 4px 14px;
       font-size: 0.7rem;
+      min-height: 36px;
+      min-width: 36px;
     }
     .cta-banner h2 {
-      font-size: 2rem;
+      font-size: clamp(1.6rem, 5vw, 2rem);
     }
-    .cta-banner .cta-buttons {
+    .cta-buttons {
       flex-direction: column;
       align-items: center;
     }
-    .cta-banner .cta-buttons .btn-primary,
-    .cta-banner .cta-buttons .btn-whatsapp {
+    .cta-buttons .btn-primary,
+    .cta-buttons .btn-whatsapp {
       width: 100%;
+      max-width: 280px;
       justify-content: center;
     }
     .footer-note {
@@ -425,26 +524,310 @@
       text-align: center;
       gap: 8px;
     }
+    .footer-note .badge {
+      white-space: normal;
+    }
   }
 
   @media (max-width: 480px) {
     .page-hero h1 {
-      font-size: 1.8rem;
+      font-size: clamp(1.4rem, 5vw, 1.8rem);
     }
     .form-card {
-      padding: 12px 12px 12px 14px;
+      padding: 0.6rem 0.6rem 0.6rem 0.8rem;
     }
     .form-card .form-info i {
-      font-size: 1rem;
+      font-size: clamp(0.9rem, 3vw, 1rem);
     }
     .form-card .form-name {
-      font-size: 0.8rem;
+      font-size: clamp(0.75rem, 2vw, 0.8rem);
     }
     .search-wrap {
       border-radius: 40px;
+      padding: 0.15rem 0.15rem 0.15rem 0.8rem;
     }
     .search-wrap input {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
+      padding: 0.5rem 0.5rem;
+    }
+    .search-wrap .clear-btn {
+      font-size: 0.65rem;
+      padding: 0.3rem 0.8rem;
+      min-height: 34px;
+    }
+    .btn-download {
+      font-size: 0.65rem;
+      padding: 3px 10px;
+      min-height: 32px;
+      min-width: 32px;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .form-card {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .form-card .form-info {
+      flex-wrap: wrap;
+    }
+    .btn-download {
+      align-self: flex-start;
+    }
+    .search-wrap {
+      flex-wrap: wrap;
+      border-radius: 30px;
+      padding: 0.2rem;
+      gap: 0.3rem;
+    }
+    .search-wrap input {
+      flex: 1 1 100%;
+      padding: 0.4rem 0.6rem;
+      min-height: 36px;
+    }
+    .search-wrap .clear-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  /* ================================================================
+     CROSS‑BROWSER FALLBACKS
+     ================================================================ */
+
+  /* ----- Flexbox fallback for older IE ----- */
+  @supports not (display: flex) {
+    .search-wrap {
+      display: table;
+      width: 100%;
+    }
+    .search-wrap i {
+      display: table-cell;
+      width: 1%;
+      padding: 0 0 0 1rem;
+      vertical-align: middle;
+    }
+    .search-wrap input {
+      display: table-cell;
+      width: 99%;
+    }
+    .search-wrap .clear-btn {
+      display: table-cell;
+      width: 1%;
+      white-space: nowrap;
+    }
+    .form-card {
+      display: block;
+      overflow: hidden;
+      padding: 1rem;
+    }
+    .form-card .form-info {
+      display: inline-block;
+      width: 70%;
+      vertical-align: middle;
+    }
+    .form-card .form-category {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .btn-download {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .footer-note {
+      display: block;
+      text-align: center;
+    }
+    .footer-note .badge {
+      display: inline-block;
+      margin-top: 6px;
+    }
+    .cta-buttons {
+      display: block;
+    }
+    .cta-buttons .btn-primary,
+    .cta-buttons .btn-whatsapp {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto 12px auto;
+    }
+    .form-grid {
+      display: block;
+    }
+    .form-card {
+      margin-bottom: 14px;
+    }
+  }
+
+  /* ----- Grid fallback for older browsers ----- */
+  @supports not (display: grid) {
+    .form-grid {
+      display: block;
+    }
+    .form-card {
+      margin-bottom: 14px;
+    }
+  }
+
+  /* ----- backdrop-filter fallback ----- */
+  @supports not (backdrop-filter: blur(4px)) {
+    .search-wrap,
+    .form-card {
+      background: rgba(10, 14, 26, 0.95) !important;
+    }
+  }
+
+  /* ----- Touch devices: larger tap targets & disable hover effects ----- */
+  @media (hover: none) and (pointer: coarse) {
+    .search-wrap .clear-btn {
+      min-height: 48px;
+    }
+    .search-wrap input {
+      min-height: 48px;
+    }
+    .btn-download {
+      min-height: 44px;
+      min-width: 44px;
+      padding: 6px 18px;
+    }
+    .form-card:hover {
+      transform: none !important;
+      border-color: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .form-card:hover::after {
+      transform: scaleX(0);
+    }
+    .form-card:hover .form-name {
+      color: var(--text-white, #f0f4ff);
+    }
+    .form-card:hover .form-info i {
+      color: var(--neon-cyan, #00f0ff);
+      transform: none;
+      filter: none;
+    }
+    .form-card:hover .form-category {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-muted, #94a3b8);
+      border-color: rgba(255, 255, 255, 0.04);
+    }
+    .btn-download:hover {
+      background: transparent;
+      color: var(--neon-cyan, #00f0ff);
+      transform: none;
+      box-shadow: none;
+    }
+    .search-wrap .clear-btn:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-muted, #94a3b8);
+      transform: none;
+      box-shadow: none;
+    }
+    .cta-buttons .btn-primary:hover,
+    .cta-buttons .btn-whatsapp:hover {
+      transform: none !important;
+    }
+    .footer-note .badge:hover {
+      border-color: rgba(255, 255, 255, 0.04);
+      color: var(--text-muted, #94a3b8);
+      box-shadow: none;
+    }
+    .search-wrap:focus-within {
+      transform: none !important;
+    }
+  }
+
+  /* ----- Reduced motion ----- */
+  @media (prefers-reduced-motion: reduce) {
+    .search-wrap,
+    .search-wrap .clear-btn,
+    .form-card,
+    .btn-download,
+    .footer-note .badge {
+      transition: none !important;
+    }
+    .form-card::after {
+      transition: none !important;
+    }
+    .search-wrap:focus-within {
+      transform: none !important;
+    }
+    .btn-download:hover,
+    .search-wrap .clear-btn:hover {
+      transform: none !important;
+    }
+    .form-card:hover {
+      transform: none !important;
+    }
+  }
+
+  /* ----- Print styles ----- */
+  @media print {
+    .page-hero {
+      background: #fff !important;
+      border-bottom: 1px solid #ccc;
+    }
+    .page-hero h1,
+    .page-hero h1 span,
+    .cta-banner h2 span {
+      -webkit-text-fill-color: #000 !important;
+      color: #000 !important;
+      background: none !important;
+    }
+    .page-hero p {
+      color: #000 !important;
+    }
+    .page-hero .glow-line {
+      background: #000 !important;
+      box-shadow: none !important;
+    }
+    .search-wrap,
+    .cta-banner,
+    .cta-buttons .btn-primary,
+    .cta-buttons .btn-whatsapp {
+      display: none !important;
+    }
+    .form-card {
+      border: 1px solid #ccc !important;
+      box-shadow: none !important;
+      background: #fff !important;
+      padding: 0.5rem !important;
+      margin-bottom: 0.5rem !important;
+    }
+    .form-card .form-name {
+      color: #000 !important;
+    }
+    .form-card .form-category {
+      color: #000 !important;
+      border: 1px solid #000 !important;
+      background: #f5f5f5 !important;
+    }
+    .btn-download {
+      border: 1px solid #000 !important;
+      color: #000 !important;
+      background: #f9f9f9 !important;
+    }
+    .btn-download.disabled {
+      opacity: 1 !important;
+      color: #999 !important;
+      border-color: #999 !important;
+    }
+    .footer-note {
+      border-top: 1px solid #ccc !important;
+      color: #000 !important;
+    }
+    .footer-note .badge {
+      border: 1px solid #000 !important;
+      color: #000 !important;
+      background: #f5f5f5 !important;
+    }
+    .page-hero::before {
+      display: none !important;
+    }
+    .form-grid {
+      display: block !important;
     }
   }
 </style>
@@ -488,24 +871,26 @@
     </div>
 
     <!-- Form Grid (DYNAMIC) -->
-    {% for form in forms %}
-    <div class="form-card" data-form="{{ form.title|lower }}">
+    <div class="form-grid">
+      {% for form in forms %}
+      <div class="form-card" data-form="{{ form.title|lower }}">
         <div class="form-info">
-            <i class="fas fa-file-pdf"></i>
-            <span class="form-name">{{ form.title }}</span>
+          <i class="fas fa-file-pdf"></i>
+          <span class="form-name">{{ form.title }}</span>
         </div>
         <span class="form-category">{{ form.category|default:_("General") }}</span>
         {% if form.pdf %}
           <a href="{{ form.pdf.url }}" target="_blank" class="btn-download" download>
-              <i class="fas fa-download"></i> {% trans "PDF" %}
+            <i class="fas fa-download"></i> {% trans "PDF" %}
           </a>
         {% else %}
-          <span class="btn-download disabled" style="opacity:0.5; cursor:not-allowed;">
-              <i class="fas fa-times"></i> {% trans "No file" %}
+          <span class="btn-download disabled">
+            <i class="fas fa-times"></i> {% trans "No file" %}
           </span>
         {% endif %}
       </div>
       {% endfor %}
+    </div>
 
     <!-- No Results (filter) -->
     <div class="no-results" id="noResults">
@@ -516,7 +901,7 @@
     <!-- Footer Note -->
     <div class="footer-note">
       <span>
-        <i class="fas fa-check-circle" style="color: var(--neon-green);"></i>
+        <i class="fas fa-check-circle" style="color: var(--neon-green, #22d3ee);"></i>
         {% trans "All forms are official and up-to-date." %}
       </span>
       <span class="badge">
@@ -544,7 +929,7 @@
         <i class="fas fa-phone"></i> {% trans "Contact Us" %}
       </a>
       {% with whatsapp_number=business.whatsapp|default:"919876543210" %}
-      <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20need%20help%20with%20government%20forms." target="_blank" class="btn-whatsapp">
+      <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20need%20help%20with%20government%20forms." target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
         <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
       </a>
       {% endwith %}
@@ -561,33 +946,37 @@
   (function() {
     'use strict';
 
-    const searchInput = document.getElementById('searchInput');
-    const clearBtn = document.getElementById('searchClear');
-    const formCards = document.querySelectorAll('.form-card');
-    const noResults = document.getElementById('noResults');
+    var searchInput = document.getElementById('searchInput');
+    var clearBtn = document.getElementById('searchClear');
+    var formCards = document.querySelectorAll('.form-card');
+    var noResults = document.getElementById('noResults');
 
-    // If no cards, hide the search bar and show no results
+    // If no cards, hide search and show message
     if (formCards.length === 0) {
-      document.getElementById('searchWrap').style.display = 'none';
-      noResults.style.display = 'block';
-      noResults.innerHTML = '<i class="fas fa-file-alt"></i><p>{% trans "No forms available at the moment."|escapejs %}</p>';
+      var searchWrap = document.getElementById('searchWrap');
+      if (searchWrap) searchWrap.style.display = 'none';
+      if (noResults) {
+        noResults.style.display = 'block';
+        noResults.innerHTML = '<i class="fas fa-file-alt"></i><p>{% trans "No forms available at the moment."|escapejs %}</p>';
+      }
       return;
     }
 
     function filterForms(query) {
-      const q = query.trim().toLowerCase();
-      let visibleCount = 0;
+      var q = query.trim().toLowerCase();
+      var visibleCount = 0;
 
-      formCards.forEach(function(card) {
-        const formData = card.getAttribute('data-form') || '';
-        const matches = !q || formData.includes(q);
+      for (var i = 0; i < formCards.length; i++) {
+        var card = formCards[i];
+        var formData = card.getAttribute('data-form') || '';
+        var matches = !q || formData.indexOf(q) !== -1;
         if (matches) {
           card.classList.remove('hidden-item');
           visibleCount++;
         } else {
           card.classList.add('hidden-item');
         }
-      });
+      }
 
       if (visibleCount === 0 && q !== '') {
         noResults.style.display = 'block';

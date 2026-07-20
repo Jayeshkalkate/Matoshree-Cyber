@@ -1,32 +1,61 @@
-{% extends "base.html" %}
-{% load i18n %}
+{% extends "base.html" %} {% load i18n %} {% block title %} {% trans "Apply for"
+%} {{ service.name }} {% endblock %} {% block extra_head %}
+<!-- ============================================================
+     META – viewport & compatibility
+     ============================================================ -->
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"
+/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-{% block title %}
-  {% trans "Apply for" %} {{ service.name }}
-{% endblock %}
-
-{% block extra_head %}
 <style>
   /* ================================================================
-     PAGE-SPECIFIC STYLES – Apply Service
-     Uses global CSS variables from base.html.
+     PAGE-SPECIFIC STYLES – Fully responsive + cross‑browser
      ================================================================ */
 
-  /* ---- Hero (matches other pages) ---- */
+  /* ----- Base resets ----- */
+  .apply-section *,
+  .apply-section *::before,
+  .apply-section *::after {
+    box-sizing: border-box;
+  }
+
+  .apply-section .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    width: 100%;
+  }
+
+  /* ---- Page Hero ---- */
   .page-hero {
-    padding: 70px 0 50px;
+    padding: clamp(30px, 6vw, 70px) 0 clamp(20px, 4vw, 50px);
     text-align: center;
     position: relative;
     overflow: hidden;
+    background:
+      radial-gradient(
+        ellipse at 30% 20%,
+        rgba(0, 240, 255, 0.05),
+        transparent 60%
+      ),
+      var(--bg-primary, #0a0e1a);
+    border-bottom: 1px solid rgba(0, 240, 255, 0.06);
+    width: 100%;
   }
   .page-hero::before {
-    content: '';
+    content: "";
     position: absolute;
     top: -30%;
     right: -10%;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(0, 240, 255, 0.04), transparent 70%);
+    width: min(600px, 80vw);
+    height: min(600px, 80vw);
+    background: radial-gradient(
+      circle,
+      rgba(0, 240, 255, 0.04),
+      transparent 70%
+    );
     border-radius: 50%;
     pointer-events: none;
     z-index: 0;
@@ -36,53 +65,58 @@
     z-index: 1;
   }
   .page-hero h1 {
-    font-size: 2.8rem;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
     font-weight: 900;
-    font-family: var(--font-display);
-    color: var(--text-white);
+    font-family: var(--font-display, "Inter", sans-serif);
+    color: var(--text-white, #f0f4ff);
     letter-spacing: 1px;
     margin-bottom: 8px;
     text-shadow: 0 0 40px rgba(0, 240, 255, 0.12);
   }
   .page-hero p {
-    font-size: 1.15rem;
-    color: var(--text-muted);
+    font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+    color: var(--text-muted, #94a3b8);
     max-width: 620px;
     margin: 0 auto;
     line-height: 1.8;
+    padding: 0 10px;
   }
 
   /* ---- Apply Section ---- */
   .apply-section {
-    padding: 40px 0 70px;
-    background: var(--bg-secondary);
+    padding: clamp(30px, 5vw, 40px) 0 clamp(40px, 8vw, 70px);
+    background: var(--bg-secondary, rgba(10, 14, 26, 0.6));
+    width: 100%;
   }
 
   .apply-card {
-    background: var(--bg-card);
-    border-radius: var(--radius);
+    background: var(--bg-card, rgba(255, 255, 255, 0.04));
+    border-radius: var(--radius, 12px);
     border: 1px solid rgba(255, 255, 255, 0.04);
-    box-shadow: var(--shadow-card);
-    padding: 2.5rem 2.5rem 2.8rem;
-    transition: var(--transition);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    padding: clamp(1.2rem, 3vw, 2.5rem) clamp(0.8rem, 2.5vw, 2.5rem)
+      clamp(1.5rem, 3vw, 2.8rem);
+    transition: all 0.3s ease;
     max-width: 820px;
     margin: 0 auto;
   }
   .apply-card:hover {
-    border-color: var(--neon-cyan);
-    box-shadow: var(--shadow-card), var(--glow-cyan);
+    border-color: var(--neon-cyan, #00f0ff);
+    box-shadow:
+      0 8px 30px rgba(0, 0, 0, 0.2),
+      0 0 30px rgba(0, 240, 255, 0.06);
   }
 
   .apply-card h4 {
-    font-size: 1.4rem;
+    font-size: clamp(1.2rem, 1.8vw, 1.4rem);
     font-weight: 700;
-    color: var(--text-white);
+    color: var(--text-white, #f0f4ff);
     margin-bottom: 0.2rem;
   }
   .apply-card h5 {
-    font-size: 1.1rem;
+    font-size: clamp(1.05rem, 1.3vw, 1.1rem);
     font-weight: 700;
-    color: var(--text-white);
+    color: var(--text-white, #f0f4ff);
     margin-top: 1.5rem;
     margin-bottom: 0.75rem;
   }
@@ -91,6 +125,11 @@
     height: 1px;
     background: rgba(255, 255, 255, 0.06);
     margin: 1.5rem 0;
+  }
+  .apply-card p {
+    color: var(--text-muted, #94a3b8);
+    font-size: clamp(0.9rem, 1vw, 1rem);
+    line-height: 1.6;
   }
 
   /* ---- Required Documents List ---- */
@@ -102,22 +141,26 @@
   .required-docs-list li {
     padding: 6px 0;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 10px;
-    color: var(--text-muted);
+    color: var(--text-muted, #94a3b8);
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    font-size: clamp(0.85rem, 1vw, 0.95rem);
   }
   .required-docs-list li i {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
     width: 20px;
+    flex-shrink: 0;
   }
   .required-docs-list li .badge {
     margin-left: auto;
-    background: var(--neon-magenta);
-    color: var(--text-white);
+    background: var(--neon-magenta, #ff2d95);
+    color: var(--text-white, #f0f4ff);
     font-size: 0.7rem;
     padding: 2px 12px;
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-pill, 50px);
+    flex-shrink: 0;
   }
 
   /* ---- Form Elements ---- */
@@ -126,10 +169,10 @@
   }
   .apply-card .form-group label {
     font-weight: 600;
-    color: var(--text-muted);
+    color: var(--text-muted, #94a3b8);
     display: block;
     margin-bottom: 0.3rem;
-    font-size: 0.9rem;
+    font-size: clamp(0.8rem, 0.9vw, 0.9rem);
   }
   .apply-card .form-control,
   .apply-card input[type="text"],
@@ -141,27 +184,37 @@
   .apply-card select {
     background: rgba(255, 255, 255, 0.04) !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    color: var(--text-white) !important;
-    border-radius: var(--radius-sm);
+    color: var(--text-white, #f0f4ff) !important;
+    border-radius: var(--radius-sm, 8px);
     padding: 10px 14px;
     width: 100%;
-    transition: var(--transition);
-    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    font-size: clamp(0.9rem, 1vw, 0.95rem);
+    min-height: 44px;
+    -webkit-appearance: none;
+    appearance: none;
   }
   .apply-card .form-control::placeholder,
   .apply-card input::placeholder,
   .apply-card textarea::placeholder {
-    color: var(--text-muted) !important;
+    color: var(--text-muted, #94a3b8) !important;
     opacity: 0.6;
   }
   .apply-card .form-control:focus,
   .apply-card input:focus,
   .apply-card textarea:focus,
   .apply-card select:focus {
-    border-color: var(--neon-cyan) !important;
+    border-color: var(--neon-cyan, #00f0ff) !important;
     box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.12);
     outline: none;
     background: rgba(0, 240, 255, 0.04) !important;
+  }
+
+  .apply-card select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394a3b8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
   }
 
   /* File input */
@@ -169,54 +222,65 @@
     padding: 8px 10px;
     background: rgba(255, 255, 255, 0.02) !important;
     border: 1px dashed rgba(255, 255, 255, 0.15) !important;
-    color: var(--text-muted) !important;
+    color: var(--text-muted, #94a3b8) !important;
+    min-height: 48px;
   }
   .apply-card input[type="file"]::file-selector-button {
-    background: var(--neon-cyan);
-    color: var(--bg-primary);
+    background: var(--neon-cyan, #00f0ff);
+    color: var(--bg-primary, #0a0e1a);
     border: none;
     padding: 6px 16px;
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-pill, 50px);
     font-weight: 600;
     cursor: pointer;
-    transition: var(--transition);
+    transition: all 0.3s ease;
+    touch-action: manipulation;
+    min-height: 36px;
   }
   .apply-card input[type="file"]::file-selector-button:hover {
     background: #00e5ff;
-    box-shadow: var(--glow-cyan);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
   }
 
   /* ---- Upload Groups ---- */
   .upload-group {
     background: rgba(255, 255, 255, 0.02);
-    border-radius: var(--radius-sm);
-    border-left: 3px solid var(--neon-cyan);
-    padding: 1rem 1.2rem;
+    border-radius: var(--radius-sm, 8px);
+    border-left: 3px solid var(--neon-cyan, #00f0ff);
+    padding: clamp(0.8rem, 1.5vw, 1.2rem) clamp(0.8rem, 1.5vw, 1.2rem);
     margin-bottom: 1.5rem;
-    transition: var(--transition);
+    transition: all 0.3s ease;
   }
   .upload-group:hover {
     background: rgba(0, 240, 255, 0.04);
-    border-left-color: var(--neon-magenta);
+    border-left-color: var(--neon-magenta, #ff2d95);
   }
   .upload-group .doc-label {
     font-weight: 600;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 10px;
-    font-size: 1rem;
-    color: var(--text-white);
+    font-size: clamp(0.95rem, 1.1vw, 1rem);
+    color: var(--text-white, #f0f4ff);
     margin-bottom: 0.5rem;
   }
   .upload-group .doc-label i {
-    color: var(--neon-cyan);
+    color: var(--neon-cyan, #00f0ff);
   }
   .upload-group .badge {
     font-size: 0.7rem;
-    background: var(--neon-magenta);
-    color: var(--text-white);
+    background: var(--neon-magenta, #ff2d95);
+    color: var(--text-white, #f0f4ff);
     padding: 2px 10px;
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-pill, 50px);
+    flex-shrink: 0;
+  }
+  .upload-group small {
+    display: block;
+    margin-top: 0.3rem;
+    color: var(--text-muted, #94a3b8);
+    font-size: clamp(0.7rem, 0.8vw, 0.8rem);
   }
 
   /* ---- Merge Button (neon) ---- */
@@ -224,76 +288,297 @@
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
-    padding: 0.7rem 1.8rem;
+    padding: clamp(0.6rem, 1vw, 0.7rem) clamp(1.2rem, 2vw, 1.8rem);
     background: transparent;
-    border: 1.5px solid var(--neon-cyan);
-    color: var(--neon-cyan);
-    border-radius: var(--radius-pill);
+    border: 1.5px solid var(--neon-cyan, #00f0ff);
+    color: var(--neon-cyan, #00f0ff);
+    border-radius: var(--radius-pill, 50px);
     font-weight: 700;
-    font-size: 0.95rem;
-    transition: var(--transition);
+    font-size: clamp(0.85rem, 1vw, 0.95rem);
+    transition: all 0.3s ease;
     text-decoration: none;
     cursor: pointer;
+    touch-action: manipulation;
+    min-height: 48px;
+    justify-content: center;
+    min-width: 48px;
   }
   .btn-merge i {
-    color: var(--neon-cyan);
-    font-size: 1.1rem;
+    color: var(--neon-cyan, #00f0ff);
+    font-size: clamp(0.9rem, 1.1vw, 1.1rem);
   }
   .btn-merge:hover {
-    background: var(--neon-cyan);
-    color: var(--bg-primary);
-    box-shadow: var(--glow-cyan);
+    background: var(--neon-cyan, #00f0ff);
+    color: var(--bg-primary, #0a0e1a);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
     transform: translateY(-2px);
   }
   .btn-merge:hover i {
-    color: var(--bg-primary);
+    color: var(--bg-primary, #0a0e1a);
+  }
+
+  /* ---- Submit Button ---- */
+  .apply-card .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: clamp(0.7rem, 1vw, 0.9rem) clamp(1.5rem, 2.5vw, 2.5rem);
+    background: var(--gradient-cyan, linear-gradient(135deg, #00f0ff, #0ea5e9));
+    color: var(--bg-primary, #0a0e1a);
+    border: none;
+    border-radius: var(--radius-sm, 8px);
+    font-weight: 700;
+    font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    touch-action: manipulation;
+    min-height: 48px;
+    min-width: 48px;
+    justify-content: center;
+    width: 100%;
+    max-width: 280px;
+  }
+  .apply-card .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 40px rgba(0, 240, 255, 0.35);
   }
 
   /* ---- Errors ---- */
   .text-danger {
-    color: var(--neon-orange) !important;
+    color: var(--neon-orange, #f97316) !important;
     font-weight: 500;
     margin-top: 0.3rem;
+    font-size: clamp(0.8rem, 0.9vw, 0.9rem);
   }
 
-  /* ---- Responsive ---- */
+  /* ---- Helper classes ---- */
+  .text-muted {
+    color: var(--text-muted, #94a3b8) !important;
+  }
+  .d-block {
+    display: block;
+  }
+  .mt-2 {
+    margin-top: 0.5rem;
+  }
+
+  /* ================================================================
+     RESPONSIVE BREAKPOINTS
+     ================================================================ */
+
   @media (max-width: 768px) {
     .apply-card {
-      padding: 1.8rem 1.2rem 2rem;
+      padding: 1.5rem 1rem 1.8rem;
     }
     .page-hero h1 {
-      font-size: 2.2rem;
+      font-size: clamp(1.6rem, 5vw, 2.2rem);
     }
     .page-hero p {
-      font-size: 1rem;
+      font-size: clamp(0.9rem, 2vw, 1rem);
     }
     .btn-merge {
       width: 100%;
       justify-content: center;
     }
-  }
-  @media (max-width: 480px) {
-    .apply-card {
-      padding: 1.2rem 0.8rem 1.5rem;
-    }
-    .page-hero h1 {
-      font-size: 1.8rem;
+    .apply-card .btn-primary {
+      max-width: 100%;
     }
     .upload-group {
-      padding: 0.8rem 0.8rem;
+      padding: 0.8rem;
+    }
+    .required-docs-list li {
+      flex-wrap: wrap;
+    }
+    .required-docs-list li .badge {
+      margin-left: 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .apply-card {
+      padding: 1rem 0.7rem 1.2rem;
+    }
+    .page-hero h1 {
+      font-size: clamp(1.4rem, 5vw, 1.8rem);
+    }
+    .upload-group {
+      padding: 0.6rem;
+    }
+    .apply-card input[type="file"] {
+      min-height: 44px;
+    }
+    .apply-card input[type="file"]::file-selector-button {
+      padding: 4px 12px;
+      font-size: 0.8rem;
+      min-height: 32px;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .apply-card {
+      padding: 0.8rem 0.5rem 1rem;
+    }
+    .required-docs-list li {
+      font-size: 0.8rem;
+    }
+    .btn-merge {
+      font-size: 0.8rem;
+      padding: 0.5rem 1rem;
+    }
+    .apply-card .btn-primary {
+      font-size: 0.85rem;
+      padding: 0.6rem 1.2rem;
+    }
+  }
+
+  /* ================================================================
+     CROSS‑BROWSER FALLBACKS
+     ================================================================ */
+
+  /* ----- Flexbox fallback for older browsers ----- */
+  @supports not (display: flex) {
+    .required-docs-list li {
+      display: block;
+      overflow: hidden;
+      padding: 8px 0;
+    }
+    .required-docs-list li .badge {
+      float: right;
+    }
+    .upload-group .doc-label {
+      display: block;
+    }
+    .btn-merge,
+    .apply-card .btn-primary {
+      display: inline-block;
+      text-align: center;
+    }
+  }
+
+  /* ----- backdrop-filter fallback ----- */
+  @supports not (backdrop-filter: blur(4px)) {
+    .apply-card,
+    .upload-group,
+    .apply-card .form-control {
+      background: rgba(10, 14, 26, 0.95) !important;
+    }
+  }
+
+  /* ----- Touch devices: larger tap targets & disable hover effects ----- */
+  @media (hover: none) and (pointer: coarse) {
+    .apply-card:hover {
+      border-color: rgba(255, 255, 255, 0.04);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      transform: none !important;
+    }
+    .upload-group:hover {
+      background: rgba(255, 255, 255, 0.02);
+      border-left-color: var(--neon-cyan, #00f0ff);
+    }
+    .btn-merge {
+      min-height: 48px;
+    }
+    .apply-card .btn-primary {
+      min-height: 48px;
+    }
+    .apply-card input[type="file"] {
+      min-height: 48px;
+    }
+    .apply-card input[type="file"]::file-selector-button {
+      min-height: 40px;
+    }
+    .btn-merge:hover {
+      background: transparent;
+      color: var(--neon-cyan, #00f0ff);
+      transform: none !important;
+      box-shadow: none;
+    }
+    .btn-merge:hover i {
+      color: var(--neon-cyan, #00f0ff);
+    }
+    .apply-card .btn-primary:hover {
+      transform: none !important;
+    }
+  }
+
+  /* ----- Reduced motion ----- */
+  @media (prefers-reduced-motion: reduce) {
+    .apply-card,
+    .upload-group,
+    .btn-merge,
+    .apply-card .btn-primary,
+    .apply-card .form-control {
+      transition: none !important;
+    }
+  }
+
+  /* ----- Print styles ----- */
+  @media print {
+    .page-hero {
+      background: #fff !important;
+      border-bottom: 1px solid #ccc;
+    }
+    .page-hero h1,
+    .page-hero p {
+      color: #000 !important;
+      text-shadow: none !important;
+    }
+    .apply-card {
+      border: 1px solid #ccc !important;
+      box-shadow: none !important;
+      background: #fff !important;
+    }
+    .apply-card h4,
+    .apply-card h5 {
+      color: #000 !important;
+    }
+    .apply-card p,
+    .required-docs-list li,
+    .upload-group .doc-label,
+    .apply-card .form-group label,
+    .text-muted {
+      color: #000 !important;
+    }
+    .required-docs-list li .badge,
+    .upload-group .badge {
+      background: #000 !important;
+      color: #fff !important;
+    }
+    .apply-card .form-control,
+    .apply-card input,
+    .apply-card textarea,
+    .apply-card select {
+      border: 1px solid #ccc !important;
+      color: #000 !important;
+      background: #f9f9f9 !important;
+    }
+    .apply-card input[type="file"] {
+      border: 1px solid #ccc !important;
+    }
+    .btn-merge,
+    .apply-card .btn-primary {
+      display: none !important;
+    }
+    .upload-group {
+      border-left: 3px solid #000 !important;
+      background: #f5f5f5 !important;
+    }
+    .page-hero::before {
+      display: none !important;
     }
   }
 </style>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <!-- ================================================================
      PAGE HERO
      ================================================================ -->
 <section class="page-hero">
   <div class="container">
     <h1>{% trans "Apply for" %} {{ service.name }}</h1>
-    <p>{% trans "Please fill in your details and upload the required documents." %}</p>
+    <p>
+      {% trans "Please fill in your details and upload the required documents."
+      %}
+    </p>
   </div>
 </section>
 
@@ -305,22 +590,22 @@
     <div class="apply-card">
       <h4>{% trans "Service" %}: {{ service.name }}</h4>
       <p>{{ service.description }}</p>
-      <hr>
+      <hr />
 
       <!-- Required Documents -->
       <h5>{% trans "Required Documents" %}</h5>
       <ul class="required-docs-list">
         {% for doc in required_docs %}
-          <li>
-            <i class="fas fa-file-alt"></i>
-            {{ doc.document_name }}
-            <span class="badge">{% trans "Mandatory" %}</span>
-          </li>
+        <li>
+          <i class="fas fa-file-alt"></i>
+          {{ doc.document_name }}
+          <span class="badge">{% trans "Mandatory" %}</span>
+        </li>
         {% empty %}
-          <li>{% trans "No specific documents required." %}</li>
+        <li>{% trans "No specific documents required." %}</li>
         {% endfor %}
       </ul>
-      <hr>
+      <hr />
 
       <!-- Form -->
       <form method="post" enctype="multipart/form-data" novalidate>
@@ -330,68 +615,84 @@
         <h5>{% trans "Personal Details" %}</h5>
 
         <div class="form-group">
-          <label for="{{ form.full_name.id_for_label }}">{{ form.full_name.label }}</label>
-          {{ form.full_name }}
-          {% if form.full_name.errors %}
-            <div class="text-danger">{{ form.full_name.errors }}</div>
+          <label for="{{ form.full_name.id_for_label }}"
+            >{{ form.full_name.label }}</label
+          >
+          {{ form.full_name }} {% if form.full_name.errors %}
+          <div class="text-danger">{{ form.full_name.errors }}</div>
           {% endif %}
         </div>
 
         <div class="form-group">
-          <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>
-          {{ form.phone }}
-          {% if form.phone.errors %}
-            <div class="text-danger">{{ form.phone.errors }}</div>
+          <label for="{{ form.phone.id_for_label }}"
+            >{{ form.phone.label }}</label
+          >
+          {{ form.phone }} {% if form.phone.errors %}
+          <div class="text-danger">{{ form.phone.errors }}</div>
           {% endif %}
         </div>
 
         <div class="form-group">
-          <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
-          {{ form.email }}
-          {% if form.email.errors %}
-            <div class="text-danger">{{ form.email.errors }}</div>
+          <label for="{{ form.email.id_for_label }}"
+            >{{ form.email.label }}</label
+          >
+          {{ form.email }} {% if form.email.errors %}
+          <div class="text-danger">{{ form.email.errors }}</div>
           {% endif %}
         </div>
 
         <div class="form-group">
-          <label for="{{ form.address.id_for_label }}">{{ form.address.label }}</label>
-          {{ form.address }}
-          {% if form.address.errors %}
-            <div class="text-danger">{{ form.address.errors }}</div>
+          <label for="{{ form.address.id_for_label }}"
+            >{{ form.address.label }}</label
+          >
+          {{ form.address }} {% if form.address.errors %}
+          <div class="text-danger">{{ form.address.errors }}</div>
           {% endif %}
         </div>
 
-        <hr>
+        <hr />
 
         <!-- Document Uploads -->
         <h5>{% trans "Upload Documents" %}</h5>
-        <p class="text-muted">{% trans "📄 Please upload a merged PDF containing all the required documents." %}</p>
-        <p>{% trans "💡 You can merge your PDFs using an online tool before uploading." %}</p>
+        <p class="text-muted">
+          {% trans "📄 Please upload a merged PDF containing all the required
+          documents." %}
+        </p>
+        <p>
+          {% trans "💡 You can merge your PDFs using an online tool before
+          uploading." %}
+        </p>
 
-        <a href="https://www.ilovepdf.com/" target="_blank" rel="noopener" class="btn-merge">
-          <i class="fas fa-heart" style="color: var(--neon-magenta);"></i>
+        <a
+          href="https://www.ilovepdf.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-merge"
+        >
+          <i
+            class="fas fa-heart"
+            style="color: var(--neon-magenta, #ff2d95)"
+          ></i>
           {% trans "Merge PDFs with iLovePDF" %}
         </a>
-        <br><br>
+        <br /><br />
 
-        {{ formset.management_form }}
-
-        {% for doc_form in formset %}
-          <div class="upload-group">
-            {{ doc_form.document_name }}
-            <div class="doc-label">
-              <i class="fas fa-upload"></i>
-              {{ doc_form.document_name.value }}
-              <span class="badge">{% trans "Required" %}</span>
-            </div>
-            {{ doc_form.file }}
-            <small class="text-muted d-block mt-2">
-              {% trans "Allowed: PDF, JPG, JPEG, PNG" %}
-            </small>
-            {% if doc_form.file.errors %}
-              <div class="text-danger mt-2">{{ doc_form.file.errors }}</div>
-            {% endif %}
+        {{ formset.management_form }} {% for doc_form in formset %}
+        <div class="upload-group">
+          {{ doc_form.document_name }}
+          <div class="doc-label">
+            <i class="fas fa-upload"></i>
+            {{ doc_form.document_name.value }}
+            <span class="badge">{% trans "Required" %}</span>
           </div>
+          {{ doc_form.file }}
+          <small class="text-muted">
+            {% trans "Allowed: PDF, JPG, JPEG, PNG" %}
+          </small>
+          {% if doc_form.file.errors %}
+          <div class="text-danger mt-2">{{ doc_form.file.errors }}</div>
+          {% endif %}
+        </div>
         {% endfor %}
 
         <button type="submit" class="btn-primary">

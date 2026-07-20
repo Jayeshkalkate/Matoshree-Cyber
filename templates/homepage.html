@@ -5,37 +5,42 @@
 {% block title %}{% trans "Homepage" %}{% endblock %}
 
 {% block extra_head %}
-<!-- ================================================================
-     PAGE-SPECIFIC STYLES — only what's needed beyond base.html
-     ================================================================ -->
+<!-- ============================================================
+     PAGE-SPECIFIC STYLES — fully responsive + cross‑browser
+     ============================================================ -->
 <style>
     /* ================================================================
-           HERO SECTION
-           ================================================================ */
+       PAGE-SPECIFIC VARIABLES (used only in this page)
+       ================================================================ */
+
+    /* ================================================================
+       HERO SECTION
+       ================================================================ */
     .hero {
-        padding: 80px 0 70px;
+        padding: 60px 0 50px;
         position: relative;
         overflow: hidden;
+        width: 100%;
     }
     .hero::before {
-        content: '';
+        content: "";
         position: absolute;
-        top: -30%;
+        top: -20%;
         right: -10%;
-        width: 700px;
-        height: 700px;
+        width: min(700px, 80vw);
+        height: min(700px, 80vw);
         background: radial-gradient(circle, rgba(0, 240, 255, 0.05) 0%, transparent 70%);
         border-radius: 50%;
         pointer-events: none;
         z-index: 0;
     }
     .hero::after {
-        content: '';
+        content: "";
         position: absolute;
         bottom: -20%;
         left: -10%;
-        width: 600px;
-        height: 600px;
+        width: min(600px, 70vw);
+        height: min(600px, 70vw);
         background: radial-gradient(circle, rgba(168, 85, 247, 0.04) 0%, transparent 70%);
         border-radius: 50%;
         pointer-events: none;
@@ -46,25 +51,31 @@
         z-index: 1;
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 50px;
+        gap: 40px;
         align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        width: 100%;
     }
     .hero-content h1 {
-        font-size: 3.4rem;
+        font-size: var(--fluid-h1);
         font-weight: 900;
         line-height: 1.1;
         letter-spacing: -0.5px;
         margin-bottom: 16px;
         font-family: var(--font-display);
+        word-break: break-word;
     }
     .hero-content h1 span {
         background: var(--gradient-cyber);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+        display: inline-block;
     }
     .hero-content p {
-        font-size: 1.1rem;
+        font-size: var(--fluid-body);
         color: var(--text-muted);
         max-width: 480px;
         line-height: 1.8;
@@ -75,10 +86,71 @@
         flex-wrap: wrap;
         gap: 14px;
     }
+    .hero-buttons .btn-primary,
+    .hero-buttons .btn-outline {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 28px;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
+        font-size: 0.95rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        touch-action: manipulation;
+        min-height: 48px;
+        justify-content: center;
+        white-space: nowrap;
+        border: none;
+        font-family: inherit;
+    }
+    .btn-primary {
+        background: var(--gradient-cyan);
+        color: #fff !important;
+        box-shadow: 0 0 24px rgba(0, 240, 255, 0.2);
+    }
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 40px rgba(0, 240, 255, 0.35);
+    }
+    .btn-outline {
+        background: transparent;
+        color: var(--text-white);
+        border: 2px solid rgba(255, 255, 255, 0.15);
+    }
+    .btn-outline:hover {
+        border-color: var(--neon-cyan);
+        background: rgba(0, 240, 255, 0.08);
+    }
+    .btn-whatsapp {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 28px;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
+        font-size: 0.95rem;
+        text-decoration: none;
+        background: #25d366;
+        color: #fff !important;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        touch-action: manipulation;
+        min-height: 48px;
+        justify-content: center;
+        border: none;
+        font-family: inherit;
+    }
+    .btn-whatsapp:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 30px rgba(37, 211, 102, 0.35);
+    }
     .hero-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 14px;
+        width: 100%;
     }
     .hero-grid-item {
         background: rgba(255, 255, 255, 0.04);
@@ -86,9 +158,15 @@
         border-radius: var(--radius-sm);
         padding: 18px 10px;
         text-align: center;
-        transition: var(--transition);
+        transition: all 0.3s ease;
         cursor: default;
+        -webkit-backdrop-filter: blur(4px);
         backdrop-filter: blur(4px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 90px;
     }
     .hero-grid-item:hover {
         background: rgba(0, 240, 255, 0.06);
@@ -97,28 +175,32 @@
         box-shadow: var(--glow-cyan);
     }
     .hero-grid-item i {
-        font-size: 1.6rem;
+        font-size: clamp(1.3rem, 2.5vw, 1.8rem);
         color: var(--neon-cyan);
         display: block;
         margin-bottom: 4px;
+        line-height: 1.2;
     }
     .hero-grid-item span {
-        font-size: 0.78rem;
+        font-size: var(--fluid-small);
         font-weight: 500;
         color: var(--text-muted);
+        word-break: break-word;
     }
 
     /* ================================================================
-           SERVICES — cards with icon wrappers
-           ================================================================ */
+       SERVICES
+       ================================================================ */
     .services {
-        padding: 70px 0 80px;
+        padding: 60px 0 70px;
         background: rgba(10, 14, 26, 0.3);
+        width: 100%;
     }
     .services-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
         gap: 24px;
+        width: 100%;
     }
     .service-card {
         background: var(--bg-card);
@@ -126,8 +208,12 @@
         border-radius: var(--radius);
         padding: 28px 18px 24px;
         text-align: center;
-        transition: var(--transition);
+        transition: all 0.3s ease;
         cursor: default;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
     }
     .service-card:hover {
         transform: translateY(-6px);
@@ -145,7 +231,8 @@
         margin: 0 auto 14px;
         font-size: 1.6rem;
         color: #fff;
-        transition: var(--transition);
+        transition: all 0.3s ease;
+        flex-shrink: 0;
         background: var(--gradient-cyan);
         box-shadow: 0 0 24px rgba(0, 240, 255, 0.2);
     }
@@ -154,29 +241,33 @@
         box-shadow: var(--glow-cyan);
     }
     .service-card h3 {
-        font-size: 1.05rem;
+        font-size: var(--fluid-h3);
         font-weight: 700;
         margin-bottom: 4px;
         color: var(--text-white);
+        word-break: break-word;
     }
     .service-card p {
-        font-size: 0.88rem;
+        font-size: var(--fluid-small);
         color: var(--text-muted);
         line-height: 1.5;
         margin: 0;
+        word-break: break-word;
     }
 
     /* ================================================================
-           PRICING — gaming‑style hover
-           ================================================================ */
+       PRICING
+       ================================================================ */
     .pricing {
-        padding: 70px 0 80px;
-        background: var(--bg-primary);
+        padding: 60px 0 70px;
+        background: #0a0e1a;
+        width: 100%;
     }
     .pricing-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
         gap: 28px;
+        width: 100%;
     }
     .pricing-card {
         background: var(--bg-card);
@@ -184,10 +275,13 @@
         border-radius: var(--radius);
         padding: 36px 24px 32px;
         text-align: center;
-        transition: var(--transition);
+        transition: all 0.3s ease;
         cursor: default;
         position: relative;
         overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
     }
     .pricing-card:hover {
         transform: scale(1.03) translateY(-6px);
@@ -196,18 +290,18 @@
         background: var(--bg-card-hover);
     }
     .pricing-card .plan-name {
-        font-size: 1.2rem;
+        font-size: var(--fluid-h3);
         font-weight: 700;
         color: var(--text-white);
     }
     .pricing-card .price {
         font-family: var(--font-display);
-        font-size: 2.6rem;
+        font-size: clamp(2rem, 4vw, 2.8rem);
         font-weight: 900;
         color: var(--neon-cyan);
         margin: 6px 0 2px;
         text-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
-        transition: var(--transition);
+        transition: all 0.3s ease;
     }
     .pricing-card:hover .price {
         color: var(--neon-magenta);
@@ -220,7 +314,7 @@
     }
     .pricing-card .desc {
         color: var(--text-muted);
-        font-size: 0.92rem;
+        font-size: var(--fluid-small);
         margin-bottom: 16px;
     }
     .pricing-card ul {
@@ -228,19 +322,22 @@
         margin: 14px 0 22px;
         padding: 0;
         text-align: left;
+        flex-grow: 1;
     }
     .pricing-card ul li {
         padding: 5px 0;
         color: var(--text-muted);
-        font-size: 0.88rem;
+        font-size: var(--fluid-small);
         display: flex;
         align-items: center;
         gap: 10px;
+        word-break: break-word;
     }
     .pricing-card ul li i {
         color: var(--neon-cyan);
         width: 18px;
         font-size: 0.75rem;
+        flex-shrink: 0;
     }
     .pricing-card.popular {
         border-color: var(--neon-cyan);
@@ -260,18 +357,27 @@
         letter-spacing: 0.5px;
         box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
     }
+    .pricing-card .btn-primary {
+        margin-top: auto;
+        align-self: center;
+        width: 100%;
+        max-width: 200px;
+        justify-content: center;
+    }
 
     /* ================================================================
-           GALLERY
-           ================================================================ */
+       GALLERY
+       ================================================================ */
     .gallery {
-        padding: 70px 0 80px;
+        padding: 60px 0 70px;
         background: rgba(10, 14, 26, 0.2);
+        width: 100%;
     }
     .gallery-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
         gap: 18px;
+        width: 100%;
     }
     .gallery-item {
         border-radius: var(--radius-sm);
@@ -279,19 +385,37 @@
         aspect-ratio: 1/1;
         background: var(--bg-card);
         border: 1px solid rgba(255, 255, 255, 0.05);
-        transition: var(--transition);
+        transition: all 0.3s ease;
         cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         background-size: cover;
         background-position: center;
         position: relative;
+        min-height: 140px;
+    }
+    @supports not (aspect-ratio: 1/1) {
+        .gallery-item {
+            height: 0;
+            padding-bottom: 100%;
+            position: relative;
+        }
+        .gallery-item .caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+        .gallery-item .placeholder-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     }
     .gallery-item:hover {
         transform: scale(1.03);
         border-color: var(--neon-cyan);
         box-shadow: var(--glow-cyan);
+        z-index: 2;
     }
     .gallery-item .caption {
         position: absolute;
@@ -301,40 +425,52 @@
         background: rgba(0, 0, 0, 0.65);
         color: #fff;
         padding: 8px 12px;
-        font-size: 0.78rem;
+        font-size: var(--fluid-small);
         text-align: center;
         opacity: 0;
-        transition: var(--transition);
+        transition: all 0.3s ease;
+        -webkit-backdrop-filter: blur(4px);
         backdrop-filter: blur(4px);
+        pointer-events: none;
+        word-break: break-word;
     }
     .gallery-item:hover .caption {
         opacity: 1;
     }
     .gallery-item .placeholder-icon {
-        font-size: 2.8rem;
+        font-size: clamp(2rem, 4vw, 3rem);
         color: var(--text-muted);
         opacity: 0.3;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
 
     /* ================================================================
-           REVIEWS
-           ================================================================ */
+       REVIEWS
+       ================================================================ */
     .reviews {
-        padding: 70px 0 80px;
-        background: var(--bg-primary);
+        padding: 60px 0 70px;
+        background: #0a0e1a;
+        width: 100%;
     }
     .reviews-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
         gap: 24px;
+        width: 100%;
     }
     .review-card {
         background: var(--bg-card);
         border: 1px solid rgba(255, 255, 255, 0.05);
         border-radius: var(--radius);
         padding: 24px 22px;
-        transition: var(--transition);
+        transition: all 0.3s ease;
         cursor: default;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
     }
     .review-card:hover {
         transform: translateY(-5px);
@@ -347,30 +483,45 @@
         margin-bottom: 6px;
         letter-spacing: 1px;
         font-size: 0.95rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px;
+        flex-shrink: 0;
+    }
+    .review-card .stars i {
+        font-size: clamp(0.8rem, 1.2vw, 1rem);
     }
     .review-card .review-text {
         color: var(--text-muted);
-        font-size: 0.92rem;
+        font-size: var(--fluid-small);
         line-height: 1.6;
+        flex-grow: 1;
+        word-break: break-word;
     }
     .review-card .reviewer {
         font-weight: 700;
         color: var(--text-white);
         margin-top: 8px;
-        font-size: 0.9rem;
+        font-size: var(--fluid-small);
+        flex-shrink: 0;
     }
 
     /* ================================================================
-           INFO ROW — timings + contact (dynamic)
-           ================================================================ */
+       INFO ROW — timings + contact
+       ================================================================ */
     .info-row {
-        padding: 60px 0;
+        padding: 50px 0;
         background: rgba(10, 14, 26, 0.4);
+        width: 100%;
     }
     .info-row .container {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 40px;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        width: 100%;
     }
     .timings-card,
     .contact-card {
@@ -378,7 +529,8 @@
         border: 1px solid rgba(255, 255, 255, 0.05);
         border-radius: var(--radius);
         padding: 32px 28px;
-        transition: var(--transition);
+        transition: all 0.3s ease;
+        height: 100%;
     }
     .timings-card:hover {
         border-color: var(--neon-cyan);
@@ -386,27 +538,30 @@
     }
     .contact-card:hover {
         border-color: var(--neon-orange);
-        box-shadow: 0 0 20px rgba(249, 115, 22, 0.2);
+        box-shadow: 0 0 20px rgba(249, 115, 22, 0.12);
     }
     .timings-card h3,
     .contact-card h3 {
-        font-size: 1.3rem;
+        font-size: var(--fluid-h3);
         font-weight: 700;
         margin-bottom: 16px;
         display: flex;
         align-items: center;
         gap: 12px;
         color: var(--text-white);
+        flex-wrap: wrap;
     }
     .timings-card h3 i {
         color: var(--neon-cyan);
+        flex-shrink: 0;
     }
     .contact-card h3 i {
         color: var(--neon-orange);
+        flex-shrink: 0;
     }
     .timings-block {
         color: var(--text-muted);
-        font-size: 0.95rem;
+        font-size: var(--fluid-body);
         line-height: 1.8;
         white-space: pre-wrap;
         word-break: break-word;
@@ -415,7 +570,7 @@
         color: var(--text-white);
     }
     .contact-card .phone {
-        font-size: 1.8rem;
+        font-size: clamp(1.2rem, 2.5vw, 1.8rem);
         font-weight: 800;
         color: var(--text-white);
         display: flex;
@@ -423,21 +578,24 @@
         gap: 12px;
         margin-bottom: 2px;
         flex-wrap: wrap;
+        word-break: break-all;
     }
     .contact-card .phone a {
         color: var(--text-white);
-        transition: var(--transition);
+        transition: all 0.3s ease;
+        text-decoration: none;
     }
     .contact-card .phone a:hover {
         color: var(--neon-cyan);
     }
     .contact-card .phone i {
         color: var(--neon-cyan);
-        font-size: 1.5rem;
+        font-size: clamp(1.2rem, 2vw, 1.6rem);
+        flex-shrink: 0;
     }
     .contact-card .sub {
         color: var(--text-muted);
-        font-size: 0.9rem;
+        font-size: var(--fluid-small);
         margin-bottom: 18px;
     }
     .contact-buttons {
@@ -445,39 +603,57 @@
         flex-wrap: wrap;
         gap: 12px;
     }
+    .contact-buttons .btn-primary,
+    .contact-buttons .btn-whatsapp {
+        flex: 1 1 auto;
+        min-width: 140px;
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 0.9rem;
+        min-height: 48px;
+        text-align: center;
+    }
 
     /* ================================================================
-           LOCATION (dynamic)
-           ================================================================ */
+       LOCATION
+       ================================================================ */
     .location {
-        padding: 70px 0 80px;
+        padding: 60px 0 70px;
         background: rgba(10, 14, 26, 0.25);
+        width: 100%;
     }
     .location .container {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 48px;
         align-items: stretch;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        width: 100%;
     }
     .location-info {
         display: flex;
         flex-direction: column;
         justify-content: center;
+        height: 100%;
     }
     .location-info h2 {
-        font-size: 2.4rem;
+        font-size: var(--fluid-h2);
         font-weight: 800;
         letter-spacing: -0.5px;
         font-family: var(--font-display);
+        word-break: break-word;
     }
     .location-info h2 span {
         background: var(--gradient-cyber);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+        display: inline-block;
     }
     .location-info .address {
-        font-size: 1rem;
+        font-size: var(--fluid-body);
         color: var(--text-muted);
         line-height: 1.8;
         margin: 14px 0 22px;
@@ -485,7 +661,8 @@
         background: rgba(255, 255, 255, 0.03);
         border-left: 4px solid var(--neon-cyan);
         border-radius: var(--radius-sm);
-        transition: var(--transition);
+        transition: all 0.3s ease;
+        word-break: break-word;
     }
     .location-info .address:hover {
         border-left-color: var(--neon-purple);
@@ -495,14 +672,30 @@
         color: var(--neon-cyan);
         width: 22px;
         margin-right: 4px;
+        flex-shrink: 0;
+    }
+    .location-info .btn-primary {
+        align-self: flex-start;
+        padding: 12px 32px;
+        min-height: 48px;
+        font-size: 0.95rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: center;
     }
     .map-container {
         border-radius: var(--radius);
         overflow: hidden;
         border: 1px solid rgba(255, 255, 255, 0.06);
-        min-height: 280px;
+        min-height: 260px;
         background: var(--bg-card);
-        transition: var(--transition);
+        transition: all 0.3s ease;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 240px;
     }
     .map-container:hover {
         border-color: var(--neon-cyan);
@@ -511,143 +704,223 @@
     .map-container iframe {
         width: 100%;
         height: 100%;
-        min-height: 280px;
+        min-height: 260px;
         border: none;
         display: block;
+        min-height: 240px;
     }
     .map-placeholder {
         display: flex;
         align-items: center;
         justify-content: center;
         height: 100%;
-        min-height: 280px;
+        min-height: 240px;
         color: var(--text-muted);
-        font-size: 1rem;
+        font-size: var(--fluid-body);
         background: var(--bg-card);
+        padding: 20px;
+        text-align: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        width: 100%;
     }
     .map-placeholder i {
-        font-size: 2rem;
-        margin-right: 12px;
+        font-size: clamp(1.5rem, 3vw, 2.2rem);
+        margin-right: 8px;
         opacity: 0.4;
+        flex-shrink: 0;
     }
 
     /* ================================================================
-           RESPONSIVE
-           ================================================================ */
+       RESPONSIVE BREAKPOINTS (section-specific only)
+       ================================================================ */
+    @media (max-width: 1200px) {
+        .hero .container { gap: 30px; }
+        .hero-content h1 { font-size: clamp(2rem, 4.5vw, 3rem); }
+        .pricing-grid { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+    }
     @media (max-width: 1024px) {
-        .hero .container {
-            grid-template-columns: 1fr;
-            text-align: center;
-        }
-        .hero-content p {
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .hero-buttons {
-            justify-content: center;
-        }
-        .hero-grid {
-            max-width: 480px;
-            margin: 0 auto;
-        }
-        .services-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-        .pricing-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-        .reviews-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-        .gallery-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-        .info-row .container {
-            grid-template-columns: 1fr;
-        }
-        .location .container {
-            grid-template-columns: 1fr;
-        }
-        .location-info .btn-primary {
-            align-self: center;
-        }
+        .hero .container { grid-template-columns: 1fr; text-align: center; gap: 30px; }
+        .hero-content p { margin-left: auto; margin-right: auto; max-width: 560px; }
+        .hero-buttons { justify-content: center; }
+        .hero-grid { max-width: 480px; margin: 0 auto; }
+        .services-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+        .pricing-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+        .reviews-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+        .gallery-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+        .info-row .container { grid-template-columns: 1fr; gap: 30px; }
+        .location .container { grid-template-columns: 1fr; gap: 30px; }
+        .location-info .btn-primary { align-self: center; }
+        .pricing-card .btn-primary { max-width: 100%; }
+        .pricing-card:hover { transform: scale(1.02) translateY(-4px); }
     }
     @media (max-width: 768px) {
-        .hero { padding: 50px 0 40px; }
-        .hero-content h1 { font-size: 2.4rem; }
-        .hero-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .hero-grid-item { padding: 12px 8px; }
-        .hero-grid-item i { font-size: 1.3rem; }
-        .hero-grid-item span { font-size: 0.68rem; }
-        .services-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+        .hero { padding: 40px 0 30px; }
+        .hero-content h1 { font-size: clamp(1.6rem, 5vw, 2.4rem); }
+        .hero-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 400px; }
+        .hero-grid-item { padding: 12px 8px; min-height: 70px; }
+        .hero-grid-item i { font-size: clamp(1rem, 2.5vw, 1.4rem); }
+        .hero-grid-item span { font-size: clamp(0.6rem, 1.2vw, 0.75rem); }
+        .services-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; }
         .pricing-grid { grid-template-columns: 1fr; max-width: 380px; margin: 0 auto; }
-        .reviews-grid { grid-template-columns: 1fr; }
-        .gallery-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-        .section-header h2 { font-size: 2rem; }
-        .contact-card .phone { font-size: 1.4rem; }
+        .pricing-card { padding: 28px 18px 24px; }
+        .reviews-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; }
+        .gallery-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; }
+        .contact-card .phone { font-size: clamp(1.1rem, 3vw, 1.5rem); }
         .timings-card, .contact-card { padding: 22px 18px; }
-        .location-info h2 { font-size: 2rem; }
+        .location-info h2 { font-size: clamp(1.6rem, 4vw, 2.2rem); }
         .map-container { min-height: 200px; }
         .map-container iframe { min-height: 200px; }
+        .map-placeholder { min-height: 180px; }
+        .hero-buttons .btn-primary, .hero-buttons .btn-outline { padding: 10px 20px; font-size: 0.85rem; min-height: 42px; }
+        .btn-whatsapp { padding: 10px 20px; font-size: 0.85rem; min-height: 42px; }
+        .contact-buttons .btn-primary, .contact-buttons .btn-whatsapp { min-width: 120px; font-size: 0.85rem; padding: 10px 16px; min-height: 42px; }
+        .services, .pricing, .gallery, .reviews, .location { padding: 40px 0 50px; }
+        .info-row { padding: 40px 0; }
     }
-    @media (max-width: 480px) {
-        .hero-grid { grid-template-columns: repeat(2, 1fr); }
-        .services-grid { grid-template-columns: 1fr; }
-        .gallery-grid { grid-template-columns: 1fr; }
+    @media (max-width: 600px) {
+        .hero-grid { grid-template-columns: repeat(2, 1fr); max-width: 320px; gap: 8px; }
+        .hero-grid-item { padding: 10px 6px; min-height: 60px; }
+        .hero-grid-item i { font-size: clamp(0.9rem, 3vw, 1.2rem); }
+        .hero-grid-item span { font-size: clamp(0.55rem, 1.5vw, 0.7rem); }
+        .services-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+        .service-card { padding: 20px 12px 16px; }
+        .service-card .icon-wrap { width: 50px; height: 50px; font-size: 1.2rem; margin-bottom: 10px; }
+        .gallery-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+        .gallery-item { min-height: 100px; }
         .contact-buttons { flex-direction: column; }
-        .contact-buttons .btn-primary,
-        .contact-buttons .btn-whatsapp {
-            width: 100%;
-            justify-content: center;
-        }
-        .hero-buttons { flex-direction: column; align-items: center; }
-        .hero-buttons .btn-primary,
-        .hero-buttons .btn-outline {
-            width: 100%;
-            justify-content: center;
-        }
-        .hero-content h1 { font-size: 1.8rem; }
-        .pricing-card .price { font-size: 2.2rem; }
+        .contact-buttons .btn-primary, .contact-buttons .btn-whatsapp { width: 100%; min-width: unset; }
+        .hero-buttons { flex-direction: column; align-items: center; width: 100%; max-width: 300px; margin: 0 auto; }
+        .hero-buttons .btn-primary, .hero-buttons .btn-outline { width: 100%; justify-content: center; }
+        .hero-content h1 { font-size: clamp(1.4rem, 5.5vw, 2rem); }
+        .pricing-card .price { font-size: clamp(1.8rem, 5vw, 2.4rem); }
+        .pricing-card { padding: 24px 16px 20px; }
+        .pricing-card ul li { font-size: clamp(0.7rem, 1.5vw, 0.85rem); }
+        .pricing-card .plan-name { font-size: clamp(1rem, 2.5vw, 1.2rem); }
+        .pricing-grid { max-width: 340px; }
+        .reviews-grid { max-width: 340px; }
+        .review-card { padding: 18px 16px; }
+        .timings-card, .contact-card { padding: 18px 14px; }
+        .location-info .address { padding: 14px 16px; font-size: clamp(0.85rem, 2vw, 1rem); }
+        .location-info .btn-primary { width: 100%; justify-content: center; padding: 12px 20px; }
+        .map-container { min-height: 180px; }
+        .map-container iframe { min-height: 180px; }
+        .map-placeholder { min-height: 160px; font-size: clamp(0.85rem, 1.8vw, 1rem); padding: 14px; }
+        .pricing-card .badge { font-size: 0.55rem; padding: 3px 10px; top: 8px; right: 8px; }
     }
+    @media (max-width: 400px) {
+        .hero-grid { grid-template-columns: repeat(2, 1fr); max-width: 280px; gap: 6px; }
+        .hero-grid-item { padding: 8px 4px; min-height: 50px; }
+        .hero-grid-item i { font-size: 0.85rem; }
+        .hero-grid-item span { font-size: 0.55rem; }
+        .services-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+        .service-card { padding: 16px 10px 14px; }
+        .service-card .icon-wrap { width: 44px; height: 44px; font-size: 1rem; margin-bottom: 8px; }
+        .service-card h3 { font-size: clamp(0.85rem, 2.5vw, 1rem); }
+        .service-card p { font-size: clamp(0.6rem, 1.8vw, 0.75rem); }
+        .gallery-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+        .gallery-item { min-height: 80px; }
+        .pricing-grid { max-width: 300px; }
+        .pricing-card { padding: 20px 14px 18px; }
+        .pricing-card .price { font-size: clamp(1.6rem, 5vw, 2rem); }
+        .reviews-grid { max-width: 300px; }
+        .review-card { padding: 14px 12px; }
+        .review-card .stars { font-size: 0.75rem; }
+        .review-card .review-text { font-size: clamp(0.7rem, 1.8vw, 0.82rem); }
+        .hero-content h1 { font-size: clamp(1.2rem, 5vw, 1.6rem); }
+        .hero-content p { font-size: clamp(0.8rem, 2vw, 0.95rem); }
+        .hero-buttons .btn-primary, .hero-buttons .btn-outline { font-size: 0.8rem; padding: 8px 16px; min-height: 38px; }
+        .btn-whatsapp { font-size: 0.8rem; padding: 8px 16px; min-height: 38px; }
+        .contact-card .phone { font-size: clamp(1rem, 3vw, 1.2rem); }
+        .contact-buttons .btn-primary, .contact-buttons .btn-whatsapp { font-size: 0.8rem; padding: 8px 14px; min-height: 38px; }
+        .timings-card, .contact-card { padding: 16px 12px; }
+        .timings-block { font-size: clamp(0.8rem, 2vw, 0.9rem); }
+        .location-info .address { padding: 12px 14px; font-size: clamp(0.8rem, 2vw, 0.9rem); }
+        .location-info h2 { font-size: clamp(1.3rem, 4.5vw, 1.6rem); }
+        .map-container { min-height: 150px; }
+        .map-container iframe { min-height: 150px; }
+        .map-placeholder { min-height: 140px; font-size: clamp(0.75rem, 2vw, 0.85rem); }
+    }
+
     /* ================================================================
-           UTILITY — no-data fallback
-           ================================================================ */
-    .no-data {
-        color: var(--text-muted);
-        text-align: center;
-        padding: 30px 0;
-        grid-column: 1 / -1;
-        font-size: 1rem;
-        opacity: 0.6;
+       CROSS‑BROWSER FALLBACKS
+       ================================================================ */
+    @-moz-document url-prefix() {
+        .hero-grid-item, .service-card, .pricing-card, .review-card, .timings-card, .contact-card {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+        }
     }
-    .section-header {
-        text-align: center;
-        margin-bottom: 40px;
+    @supports not (backdrop-filter: blur(4px)) {
+        .hero-grid-item { background: rgba(10, 14, 26, 0.85); }
+        .gallery-item .caption { background: rgba(0, 0, 0, 0.8); }
     }
-    .section-header h2 {
-        font-size: 2.6rem;
-        font-weight: 800;
-        letter-spacing: -0.5px;
-        font-family: var(--font-display);
+    @supports not (background-clip: text) {
+        .hero-content h1 span, .section-header h2 span, .location-info h2 span {
+            -webkit-text-fill-color: #00f0ff;
+            color: #00f0ff;
+            background: none;
+        }
     }
-    .section-header h2 span {
-        background: var(--gradient-cyber);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+    @media (hover: none) and (pointer: coarse) {
+        .btn-primary, .btn-outline, .btn-whatsapp, .hero-buttons a, .contact-buttons a,
+        .pricing-card .btn-primary, .location-info .btn-primary, .nav-links a {
+            min-height: 48px; min-width: 48px; padding: 12px 24px;
+        }
+        .hero-grid-item, .service-card, .pricing-card, .review-card, .gallery-item { cursor: default; }
+        .gallery-item .caption { opacity: 1; background: rgba(0, 0, 0, 0.7); }
+        .pricing-card:hover, .service-card:hover, .review-card:hover,
+        .hero-grid-item:hover, .gallery-item:hover { transform: none !important; }
+        .timings-card:hover, .contact-card:hover { box-shadow: none !important; }
     }
-    .section-header p {
-        color: var(--text-muted);
-        font-size: 1.05rem;
-        margin-top: 4px;
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+        html { scroll-behavior: auto !important; }
+    }
+    @media print {
+        .hero-grid, .hero-buttons, .contact-buttons, .gallery-item .caption,
+        .pricing-card .badge, .map-container { display: none !important; }
+        .pricing-card { border: 1px solid #ccc !important; box-shadow: none !important; }
+        .pricing-card:hover { transform: none !important; }
+        .service-card { border: 1px solid #ccc !important; }
+        .service-card:hover { transform: none !important; }
+        .review-card { border: 1px solid #ccc !important; }
+        .review-card:hover { transform: none !important; }
+        .hero::before, .hero::after { display: none !important; }
+        body { background: #fff !important; color: #000 !important; }
+        .hero-content h1 span, .section-header h2 span, .location-info h2 span {
+            -webkit-text-fill-color: #000 !important;
+            color: #000 !important;
+            background: none !important;
+        }
+        .hero-content p, .service-card p, .pricing-card .desc,
+        .pricing-card ul li, .review-card .review-text,
+        .timings-block, .contact-card .sub, .location-info .address {
+            color: #333 !important;
+        }
+        .pricing-card .price { color: #000 !important; text-shadow: none !important; }
+        .pricing-card .plan-name, .review-card .reviewer,
+        .contact-card .phone, .contact-card .phone a,
+        .service-card h3, .timings-card h3, .contact-card h3,
+        .location-info h2 { color: #000 !important; }
+        .pricing-card .price small { color: #555 !important; }
+        .timings-block strong { color: #000 !important; }
+        .pricing-card ul li i { color: #000 !important; }
+        .service-card .icon-wrap { background: #000 !important; box-shadow: none !important; }
+        hr { border-top-color: #ccc !important; }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<!-- ================================================================
+<!-- ============================================================
      HERO
-     ================================================================ -->
+     ============================================================ -->
 <section class="hero animate-on-load" id="home">
     <div class="container">
         <div class="hero-content">
@@ -656,35 +929,47 @@
                 <span>Cyber</span> Services
             </h1>
             <p>
-                Fast, reliable &amp; affordable digital solutions —
-                from document printing to Aadhaar, PAN, passport
-                services and more. Built for the future.
+                Fast, reliable &amp; affordable digital solutions — from document
+                printing to Aadhaar, PAN, passport services and more. Built for the
+                future.
             </p>
             <div class="hero-buttons">
                 <a href="#services" class="btn-primary">
-                    <i class="fas fa-arrow-right"></i> Explore
+                    <i class="fas fa-arrow-right" aria-hidden="true"></i> Explore
                 </a>
                 <a href="#contact" class="btn-outline">
-                    <i class="fas fa-phone"></i> Contact
+                    <i class="fas fa-phone" aria-hidden="true"></i> Contact
                 </a>
             </div>
         </div>
         <div class="hero-grid">
-            <div class="hero-grid-item"><i class="fas fa-file-alt"></i><span>Online Forms</span></div>
-            <div class="hero-grid-item"><i class="fas fa-id-card"></i><span>Aadhaar</span></div>
-            <div class="hero-grid-item"><i class="fas fa-credit-card"></i><span>PAN Card</span></div>
-            <div class="hero-grid-item"><i class="fas fa-passport"></i><span>Passport</span></div>
-            <div class="hero-grid-item"><i class="fas fa-print"></i><span>Print &amp; Scan</span></div>
-            <div class="hero-grid-item"><i class="fas fa-file-pdf"></i><span>Lamination</span></div>
+            <div class="hero-grid-item">
+                <i class="fas fa-file-alt" aria-hidden="true"></i><span>Online Forms</span>
+            </div>
+            <div class="hero-grid-item">
+                <i class="fas fa-id-card" aria-hidden="true"></i><span>Aadhaar</span>
+            </div>
+            <div class="hero-grid-item">
+                <i class="fas fa-credit-card" aria-hidden="true"></i><span>PAN Card</span>
+            </div>
+            <div class="hero-grid-item">
+                <i class="fas fa-passport" aria-hidden="true"></i><span>Passport</span>
+            </div>
+            <div class="hero-grid-item">
+                <i class="fas fa-print" aria-hidden="true"></i><span>Print &amp; Scan</span>
+            </div>
+            <div class="hero-grid-item">
+                <i class="fas fa-file-pdf" aria-hidden="true"></i><span>Lamination</span>
+            </div>
         </div>
     </div>
 </section>
 
 <hr />
 
-<!-- ================================================================
+<!-- ============================================================
      SERVICES
-     ================================================================ -->
+     ============================================================ -->
 <section class="services animate-on-load" id="services">
     <div class="container">
         <div class="section-header">
@@ -695,7 +980,7 @@
             {% for service in services %}
             <div class="service-card">
                 <div class="icon-wrap">
-                    <i class="fas {{ service.icon|default:'fa-cogs' }}"></i>
+                    <i class="fas {{ service.icon|default:'fa-cogs' }}" aria-hidden="true"></i>
                 </div>
                 <h3>{{ service.name }}</h3>
                 <p>{{ service.description|truncatechars:60 }}</p>
@@ -709,9 +994,9 @@
 
 <hr />
 
-<!-- ================================================================
+<!-- ============================================================
      PRICING
-     ================================================================ -->
+     ============================================================ -->
 <section class="pricing animate-on-load" id="pricing">
     <div class="container">
         <div class="section-header">
@@ -728,9 +1013,9 @@
                 <div class="price">₹{{ charge.charge }} <small>/ session</small></div>
                 <div class="desc">Starting at affordable rates</div>
                 <ul>
-                    <li><i class="fas fa-check"></i> Professional service</li>
-                    <li><i class="fas fa-check"></i> Quick turnaround</li>
-                    <li><i class="fas fa-check"></i> Expert assistance</li>
+                    <li><i class="fas fa-check" aria-hidden="true"></i> Professional service</li>
+                    <li><i class="fas fa-check" aria-hidden="true"></i> Quick turnaround</li>
+                    <li><i class="fas fa-check" aria-hidden="true"></i> Expert assistance</li>
                 </ul>
                 <a href="{% url 'appointment' %}" class="btn-primary">Book Now</a>
             </div>
@@ -743,9 +1028,9 @@
 
 <hr />
 
-<!-- ================================================================
+<!-- ============================================================
      GALLERY
-     ================================================================ -->
+     ============================================================ -->
 <section class="gallery animate-on-load" id="gallery">
     <div class="container">
         <div class="section-header">
@@ -766,9 +1051,9 @@
 
 <hr />
 
-<!-- ================================================================
-     REVIEWS
-     ================================================================ -->
+<!-- ============================================================
+     REVIEWS — cross‑browser star rendering
+     ============================================================ -->
 <section class="reviews animate-on-load" id="reviews">
     <div class="container">
         <div class="section-header">
@@ -779,11 +1064,12 @@
             {% for review in reviews %}
             <div class="review-card">
                 <div class="stars">
+                    {# Filled stars #}
                     {% for i in "12345"|make_list %}
                     {% if forloop.counter <= review.rating %}
-                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star" aria-hidden="true"></i>
                     {% else %}
-                    <i class="fas fa-star" style="color: #444;"></i>
+                    <i class="fas fa-star" aria-hidden="true" style="color: #444;"></i>
                     {% endif %}
                     {% endfor %}
                 </div>
@@ -799,27 +1085,29 @@
 
 <hr />
 
-<!-- ================================================================
+<!-- ============================================================
      INFO ROW — Timings + Contact (DYNAMIC)
-     ================================================================ -->
+     ============================================================ -->
 <section class="info-row animate-on-load" id="contact">
     <div class="container">
         <div class="timings-card">
-            <h3><i class="fas fa-clock"></i> Business Timings</h3>
+            <h3><i class="fas fa-clock" aria-hidden="true"></i> Business Timings</h3>
             {% if business.business_hours %}
-                <div class="timings-block">{{ business.business_hours|linebreaksbr }}</div>
+            <div class="timings-block">
+                {{ business.business_hours|linebreaksbr }}
+            </div>
             {% else %}
-                <div class="timings-block">
-                    <strong>Monday – Saturday:</strong> 9:00 AM – 8:00 PM<br>
-                    <strong>Sunday:</strong> 10:00 AM – 2:00 PM<br>
-                    <strong>Holidays:</strong> Closed
-                </div>
+            <div class="timings-block">
+                <strong>Monday – Saturday:</strong> 9:00 AM – 8:00 PM<br />
+                <strong>Sunday:</strong> 10:00 AM – 2:00 PM<br />
+                <strong>Holidays:</strong> Closed
+            </div>
             {% endif %}
         </div>
         <div class="contact-card">
-            <h3><i class="fas fa-phone-alt"></i> Get in Touch</h3>
+            <h3><i class="fas fa-phone-alt" aria-hidden="true"></i> Get in Touch</h3>
             <div class="phone">
-                <i class="fas fa-mobile-alt"></i>
+                <i class="fas fa-mobile-alt" aria-hidden="true"></i>
                 <a href="tel:{{ business.phone|default:'+919876543210' }}">
                     {{ business.phone|default:"+91 98765 43210" }}
                 </a>
@@ -827,11 +1115,11 @@
             <div class="sub">Call or WhatsApp for quick support.</div>
             <div class="contact-buttons">
                 <a href="tel:{{ business.phone|default:'+919876543210' }}" class="btn-primary">
-                    <i class="fas fa-phone"></i> Call Now
+                    <i class="fas fa-phone" aria-hidden="true"></i> Call Now
                 </a>
                 {% with whatsapp_number=business.whatsapp|default:"919876543210" %}
-                <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20need%20assistance." target="_blank" class="btn-whatsapp">
-                    <i class="fab fa-whatsapp"></i> WhatsApp
+                <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20need%20assistance." target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
+                    <i class="fab fa-whatsapp" aria-hidden="true"></i> WhatsApp
                 </a>
                 {% endwith %}
             </div>
@@ -841,37 +1129,32 @@
 
 <hr />
 
-<!-- ================================================================
+<!-- ============================================================
      LOCATION (DYNAMIC)
-     ================================================================ -->
+     ============================================================ -->
 <section class="location animate-on-load" id="location">
     <div class="container">
         <div class="location-info">
             <h2>Find Us <span>Here</span></h2>
             <div class="address">
-                <i class="fas fa-map-marker-alt"></i>
-                {% if business.address %}
-                    {{ business.address|linebreaksbr }}
-                {% else %}
-                    CyberTech Digital Hub<br>
-                    देऊबाई कॉम्प्लेक्स, साईबाबा चौक,<br>
-                    Ranale, Maharashtra 425411
-                {% endif %}
+                <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                {% if business.address %} {{ business.address|linebreaksbr }} {% else %}
+                CyberTech Digital Hub<br />
+                देऊबाई कॉम्प्लेक्स, साईबाबा चौक,<br />
+                Ranale, Maharashtra 425411 {% endif %}
             </div>
             {% with address_url=business.address|urlencode %}
-            <a href="https://www.google.com/maps/dir/?api=1&destination={{ address_url|default:'CyberTech+Digital+Hub,+Ranale,+Maharashtra' }}" target="_blank" class="btn-primary" style="padding: 12px 32px; align-self: flex-start;">
-                <i class="fas fa-directions"></i> Get Directions
+            <a href="https://www.google.com/maps/dir/?api=1&destination={{ address_url|default:'CyberTech+Digital+Hub,+Ranale,+Maharashtra' }}" target="_blank" rel="noopener noreferrer" class="btn-primary">
+                <i class="fas fa-directions" aria-hidden="true"></i> Get Directions
             </a>
             {% endwith %}
         </div>
         <div class="map-container">
-            {% if business.google_map %}
-                {{ business.google_map|safe }}
-            {% else %}
-                <div class="map-placeholder">
-                    <i class="fas fa-map-marked-alt"></i>
-                    {% trans "Map location not configured." %}
-                </div>
+            {% if business.google_map %} {{ business.google_map|safe }} {% else %}
+            <div class="map-placeholder">
+                <i class="fas fa-map-marked-alt" aria-hidden="true"></i>
+                {% trans "Map location not configured." %}
+            </div>
             {% endif %}
         </div>
     </div>
@@ -881,53 +1164,76 @@
 {% endblock %}
 
 {% block extra_js %}
-<!-- ================================================================
-     PAGE-SPECIFIC JAVASCRIPT — active nav highlight on scroll
-     ================================================================ -->
+<!-- ============================================================
+     PAGE-SPECIFIC JAVASCRIPT — smooth + touch‑friendly
+     ============================================================ -->
 <script>
     (function() {
-        'use strict';
+        "use strict";
 
-        // ---- Active nav highlight on scroll ----
-        const sections = document.querySelectorAll('section[id]');
-        const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+        // ---- Throttle helper ----
+        function throttle(fn, delay) {
+            var lastCall = 0;
+            return function() {
+                var now = Date.now();
+                if (now - lastCall >= delay) {
+                    lastCall = now;
+                    fn.apply(this, arguments);
+                }
+            };
+        }
+
+        // ---- Active nav highlight on scroll (throttled) ----
+        var sections = document.querySelectorAll("section[id]");
+        var navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
 
         if (sections.length && navLinks.length) {
-            window.addEventListener('scroll', function() {
-                let current = '';
-                const scrollY = window.scrollY + 100;
+            var updateActive = throttle(function() {
+                var current = "";
+                var scrollY = window.scrollY + 100;
                 sections.forEach(function(section) {
-                    const top = section.offsetTop;
-                    const height = section.offsetHeight;
+                    var top = section.offsetTop;
+                    var height = section.offsetHeight;
                     if (scrollY >= top && scrollY < top + height) {
-                        current = section.getAttribute('id');
+                        current = section.getAttribute("id");
                     }
                 });
                 navLinks.forEach(function(link) {
-                    link.classList.remove('active');
-                    const href = link.getAttribute('href');
-                    if (href === '#' + current) {
-                        link.classList.add('active');
+                    link.classList.remove("active");
+                    var href = link.getAttribute("href");
+                    if (href === "#" + current) {
+                        link.classList.add("active");
                     }
                 });
-            }, { passive: true });
+            }, 80);
+
+            window.addEventListener("scroll", updateActive, { passive: true });
+            document.addEventListener("DOMContentLoaded", updateActive);
         }
 
-        // ---- Smooth scroll for anchor links ----
+        // ---- Smooth scroll for anchor links (with header offset) ----
         document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
-            anchor.addEventListener('click', function(e) {
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                const targetEl = document.querySelector(targetId);
+            anchor.addEventListener("click", function(e) {
+                var targetId = this.getAttribute("href");
+                if (targetId === "#") return;
+                var targetEl = document.querySelector(targetId);
                 if (targetEl) {
                     e.preventDefault();
-                    const headerHeight = document.querySelector('.header')?.offsetHeight || 70;
-                    const top = targetEl.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-                    window.scrollTo({ top: top, behavior: 'smooth' });
+                    var header = document.querySelector(".header");
+                    var headerHeight = header ? header.offsetHeight : 70;
+                    var top = targetEl.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                    window.scrollTo({ top: top, behavior: "smooth" });
                 }
             });
         });
 
+        // ---- Touch‑friendly: passive touch hints ----
+        document.querySelectorAll('.btn-primary, .btn-outline, .btn-whatsapp, .hero-grid-item, .gallery-item')
+            .forEach(function(el) {
+                el.addEventListener('touchstart', function() {}, { passive: true });
+            });
+
+        console.log('✅ CyberTech homepage — fully responsive + cross‑browser ready');
     })();
 </script>
 {% endblock %}
