@@ -125,23 +125,17 @@ DATABASES["default"]["CONN_MAX_AGE"] = 0
 # Cloudinary / Media Storage
 # =============================================================================
 
-CLOUDINARY_CREDENTIALS = all([
-    os.getenv("CLOUDINARY_CLOUD_NAME"),
-    os.getenv("CLOUDINARY_API_KEY"),
-    os.getenv("CLOUDINARY_API_SECRET"),
-])
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": os.getenv("CLOUDINARY_CLOUD_NAME", "dqsl67215"),
+    "API_KEY": os.getenv("CLOUDINARY_API_KEY", "438720846710921"),
+    "API_SECRET": os.getenv("CLOUDINARY_API_SECRET", ""),
+}
 
-if CLOUDINARY_CREDENTIALS:
-    CLOUDINARY_STORAGE = {
-        "CLOUD_NAME": os.getenv("CLOUDINARY_CLOUD_NAME"),
-        "API_KEY": os.getenv("CLOUDINARY_API_KEY"),
-        "API_SECRET": os.getenv("CLOUDINARY_API_SECRET"),
-    }
-    DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
-else:
-    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
-    MEDIA_URL = "/media/"
-    MEDIA_ROOT = BASE_DIR / "media"
+# Force Cloudinary storage regardless of environment variables
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+
+# Optional: also set the URL if you need to reference it directly
+CLOUDINARY_URL = os.getenv("CLOUDINARY_URL", "")
 
 # =============================================================================
 # Static Files
