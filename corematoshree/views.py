@@ -21,7 +21,7 @@ from pypdf import PdfReader, PdfWriter
 from django.core.cache import cache
 from django.db import ProgrammingError
 from .models import (
-    User, Contact, Appointment, Review, Service, Announcement,
+    User, Appointment, Review, Service, Announcement,
     JobNotification, GovernmentScheme, DownloadForm, ServiceCharge,
     Gallery, BusinessInfo, RequiredDocument, FAQ, Application, DocumentUpload
 )
@@ -29,9 +29,8 @@ from .models import (
     User, Contact, Appointment, Review, Service, Announcement,
     JobNotification, GovernmentScheme, DownloadForm, ServiceCharge,
     Gallery, BusinessInfo, RequiredDocument, FAQ, Application, DocumentUpload,
-    TeamMember  # new
+    TeamMember
 )
-from .models import TeamMember
 from .forms import TeamMemberForm
 from .forms import (
     CustomUserCreationForm, ProfileUpdateForm,
