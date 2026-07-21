@@ -214,7 +214,7 @@ class BusinessInfoAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': (
-                'business_name', 'logo', 'welcome_message',
+                'business_name', 'welcome_message',
                 'address', 'phone', 'whatsapp', 'email',
                 'google_map', 'business_hours',
                 'registration_number', 'certifications'

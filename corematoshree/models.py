@@ -390,7 +390,6 @@ class FAQ(models.Model):
 # ==========================
 class BusinessInfo(models.Model):
     business_name = models.CharField(_("Business Name"), max_length=200)
-    logo = models.ImageField(_("Logo"), upload_to="logo/", blank=True, null=True)
     welcome_message = models.TextField(_("Welcome Message"))
     address = models.TextField(_("Address"))
     phone = models.CharField(_("Phone"), max_length=15, validators=[phone_validator])

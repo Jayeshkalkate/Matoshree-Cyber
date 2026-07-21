@@ -319,7 +319,6 @@ class BusinessInfoForm(forms.ModelForm):
         fields = "__all__"
         labels = {
             "business_name": _("Business Name"),
-            "logo": _("Logo"),
             "welcome_message": _("Welcome Message"),
             "address": _("Address"),
             "phone": _("Phone"),
@@ -332,7 +331,6 @@ class BusinessInfoForm(forms.ModelForm):
         }
         widgets = {
             "business_name": forms.TextInput(attrs={"class": "form-control"}),
-            "logo": forms.FileInput(attrs={"class": "form-control"}),
             "welcome_message": forms.Textarea(attrs={"class": "form-control", "rows": 3}),
             "address": forms.Textarea(attrs={"class": "form-control", "rows": 2}),
             "phone": forms.TextInput(attrs={"class": "form-control"}),
