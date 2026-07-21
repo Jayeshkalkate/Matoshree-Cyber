@@ -505,3 +505,26 @@ class DocumentUpload(models.Model):
 
     def __str__(self):
         return f"{self.document_name} – {self.application.full_name}"
+
+# ==========================
+# Team Member
+# ==========================
+class TeamMember(models.Model):
+    name = models.CharField(_("Name"), max_length=100, db_index=True)
+    designation = models.CharField(_("Designation"), max_length=200)
+    bio = models.TextField(_("Bio"), blank=True)
+    photo = models.ImageField(_("Photo"), upload_to="team/", blank=True, null=True)
+    order = models.PositiveIntegerField(_("Order"), default=0, help_text=_("Lower numbers appear first."))
+    is_active = models.BooleanField(_("Active"), default=True, db_index=True)
+    created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
+
+    class Meta:
+        ordering = ['order', 'name']
+        verbose_name = _("Team Member")
+        verbose_name_plural = _("Team Members")
+        indexes = [
+            models.Index(fields=['is_active', 'order']),
+        ]
+
+    def __str__(self):
+        return self.name

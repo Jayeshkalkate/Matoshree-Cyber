@@ -1,0 +1,330 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Our Team" %}{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* ---- Hero ---- */
+    .page-hero {
+        padding: 70px 0 50px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    .page-hero::before {
+        content: "";
+        position: absolute;
+        top: -30%;
+        right: -10%;
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(
+            circle,
+            rgba(0, 240, 255, 0.04),
+            transparent 70%
+        );
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+    }
+    .page-hero .container {
+        position: relative;
+        z-index: 1;
+    }
+    .page-hero .breadcrumb {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-bottom: 16px;
+        letter-spacing: 0.3px;
+    }
+    .page-hero .breadcrumb a {
+        color: var(--text-muted);
+        transition: var(--transition);
+    }
+    .page-hero .breadcrumb a:hover {
+        color: var(--neon-cyan);
+    }
+    .page-hero .breadcrumb .current {
+        color: var(--neon-cyan);
+    }
+    .page-hero h1 {
+        font-size: 3rem;
+        font-weight: 900;
+        font-family: var(--font-display);
+        color: var(--text-white);
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+        text-shadow: 0 0 40px rgba(0, 240, 255, 0.12);
+    }
+    .page-hero h1 span {
+        color: var(--neon-cyan);
+        text-shadow: 0 0 30px rgba(0, 240, 255, 0.25);
+    }
+    .page-hero p {
+        font-size: 1.15rem;
+        color: var(--text-muted);
+        max-width: 620px;
+        margin: 0 auto;
+        line-height: 1.8;
+    }
+
+    /* ---- Team Grid ---- */
+    .team-section {
+        padding: 60px 0 80px;
+        background: var(--bg-secondary);
+    }
+    .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 28px;
+    }
+    .team-card {
+        background: var(--bg-card);
+        border-radius: var(--radius);
+        padding: 24px 18px 20px;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        transition: var(--transition);
+        box-shadow: var(--shadow-card);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .team-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        border-color: var(--neon-cyan);
+        box-shadow: var(--shadow-card), var(--glow-cyan);
+        background: var(--bg-card-hover);
+    }
+    .team-card img,
+    .team-card .team-placeholder {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 14px;
+        border: 3px solid rgba(255, 255, 255, 0.08);
+        transition: var(--transition);
+    }
+    .team-card:hover img,
+    .team-card:hover .team-placeholder {
+        border-color: var(--neon-cyan);
+        box-shadow: var(--glow-cyan);
+    }
+    .team-card .team-placeholder {
+        background: var(--bg-card);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3.5rem;
+        color: var(--text-muted);
+        border: 3px solid rgba(255, 255, 255, 0.08);
+    }
+    .team-card h3 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--text-white);
+        margin-bottom: 2px;
+    }
+    .team-card .designation {
+        font-size: 0.95rem;
+        color: var(--neon-cyan);
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+    .team-card .bio {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        line-height: 1.6;
+        flex-grow: 1;
+        margin: 0;
+    }
+
+    /* ---- Pagination ---- */
+    .pagination-wrap {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 40px;
+        flex-wrap: wrap;
+    }
+    .pagination-wrap .page-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 16px;
+        border-radius: 30px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        color: var(--text-muted);
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: var(--transition);
+        text-decoration: none;
+        min-width: 44px;
+    }
+    .pagination-wrap .page-link:hover {
+        background: rgba(0, 240, 255, 0.08);
+        border-color: var(--neon-cyan);
+        color: var(--text-white);
+        box-shadow: var(--glow-cyan);
+        transform: translateY(-2px);
+    }
+    .pagination-wrap .page-link.active {
+        background: var(--neon-cyan);
+        color: var(--bg-primary);
+        border-color: var(--neon-cyan);
+        box-shadow: var(--glow-cyan);
+    }
+    .pagination-wrap .page-link.disabled {
+        opacity: 0.3;
+        pointer-events: none;
+    }
+
+    .no-data {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 3rem 0;
+        color: var(--text-muted);
+        font-size: 1.1rem;
+    }
+
+    @media (max-width: 768px) {
+        .page-hero h1 {
+            font-size: 2.4rem;
+        }
+        .page-hero p {
+            font-size: 1rem;
+        }
+        .team-grid {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 18px;
+        }
+        .team-card img,
+        .team-card .team-placeholder {
+            width: 100px;
+            height: 100px;
+        }
+        .team-card .team-placeholder {
+            font-size: 2.8rem;
+        }
+    }
+    @media (max-width: 480px) {
+        .team-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+        .team-card {
+            padding: 18px 12px 16px;
+        }
+        .team-card img,
+        .team-card .team-placeholder {
+            width: 80px;
+            height: 80px;
+        }
+        .team-card .team-placeholder {
+            font-size: 2rem;
+        }
+        .team-card h3 {
+            font-size: 1rem;
+        }
+        .team-card .designation {
+            font-size: 0.8rem;
+        }
+        .team-card .bio {
+            font-size: 0.8rem;
+        }
+        .pagination-wrap .page-link {
+            min-width: 38px;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+    }
+    @media (max-width: 380px) {
+        .team-grid {
+            grid-template-columns: 1fr;
+            max-width: 280px;
+            margin: 0 auto;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- ================================================================
+     PAGE HERO
+     ================================================================ -->
+<section class="page-hero">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="{% url 'home' %}"><i class="fas fa-home"></i> {% trans "Home" %}</a>
+            <span><i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5;"></i></span>
+            <span class="current">{% trans "Our Team" %}</span>
+        </div>
+        <h1>{% trans "Our" %} <span>{% trans "Team" %}</span></h1>
+        <p>{% trans "Meet the dedicated professionals who make our services exceptional." %}</p>
+    </div>
+</section>
+
+<!-- ================================================================
+     TEAM LIST
+     ================================================================ -->
+<section class="team-section">
+    <div class="container">
+        <div class="team-grid">
+            {% for member in members %}
+            <div class="team-card">
+                {% if member.photo %}
+                <img src="{{ member.photo.url }}" alt="{{ member.name }}" loading="lazy" />
+                {% else %}
+                <div class="team-placeholder"><i class="fas fa-user-circle"></i></div>
+                {% endif %}
+                <h3>{{ member.name }}</h3>
+                <p class="designation">{{ member.designation }}</p>
+                <p class="bio">{{ member.bio }}</p>
+            </div>
+            {% empty %}
+            <p class="no-data">{% trans "No team members available." %}</p>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination (corrected) -->
+        {% if members.has_other_pages %}
+        <div class="pagination-wrap">
+            {% if members.has_previous %}
+            <a href="?page={{ members.previous_page_number }}" class="page-link">
+                <i class="fas fa-chevron-left"></i> {% trans "Prev" %}
+            </a>
+            {% else %}
+            <span class="page-link disabled">
+                <i class="fas fa-chevron-left"></i> {% trans "Prev" %}
+            </span>
+            {% endif %}
+
+            {% for num in members.paginator.page_range %}
+            {% if members.number == num %}
+            <span class="page-link active">{{ num }}</span>
+            {% elif num > members.number|add:'-3' and num < members.number|add:'3' %}
+            <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+            {% endif %}
+            {% endfor %}
+
+            {% if members.has_next %}
+            <a href="?page={{ members.next_page_number }}" class="page-link">
+                {% trans "Next" %} <i class="fas fa-chevron-right"></i>
+            </a>
+            {% else %}
+            <span class="page-link disabled">
+                {% trans "Next" %} <i class="fas fa-chevron-right"></i>
+            </span>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

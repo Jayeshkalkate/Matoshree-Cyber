@@ -1006,6 +1006,91 @@ trans "About Us" %}{% endblock %} {% block extra_head %}
       background: #fff !important;
     }
   }
+
+  /* ---- Team Preview (about page) ---- */
+  .team-preview {
+    padding: clamp(40px, 8vw, 80px) 0 clamp(30px, 6vw, 70px);
+    background: var(--bg-secondary, rgba(10, 14, 26, 0.6));
+  }
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: clamp(20px, 3vw, 30px);
+  }
+  .team-card {
+    background: var(--bg-card, rgba(255, 255, 255, 0.04));
+    border-radius: var(--radius, 12px);
+    padding: clamp(1rem, 2vw, 1.5rem);
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  .team-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--neon-cyan, #00f0ff);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15), 0 0 30px rgba(0, 240, 255, 0.06);
+  }
+  .team-card img,
+  .team-card .team-placeholder {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 12px;
+    display: block;
+    border: 2px solid rgba(255, 255, 255, 0.06);
+  }
+  .team-card .team-placeholder {
+    background: var(--bg-card, rgba(255, 255, 255, 0.04));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: var(--text-muted, #94a3b8);
+  }
+  .team-card h3 {
+    font-size: clamp(1rem, 1.2vw, 1.1rem);
+    font-weight: 700;
+    color: var(--text-white, #f0f4ff);
+    margin-bottom: 2px;
+  }
+  .team-card .designation {
+    font-size: clamp(0.8rem, 0.9vw, 0.85rem);
+    color: var(--neon-cyan, #00f0ff);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .team-card .bio {
+    font-size: clamp(0.8rem, 0.9vw, 0.85rem);
+    color: var(--text-muted, #94a3b8);
+    line-height: 1.5;
+    margin: 0;
+  }
+  @media (max-width: 768px) {
+    .team-grid {
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+    }
+    .team-card img,
+    .team-card .team-placeholder {
+      width: 80px;
+      height: 80px;
+    }
+  }
+  @media (max-width: 480px) {
+    .team-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+  }
+  @media (max-width: 360px) {
+    .team-grid {
+      grid-template-columns: 1fr;
+      max-width: 280px;
+      margin: 0 auto;
+    }
+  }
 </style>
 {% endblock %} {% block content %}
 <!-- ================================================================
@@ -1249,6 +1334,39 @@ trans "About Us" %}{% endblock %} {% block extra_head %}
 {% endif %}
 
 <!-- ================================================================
+     TEAM PREVIEW – Meet the team (DYNAMIC)
+     ================================================================ -->
+<section class="team-preview">
+  <div class="container">
+    <div class="section-header">
+      <h2>{% trans "Meet Our" %} <span>{% trans "Team" %}</span></h2>
+      <p>{% trans "Our dedicated professionals are here to serve you." %}</p>
+    </div>
+    <div class="team-grid">
+      {% for member in team_members|slice:":6" %}
+      <div class="team-card">
+        {% if member.photo %}
+        <img src="{{ member.photo.url }}" alt="{{ member.name }}" loading="lazy" />
+        {% else %}
+        <div class="team-placeholder"><i class="fas fa-user-circle"></i></div>
+        {% endif %}
+        <h3>{{ member.name }}</h3>
+        <p class="designation">{{ member.designation }}</p>
+        <p class="bio">{{ member.bio|truncatechars:80 }}</p>
+      </div>
+      {% empty %}
+      <p class="no-data">{% trans "No team members listed yet." %}</p>
+      {% endfor %}
+    </div>
+    {% if team_members|length > 6 %}
+    <div class="text-center mt-4">
+      <a href="{% url 'team' %}" class="btn-primary">{% trans "View Full Team" %} <i class="fas fa-arrow-right"></i></a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- ================================================================
      CTA BANNER – Call to action
      ================================================================ -->
 <section class="cta-banner">
@@ -1276,4 +1394,22 @@ trans "About Us" %}{% endblock %} {% block extra_head %}
     </div>
   </div>
 </section>
+
+<!-- Developer Credit -->
+<section class="developer-credit" style="padding: 40px 0; background: var(--bg-secondary);">
+  <div class="container" style="text-align: center; max-width: 700px;">
+    <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--text-white);">
+      <i class="fas fa-code" style="color: var(--neon-cyan);"></i>
+      About the Developer
+    </h3>
+    <p style="color: var(--text-muted); font-size: 1rem; line-height: 1.7;">
+      This website was built by <strong>Jayesh Kalkate</strong>, a passionate full-stack developer.
+      You can explore more of his work on his
+      <a href="https://devjayesh-portfolio.netlify.app/" target="_blank" rel="noopener noreferrer" style="color: var(--neon-cyan);">portfolio</a>
+      or connect with him on
+      <a href="https://www.linkedin.com/in/jayesh-kalkate-31a250242/" target="_blank" rel="noopener noreferrer" style="color: var(--neon-cyan);">LinkedIn</a>.
+    </p>
+  </div>
+</section>
+
 {% endblock %}

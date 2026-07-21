@@ -13,6 +13,7 @@ from .models import (
     Review,
     Announcement,
     Gallery,
+    TeamMember,
     ServiceCharge,
     RequiredDocument,
     DownloadForm,
@@ -245,3 +246,11 @@ class ApplicationAdmin(admin.ModelAdmin):
         ('Timestamps', {'fields': ('created_at', 'updated_at')}),
     )
     ordering = ('-created_at',)
+
+@admin.register(TeamMember)
+class TeamMemberAdmin(admin.ModelAdmin):
+    list_display = ('name', 'designation', 'order', 'is_active')
+    list_filter = ('is_active',)
+    search_fields = ('name', 'designation')
+    ordering = ('order', 'name')
+    list_editable = ('order', 'is_active')

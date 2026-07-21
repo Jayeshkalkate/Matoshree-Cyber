@@ -975,6 +975,7 @@
                 <li><a href="#" data-section="inquiries"><i class="fas fa-envelope"></i> {% trans "Inquiries" %}</a></li>
                 <li><a href="#" data-section="forms"><i class="fas fa-file-pdf"></i> {% trans "Upload Forms" %}</a></li>
                 <li><a href="#" data-section="gallery"><i class="fas fa-images"></i> {% trans "Gallery" %}</a></li>
+                <li><a href="#" data-section="teammembers"><i class="fas fa-users-cog"></i> {% trans "Team Members" %}</a></li>
                 <li><a href="#" data-section="requireddocs"><i class="fas fa-list-ul"></i> {% trans "Required Docs" %}</a></li>
                 <li><a href="#" data-section="applications"><i class="fas fa-file-alt"></i> {% trans "Applications" %}</a></li>
                 <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> {% trans "Settings" %}</a></li>
@@ -1790,6 +1791,102 @@
             </div>
         </div>
 
+<!-- ===== SECTION: TEAM MEMBERS ===== -->
+<div id="section-teammembers" class="section">
+    <div class="section-header">
+        <h3><i class="fas fa-users-cog" style="color:var(--neon-cyan)"></i> {% trans "Manage Team" %}</h3>
+        <button class="btn-primary" data-bs-toggle="collapse" data-bs-target="#addTeamMemberForm" aria-expanded="false">
+            {% trans "Add Team Member" %}
+        </button>
+    </div>
+
+    <!-- Add Form (collapsible) -->
+    <div class="collapse admin-form" id="addTeamMemberForm">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="add">
+            <input type="hidden" name="model_type" value="teammember">
+            {{ team_member_form.as_p }}
+            <div class="form-actions">
+                <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save" %}</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Listing -->
+    <div id="teamMemberList">
+        {% for member in team_members %}
+            <div class="list-item">
+                <div class="info">
+                    <span class="title">{{ member.name }}</span>
+                    <span class="sub">{{ member.designation }} – {% if member.is_active %}{% trans "Active" %}{% else %}{% trans "Inactive" %}{% endif %}</span>
+                    {% if member.photo %}
+                        <img src="{{ member.photo.url }}" alt="{{ member.name }}" style="max-height:60px;">
+                    {% endif %}
+                </div>
+                <div class="list-actions">
+                    <button class="btn-primary btn-sm" onclick="editTeamMember('{{ member.id }}', '{{ member.name|escapejs }}', '{{ member.designation|escapejs }}', '{{ member.bio|escapejs }}', '{{ member.order }}', '{{ member.is_active|yesno:"true,false" }}')">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <form method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="model_type" value="teammember">
+                        <input type="hidden" name="id" value="{{ member.id }}">
+                        <button type="submit" class="btn-danger" onclick="return confirm('{% trans "Delete this team member?"|escapejs %}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% empty %}
+            <p style="color:var(--text-dim);">{% trans "No team members added yet." %}</p>
+        {% endfor %}
+    </div>
+
+    <!-- Inline Edit Form -->
+    <div class="admin-form" id="editTeamMemberForm" style="display:none; margin-top:1rem;">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="edit">
+            <input type="hidden" name="model_type" value="teammember">
+            <input type="hidden" name="id" id="editTeamMemberId">
+            <div>
+                <label>{% trans "Name" %} *</label>
+                <input type="text" name="name" id="editTmName" required>
+            </div>
+            <div>
+                <label>{% trans "Designation" %} *</label>
+                <input type="text" name="designation" id="editTmDesignation" required>
+            </div>
+            <div class="full-width">
+                <label>{% trans "Bio" %}</label>
+                <textarea name="bio" id="editTmBio" rows="3"></textarea>
+            </div>
+            <div>
+                <label>{% trans "Photo" %}</label>
+                <input type="file" name="photo" id="editTmPhoto" accept="image/*">
+                <small style="color:var(--text-dim); display:block; margin-top:0.2rem;">{% trans "Leave empty to keep current photo." %}</small>
+            </div>
+            <div>
+                <label>{% trans "Order" %}</label>
+                <input type="number" name="order" id="editTmOrder" min="0" step="1">
+            </div>
+            <div>
+                <label>{% trans "Active" %}</label>
+                <select name="is_active" id="editTmActive">
+                    <option value="true">{% trans "Yes" %}</option>
+                    <option value="false">{% trans "No" %}</option>
+                </select>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn-outline cancel-btn">{% trans "Cancel" %}</button>
+                <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Update" %}</button>
+            </div>
+        </form>
+    </div>
+</div>
+
         <!-- ===== SECTION: SETTINGS ===== -->
         <div id="section-settings" class="section">
             <div class="section-header">
@@ -1880,6 +1977,7 @@
                 inquiries: "{% trans "Inquiries" %}",
                 forms: "{% trans "Upload Forms" %}",
                 gallery: "{% trans "Gallery" %}",
+                teammembers: "{% trans "Manage Team" %}", 
                 requireddocs: "{% trans "Required Documents" %}",
                 applications: "{% trans "Applications" %}",
                 settings: "{% trans "Settings" %}",
@@ -1929,6 +2027,17 @@
                 document.getElementById("editSvcColor").value = color || '#00d4ff';
                 document.getElementById("editServiceForm").style.display = "grid";
                 document.getElementById("editServiceForm").scrollIntoView({ behavior: 'smooth' });
+            };
+
+            window.editTeamMember = function(id, name, designation, bio, order, isActive) {
+                document.getElementById("editTeamMemberId").value = id;
+                document.getElementById("editTmName").value = name;
+                document.getElementById("editTmDesignation").value = designation;
+                document.getElementById("editTmBio").value = bio || '';
+                document.getElementById("editTmOrder").value = order || 0;
+                document.getElementById("editTmActive").value = isActive === 'true' ? 'true' : 'false';
+                document.getElementById("editTeamMemberForm").style.display = "grid";
+                document.getElementById("editTeamMemberForm").scrollIntoView({ behavior: 'smooth' });
             };
 
             window.editCharge = function(id, serviceId, charge) {

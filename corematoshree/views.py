@@ -25,6 +25,14 @@ from .models import (
     JobNotification, GovernmentScheme, DownloadForm, ServiceCharge,
     Gallery, BusinessInfo, RequiredDocument, FAQ, Application, DocumentUpload
 )
+from .models import (
+    User, Contact, Appointment, Review, Service, Announcement,
+    JobNotification, GovernmentScheme, DownloadForm, ServiceCharge,
+    Gallery, BusinessInfo, RequiredDocument, FAQ, Application, DocumentUpload,
+    TeamMember  # new
+)
+from .models import TeamMember
+from .forms import TeamMemberForm
 from .forms import (
     CustomUserCreationForm, ProfileUpdateForm,
     ContactForm, AppointmentForm, ReviewForm,
@@ -105,7 +113,6 @@ def _get_dashboard_common_data():
     cached = cache.get(cache_key)
 
     if cached is not None:
-        # cached contains only querysets and business_info
         data = {
             'services': cached['services'],
             'appointments': cached['appointments'],
@@ -119,6 +126,9 @@ def _get_dashboard_common_data():
             'business_info': cached['business_info'],
             'applications': cached['applications'],
             'required_docs': cached['required_docs'],
+            # --- NEW ---
+            'team_members': cached.get('team_members', TeamMember.objects.all().order_by('order', 'name')),
+            'team_member_form': TeamMemberForm(),   # never cached
         }
     else:
         # Fetch all querysets (no forms)
@@ -143,6 +153,8 @@ def _get_dashboard_common_data():
             'required_docs': RequiredDocument.objects.select_related('service').only(
                 'id', 'service__name', 'document_name'
             ).order_by('service__name'),
+            # ... existing keys ...
+            'team_members': TeamMember.objects.all().order_by('order', 'name'),
         }
         # Cache only the querysets / business_info (forms are excluded)
         cache.set(cache_key, data, 60 * 5)
@@ -205,7 +217,15 @@ def _handle_dashboard_post(request, is_super=False):
             # Clear cache so dashboard shows new documents immediately
             cache.delete(DASHBOARD_CACHE_KEY)
             return redirect('superadmin_dashboard' if is_super else 'admin_dashboard')
-
+        
+        elif model_type == 'teammember':
+            form = TeamMemberForm(request.POST, request.FILES)
+            if form.is_valid():
+                form.save()
+                messages.success(request, _('Team member added.'))
+            else:
+                messages.error(request, _('Error adding team member.'))
+        
         elif model_type == 'announcement':
             form = AnnouncementForm(request.POST)
             if form.is_valid():
@@ -292,7 +312,16 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.success(request, _('Required document updated.'))
             else:
                 messages.error(request, _('Error updating required document.'))
-
+                
+        elif model_type == 'teammember' and obj_id:
+            instance = get_object_or_404(TeamMember, id=obj_id)
+            form = TeamMemberForm(request.POST, request.FILES, instance=instance)
+            if form.is_valid():
+                form.save()
+                messages.success(request, _('Team member updated.'))
+            else:
+                messages.error(request, _('Error updating team member.'))
+        
         elif model_type == 'announcement' and obj_id:
             instance = get_object_or_404(Announcement, id=obj_id)
             form = AnnouncementForm(request.POST, instance=instance)
@@ -382,6 +411,9 @@ def _handle_dashboard_post(request, is_super=False):
         elif model_type == 'announcement' and obj_id:
             get_object_or_404(Announcement, id=obj_id).delete()
             messages.success(request, _('Announcement deleted.'))
+        elif model_type == 'teammember' and obj_id:
+            get_object_or_404(TeamMember, id=obj_id).delete()
+            messages.success(request, _('Team member deleted.'))
         elif model_type == 'requireddoc' and obj_id:
             get_object_or_404(RequiredDocument, id=obj_id).delete()
             messages.success(request, _('Required document deleted.'))
@@ -514,14 +546,36 @@ def about(request):
     if business and business.certifications:
         certifications = business.certifications.splitlines()
 
+    # --- new ---
+    team_members = TeamMember.objects.filter(is_active=True).order_by('order', 'name')
+
     context = {
         'business': business,
         'services': Service.objects.filter(active=True).only('name', 'icon'),
         'charges': ServiceCharge.objects.select_related('service').all().only('service__name', 'charge'),
         'certifications': certifications,
+        'team_members': team_members,   # add this
     }
     return render(request, 'aboutus.html', context)
 
+@cache_page(60 * 15)  # 15 minutes
+def team(request):
+    members = TeamMember.objects.filter(is_active=True).order_by('order', 'name').only(
+        'id', 'name', 'designation', 'bio', 'photo'
+    )
+    paginator = Paginator(members, 12)
+    page = request.GET.get('page')
+    try:
+        members_page = paginator.page(page)
+    except PageNotAnInteger:
+        members_page = paginator.page(1)
+    except EmptyPage:
+        members_page = paginator.page(paginator.num_pages)
+    return render(request, 'team.html', {
+        'business': get_business(),
+        'members': members_page,
+    })
+    
 def services(request):
     services_qs = Service.objects.filter(active=True).order_by('name').only('id', 'name', 'description', 'icon', 'icon_color')
     paginator = Paginator(services_qs, 12)

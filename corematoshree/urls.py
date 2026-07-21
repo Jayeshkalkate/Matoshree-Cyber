@@ -25,7 +25,8 @@ urlpatterns = [
     path('announcements/', views.announcements, name='announcements'),
     path('government-schemes/', views.government_schemes, name='government_schemes'),
     path('jobs/', views.jobs, name='jobs'),
-
+    path('team/', views.team, name='team'),
+    
     # Review submission (POST only)
     path('submit-review/', views.submit_review, name='submit_review'),
 

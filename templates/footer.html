@@ -3,6 +3,7 @@
 
 <footer class="footer">
   <div class="container">
+    <!-- Footer Grid: 4 Columns -->
     <div class="footer-grid">
       <!-- Column 1: Brand & Contact -->
       <div class="footer-col">
@@ -27,14 +28,15 @@
         <ul>
           <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
           <li><a href="{% url 'about' %}">{% trans "About" %}</a></li>
+          <li><a href="{% url 'team' %}">{% trans "Team" %}</a></li>
+          <li><a href="{% url 'contact' %}">{% trans "Contact" %}</a></li>
           <li><a href="{% url 'services' %}">{% trans "Services" %}</a></li>
           <li><a href="{% url 'gallery' %}">{% trans "Gallery" %}</a></li>
           <li><a href="{% url 'reviews' %}">{% trans "Reviews" %}</a></li>
-          <li><a href="{% url 'contact' %}">{% trans "Contact" %}</a></li>
         </ul>
       </div>
 
-      <!-- Column 3: Our Services -->
+      <!-- Column 4: Our Services -->
       <div class="footer-col">
         <h4>{% trans "Our Services" %}</h4>
         <ul>
@@ -45,7 +47,7 @@
         </ul>
       </div>
 
-      <!-- Column 4: Resources -->
+      <!-- Column 5: Resources -->
       <div class="footer-col">
         <h4>{% trans "Resources" %}</h4>
         <ul>
@@ -55,23 +57,17 @@
           <li><a href="{% url 'appointment' %}">{% trans "Book Appointment" %}</a></li>
         </ul>
       </div>
+      
     </div>
 
-    <!-- Bottom row: copyright + socials -->
-    <div class="footer-bottom">
-      <p>
-        {% now "Y" as current_year %}
-        {% blocktrans with year=current_year name=business.business_name|default:"Matoshree Cyber Cafe" trimmed %}
-          &copy; {{ year }} {{ name }}. All rights reserved.
-        {% endblocktrans %}
-      </p>
+    <!-- Social Icons Row -->
+    <div class="footer-socials">
       <div class="socials">
-      {% comment %} https://chat.whatsapp.com/BjIk12GVsYn85tW0RKu9qJ {% endcomment %}
         <a href="https://chat.whatsapp.com/BjIk12GVsYn85tW0RKu9qJ"
            target="_blank"
            rel="noopener noreferrer"
            aria-label="Join our WhatsApp Group">
-           <i class="fa fa-whatsapp"></i>
+          <i class="fab fa-whatsapp"></i>
         </a>
         <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
         <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
@@ -80,11 +76,36 @@
         <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
       </div>
     </div>
-  </div>
+
+    <!-- Copyright & Developer Credit -->
+    <div class="footer-copy">
+      <p>
+        {% now "Y" as current_year %}
+        {% blocktrans with year=current_year name=business.business_name|default:"Matoshree Cyber Cafe" trimmed %}
+          &copy; {{ year }} {{ name }}. All rights reserved.
+        {% endblocktrans %}
+      </p>
+      <p class="developer-credit">
+        Developed with ❤️ by
+        <a href="https://devjayesh-portfolio.netlify.app/"
+           target="_blank"
+           rel="noopener noreferrer">
+          DEVJAYESH
+        </a>
+        &nbsp;|&nbsp;
+        <a href="https://www.linkedin.com/in/jayesh-kalkate-31a250242/"
+           target="_blank"
+           rel="noopener noreferrer">
+          LinkedIn
+        </a>
+      </p>
+    </div>
+
+  </div> <!-- /container -->
 </footer>
 
 <!-- ============================================================
-     RESPONSIVE FOOTER STYLES (embedded for portability)
+     RESPONSIVE FOOTER STYLES (single block)
      ============================================================ -->
 <style>
   /* ----- Reset / base for footer ----- */
@@ -208,20 +229,13 @@
     flex-shrink: 0;
   }
 
-  /* ----- Footer bottom (copyright + socials) ----- */
-  .footer-bottom {
+  /* ----- Social Icons Row ----- */
+  .footer-socials {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    font-size: 0.88rem;
-    padding-top: 4px;
-  }
-
-  .footer-bottom p {
-    margin: 0;
-    color: var(--text-muted, #94a3b8);
+    justify-content: center;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 16px;
   }
 
   .socials {
@@ -232,13 +246,13 @@
 
   .socials a {
     color: var(--text-muted, #94a3b8);
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     transition: color 0.2s ease, transform 0.2s ease;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.04);
     text-decoration: none;
@@ -249,6 +263,28 @@
     color: var(--neon-cyan, #00f0ff);
     transform: translateY(-2px);
     background: rgba(0, 240, 255, 0.08);
+  }
+
+  /* ----- Copyright & Developer Credit ----- */
+  .footer-copy {
+    text-align: center;
+    padding: 8px 0 4px;
+    font-size: 0.9rem;
+  }
+
+  .footer-copy p {
+    margin: 6px 0;
+    color: var(--text-muted, #94a3b8);
+  }
+
+  .developer-credit a {
+    color: var(--neon-cyan, #00f0ff);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .developer-credit a:hover {
+    color: var(--text-white, #f0f4ff);
   }
 
   /* ============================================================
@@ -279,18 +315,16 @@
     .brand-small .name {
       font-size: 1.2rem;
     }
-    .footer-bottom {
-      flex-direction: column;
-      text-align: center;
-      gap: 8px;
-    }
-    .socials {
-      justify-content: center;
+    .footer-socials {
+      padding: 12px 0;
     }
     .socials a {
       width: 44px;
       height: 44px;
       font-size: 1.2rem;
+    }
+    .footer-copy {
+      font-size: 0.85rem;
     }
   }
 
@@ -317,14 +351,22 @@
     .footer-contact p {
       justify-content: center;
     }
-    .footer-bottom {
-      font-size: 0.82rem;
-    }
     .footer .container {
       padding: 0 16px;
     }
     .footer-address {
       text-align: center;
+    }
+    .footer-socials {
+      padding: 10px 0;
+    }
+    .socials {
+      gap: 12px;
+    }
+    .socials a {
+      width: 44px;
+      height: 44px;
+      font-size: 1.2rem;
     }
   }
 
@@ -357,8 +399,8 @@
       height: 40px;
       font-size: 1rem;
     }
-    .footer-bottom p {
-      font-size: 0.75rem;
+    .footer-copy {
+      font-size: 0.8rem;
     }
   }
 
@@ -440,7 +482,7 @@
       background: none !important;
       border: 1px solid #ccc;
     }
-    .footer-bottom p {
+    .footer-copy p {
       color: #000 !important;
     }
     .footer-contact p i {
