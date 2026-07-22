@@ -31,7 +31,7 @@ pypdf==6.14.2                   # PDF splitting/merging
 # =============================================================================
 # PAYMENT GATEWAY (Razorpay – if you use it)
 # =============================================================================
-razorpay==1.4.2                 # Required only if you use online payments
+# razorpay==1.4.2                 # Required only if you use online payments
 
 # =============================================================================
 # PERFORMANCE & CACHING (Optional – uncomment if using Redis)
@@ -43,6 +43,6 @@ razorpay==1.4.2                 # Required only if you use online payments
 # =============================================================================
 # DEVELOPMENT TOOLS (Optional – uncomment for local debugging)
 # =============================================================================
-# django-debug-toolbar==4.4.6
+django-debug-toolbar==4.0
 
 reportlab==4.2.5

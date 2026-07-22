@@ -455,7 +455,7 @@ class Application(models.Model):
     )
     PAYMENT_METHOD_CHOICES = (
         ("upi", "UPI"),
-        ("razorpay", "Razorpay"),
+        # ("razorpay", "Razorpay"),
         ("cash", "Cash"),
     )
 
