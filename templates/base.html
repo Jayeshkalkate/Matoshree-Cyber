@@ -19,9 +19,6 @@
     <!-- Font Awesome (CDN) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="{% static 'manifest.json' %}">
-
     {% block extra_head %}{% endblock %}
 
     <style>
@@ -1102,15 +1099,6 @@
             });
 
         })();
-    </script>
-
-    <!-- ============================== PWA SERVICE WORKER ============================== -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('{% static "sw.js" %}')
-                .then(() => console.log('Service Worker registered'))
-                .catch(err => console.log('SW registration failed:', err));
-        }
     </script>
 
     <!-- ============================== INSTALL APP LOGIC ============================== -->
