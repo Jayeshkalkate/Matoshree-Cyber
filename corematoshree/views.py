@@ -29,7 +29,7 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import cache_page
 from pypdf import PdfReader, PdfWriter
-# import razorpay
+import razorpay
 from django.conf import settings
 from django.core.cache import cache
 from django.db import ProgrammingError
@@ -1093,25 +1093,25 @@ def mark_payment_done(request, app_id):
         messages.warning(request, _('Payment already processed.'))
     return redirect('application_detail', app_id=app_id)
 
-# def create_payment(request, app_id):
-#     app = get_object_or_404(Application, id=app_id, user=request.user)
-#     amount = int(app.service.servicecharge_set.first().charge * 100)  # in paise
-#     client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
-#     order = client.order.create({
-#         'amount': amount,
-#         'currency': 'INR',
-#         'receipt': f'app_{app.id}',
-#         'payment_capture': '1'
-#     })
-#     app.payment_transaction_id = order['id']
-#     app.save()
-#     context = {
-#         'app': app,
-#         'order_id': order['id'],
-#         'razorpay_key': settings.RAZORPAY_KEY_ID,
-#         'amount': amount,
-#     }
-#     return render(request, 'payment.html', context)
+def create_payment(request, app_id):
+    app = get_object_or_404(Application, id=app_id, user=request.user)
+    amount = int(app.service.servicecharge_set.first().charge * 100)  # in paise
+    client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+    order = client.order.create({
+        'amount': amount,
+        'currency': 'INR',
+        'receipt': f'app_{app.id}',
+        'payment_capture': '1'
+    })
+    app.payment_transaction_id = order['id']
+    app.save()
+    context = {
+        'app': app,
+        'order_id': order['id'],
+        'razorpay_key': settings.RAZORPAY_KEY_ID,
+        'amount': amount,
+    }
+    return render(request, 'payment.html', context)
 
 @login_required
 def download_receipt(request, app_id):

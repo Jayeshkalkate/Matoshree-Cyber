@@ -31,7 +31,7 @@ pypdf==6.14.2                   # PDF splitting/merging
 # =============================================================================
 # PAYMENT GATEWAY (Razorpay – if you use it)
 # =============================================================================
-# razorpay==1.4.2                 # Required only if you use online payments
+razorpay==1.4.2                 # Required only if you use online payments
 
 # =============================================================================
 # PERFORMANCE & CACHING (Optional – uncomment if using Redis)
