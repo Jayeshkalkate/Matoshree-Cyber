@@ -1,7 +1,7 @@
 # =============================================================================
 # CORE DJANGO & DEPLOYMENT
 # =============================================================================
-Django==6.0.2
+Django==6.0.7                    # Latest patch for 6.0 (or use 5.2.x LTS)
 gunicorn==26.0.0                # Production WSGI server
 whitenoise==6.12.0              # Static file serving (no external server needed)
 
@@ -29,14 +29,20 @@ Pillow==12.1.1                  # Required for image processing
 pypdf==6.14.2                   # PDF splitting/merging
 
 # =============================================================================
+# PAYMENT GATEWAY (Razorpay – if you use it)
+# =============================================================================
+razorpay==1.4.2                 # Required only if you use online payments
+
+# =============================================================================
 # PERFORMANCE & CACHING (Optional – uncomment if using Redis)
 # =============================================================================
-# redis==5.2.1                   # Redis client
-# hiredis==3.1.0                 # Faster Redis parser (optional)
-# django-redis==5.4.0            # Django cache backend for Redis
+# redis==5.2.1
+# hiredis==3.1.0
+# django-redis==5.4.0
 
 # =============================================================================
 # DEVELOPMENT TOOLS (Optional – uncomment for local debugging)
 # =============================================================================
-# django-debug-toolbar==4.4.6    # Query debugging & performance profiling
+# django-debug-toolbar==4.4.6
 
+reportlab==4.2.5

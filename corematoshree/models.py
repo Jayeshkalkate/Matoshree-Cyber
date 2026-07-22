@@ -200,7 +200,7 @@ class Review(models.Model):
 # ==========================
 class Announcement(models.Model):
     CATEGORY = (
-        ("General", _("General")),                    # ADDED
+        ("General", _("General")),
         ("Government Scheme", _("Government Scheme")),
         ("Recruitment", _("Recruitment")),
         ("Scholarship", _("Scholarship")),
@@ -437,9 +437,8 @@ class BusinessInfo(models.Model):
         verbose_name_plural = _("Business Information")
 
 
-# ==========================
-# Application & Documents
-# ==========================
+# corematoshree/models.py
+
 class Application(models.Model):
     STATUS_CHOICES = (
         ("pending", "Pending"),
@@ -448,6 +447,19 @@ class Application(models.Model):
         ("rejected", "Rejected"),
     )
 
+    PAYMENT_STATUS_CHOICES = (
+        ("pending", "Pending"),
+        ("paid", "Paid"),
+        ("failed", "Failed"),
+        ("refunded", "Refunded"),
+    )
+    PAYMENT_METHOD_CHOICES = (
+        ("upi", "UPI"),
+        ("razorpay", "Razorpay"),
+        ("cash", "Cash"),
+    )
+
+    # --- Core fields ---
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("User"))
     service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name=_("Service"))
     full_name = models.CharField(_("Full Name"), max_length=150, db_index=True)
@@ -465,6 +477,32 @@ class Application(models.Model):
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(_("Updated At"), auto_now=True, db_index=True)
 
+    # --- Payment fields ---
+    payment_status = models.CharField(
+        max_length=20,
+        choices=PAYMENT_STATUS_CHOICES,
+        default="pending",
+        db_index=True
+    )
+    payment_transaction_id = models.CharField(max_length=100, blank=True)
+    payment_method = models.CharField(
+        max_length=20,
+        choices=PAYMENT_METHOD_CHOICES,
+        default="upi",
+        blank=True
+    )
+    payment_date = models.DateTimeField(null=True, blank=True)
+    receipt_number = models.CharField(max_length=50, blank=True, null=True, unique=True)
+
+    def generate_receipt_number(self):
+        """Generate a unique receipt number e.g. RCP-2026-07-22-0001"""
+        from django.utils import timezone
+        now = timezone.now()
+        return f"RCP-{now.strftime('%Y%m%d')}-{self.id:04d}"
+
+    def __str__(self):
+        return f"{self.full_name} – {self.service.name}"
+
     class Meta:
         ordering = ["-created_at"]
         verbose_name = _("Application")
@@ -475,10 +513,8 @@ class Application(models.Model):
             models.Index(fields=['status', 'created_at']),
             models.Index(fields=['email']),
             models.Index(fields=['phone']),
+            models.Index(fields=['payment_status']),
         ]
-
-    def __str__(self):
-        return f"{self.full_name} – {self.service.name}"
 
 
 class DocumentUpload(models.Model):
@@ -505,6 +541,7 @@ class DocumentUpload(models.Model):
     def __str__(self):
         return f"{self.document_name} – {self.application.full_name}"
 
+
 # ==========================
 # Team Member
 # ==========================
@@ -527,3 +564,29 @@ class TeamMember(models.Model):
 
     def __str__(self):
         return self.name
+
+
+# ==========================
+# Payment Setting (Singleton)
+# ==========================
+class PaymentSettings(models.Model):
+    upi_id = models.CharField("UPI ID", max_length=100, blank=True, help_text="e.g. example@upi")
+    upi_mobile = models.CharField("UPI Mobile", max_length=15, blank=True)
+    qr_code = models.ImageField("QR Code", upload_to="payments/", blank=True, null=True)
+    payment_instructions = models.TextField("Instructions", blank=True, default="Scan QR code and pay using any UPI app.")
+    is_active = models.BooleanField("Active", default=True)
+
+    def save(self, *args, **kwargs):
+        # Enforce singleton: if this is a new record, reuse the existing one
+        if not self.pk:
+            existing = PaymentSettings.objects.first()
+            if existing:
+                self.pk = existing.pk
+        # Ensure only one record is active at a time
+        if self.is_active:
+            PaymentSettings.objects.filter(is_active=True).exclude(pk=self.pk).update(is_active=False)
+        super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = "Payment Setting"
+        verbose_name_plural = "Payment Settings"

@@ -104,6 +104,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.i18n",
                 "corematoshree.context_processors.business_info",
+                "corematoshree.context_processors.payment_settings",
             ],
         },
     },
@@ -133,6 +134,9 @@ CLOUDINARY_STORAGE = {
 
 # Force Cloudinary storage regardless of environment variables
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Optional: also set the URL if you need to reference it directly
 CLOUDINARY_URL = os.getenv("CLOUDINARY_URL", "")
@@ -283,3 +287,10 @@ else:
             }
         }
     }
+
+# =============================================================================
+# PAYMENT - RAZORPAY
+# =============================================================================
+
+RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID")
+RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET")

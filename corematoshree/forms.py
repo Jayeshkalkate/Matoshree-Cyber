@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.translation import gettext_lazy as _
 from .models import TeamMember
+from .models import PaymentSettings
 from .models import (
     User,
     Contact,
@@ -403,6 +404,7 @@ class RequiredDocumentForm(forms.ModelForm):
             "document_name": _("Separate multiple documents with commas."),
         }
 
+
 class TeamMemberForm(forms.ModelForm):
     class Meta:
         model = TeamMember
@@ -413,5 +415,22 @@ class TeamMemberForm(forms.ModelForm):
             'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'photo': forms.FileInput(attrs={'class': 'form-control'}),
             'order': forms.NumberInput(attrs={'class': 'form-control'}),
+            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
+
+
+# ==========================
+# PAYMENT GATEWAY
+# ==========================
+
+class PaymentSettingsForm(forms.ModelForm):
+    class Meta:
+        model = PaymentSettings
+        fields = ('upi_id', 'upi_mobile', 'qr_code', 'payment_instructions', 'is_active')
+        widgets = {
+            'upi_id': forms.TextInput(attrs={'class': 'form-control'}),
+            'upi_mobile': forms.TextInput(attrs={'class': 'form-control'}),
+            'qr_code': forms.FileInput(attrs={'class': 'form-control'}),
+            'payment_instructions': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }

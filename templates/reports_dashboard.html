@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Analytics Dashboard" %}{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  .chart-container {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 1rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .chart-container canvas {
+    max-height: 300px;
+    width: 100% !important;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="mb-4">{% trans "Analytics Dashboard" %}</h1>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="chart-container">
+        <h5>{% trans "Applications by Status" %}</h5>
+        <canvas id="appStatusChart"></canvas>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="chart-container">
+        <h5>{% trans "Daily Applications (Last 30 Days)" %}</h5>
+        <canvas id="dailyAppsChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="chart-container">
+        <h5>{% trans "Appointments by Status" %}</h5>
+        <canvas id="apptStatusChart"></canvas>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="chart-container">
+        <h5>{% trans "New Users per Week" %}</h5>
+        <canvas id="weeklyUsersChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="chart-container">
+        <h5>{% trans "Payment Status Breakdown" %}</h5>
+        <canvas id="paymentStatusChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    "use strict";
+
+    const data = {{ data|safe }};
+
+    // ---- Applications by Status ----
+    const appStatusLabels = data.app_status.map(item => item.status);
+    const appStatusCounts = data.app_status.map(item => item.count);
+    new Chart(document.getElementById('appStatusChart'), {
+      type: 'bar',
+      data: {
+        labels: appStatusLabels,
+        datasets: [{
+          label: '{% trans "Applications" %}',
+          data: appStatusCounts,
+          backgroundColor: 'rgba(0, 230, 255, 0.6)',
+          borderColor: 'rgba(0, 230, 255, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+
+    // ---- Daily Applications ----
+    const dailyLabels = data.daily_apps.map(item => item.day);
+    const dailyCounts = data.daily_apps.map(item => item.count);
+    new Chart(document.getElementById('dailyAppsChart'), {
+      type: 'line',
+      data: {
+        labels: dailyLabels,
+        datasets: [{
+          label: '{% trans "Applications" %}',
+          data: dailyCounts,
+          borderColor: 'rgba(168, 85, 247, 1)',
+          backgroundColor: 'rgba(168, 85, 247, 0.2)',
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+
+    // ---- Appointments by Status ----
+    const apptStatusLabels = data.appt_status.map(item => item.status);
+    const apptStatusCounts = data.appt_status.map(item => item.count);
+    new Chart(document.getElementById('apptStatusChart'), {
+      type: 'doughnut',
+      data: {
+        labels: apptStatusLabels,
+        datasets: [{
+          data: apptStatusCounts,
+          backgroundColor: [
+            'rgba(255, 194, 60, 0.7)',
+            'rgba(0, 230, 255, 0.7)',
+            'rgba(57, 255, 158, 0.7)',
+            'rgba(255, 61, 95, 0.7)'
+          ],
+          borderColor: '#060814'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true
+      }
+    });
+
+    // ---- Weekly Users ----
+    const weekLabels = data.weekly_users.map(item => item.week);
+    const weekCounts = data.weekly_users.map(item => item.count);
+    new Chart(document.getElementById('weeklyUsersChart'), {
+      type: 'bar',
+      data: {
+        labels: weekLabels,
+        datasets: [{
+          label: '{% trans "New Users" %}',
+          data: weekCounts,
+          backgroundColor: 'rgba(255, 45, 149, 0.6)',
+          borderColor: 'rgba(255, 45, 149, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+
+    // ---- Payment Status ----
+    const paymentLabels = data.payment_status.map(item => item.payment_status);
+    const paymentCounts = data.payment_status.map(item => item.count);
+    new Chart(document.getElementById('paymentStatusChart'), {
+      type: 'pie',
+      data: {
+        labels: paymentLabels,
+        datasets: [{
+          data: paymentCounts,
+          backgroundColor: [
+            'rgba(255, 194, 60, 0.7)',
+            'rgba(57, 255, 158, 0.7)',
+            'rgba(255, 61, 95, 0.7)',
+            'rgba(168, 85, 247, 0.7)'
+          ],
+          borderColor: '#060814'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true
+      }
+    });
+
+  })();
+</script>
+{% endblock %}

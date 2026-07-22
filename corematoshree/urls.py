@@ -61,4 +61,13 @@ urlpatterns = [
 
     # PDF splitting (admin only)
     path('pdf/<int:pk>/split/', views.split_pdf, name='split_pdf'),
+    
+    # Payemnt get way
+    path('payment/mark-done/<int:app_id>/', views.mark_payment_done, name='mark_payment_done'),
+    path('payment/create/<int:app_id>/', views.create_payment, name='create_payment'),
+    path('receipt/<int:app_id>/', views.download_receipt, name='download_receipt'),
+    
+    # Dashboard Report
+    path('reports/', views.reports_dashboard, name='reports_dashboard'),
+    
 ]

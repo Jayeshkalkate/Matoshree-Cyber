@@ -5,8 +5,19 @@ import os
 import tempfile
 import logging
 from django.contrib import messages
+from django.utils import timezone
 from django.db import models
+from django.db.models import Count, Q
+from django.utils import timezone
+from datetime import timedelta
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.units import inch
+from django.http import FileResponse
+from django.core.cache import cache
 from django.contrib.auth import login, authenticate
+from .forms import PaymentSettingsForm 
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -18,28 +29,25 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import cache_page
 from pypdf import PdfReader, PdfWriter
+import razorpay
+from django.conf import settings
 from django.core.cache import cache
 from django.db import ProgrammingError
+from django.db.models.functions import TruncDate, TruncWeek
+
 from .models import (
-    User, Appointment, Review, Service, Announcement,
-    JobNotification, GovernmentScheme, DownloadForm, ServiceCharge,
-    Gallery, BusinessInfo, RequiredDocument, FAQ, Application, DocumentUpload
+    User, Appointment, Review, Service, Announcement, JobNotification,
+    GovernmentScheme, DownloadForm, ServiceCharge, Gallery, BusinessInfo,
+    RequiredDocument, FAQ, Application, DocumentUpload, Contact, TeamMember,
+    PaymentSettings
 )
-from .models import (
-    User, Contact, Appointment, Review, Service, Announcement,
-    JobNotification, GovernmentScheme, DownloadForm, ServiceCharge,
-    Gallery, BusinessInfo, RequiredDocument, FAQ, Application, DocumentUpload,
-    TeamMember
-)
-from .forms import TeamMemberForm
 from .forms import (
-    CustomUserCreationForm, ProfileUpdateForm,
-    ContactForm, AppointmentForm, ReviewForm,
-    ServiceForm, AnnouncementForm, JobNotificationForm,
-    GovernmentSchemeForm, AppointmentFormDashboard,
-    ContactFormDashboard, DownloadFormForm, ServiceChargeForm,
-    GalleryForm, BusinessInfoForm, RequiredDocumentForm,
-    ApplicationForm, DocumentUploadForm
+    TeamMemberForm, CustomUserCreationForm, ProfileUpdateForm, ContactForm,
+    AppointmentForm, ReviewForm, ServiceForm, AnnouncementForm,
+    JobNotificationForm, GovernmentSchemeForm, AppointmentFormDashboard,
+    ContactFormDashboard, DownloadFormForm, ServiceChargeForm, GalleryForm,
+    BusinessInfoForm, RequiredDocumentForm, ApplicationForm, DocumentUploadForm,
+    PaymentSettingsForm
 )
 
 logger = logging.getLogger(__name__)
@@ -111,6 +119,11 @@ def _get_dashboard_common_data():
     cache_key = DASHBOARD_CACHE_KEY
     cached = cache.get(cache_key)
 
+    # Ensure a PaymentSettings instance exists (singleton)
+    payment_settings_instance = PaymentSettings.objects.first()
+    if not payment_settings_instance:
+        payment_settings_instance = PaymentSettings.objects.create(is_active=False)
+
     if cached is not None:
         data = {
             'services': cached['services'],
@@ -125,9 +138,7 @@ def _get_dashboard_common_data():
             'business_info': cached['business_info'],
             'applications': cached['applications'],
             'required_docs': cached['required_docs'],
-            # --- NEW ---
             'team_members': cached.get('team_members', TeamMember.objects.all().order_by('order', 'name')),
-            'team_member_form': TeamMemberForm(),   # never cached
         }
     else:
         # Fetch all querysets (no forms)
@@ -152,7 +163,6 @@ def _get_dashboard_common_data():
             'required_docs': RequiredDocument.objects.select_related('service').only(
                 'id', 'service__name', 'document_name'
             ).order_by('service__name'),
-            # ... existing keys ...
             'team_members': TeamMember.objects.all().order_by('order', 'name'),
         }
         # Cache only the querysets / business_info (forms are excluded)
@@ -171,6 +181,9 @@ def _get_dashboard_common_data():
         'gallery_form': GalleryForm(),
         'businessinfo_form': BusinessInfoForm(instance=BusinessInfo.objects.first()),
         'required_doc_form': RequiredDocumentForm(),
+        'team_member_form': TeamMemberForm(),  # <-- added
+        'payment_settings_form': PaymentSettingsForm(instance=payment_settings_instance),
+        'payment_settings': PaymentSettings.objects.filter(is_active=True).first(),
     })
     return data
 
@@ -216,7 +229,7 @@ def _handle_dashboard_post(request, is_super=False):
             # Clear cache so dashboard shows new documents immediately
             cache.delete(DASHBOARD_CACHE_KEY)
             return redirect('superadmin_dashboard' if is_super else 'admin_dashboard')
-        
+
         elif model_type == 'teammember':
             form = TeamMemberForm(request.POST, request.FILES)
             if form.is_valid():
@@ -224,7 +237,7 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.success(request, _('Team member added.'))
             else:
                 messages.error(request, _('Error adding team member.'))
-        
+
         elif model_type == 'announcement':
             form = AnnouncementForm(request.POST)
             if form.is_valid():
@@ -311,7 +324,7 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.success(request, _('Required document updated.'))
             else:
                 messages.error(request, _('Error updating required document.'))
-                
+
         elif model_type == 'teammember' and obj_id:
             instance = get_object_or_404(TeamMember, id=obj_id)
             form = TeamMemberForm(request.POST, request.FILES, instance=instance)
@@ -320,7 +333,7 @@ def _handle_dashboard_post(request, is_super=False):
                 messages.success(request, _('Team member updated.'))
             else:
                 messages.error(request, _('Error updating team member.'))
-        
+
         elif model_type == 'announcement' and obj_id:
             instance = get_object_or_404(Announcement, id=obj_id)
             form = AnnouncementForm(request.POST, instance=instance)
@@ -441,6 +454,24 @@ def _handle_dashboard_post(request, is_super=False):
         cache.delete(DASHBOARD_CACHE_KEY)
         return redirect('superadmin_dashboard' if is_super else 'admin_dashboard')
 
+    # ===== PAYMENT SETTINGS – FIXED =====
+    elif model_type == 'paymentsettings':
+        instance = PaymentSettings.objects.first() or PaymentSettings()
+        form = PaymentSettingsForm(request.POST, request.FILES, instance=instance)
+        if form.is_valid():
+            form.save()
+            messages.success(request, _('Payment settings updated.'))
+            cache.delete('payment_settings')
+        else:
+            # Log all errors
+            logger.error(f"PaymentSettings form errors: {form.errors.as_json()}")
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+            messages.error(request, _('Please correct the errors below.'))
+        cache.delete(DASHBOARD_CACHE_KEY)
+        return redirect('superadmin_dashboard' if is_super else 'admin_dashboard')
+
     # Superadmin specific: edit user role
     if is_super and action == 'edit_user':
         user_id = request.POST.get('user_id')
@@ -545,7 +576,6 @@ def about(request):
     if business and business.certifications:
         certifications = business.certifications.splitlines()
 
-    # --- new ---
     team_members = TeamMember.objects.filter(is_active=True).order_by('order', 'name')
 
     context = {
@@ -553,7 +583,7 @@ def about(request):
         'services': Service.objects.filter(active=True).only('name', 'icon'),
         'charges': ServiceCharge.objects.select_related('service').all().only('service__name', 'charge'),
         'certifications': certifications,
-        'team_members': team_members,   # add this
+        'team_members': team_members,
     }
     return render(request, 'aboutus.html', context)
 
@@ -574,7 +604,7 @@ def team(request):
         'business': get_business(),
         'members': members_page,
     })
-    
+
 def services(request):
     services_qs = Service.objects.filter(active=True).order_by('name').only('id', 'name', 'description', 'icon', 'icon_color')
     paginator = Paginator(services_qs, 12)
@@ -718,7 +748,6 @@ def reviews(request):
     except EmptyPage:
         reviews_page = paginator.page(paginator.num_pages)
 
-    # Compute rating statistics (for the entire queryset, not just the page)
     total_reviews = all_reviews.count()
     if total_reviews > 0:
         rating_avg = all_reviews.aggregate(avg=models.Avg('rating'))['avg']
@@ -884,6 +913,7 @@ def application_detail(request, app_id):
         'application': application,
         'documents': documents,
         'business': get_business(),
+        'payment_settings': PaymentSettings.objects.filter(is_active=True).first(),
     })
 
 # =============================================================================
@@ -1043,3 +1073,126 @@ def split_pdf(request, pk):
         'app': app,
         'business': get_business(),
     })
+
+# =============================================================================
+# PAYMENT GATEWAY
+# =============================================================================
+
+@login_required
+def mark_payment_done(request, app_id):
+    application = get_object_or_404(Application, id=app_id, user=request.user)
+    if application.payment_status == 'pending':
+        application.payment_status = 'paid'
+        application.payment_date = timezone.now()
+        application.receipt_number = application.generate_receipt_number()
+        application.payment_method = request.POST.get('payment_method', 'upi')
+        application.save()
+        messages.success(request, _('Payment marked as completed. Your receipt is ready.'))
+        cache.delete('reports_data')
+    else:
+        messages.warning(request, _('Payment already processed.'))
+    return redirect('application_detail', app_id=app_id)
+
+def create_payment(request, app_id):
+    app = get_object_or_404(Application, id=app_id, user=request.user)
+    amount = int(app.service.servicecharge_set.first().charge * 100)  # in paise
+    client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+    order = client.order.create({
+        'amount': amount,
+        'currency': 'INR',
+        'receipt': f'app_{app.id}',
+        'payment_capture': '1'
+    })
+    app.payment_transaction_id = order['id']
+    app.save()
+    context = {
+        'app': app,
+        'order_id': order['id'],
+        'razorpay_key': settings.RAZORPAY_KEY_ID,
+        'amount': amount,
+    }
+    return render(request, 'payment.html', context)
+
+@login_required
+def download_receipt(request, app_id):
+    application = get_object_or_404(Application, id=app_id, user=request.user)
+    if application.payment_status != 'paid':
+        messages.error(request, _('No payment record found.'))
+        return redirect('application_detail', app_id=app_id)
+
+    buffer = BytesIO()
+    c = canvas.Canvas(buffer, pagesize=A4)
+    width, height = A4
+
+    c.setFont("Helvetica-Bold", 16)
+    c.drawString(1*inch, height-1*inch, "PAYMENT RECEIPT")
+
+    c.setFont("Helvetica", 12)
+    y = height - 1.5*inch
+    c.drawString(1*inch, y, f"Receipt No: {application.receipt_number}")
+    c.drawString(1*inch, y-0.3*inch, f"Date: {application.payment_date.strftime('%d %b %Y, %H:%M')}")
+    c.drawString(1*inch, y-0.6*inch, f"Transaction ID: {application.payment_transaction_id or 'N/A'}")
+    c.drawString(1*inch, y-0.9*inch, f"Payment Method: {application.get_payment_method_display()}")
+
+    c.drawString(1*inch, y-1.4*inch, "Customer Details")
+    c.drawString(1*inch, y-1.7*inch, f"Name: {application.full_name}")
+    c.drawString(1*inch, y-2.0*inch, f"Phone: {application.phone}")
+    c.drawString(1*inch, y-2.3*inch, f"Email: {application.email}")
+
+    c.drawString(1*inch, y-2.8*inch, "Service Details")
+    c.drawString(1*inch, y-3.1*inch, f"Service: {application.service.name}")
+    try:
+        charge = application.service.servicecharge_set.first().charge
+    except:
+        charge = 0
+    c.drawString(1*inch, y-3.4*inch, f"Amount: ₹{charge}")
+
+    c.setFont("Helvetica-Oblique", 10)
+    c.drawString(1*inch, 1*inch, "Thank you for your payment. This is a system-generated receipt.")
+
+    c.save()
+    buffer.seek(0)
+
+    return FileResponse(buffer, as_attachment=True, filename=f"receipt_{application.receipt_number}.pdf")
+
+# =============================================================================
+# DASHBOARD REPORT
+# =============================================================================
+
+@login_required
+@user_passes_test(is_admin)
+def reports_dashboard(request):
+    cache_key = 'reports_data'
+    data = cache.get(cache_key)
+    if not data:
+        app_status_counts = Application.objects.values('status').annotate(count=Count('id'))
+        end_date = timezone.now().date()
+        start_date = end_date - timedelta(days=30)
+        daily_apps = Application.objects.filter(created_at__date__gte=start_date) \
+            .annotate(day=TruncDate('created_at')) \
+            .values('day') \
+            .annotate(count=Count('id')) \
+            .order_by('day')
+        appt_status_counts = Appointment.objects.values('status').annotate(count=Count('id'))
+        weekly_users = User.objects.filter(date_joined__gte=timezone.now() - timedelta(days=90)) \
+            .annotate(week=TruncWeek('date_joined')) \
+            .values('week') \
+            .annotate(count=Count('id')) \
+            .order_by('week')
+        payment_status_counts = Application.objects.values('payment_status').annotate(count=Count('id'))
+
+        data = {
+            'app_status': list(app_status_counts),
+            'daily_apps': list(daily_apps),
+            'appt_status': list(appt_status_counts),
+            'weekly_users': list(weekly_users),
+            'payment_status': list(payment_status_counts),
+        }
+        cache.set(cache_key, data, 60*60)
+
+    context = {
+        'data': data,
+        'business': get_business(),
+    }
+    return render(request, 'reports_dashboard.html', context)
+

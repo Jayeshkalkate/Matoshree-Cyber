@@ -4,7 +4,7 @@ Django Admin Configuration for the core application.
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib import messages
-
+from .models import PaymentSettings
 from .models import (
     User,
     Service,
@@ -222,7 +222,6 @@ class BusinessInfoAdmin(admin.ModelAdmin):
         }),
     )
 
-
 # ==========================
 # Application & Document Upload (Inline)
 # ==========================
@@ -235,8 +234,8 @@ class DocumentUploadInline(admin.TabularInline):
 
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
-    list_display = ('full_name', 'service', 'status', 'created_at')
-    list_filter = ('status', 'service', 'created_at')
+    list_display = ('full_name', 'service', 'status', 'payment_status', 'payment_method', 'created_at')
+    list_filter = ('status', 'payment_status', 'service', 'created_at')
     search_fields = ('full_name', 'email', 'phone')
     readonly_fields = ('created_at', 'updated_at')
     inlines = [DocumentUploadInline]
@@ -254,3 +253,14 @@ class TeamMemberAdmin(admin.ModelAdmin):
     search_fields = ('name', 'designation')
     ordering = ('order', 'name')
     list_editable = ('order', 'is_active')
+
+# ==========================
+# Payment Setting
+# ==========================
+
+@admin.register(PaymentSettings)
+class PaymentSettingsAdmin(admin.ModelAdmin):
+    list_display = ('upi_id', 'upi_mobile', 'is_active')
+    fieldsets = (
+        (None, {'fields': ('upi_id', 'upi_mobile', 'qr_code', 'payment_instructions', 'is_active')}),
+    )

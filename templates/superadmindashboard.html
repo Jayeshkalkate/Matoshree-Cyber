@@ -1301,14 +1301,58 @@
                 <li><a href="#" data-section="requireddocs"><i class="fas fa-list-ul" aria-hidden="true"></i> {% trans "Required Docs" %}</a></li>
                 <li><a href="#" data-section="applications"><i class="fas fa-file-alt" aria-hidden="true"></i> {% trans "Applications" %}</a></li>
                 <li><a href="#" data-section="settings"><i class="fas fa-cog" aria-hidden="true"></i> {% trans "Settings" %}</a></li>
+                <li><a href="{% url 'reports_dashboard' %}" target="_blank"><i class="fas fa-chart-bar"></i> {% trans "Analytics" %}</a></li>
             </ul>
         </nav>
         <a href="{% url 'logout' %}" class="logout-btn"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> {% trans "Logout" %}</a>
     </aside>
 
-    <!-- ===== MAIN CONTENT ===== -->
-    <main class="main-content" role="main">
+    <!-- ===== SECTION: PAYMENT SETTINGS ===== -->
+<div id="section-paymentsettings" class="section">
+    <div class="section-header">
+        <h3><i class="fas fa-credit-card" style="color:var(--neon-cyan)"></i> {% trans "Payment Settings" %}</h3>
+    </div>
+    <div class="admin-form">
+        {% if payment_settings_form.non_field_errors %}
+            <div class="alert alert-danger" style="grid-column:1/-1; padding:0.5rem 1rem; background:rgba(255,0,0,0.1); border-radius:8px;">
+                {{ payment_settings_form.non_field_errors }}
+            </div>
+        {% endif %}
 
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="edit">
+            <input type="hidden" name="model_type" value="paymentsettings">
+            
+            {% for field in payment_settings_form %}
+                <div class="form-group" style="grid-column: span 1;">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="text-danger" style="font-size:0.85rem; margin-top:0.2rem;">
+                            {% for error in field.errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    {% if field.help_text %}
+                        <small class="text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            
+            <div class="form-actions">
+                <button type="submit" class="btn-primary"><i class="fas fa-save"></i> {% trans "Save Settings" %}</button>
+            </div>
+        </form>
+
+        {% if payment_settings and payment_settings.qr_code %}
+            <div class="mt-2" style="text-align:center; grid-column:1/-1;">
+                <img src="{{ payment_settings.qr_code.url }}" alt="QR Code" style="max-width:200px; border:1px solid var(--border-soft); border-radius:8px; padding:4px;">
+            </div>
+        {% endif %}
+    </div>
+</div>
         <!-- Top Bar -->
         <div class="top-bar">
             <div class="left-group">
