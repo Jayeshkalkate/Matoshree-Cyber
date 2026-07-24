@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',   # <-- ADD Whitenoise
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -64,7 +65,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # Custom context processors
                 'corematoshree.context_processors.business_info',
                 # 'corematoshree.context_processors.payment_settings',
             ],
@@ -89,6 +89,11 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+
+# ------------------------------------------------------------------
+# SESSIONS – use database backend to avoid corruption
+# ------------------------------------------------------------------
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'   # <-- ADD this line
 
 # ------------------------------------------------------------------
 # PASSWORD VALIDATION
@@ -123,8 +128,27 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 static_dir = BASE_DIR / 'static'
 STATICFILES_DIRS = [static_dir] if static_dir.exists() else []
 
+# Use Whitenoise to serve static files with compression
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Media files – in production, use Cloudinary or S3. 
+# For local development, we keep the local storage.
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# ------------------------------------------------------------------
+# CLOUDINARY FOR MEDIA (Optional but recommended for production)
+# Uncomment and set environment variables to use Cloudinary.
+# ------------------------------------------------------------------
+# if not DEBUG:
+#     INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
+#     import cloudinary
+#     cloudinary.config(
+#         cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
+#         api_key=os.getenv('CLOUDINARY_API_KEY'),
+#         api_secret=os.getenv('CLOUDINARY_API_SECRET')
+#     )
+#     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -152,6 +176,15 @@ if not DEBUG:
     SECURE_HSTS_PRELOAD = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     X_FRAME_OPTIONS = 'DENY'
+
+# ------------------------------------------------------------------
+# CSRF TRUSTED ORIGINS – add your Render domain here
+# ------------------------------------------------------------------
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',') if os.getenv('CSRF_TRUSTED_ORIGINS') else []
+if DEBUG and not CSRF_TRUSTED_ORIGINS:
+    CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1:8000']
+# For production, ensure your Render URL is included, e.g.:
+# CSRF_TRUSTED_ORIGINS = ['https://matoshree-cyber.onrender.com']
 
 # ------------------------------------------------------------------
 # LOGGING – Enhanced for payment/debugging
@@ -220,11 +253,3 @@ PAYMENT_TIMEOUT_MINUTES = int(os.getenv('PAYMENT_TIMEOUT_MINUTES', '15'))
 PAYMENT_MAX_RETRY = int(os.getenv('PAYMENT_MAX_RETRY', '3'))
 PAYMENT_AMOUNT_MIN = int(os.getenv('PAYMENT_AMOUNT_MIN', '1'))  # in INR
 PAYMENT_AMOUNT_MAX = int(os.getenv('PAYMENT_AMOUNT_MAX', '100000'))  # in INR
-
-# ------------------------------------------------------------------
-# CSRF TRUSTED ORIGINS – needed for webhook if using custom domain
-# ------------------------------------------------------------------
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',') if os.getenv('CSRF_TRUSTED_ORIGINS') else []
-if DEBUG and not CSRF_TRUSTED_ORIGINS:
-    CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1:8000']
-    
