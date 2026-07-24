@@ -1075,7 +1075,7 @@
                                 <td>{{ service.category }}</td>
                                 <td><span class="badge-status {% if service.active %}confirmed{% else %}cancelled{% endif %}">{{ service.active|yesno:_("Active,Inactive") }}</span></td>
                                 <td>
-                                    <button class="btn-primary btn-sm" onclick="editService('{{ service.id }}', '{{ service.name|escapejs }}', '{{ service.category|escapejs }}', '{{ service.description|escapejs }}', '{{ service.active|yesno:"true,false" }}', '{{ service.icon|escapejs }}', '{{ service.icon_color|default:"#00d4ff" }}')"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-primary btn-sm" onclick="editService('{{ service.id }}', '{{ service.name|escapejs }}', '{{ service.category|escapejs }}', '{{ service.description|escapejs }}', '{{ service.active|yesno:"true,false" }}', '{{ service.icon|escapejs }}', '{{ service.icon_color|default:"#00d4ff" }}', '{{ service.payment_required|yesno:"true,false" }}')"><i class="fas fa-edit"></i></button>
                                     <form method="post" style="display:inline;">
                                         {% csrf_token %}
                                         <input type="hidden" name="action" value="delete">
@@ -1121,6 +1121,13 @@
                         <select name="active" id="editSvcStatus">
                             <option value="true">{% trans "Active" %}</option>
                             <option value="false">{% trans "Inactive" %}</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>{% trans "Payment Required" %}</label>
+                        <select name="payment_required" id="editSvcPaymentRequired">
+                            <option value="true">{% trans "Yes" %}</option>
+                            <option value="false">{% trans "No" %}</option>
                         </select>
                     </div>
                     <div>
@@ -1922,6 +1929,7 @@
                             <th>{% trans "Service" %}</th>
                             <th>{% trans "Status" %}</th>
                             <th>{% trans "Submitted" %}</th>
+                            <th>{% trans "Payment Status" %}</th>
                             <th>{% trans "Actions" %}</th>
                         </tr>
                     </thead>
@@ -1934,6 +1942,12 @@
                                     <span class="badge-status {{ app.status }}">{{ app.get_status_display }}</span>
                                 </td>
                                 <td>{{ app.created_at|date:"d M Y" }}</td>
+                                <!-- NEW: Payment Status -->
+                                <td>
+                                    <span class="badge-status {{ app.payment_status|default:'pending'|lower }}">
+                                    {{ app.get_payment_status_display|default:"Pending" }}
+                                    </span>
+                                </td>
                                 <td>
                                     <a href="{% url 'application_admin_detail' app.id %}" class="btn-primary btn-sm">
                                         <i class="fas fa-eye"></i> {% trans "View" %}
@@ -1944,7 +1958,7 @@
                                 </td>
                             </tr>
                         {% empty %}
-                            <tr><td colspan="5">{% trans "No applications yet." %}</td></tr>
+                            <tr><td colspan="6">{% trans "No applications yet." %}</td></tr>
                         {% endfor %}
                     </tbody>
                 </table>
@@ -2068,12 +2082,13 @@
             // --------------------------------------------------------------------
             // 2. Global edit functions
             // --------------------------------------------------------------------
-            window.editService = function(id, name, category, description, active, icon, color) {
+            window.editService = function(id, name, category, description, active, icon, color,paymentRequired) {
                 document.getElementById("editServiceId").value = id;
                 document.getElementById("editSvcName").value = name;
                 document.getElementById("editSvcCategory").value = category;
                 document.getElementById("editSvcDesc").value = description;
                 document.getElementById("editSvcStatus").value = active === 'true' ? 'true' : 'false';
+                document.getElementById("editSvcPaymentRequired").value = paymentRequired === 'true' ? 'true' : 'false';
                 document.getElementById("editSvcIcon").value = icon || '';
                 document.getElementById("editSvcColor").value = color || '#00d4ff';
                 document.getElementById("editServiceForm").style.display = "grid";

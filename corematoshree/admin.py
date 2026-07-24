@@ -4,6 +4,7 @@ Django Admin Configuration for the core application.
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib import messages
+from django.utils import timezone
 from .models import PaymentSettings
 from .models import (
     User,
@@ -56,8 +57,8 @@ class CustomUserAdmin(UserAdmin):
 # ==========================
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'active')
-    list_filter = ('category', 'active')
+    list_display = ('name', 'category', 'active', 'payment_required')
+    list_filter = ('category', 'active', 'payment_required')
     search_fields = ('name', 'category')
     ordering = ('name',)
 
@@ -71,7 +72,7 @@ class AppointmentAdmin(admin.ModelAdmin):
     list_filter = ('status', 'appointment_date', 'service')
     search_fields = ('full_name', 'phone', 'email')
     ordering = ('-appointment_date',)
-    list_editable = ('status',)   # Quick inline status updates
+    list_editable = ('status',)
     actions = ['mark_as_confirmed', 'mark_as_completed', 'mark_as_cancelled']
 
     def mark_as_confirmed(self, request, queryset):
@@ -222,6 +223,7 @@ class BusinessInfoAdmin(admin.ModelAdmin):
         }),
     )
 
+
 # ==========================
 # Application & Document Upload (Inline)
 # ==========================
@@ -234,7 +236,10 @@ class DocumentUploadInline(admin.TabularInline):
 
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
-    list_display = ('full_name', 'service', 'status', 'payment_status', 'payment_method', 'created_at')
+    list_display = (
+        'full_name', 'service', 'status', 'payment_status',
+        'payment_method', 'created_at'
+    )
     list_filter = ('status', 'payment_status', 'service', 'created_at')
     search_fields = ('full_name', 'email', 'phone')
     readonly_fields = ('created_at', 'updated_at')
@@ -242,10 +247,49 @@ class ApplicationAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('user', 'service', 'full_name', 'phone', 'email', 'address', 'extra_data')}),
         ('Status', {'fields': ('status',)}),
+        ('Payment', {'fields': ('payment_status', 'payment_method', 'payment_transaction_id',
+                                'payment_date', 'receipt_number', 'utr_number', 'payment_app')}),
         ('Timestamps', {'fields': ('created_at', 'updated_at')}),
     )
     ordering = ('-created_at',)
+    list_editable = ('status', 'payment_status')   # Quick inline updates
+    actions = ['mark_paid', 'generate_receipts']
 
+    @admin.action(description="Mark selected applications as Paid")
+    def mark_paid(self, request, queryset):
+        updated = queryset.update(
+            payment_status='paid',
+            payment_date=timezone.now()
+        )
+        # Generate receipt numbers if missing
+        for app in queryset:
+            if not app.receipt_number:
+                app.receipt_number = app.generate_receipt_number()
+                app.save(update_fields=['receipt_number'])
+        self.message_user(
+            request,
+            f"{updated} application(s) marked as paid and receipt(s) generated.",
+            messages.SUCCESS
+        )
+
+    @admin.action(description="Generate receipts for selected applications")
+    def generate_receipts(self, request, queryset):
+        count = 0
+        for app in queryset:
+            if app.payment_status == 'paid' and not app.receipt_number:
+                app.receipt_number = app.generate_receipt_number()
+                app.save(update_fields=['receipt_number'])
+                count += 1
+        self.message_user(
+            request,
+            f"Receipts generated for {count} application(s).",
+            messages.SUCCESS if count else messages.WARNING
+        )
+
+
+# ==========================
+# Team Member Admin
+# ==========================
 @admin.register(TeamMember)
 class TeamMemberAdmin(admin.ModelAdmin):
     list_display = ('name', 'designation', 'order', 'is_active')
@@ -254,13 +298,43 @@ class TeamMemberAdmin(admin.ModelAdmin):
     ordering = ('order', 'name')
     list_editable = ('order', 'is_active')
 
-# ==========================
-# Payment Setting
-# ==========================
 
+# ==========================
+# Payment Settings (Enhanced)
+# ==========================
 @admin.register(PaymentSettings)
 class PaymentSettingsAdmin(admin.ModelAdmin):
-    list_display = ('upi_id', 'upi_mobile', 'is_active')
-    fieldsets = (
-        (None, {'fields': ('upi_id', 'upi_mobile', 'qr_code', 'payment_instructions', 'is_active')}),
+    list_display = (
+        'upi_id', 'upi_mobile', 'is_active',
+        'razorpay_enabled', 'cash_enabled', 'upi_enabled',
+        'test_mode'
     )
+    list_filter = ('is_active', 'razorpay_enabled', 'cash_enabled', 'upi_enabled', 'test_mode')
+    search_fields = ('upi_id', 'upi_mobile')
+
+    fieldsets = (
+        (None, {
+            'fields': (
+                'is_active',
+                'upi_id', 'upi_mobile', 'qr_code', 'payment_instructions'
+            )
+        }),
+        ('Payment Methods', {
+            'fields': (
+                'razorpay_enabled', 'cash_enabled', 'upi_enabled'
+            )
+        }),
+        ('Test Mode', {
+            'fields': (
+                'test_mode', 'razorpay_test_key', 'razorpay_test_secret'
+            ),
+            'classes': ('collapse',),
+        }),
+    )
+
+    def get_readonly_fields(self, request, obj=None):
+        # Make test keys read-only if not in test mode
+        if obj and not obj.test_mode:
+            return ('razorpay_test_key', 'razorpay_test_secret')
+        return ()
+    

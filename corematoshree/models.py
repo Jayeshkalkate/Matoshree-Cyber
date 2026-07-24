@@ -61,6 +61,11 @@ class Service(models.Model):
     category = models.CharField(_("Category"), max_length=100, db_index=True)
     description = models.TextField(_("Description"), blank=True)
     active = models.BooleanField(_("Active"), default=True, db_index=True)
+    payment_required = models.BooleanField(
+        _("Payment Required"),
+        default=False,
+        help_text=_("If enabled, users will be prompted to pay after application submission.")
+    )
     icon = models.CharField(
         _("Icon"),
         max_length=50,
@@ -126,13 +131,10 @@ class Appointment(models.Model):
         ]
 
     def clean(self):
-        # Validate date is not in the past
         if self.appointment_date and self.appointment_date < timezone.localdate():
             raise ValidationError(
                 {"appointment_date": _("Appointment date cannot be in the past.")}
             )
-
-        # Validate time is within business hours (9:00 AM – 5:00 PM)
         if self.appointment_time:
             minutes = self.appointment_time.hour * 60 + self.appointment_time.minute
             if minutes < 9 * 60 or minutes > 17 * 60:
@@ -178,7 +180,7 @@ class Review(models.Model):
     email = models.EmailField(_("Email"), blank=True, null=True, db_index=True)
     review = models.TextField(_("Review"))
     rating = models.PositiveSmallIntegerField(_("Rating"), default=5, db_index=True)
-    approved = models.BooleanField(_("Approved"), default=True, db_index=True)
+    approved = models.BooleanField(_("Approved"), default=False, db_index=True)
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True, db_index=True)
 
     class Meta:
@@ -293,6 +295,7 @@ class RequiredDocument(models.Model):
         indexes = [
             models.Index(fields=['service', 'document_name']),
         ]
+        unique_together = [['service', 'document_name']]
 
     def __str__(self):
         return f"{self.service.name} - {self.document_name}"
@@ -413,33 +416,46 @@ class BusinessInfo(models.Model):
     )
 
     def save(self, *args, **kwargs):
-        if not self.pk:
-            existing = BusinessInfo.objects.first()
-            if existing:
-                self.pk = existing.pk
+        if self.pk:
+            BusinessInfo.objects.exclude(pk=self.pk).delete()
+        else:
+            BusinessInfo.objects.all().delete()
         super().save(*args, **kwargs)
         cache.delete('business_info')
-
-    @classmethod
-    def get_instance(cls):
-        """Return the singleton BusinessInfo instance, creating one if it doesn't exist."""
-        try:
-            instance = cls.objects.first()
-        except Exception:
-            instance = None
-        if not instance:
-            instance = cls()
-            instance.save()
-        return instance
 
     class Meta:
         verbose_name = _("Business Information")
         verbose_name_plural = _("Business Information")
 
 
-# corematoshree/models.py
-
+# ==========================
+# Application
+# ==========================
 class Application(models.Model):
+    PAYMENT_APP_CHOICES = (
+        ('gpay', 'Google Pay'),
+        ('phonepe', 'PhonePe'),
+        ('paytm', 'Paytm'),
+        ('bhim', 'BHIM'),
+        ('upi', 'Other UPI App'),
+        ('other', 'Other'),
+    )
+
+    utr_number = models.CharField(
+        _("UTR Number"),
+        max_length=50,
+        blank=True,
+        help_text=_("Unique Transaction Reference (if available)")
+    )
+    payment_app = models.CharField(
+        _("Payment App"),
+        max_length=20,
+        choices=PAYMENT_APP_CHOICES,
+        blank=True,
+        null=True,
+        # default='upi'
+    )
+
     STATUS_CHOICES = (
         ("pending", "Pending"),
         ("review", "Under Review"),
@@ -495,10 +511,13 @@ class Application(models.Model):
     receipt_number = models.CharField(max_length=50, blank=True, null=True, unique=True)
 
     def generate_receipt_number(self):
-        """Generate a unique receipt number e.g. RCP-2026-07-22-0001"""
         from django.utils import timezone
         now = timezone.now()
         return f"RCP-{now.strftime('%Y%m%d')}-{self.id:04d}"
+
+    def clean(self):
+        if self.payment_app and not self.utr_number:
+            raise ValidationError({"utr_number": _("UTR number is required when a payment app is selected.")})
 
     def __str__(self):
         return f"{self.full_name} – {self.service.name}"
@@ -517,6 +536,9 @@ class Application(models.Model):
         ]
 
 
+# ==========================
+# Document Upload
+# ==========================
 class DocumentUpload(models.Model):
     application = models.ForeignKey(
         Application,
@@ -565,24 +587,34 @@ class TeamMember(models.Model):
     def __str__(self):
         return self.name
 
-
-# ==========================
-# Payment Setting (Singleton)
-# ==========================
 class PaymentSettings(models.Model):
+    # Existing fields (keep these)
     upi_id = models.CharField("UPI ID", max_length=100, blank=True, help_text="e.g. example@upi")
     upi_mobile = models.CharField("UPI Mobile", max_length=15, blank=True)
     qr_code = models.ImageField("QR Code", upload_to="payments/", blank=True, null=True)
     payment_instructions = models.TextField("Instructions", blank=True, default="Scan QR code and pay using any UPI app.")
     is_active = models.BooleanField("Active", default=True)
 
+    # Gateway toggles
+    razorpay_enabled = models.BooleanField("Enable Razorpay", default=False)
+    upi_enabled = models.BooleanField("Enable UPI Payment", default=True)
+    cash_enabled = models.BooleanField("Enable Cash Payment", default=False)
+
+    # Razorpay credentials (MUST exist)
+    razorpay_key_id = models.CharField("Razorpay Key ID", max_length=100, blank=True)
+    razorpay_key_secret = models.CharField("Razorpay Key Secret", max_length=100, blank=True)
+
+    # Test mode (optional)
+    test_mode = models.BooleanField("Test Mode", default=False)
+    razorpay_test_key = models.CharField("Razorpay Test Key", max_length=100, blank=True)
+    razorpay_test_secret = models.CharField("Razorpay Test Secret", max_length=100, blank=True)
+
     def save(self, *args, **kwargs):
-        # Enforce singleton: if this is a new record, reuse the existing one
-        if not self.pk:
-            existing = PaymentSettings.objects.first()
-            if existing:
-                self.pk = existing.pk
-        # Ensure only one record is active at a time
+        # Singleton logic
+        if self.pk:
+            PaymentSettings.objects.exclude(pk=self.pk).delete()
+        else:
+            PaymentSettings.objects.all().delete()
         if self.is_active:
             PaymentSettings.objects.filter(is_active=True).exclude(pk=self.pk).update(is_active=False)
         super().save(*args, **kwargs)
@@ -590,3 +622,38 @@ class PaymentSettings(models.Model):
     class Meta:
         verbose_name = "Payment Setting"
         verbose_name_plural = "Payment Settings"
+
+# ==========================
+# Payment Log (for audit trail)
+# ==========================
+class PaymentLog(models.Model):
+    application = models.ForeignKey(Application, on_delete=models.CASCADE, related_name="payment_logs")
+    event_type = models.CharField(
+        max_length=50,
+        choices=(
+            ('created', 'Order Created'),
+            ('captured', 'Payment Captured'),
+            ('failed', 'Payment Failed'),
+            ('refunded', 'Payment Refunded'),
+            ('webhook_received', 'Webhook Received'),
+            ('manual_confirmed', 'Manually Confirmed'),
+        ),
+        db_index=True
+    )
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    razorpay_payment_id = models.CharField(max_length=100, blank=True)
+    razorpay_order_id = models.CharField(max_length=100, blank=True)
+    webhook_data = models.JSONField(default=dict, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = "Payment Log"
+        verbose_name_plural = "Payment Logs"
+        indexes = [
+            models.Index(fields=['application', 'event_type']),
+            models.Index(fields=['razorpay_payment_id']),
+        ]
+
+    def __str__(self):
+        return f"{self.application.full_name} – {self.event_type} – {self.created_at.strftime('%Y-%m-%d %H:%M')}"

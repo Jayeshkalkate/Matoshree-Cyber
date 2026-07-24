@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% load i18n %}
 
 {% block title %}{% trans "Application Detail" %}{% endblock %}
@@ -96,6 +95,10 @@
     .badge-status.approved { border-color: var(--neon-green, #22d3ee); color: var(--neon-green, #22d3ee); }
     .badge-status.rejected { border-color: var(--neon-magenta, #ff2d95); color: var(--neon-magenta, #ff2d95); }
     .badge-status.completed { border-color: var(--neon-cyan, #00f0ff); color: var(--neon-cyan, #00f0ff); }
+    /* Payment status variations */
+    .badge-status.paid { border-color: var(--neon-green, #22d3ee); color: var(--neon-green, #22d3ee); }
+    .badge-status.pending { border-color: var(--neon-orange, #f97316); color: var(--neon-orange, #f97316); }
+    .badge-status.failed { border-color: var(--neon-magenta, #ff2d95); color: var(--neon-magenta, #ff2d95); }
 
     .app-detail .card-body {
         padding: clamp(1rem, 2.5vw, 1.8rem) clamp(1rem, 2.5vw, 2rem);
@@ -144,128 +147,6 @@
         color: var(--neon-cyan, #00f0ff);
     }
 
-    /* ---- Status update form ---- */
-    .app-detail .status-form {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.8rem 1rem;
-        align-items: flex-end;
-    }
-
-    .app-detail .form-group {
-        margin-bottom: 1.2rem;
-        flex: 1 1 200px;
-    }
-
-    .app-detail .form-group label {
-        font-weight: 600;
-        color: var(--text-muted, #94a3b8);
-        display: block;
-        margin-bottom: 0.3rem;
-        font-size: clamp(0.8rem, 0.9vw, 0.9rem);
-    }
-
-    .app-detail .form-control,
-    .app-detail input[type="text"],
-    .app-detail input[type="file"],
-    .app-detail select {
-        background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        color: var(--text-white, #f0f4ff);
-        border-radius: var(--radius-sm, 8px);
-        padding: 0.6rem 1rem;
-        width: 100%;
-        transition: all 0.3s ease;
-        font-size: clamp(0.85rem, 1vw, 0.95rem);
-        min-height: 44px;
-        -webkit-appearance: none;
-        appearance: none;
-    }
-
-    .app-detail .form-control:focus,
-    .app-detail input:focus,
-    .app-detail select:focus {
-        border-color: var(--neon-cyan, #00f0ff);
-        box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.15);
-        outline: none;
-        background: rgba(255, 255, 255, 0.08);
-    }
-
-    .app-detail select {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394a3b8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 1rem center;
-        padding-right: 2.5rem;
-    }
-
-    .app-detail .btn-sm {
-        padding: 0.4rem 1.2rem;
-        font-size: clamp(0.8rem, 0.9vw, 0.9rem);
-        min-height: 44px;
-        min-width: 44px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.4rem;
-        border: none;
-        border-radius: var(--radius-sm, 8px);
-        font-weight: 600;
-        transition: all 0.3s ease;
-        cursor: pointer;
-        touch-action: manipulation;
-        text-decoration: none;
-    }
-
-    .app-detail .btn-primary {
-        background: var(--gradient-cyan, linear-gradient(135deg, #00f0ff, #0ea5e9));
-        color: var(--bg-primary, #0a0e1a);
-        box-shadow: 0 0 24px rgba(0, 240, 255, 0.15);
-    }
-    .app-detail .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 0 40px rgba(0, 240, 255, 0.3);
-    }
-
-    .app-detail .btn-danger {
-        background: rgba(255, 45, 149, 0.15);
-        color: var(--neon-magenta, #ff2d95);
-        border: 1px solid rgba(255, 45, 149, 0.2);
-    }
-    .app-detail .btn-danger:hover {
-        background: var(--neon-magenta, #ff2d95);
-        color: var(--bg-primary, #0a0e1a);
-    }
-
-    .app-detail .btn-outline-primary {
-        background: transparent;
-        color: var(--neon-cyan, #00f0ff);
-        border: 1px solid var(--neon-cyan, #00f0ff);
-    }
-    .app-detail .btn-outline-primary:hover {
-        background: var(--neon-cyan, #00f0ff);
-        color: var(--bg-primary, #0a0e1a);
-    }
-
-    .app-detail .btn-outline-success {
-        background: transparent;
-        color: var(--neon-green, #22d3ee);
-        border: 1px solid var(--neon-green, #22d3ee);
-    }
-    .app-detail .btn-outline-success:hover {
-        background: var(--neon-green, #22d3ee);
-        color: var(--bg-primary, #0a0e1a);
-    }
-
-    .app-detail .btn-outline-warning {
-        background: transparent;
-        color: var(--neon-orange, #f97316);
-        border: 1px solid var(--neon-orange, #f97316);
-    }
-    .app-detail .btn-outline-warning:hover {
-        background: var(--neon-orange, #f97316);
-        color: var(--bg-primary, #0a0e1a);
-    }
-
     /* ---- Table (documents) ---- */
     .app-detail .table-wrap {
         background: rgba(255, 255, 255, 0.02);
@@ -280,7 +161,7 @@
         width: 100%;
         border-collapse: collapse;
         font-size: clamp(0.8rem, 0.9vw, 0.9rem);
-        min-width: 600px;
+        min-width: 480px;
     }
 
     .app-detail th {
@@ -324,38 +205,148 @@
         padding: 0.2rem 0.6rem;
         font-size: 0.8rem;
         border-radius: var(--radius-sm, 6px);
-    }
-
-    /* ---- Verification toggle button ---- */
-    .app-detail .btn-verify {
-        background: transparent;
-        border: 1px solid var(--neon-cyan, #00f0ff);
-        color: var(--neon-cyan, #00f0ff);
-        padding: 0.2rem 0.8rem;
-        border-radius: 30px;
-        font-size: clamp(0.65rem, 0.8vw, 0.75rem);
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
+        text-decoration: none;
         display: inline-flex;
         align-items: center;
+        justify-content: center;
         gap: 0.3rem;
-        min-height: 32px;
-        touch-action: manipulation;
-        white-space: nowrap;
+        transition: all 0.3s ease;
+        cursor: pointer;
     }
-    .app-detail .btn-verify:hover {
+
+    .app-detail .btn-outline-primary {
+        background: transparent;
+        color: var(--neon-cyan, #00f0ff);
+        border: 1px solid var(--neon-cyan, #00f0ff);
+    }
+    .app-detail .btn-outline-primary:hover {
         background: var(--neon-cyan, #00f0ff);
         color: var(--bg-primary, #0a0e1a);
-        box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
     }
-    .app-detail .btn-verify.verified {
-        border-color: var(--neon-green, #22d3ee);
+
+    .app-detail .btn-outline-success {
+        background: transparent;
         color: var(--neon-green, #22d3ee);
+        border: 1px solid var(--neon-green, #22d3ee);
     }
-    .app-detail .btn-verify.verified:hover {
+    .app-detail .btn-outline-success:hover {
         background: var(--neon-green, #22d3ee);
         color: var(--bg-primary, #0a0e1a);
+    }
+
+    /* ---- Extra data ---- */
+    .app-detail .extra-data-pre {
+        margin: 0;
+        color: var(--text-muted, #94a3b8);
+        background: rgba(255, 255, 255, 0.04);
+        padding: 0.4rem 0.8rem;
+        border-radius: var(--radius-sm, 8px);
+        overflow-x: auto;
+        font-size: clamp(0.8rem, 0.9vw, 0.9rem);
+        max-width: 100%;
+        word-break: break-all;
+        white-space: pre-wrap;
+    }
+
+    /* ---- Payment section ---- */
+    .app-detail .payment-section {
+        margin-top: 1rem;
+        padding: 1rem 0 0.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .app-detail .payment-section .payment-details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 1.5rem;
+        align-items: center;
+    }
+
+    .app-detail .payment-section .upi-payment {
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: var(--radius-sm, 8px);
+        padding: 1rem 1.2rem;
+        margin-top: 0.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .app-detail .payment-section .upi-payment img {
+        max-width: 200px;
+        height: auto;
+        border-radius: 8px;
+        margin: 0.5rem 0;
+        background: #fff;
+        padding: 4px;
+        display: block;
+    }
+
+    .app-detail .payment-section .payment-done {
+        background: rgba(34, 211, 238, 0.05);
+        border-radius: var(--radius-sm, 8px);
+        padding: 1rem 1.2rem;
+        border: 1px solid rgba(34, 211, 238, 0.15);
+    }
+
+    .app-detail .payment-section .payment-done i {
+        color: var(--neon-green, #22d3ee);
+        margin-right: 0.4rem;
+    }
+
+    .app-detail .payment-section .btn-success {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.5rem 1.5rem;
+        background: var(--neon-green, #22d3ee);
+        color: var(--bg-primary, #0a0e1a);
+        border: none;
+        border-radius: var(--radius-sm, 8px);
+        font-weight: 700;
+        font-size: clamp(0.9rem, 1vw, 1rem);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 0.5rem;
+        touch-action: manipulation;
+        min-height: 44px;
+        min-width: 44px;
+        justify-content: center;
+        text-decoration: none;
+    }
+    .app-detail .payment-section .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 30px rgba(34, 211, 238, 0.3);
+    }
+
+    .app-detail .payment-section .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.5rem 1.5rem;
+        background: var(--gradient-cyan, linear-gradient(135deg, #00f0ff, #0ea5e9));
+        color: var(--bg-primary, #0a0e1a);
+        border: none;
+        border-radius: var(--radius-sm, 8px);
+        font-weight: 700;
+        font-size: clamp(0.9rem, 1vw, 1rem);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 0.5rem;
+        touch-action: manipulation;
+        min-height: 44px;
+        min-width: 44px;
+        justify-content: center;
+        text-decoration: none;
+        box-shadow: 0 0 24px rgba(0, 240, 255, 0.15);
+    }
+    .app-detail .payment-section .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 40px rgba(0, 240, 255, 0.3);
+    }
+
+    .app-detail .payment-section .text-muted {
+        font-size: clamp(0.75rem, 0.8vw, 0.85rem);
+        color: var(--text-dim, #5c6a8c);
+        margin-top: 0.5rem;
     }
 
     /* ---- Back link ---- */
@@ -375,21 +366,7 @@
         color: var(--neon-cyan, #00f0ff);
     }
 
-    /* ---- Extra data pre block ---- */
-    .app-detail .extra-data-pre {
-        margin: 0;
-        color: var(--text-muted, #94a3b8);
-        background: rgba(255, 255, 255, 0.04);
-        padding: 0.4rem 0.8rem;
-        border-radius: var(--radius-sm, 8px);
-        overflow-x: auto;
-        font-size: clamp(0.8rem, 0.9vw, 0.9rem);
-        max-width: 100%;
-        word-break: break-all;
-        white-space: pre-wrap;
-    }
-
-    /* ---- Page hero (assume defined in base, but we style anyway) ---- */
+    /* ---- Page hero ---- */
     .page-hero {
         padding: clamp(30px, 6vw, 60px) 0 clamp(20px, 4vw, 40px);
         text-align: center;
@@ -431,17 +408,6 @@
             width: 100%;
             margin-bottom: 0.1rem;
         }
-        .app-detail .status-form {
-            flex-direction: column;
-            align-items: stretch;
-        }
-        .app-detail .status-form .form-group {
-            flex: 1 1 auto;
-            margin-bottom: 0.6rem;
-        }
-        .app-detail .status-form .form-group select {
-            width: 100%;
-        }
         .app-detail .card-header {
             flex-direction: column;
             align-items: flex-start;
@@ -457,15 +423,19 @@
             min-height: 40px;
             min-width: 40px;
         }
-        .app-detail .btn-verify {
-            min-height: 36px;
+        .app-detail .payment-section .payment-details {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .app-detail .payment-section .upi-payment img {
+            max-width: 150px;
         }
     }
 
     @media (max-width: 480px) {
         .app-detail table {
             font-size: 0.75rem;
-            min-width: 480px;
+            min-width: 360px;
         }
         .app-detail th,
         .app-detail td {
@@ -477,13 +447,16 @@
         .app-detail .back-link {
             font-size: 0.85rem;
         }
+        .app-detail .payment-section .btn-primary,
+        .app-detail .payment-section .btn-success {
+            width: 100%;
+        }
     }
 
     /* ================================================================
        CROSS‑BROWSER FALLBACKS
        ================================================================ */
 
-    /* ----- Flexbox fallback for older IE ----- */
     @supports not (display: flex) {
         .app-detail .row {
             display: block;
@@ -499,10 +472,10 @@
         .app-detail .detail-row {
             display: block;
         }
-        .app-detail .status-form {
+        .app-detail .payment-section .payment-details {
             display: block;
         }
-        .app-detail .status-form .form-group {
+        .app-detail table {
             width: 100%;
         }
         .app-detail .btn-group {
@@ -511,24 +484,15 @@
         .app-detail .btn-group .btn-sm {
             margin: 0.2rem;
         }
-        .app-detail .btn-verify {
-            display: inline-block;
-        }
-        .app-detail table {
-            width: 100%;
-        }
     }
 
-    /* ----- backdrop-filter fallback ----- */
     @supports not (backdrop-filter: blur(4px)) {
         .app-detail .card,
-        .app-detail .table-wrap,
-        .app-detail .form-control {
+        .app-detail .table-wrap {
             background: rgba(10, 14, 26, 0.95);
         }
     }
 
-    /* ----- Touch devices: increase tap targets and disable hover transforms ----- */
     @media (hover: none) and (pointer: coarse) {
         .app-detail .card:hover {
             transform: none !important;
@@ -537,47 +501,26 @@
         }
         .app-detail .btn-sm,
         .app-detail .back-link,
-        .app-detail .btn-verify,
-        .app-detail .form-control,
-        .app-detail select {
+        .app-detail .btn-primary,
+        .app-detail .btn-success {
             min-height: 48px;
         }
-        .app-detail .btn-verify {
-            min-height: 40px;
-        }
-        .app-detail td .btn-group .btn-sm {
-            min-height: 44px;
-            min-width: 44px;
-        }
         .app-detail .btn-primary:hover,
-        .app-detail .btn-danger:hover,
+        .app-detail .btn-success:hover,
         .app-detail .btn-outline-primary:hover,
-        .app-detail .btn-outline-success:hover,
-        .app-detail .btn-outline-warning:hover {
+        .app-detail .btn-outline-success:hover {
             transform: none !important;
-        }
-        .app-detail .btn-verify:hover {
-            background: transparent;
-            color: var(--neon-cyan, #00f0ff);
-        }
-        .app-detail .btn-verify.verified:hover {
-            background: transparent;
-            color: var(--neon-green, #22d3ee);
         }
     }
 
-    /* ----- Reduced motion ----- */
     @media (prefers-reduced-motion: reduce) {
         .app-detail .card,
         .app-detail .btn-sm,
-        .app-detail .btn-verify,
-        .app-detail .back-link,
-        .app-detail .form-control {
+        .app-detail .back-link {
             transition: none !important;
         }
     }
 
-    /* ----- Print styles ----- */
     @media print {
         .app-detail .card {
             border: 1px solid #ccc !important;
@@ -592,9 +535,7 @@
             border-color: #000 !important;
             color: #000 !important;
         }
-        .app-detail .detail-row .label {
-            color: #000 !important;
-        }
+        .app-detail .detail-row .label,
         .app-detail .detail-row .value {
             color: #000 !important;
         }
@@ -602,11 +543,9 @@
             color: #000 !important;
         }
         .app-detail .btn-sm,
-        .app-detail .btn-verify,
         .app-detail .back-link,
-        .app-detail .status-form,
-        .app-detail .table-wrap form,
-        .app-detail .btn-group .btn-sm {
+        .app-detail .payment-section .btn-primary,
+        .app-detail .payment-section .btn-success {
             display: none !important;
         }
         .app-detail table {
@@ -639,8 +578,15 @@
         .page-hero p {
             color: #000 !important;
         }
-        .app-detail .card-body {
-            padding: 0.5in !important;
+        .app-detail .payment-section {
+            border-top: 1px solid #ccc;
+        }
+        .app-detail .payment-section .payment-done {
+            background: #f9f9f9 !important;
+            border-color: #ccc !important;
+        }
+        .app-detail .payment-section .payment-done i {
+            color: #000 !important;
         }
     }
 </style>
@@ -651,7 +597,7 @@
 <section class="page-hero">
     <div class="container">
         <h1>{% trans "Application Detail" %}</h1>
-        <p>{% trans "Review and manage the application." %}</p>
+        <p>{% trans "View your application and manage payment." %}</p>
     </div>
 </section>
 
@@ -659,9 +605,9 @@
     <div class="container">
         <div class="row">
             <div class="col-md-10">
-                <!-- Back link -->
-                <a href="{% url 'admin_dashboard' %}#section-applications" class="back-link">
-                    <i class="fas fa-arrow-left"></i> {% trans "Back to Applications" %}
+                <!-- Back link – now goes to user's own application list -->
+                <a href="{% url 'my_applications' %}" class="back-link">
+                    <i class="fas fa-arrow-left"></i> {% trans "Back to My Applications" %}
                 </a>
 
                 <div class="card">
@@ -677,10 +623,6 @@
                     <div class="card-body">
 
                         <!-- User & Service Info -->
-                        <div class="detail-row">
-                            <div class="label">{% trans "User" %}:</div>
-                            <div class="value">{{ application.user.username }}</div>
-                        </div>
                         <div class="detail-row">
                             <div class="label">{% trans "Service" %}:</div>
                             <div class="value">{{ application.service.name }}</div>
@@ -704,42 +646,18 @@
                         </div>
                         <div class="detail-row">
                             <div class="label">{% trans "Address" %}:</div>
-                            <div class="value">{{ application.address }}</div>
+                            <div class="value">{{ application.address|linebreaksbr }}</div>
                         </div>
 
-                        <!-- Extra Data – only show if not empty -->
+                        <!-- Extra Data – displayed as plain text (no |safe) -->
                         {% if application.extra_data %}
                         <div class="detail-row">
                             <div class="label">{% trans "Extra Data" %}:</div>
                             <div class="value">
-                                <pre class="extra-data-pre">{{ application.extra_data|json_script:"extra-data" }}</pre>
+                                <pre class="extra-data-pre">{{ application.extra_data|escape }}</pre>
                             </div>
                         </div>
                         {% endif %}
-
-                        <hr>
-
-                        <!-- Status Update -->
-                        <h5><i class="fas fa-tasks"></i> {% trans "Status" %}</h5>
-                        <form method="post" class="status-form">
-                            {% csrf_token %}
-                            <input type="hidden" name="action" value="update_status">
-                            <div class="form-group">
-                                <label for="statusSelect">{% trans "Change Status" %}</label>
-                                <select name="status" id="statusSelect" class="form-control">
-                                    {% for value, label in application.STATUS_CHOICES %}
-                                        <option value="{{ value }}" {% if application.status == value %}selected{% endif %}>
-                                            {{ label }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="form-group" style="flex: 0 0 auto; margin-bottom: 0; display: flex; align-items: flex-end;">
-                                <button type="submit" class="btn-primary btn-sm" style="width:100%;">
-                                    <i class="fas fa-save"></i> {% trans "Update Status" %}
-                                </button>
-                            </div>
-                        </form>
 
                         <hr>
 
@@ -756,19 +674,17 @@
 
                         <hr>
 
-                        <!-- Document Uploads -->
-                        <h5><i class="fas fa-file-alt"></i> {% trans "Document Uploads" %}</h5>
+                        <!-- Document Uploads (user only: view & download) -->
+                        <h5><i class="fas fa-file-alt"></i> {% trans "Uploaded Documents" %}</h5>
 
                         <div class="table-wrap">
                             <table>
                                 <thead>
                                     <tr>
                                         <th>{% trans "Document Name" %}</th>
-                                        <th>{% trans "File" %}</th>
+                                        <th>{% trans "Action" %}</th>
                                         <th>{% trans "Mandatory" %}</th>
-                                        <th>{% trans "Verified by Admin" %}</th>
                                         <th>{% trans "Uploaded At" %}</th>
-                                        <th>{% trans "Actions" %}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -777,59 +693,233 @@
                                         <td>{{ doc.document_name }}</td>
                                         <td>
                                             <div class="btn-group">
-                                                <!-- View PDF -->
+                                                <!-- View -->
                                                 <a href="{{ doc.file.url }}" target="_blank" rel="noopener noreferrer"
-                                                   class="btn-sm btn-outline-primary" title="View PDF">
+                                                   class="btn-sm btn-outline-primary" title="{% trans 'View' %}">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <!-- Download PDF -->
+                                                <!-- Download -->
                                                 <a href="{{ doc.file.url }}" download
-                                                   class="btn-sm btn-outline-success" title="Download PDF">
+                                                   class="btn-sm btn-outline-success" title="{% trans 'Download' %}">
                                                     <i class="fas fa-download"></i>
-                                                </a>
-                                                <!-- Split PDF -->
-                                                <a href="{% url 'split_pdf' doc.id %}"
-                                                   class="btn-sm btn-outline-warning" title="Split PDF">
-                                                    <i class="fas fa-cut"></i>
                                                 </a>
                                             </div>
                                         </td>
                                         <td>{% if doc.is_mandatory %}<i class="fas fa-check-circle" style="color:var(--neon-green, #22d3ee);"></i>{% else %}<i class="fas fa-times-circle" style="color:var(--text-muted, #94a3b8);"></i>{% endif %}</td>
-                                        <td>
-                                            <!-- Verification toggle -->
-                                            <form method="post" style="display:inline;">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="action" value="verify_document">
-                                                <input type="hidden" name="doc_id" value="{{ doc.id }}">
-                                                <button type="submit" class="btn-verify {% if doc.verified %}verified{% endif %}" title="{% trans "Toggle verification" %}">
-                                                    <i class="fas {% if doc.verified %}fa-check-circle{% else %}fa-circle{% endif %}"></i>
-                                                    {% if doc.verified %}{% trans "Verified" %}{% else %}{% trans "Unverified" %}{% endif %}
-                                                </button>
-                                            </form>
-                                        </td>
                                         <td>{{ doc.uploaded_at|date:"M d, Y, h:i a" }}</td>
-                                        <td>
-                                            <!-- Delete document -->
-                                            <form method="post" onsubmit="return confirm('{% trans "Delete this document?" %}');" style="display:inline;">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="action" value="delete_document">
-                                                <input type="hidden" name="doc_id" value="{{ doc.id }}">
-                                                <button type="submit" class="btn-sm btn-danger"><i class="fas fa-trash"></i></button>
-                                            </form>
-                                        </td>
                                     </tr>
                                     {% empty %}
-                                    <tr><td colspan="6" style="text-align:center; padding:1.5rem;">{% trans "No documents uploaded." %}</td></tr>
+                                    <tr><td colspan="4" style="text-align:center; padding:1.5rem;">{% trans "No documents uploaded." %}</td></tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
                         </div>
 
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                        <hr>
+
+                        <!-- ============================================================
+                             PAYMENT SECTION – streamlined for real‑time e‑commerce
+                             ============================================================ -->
+                        <div class="payment-section">
+                            <h5><i class="fas fa-credit-card"></i> {% trans "Payment" %}</h5>
+
+                            {% if application.service.payment_required %}
+                                <!-- Show payment status and methods if payment is required -->
+                                <div class="payment-details">
+                                    <p><strong>{% trans "Status" %}:</strong>
+                                        <span class="badge-status {{ application.payment_status|default:'pending'|lower }}">
+                                            {{ application.get_payment_status_display|default:"Pending" }}
+                                        </span>
+                                    </p>
+                                </div>
+
+                                {% if application.payment_status == 'pending' %}
+                                    <!-- UPI Payment Option (if enabled) -->
+                                    {% if payment_settings and payment_settings.upi_enabled and payment_settings.qr_code %}
+                                    <div class="upi-payment">
+                                        <h5>{% trans "Pay via UPI" %}</h5>
+                                        <img src="{{ payment_settings.qr_code.url }}" alt="UPI QR Code">
+                                        <p><strong>UPI ID:</strong> {{ payment_settings.upi_id }}</p>
+                                        <p><strong>Mobile:</strong> {{ payment_settings.upi_mobile }}</p>
+                                        <p>{{ payment_settings.payment_instructions|default:"" }}</p>
+                                        <form method="post" action="{% url 'mark_payment_done' application.id %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="payment_method" value="upi">
+
+                                            <div style="margin-top: 0.8rem;">
+                                                <label for="payment_app">{% trans "Payment App" %} *</label>
+                                                <select name="payment_app" id="payment_app" required style="width:100%; padding:0.5rem; background:var(--bg-input); color:var(--text-bright); border:1px solid var(--border-soft); border-radius:8px;">
+                                                    <option value="gpay">Google Pay</option>
+                                                    <option value="phonepe">PhonePe</option>
+                                                    <option value="paytm">Paytm</option>
+                                                    <option value="bhim">BHIM</option>
+                                                    <option value="upi" selected>Other UPI App</option>
+                                                </select>
+                                            </div>
+
+                                            <div style="margin-top: 0.8rem;">
+                                                <label for="utr_number">{% trans "UTR Number" %}</label>
+                                                <input type="text" name="utr_number" id="utr_number" placeholder="{% trans 'e.g. 123456789012' %}" style="width:100%; padding:0.5rem; background:var(--bg-input); color:var(--text-bright); border:1px solid var(--border-soft); border-radius:8px;">
+                                                <small style="color:var(--text-dim); display:block; margin-top:0.2rem;">{% trans "Optional, but helps admin verify your payment." %}</small>
+                                            </div>
+
+                                            <button type="submit" class="btn-success" style="margin-top:0.8rem;">
+                                                <i class="fas fa-check-circle"></i> {% trans "I have paid" %}
+                                            </button>
+                                        </form>
+                                        <p class="text-muted">{% trans "After payment, click the button to confirm. Admin will verify." %}</p>
+                                    </div>
+                                    {% endif %}
+
+                                    <!-- Razorpay Payment Option (if enabled) -->
+                                    {% if payment_settings and payment_settings.razorpay_enabled %}
+                                    <div style="margin-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 1.2rem;">
+                                        <h5>{% trans "Pay with Razorpay" %}</h5>
+                                        <button id="razorpay-pay-btn" class="btn-primary">
+                                            <i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}
+                                        </button>
+                                        <p class="text-muted">{% trans "Instant online payment via credit/debit card, UPI, or netbanking." %}</p>
+                                    </div>
+                                    {% endif %}
+
+                                    <!-- If no method is enabled, show message -->
+                                    {% if not payment_settings.razorpay_enabled and not payment_settings.upi_enabled %}
+                                    <p class="text-muted">{% trans "No online payment methods are currently enabled. Please contact the admin to complete your payment." %}</p>
+                                    {% endif %}
+
+                                {% elif application.payment_status == 'paid' %}
+                                    <div class="payment-done">
+                                        <p><i class="fas fa-check-circle"></i> {% trans "Payment completed." %}</p>
+                                        <p><strong>{% trans "Receipt No." %}:</strong> {{ application.receipt_number|default:"—" }}</p>
+                                        <p><strong>{% trans "Payment Date" %}:</strong> {{ application.payment_date|date:"d M Y, H:i"|default:"—" }}</p>
+                                        <a href="{% url 'download_receipt' application.id %}" class="btn-primary">
+                                            <i class="fas fa-file-pdf"></i> {% trans "Download Receipt" %}
+                                        </a>
+                                    </div>
+                                {% endif %}
+
+                            {% else %}
+                                <!-- Payment not required for this service -->
+                                <div class="payment-details">
+                                    <p><i class="fas fa-info-circle" style="color: var(--neon-cyan);"></i> {% trans "No payment is required for this service." %}</p>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                    </div> <!-- /card-body -->
+                </div> <!-- /card -->
+            </div> <!-- /col-md-10 -->
+        </div> <!-- /row -->
+    </div> <!-- /container -->
 </section>
 
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    (function() {
+        "use strict";
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var payBtn = document.getElementById('razorpay-pay-btn');
+            if (!payBtn) return;
+
+            var appId = {{ application.id }};
+            var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || '';
+
+            payBtn.addEventListener('click', function() {
+                // Disable button and show spinner
+                payBtn.disabled = true;
+                payBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {% trans "Processing..." %}';
+
+                // 1. Create Razorpay order
+                fetch('/payment/create-order/' + appId + '/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert('Error: ' + data.error);
+                        payBtn.disabled = false;
+                        payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
+                        return;
+                    }
+
+                    // 2. Open Razorpay modal
+                    var options = {
+                        key: data.key,
+                        amount: data.amount,
+                        currency: data.currency,
+                        name: '{{ business.business_name|default:"Cyber Café" }}',
+                        description: 'Payment for Application #' + appId,
+                        order_id: data.order_id,
+                        handler: function(response) {
+                            // 3. Verify payment on backend
+                            var verifyData = new FormData();
+                            verifyData.append('razorpay_payment_id', response.razorpay_payment_id);
+                            verifyData.append('razorpay_order_id', response.razorpay_order_id);
+                            verifyData.append('razorpay_signature', response.razorpay_signature);
+                            verifyData.append('app_id', appId);
+
+                            fetch('/payment/verify-payment/', {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRFToken': csrftoken,
+                                },
+                                body: verifyData,
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.success) {
+                                    window.location.href = data.receipt_url || '/my-applications/';
+                                } else {
+                                    alert('Payment verification failed: ' + (data.error || 'Unknown error'));
+                                    payBtn.disabled = false;
+                                    payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
+                                }
+                            })
+                            .catch(err => {
+                                alert('Verification error: ' + err.message);
+                                payBtn.disabled = false;
+                                payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
+                            });
+                        },
+                        modal: {
+                            ondismiss: function() {
+                                alert('Payment cancelled. You can try again later.');
+                                payBtn.disabled = false;
+                                payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
+                            }
+                        },
+                        prefill: {
+                            name: '{{ application.full_name }}',
+                            email: '{{ application.email }}',
+                            contact: '{{ application.phone }}',
+                        },
+                        theme: {
+                            color: '#00e6ff',
+                        },
+                        onError: function(error) {
+                            alert('Payment failed: ' + (error.description || 'Unknown error'));
+                            payBtn.disabled = false;
+                            payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
+                        }
+                    };
+                    var rzp = new Razorpay(options);
+                    rzp.open();
+                })
+                .catch(err => {
+                    alert('Error creating order: ' + err.message);
+                    payBtn.disabled = false;
+                    payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
+                });
+            });
+        });
+    })();
+</script>
 {% endblock %}

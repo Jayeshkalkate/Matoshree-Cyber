@@ -22,7 +22,7 @@
     box-sizing: border-box;
   }
 
-  /* ----- Container overrides (safe) ----- */
+  /* ----- Container overrides ----- */
   .app-detail .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -76,7 +76,7 @@
     text-shadow: 0 0 40px rgba(0, 240, 255, 0.12);
   }
 
-  /* ---- Detail card ---- */
+  /* ---- Main card ---- */
   .app-detail {
     padding: clamp(30px, 5vw, 40px) 0 clamp(40px, 8vw, 70px);
     background: var(--bg-secondary, rgba(10, 14, 26, 0.6));
@@ -107,7 +107,14 @@
     color: var(--text-white, #f0f4ff);
     margin-top: 1.5rem;
     margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
+  .detail-card h5 i {
+    color: var(--neon-cyan, #00f0ff);
+  }
+
   .detail-card hr {
     border: 0;
     height: 1px;
@@ -168,6 +175,91 @@
     border: 1px solid rgba(255, 45, 149, 0.15);
   }
 
+  /* ---- Status update form ---- */
+  .status-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem 1rem;
+    align-items: flex-end;
+    margin-top: 0.5rem;
+  }
+  .status-form .form-group {
+    flex: 1 1 200px;
+    margin-bottom: 0.5rem;
+  }
+  .status-form .form-group label {
+    font-weight: 600;
+    color: var(--text-muted, #94a3b8);
+    display: block;
+    margin-bottom: 0.3rem;
+    font-size: clamp(0.8rem, 0.9vw, 0.9rem);
+  }
+  .status-form .form-control,
+  .status-form select {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--text-white, #f0f4ff);
+    border-radius: var(--radius-sm, 8px);
+    padding: 0.6rem 1rem;
+    width: 100%;
+    transition: all 0.3s ease;
+    font-size: clamp(0.85rem, 1vw, 0.95rem);
+    min-height: 44px;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .status-form .form-control:focus,
+  .status-form select:focus {
+    border-color: var(--neon-cyan, #00f0ff);
+    box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.15);
+    outline: none;
+    background: rgba(255, 255, 255, 0.08);
+  }
+  .status-form select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394a3b8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+  }
+  .status-form .btn-primary {
+    padding: 0.6rem 1.5rem;
+    font-size: clamp(0.85rem, 0.9vw, 0.95rem);
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    border: none;
+    border-radius: var(--radius-sm, 8px);
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    background: var(--gradient-cyan, linear-gradient(135deg, #00f0ff, #0ea5e9));
+    color: var(--bg-primary, #0a0e1a);
+    box-shadow: 0 0 24px rgba(0, 240, 255, 0.15);
+    touch-action: manipulation;
+    text-decoration: none;
+  }
+  .status-form .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 40px rgba(0, 240, 255, 0.3);
+  }
+
+  /* ---- Extra data ---- */
+  .extra-data-pre {
+    margin: 0;
+    color: var(--text-muted, #94a3b8);
+    background: rgba(255, 255, 255, 0.04);
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius-sm, 8px);
+    overflow-x: auto;
+    font-size: clamp(0.8rem, 0.9vw, 0.9rem);
+    max-width: 100%;
+    word-break: break-all;
+    white-space: pre-wrap;
+  }
+
   /* ---- Document list ---- */
   .doc-list {
     list-style: none;
@@ -197,7 +289,8 @@
     align-items: center;
   }
   .doc-list li .doc-actions a,
-  .doc-list li .doc-actions .verified-badge {
+  .doc-list li .doc-actions .verified-badge,
+  .doc-list li .doc-actions .btn-verify {
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
@@ -232,14 +325,33 @@
     color: var(--bg-primary, #0a0e1a);
     box-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
   }
-  .doc-list li .verified-badge {
+  .doc-list li .doc-actions .btn-verify {
+    background: transparent;
+    border: 1px solid var(--neon-cyan, #00f0ff);
+    color: var(--neon-cyan, #00f0ff);
+  }
+  .doc-list li .doc-actions .btn-verify:hover {
+    background: var(--neon-cyan, #00f0ff);
+    color: var(--bg-primary, #0a0e1a);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+  }
+  .doc-list li .doc-actions .btn-verify.verified {
+    border-color: var(--neon-green, #22d3ee);
+    color: var(--neon-green, #22d3ee);
+  }
+  .doc-list li .doc-actions .btn-verify.verified:hover {
+    background: var(--neon-green, #22d3ee);
+    color: var(--bg-primary, #0a0e1a);
+  }
+  .doc-list li .doc-actions .verified-badge {
     background: rgba(34, 211, 238, 0.08);
     color: var(--neon-green, #22d3ee);
     border-color: rgba(34, 211, 238, 0.1);
     font-weight: 600;
     padding: 0.1rem 0.7rem;
+    cursor: default;
   }
-  .doc-list li .verified-badge i {
+  .doc-list li .doc-actions .verified-badge i {
     margin-right: 0.15rem;
   }
 
@@ -249,7 +361,7 @@
     font-size: clamp(0.9rem, 1vw, 1rem);
   }
 
-  /* ---- Payment Section Styles ---- */
+  /* ---- Payment Section ---- */
   .payment-section {
     background: var(--bg-card, rgba(255, 255, 255, 0.04));
     border-radius: var(--radius, 12px);
@@ -273,6 +385,31 @@
     color: var(--text-white, #f0f4ff);
     margin-top: 1rem;
     margin-bottom: 0.5rem;
+  }
+  .payment-section .badge-status {
+    display: inline-block;
+    padding: 0.2rem 1rem;
+    border-radius: var(--radius-pill, 50px);
+    font-weight: 700;
+    font-size: clamp(0.7rem, 0.9vw, 0.85rem);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
+  .badge-status.pending {
+    border-color: var(--neon-orange, #f97316);
+    color: var(--neon-orange, #f97316);
+    border: 1px solid var(--neon-orange, #f97316);
+  }
+  .badge-status.paid {
+    border-color: var(--neon-green, #22d3ee);
+    color: var(--neon-green, #22d3ee);
+    border: 1px solid var(--neon-green, #22d3ee);
+  }
+  .badge-status.failed {
+    border-color: var(--neon-magenta, #ff2d95);
+    color: var(--neon-magenta, #ff2d95);
+    border: 1px solid var(--neon-magenta, #ff2d95);
   }
   .payment-section .upi-payment {
     background: rgba(0, 240, 255, 0.03);
@@ -349,6 +486,42 @@
     box-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
   }
 
+  /* Admin override button */
+  .admin-override-btn {
+    margin-top: 1rem;
+    padding: 0.5rem 1.5rem;
+    background: var(--neon-orange, #f97316);
+    color: var(--bg-primary, #0a0e1a);
+    border: none;
+    border-radius: var(--radius-sm, 8px);
+    font-weight: 700;
+    font-size: clamp(0.9rem, 1vw, 1rem);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    touch-action: manipulation;
+  }
+  .admin-override-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(249, 115, 22, 0.3);
+  }
+
+  /* ---- Back link ---- */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted, #94a3b8);
+    transition: all 0.3s ease;
+    margin-bottom: 1.2rem;
+    text-decoration: none;
+    font-size: clamp(0.9rem, 1vw, 1rem);
+    padding: 0.3rem 0;
+    min-height: 44px;
+  }
+  .back-link:hover {
+    color: var(--neon-cyan, #00f0ff);
+  }
+
   /* ================================================================
      RESPONSIVE BREAKPOINTS
      ================================================================ */
@@ -367,6 +540,13 @@
     .detail-card .info-row .label {
       width: 100%;
     }
+    .status-form {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .status-form .form-group {
+      flex: 1 1 auto;
+    }
     .doc-list li {
       flex-direction: column;
       align-items: stretch;
@@ -376,7 +556,8 @@
       justify-content: flex-start;
     }
     .doc-list li .doc-actions a,
-    .doc-list li .doc-actions .verified-badge {
+    .doc-list li .doc-actions .verified-badge,
+    .doc-list li .doc-actions .btn-verify {
       min-height: 40px;
       padding: 0.4rem 1rem;
       font-size: 0.8rem;
@@ -400,7 +581,8 @@
       font-size: clamp(1.4rem, 5vw, 1.8rem);
     }
     .doc-list li .doc-actions a,
-    .doc-list li .doc-actions .verified-badge {
+    .doc-list li .doc-actions .verified-badge,
+    .doc-list li .doc-actions .btn-verify {
       font-size: 0.7rem;
       padding: 0.3rem 0.7rem;
       min-height: 36px;
@@ -416,6 +598,9 @@
     .payment-section .upi-payment .btn-success {
       width: 100%;
     }
+    .status-form .btn-primary {
+      width: 100%;
+    }
   }
 
   @media (max-width: 360px) {
@@ -426,7 +611,8 @@
       font-size: 0.8rem;
     }
     .doc-list li .doc-actions a,
-    .doc-list li .doc-actions .verified-badge {
+    .doc-list li .doc-actions .verified-badge,
+    .doc-list li .doc-actions .btn-verify {
       font-size: 0.65rem;
       padding: 0.2rem 0.6rem;
       min-height: 32px;
@@ -437,48 +623,22 @@
      CROSS‑BROWSER FALLBACKS
      ================================================================ */
 
-  /* ----- Flexbox fallback for older browsers ----- */
   @supports not (display: flex) {
-    .detail-card .info-row {
-      display: block;
-      overflow: hidden;
-    }
-    .detail-card .info-row .label {
-      display: block;
-      width: 100%;
-    }
-    .detail-card .info-row .value {
-      display: block;
-    }
-    .doc-list li {
-      display: block;
-      overflow: hidden;
-      padding: 0.8rem 0;
-    }
-    .doc-list li .doc-name {
-      display: block;
-      margin-bottom: 0.3rem;
-    }
-    .doc-list li .doc-actions {
-      display: inline-block;
-    }
+    .detail-card .info-row { display: block; }
+    .detail-card .info-row .label { display: block; width: 100%; }
+    .detail-card .info-row .value { display: block; }
+    .status-form { display: block; }
+    .status-form .form-group { width: 100%; margin-bottom: 0.8rem; }
+    .doc-list li { display: block; overflow: hidden; }
+    .doc-list li .doc-name { display: block; margin-bottom: 0.3rem; }
+    .doc-list li .doc-actions { display: inline-block; }
     .doc-list li .doc-actions a,
-    .doc-list li .doc-actions .verified-badge {
-      display: inline-block;
-      margin: 0.1rem 0.2rem;
-    }
-    .status-badge {
-      display: inline-block;
-    }
-    .payment-section {
-      display: block;
-    }
-    .payment-section .upi-payment {
-      display: block;
-    }
+    .doc-list li .doc-actions .verified-badge,
+    .doc-list li .doc-actions .btn-verify { display: inline-block; margin: 0.1rem 0.2rem; }
+    .payment-section .upi-payment { display: block; }
+    .payment-section .upi-payment .btn-success { display: inline-block; }
   }
 
-  /* ----- backdrop-filter fallback ----- */
   @supports not (backdrop-filter: blur(4px)) {
     .detail-card,
     .payment-section {
@@ -486,7 +646,6 @@
     }
   }
 
-  /* ----- Touch devices: larger tap targets & disable hover effects ----- */
   @media (hover: none) and (pointer: coarse) {
     .detail-card:hover {
       border-color: rgba(255, 255, 255, 0.04);
@@ -494,40 +653,38 @@
       transform: none !important;
     }
     .doc-list li .doc-actions a,
-    .doc-list li .doc-actions .verified-badge {
+    .doc-list li .doc-actions .verified-badge,
+    .doc-list li .doc-actions .btn-verify {
       min-height: 44px;
       padding: 0.4rem 1.2rem;
       font-size: 0.85rem;
     }
     .doc-list li .doc-actions .btn-view:hover,
-    .doc-list li .doc-actions .btn-download:hover {
-      background: rgba(0, 240, 255, 0.08);
-      color: var(--neon-cyan, #00f0ff);
-      box-shadow: none;
-    }
-    .doc-list li .doc-actions .btn-download:hover {
-      background: rgba(34, 211, 238, 0.08);
-      color: var(--neon-green, #22d3ee);
+    .doc-list li .doc-actions .btn-download:hover,
+    .doc-list li .doc-actions .btn-verify:hover {
+      transform: none !important;
     }
     .payment-section .upi-payment .btn-success:hover,
     .payment-section .payment-done .btn-primary:hover {
       transform: none !important;
     }
+    .status-form .btn-primary:hover {
+      transform: none !important;
+    }
   }
 
-  /* ----- Reduced motion ----- */
   @media (prefers-reduced-motion: reduce) {
     .detail-card,
     .payment-section,
     .doc-list li .doc-actions a,
-    .doc-list li .doc-actions .verified-badge,
+    .doc-list li .doc-actions .btn-verify,
+    .status-form .btn-primary,
     .payment-section .upi-payment .btn-success,
     .payment-section .payment-done .btn-primary {
       transition: none !important;
     }
   }
 
-  /* ----- Print styles ----- */
   @media print {
     .page-hero {
       background: #fff !important;
@@ -554,7 +711,8 @@
     .detail-card .info-row .value {
       color: #000 !important;
     }
-    .status-badge {
+    .status-badge,
+    .badge-status {
       border: 1px solid #000 !important;
       color: #000 !important;
       background: #f5f5f5 !important;
@@ -564,8 +722,11 @@
     }
     .doc-list li .doc-actions a,
     .doc-list li .doc-actions .verified-badge,
+    .doc-list li .doc-actions .btn-verify,
+    .status-form,
     .payment-section .upi-payment .btn-success,
-    .payment-section .payment-done .btn-primary {
+    .payment-section .payment-done .btn-primary,
+    .back-link {
       display: none !important;
     }
     .doc-list li {
@@ -610,9 +771,20 @@
      ================================================================ -->
 <section class="app-detail">
   <div class="container">
+
+    <!-- Back link -->
+    <a href="{% url 'admin_dashboard' %}#section-applications" class="back-link">
+      <i class="fas fa-arrow-left"></i> {% trans "Back to Applications" %}
+    </a>
+
     <div class="detail-card">
       <!-- Service & Status -->
-      <h5>{{ application.service.name }}</h5>
+      <h5><i class="fas fa-concierge-bell"></i> {{ application.service.name }}</h5>
+
+      <div class="info-row">
+        <span class="label">{% trans "User" %}:</span>
+        <span class="value">{{ application.user.username }}</span>
+      </div>
       <div class="info-row">
         <span class="label">{% trans "Status" %}:</span>
         <span class="value">
@@ -629,7 +801,7 @@
       <hr />
 
       <!-- Personal Details -->
-      <h5>{% trans "Personal Details" %}</h5>
+      <h5><i class="fas fa-user"></i> {% trans "Personal Details" %}</h5>
       <div class="info-row">
         <span class="label">{% trans "Name" %}:</span>
         <span class="value">{{ application.full_name }}</span>
@@ -647,37 +819,86 @@
         <span class="value">{{ application.address|linebreaksbr }}</span>
       </div>
 
+      <!-- Extra Data - SAFELY escaped (no |safe) -->
+      {% if application.extra_data %}
+      <div class="info-row">
+        <span class="label">{% trans "Extra Data" %}:</span>
+        <div class="value">
+          <pre class="extra-data-pre">{{ application.extra_data|escape }}</pre>
+        </div>
+      </div>
+      {% endif %}
+
+      <hr />
+
+      <!-- Status Update Form (Admin) -->
+      <h5><i class="fas fa-tasks"></i> {% trans "Update Status" %}</h5>
+      <form method="post" class="status-form">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="update_status">
+        <div class="form-group">
+          <label for="statusSelect">{% trans "Change Status" %}</label>
+          <select name="status" id="statusSelect" class="form-control">
+            {% for value, label in application.STATUS_CHOICES %}
+              <option value="{{ value }}" {% if application.status == value %}selected{% endif %}>
+                {{ label }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group" style="flex: 0 0 auto; margin-bottom: 0; display: flex; align-items: flex-end;">
+          <button type="submit" class="btn-primary">
+            <i class="fas fa-save"></i> {% trans "Update Status" %}
+          </button>
+        </div>
+      </form>
+
       <hr />
 
       <!-- Uploaded Documents -->
-      <h5>{% trans "Uploaded Documents" %}</h5>
+      <h5><i class="fas fa-file-alt"></i> {% trans "Uploaded Documents" %}</h5>
       <ul class="doc-list">
         {% for doc in documents %}
         <li>
           <span class="doc-name">
-            <i
-              class="fas fa-file-alt"
-              style="color: var(--neon-cyan, #00f0ff); margin-right: 0.5rem"
-            ></i>
+            <i class="fas fa-file-alt" style="color: var(--neon-cyan, #00f0ff); margin-right: 0.5rem"></i>
             {{ doc.document_name }}
+            {% if doc.is_mandatory %}
+              <small style="color: var(--neon-orange);">({% trans "Mandatory" %})</small>
+            {% endif %}
           </span>
           <span class="doc-actions">
-            <a
-              href="{{ doc.file.url }}"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn-view"
-            >
+            <!-- View -->
+            <a href="{{ doc.file.url }}" target="_blank" rel="noopener noreferrer" class="btn-view">
               <i class="fas fa-eye"></i> {% trans "View" %}
             </a>
+            <!-- Download -->
             <a href="{{ doc.file.url }}" download class="btn-download">
               <i class="fas fa-download"></i> {% trans "Download" %}
             </a>
-            {% if doc.verified %}
-            <span class="verified-badge"
-              ><i class="fas fa-check-circle"></i> {% trans "Verified" %}</span
-            >
-            {% endif %}
+            <!-- Split -->
+            <a href="{% url 'split_pdf' doc.id %}" class="btn-view" title="{% trans 'Split PDF' %}">
+              <i class="fas fa-cut"></i>
+            </a>
+            <!-- Verification toggle -->
+            <form method="post" style="display:inline;">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="verify_document">
+              <input type="hidden" name="doc_id" value="{{ doc.id }}">
+              <button type="submit" class="btn-verify {% if doc.verified %}verified{% endif %}" title="{% trans "Toggle verification" %}">
+                <i class="fas {% if doc.verified %}fa-check-circle{% else %}fa-circle{% endif %}"></i>
+                {% if doc.verified %}{% trans "Verified" %}{% else %}{% trans "Unverified" %}{% endif %}
+              </button>
+            </form>
+            <!-- Delete document -->
+            <form method="post" onsubmit="return confirm('{% trans "Delete this document?" %}');" style="display:inline;">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="delete_document">
+              <input type="hidden" name="doc_id" value="{{ doc.id }}">
+              <button type="submit" class="btn-view" style="background:rgba(255,45,149,0.08); color:var(--neon-magenta); border-color:rgba(255,45,149,0.1);">
+                <i class="fas fa-trash"></i>
+              </button>
+            </form>
           </span>
         </li>
         {% empty %}
@@ -687,49 +908,78 @@
     </div>
 
     <!-- ================================================================
-         PAYMENT SECTION
+         PAYMENT SECTION – Enhanced with details and admin override
          ================================================================ -->
     <div class="payment-section">
-      <h4>{% trans "Payment" %}</h4>
+      <h4><i class="fas fa-credit-card"></i> {% trans "Payment" %}</h4>
+
+      <!-- Status and basic info -->
       <p>
-        <strong>{% trans "Status" %}:</strong>
-        <span class="badge-status {{ application.payment_status }}">
-          {{ application.get_payment_status_display }}
+        <strong>{% trans "Payment Status" %}:</strong>
+        <span class="badge-status {{ application.payment_status|default:'pending'|lower }}">
+          {{ application.get_payment_status_display|default:"Pending" }}
         </span>
       </p>
 
       {% if application.payment_status == 'pending' %}
+        <!-- Admin override: Mark as paid -->
+        <div style="margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 1rem;">
+          <form method="post" onsubmit="return confirm('{% trans "Are you sure you want to manually mark this payment as paid? This will generate a receipt." %}');">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="mark_payment_paid">
+            <button type="submit" class="admin-override-btn">
+              <i class="fas fa-check-double"></i> {% trans "Admin – Mark as Paid" %}
+            </button>
+          </form>
+          <p class="text-muted">{% trans "Use this only if the user has paid offline or if the payment needs manual confirmation." %}</p>
+        </div>
+
+        <!-- UPI Payment Option for admin -->
         {% if payment_settings and payment_settings.qr_code %}
-          <div class="upi-payment">
-            <h5>{% trans "Pay via UPI" %}</h5>
-            <img src="{{ payment_settings.qr_code.url }}" alt="UPI QR Code">
-            <p><strong>UPI ID:</strong> {{ payment_settings.upi_id }}</p>
-            <p><strong>Mobile:</strong> {{ payment_settings.upi_mobile }}</p>
-            <p>{{ payment_settings.payment_instructions }}</p>
-            <form method="post" action="{% url 'mark_payment_done' application.id %}">
-              {% csrf_token %}
-              <input type="hidden" name="payment_method" value="upi">
-              <button type="submit" class="btn-success">
-                <i class="fas fa-check-circle"></i> {% trans "I have paid" %}
-              </button>
-            </form>
-            <p class="text-muted">
-              {% trans "After payment, click the button to confirm. Admin will verify." %}
-            </p>
-          </div>
-        {% else %}
-          <p>{% trans "Payment options are not configured. Please contact admin." %}</p>
+        <div class="upi-payment">
+          <h5>{% trans "Pay via UPI (Manual Confirmation)" %}</h5>
+          <img src="{{ payment_settings.qr_code.url }}" alt="UPI QR Code">
+          <p><strong>UPI ID:</strong> {{ payment_settings.upi_id }}</p>
+          <p><strong>Mobile:</strong> {{ payment_settings.upi_mobile }}</p>
+          <form method="post" action="{% url 'mark_payment_done' application.id %}">
+            {% csrf_token %}
+            <input type="hidden" name="payment_method" value="upi">
+            <div style="margin-top: 0.8rem;">
+              <label for="payment_app">{% trans "Payment App" %} *</label>
+              <select name="payment_app" id="payment_app" required style="width:100%; padding:0.5rem; background:var(--bg-input); color:var(--text-bright); border:1px solid var(--border-soft); border-radius:8px;">
+                <option value="gpay">Google Pay</option>
+                <option value="phonepe">PhonePe</option>
+                <option value="paytm">Paytm</option>
+                <option value="bhim">BHIM</option>
+                <option value="upi" selected>Other UPI App</option>
+              </select>
+            </div>
+            <div style="margin-top: 0.8rem;">
+              <label for="utr_number">{% trans "UTR Number" %}</label>
+              <input type="text" name="utr_number" id="utr_number" placeholder="{% trans 'e.g. 123456789012' %}" style="width:100%; padding:0.5rem; background:var(--bg-input); color:var(--text-bright); border:1px solid var(--border-soft); border-radius:8px;">
+              <small style="color:var(--text-dim);">{% trans "Optional, but helps admin verify your payment." %}</small>
+            </div>
+            <button type="submit" class="btn-success" style="margin-top:0.8rem;">
+              <i class="fas fa-check-circle"></i> {% trans "I have paid" %}
+            </button>
+          </form>
+        </div>
         {% endif %}
 
       {% elif application.payment_status == 'paid' %}
+        <!-- Payment completed -->
         <div class="payment-done">
-          <p>
-            <i class="fas fa-check-circle" style="color: var(--neon-green);"></i>
-            {% trans "Payment completed." %}
-          </p>
-          <p><strong>{% trans "Receipt No." %}:</strong> {{ application.receipt_number }}</p>
-          <p><strong>{% trans "Payment Date" %}:</strong> {{ application.payment_date|date:"d M Y, H:i" }}</p>
-          <a href="{% url 'download_receipt' application.id %}" class="btn-primary">
+          <p><i class="fas fa-check-circle" style="color: var(--neon-green);"></i> {% trans "Payment completed." %}</p>
+          <p><strong>{% trans "Receipt No." %}:</strong> {{ application.receipt_number|default:"—" }}</p>
+          <p><strong>{% trans "Payment Date" %}:</strong> {{ application.payment_date|date:"d M Y, H:i"|default:"—" }}</p>
+          <p><strong>{% trans "Payment Method" %}:</strong> {{ application.get_payment_method_display|default:"—" }}</p>
+          {% if application.payment_method == 'razorpay' %}
+            <p><strong>{% trans "Transaction ID" %}:</strong> {{ application.payment_transaction_id|default:"N/A" }}</p>
+          {% else %}
+            <p><strong>{% trans "UTR Number" %}:</strong> {{ application.utr_number|default:"N/A" }}</p>
+            <p><strong>{% trans "Payment App" %}:</strong> {{ application.get_payment_app_display|default:"N/A" }}</p>
+          {% endif %}
+          <a href="{% url 'download_receipt' application.id %}" class="btn-primary" style="max-width: 200px; margin: 0 auto;">
             <i class="fas fa-file-pdf"></i> {% trans "Download Receipt" %}
           </a>
         </div>

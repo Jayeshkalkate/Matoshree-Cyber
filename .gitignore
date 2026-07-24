@@ -171,3 +171,18 @@ celerybeat.pid
 # Optional: ignore Jupyter notebooks
 # ===============================
 *.ipynb_checkpoints/
+
+# ===============================
+# Additional development / cache files
+# ===============================
+.python-version
+.ruff_cache
+.mypy_cache
+.dmypy.json
+dmypy.json
+.pytype
+*.pytype
+pip-wheel-metadata
+share/python-wheels/
+*.egg-info/
+MANIFEST

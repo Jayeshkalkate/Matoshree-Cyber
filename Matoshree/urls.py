@@ -1,21 +1,4 @@
 """
-URL configuration for Matoshree project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/6.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-    
-"""
 URL Configuration for Matoshree project.
 
 The `urlpatterns` list routes URLs to views. For more information see:
@@ -28,23 +11,26 @@ from django.conf.urls.static import static
 from django.conf.urls.i18n import i18n_patterns
 
 urlpatterns = [
-    # Admin interface
+    # Django Admin – keep this if you use the built‑in admin
     path('admin/', admin.site.urls),
 
-    # All application URLs (home, about, services, etc.)
+    # All application URLs (home, about, services, payment, etc.)
+    # This includes everything defined in corematoshree/urls.py,
+    # including:
+    #   - Payment: /create-razorpay-order/, /payment/razorpay-webhook/, etc.
+    #   - Public pages, dashboards, applications, etc.
     path('', include('corematoshree.urls')),
 
-    # Language selection (for i18n)
+    # Language selection (i18n) – enables language switching via /i18n/setlang/
     path('i18n/', include('django.conf.urls.i18n')),
 ]
 
-# Debug Toolbar URLs – only in development
-if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns += [
-        path('__debug__/', include(debug_toolbar.urls)),
-    ]
-
-# Serve media files during development only
+# Serve media and static files during development only
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+    # Optional: Django Debug Toolbar (uncomment if installed)
+    # import debug_toolbar
+    # urlpatterns += [path('__debug__/', include(debug_toolbar.urls))]
+    

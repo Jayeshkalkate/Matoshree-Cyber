@@ -1,38 +1,39 @@
 # =============================================================================
 # CORE DJANGO & DEPLOYMENT
 # =============================================================================
-Django==6.0.7                    # Latest patch for 6.0 (or use 5.2.x LTS)
-setuptools==74.0.0               # Provides pkg_resources (needed by razorpay)
-gunicorn==26.0.0                # Production WSGI server
-whitenoise==6.12.0              # Static file serving (no external server needed)
+Django==5.1.4                    # Latest stable release (5.1.x series)
+setuptools==75.8.0               # Provides pkg_resources (needed by razorpay)
+gunicorn==23.0.0                 # Production WSGI server
+whitenoise==6.9.0                # Static file serving (no external server needed)
 
 # =============================================================================
 # DATABASE
 # =============================================================================
-psycopg2-binary==2.9.12         # PostgreSQL adapter (use psycopg2 for production)
-dj-database-url==3.1.2          # Parse DATABASE_URL env variable
+psycopg2-binary==2.9.10          # PostgreSQL adapter (use psycopg2 for production)
+dj-database-url==3.1.2           # Parse DATABASE_URL env variable
 
 # =============================================================================
 # ENVIRONMENT VARIABLES
 # =============================================================================
-python-dotenv==1.2.2
+python-dotenv==1.0.1
 
 # =============================================================================
 # MEDIA FILES (Cloudinary)
 # =============================================================================
 cloudinary==1.44.2
 django-cloudinary-storage==0.3.0
-Pillow==12.1.1                  # Required for image processing
+Pillow==12.0.0                   # Required for image processing
 
 # =============================================================================
 # PDF PROCESSING
 # =============================================================================
-pypdf==6.14.2                   # PDF splitting/merging
+pypdf==6.0.0                     # PDF splitting/merging
+reportlab==4.2.5                 # PDF generation (receipts)
 
 # =============================================================================
 # PAYMENT GATEWAY (Razorpay – if you use it)
 # =============================================================================
-razorpay==1.4.2                 # Required only if you use online payments
+razorpay==1.4.2                  # Required only if you use online payments
 
 # =============================================================================
 # PERFORMANCE & CACHING (Optional – uncomment if using Redis)
@@ -44,6 +45,5 @@ razorpay==1.4.2                 # Required only if you use online payments
 # =============================================================================
 # DEVELOPMENT TOOLS (Optional – uncomment for local debugging)
 # =============================================================================
-django-debug-toolbar==4.0
+# django-debug-toolbar==4.3.0
 
-reportlab==4.2.5

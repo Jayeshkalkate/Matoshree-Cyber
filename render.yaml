@@ -4,20 +4,21 @@ services:
     runtime: python
     plan: free
     region: oregon
-
-    buildCommand: >
-      pip install -r requirements.txt &&
-      python manage.py migrate --noinput &&
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+      python manage.py migrate --noinput
       python manage.py collectstatic --noinput
-
     startCommand: gunicorn matoshree.wsgi:application
-
+    healthCheckPath: /     # optional – checks that the site is up
     envVars:
+      # Database – automatically linked from the database below
       - key: DATABASE_URL
         fromDatabase:
           name: matoshree-db
           property: connectionString
 
+      # Django core
       - key: SECRET_KEY
         generateValue: true
 
@@ -27,22 +28,46 @@ services:
       - key: ALLOWED_HOSTS
         value: "matoshree-cyber.onrender.com,localhost,127.0.0.1"
 
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://matoshree-cyber.onrender.com"
+
       - key: BASE_URL
         value: "https://matoshree-cyber.onrender.com"
 
+      # Optional – set Python version explicitly (Render uses 3.12 by default)
+      - key: PYTHON_VERSION
+        value: "3.12"
+
+      # Cloudinary (if used) – set these manually in the Render dashboard
       - key: CLOUDINARY_CLOUD_NAME
         sync: false
-
       - key: CLOUDINARY_API_KEY
         sync: false
-
       - key: CLOUDINARY_API_SECRET
         sync: false
 
+      # Email (Gmail or other SMTP) – set manually
+      - key: EMAIL_BACKEND
+        value: "django.core.mail.backends.smtp.EmailBackend"
+      - key: EMAIL_HOST
+        value: "smtp.gmail.com"
+      - key: EMAIL_PORT
+        value: "587"
+      - key: EMAIL_USE_TLS
+        value: "True"
       - key: EMAIL_HOST_USER
         sync: false
-
       - key: EMAIL_HOST_PASSWORD
+        sync: false
+      - key: DEFAULT_FROM_EMAIL
+        sync: false          # set to your email (e.g., noreply@yourdomain.com)
+      - key: CONTACT_EMAIL
+        sync: false          # where admin notifications go
+
+      # Razorpay (if used) – set manually
+      - key: RAZORPAY_KEY_ID
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
         sync: false
 
 databases:
@@ -51,3 +76,4 @@ databases:
     user: matoshree_db
     plan: free
     region: oregon
+

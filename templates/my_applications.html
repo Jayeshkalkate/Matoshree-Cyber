@@ -110,6 +110,10 @@ Applications" %}{% endblock %} {% block extra_head %}
 
   .app-card .app-status {
     margin: 0.5rem 0 0.8rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem 0.5rem;
   }
 
   .app-card .app-footer {
@@ -137,7 +141,7 @@ Applications" %}{% endblock %} {% block extra_head %}
     box-shadow: var(--glow-cyan);
   }
 
-  /* Status badge */
+  /* ---- Status badges (application & payment) ---- */
   .status-badge {
     display: inline-block;
     padding: 0.2rem 1rem;
@@ -147,6 +151,7 @@ Applications" %}{% endblock %} {% block extra_head %}
     text-transform: uppercase;
     letter-spacing: 0.3px;
   }
+  /* Application statuses */
   .status-badge.pending {
     background: rgba(249, 115, 22, 0.15);
     color: var(--neon-orange);
@@ -166,6 +171,22 @@ Applications" %}{% endblock %} {% block extra_head %}
     background: rgba(255, 45, 149, 0.12);
     color: var(--neon-magenta);
     border: 1px solid rgba(255, 45, 149, 0.15);
+  }
+  /* Payment statuses */
+  .status-badge.paid {
+    background: rgba(34, 211, 238, 0.12);
+    color: var(--neon-green);
+    border: 1px solid rgba(34, 211, 238, 0.15);
+  }
+  .status-badge.failed {
+    background: rgba(255, 45, 149, 0.12);
+    color: var(--neon-magenta);
+    border: 1px solid rgba(255, 45, 149, 0.15);
+  }
+  .status-badge.refunded {
+    background: rgba(249, 115, 22, 0.12);
+    color: var(--neon-amber);
+    border: 1px solid rgba(249, 115, 22, 0.15);
   }
 
   /* Empty state */
@@ -244,6 +265,11 @@ Applications" %}{% endblock %} {% block extra_head %}
           <span class="status-badge {{ app.status }}">
             {{ app.get_status_display }}
           </span>
+          {% if app.payment_status %}
+            <span class="status-badge {{ app.payment_status|default:'pending'|lower }}">
+              {{ app.get_payment_status_display }}
+            </span>
+          {% endif %}
         </div>
         <div class="app-footer">
           <span class="btn-detail">

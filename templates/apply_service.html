@@ -1,13 +1,14 @@
-{% extends "base.html" %} {% load i18n %} {% block title %} {% trans "Apply for"
-%} {{ service.name }} {% endblock %} {% block extra_head %}
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Apply for" %} {{ service.name }}{% endblock %}
+
+{% block extra_head %}
 <!-- ============================================================
      META – viewport & compatibility
      ============================================================ -->
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"
-/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 <style>
   /* ================================================================
@@ -343,6 +344,164 @@
     box-shadow: 0 0 40px rgba(0, 240, 255, 0.35);
   }
 
+  /* ---- Success / Payment Section ---- */
+  .success-message {
+    background: rgba(34, 211, 238, 0.05);
+    border: 1px solid rgba(34, 211, 238, 0.15);
+    border-radius: var(--radius-sm, 8px);
+    padding: 1.2rem;
+    margin: 1rem 0;
+    text-align: center;
+  }
+  .success-message i {
+    color: var(--neon-green, #22d3ee);
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .success-message h4 {
+    color: var(--text-white, #f0f4ff);
+    margin-bottom: 0.2rem;
+  }
+  .success-message p {
+    color: var(--text-muted, #94a3b8);
+    margin: 0;
+  }
+
+  /* ---- Payment Styles ---- */
+  .payment-section {
+    margin-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: 1.5rem;
+  }
+  .payment-section h5 {
+    font-size: clamp(1.05rem, 1.3vw, 1.1rem);
+    font-weight: 600;
+    color: var(--text-white, #f0f4ff);
+    margin-bottom: 0.5rem;
+  }
+  .payment-section .badge-status {
+    display: inline-block;
+    padding: 0.2rem 1rem;
+    border-radius: var(--radius-pill, 50px);
+    font-weight: 700;
+    font-size: clamp(0.7rem, 0.9vw, 0.85rem);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
+  .badge-status.pending {
+    border-color: var(--neon-orange, #f97316);
+    color: var(--neon-orange, #f97316);
+    border: 1px solid var(--neon-orange, #f97316);
+  }
+  .badge-status.paid {
+    border-color: var(--neon-green, #22d3ee);
+    color: var(--neon-green, #22d3ee);
+    border: 1px solid var(--neon-green, #22d3ee);
+  }
+  .payment-section .upi-payment {
+    background: rgba(0, 240, 255, 0.03);
+    border-radius: var(--radius-sm, 8px);
+    padding: 1rem;
+    border: 1px solid rgba(0, 240, 255, 0.08);
+    margin-top: 0.5rem;
+  }
+  .payment-section .upi-payment img {
+    max-width: 200px;
+    display: block;
+    margin: 0.5rem auto;
+  }
+  .payment-section .upi-payment p {
+    color: var(--text-muted, #94a3b8);
+    font-size: clamp(0.85rem, 1vw, 0.95rem);
+    margin: 0.3rem 0;
+  }
+  .payment-section .upi-payment .btn-success {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1.5rem;
+    background: var(--neon-green, #22d3ee);
+    color: var(--bg-primary, #0a0e1a);
+    border: none;
+    border-radius: var(--radius-sm, 8px);
+    font-weight: 700;
+    font-size: clamp(0.9rem, 1vw, 1rem);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 0.5rem;
+    touch-action: manipulation;
+    min-height: 44px;
+    min-width: 44px;
+    justify-content: center;
+  }
+  .payment-section .upi-payment .btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(34, 211, 238, 0.3);
+  }
+  .payment-section .text-muted {
+    font-size: clamp(0.75rem, 0.8vw, 0.85rem);
+    color: var(--text-dim, #5c6a8c);
+    margin-top: 0.5rem;
+  }
+  .payment-section .payment-done {
+    text-align: center;
+    padding: 0.5rem 0;
+  }
+  .payment-section .payment-done p {
+    color: var(--text-white, #f0f4ff);
+    font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+  }
+  .payment-section .payment-done .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1.5rem;
+    background: var(--gradient-cyan, linear-gradient(135deg, #00f0ff, #0ea5e9));
+    color: var(--bg-primary, #0a0e1a);
+    border: none;
+    border-radius: var(--radius-sm, 8px);
+    font-weight: 700;
+    font-size: clamp(0.9rem, 1vw, 1rem);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 0.5rem;
+    text-decoration: none;
+    min-height: 44px;
+    justify-content: center;
+  }
+  .payment-section .payment-done .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+  }
+
+  /* ---- Payment info block (shown before submission) ---- */
+  .payment-info {
+    background: rgba(0, 240, 255, 0.03);
+    border: 1px solid rgba(0, 240, 255, 0.08);
+    border-radius: var(--radius-sm, 8px);
+    padding: 1rem;
+    margin: 1.5rem 0;
+  }
+  .payment-info .upi-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+  }
+  .payment-info .upi-details img {
+    max-width: 150px;
+    border-radius: 4px;
+    background: #fff;
+    padding: 4px;
+  }
+  .payment-info .upi-details .details {
+    flex: 1;
+  }
+  .payment-info .upi-details .details p {
+    margin: 0.2rem 0;
+  }
+
   /* ---- Errors ---- */
   .text-danger {
     color: var(--neon-orange, #f97316) !important;
@@ -360,6 +519,9 @@
   }
   .mt-2 {
     margin-top: 0.5rem;
+  }
+  .mb-3 {
+    margin-bottom: 1rem;
   }
 
   /* ================================================================
@@ -392,6 +554,14 @@
     .required-docs-list li .badge {
       margin-left: 0;
     }
+    .payment-section .upi-payment img,
+    .payment-info .upi-details img {
+      max-width: 150px;
+    }
+    .payment-info .upi-details {
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
 
   @media (max-width: 480px) {
@@ -411,6 +581,14 @@
       padding: 4px 12px;
       font-size: 0.8rem;
       min-height: 32px;
+    }
+    .payment-section .upi-payment img,
+    .payment-info .upi-details img {
+      max-width: 120px;
+    }
+    .payment-section .upi-payment .btn-success,
+    .payment-section .payment-done .btn-primary {
+      width: 100%;
     }
   }
 
@@ -435,7 +613,6 @@
      CROSS‑BROWSER FALLBACKS
      ================================================================ */
 
-  /* ----- Flexbox fallback for older browsers ----- */
   @supports not (display: flex) {
     .required-docs-list li {
       display: block;
@@ -453,18 +630,30 @@
       display: inline-block;
       text-align: center;
     }
+    .payment-section .upi-payment {
+      display: block;
+    }
+    .payment-section .upi-payment .btn-success {
+      display: inline-block;
+    }
+    .payment-info .upi-details {
+      display: block;
+    }
+    .payment-info .upi-details img {
+      display: block;
+      margin: 0 auto 10px;
+    }
   }
 
-  /* ----- backdrop-filter fallback ----- */
   @supports not (backdrop-filter: blur(4px)) {
     .apply-card,
     .upload-group,
-    .apply-card .form-control {
+    .apply-card .form-control,
+    .payment-info {
       background: rgba(10, 14, 26, 0.95) !important;
     }
   }
 
-  /* ----- Touch devices: larger tap targets & disable hover effects ----- */
   @media (hover: none) and (pointer: coarse) {
     .apply-card:hover {
       border-color: rgba(255, 255, 255, 0.04);
@@ -496,23 +685,24 @@
     .btn-merge:hover i {
       color: var(--neon-cyan, #00f0ff);
     }
-    .apply-card .btn-primary:hover {
+    .apply-card .btn-primary:hover,
+    .payment-section .upi-payment .btn-success:hover {
       transform: none !important;
     }
   }
 
-  /* ----- Reduced motion ----- */
   @media (prefers-reduced-motion: reduce) {
     .apply-card,
     .upload-group,
     .btn-merge,
     .apply-card .btn-primary,
-    .apply-card .form-control {
+    .apply-card .form-control,
+    .payment-section .upi-payment .btn-success,
+    .payment-section .payment-done .btn-primary {
       transition: none !important;
     }
   }
 
-  /* ----- Print styles ----- */
   @media print {
     .page-hero {
       background: #fff !important;
@@ -556,7 +746,9 @@
       border: 1px solid #ccc !important;
     }
     .btn-merge,
-    .apply-card .btn-primary {
+    .apply-card .btn-primary,
+    .payment-section .upi-payment .btn-success,
+    .payment-section .payment-done .btn-primary {
       display: none !important;
     }
     .upload-group {
@@ -566,19 +758,30 @@
     .page-hero::before {
       display: none !important;
     }
+    .payment-section .upi-payment,
+    .payment-info {
+      background: #f9f9f9 !important;
+      border: 1px solid #ccc !important;
+    }
+    .payment-section .upi-payment p,
+    .payment-info .upi-details .details p {
+      color: #000 !important;
+    }
+    .payment-section .text-muted {
+      color: #333 !important;
+    }
   }
 </style>
-{% endblock %} {% block content %}
+{% endblock %}
+
+{% block content %}
 <!-- ================================================================
      PAGE HERO
      ================================================================ -->
 <section class="page-hero">
   <div class="container">
     <h1>{% trans "Apply for" %} {{ service.name }}</h1>
-    <p>
-      {% trans "Please fill in your details and upload the required documents."
-      %}
-    </p>
+    <p>{% trans "Please fill in your details and upload the required documents." %}</p>
   </div>
 </section>
 
@@ -588,118 +791,365 @@
 <section class="apply-section">
   <div class="container">
     <div class="apply-card">
-      <h4>{% trans "Service" %}: {{ service.name }}</h4>
-      <p>{{ service.description }}</p>
-      <hr />
 
-      <!-- Required Documents -->
-      <h5>{% trans "Required Documents" %}</h5>
-      <ul class="required-docs-list">
-        {% for doc in required_docs %}
-        <li>
-          <i class="fas fa-file-alt"></i>
-          {{ doc.document_name }}
-          <span class="badge">{% trans "Mandatory" %}</span>
-        </li>
-        {% empty %}
-        <li>{% trans "No specific documents required." %}</li>
-        {% endfor %}
-      </ul>
-      <hr />
+      <!-- ============================================================
+           PAYMENT INFO BLOCK – before submission (only if payment is required and UPI is enabled)
+           ============================================================ -->
+      {% if not application and service.payment_required and payment_settings and payment_settings.upi_enabled and payment_settings.qr_code %}
+        <div class="payment-info">
+          <h5>{% trans "Payment Required" %}</h5>
+          <p>{% trans "This service requires a payment. Please pay now using the details below." %}</p>
+          <div class="upi-details">
+            <img src="{{ payment_settings.qr_code.url }}" alt="UPI QR Code">
+            <div class="details">
+              <p><strong>UPI ID:</strong> {{ payment_settings.upi_id }}</p>
+              <p><strong>Mobile:</strong> {{ payment_settings.upi_mobile }}</p>
+              <p>{{ payment_settings.payment_instructions|default:"" }}</p>
+            </div>
+          </div>
+        </div>
+      {% endif %}
 
-      <!-- Form -->
-      <form method="post" enctype="multipart/form-data" novalidate>
-        {% csrf_token %}
-
-        <!-- Personal Details -->
-        <h5>{% trans "Personal Details" %}</h5>
-
-        <div class="form-group">
-          <label for="{{ form.full_name.id_for_label }}"
-            >{{ form.full_name.label }}</label
-          >
-          {{ form.full_name }} {% if form.full_name.errors %}
-          <div class="text-danger">{{ form.full_name.errors }}</div>
-          {% endif %}
+      <!-- ============================================================
+           SUCCESS / PAYMENT SECTION (after application creation)
+           ============================================================ -->
+      {% if application %}
+        <!-- Application created successfully -->
+        <div class="success-message">
+          <i class="fas fa-check-circle"></i>
+          <h4>{% trans "Application submitted successfully!" %}</h4>
+          <p>{% trans "Your application number is" %} <strong>#{{ application.id }}</strong>.</p>
         </div>
 
-        <div class="form-group">
-          <label for="{{ form.phone.id_for_label }}"
-            >{{ form.phone.label }}</label
-          >
-          {{ form.phone }} {% if form.phone.errors %}
-          <div class="text-danger">{{ form.phone.errors }}</div>
-          {% endif %}
-        </div>
+        <!-- If payment is required for this service, show payment details with action -->
+        {% if service.payment_required %}
+          <div class="payment-section">
+            <h5>{% trans "Payment" %}</h5>
+            <p>
+              <strong>{% trans "Status" %}:</strong>
+              <span class="badge-status {{ application.payment_status|default:'pending'|lower }}">
+                {{ application.get_payment_status_display|default:"Pending" }}
+              </span>
+            </p>
 
-        <div class="form-group">
-          <label for="{{ form.email.id_for_label }}"
-            >{{ form.email.label }}</label
-          >
-          {{ form.email }} {% if form.email.errors %}
-          <div class="text-danger">{{ form.email.errors }}</div>
-          {% endif %}
-        </div>
+            {% if application.payment_status == 'pending' %}
 
-        <div class="form-group">
-          <label for="{{ form.address.id_for_label }}"
-            >{{ form.address.label }}</label
-          >
-          {{ form.address }} {% if form.address.errors %}
-          <div class="text-danger">{{ form.address.errors }}</div>
-          {% endif %}
-        </div>
+              <!-- UPI Payment Option (if configured and enabled) -->
+              {% if payment_settings and payment_settings.upi_enabled and payment_settings.qr_code %}
+                <div class="upi-payment">
+                  <h5>{% trans "Pay via UPI" %}</h5>
+                  <img src="{{ payment_settings.qr_code.url }}" alt="UPI QR Code">
+                  <p><strong>UPI ID:</strong> {{ payment_settings.upi_id }}</p>
+                  <p><strong>Mobile:</strong> {{ payment_settings.upi_mobile }}</p>
+                  <p>{{ payment_settings.payment_instructions|default:"" }}</p>
 
+                  <form method="post" action="{% url 'mark_payment_done' application.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="payment_method" value="upi">
+
+                    <div style="margin-top: 0.8rem;">
+                      <label for="payment_app">{% trans "Payment App" %} *</label>
+                      <select name="payment_app" id="payment_app" required style="width:100%; padding:0.5rem; background:var(--bg-input); color:var(--text-bright); border:1px solid var(--border-soft); border-radius:8px;">
+                        <option value="gpay">Google Pay</option>
+                        <option value="phonepe">PhonePe</option>
+                        <option value="paytm">Paytm</option>
+                        <option value="bhim">BHIM</option>
+                        <option value="upi" selected>Other UPI App</option>
+                      </select>
+                    </div>
+
+                    <div style="margin-top: 0.8rem;">
+                      <label for="utr_number">{% trans "UTR Number" %}</label>
+                      <input type="text" name="utr_number" id="utr_number" placeholder="{% trans 'e.g. 123456789012' %}" style="width:100%; padding:0.5rem; background:var(--bg-input); color:var(--text-bright); border:1px solid var(--border-soft); border-radius:8px;">
+                      <small style="color:var(--text-dim); display:block; margin-top:0.2rem;">{% trans "Optional, but helps admin verify your payment." %}</small>
+                    </div>
+
+                    <button type="submit" class="btn-success" style="margin-top:0.8rem;">
+                      <i class="fas fa-check-circle"></i> {% trans "I have paid" %}
+                    </button>
+                  </form>
+                  <p class="text-muted" style="margin-top:0.5rem;">
+                    {% trans "After payment, click the button to confirm. Admin will verify." %}
+                  </p>
+                </div>
+              {% endif %}
+
+              <!-- Razorpay Payment Option (only if enabled) -->
+              {% if payment_settings and payment_settings.razorpay_enabled %}
+                <div style="margin-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 1.2rem;">
+                  <h5 style="color: var(--text-white);">{% trans "Pay with Razorpay" %}</h5>
+                  <button id="razorpay-pay-btn" class="btn-primary" style="background: #00e6ff; color: #000; width: 100%; max-width: 280px;">
+                    <i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}
+                  </button>
+                  <p class="text-muted" style="margin-top:0.5rem;">
+                    {% trans "Instant online payment via credit/debit card, UPI, or netbanking." %}
+                  </p>
+                </div>
+              {% endif %}
+
+              <!-- If no online method is enabled, show a message -->
+              {% if not payment_settings.razorpay_enabled and not payment_settings.upi_enabled %}
+                <p class="text-muted">{% trans "No online payment methods are currently enabled. Please contact the admin to complete your payment." %}</p>
+              {% endif %}
+
+              <!-- Link to application detail for later payment -->
+              <div style="margin-top: 1.5rem; text-align:center;">
+                <p class="text-muted">
+                  <i class="fas fa-clock" style="color: var(--neon-orange);"></i>
+                  {% trans "You can also pay later from your" %}
+                  <a href="{% url 'application_detail' application.id %}">{% trans "application detail page" %}</a>.
+                </p>
+              </div>
+
+            {% elif application.payment_status == 'paid' %}
+              <div class="payment-done">
+                <p>
+                  <i class="fas fa-check-circle" style="color: var(--neon-green);"></i>
+                  {% trans "Payment completed." %}
+                </p>
+                <p><strong>{% trans "Receipt No." %}:</strong> {{ application.receipt_number|default:"—" }}</p>
+                <p><strong>{% trans "Payment Date" %}:</strong> {{ application.payment_date|date:"d M Y, H:i"|default:"—" }}</p>
+                <a href="{% url 'download_receipt' application.id %}" class="btn-primary" style="max-width:200px;">
+                  <i class="fas fa-file-pdf"></i> {% trans "Download Receipt" %}
+                </a>
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Link to application detail -->
+          <div style="text-align:center; margin-top: 1.5rem;">
+            <a href="{% url 'application_detail' application.id %}" class="btn-primary" style="max-width: 200px; display: inline-flex;">
+              <i class="fas fa-eye"></i> {% trans "View Application" %}
+            </a>
+          </div>
+
+        {% else %}
+          <!-- Payment not required – show simple success -->
+          <p class="text-muted" style="text-align:center; margin-top: 1rem;">
+            {% trans "No payment is required for this service. Your application is being processed." %}
+          </p>
+          <div style="text-align:center; margin-top: 1.5rem;">
+            <a href="{% url 'application_detail' application.id %}" class="btn-primary" style="max-width: 200px; display: inline-flex;">
+              <i class="fas fa-eye"></i> {% trans "View Application" %}
+            </a>
+          </div>
+        {% endif %}
+
+      {% else %}
+        <!-- ============================================================
+             FORM (shown only when no application is created yet)
+             ============================================================ -->
+        <h4>{% trans "Service" %}: {{ service.name }}</h4>
+        <p>{{ service.description }}</p>
         <hr />
 
-        <!-- Document Uploads -->
-        <h5>{% trans "Upload Documents" %}</h5>
-        <p class="text-muted">
-          {% trans "📄 Please upload a merged PDF containing all the required
-          documents." %}
-        </p>
-        <p>
-          {% trans "💡 You can merge your PDFs using an online tool before
-          uploading." %}
-        </p>
+        <!-- Required Documents -->
+        <h5>{% trans "Required Documents" %}</h5>
+        <ul class="required-docs-list">
+          {% for doc in required_docs %}
+          <li>
+            <i class="fas fa-file-alt"></i>
+            {{ doc.document_name }}
+            <span class="badge">{% trans "Mandatory" %}</span>
+          </li>
+          {% empty %}
+          <li>{% trans "No specific documents required." %}</li>
+          {% endfor %}
+        </ul>
+        <hr />
 
-        <a
-          href="https://www.ilovepdf.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn-merge"
-        >
-          <i
-            class="fas fa-heart"
-            style="color: var(--neon-magenta, #ff2d95)"
-          ></i>
-          {% trans "Merge PDFs with iLovePDF" %}
-        </a>
-        <br /><br />
+        <!-- Form -->
+        <form method="post" enctype="multipart/form-data" novalidate>
+          {% csrf_token %}
 
-        {{ formset.management_form }} {% for doc_form in formset %}
-        <div class="upload-group">
-          {{ doc_form.document_name }}
-          <div class="doc-label">
-            <i class="fas fa-upload"></i>
-            {{ doc_form.document_name.value }}
-            <span class="badge">{% trans "Required" %}</span>
+          <!-- Personal Details -->
+          <h5>{% trans "Personal Details" %}</h5>
+
+          <div class="form-group">
+            <label for="{{ form.full_name.id_for_label }}">{{ form.full_name.label }}</label>
+            {{ form.full_name }}
+            {% if form.full_name.errors %}
+            <div class="text-danger">{{ form.full_name.errors }}</div>
+            {% endif %}
           </div>
-          {{ doc_form.file }}
-          <small class="text-muted">
-            {% trans "Allowed: PDF, JPG, JPEG, PNG" %}
-          </small>
-          {% if doc_form.file.errors %}
-          <div class="text-danger mt-2">{{ doc_form.file.errors }}</div>
-          {% endif %}
-        </div>
-        {% endfor %}
 
-        <button type="submit" class="btn-primary">
-          <i class="fas fa-paper-plane"></i> {% trans "Submit Application" %}
-        </button>
-      </form>
+          <div class="form-group">
+            <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>
+            {{ form.phone }}
+            {% if form.phone.errors %}
+            <div class="text-danger">{{ form.phone.errors }}</div>
+            {% endif %}
+          </div>
+
+          <div class="form-group">
+            <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+            <div class="text-danger">{{ form.email.errors }}</div>
+            {% endif %}
+          </div>
+
+          <div class="form-group">
+            <label for="{{ form.address.id_for_label }}">{{ form.address.label }}</label>
+            {{ form.address }}
+            {% if form.address.errors %}
+            <div class="text-danger">{{ form.address.errors }}</div>
+            {% endif %}
+          </div>
+
+          <hr />
+
+          <!-- Document Uploads -->
+          <h5>{% trans "Upload Documents" %}</h5>
+          <p class="text-muted">
+            {% trans "📄 Please upload a merged PDF containing all the required documents." %}
+          </p>
+          <p>
+            {% trans "💡 You can merge your PDFs using an online tool before uploading." %}
+          </p>
+
+          <a href="https://www.ilovepdf.com/" target="_blank" rel="noopener noreferrer" class="btn-merge">
+            <i class="fas fa-heart" style="color: var(--neon-magenta, #ff2d95);"></i>
+            {% trans "Merge PDFs with iLovePDF" %}
+          </a>
+          <br /><br />
+
+          {{ formset.management_form }}
+          {% for doc_form in formset %}
+          <div class="upload-group">
+            {{ doc_form.document_name }}
+            <div class="doc-label">
+              <i class="fas fa-upload"></i>
+              {{ doc_form.document_name.value }}
+              <span class="badge">{% trans "Required" %}</span>
+            </div>
+            {{ doc_form.file }}
+            <small class="text-muted">
+              {% trans "Allowed: PDF, JPG, JPEG, PNG" %}
+            </small>
+            {% if doc_form.file.errors %}
+            <div class="text-danger mt-2">{{ doc_form.file.errors }}</div>
+            {% endif %}
+          </div>
+          {% endfor %}
+
+          <button type="submit" class="btn-primary">
+            <i class="fas fa-paper-plane"></i> {% trans "Submit Application" %}
+          </button>
+        </form>
+      {% endif %}
     </div>
   </div>
 </section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  (function() {
+    "use strict";
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+      // ---- Razorpay payment ----
+      var payBtn = document.getElementById('razorpay-pay-btn');
+      if (!payBtn) return;
+
+      var appId = {{ application.id }};
+      var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || '';
+
+      payBtn.addEventListener('click', function() {
+        // Disable button and show spinner (prevents double-click)
+        payBtn.disabled = true;
+        payBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {% trans "Processing..." %}';
+
+        // 1. Create Razorpay order
+        fetch('/payment/create-order/' + appId + '/', {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': csrftoken,
+            'Content-Type': 'application/json',
+          },
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.error) {
+            alert('Error: ' + data.error);
+            payBtn.disabled = false;
+            payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
+            return;
+          }
+
+          // 2. Open Razorpay modal
+          var options = {
+            key: data.key,
+            amount: data.amount,
+            currency: data.currency,
+            name: '{{ business.business_name|default:"Cyber Café" }}',
+            description: 'Payment for Application #' + appId,
+            order_id: data.order_id,
+            handler: function(response) {
+              // 3. Verify payment on backend
+              var verifyData = new FormData();
+              verifyData.append('razorpay_payment_id', response.razorpay_payment_id);
+              verifyData.append('razorpay_order_id', response.razorpay_order_id);
+              verifyData.append('razorpay_signature', response.razorpay_signature);
+              verifyData.append('app_id', appId);
+
+              fetch('/payment/verify-payment/', {
+                method: 'POST',
+                headers: {
+                  'X-CSRFToken': csrftoken,
+                },
+                body: verifyData,
+              })
+              .then(res => res.json())
+              .then(data => {
+                if (data.success) {
+                  window.location.href = data.receipt_url || '/my-applications/';
+                } else {
+                  alert('Payment verification failed: ' + (data.error || 'Unknown error'));
+                  payBtn.disabled = false;
+                  payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
+                }
+              })
+              .catch(err => {
+                alert('Verification error: ' + err.message);
+                payBtn.disabled = false;
+                payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
+              });
+            },
+            modal: {
+              ondismiss: function() {
+                alert('Payment cancelled. You can try again later.');
+                payBtn.disabled = false;
+                payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
+              }
+            },
+            prefill: {
+              name: '{{ application.full_name }}',
+              email: '{{ application.email }}',
+              contact: '{{ application.phone }}',
+            },
+            theme: {
+              color: '#00e6ff',
+            },
+            onError: function(error) {
+              alert('Payment failed: ' + (error.description || 'Unknown error'));
+              payBtn.disabled = false;
+              payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
+            }
+          };
+          var rzp = new Razorpay(options);
+          rzp.open();
+        })
+        .catch(err => {
+          alert('Error creating order: ' + err.message);
+          payBtn.disabled = false;
+          payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
+        });
+      });
+    });
+  })();
+</script>
 {% endblock %}
