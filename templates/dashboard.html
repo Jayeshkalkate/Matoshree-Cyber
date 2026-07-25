@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-    <title>{% trans "Super Admin Dashboard – Cyber Café" %}</title>
+    <title>{% if user.role == 'superadmin' %}{% trans "Super Admin Dashboard" %}{% else %}{% trans "Admin Dashboard" %}{% endif %} – Cyber Café</title>
 
     <!-- Google Fonts & Font Awesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -17,9 +17,8 @@
 
     <style>
         /* =====================================================================
-               CYBER CAFE ADMIN — FUTURISTIC NEON THEME
-               FULLY RESPONSIVE · CROSS‑BROWSER
-               ===================================================================== */
+           CYBER CAFE ADMIN — FUTURISTIC NEON THEME (shared by both roles)
+           ===================================================================== */
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&display=swap');
 
         :root {
@@ -69,32 +68,17 @@
         }
 
         /* ---------- Reset & Base ---------- */
-        *,
-        *::before,
-        *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        *, *::before, *::after {
+            margin: 0; padding: 0; box-sizing: border-box;
         }
 
         @keyframes fadeSlideUp {
-            from {
-                opacity: 0;
-                transform: translateY(22px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(22px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
         @keyframes neonPulse {
-            0%,
-            100% {
-                box-shadow: 0 0 6px currentColor, 0 0 14px currentColor;
-            }
-            50% {
-                box-shadow: 0 0 14px currentColor, 0 0 32px currentColor;
-            }
+            0%, 100% { box-shadow: 0 0 6px currentColor, 0 0 14px currentColor; }
+            50%      { box-shadow: 0 0 14px currentColor, 0 0 32px currentColor; }
         }
 
         html {
@@ -122,14 +106,8 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Better scrollbar – cross‑browser */
-        ::-webkit-scrollbar {
-            width: 10px;
-            height: 10px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-void);
-        }
+        ::-webkit-scrollbar { width: 10px; height: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg-void); }
         ::-webkit-scrollbar-thumb {
             background: linear-gradient(var(--neon-cyan), var(--neon-purple));
             border-radius: 10px;
@@ -177,7 +155,6 @@
             }
         }
 
-        /* Sidebar overlay (mobile) */
         .sidebar-overlay {
             position: fixed;
             inset: 0;
@@ -374,7 +351,6 @@
             flex-shrink: 0;
         }
 
-        /* Hamburger */
         .hamburger {
             display: flex;
             align-items: center;
@@ -482,13 +458,8 @@
         }
 
         /* ---------- Sections ---------- */
-        .section {
-            display: none;
-            animation: fadeSlideUp 0.35s ease;
-        }
-        .section.active {
-            display: block;
-        }
+        .section { display: none; animation: fadeSlideUp 0.35s ease; }
+        .section.active { display: block; }
 
         .section-header {
             display: flex;
@@ -639,8 +610,7 @@
         }
 
         @media (max-width: 480px) {
-            .btn-primary,
-            .btn-outline {
+            .btn-primary, .btn-outline {
                 padding: 0.3rem 0.8rem;
                 font-size: 0.75rem;
                 min-height: 36px;
@@ -714,41 +684,13 @@
             display: inline-block;
             white-space: nowrap;
         }
-        .badge-status.pending {
-            background: rgba(255, 194, 60, 0.12);
-            color: var(--neon-amber);
-            border-color: var(--neon-amber);
-        }
-        .badge-status.confirmed {
-            background: rgba(0, 230, 255, 0.12);
-            color: var(--neon-cyan);
-            border-color: var(--neon-cyan);
-        }
-        .badge-status.completed {
-            background: rgba(57, 255, 158, 0.12);
-            color: var(--neon-green);
-            border-color: var(--neon-green);
-        }
-        .badge-status.cancelled {
-            background: rgba(255, 61, 95, 0.12);
-            color: var(--neon-red);
-            border-color: var(--neon-red);
-        }
-        .badge-status.review {
-            background: rgba(255, 194, 60, 0.12);
-            color: var(--neon-amber);
-            border-color: var(--neon-amber);
-        }
-        .badge-status.approved {
-            background: rgba(57, 255, 158, 0.12);
-            color: var(--neon-green);
-            border-color: var(--neon-green);
-        }
-        .badge-status.rejected {
-            background: rgba(255, 61, 95, 0.12);
-            color: var(--neon-red);
-            border-color: var(--neon-red);
-        }
+        .badge-status.pending   { background: rgba(255, 194, 60, 0.12); color: var(--neon-amber); border-color: var(--neon-amber); }
+        .badge-status.confirmed { background: rgba(0, 230, 255, 0.12); color: var(--neon-cyan);  border-color: var(--neon-cyan); }
+        .badge-status.completed { background: rgba(57, 255, 158, 0.12); color: var(--neon-green); border-color: var(--neon-green); }
+        .badge-status.cancelled { background: rgba(255, 61, 95, 0.12); color: var(--neon-red);   border-color: var(--neon-red); }
+        .badge-status.review   { background: rgba(255, 194, 60, 0.12); color: var(--neon-amber); border-color: var(--neon-amber); }
+        .badge-status.approved { background: rgba(57, 255, 158, 0.12); color: var(--neon-green); border-color: var(--neon-green); }
+        .badge-status.rejected { background: rgba(255, 61, 95, 0.12); color: var(--neon-red);   border-color: var(--neon-red); }
 
         /* ---------- Forms ---------- */
         .admin-form {
@@ -767,19 +709,12 @@
             width: 100%;
         }
         @media (min-width: 640px) {
-            .admin-form {
-                grid-template-columns: 1fr 1fr;
-            }
+            .admin-form { grid-template-columns: 1fr 1fr; }
         }
         @media (min-width: 992px) {
-            .admin-form {
-                grid-template-columns: 1fr 1fr 1fr;
-                gap: 1rem 1.5rem;
-            }
+            .admin-form { grid-template-columns: 1fr 1fr 1fr; gap: 1rem 1.5rem; }
         }
-        .admin-form .full-width {
-            grid-column: 1 / -1;
-        }
+        .admin-form .full-width { grid-column: 1 / -1; }
         .admin-form label {
             font-weight: 600;
             font-size: var(--fs-small);
@@ -789,9 +724,7 @@
             text-transform: uppercase;
             letter-spacing: 0.03em;
         }
-        .admin-form input,
-        .admin-form select,
-        .admin-form textarea {
+        .admin-form input, .admin-form select, .admin-form textarea {
             width: 100%;
             padding: 0.5rem 0.8rem;
             border: 1.5px solid var(--border-soft);
@@ -804,9 +737,7 @@
             -webkit-appearance: none;
             appearance: none;
         }
-        .admin-form input:focus,
-        .admin-form select:focus,
-        .admin-form textarea:focus {
+        .admin-form input:focus, .admin-form select:focus, .admin-form textarea:focus {
             outline: none;
             border-color: var(--neon-cyan);
             box-shadow: 0 0 0 4px rgba(0, 230, 255, 0.1), var(--glow-cyan);
@@ -834,7 +765,6 @@
             }
         }
 
-        /* Django form.as_p inside admin-form */
         .admin-form form {
             display: contents;
             width: 100%;
@@ -864,9 +794,7 @@
             letter-spacing: 0.03em;
             margin-bottom: 0.1rem;
         }
-        .admin-form form p input,
-        .admin-form form p select,
-        .admin-form form p textarea {
+        .admin-form form p input, .admin-form form p select, .admin-form form p textarea {
             width: 100%;
             padding: 0.5rem 0.8rem;
             border: 1.5px solid var(--border-soft);
@@ -879,9 +807,7 @@
             -webkit-appearance: none;
             appearance: none;
         }
-        .admin-form form p input:focus,
-        .admin-form form p select:focus,
-        .admin-form form p textarea:focus {
+        .admin-form form p input:focus, .admin-form form p select:focus, .admin-form form p textarea:focus {
             outline: none;
             border-color: var(--neon-cyan);
             box-shadow: 0 0 0 4px rgba(0, 230, 255, 0.1), var(--glow-cyan);
@@ -960,14 +886,10 @@
             margin-top: 1rem;
         }
         @media (min-width: 480px) {
-            .gallery-grid {
-                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            }
+            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
         }
         @media (min-width: 768px) {
-            .gallery-grid {
-                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            }
+            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
         }
 
         .gallery-item {
@@ -1037,7 +959,7 @@
             box-shadow: var(--glow-red);
         }
 
-        /* ---------- Role Badges ---------- */
+        /* ---------- Role Badges (Super Admin only) ---------- */
         .role-badge {
             padding: 0.15rem 0.6rem;
             border-radius: 30px;
@@ -1087,54 +1009,28 @@
         }
 
         /* ---------- Utilities ---------- */
-        .mt-2 {
-            margin-top: 1rem;
-        }
-        .mb-2 {
-            margin-bottom: 1rem;
-        }
-        .flex {
-            display: flex;
-            gap: 0.6rem;
-            flex-wrap: wrap;
-        }
-        .text-dim {
-            color: var(--text-dim);
-        }
-        .w-full {
-            width: 100%;
-        }
+        .mt-2 { margin-top: 1rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .flex { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+        .text-dim { color: var(--text-dim); }
+        .w-full { width: 100%; }
 
         /* ---------- Responsive fine-tune ---------- */
         @media (max-width: 480px) {
-            .top-bar .user-info span {
-                font-size: 0.7rem;
-            }
+            .top-bar .user-info span { font-size: 0.7rem; }
             .stats-grid {
                 grid-template-columns: 1fr 1fr;
                 gap: 0.5rem;
             }
-            .stat-card .info h4 {
-                font-size: 1.1rem;
-            }
-            .stat-card .info p {
-                font-size: 0.65rem;
-            }
-            .stat-card .icon {
-                width: 34px;
-                height: 34px;
-                font-size: 0.9rem;
-            }
-            .section-header h3 {
-                font-size: 1rem;
-            }
+            .stat-card .info h4 { font-size: 1.1rem; }
+            .stat-card .info p { font-size: 0.65rem; }
+            .stat-card .icon { width: 34px; height: 34px; font-size: 0.9rem; }
+            .section-header h3 { font-size: 1rem; }
             .admin-form {
                 padding: 0.7rem;
                 gap: 0.6rem;
             }
-            .admin-form input,
-            .admin-form select,
-            .admin-form textarea {
+            .admin-form input, .admin-form select, .admin-form textarea {
                 font-size: 0.85rem;
                 padding: 0.4rem 0.6rem;
             }
@@ -1149,31 +1045,18 @@
                 padding: 0.4rem;
                 min-height: 70px;
             }
-            .stat-card .icon {
-                width: 30px;
-                height: 30px;
-                font-size: 0.8rem;
-            }
-            .stat-card .info h4 {
-                font-size: 0.95rem;
-            }
+            .stat-card .icon { width: 30px; height: 30px; font-size: 0.8rem; }
+            .stat-card .info h4 { font-size: 0.95rem; }
         }
 
         /* ---------- Print styles ---------- */
         @media print {
-            .sidebar,
-            .hamburger,
-            .sidebar-overlay {
-                display: none !important;
-            }
+            .sidebar, .hamburger, .sidebar-overlay { display: none !important; }
             .main-content {
                 margin-left: 0 !important;
                 padding: 1rem !important;
             }
-            .stat-card,
-            .table-wrap,
-            .admin-form,
-            .list-item {
+            .stat-card, .table-wrap, .admin-form, .list-item {
                 background: #0e1424 !important;
                 border-color: #333 !important;
                 backdrop-filter: none !important;
@@ -1188,16 +1071,12 @@
 
         /* ---------- Reduced motion ---------- */
         @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
+            *, *::before, *::after {
                 animation-duration: 0.01ms !important;
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
             }
-            .stat-card:hover,
-            .list-item:hover,
-            .gallery-item:hover {
+            .stat-card:hover, .list-item:hover, .gallery-item:hover {
                 transform: none !important;
             }
         }
@@ -1216,16 +1095,11 @@
             background-size: 12px 12px;
             padding-right: 2.2rem;
         }
-        select::-ms-expand {
-            display: none;
-        }
+        select::-ms-expand { display: none; }
 
         /* ---------- Edge / IE fallback for backdrop ---------- */
         @supports not (backdrop-filter: blur(10px)) {
-            .stat-card,
-            .table-wrap,
-            .admin-form,
-            .list-item {
+            .stat-card, .table-wrap, .admin-form, .list-item {
                 background: var(--bg-panel-solid);
             }
         }
@@ -1295,14 +1169,26 @@
                 <li><a href="#" data-section="appointments"><i class="fas fa-calendar-check" aria-hidden="true"></i> {% trans "Appointments" %}</a></li>
                 <li><a href="#" data-section="inquiries"><i class="fas fa-envelope" aria-hidden="true"></i> {% trans "Inquiries" %}</a></li>
                 <li><a href="#" data-section="forms"><i class="fas fa-file-pdf" aria-hidden="true"></i> {% trans "Upload Forms" %}</a></li>
+
+                {# Super Admin only: Users link #}
+                {% if user.role == 'superadmin' %}
                 <li><a href="#" data-section="users"><i class="fas fa-users" aria-hidden="true"></i> {% trans "Users" %}</a></li>
+                {% endif %}
+
                 <li><a href="#" data-section="gallery"><i class="fas fa-images" aria-hidden="true"></i> {% trans "Gallery" %}</a></li>
                 <li><a href="#" data-section="teammembers"><i class="fas fa-users-cog" aria-hidden="true"></i> {% trans "Team Members" %}</a></li>
                 <li><a href="#" data-section="requireddocs"><i class="fas fa-list-ul" aria-hidden="true"></i> {% trans "Required Docs" %}</a></li>
                 <li><a href="#" data-section="applications"><i class="fas fa-file-alt" aria-hidden="true"></i> {% trans "Applications" %}</a></li>
                 <li><a href="#" data-section="paymentsettings"><i class="fas fa-credit-card" aria-hidden="true"></i> {% trans "Payment Settings" %}</a></li>
                 <li><a href="#" data-section="settings"><i class="fas fa-cog" aria-hidden="true"></i> {% trans "Settings" %}</a></li>
-                <li><a href="{% url 'reports_dashboard' %}" target="_blank"><i class="fas fa-chart-bar" aria-hidden="true"></i> {% trans "Analytics" %}</a></li>
+
+                {# Reports / Analytics – same URL, different label/icon #}
+                <li>
+                    <a href="{% url 'reports_dashboard' %}" target="_blank">
+                        <i class="fas {% if user.role == 'superadmin' %}fa-chart-bar{% else %}fa-chart-pie{% endif %}" aria-hidden="true"></i>
+                        {% if user.role == 'superadmin' %}{% trans "Analytics" %}{% else %}{% trans "Reports" %}{% endif %}
+                    </a>
+                </li>
             </ul>
         </nav>
         <a href="{% url 'logout' %}" class="logout-btn"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> {% trans "Logout" %}</a>
@@ -1320,8 +1206,12 @@
                 <h2 id="pageTitle">{% trans "Dashboard" %}</h2>
             </div>
             <div class="user-info">
-                <span>{% trans "Super Admin" %}</span>
-                <div class="avatar" aria-label="{% trans "User avatar" %}">SA</div>
+                <span>
+                    {% if user.role == 'superadmin' %}{% trans "Super Admin" %}{% else %}{% trans "Admin" %}{% endif %}
+                </span>
+                <div class="avatar" aria-label="{% trans "User avatar" %}">
+                    {% if user.role == 'superadmin' %}SA{% else %}A{% endif %}
+                </div>
             </div>
         </div>
 
@@ -1344,10 +1234,13 @@
                     <div class="icon"><i class="fas fa-file-pdf" aria-hidden="true"></i></div>
                     <div class="info"><h4>{{ forms_list.count }}</h4><p>{% trans "Forms" %}</p></div>
                 </div>
+                {# Super Admin only: extra stat card #}
+                {% if user.role == 'superadmin' %}
                 <div class="stat-card">
                     <div class="icon"><i class="fas fa-users" aria-hidden="true"></i></div>
                     <div class="info"><h4>{{ users.count }}</h4><p>{% trans "Users" %}</p></div>
                 </div>
+                {% endif %}
             </div>
             <div style="background:var(--bg-panel); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-radius:1rem; padding:1.2rem; border:1px solid var(--border-soft);">
                 <h4 style="margin-bottom:0.8rem; font-size:var(--fs-h4);"><i class="fas fa-clock" style="color:var(--neon-cyan)" aria-hidden="true"></i> {% trans "Recent Activity" %}</h4>
@@ -2088,55 +1981,6 @@
             </div>
         </div>
 
-        <!-- ===== SECTION: USER MANAGEMENT ===== -->
-        <div id="section-users" class="section">
-            <div class="section-header">
-                <h3><i class="fas fa-users" style="color:var(--neon-cyan)" aria-hidden="true"></i> {% trans "User Management" %}</h3>
-            </div>
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>{% trans "Username" %}</th>
-                            <th>{% trans "Email" %}</th>
-                            <th>{% trans "Role" %}</th>
-                            <th>{% trans "Staff" %}</th>
-                            <th>{% trans "Action" %}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for user in users %}
-                            <tr>
-                                <td><strong>{{ user.username }}</strong></td>
-                                <td>{{ user.email }}</td>
-                                <td>
-                                    <span class="role-badge {{ user.role }}">
-                                        {{ user.get_role_display }}
-                                    </span>
-                                </td>
-                                <td>{{ user.is_staff|yesno:_("Yes,No") }}</td>
-                                <td>
-                                    <form method="post" style="display:flex; gap:0.4rem; align-items:center; flex-wrap:wrap;">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="action" value="edit_user">
-                                        <input type="hidden" name="user_id" value="{{ user.id }}">
-                                        <select name="new_role" class="form-select-sm">
-                                            <option value="user" {% if user.role == 'user' %}selected{% endif %}>{% trans "User" %}</option>
-                                            <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>{% trans "Admin" %}</option>
-                                            <option value="superadmin" {% if user.role == 'superadmin' %}selected{% endif %}>{% trans "Super Admin" %}</option>
-                                        </select>
-                                        <button type="submit" class="btn-primary btn-sm"><i class="fas fa-sync-alt" aria-hidden="true"></i> {% trans "Update" %}</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        {% empty %}
-                            <tr><td colspan="5">{% trans "No users found." %}</td></tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
         <!-- ===== SECTION: GALLERY ===== -->
         <div id="section-gallery" class="section">
             <div class="section-header">
@@ -2385,6 +2229,57 @@
             </div>
         </div>
 
+        <!-- ===== SECTION: USER MANAGEMENT (Super Admin only) ===== -->
+        {% if user.role == 'superadmin' %}
+        <div id="section-users" class="section">
+            <div class="section-header">
+                <h3><i class="fas fa-users" style="color:var(--neon-cyan)" aria-hidden="true"></i> {% trans "User Management" %}</h3>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>{% trans "Username" %}</th>
+                            <th>{% trans "Email" %}</th>
+                            <th>{% trans "Role" %}</th>
+                            <th>{% trans "Staff" %}</th>
+                            <th>{% trans "Action" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td><strong>{{ user.username }}</strong></td>
+                                <td>{{ user.email }}</td>
+                                <td>
+                                    <span class="role-badge {{ user.role }}">
+                                        {{ user.get_role_display }}
+                                    </span>
+                                </td>
+                                <td>{{ user.is_staff|yesno:_("Yes,No") }}</td>
+                                <td>
+                                    <form method="post" style="display:flex; gap:0.4rem; align-items:center; flex-wrap:wrap;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="edit_user">
+                                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                                        <select name="new_role" class="form-select-sm">
+                                            <option value="user" {% if user.role == 'user' %}selected{% endif %}>{% trans "User" %}</option>
+                                            <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>{% trans "Admin" %}</option>
+                                            <option value="superadmin" {% if user.role == 'superadmin' %}selected{% endif %}>{% trans "Super Admin" %}</option>
+                                        </select>
+                                        <button type="submit" class="btn-primary btn-sm"><i class="fas fa-sync-alt" aria-hidden="true"></i> {% trans "Update" %}</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr><td colspan="5">{% trans "No users found." %}</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+
     </main>
 
     <!-- Bootstrap JS (for collapsible) -->
@@ -2413,13 +2308,13 @@
                 appointments: "{% trans "Appointments" %}",
                 inquiries: "{% trans "Inquiries" %}",
                 forms: "{% trans "Upload Forms" %}",
-                users: "{% trans "User Management" %}",
                 gallery: "{% trans "Gallery" %}",
                 teammembers: "{% trans "Manage Team" %}",
                 requireddocs: "{% trans "Required Documents" %}",
                 applications: "{% trans "Applications" %}",
                 paymentsettings: "{% trans "Payment Settings" %}",
                 settings: "{% trans "Settings" %}",
+                users: "{% trans "User Management" %}",
             };
 
             // ---- Helper: close sidebar ----
@@ -2508,7 +2403,7 @@
                 }, 150);
             }, { passive: true });
 
-            // ---- Global edit functions ----
+            // ---- Global edit functions (identical to before) ----
             window.editService = function(id, name, category, description, active, icon, color, paymentRequired) {
                 document.getElementById("editServiceId").value = id;
                 document.getElementById("editSvcName").value = name;

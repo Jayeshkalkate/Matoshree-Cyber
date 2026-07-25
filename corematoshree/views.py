@@ -15,7 +15,7 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.views import (
     PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView,
-    PasswordResetCompleteView
+    PasswordResetCompleteView, PasswordChangeView, PasswordChangeDoneView
 )
 from django.core.cache import cache
 from django.core.mail import send_mail
@@ -225,6 +225,18 @@ class CustomPasswordResetConfirmView(PasswordResetConfirmView):
 
 class CustomPasswordResetCompleteView(PasswordResetCompleteView):
     template_name = 'registration/password_reset_complete.html'
+
+
+# -----------------------------------------------------------------------------
+# Password Change Views (added)
+# -----------------------------------------------------------------------------
+class CustomPasswordChangeView(PasswordChangeView):
+    template_name = 'password_change.html'
+    success_url = reverse_lazy('password_change_done')
+
+
+class CustomPasswordChangeDoneView(PasswordChangeDoneView):
+    template_name = 'password_change_done.html'
 
 
 # =============================================================================
@@ -620,7 +632,8 @@ def admin_dashboard(request):
         if response:
             return response
     context['business'] = get_business()
-    return render(request, 'admindashboard.html', context)
+    return render(request, 'dashboard.html', context)
+    # return render(request, 'admindashboard.html', context)
 
 
 @login_required
@@ -633,7 +646,8 @@ def superadmin_dashboard(request):
         if response:
             return response
     context['business'] = get_business()
-    return render(request, 'superadmindashboard.html', context)
+    return render(request, 'dashboard.html', context)
+    # return render(request, 'superadmindashboard.html', context)
 
 
 @login_required
@@ -1132,18 +1146,21 @@ def payment_checkout(request, service_id):
     })
 
 
-@login_required
-def create_application_from_session(request):
-    pending_data = request.session.pop('pending_application', None)
-    if not pending_data:
-        messages.error(request, _('No pending application found.'))
-        return redirect('services')
-
+def _create_application_from_session_data(pending_data, request):
+    """
+    Internal helper to create an Application from session data.
+    Returns the created Application object.
+    """
     service = get_object_or_404(Service, id=pending_data['service_id'])
     form_data = pending_data['form_data']
     temp_files = pending_data['temp_files']
 
-    # Create application
+    # Read payment details from session (set by mark_payment_done or verify_razorpay_payment)
+    payment_method = pending_data.get('payment_method', 'upi')
+    payment_app = pending_data.get('payment_app', '')
+    utr_number = pending_data.get('utr_number', '')
+    payment_transaction_id = pending_data.get('razorpay_payment_id', '')
+
     application = Application(
         user=request.user,
         service=service,
@@ -1153,8 +1170,12 @@ def create_application_from_session(request):
         address=form_data['address'],
         extra_data=form_data.get('extra_data', {}),
         status='pending',
-        payment_status='paid',  # payment already confirmed
+        payment_status='paid',
         payment_date=timezone.now(),
+        payment_method=payment_method,
+        payment_app=payment_app,
+        utr_number=utr_number,
+        payment_transaction_id=payment_transaction_id,
     )
     application.save()
     application.receipt_number = application.generate_receipt_number()
@@ -1188,6 +1209,18 @@ def create_application_from_session(request):
             f'Receipt: {application.receipt_number}'
         )
     )
+
+    return application
+
+
+@login_required
+def create_application_from_session(request):
+    pending_data = request.session.pop('pending_application', None)
+    if not pending_data:
+        messages.error(request, _('No pending application found.'))
+        return redirect('services')
+
+    application = _create_application_from_session_data(pending_data, request)
 
     messages.success(request, _('Your application has been submitted and payment confirmed.'))
     return redirect('application_detail', app_id=application.id)
@@ -1504,7 +1537,7 @@ def verify_razorpay_payment(request):
     if not all([payment_id, order_id, signature, app_id]):
         return JsonResponse({'error': 'Missing parameters'}, status=400)
 
-    # Check if this is a pending application (app_id is "pending" or 0)
+    # --- Pending application (app_id is "pending" or "0") ---
     if app_id == 'pending' or app_id == '0':
         pending_data = request.session.get('pending_application', None)
         if not pending_data or pending_data.get('razorpay_order_id') != order_id:
@@ -1525,15 +1558,23 @@ def verify_razorpay_payment(request):
         except razorpay.errors.SignatureVerificationError:
             return JsonResponse({'error': 'Invalid signature'}, status=400)
 
-        # Payment verified – set payment info and create application
+        # Store payment info and create the application
         pending_data['payment_method'] = 'razorpay'
         pending_data['razorpay_payment_id'] = payment_id
         request.session['pending_application'] = pending_data
 
-        # Create the application
-        return create_application_from_session(request)
+        # Create the application using the helper
+        application = _create_application_from_session_data(pending_data, request)
+        # Remove session now that application is created
+        request.session.pop('pending_application', None)
 
-    # --- Normal application (app_id > 0) ---
+        # Return JSON response with receipt URL (as expected by AJAX)
+        return JsonResponse({
+            'success': True,
+            'receipt_url': reverse('download_receipt', args=[application.id])
+        })
+
+    # --- Existing application (app_id > 0) ---
     app = get_object_or_404(Application, id=app_id, user=request.user)
 
     payment_settings = get_payment_settings()
@@ -1609,7 +1650,11 @@ def mark_payment_done(request, app_id):
         request.session['pending_application'] = pending_data
 
         # Create the application
-        return create_application_from_session(request)
+        application = _create_application_from_session_data(pending_data, request)
+        request.session.pop('pending_application', None)
+
+        messages.success(request, _('Your application has been submitted and payment confirmed.'))
+        return redirect('application_detail', app_id=application.id)
 
     # --- Existing application (app_id > 0) ---
     application = get_object_or_404(Application, id=app_id, user=request.user)

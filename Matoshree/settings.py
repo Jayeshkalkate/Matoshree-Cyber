@@ -15,15 +15,27 @@ if not os.path.exists(LOG_DIR):
     os.makedirs(LOG_DIR)
 
 # ------------------------------------------------------------------
-# SECURITY
+# SECURITY & DEBUG
 # ------------------------------------------------------------------
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-default-change-in-production')
+
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-# ALLOWED_HOSTS – handle comma‑separated list, or allow all if DEBUG is True
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',') if os.getenv('ALLOWED_HOSTS') else []
-if DEBUG and not ALLOWED_HOSTS:
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver']
+# Secret key – use a strong, random value in production
+if DEBUG:
+    SECRET_KEY = os.getenv(
+        "DJANGO_SECRET_KEY",
+        "django-insecure-dev-key-only"   # fallback for development
+    )
+else:
+    SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]  # must be set
+
+# Allowed hosts – in production, set ALLOWED_HOSTS as comma-separated list
+# (a single value without commas also works)
+if DEBUG:
+    ALLOWED_HOSTS = ["127.0.0.1", "localhost", "testserver"]
+else:
+    hosts = os.getenv("ALLOWED_HOSTS", "")
+    ALLOWED_HOSTS = [h.strip() for h in hosts.split(",") if h.strip()]
 
 # ------------------------------------------------------------------
 # APPLICATION DEFINITION
@@ -35,12 +47,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'corematoshree',  # our app
+    'corematoshree',  # your app
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',   # <-- ADD Whitenoise
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -52,7 +64,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'Matoshree.urls'
 
 # ------------------------------------------------------------------
-# TEMPLATES – with custom context processors
+# TEMPLATES
 # ------------------------------------------------------------------
 TEMPLATES = [
     {
@@ -66,7 +78,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'corematoshree.context_processors.business_info',
-                # 'corematoshree.context_processors.payment_settings',
+                'corematoshree.context_processors.payment_settings',
             ],
         },
     },
@@ -75,7 +87,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Matoshree.wsgi.application'
 
 # ------------------------------------------------------------------
-# DATABASE – uses DATABASE_URL if present, else SQLite
+# DATABASE
 # ------------------------------------------------------------------
 DATABASE_URL = os.getenv('DATABASE_URL')
 if DATABASE_URL:
@@ -91,9 +103,9 @@ else:
     }
 
 # ------------------------------------------------------------------
-# SESSIONS – use database backend to avoid corruption
+# SESSIONS
 # ------------------------------------------------------------------
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'   # <-- ADD this line
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 # ------------------------------------------------------------------
 # PASSWORD VALIDATION
@@ -127,19 +139,12 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 static_dir = BASE_DIR / 'static'
 STATICFILES_DIRS = [static_dir] if static_dir.exists() else []
-
-# Use Whitenoise to serve static files with compression
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Media files – in production, use Cloudinary or S3. 
-# For local development, we keep the local storage.
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# ------------------------------------------------------------------
-# CLOUDINARY FOR MEDIA (Optional but recommended for production)
-# Uncomment and set environment variables to use Cloudinary.
-# ------------------------------------------------------------------
+# (Optional) Cloudinary configuration for production – uncomment when ready
 # if not DEBUG:
 #     INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
 #     import cloudinary
@@ -165,29 +170,36 @@ DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@example.com')
 CONTACT_EMAIL = os.getenv('CONTACT_EMAIL', DEFAULT_FROM_EMAIL)
 
 # ------------------------------------------------------------------
-# SECURITY SETTINGS (production)
+# SECURITY SETTINGS (production only)
 # ------------------------------------------------------------------
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_SECONDS = 31536000          # 1 year
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     X_FRAME_OPTIONS = 'DENY'
+else:
+    # Development – these are explicitly set to False for clarity
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    # HSTS is not used in development
 
 # ------------------------------------------------------------------
-# CSRF TRUSTED ORIGINS – add your Render domain here
+# CSRF TRUSTED ORIGINS
 # ------------------------------------------------------------------
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',') if os.getenv('CSRF_TRUSTED_ORIGINS') else []
-if DEBUG and not CSRF_TRUSTED_ORIGINS:
+if DEBUG:
     CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1:8000']
-# For production, ensure your Render URL is included, e.g.:
-# CSRF_TRUSTED_ORIGINS = ['https://matoshree-cyber.onrender.com']
+else:
+    # Accept both comma‑separated and single‑value entries
+    origins = os.getenv('CSRF_TRUSTED_ORIGINS', '')
+    CSRF_TRUSTED_ORIGINS = [o.strip() for o in origins.split(',') if o.strip()]
 
 # ------------------------------------------------------------------
-# LOGGING – Enhanced for payment/debugging
+# LOGGING
 # ------------------------------------------------------------------
 LOGGING = {
     'version': 1,
@@ -232,7 +244,6 @@ LOGGING = {
             'level': 'DEBUG' if DEBUG else 'INFO',
             'propagate': True,
         },
-        # Payment-specific logger
         'corematoshree.payment': {
             'handlers': ['payment_file', 'console'],
             'level': 'INFO',
@@ -242,14 +253,13 @@ LOGGING = {
 }
 
 # ------------------------------------------------------------------
-# RAZORPAY PAYMENT GATEWAY
+# RAZORPAY
 # ------------------------------------------------------------------
 RAZORPAY_KEY_ID = os.getenv('RAZORPAY_KEY_ID', '')
 RAZORPAY_KEY_SECRET = os.getenv('RAZORPAY_KEY_SECRET', '')
 RAZORPAY_WEBHOOK_SECRET = os.getenv('RAZORPAY_WEBHOOK_SECRET', '')
 
-# Payment timeouts and limits (optional)
 PAYMENT_TIMEOUT_MINUTES = int(os.getenv('PAYMENT_TIMEOUT_MINUTES', '15'))
 PAYMENT_MAX_RETRY = int(os.getenv('PAYMENT_MAX_RETRY', '3'))
-PAYMENT_AMOUNT_MIN = int(os.getenv('PAYMENT_AMOUNT_MIN', '1'))  # in INR
-PAYMENT_AMOUNT_MAX = int(os.getenv('PAYMENT_AMOUNT_MAX', '100000'))  # in INR
+PAYMENT_AMOUNT_MIN = int(os.getenv('PAYMENT_AMOUNT_MIN', '1'))
+PAYMENT_AMOUNT_MAX = int(os.getenv('PAYMENT_AMOUNT_MAX', '100000'))

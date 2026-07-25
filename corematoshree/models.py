@@ -453,7 +453,6 @@ class Application(models.Model):
         choices=PAYMENT_APP_CHOICES,
         blank=True,
         null=True,
-        # default='upi'
     )
 
     STATUS_CHOICES = (
@@ -587,8 +586,12 @@ class TeamMember(models.Model):
     def __str__(self):
         return self.name
 
+
+# ==========================
+# Payment Settings (Singleton)
+# ==========================
 class PaymentSettings(models.Model):
-    # Existing fields (keep these)
+    # Existing fields
     upi_id = models.CharField("UPI ID", max_length=100, blank=True, help_text="e.g. example@upi")
     upi_mobile = models.CharField("UPI Mobile", max_length=15, blank=True)
     qr_code = models.ImageField("QR Code", upload_to="payments/", blank=True, null=True)
@@ -600,11 +603,11 @@ class PaymentSettings(models.Model):
     upi_enabled = models.BooleanField("Enable UPI Payment", default=True)
     cash_enabled = models.BooleanField("Enable Cash Payment", default=False)
 
-    # Razorpay credentials (MUST exist)
+    # Razorpay credentials (live)
     razorpay_key_id = models.CharField("Razorpay Key ID", max_length=100, blank=True)
     razorpay_key_secret = models.CharField("Razorpay Key Secret", max_length=100, blank=True)
 
-    # Test mode (optional)
+    # Test mode
     test_mode = models.BooleanField("Test Mode", default=False)
     razorpay_test_key = models.CharField("Razorpay Test Key", max_length=100, blank=True)
     razorpay_test_secret = models.CharField("Razorpay Test Secret", max_length=100, blank=True)
@@ -618,10 +621,16 @@ class PaymentSettings(models.Model):
         if self.is_active:
             PaymentSettings.objects.filter(is_active=True).exclude(pk=self.pk).update(is_active=False)
         super().save(*args, **kwargs)
+        # Invalidate cached payment settings
+        cache.delete('payment_settings')
+
+    def __str__(self):
+        return "Payment Settings" if self.is_active else "Payment Settings (Inactive)"
 
     class Meta:
         verbose_name = "Payment Setting"
         verbose_name_plural = "Payment Settings"
+
 
 # ==========================
 # Payment Log (for audit trail)
@@ -657,3 +666,4 @@ class PaymentLog(models.Model):
 
     def __str__(self):
         return f"{self.application.full_name} – {self.event_type} – {self.created_at.strftime('%Y-%m-%d %H:%M')}"
+

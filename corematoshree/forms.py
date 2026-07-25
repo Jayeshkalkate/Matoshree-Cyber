@@ -129,7 +129,7 @@ class ReviewForm(forms.ModelForm):
 
 
 # ==========================
-# Dashboard / Admin Forms (mostly unchanged)
+# Dashboard / Admin Forms
 # ==========================
 class ServiceForm(forms.ModelForm):
     class Meta:
@@ -219,7 +219,7 @@ class BusinessInfoForm(forms.ModelForm):
 
 
 # ==========================
-# Application & Document Forms (unchanged)
+# Application & Document Forms
 # ==========================
 class ApplicationForm(forms.ModelForm):
     extra_data = forms.CharField(
@@ -310,17 +310,18 @@ class TeamMemberForm(forms.ModelForm):
 
 class PaymentSettingsForm(forms.ModelForm):
     """
-    Enhanced payment settings with support for multiple methods
-    and proper validation.
+    Enhanced payment settings with support for multiple methods,
+    live/test Razorpay keys, and proper validation.
     """
     class Meta:
         model = PaymentSettings
         fields = (
             'upi_id', 'upi_mobile', 'qr_code', 'payment_instructions',
             'is_active',
-            # New fields for multi-gateway support (add these to your model)
             'razorpay_enabled', 'cash_enabled', 'upi_enabled',
-            'test_mode', 'razorpay_test_key', 'razorpay_test_secret',
+            'test_mode',
+            'razorpay_key_id', 'razorpay_key_secret',      # <-- ADDED live keys
+            'razorpay_test_key', 'razorpay_test_secret',
         )
         widgets = {
             'upi_id': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'example@upi'}),
@@ -332,6 +333,8 @@ class PaymentSettingsForm(forms.ModelForm):
             'cash_enabled': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'upi_enabled': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'test_mode': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'razorpay_key_id': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'rzp_live_...'}),
+            'razorpay_key_secret': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '...'}),
             'razorpay_test_key': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'rzp_test_...'}),
             'razorpay_test_secret': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '...'}),
         }
@@ -339,7 +342,6 @@ class PaymentSettingsForm(forms.ModelForm):
     def clean_upi_id(self):
         upi_id = self.cleaned_data.get('upi_id', '').strip()
         if upi_id:
-            # Basic UPI ID format: something@something
             if not re.match(r'^[\w.-]+@[\w.-]+$', upi_id):
                 raise forms.ValidationError(_("Enter a valid UPI ID (e.g., name@bank)"))
         return upi_id
@@ -347,60 +349,44 @@ class PaymentSettingsForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         is_active = cleaned_data.get('is_active')
+        razorpay_enabled = cleaned_data.get('razorpay_enabled')
+        test_mode = cleaned_data.get('test_mode')
+        upi_enabled = cleaned_data.get('upi_enabled')
         upi_id = cleaned_data.get('upi_id')
         qr_code = cleaned_data.get('qr_code')
-        razorpay_enabled = cleaned_data.get('razorpay_enabled')
         cash_enabled = cleaned_data.get('cash_enabled')
-        upi_enabled = cleaned_data.get('upi_enabled')
 
-        # If active, at least one payment method must be enabled
+        # If active, at least one method must be enabled
         if is_active:
-            # Check if any method is available (consider both settings and actual data)
             has_upi = upi_enabled and (upi_id or qr_code)
             has_razorpay = razorpay_enabled
             has_cash = cash_enabled
-
             if not (has_upi or has_razorpay or has_cash):
                 raise forms.ValidationError(
                     _("At least one payment method (UPI, Razorpay, or Cash) must be enabled "
                       "when payment settings are active.")
                 )
 
-            # If UPI is enabled, ensure either UPI ID or QR Code is provided
+            # UPI validation
             if upi_enabled and not upi_id and not qr_code:
                 raise forms.ValidationError(
                     _("UPI is enabled but neither UPI ID nor QR Code is provided.")
                 )
 
-            # Validate test keys if test mode is enabled
-            if cleaned_data.get('test_mode'):
-                if not cleaned_data.get('razorpay_test_key') or not cleaned_data.get('razorpay_test_secret'):
-                    raise forms.ValidationError(
-                        _("Test mode requires both Razorpay Test Key and Test Secret.")
-                    )
+            # Razorpay validation
+            if razorpay_enabled:
+                if test_mode:
+                    # Test mode: test keys required
+                    if not cleaned_data.get('razorpay_test_key') or not cleaned_data.get('razorpay_test_secret'):
+                        raise forms.ValidationError(
+                            _("Test mode requires both Razorpay Test Key and Test Secret.")
+                        )
+                else:
+                    # Live mode: live keys required
+                    if not cleaned_data.get('razorpay_key_id') or not cleaned_data.get('razorpay_key_secret'):
+                        raise forms.ValidationError(
+                            _("Live Razorpay keys are required when Razorpay is enabled and Test Mode is off.")
+                        )
 
         return cleaned_data
-
-
-# Optional: Form for manual payment confirmation (used in templates)
-class PaymentConfirmationForm(forms.Form):
-    payment_app = forms.ChoiceField(
-        label=_("Payment App"),
-        choices=Application.PAYMENT_APP_CHOICES,
-        required=True,
-        widget=forms.Select(attrs={"class": "form-control"}),
-    )
-    utr_number = forms.CharField(
-        label=_("UTR Number"),
-        max_length=50,
-        required=False,
-        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": _("e.g. 123456789012")}),
-        help_text=_("Optional but helps admin verify your payment."),
-    )
-    payment_method = forms.ChoiceField(
-        label=_("Payment Method"),
-        choices=Application.PAYMENT_METHOD_CHOICES,
-        initial='upi',
-        widget=forms.HiddenInput(),
-    )
     

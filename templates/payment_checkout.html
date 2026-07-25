@@ -234,6 +234,31 @@
   .text-muted {
     color: var(--text-muted, #94a3b8) !important;
   }
+  .btn-outline {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    border: 1.5px solid var(--border-soft, rgba(255,255,255,0.15));
+    border-radius: 30px;
+    color: var(--text-soft, #9fb0d4);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    background: transparent;
+    font-weight: 600;
+    font-size: clamp(0.9rem, 1vw, 1rem);
+    touch-action: manipulation;
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+  }
+  .btn-outline:hover {
+    border-color: var(--neon-cyan, #00f0ff);
+    color: var(--neon-cyan, #00f0ff);
+    box-shadow: 0 0 20px rgba(0,240,255,0.08);
+    transform: translateY(-2px);
+  }
 
   /* Responsive */
   @media (max-width: 768px) {
@@ -258,7 +283,8 @@
       max-width: 120px;
     }
     .btn-success,
-    .btn-primary {
+    .btn-primary,
+    .btn-outline {
       width: 100%;
     }
   }
@@ -286,7 +312,9 @@
       <hr>
       <div class="payment-section">
         <h5>{% trans "Payment Required" %}</h5>
-        <p><strong>{% trans "Amount" %}:</strong> ₹{{ service.servicecharge_set.first.charge }}</p>
+        {% with charge=service.servicecharge_set.first %}
+          <p><strong>{% trans "Amount" %}:</strong> ₹{{ charge.charge|default:"0" }}</p>
+        {% endwith %}
 
         <!-- UPI Payment Option -->
         {% if payment_settings and payment_settings.upi_enabled and payment_settings.qr_code %}
@@ -331,6 +359,8 @@
               <i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}
             </button>
             <p class="text-muted">{% trans "Instant online payment via credit/debit card, UPI, or netbanking." %}</p>
+            <!-- ✅ Add CSRF token -->
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
           </div>
         {% endif %}
 
@@ -341,7 +371,7 @@
 
         <!-- Cancel / back link -->
         <div style="margin-top: 1.5rem; text-align: center;">
-          <a href="{% url 'apply_service' service.id %}" class="btn-outline" style="display: inline-block; padding: 0.5rem 1.5rem; border: 1.5px solid var(--border-soft); border-radius: 30px; color: var(--text-soft); text-decoration: none;">
+          <a href="{% url 'apply_service' service.id %}" class="btn-outline">
             <i class="fas fa-arrow-left"></i> {% trans "Go Back" %}
           </a>
         </div>
@@ -359,25 +389,39 @@
 
     document.addEventListener('DOMContentLoaded', function() {
       var payBtn = document.getElementById('razorpay-pay-btn');
-      if (!payBtn) return;
+      if (!payBtn) {
+        console.error('Razorpay button not found!');
+        return;
+      }
+      console.log('✅ Razorpay button found.');
 
       var serviceId = {{ service.id }};
+      console.log('Service ID:', serviceId);
+
       var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || '';
+      console.log('CSRF token present:', csrftoken ? 'Yes' : 'No');
 
       payBtn.addEventListener('click', function() {
+        console.log('🟢 Button clicked.');
         payBtn.disabled = true;
         payBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {% trans "Processing..." %}';
 
-        // Create order for pending application
-        fetch('/create-razorpay-order-pending/' + serviceId + '/', {
+        var url = '/create-razorpay-order-pending/' + serviceId + '/';
+        console.log('Fetching:', url);
+
+        fetch(url, {
           method: 'POST',
           headers: {
             'X-CSRFToken': csrftoken,
             'Content-Type': 'application/json',
           },
         })
-        .then(response => response.json())
+        .then(response => {
+          console.log('Response status:', response.status);
+          return response.json();
+        })
         .then(data => {
+          console.log('Order data:', data);
           if (data.error) {
             alert('Error: ' + data.error);
             payBtn.disabled = false;
@@ -385,7 +429,6 @@
             return;
           }
 
-          // Open Razorpay modal
           var options = {
             key: data.key,
             amount: data.amount,
@@ -394,7 +437,7 @@
             description: 'Payment for Application (Pending)',
             order_id: data.order_id,
             handler: function(response) {
-              // Verify payment – use app_id = 'pending' to indicate it's for a pending session
+              console.log('Payment success:', response);
               var verifyData = new FormData();
               verifyData.append('razorpay_payment_id', response.razorpay_payment_id);
               verifyData.append('razorpay_order_id', response.razorpay_order_id);
@@ -403,15 +446,12 @@
 
               fetch('/payment/verify-payment/', {
                 method: 'POST',
-                headers: {
-                  'X-CSRFToken': csrftoken,
-                },
+                headers: { 'X-CSRFToken': csrftoken },
                 body: verifyData,
               })
               .then(res => res.json())
               .then(data => {
                 if (data.success) {
-                  // On success, the backend creates the application and returns a receipt URL
                   window.location.href = data.receipt_url || '/my-applications/';
                 } else {
                   alert('Payment verification failed: ' + (data.error || 'Unknown error'));
@@ -420,6 +460,7 @@
                 }
               })
               .catch(err => {
+                console.error('Verification error:', err);
                 alert('Verification error: ' + err.message);
                 payBtn.disabled = false;
                 payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
@@ -437,10 +478,9 @@
               email: '{{ request.user.email }}',
               contact: '{{ request.user.phone }}',
             },
-            theme: {
-              color: '#00e6ff',
-            },
+            theme: { color: '#00e6ff' },
             onError: function(error) {
+              console.error('Razorpay error:', error);
               alert('Payment failed: ' + (error.description || 'Unknown error'));
               payBtn.disabled = false;
               payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
@@ -450,6 +490,7 @@
           rzp.open();
         })
         .catch(err => {
+          console.error('Fetch error:', err);
           alert('Error creating order: ' + err.message);
           payBtn.disabled = false;
           payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';

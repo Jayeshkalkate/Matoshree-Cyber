@@ -324,6 +324,12 @@ class PaymentSettingsAdmin(admin.ModelAdmin):
                 'razorpay_enabled', 'cash_enabled', 'upi_enabled'
             )
         }),
+        ('Razorpay Live Credentials', {
+            'fields': (
+                'razorpay_key_id', 'razorpay_key_secret'
+            ),
+            'classes': ('wide',),
+        }),
         ('Test Mode', {
             'fields': (
                 'test_mode', 'razorpay_test_key', 'razorpay_test_secret'
@@ -333,8 +339,9 @@ class PaymentSettingsAdmin(admin.ModelAdmin):
     )
 
     def get_readonly_fields(self, request, obj=None):
-        # Make test keys read-only if not in test mode
+        # If obj exists and test_mode is False, make test keys read-only.
+        # Live keys are always editable.
         if obj and not obj.test_mode:
             return ('razorpay_test_key', 'razorpay_test_secret')
+        # When test_mode is True, test keys are editable; live keys might be hidden, but we keep them editable anyway.
         return ()
-    
