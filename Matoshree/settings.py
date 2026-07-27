@@ -139,7 +139,17 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 static_dir = BASE_DIR / 'static'
 STATICFILES_DIRS = [static_dir] if static_dir.exists() else []
     
-if not DEBUG:
+# ------------------------------------------------------------------
+# CLOUDINARY STORAGE (always enabled if credentials are set)
+# ------------------------------------------------------------------
+
+CLOUDINARY_CREDENTIALS = all([
+    os.getenv('CLOUDINARY_CLOUD_NAME'),
+    os.getenv('CLOUDINARY_API_KEY'),
+    os.getenv('CLOUDINARY_API_SECRET')
+])
+
+if CLOUDINARY_CREDENTIALS:
     INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
     import cloudinary
     cloudinary.config(
@@ -148,6 +158,7 @@ if not DEBUG:
         api_secret=os.getenv('CLOUDINARY_API_SECRET')
     )
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    print("✅ Cloudinary storage is ACTIVE")  # Temporary – you'll see this in logs
     
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
