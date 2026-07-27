@@ -5,10 +5,7 @@ from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from corematoshree import views
 
-# app_name = 'corematoshree'  # Add namespace to avoid conflicts
-
 urlpatterns = [
-     
     # ==========================
     # AUTHENTICATION
     # ==========================
@@ -18,26 +15,14 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
 
     # Password Reset (custom views)
-    path('password-reset/',
-         views.CustomPasswordResetView.as_view(),
-         name='password_reset'),
-    path('password-reset/done/',
-         views.CustomPasswordResetDoneView.as_view(),
-         name='password_reset_done'),
-    path('password-reset/<uidb64>/<token>/',
-         views.CustomPasswordResetConfirmView.as_view(),
-         name='password_reset_confirm'),
-    path('password-reset/complete/',
-         views.CustomPasswordResetCompleteView.as_view(),
-         name='password_reset_complete'),
+    path('password-reset/', views.CustomPasswordResetView.as_view(), name='password_reset'),
+    path('password-reset/done/', views.CustomPasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('password-reset/<uidb64>/<token>/', views.CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('password-reset/complete/', views.CustomPasswordResetCompleteView.as_view(), name='password_reset_complete'),
 
-    # Password Change (added)
-    path('password-change/',
-         views.CustomPasswordChangeView.as_view(),
-         name='password_change'),
-    path('password-change/done/',
-         views.CustomPasswordChangeDoneView.as_view(),
-         name='password_change_done'),
+    # Password Change
+    path('password-change/', views.CustomPasswordChangeView.as_view(), name='password_change'),
+    path('password-change/done/', views.CustomPasswordChangeDoneView.as_view(), name='password_change_done'),
 
     # ==========================
     # DASHBOARDS & REPORTS
@@ -79,8 +64,7 @@ urlpatterns = [
     # ==========================
     path('payment-checkout/<int:service_id>/', views.payment_checkout, name='payment_checkout'),
     path('create-application-from-session/', views.create_application_from_session, name='create_application_from_session'),
-    path('create-razorpay-order-pending/<int:service_id>/', views.create_razorpay_order_pending, name='create_razorpay_order_pending'),
-    
+
     # ==========================
     # APPLICATIONS (Admin)
     # ==========================
@@ -93,33 +77,16 @@ urlpatterns = [
     path('split-pdf/<int:pk>/', views.split_pdf, name='split_pdf'),
 
     # ==========================
-    # PAYMENT GATEWAY
+    # PAYMENT GATEWAY – UPI ONLY
     # ==========================
-    
-    # ---- Webhook (public, no login) ----
-    path('payment/razorpay-webhook/', views.razorpay_webhook, name='razorpay_webhook'),
-
-    # ---- Razorpay order creation (login required) ----
-    # For existing applications (app_id > 0)
-    path('payment/create-order/<int:app_id>/', views.create_payment, name='create_payment'),
-    path('create-razorpay-order/<int:app_id>/', views.create_razorpay_order, name='create_razorpay_order'),
-
-    # ---- Razorpay verification (login required) ----
-    # Only one entry: under /payment/ for consistency
-    path('payment/verify-payment/', views.verify_razorpay_payment, name='verify_payment'),
-
     # ---- Manual UPI confirmation (login required) ----
-    # For pending (app_id=0) or existing (app_id>0)
     path('mark-payment-done/<int:app_id>/', views.mark_payment_done, name='mark_payment_done'),
 
     # ---- Receipt download (login required) ----
     path('download-receipt/<int:app_id>/', views.download_receipt, name='download_receipt'),
 ]
 
-# ==========================
-# SERVE MEDIA & STATIC FILES (development only)
-# ==========================
+# Serve media & static in development only
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    

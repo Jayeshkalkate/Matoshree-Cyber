@@ -821,14 +821,6 @@
         </div>
       {% endif %}
 
-      {% if payment_settings.qr_code %}
-          <img src="{{ payment_settings.qr_code.url }}" alt="UPI QR Code">
-      {% else %}
-          <div class="qr-placeholder">
-              <i class="fas fa-qrcode"></i> QR Code not available
-          </div>
-      {% endif %}
-      
       <!-- ============================================================
            SUCCESS / PAYMENT SECTION (after application creation)
            ============================================================ -->
@@ -893,21 +885,8 @@
                 </div>
               {% endif %}
 
-              <!-- Razorpay Payment Option (only if enabled) -->
-              {% if payment_settings and payment_settings.razorpay_enabled %}
-                <div style="margin-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 1.2rem;">
-                  <h5 style="color: var(--text-white);">{% trans "Pay with Razorpay" %}</h5>
-                  <button id="razorpay-pay-btn" class="btn-primary" style="background: #00e6ff; color: #000; width: 100%; max-width: 280px;">
-                    <i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}
-                  </button>
-                  <p class="text-muted" style="margin-top:0.5rem;">
-                    {% trans "Instant online payment via credit/debit card, UPI, or netbanking." %}
-                  </p>
-                </div>
-              {% endif %}
-
               <!-- If no online method is enabled, show a message -->
-              {% if not payment_settings.razorpay_enabled and not payment_settings.upi_enabled %}
+              {% if not payment_settings.upi_enabled %}
                 <p class="text-muted">{% trans "No online payment methods are currently enabled. Please contact the admin to complete your payment." %}</p>
               {% endif %}
 
@@ -1062,135 +1041,4 @@
     </div>
   </div>
 </section>
-{% endblock %}
-
-{% block extra_scripts %}
-<script src="https://checkout.razorpay.com/v1/checkout.js" crossorigin="anonymous" referrerpolicy="origin"></script>
-<script>
-  (function() {
-    "use strict";
-
-    // ----- Disable submit button on form submission (prevent double-click) -----
-    window.disableSubmitButton = function(form) {
-      var btn = document.getElementById('submitBtn');
-      if (!btn) return true;
-      // Only if button exists and isn't already disabled
-      if (btn.disabled) return false;
-      btn.disabled = true;
-      var textSpan = document.getElementById('submitText');
-      if (textSpan) {
-        textSpan.textContent = '{% trans "Submitting..." %}';
-      }
-      // Re-enable after 10 seconds in case of network failure (fallback)
-      setTimeout(function() {
-        btn.disabled = false;
-        if (textSpan) {
-          textSpan.textContent = '{% trans "Submit Application" %}';
-        }
-      }, 10000);
-      return true;
-    };
-
-    // ----- Razorpay payment -----
-    document.addEventListener('DOMContentLoaded', function() {
-      var payBtn = document.getElementById('razorpay-pay-btn');
-      if (!payBtn) return;
-
-      var appId = {{ application.id }};
-      var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || '';
-
-      payBtn.addEventListener('click', function() {
-        // Disable button and show spinner (prevents double-click)
-        payBtn.disabled = true;
-        payBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {% trans "Processing..." %}';
-
-        // 1. Create Razorpay order
-        fetch('/payment/create-order/' + appId + '/', {
-          method: 'POST',
-          headers: {
-            'X-CSRFToken': csrftoken,
-            'Content-Type': 'application/json',
-          },
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.error) {
-            alert('Error: ' + data.error);
-            payBtn.disabled = false;
-            payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
-            return;
-          }
-
-          // 2. Open Razorpay modal
-          var options = {
-            key: data.key,
-            amount: data.amount,
-            currency: data.currency,
-            name: '{{ business.business_name|default:"Cyber Café" }}',
-            description: 'Payment for Application #' + appId,
-            order_id: data.order_id,
-            handler: function(response) {
-              // 3. Verify payment on backend
-              var verifyData = new FormData();
-              verifyData.append('razorpay_payment_id', response.razorpay_payment_id);
-              verifyData.append('razorpay_order_id', response.razorpay_order_id);
-              verifyData.append('razorpay_signature', response.razorpay_signature);
-              verifyData.append('app_id', appId);
-
-              fetch('/payment/verify-payment/', {
-                method: 'POST',
-                headers: {
-                  'X-CSRFToken': csrftoken,
-                },
-                body: verifyData,
-              })
-              .then(res => res.json())
-              .then(data => {
-                if (data.success) {
-                  window.location.href = data.receipt_url || '/my-applications/';
-                } else {
-                  alert('Payment verification failed: ' + (data.error || 'Unknown error'));
-                  payBtn.disabled = false;
-                  payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
-                }
-              })
-              .catch(err => {
-                alert('Verification error: ' + err.message);
-                payBtn.disabled = false;
-                payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
-              });
-            },
-            modal: {
-              ondismiss: function() {
-                alert('Payment cancelled. You can try again later.');
-                payBtn.disabled = false;
-                payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
-              }
-            },
-            prefill: {
-              name: '{{ application.full_name }}',
-              email: '{{ application.email }}',
-              contact: '{{ application.phone }}',
-            },
-            theme: {
-              color: '#00e6ff',
-            },
-            onError: function(error) {
-              alert('Payment failed: ' + (error.description || 'Unknown error'));
-              payBtn.disabled = false;
-              payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
-            }
-          };
-          var rzp = new Razorpay(options);
-          rzp.open();
-        })
-        .catch(err => {
-          alert('Error creating order: ' + err.message);
-          payBtn.disabled = false;
-          payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
-        });
-      });
-    });
-  })();
-</script>
 {% endblock %}

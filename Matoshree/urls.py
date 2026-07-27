@@ -16,9 +16,7 @@ urlpatterns = [
 
     # All application URLs (home, about, services, payment, etc.)
     # This includes everything defined in corematoshree/urls.py,
-    # including:
-    #   - Payment: /create-razorpay-order/, /payment/razorpay-webhook/, etc.
-    #   - Public pages, dashboards, applications, etc.
+    # including public pages, dashboards, applications, and UPI payment.
     path('', include('corematoshree.urls')),
 
     # Language selection (i18n) – enables language switching via /i18n/setlang/
@@ -33,4 +31,3 @@ if settings.DEBUG:
     # Optional: Django Debug Toolbar (uncomment if installed)
     # import debug_toolbar
     # urlpatterns += [path('__debug__/', include(debug_toolbar.urls))]
-    

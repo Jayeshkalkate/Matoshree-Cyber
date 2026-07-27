@@ -499,7 +499,6 @@ class Application(models.Model):
     )
     PAYMENT_METHOD_CHOICES = (
         ("upi", "UPI"),
-        ("razorpay", "Razorpay"),
         ("cash", "Cash"),
     )
 
@@ -528,7 +527,7 @@ class Application(models.Model):
         default="pending",
         db_index=True
     )
-    payment_transaction_id = models.CharField(max_length=100, blank=True)
+    payment_transaction_id = models.CharField(max_length=100, blank=True)  # can hold UTR or other reference
     payment_method = models.CharField(
         max_length=20,
         choices=PAYMENT_METHOD_CHOICES,
@@ -549,7 +548,6 @@ class Application(models.Model):
         if self.id:
             return f"{base}-{self.id:04d}"
         else:
-            # Safer fallback using random alphanumeric string
             return f"{base}-{get_random_string(8, allowed_chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')}"
 
     def clean(self):
@@ -628,7 +626,7 @@ class TeamMember(models.Model):
 
 
 # ==========================
-# Payment Settings (Singleton)
+# Payment Settings (Singleton) – UPI + Cash only
 # ==========================
 class PaymentSettings(models.Model):
     """Payment gateway configuration – singleton."""
@@ -639,18 +637,8 @@ class PaymentSettings(models.Model):
     is_active = models.BooleanField("Active", default=True)
 
     # Gateway toggles
-    razorpay_enabled = models.BooleanField("Enable Razorpay", default=False)
     upi_enabled = models.BooleanField("Enable UPI Payment", default=True)
     cash_enabled = models.BooleanField("Enable Cash Payment", default=False)
-
-    # Razorpay credentials (live)
-    razorpay_key_id = models.CharField("Razorpay Key ID", max_length=100, blank=True)
-    razorpay_key_secret = models.CharField("Razorpay Key Secret", max_length=100, blank=True)
-
-    # Test mode
-    test_mode = models.BooleanField("Test Mode", default=False)
-    razorpay_test_key = models.CharField("Razorpay Test Key", max_length=100, blank=True)
-    razorpay_test_secret = models.CharField("Razorpay Test Secret", max_length=100, blank=True)
 
     def save(self, *args, **kwargs):
         # Singleton logic
@@ -673,7 +661,7 @@ class PaymentSettings(models.Model):
 
 
 # ==========================
-# Payment Log (for audit trail)
+# Payment Log (for audit trail) – Razorpay fields removed
 # ==========================
 class PaymentLog(models.Model):
     """Audit trail for payment events."""
@@ -691,9 +679,6 @@ class PaymentLog(models.Model):
         db_index=True
     )
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    razorpay_payment_id = models.CharField(max_length=100, blank=True)
-    razorpay_order_id = models.CharField(max_length=100, blank=True)
-    webhook_data = models.JSONField(default=dict, blank=True)
     # Audit fields
     ip_address = models.GenericIPAddressField(_("IP Address"), blank=True, null=True)
     user_agent = models.CharField(_("User Agent"), max_length=512, blank=True)
@@ -705,7 +690,6 @@ class PaymentLog(models.Model):
         verbose_name_plural = "Payment Logs"
         indexes = [
             models.Index(fields=['application', 'event_type']),
-            models.Index(fields=['razorpay_payment_id']),
         ]
 
     def __str__(self):

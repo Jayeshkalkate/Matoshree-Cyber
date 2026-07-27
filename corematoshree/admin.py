@@ -272,11 +272,8 @@ class ApplicationAdmin(admin.ModelAdmin):
             amount = charge.charge if charge else 0
             PaymentLog.objects.create(
                 application=app,
-                event_type='manual_confirmed',   # valid choice
+                event_type='manual_confirmed',
                 amount=amount,
-                razorpay_payment_id=app.payment_transaction_id or '',
-                razorpay_order_id='',
-                webhook_data={},
             )
             updated += 1 
         self.message_user(
@@ -313,48 +310,26 @@ class TeamMemberAdmin(admin.ModelAdmin):
 
 
 # ==========================
-# Payment Settings (Enhanced)
+# Payment Settings (UPI + Cash only)
 # ==========================
 @admin.register(PaymentSettings)
 class PaymentSettingsAdmin(admin.ModelAdmin):
     list_display = (
         'upi_id', 'upi_mobile', 'is_active',
-        'razorpay_enabled', 'cash_enabled', 'upi_enabled',
-        'test_mode'
+        'cash_enabled', 'upi_enabled',
     )
-    list_filter = ('is_active', 'razorpay_enabled', 'cash_enabled', 'upi_enabled', 'test_mode')
+    list_filter = ('is_active', 'cash_enabled', 'upi_enabled')
     search_fields = ('upi_id', 'upi_mobile')
 
     fieldsets = (
         (None, {
             'fields': (
                 'is_active',
-                'upi_id', 'upi_mobile', 'qr_code', 'payment_instructions'
+                'upi_id', 'upi_mobile', 'qr_code', 'payment_instructions',
+                'upi_enabled', 'cash_enabled',
             )
-        }),
-        ('Payment Methods', {
-            'fields': (
-                'razorpay_enabled', 'cash_enabled', 'upi_enabled'
-            )
-        }),
-        ('Razorpay Live Credentials', {
-            'fields': (
-                'razorpay_key_id', 'razorpay_key_secret'
-            ),
-            'classes': ('wide',),
-        }),
-        ('Test Mode', {
-            'fields': (
-                'test_mode', 'razorpay_test_key', 'razorpay_test_secret'
-            ),
-            'classes': ('collapse',),
         }),
     )
-
-    def get_readonly_fields(self, request, obj=None):
-        if obj and not obj.test_mode:
-            return ('razorpay_test_key', 'razorpay_test_secret')
-        return ()
     
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
@@ -362,17 +337,16 @@ class PaymentSettingsAdmin(admin.ModelAdmin):
 
 
 # ==========================
-# PaymentLog Admin (Corrected)
+# PaymentLog Admin (audit trail)
 # ==========================
 @admin.register(PaymentLog)
 class PaymentLogAdmin(admin.ModelAdmin):
-    list_display = ('application', 'event_type', 'amount', 'razorpay_payment_id', 'created_at')
+    list_display = ('application', 'event_type', 'amount', 'created_at')
     list_filter = ('event_type', 'created_at')
-    search_fields = ('application__full_name', 'application__email', 'razorpay_payment_id', 'razorpay_order_id')
+    search_fields = ('application__full_name', 'application__email')
     readonly_fields = ('created_at',)
     ordering = ('-created_at',)
     fields = (
         'application', 'event_type', 'amount',
-        'razorpay_payment_id', 'razorpay_order_id',
         'webhook_data', 'ip_address', 'user_agent', 'created_at'
     )

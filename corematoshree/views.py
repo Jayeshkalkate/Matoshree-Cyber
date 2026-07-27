@@ -4,12 +4,10 @@
 import os
 import json
 import tempfile
-import razorpay
 import logging
 from datetime import timedelta
 from io import BytesIO
-import time
-from .utils import get_business, get_payment_settings, is_admin, is_superadmin
+
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.contrib import messages
@@ -33,12 +31,27 @@ from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import cache_page
-from django.views.decorators.csrf import csrf_exempt
+
+# PDF libraries
 from pypdf import PdfReader, PdfWriter
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import inch
-import razorpay
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import (
+    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle,
+    HRFlowable, Image
+)
+from reportlab.lib.enums import TA_CENTER, TA_RIGHT, TA_LEFT
+
+# QR code (optional)
+try:
+    import qrcode
+    from io import BytesIO as qrBytesIO
+    QRCODE_AVAILABLE = True
+except ImportError:
+    QRCODE_AVAILABLE = False
 
 from .models import (
     User, Appointment, Review, Service, Announcement, JobNotification,
@@ -54,6 +67,7 @@ from .forms import (
     BusinessInfoForm, RequiredDocumentForm, ApplicationForm, DocumentUploadForm,
     PaymentSettingsForm,
 )
+from .utils import get_business, get_payment_settings, is_admin, is_superadmin
 
 logger = logging.getLogger(__name__)
 
@@ -283,8 +297,6 @@ def _clear_section_cache(section):
 
 def _clear_all_section_caches():
     """Clear all dashboard section caches (used after major updates)."""
-    # This is a simple approach; we could also delete keys by pattern if needed.
-    # For now, we'll use a list of known sections.
     sections = [
         'services', 'appointments', 'contacts', 'announcements', 'jobs',
         'schemes', 'forms', 'servicecharges', 'gallery', 'requireddocs',
@@ -466,7 +478,6 @@ def _handle_edit(model_type, obj_id, request):
             messages.error(request, _('Error updating appointment.'))
     elif model_type == 'contact':
         instance = get_object_or_404(Contact, id=obj_id)
-        # Use form for consistency
         form = ContactFormDashboard(request.POST, instance=instance)
         if form.is_valid():
             form.save()
@@ -493,7 +504,6 @@ def _handle_edit(model_type, obj_id, request):
         else:
             messages.error(request, _('Error updating service charge.'))
     elif model_type == 'businessinfo':
-        # Handle missing ID – use the first BusinessInfo or create a new one
         if not obj_id:
             instance = BusinessInfo.objects.first()
             if not instance:
@@ -564,21 +574,18 @@ def _handle_payment_settings(request):
     form = PaymentSettingsForm(request.POST, request.FILES, instance=instance)
     if form.is_valid():
         payment_settings = form.save(commit=False)
-        # REMOVE this line: payment_settings.is_active = True
         payment_settings.save()
         messages.success(request, _('Payment settings updated.'))
         cache.delete('payment_settings')
     else:
-        # Log errors for debugging
         logger.error(f"PaymentSettings form errors: {form.errors.as_json()}")
-        # Show each error to the user
         for field, errors in form.errors.items():
             for error in errors:
                 messages.error(request, f"{field}: {error}")
         messages.error(request, _('Please correct the errors below.'))
 
     cache.delete(DASHBOARD_CACHE_KEY)
-    _clear_all_section_caches()  # Payment settings affect payment-related sections
+    _clear_all_section_caches()
 
 
 def _handle_user_role_edit(request):
@@ -607,7 +614,6 @@ def _handle_dashboard_post(request, is_super=False):
         cache.delete(DASHBOARD_CACHE_KEY)
         return redirect('superadmin_dashboard' if is_super else 'admin_dashboard')
 
-    # ✅ Check paymentsettings BEFORE edit to prevent "Unknown model type"
     elif model_type == 'paymentsettings':
         _handle_payment_settings(request)
         return redirect('superadmin_dashboard' if is_super else 'admin_dashboard')
@@ -660,7 +666,6 @@ def superadmin_dashboard(request):
     return render(request, 'dashboard.html', context)
 
 
-# Cache for section data (5 minutes)
 SECTION_CACHE_TTL = 300
 
 @login_required
@@ -907,7 +912,6 @@ def charges(request):
     })
 
 
-# Public reviews (no login required)
 def reviews(request):
     all_reviews = Review.objects.filter(approved=True).order_by('-created_at').only(
         'id', 'customer_name', 'review', 'rating', 'created_at'
@@ -942,7 +946,6 @@ def reviews(request):
 
 
 def submit_review(request):
-    """Allow both authenticated and anonymous users to submit a review."""
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
@@ -1040,29 +1043,24 @@ def apply_service(request, service_id):
                 for doc_form in formset.cleaned_data:
                     if doc_form and 'file' in doc_form:
                         f = doc_form['file']
-                        # Save to temp location using default_storage
                         temp_path = default_storage.save(f'temp/{f.name}', ContentFile(f.read()))
                         temp_files.append({
                             'document_name': doc_form.get('document_name', 'Other'),
                             'temp_path': temp_path,
                             'original_name': f.name,
                         })
-                # Store in session
                 request.session['pending_application'] = {
                     'service_id': service.id,
                     'form_data': form.cleaned_data,
                     'temp_files': temp_files,
                 }
-                # Redirect to payment checkout
                 return redirect('payment_checkout', service_id=service.id)
             else:
-                # Payment not required – save immediately
                 application = form.save(commit=False)
                 application.user = request.user
                 application.service = service
                 application.save()
 
-                # Save documents
                 for i, doc_form in enumerate(formset.cleaned_data):
                     if doc_form:
                         doc_name = required_docs[i].document_name if i < len(required_docs) else 'Other'
@@ -1179,7 +1177,6 @@ def _create_application_from_session_data(pending_data, request):
     form_data = pending_data['form_data']
     temp_files = pending_data['temp_files']
 
-    # Check for duplicate pending application for same user/service
     existing = Application.objects.filter(
         user=request.user,
         service=service,
@@ -1188,11 +1185,9 @@ def _create_application_from_session_data(pending_data, request):
     if existing:
         raise Exception(_("You already have a pending application for this service."))
 
-    # Read payment details from session (set by mark_payment_done or verify_razorpay_payment)
     payment_method = pending_data.get('payment_method', 'upi')
     payment_app = pending_data.get('payment_app', '')
     utr_number = pending_data.get('utr_number', '')
-    payment_transaction_id = pending_data.get('razorpay_payment_id', '')
 
     application = Application(
         user=request.user,
@@ -1208,19 +1203,17 @@ def _create_application_from_session_data(pending_data, request):
         payment_method=payment_method,
         payment_app=payment_app,
         utr_number=utr_number,
-        payment_transaction_id=payment_transaction_id,
+        payment_transaction_id='',  # No Razorpay transaction ID
     )
     application.save()
     application.receipt_number = application.generate_receipt_number()
     application.save(update_fields=['receipt_number'])
 
     # Save documents from temp files
-    # FIX: Use chunked reading to avoid memory issues with large files
     from django.core.files import File
     for temp in temp_files:
         try:
             with default_storage.open(temp['temp_path'], 'rb') as f:
-                # Read in chunks to avoid memory bloat
                 file_content = b''
                 chunk = f.read(8192)
                 while chunk:
@@ -1233,7 +1226,6 @@ def _create_application_from_session_data(pending_data, request):
                     is_mandatory=True,
                 )
                 doc.save()
-            # Clean up temp file
             default_storage.delete(temp['temp_path'])
         except Exception as e:
             logger.error(f"Failed to save document {temp['document_name']}: {e}")
@@ -1271,7 +1263,6 @@ def create_application_from_session(request):
 
 
 def get_pending_application_from_session(request):
-    """Return pending application data from session or None."""
     return request.session.get('pending_application', None)
 
 
@@ -1361,7 +1352,6 @@ def application_admin_detail(request, app_id):
                 application.receipt_number = application.generate_receipt_number()
                 application.payment_method = 'manual'
                 application.save()
-                # FIX: Check if service charge exists before accessing
                 charge = application.service.servicecharge_set.first()
                 PaymentLog.objects.create(
                     application=application,
@@ -1407,7 +1397,6 @@ def split_pdf(request, pk):
             })
 
         try:
-            # Use default_storage to read file content
             with default_storage.open(document.file.name, 'rb') as f:
                 reader = PdfReader(f)
                 writer = PdfWriter()
@@ -1436,7 +1425,6 @@ def split_pdf(request, pk):
                 for page_num in selected_pages:
                     writer.add_page(reader.pages[page_num - 1])
 
-                # Write to temporary file and stream response
                 with tempfile.NamedTemporaryFile(suffix='.pdf', delete=True) as tmp:
                     writer.write(tmp)
                     tmp.seek(0)
@@ -1445,7 +1433,6 @@ def split_pdf(request, pk):
                         as_attachment=True,
                         filename=f'split_{os.path.basename(document.file.name)}',
                     )
-                    # Keep file open until response ends
                     response._resource_closers = [lambda: tmp.close()]
                     return response
 
@@ -1465,247 +1452,8 @@ def split_pdf(request, pk):
 
 
 # =============================================================================
-# PAYMENT GATEWAY – ENHANCED
+# PAYMENT GATEWAY – UPI ONLY
 # =============================================================================
-
-def _create_razorpay_client(payment_settings=None):
-    """
-    Create Razorpay client using environment variables first,
-    then fallback to PaymentSettings model.
-    """
-    # 1. Try environment variables
-    key_id = os.getenv('RAZORPAY_KEY_ID') or os.getenv('RAZORPAY_TEST_KEY_ID')
-    key_secret = os.getenv('RAZORPAY_KEY_SECRET') or os.getenv('RAZORPAY_TEST_KEY_SECRET')
-    source = 'env'
-
-    # 2. If missing, try database
-    if not key_id or not key_secret:
-        if payment_settings:
-            if payment_settings.test_mode:
-                key_id = payment_settings.razorpay_test_key
-                key_secret = payment_settings.razorpay_test_secret
-            else:
-                key_id = payment_settings.razorpay_key_id
-                key_secret = payment_settings.razorpay_key_secret
-            source = 'database'
-
-    # 3. Still missing? Raise clear error
-    if not key_id or not key_secret:
-        logger.error("Razorpay credentials not found in env or database")
-        raise ValueError("Razorpay credentials not configured. Please set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET environment variables.")
-
-    # Mask key for logging (show first 4 chars)
-    masked_key = key_id[:4] + "****" + key_id[-4:] if len(key_id) > 8 else "****"
-    logger.info(f"Using Razorpay key: {masked_key} (source: {source})")
-
-    return razorpay.Client(auth=(key_id, key_secret))
-
-
-@login_required
-def create_razorpay_order(request, app_id, retry_count=0):
-    """Create a Razorpay order for an existing application."""
-    # 1. Get payment settings FIRST
-    payment_settings = get_payment_settings()
-    if not payment_settings or not payment_settings.razorpay_enabled:
-        return JsonResponse({'error': 'Razorpay is not enabled'}, status=400)
-
-    app = get_object_or_404(Application, id=app_id, user=request.user)
-    if app.payment_status == 'paid':
-        return JsonResponse({'error': 'Payment already completed'}, status=400)
-
-    charge = app.service.servicecharge_set.first()
-    if not charge:
-        return JsonResponse({'error': 'No charge defined for this service'}, status=400)
-
-    amount = int(charge.charge * 100)
-    if amount < 100:
-        return JsonResponse({'error': 'Amount must be at least ₹1'}, status=400)
-
-    try:
-        client = _create_razorpay_client(payment_settings)
-        order_data = {
-            'amount': amount,
-            'currency': 'INR',
-            'receipt': f'app_{app.id}',
-            'payment_capture': 1,
-        }
-        order = client.order.create(order_data)
-    except Exception as e:
-        logger.error(f"Razorpay order creation failed (attempt {retry_count+1}): {e}")
-        if retry_count < 3:
-            time.sleep(2 ** retry_count)
-            return create_razorpay_order(request, app_id, retry_count + 1)
-        return JsonResponse({'error': 'Payment gateway temporarily unavailable. Please try again later.'}, status=503)
-
-    app.payment_transaction_id = order['id']
-    app.save()
-
-    PaymentLog.objects.create(
-        application=app,
-        event_type='created',
-        amount=charge.charge,
-        razorpay_order_id=order['id'],
-    )
-
-    key = payment_settings.razorpay_test_key if payment_settings.test_mode else payment_settings.razorpay_key_id
-    return JsonResponse({
-        'order_id': order['id'],
-        'amount': amount,
-        'currency': 'INR',
-        'key': key,
-        'app_id': app.id,
-    })
-
-
-@login_required
-def create_razorpay_order_pending(request, service_id, retry_count=0):
-    """Create a Razorpay order for a pending application (not yet saved)."""
-    # 1. Get payment settings FIRST
-    payment_settings = get_payment_settings()
-    if not payment_settings or not payment_settings.razorpay_enabled:
-        return JsonResponse({'error': 'Razorpay is not enabled'}, status=400)
-
-    pending_data = request.session.get('pending_application', None)
-    if not pending_data or pending_data.get('service_id') != service_id:
-        return JsonResponse({'error': 'No pending application found'}, status=400)
-
-    service = get_object_or_404(Service, id=service_id)
-    charge = service.servicecharge_set.first()
-    if not charge:
-        return JsonResponse({'error': 'No charge defined for this service'}, status=400)
-
-    amount = int(charge.charge * 100)
-    if amount < 100:
-        return JsonResponse({'error': 'Amount must be at least ₹1'}, status=400)
-
-    try:
-        client = _create_razorpay_client(payment_settings)
-        order_data = {
-            'amount': amount,
-            'currency': 'INR',
-            'receipt': f'pending_{service_id}_{request.user.id}',
-            'payment_capture': 1,
-        }
-        order = client.order.create(order_data)
-    except Exception as e:
-        logger.error(f"Razorpay order creation failed (pending): {e}")
-        if retry_count < 3:
-            time.sleep(2 ** retry_count)
-            return create_razorpay_order_pending(request, service_id, retry_count + 1)
-        return JsonResponse({'error': 'Payment gateway temporarily unavailable.'}, status=503)
-
-    pending_data['razorpay_order_id'] = order['id']
-    request.session['pending_application'] = pending_data
-
-    key = payment_settings.razorpay_test_key if payment_settings.test_mode else payment_settings.razorpay_key_id
-    return JsonResponse({
-        'order_id': order['id'],
-        'amount': amount,
-        'currency': 'INR',
-        'key': key,
-        'service_id': service_id,
-    })
-
-@login_required
-def verify_razorpay_payment(request):
-    if request.method != 'POST':
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
-
-    payment_id = request.POST.get('razorpay_payment_id')
-    order_id = request.POST.get('razorpay_order_id')
-    signature = request.POST.get('razorpay_signature')
-    app_id = request.POST.get('app_id')
-
-    if not all([payment_id, order_id, signature, app_id]):
-        return JsonResponse({'error': 'Missing parameters'}, status=400)
-
-    payment_settings = get_payment_settings()
-    if not payment_settings or not payment_settings.razorpay_enabled:
-        return JsonResponse({'error': 'Razorpay not enabled'}, status=400)
-
-    try:
-        client = _create_razorpay_client(payment_settings)
-    except ValueError as e:
-        return JsonResponse({'error': str(e)}, status=400)
-
-    # --- Pending application (app_id is "pending" or "0") ---
-    if app_id == 'pending' or app_id == '0':
-        pending_data = request.session.get('pending_application', None)
-        if not pending_data or pending_data.get('razorpay_order_id') != order_id:
-            return JsonResponse({'error': 'No matching pending application'}, status=400)
-
-        # Verify signature
-        params_dict = {
-            'razorpay_order_id': order_id,
-            'razorpay_payment_id': payment_id,
-            'razorpay_signature': signature
-        }
-        try:
-            client.utility.verify_payment_signature(params_dict)
-        except razorpay.errors.SignatureVerificationError:
-            return JsonResponse({'error': 'Invalid signature'}, status=400)
-
-        # Store payment info and create the application
-        pending_data['payment_method'] = 'razorpay'
-        pending_data['razorpay_payment_id'] = payment_id
-        request.session['pending_application'] = pending_data
-
-        try:
-            application = _create_application_from_session_data(pending_data, request)
-        except Exception as e:
-            logger.error(f"Application creation failed: {e}")
-            # Clear session to avoid reuse
-            request.session.pop('pending_application', None)
-            return JsonResponse({'error': str(e) or 'Failed to create application'}, status=500)
-
-        # Remove session now that application is created
-        request.session.pop('pending_application', None)
-
-        return JsonResponse({
-            'success': True,
-            'receipt_url': reverse('download_receipt', args=[application.id])
-        })
-
-    # --- Existing application (app_id > 0) ---
-    app = get_object_or_404(Application, id=app_id, user=request.user)
-
-    params_dict = {
-        'razorpay_order_id': order_id,
-        'razorpay_payment_id': payment_id,
-        'razorpay_signature': signature
-    }
-    try:
-        client.utility.verify_payment_signature(params_dict)
-    except razorpay.errors.SignatureVerificationError:
-        PaymentLog.objects.create(
-            application=app,
-            event_type='failed',
-            amount=app.service.servicecharge_set.first().charge,
-            razorpay_payment_id=payment_id,
-        )
-        return JsonResponse({'error': 'Invalid signature'}, status=400)
-
-    app.payment_status = 'paid'
-    app.payment_date = timezone.now()
-    app.receipt_number = app.generate_receipt_number()
-    app.payment_method = 'razorpay'
-    app.payment_transaction_id = payment_id
-    app.save()
-
-    PaymentLog.objects.create(
-        application=app,
-        event_type='captured',
-        amount=app.service.servicecharge_set.first().charge,
-        razorpay_payment_id=payment_id,
-        razorpay_order_id=order_id,
-    )
-
-    send_payment_confirmation(app)
-    return JsonResponse({
-        'success': True,
-        'receipt_url': reverse('download_receipt', args=[app.id])
-    })
-
 
 @login_required
 def mark_payment_done(request, app_id):
@@ -1730,7 +1478,6 @@ def mark_payment_done(request, app_id):
         utr = request.POST.get('utr_number', '').strip()
         payment_app = request.POST.get('payment_app', 'upi')
 
-        # Store payment info in session so that create_application_from_session can use it
         pending_data['payment_method'] = method
         pending_data['utr_number'] = utr
         pending_data['payment_app'] = payment_app
@@ -1764,7 +1511,6 @@ def mark_payment_done(request, app_id):
         messages.error(request, _('Cash payments are not enabled.'))
         return redirect('application_detail', app_id=app_id)
 
-    # Anti-abuse: 24h window
     time_limit = timezone.now() - timedelta(hours=24)
     if application.created_at < time_limit:
         messages.error(request, _('Payment window expired. Please contact admin.'))
@@ -1792,171 +1538,201 @@ def mark_payment_done(request, app_id):
     cache.delete('reports_data')
     return redirect('application_detail', app_id=app_id)
 
-
 @login_required
 def download_receipt(request, app_id):
-    """Download receipt as PDF with improved layout."""
     application = get_object_or_404(Application, id=app_id, user=request.user)
     if application.payment_status != 'paid':
         messages.error(request, _('No payment record found.'))
         return redirect('application_detail', app_id=app_id)
 
-    buffer = BytesIO()
-    c = canvas.Canvas(buffer, pagesize=A4)
-    width, height = A4
-    margin = 1 * inch
-    top = height - margin
-    left = margin
-
-    # Header
-    c.setFont("Helvetica-Bold", 18)
-    c.drawString(left, top, "PAYMENT RECEIPT")
-    c.setFont("Helvetica", 8)
-    c.drawString(left, top - 0.3*inch, "System-Generated Receipt")
-
-    # Payment details
-    c.setFont("Helvetica", 11)
-    y = top - 0.8*inch
-    line_height = 0.25 * inch
-    details = [
-        (f"Receipt No: {application.receipt_number}", ""),
-        (f"Date: {application.payment_date.strftime('%d %b %Y, %H:%M')}", ""),
-        (f"Transaction ID: {application.payment_transaction_id or 'N/A'}", ""),
-        (f"UTR: {application.utr_number or 'N/A'}", ""),
-        (f"Payment App: {application.get_payment_app_display() or 'N/A'}", ""),
-        (f"Payment Method: {application.get_payment_method_display()}", ""),
-    ]
-    for label, _ in details:
-        c.drawString(left, y, label)
-        y -= line_height
-
-    y -= 0.2 * inch
-
-    # Customer details
-    c.setFont("Helvetica-Bold", 12)
-    c.drawString(left, y, "Customer Details")
-    y -= 0.3 * inch
-    c.setFont("Helvetica", 11)
-    customer_lines = [
-        f"Name: {application.full_name}",
-        f"Phone: {application.phone}",
-        f"Email: {application.email}",
-    ]
-    for line in customer_lines:
-        c.drawString(left, y, line)
-        y -= line_height
-
-    y -= 0.2 * inch
-
-    # Service details
-    c.setFont("Helvetica-Bold", 12)
-    c.drawString(left, y, "Service Details")
-    y -= 0.3 * inch
-    c.setFont("Helvetica", 11)
+    # Prepare data
     charge = application.service.servicecharge_set.first()
     amount = charge.charge if charge else 0
-    service_lines = [
-        f"Service: {application.service.name}",
-        f"Amount: ₹{amount:.2f}",
+    business_name = get_business().business_name if get_business() else 'Matoshree Cyber Cafe'
+    
+    # Generate QR code (optional) – we'll include it if qrcode is installed
+    qr_img = None
+    try:
+        import qrcode
+        qr_data = f"Receipt: {application.receipt_number}\nAmount: ₹{amount}\nDate: {application.payment_date.strftime('%d %b %Y')}"
+        qr = qrcode.QRCode(box_size=4, border=2)
+        qr.add_data(qr_data)
+        qr.make(fit=True)
+        img = qr.make_image(fill_color="black", back_color="white")
+        qr_buffer = qrBytesIO()
+        img.save(qr_buffer, format='PNG')
+        qr_buffer.seek(0)
+        qr_img = Image(qr_buffer, width=1.2*inch, height=1.2*inch)
+    except ImportError:
+        qr_img = None
+
+    # Create PDF
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(
+        buffer,
+        pagesize=A4,
+        rightMargin=0.8*inch,
+        leftMargin=0.8*inch,
+        topMargin=0.8*inch,
+        bottomMargin=0.8*inch,
+    )
+    styles = getSampleStyleSheet()
+    
+    # Custom styles
+    title_style = ParagraphStyle(
+        'TitleStyle',
+        parent=styles['Heading1'],
+        fontSize=18,
+        textColor=colors.HexColor('#1a1a2e'),
+        alignment=TA_CENTER,
+        spaceAfter=6,
+    )
+    success_style = ParagraphStyle(
+        'SuccessStyle',
+        parent=styles['Heading2'],
+        fontSize=14,
+        textColor=colors.HexColor('#2e7d32'),
+        alignment=TA_CENTER,
+        spaceAfter=10,
+    )
+    amount_style = ParagraphStyle(
+        'AmountStyle',
+        parent=styles['Heading1'],
+        fontSize=28,
+        textColor=colors.HexColor('#0d47a1'),
+        alignment=TA_CENTER,
+        spaceAfter=12,
+    )
+    section_title = ParagraphStyle(
+        'SectionTitle',
+        parent=styles['Heading4'],
+        fontSize=12,
+        textColor=colors.HexColor('#37474f'),
+        alignment=TA_LEFT,
+        spaceAfter=4,
+        spaceBefore=8,
+        fontName='Helvetica-Bold',
+    )
+    normal_text = ParagraphStyle(
+        'NormalText',
+        parent=styles['Normal'],
+        fontSize=10,
+        textColor=colors.HexColor('#455a64'),
+        alignment=TA_LEFT,
+        spaceAfter=2,
+    )
+    label_style = ParagraphStyle(
+        'LabelStyle',
+        parent=styles['Normal'],
+        fontSize=10,
+        textColor=colors.HexColor('#78909c'),
+        alignment=TA_LEFT,
+        spaceAfter=2,
+        fontName='Helvetica-Bold',
+    )
+    value_style = ParagraphStyle(
+        'ValueStyle',
+        parent=styles['Normal'],
+        fontSize=10,
+        textColor=colors.HexColor('#263238'),
+        alignment=TA_LEFT,
+        spaceAfter=2,
+    )
+    
+    # Build elements
+    story = []
+
+    # --- Brand header ---
+    story.append(Paragraph(f"<b>{business_name}</b>", title_style))
+    story.append(Paragraph("Digital Payment Receipt", styles['Normal']))
+    story.append(Spacer(1, 0.2*inch))
+    story.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor('#e0e0e0'), spaceBefore=4, spaceAfter=4))
+    
+    # --- Status & Amount ---
+    story.append(Paragraph("✅ Payment Successful", success_style))
+    story.append(Paragraph(f"₹ {amount:.2f}", amount_style))
+    story.append(HRFlowable(width="60%", thickness=1, color=colors.HexColor('#4caf50'), spaceBefore=4, spaceAfter=8))
+
+    # --- Transaction Details (two columns) ---
+    data = [
+        [Paragraph("<b>Receipt No.</b>", label_style), Paragraph(application.receipt_number or 'N/A', value_style)],
+        [Paragraph("<b>Date & Time</b>", label_style), Paragraph(application.payment_date.strftime('%d %b %Y, %I:%M %p') if application.payment_date else 'N/A', value_style)],
+        [Paragraph("<b>UTR Number</b>", label_style), Paragraph(application.utr_number or 'N/A', value_style)],
+        [Paragraph("<b>Payment App</b>", label_style), Paragraph(application.get_payment_app_display() or 'N/A', value_style)],
+        [Paragraph("<b>Payment Method</b>", label_style), Paragraph(application.get_payment_method_display() or 'N/A', value_style)],
+        [Paragraph("<b>Transaction ID</b>", label_style), Paragraph(application.payment_transaction_id or 'N/A', value_style)],
     ]
-    for line in service_lines:
-        c.drawString(left, y, line)
-        y -= line_height
+    table = Table(data, colWidths=[2.2*inch, 3.5*inch])
+    table.setStyle(TableStyle([
+        ('FONTNAME', (0,0), (-1,-1), 'Helvetica'),
+        ('FONTSIZE', (0,0), (-1,-1), 9),
+        ('BACKGROUND', (0,0), (0,-1), colors.HexColor('#f5f7fa')),
+        ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor('#e8eaf6')),
+        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+        ('PADDING', (0,0), (-1,-1), 6),
+    ]))
+    story.append(table)
+    story.append(Spacer(1, 0.2*inch))
+    story.append(HRFlowable(width="100%", thickness=0.5, color=colors.HexColor('#e0e0e0'), spaceBefore=4, spaceAfter=4))
 
-    # Footer
-    c.setFont("Helvetica-Oblique", 8)
-    y = 0.8 * inch
-    c.drawString(left, y, "Thank you for your payment. This is a system-generated receipt.")
-    y -= line_height
-    c.drawString(left, y, f"Verified on: {timezone.now().strftime('%d %b %Y %H:%M:%S')}")
+    # --- Customer & Service Details (two columns) ---
+    # Left: Customer
+    customer_data = [
+        [Paragraph("<b>Customer Details</b>", section_title)],
+        [Paragraph(f"<b>Name:</b> {application.full_name}", normal_text)],
+        [Paragraph(f"<b>Phone:</b> {application.phone}", normal_text)],
+        [Paragraph(f"<b>Email:</b> {application.email}", normal_text)],
+    ]
+    customer_table = Table(customer_data, colWidths=[3*inch])
+    customer_table.setStyle(TableStyle([
+        ('ALIGN', (0,0), (-1,-1), 'LEFT'),
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+        ('PADDING', (0,0), (-1,-1), 4),
+    ]))
+    # Right: Service
+    service_data = [
+        [Paragraph("<b>Service Details</b>", section_title)],
+        [Paragraph(f"<b>Service:</b> {application.service.name}", normal_text)],
+        [Paragraph(f"<b>Amount:</b> ₹{amount:.2f}", normal_text)],
+        [Paragraph(f"<b>Status:</b> Paid", normal_text)],
+    ]
+    service_table = Table(service_data, colWidths=[3*inch])
+    service_table.setStyle(TableStyle([
+        ('ALIGN', (0,0), (-1,-1), 'LEFT'),
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+        ('PADDING', (0,0), (-1,-1), 4),
+    ]))
+    # Combine side by side
+    combined = Table([[customer_table, service_table]], colWidths=[3*inch, 3*inch])
+    combined.setStyle(TableStyle([
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+        ('LEFTPADDING', (0,0), (-1,-1), 0),
+        ('RIGHTPADDING', (0,0), (-1,-1), 0),
+    ]))
+    story.append(combined)
+    story.append(Spacer(1, 0.2*inch))
 
-    c.save()
+    # --- QR Code (if available) and Footer ---
+    if qr_img:
+        qr_table = Table([[qr_img]], colWidths=[1.5*inch])
+        qr_table.setStyle(TableStyle([
+            ('ALIGN', (0,0), (-1,-1), 'CENTER'),
+            ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+        ]))
+        story.append(qr_table)
+        story.append(Paragraph("Scan to verify", styles['Normal']))
+        story.append(Spacer(1, 0.2*inch))
+
+    # --- Footer note ---
+    story.append(HRFlowable(width="100%", thickness=0.5, color=colors.HexColor('#e0e0e0'), spaceBefore=4, spaceAfter=4))
+    story.append(Paragraph("Thank you for your payment. This is a system-generated receipt.", styles['Normal']))
+    story.append(Paragraph(f"Verified on: {timezone.now().strftime('%d %b %Y %I:%M %p')}", styles['Normal']))
+    story.append(Paragraph("For support, contact us at support@matoshree.com", styles['Normal']))
+
+    # Build PDF
+    doc.build(story)
     buffer.seek(0)
     return FileResponse(buffer, as_attachment=True, filename=f"receipt_{application.receipt_number}.pdf")
-
-
-@csrf_exempt
-def razorpay_webhook(request):
-    """Handle Razorpay webhook for payment confirmation with signature verification and amount check."""
-    if request.method != 'POST':
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
-
-    # Verify webhook signature if secret is configured
-    webhook_secret = getattr(settings, 'RAZORPAY_WEBHOOK_SECRET', None)
-    if webhook_secret:
-        try:
-            from razorpay.utility import verify_webhook_signature
-            signature = request.headers.get('X-Razorpay-Signature')
-            if not signature:
-                return JsonResponse({'status': 'missing signature'}, status=400)
-            verify_webhook_signature(request.body, signature, webhook_secret)
-        except Exception as e:
-            logger.error(f"Webhook signature verification failed: {e}")
-            return JsonResponse({'status': 'invalid signature'}, status=400)
-    else:
-        # If no secret configured, reject for security
-        logger.warning("Webhook secret not configured, rejecting webhook")
-        return JsonResponse({'status': 'webhook secret missing'}, status=400)
-
-    try:
-        payload = json.loads(request.body)
-        event = payload.get('event')
-
-        if event == 'payment.captured':
-            payment_id = payload['payload']['payment']['entity']['id']
-            order_id = payload['payload']['payment']['entity']['order_id']
-            amount = payload['payload']['payment']['entity']['amount'] / 100
-
-            app = Application.objects.filter(payment_transaction_id=order_id).first()
-            if app and app.payment_status == 'pending':
-                # Validate amount
-                charge = app.service.servicecharge_set.first()
-                expected_amount = charge.charge if charge else 0
-                if abs(amount - expected_amount) > 0.01:
-                    logger.error(f"Amount mismatch for order {order_id}: expected {expected_amount}, got {amount}")
-                    return JsonResponse({'status': 'amount mismatch'}, status=400)
-
-                app.payment_status = 'paid'
-                app.payment_date = timezone.now()
-                app.receipt_number = app.generate_receipt_number()
-                app.payment_method = 'razorpay'
-                app.payment_transaction_id = payment_id
-                app.save()
-
-                PaymentLog.objects.create(
-                    application=app,
-                    event_type='webhook_received',
-                    amount=amount,
-                    razorpay_payment_id=payment_id,
-                    razorpay_order_id=order_id,
-                    webhook_data=payload,
-                )
-
-                send_payment_confirmation(app)
-                return JsonResponse({'status': 'success'})
-            else:
-                logger.info(f"Webhook: application not found or already paid: {order_id}")
-                return JsonResponse({'status': 'ignored'})
-
-        elif event == 'payment.failed':
-            order_id = payload['payload']['payment']['entity']['order_id']
-            app = Application.objects.filter(payment_transaction_id=order_id).first()
-            if app:
-                app.payment_status = 'failed'
-                app.save()
-                PaymentLog.objects.create(
-                    application=app,
-                    event_type='failed',
-                    amount=0,
-                    razorpay_order_id=order_id,
-                    webhook_data=payload,
-                )
-
-        return JsonResponse({'status': 'ignored'})
-
-    except Exception as e:
-        logger.error(f"Webhook error: {e}")
-        return JsonResponse({'status': 'error'}, status=500)
 
 
 # =============================================================================
@@ -1992,14 +1768,10 @@ def reports_dashboard(request):
             'weekly_users': list(weekly_users),
             'payment_status': list(payment_status_counts),
         }
-        cache.set(cache_key, data, 300)  # 5 minutes TTL
+        cache.set(cache_key, data, 300)
 
     context = {
         'data': data,
         'business': get_business(),
     }
     return render(request, 'reports_dashboard.html', context)
-
-
-# Alias to maintain backward compatibility
-create_payment = create_razorpay_order

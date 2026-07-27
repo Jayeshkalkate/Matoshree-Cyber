@@ -796,14 +796,6 @@
 <section class="app-detail">
   <div class="container">
 
-      {% if payment_settings.qr_code %}
-          <img src="{{ payment_settings.qr_code.url }}" alt="UPI QR Code">
-      {% else %}
-          <div class="qr-placeholder">
-              <i class="fas fa-qrcode"></i> QR Code not available
-          </div>
-      {% endif %}
-      
     <!-- Back link -->
     <a href="{% url 'admin_dashboard' %}#section-applications" class="back-link">
       <i class="fas fa-arrow-left"></i> {% trans "Back to Applications" %}
@@ -1011,12 +1003,8 @@
           <p><strong>{% trans "Receipt No." %}:</strong> {{ application.receipt_number|default:"—" }}</p>
           <p><strong>{% trans "Payment Date" %}:</strong> {{ application.payment_date|date:"d M Y, H:i"|default:"—" }}</p>
           <p><strong>{% trans "Payment Method" %}:</strong> {{ application.get_payment_method_display|default:"—" }}</p>
-          {% if application.payment_method == 'razorpay' %}
-            <p><strong>{% trans "Transaction ID" %}:</strong> {{ application.payment_transaction_id|default:"N/A" }}</p>
-          {% else %}
-            <p><strong>{% trans "UTR Number" %}:</strong> {{ application.utr_number|default:"N/A" }}</p>
-            <p><strong>{% trans "Payment App" %}:</strong> {{ application.get_payment_app_display|default:"N/A" }}</p>
-          {% endif %}
+          <p><strong>{% trans "UTR Number" %}:</strong> {{ application.utr_number|default:"N/A" }}</p>
+          <p><strong>{% trans "Payment App" %}:</strong> {{ application.get_payment_app_display|default:"N/A" }}</p>
           <a href="{% url 'download_receipt' application.id %}" class="btn-primary" style="max-width: 200px; margin: 0 auto;">
             <i class="fas fa-file-pdf"></i> {% trans "Download Receipt" %}
           </a>

@@ -979,9 +979,11 @@
         <div class="services-grid">
             {% for service in services %}
             <div class="service-card">
-                <div class="icon-wrap">
-                    <i class="fas {{ service.icon|default:'fa-cogs' }}" aria-hidden="true"></i>
-                </div>
+            {% if service.icon|slice:":3" == "fa-" %}
+                <i class="fas {{ service.icon }}"></i>
+            {% else %}
+                <span style="font-size:2rem;">{{ service.icon }}</span>
+            {% endif %}
                 <h3>{{ service.name }}</h3>
                 <p>{{ service.description|truncatechars:60 }}</p>
             </div>

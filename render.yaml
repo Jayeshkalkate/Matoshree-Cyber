@@ -64,12 +64,6 @@ services:
       - key: CONTACT_EMAIL
         sync: false          # where admin notifications go
 
-      # Razorpay (if used) – set manually
-      - key: RAZORPAY_KEY_ID
-        sync: false
-      - key: RAZORPAY_KEY_SECRET
-        sync: false
-
 databases:
   - name: matoshree-db
     databaseName: matoshree_db

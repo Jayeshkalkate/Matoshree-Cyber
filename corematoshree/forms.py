@@ -263,7 +263,6 @@ class DocumentUploadForm(forms.ModelForm):
     def clean_file(self):
         file = self.cleaned_data.get("file")
         if file:
-            # Use configurable max upload size, fallback to 10 MB
             max_size = getattr(settings, 'MAX_UPLOAD_SIZE', 10 * 1024 * 1024)
             if file.size > max_size:
                 raise forms.ValidationError(
@@ -310,23 +309,15 @@ class TeamMemberForm(forms.ModelForm):
 
 
 # ==========================
-# PAYMENT GATEWAY FORMS (ENHANCED)
+# PAYMENT SETTINGS – UPI + Cash only (Razorpay removed)
 # ==========================
 
 class PaymentSettingsForm(forms.ModelForm):
-    """
-    Enhanced payment settings with support for multiple methods,
-    live/test Razorpay keys, and proper validation.
-    """
     class Meta:
         model = PaymentSettings
         fields = (
             'upi_id', 'upi_mobile', 'qr_code', 'payment_instructions',
-            'is_active',
-            'razorpay_enabled', 'cash_enabled', 'upi_enabled',
-            'test_mode',
-            'razorpay_key_id', 'razorpay_key_secret',
-            'razorpay_test_key', 'razorpay_test_secret',
+            'is_active', 'upi_enabled', 'cash_enabled',
         )
         widgets = {
             'upi_id': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'example@upi'}),
@@ -334,14 +325,8 @@ class PaymentSettingsForm(forms.ModelForm):
             'qr_code': forms.FileInput(attrs={'class': 'form-control'}),
             'payment_instructions': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'razorpay_enabled': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'cash_enabled': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'upi_enabled': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'test_mode': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'razorpay_key_id': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'rzp_live_...'}),
-            'razorpay_key_secret': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '...'}),
-            'razorpay_test_key': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'rzp_test_...'}),
-            'razorpay_test_secret': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '...'}),
+            'cash_enabled': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
 
     def clean_upi_id(self):
@@ -354,45 +339,21 @@ class PaymentSettingsForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         is_active = cleaned_data.get('is_active')
-        razorpay_enabled = cleaned_data.get('razorpay_enabled')
-        test_mode = cleaned_data.get('test_mode')
         upi_enabled = cleaned_data.get('upi_enabled')
         upi_id = cleaned_data.get('upi_id')
         qr_code = cleaned_data.get('qr_code')
         cash_enabled = cleaned_data.get('cash_enabled')
 
-        # If active, at least one method must be enabled
         if is_active:
             has_upi = upi_enabled and (upi_id or qr_code)
-            has_razorpay = razorpay_enabled
             has_cash = cash_enabled
-            if not (has_upi or has_razorpay or has_cash):
+            if not (has_upi or has_cash):
                 raise forms.ValidationError(
-                    _("At least one payment method (UPI, Razorpay, or Cash) must be enabled "
+                    _("At least one payment method (UPI or Cash) must be enabled "
                       "when payment settings are active.")
                 )
-
-            # UPI validation
             if upi_enabled and not upi_id and not qr_code:
                 raise forms.ValidationError(
                     _("UPI is enabled but neither UPI ID nor QR Code is provided.")
                 )
-
-            # Razorpay validation – add field-specific errors for clarity
-            if razorpay_enabled:
-                if test_mode:
-                    test_key = cleaned_data.get('razorpay_test_key')
-                    test_secret = cleaned_data.get('razorpay_test_secret')
-                    if not test_key:
-                        self.add_error('razorpay_test_key', _("This field is required when Razorpay is enabled in test mode."))
-                    if not test_secret:
-                        self.add_error('razorpay_test_secret', _("This field is required when Razorpay is enabled in test mode."))
-                else:
-                    live_key = cleaned_data.get('razorpay_key_id')
-                    live_secret = cleaned_data.get('razorpay_key_secret')
-                    if not live_key:
-                        self.add_error('razorpay_key_id', _("This field is required when Razorpay is enabled in live mode."))
-                    if not live_secret:
-                        self.add_error('razorpay_key_secret', _("This field is required when Razorpay is enabled in live mode."))
-
         return cleaned_data
