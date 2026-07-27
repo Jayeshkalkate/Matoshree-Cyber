@@ -354,6 +354,10 @@ class PaymentSettingsAdmin(admin.ModelAdmin):
         if obj and not obj.test_mode:
             return ('razorpay_test_key', 'razorpay_test_secret')
         return ()
+    
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        cache.delete('payment_settings')  # force clear
 
 
 # ==========================

@@ -1468,34 +1468,50 @@ def split_pdf(request, pk):
 # PAYMENT GATEWAY – ENHANCED
 # =============================================================================
 
-def _create_razorpay_client(payment_settings):
-    # If payment_settings is None, try to get from env
-    if not payment_settings:
-        key = os.getenv('RAZORPAY_KEY_ID') or os.getenv('RAZORPAY_TEST_KEY_ID')
-        secret = os.getenv('RAZORPAY_KEY_SECRET') or os.getenv('RAZORPAY_TEST_KEY_SECRET')
-    else:
-        if payment_settings.test_mode:
-            key = payment_settings.razorpay_test_key or os.getenv('RAZORPAY_TEST_KEY_ID')
-            secret = payment_settings.razorpay_test_secret or os.getenv('RAZORPAY_TEST_KEY_SECRET')
-        else:
-            key = payment_settings.razorpay_key_id or os.getenv('RAZORPAY_KEY_ID')
-            secret = payment_settings.razorpay_key_secret or os.getenv('RAZORPAY_KEY_SECRET')
-    if not key or not secret:
-        raise ValueError("Razorpay credentials not configured")
-    return razorpay.Client(auth=(key, secret))
+def _create_razorpay_client(payment_settings=None):
+    """
+    Create Razorpay client using environment variables first,
+    then fallback to PaymentSettings model.
+    """
+    # 1. Try environment variables
+    key_id = os.getenv('RAZORPAY_KEY_ID') or os.getenv('RAZORPAY_TEST_KEY_ID')
+    key_secret = os.getenv('RAZORPAY_KEY_SECRET') or os.getenv('RAZORPAY_TEST_KEY_SECRET')
+    source = 'env'
+
+    # 2. If missing, try database
+    if not key_id or not key_secret:
+        if payment_settings:
+            if payment_settings.test_mode:
+                key_id = payment_settings.razorpay_test_key
+                key_secret = payment_settings.razorpay_test_secret
+            else:
+                key_id = payment_settings.razorpay_key_id
+                key_secret = payment_settings.razorpay_key_secret
+            source = 'database'
+
+    # 3. Still missing? Raise clear error
+    if not key_id or not key_secret:
+        logger.error("Razorpay credentials not found in env or database")
+        raise ValueError("Razorpay credentials not configured. Please set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET environment variables.")
+
+    # Mask key for logging (show first 4 chars)
+    masked_key = key_id[:4] + "****" + key_id[-4:] if len(key_id) > 8 else "****"
+    logger.info(f"Using Razorpay key: {masked_key} (source: {source})")
+
+    return razorpay.Client(auth=(key_id, key_secret))
 
 
 @login_required
 def create_razorpay_order(request, app_id, retry_count=0):
-    """Create a Razorpay order for an existing application with exponential backoff."""
-    app = get_object_or_404(Application, id=app_id, user=request.user)
-
-    if app.payment_status == 'paid':
-        return JsonResponse({'error': 'Payment already completed'}, status=400)
-
+    """Create a Razorpay order for an existing application."""
+    # 1. Get payment settings FIRST
     payment_settings = get_payment_settings()
     if not payment_settings or not payment_settings.razorpay_enabled:
         return JsonResponse({'error': 'Razorpay is not enabled'}, status=400)
+
+    app = get_object_or_404(Application, id=app_id, user=request.user)
+    if app.payment_status == 'paid':
+        return JsonResponse({'error': 'Payment already completed'}, status=400)
 
     charge = app.service.servicecharge_set.first()
     if not charge:
@@ -1517,9 +1533,7 @@ def create_razorpay_order(request, app_id, retry_count=0):
     except Exception as e:
         logger.error(f"Razorpay order creation failed (attempt {retry_count+1}): {e}")
         if retry_count < 3:
-            # Exponential backoff: wait 1s, 2s, 4s
-            sleep_time = 2 ** retry_count
-            time.sleep(sleep_time)
+            time.sleep(2 ** retry_count)
             return create_razorpay_order(request, app_id, retry_count + 1)
         return JsonResponse({'error': 'Payment gateway temporarily unavailable. Please try again later.'}, status=503)
 
@@ -1545,7 +1559,12 @@ def create_razorpay_order(request, app_id, retry_count=0):
 
 @login_required
 def create_razorpay_order_pending(request, service_id, retry_count=0):
-    """Create a Razorpay order for a pending (not yet saved) application."""
+    """Create a Razorpay order for a pending application (not yet saved)."""
+    # 1. Get payment settings FIRST
+    payment_settings = get_payment_settings()
+    if not payment_settings or not payment_settings.razorpay_enabled:
+        return JsonResponse({'error': 'Razorpay is not enabled'}, status=400)
+
     pending_data = request.session.get('pending_application', None)
     if not pending_data or pending_data.get('service_id') != service_id:
         return JsonResponse({'error': 'No pending application found'}, status=400)
@@ -1554,10 +1573,6 @@ def create_razorpay_order_pending(request, service_id, retry_count=0):
     charge = service.servicecharge_set.first()
     if not charge:
         return JsonResponse({'error': 'No charge defined for this service'}, status=400)
-
-    payment_settings = get_payment_settings()
-    if not payment_settings or not payment_settings.razorpay_enabled:
-        return JsonResponse({'error': 'Razorpay is not enabled'}, status=400)
 
     amount = int(charge.charge * 100)
     if amount < 100:
@@ -1590,7 +1605,6 @@ def create_razorpay_order_pending(request, service_id, retry_count=0):
         'key': key,
         'service_id': service_id,
     })
-
 
 @login_required
 def verify_razorpay_payment(request):
