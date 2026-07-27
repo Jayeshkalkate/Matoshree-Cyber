@@ -4,6 +4,7 @@
 import os
 import json
 import tempfile
+import razorpay
 import logging
 from datetime import timedelta
 from io import BytesIO
@@ -1468,12 +1469,17 @@ def split_pdf(request, pk):
 # =============================================================================
 
 def _create_razorpay_client(payment_settings):
-    if payment_settings.test_mode:
-        key = payment_settings.razorpay_test_key or os.getenv('RAZORPAY_TEST_KEY_ID')
-        secret = payment_settings.razorpay_test_secret or os.getenv('RAZORPAY_TEST_KEY_SECRET')
+    # If payment_settings is None, try to get from env
+    if not payment_settings:
+        key = os.getenv('RAZORPAY_KEY_ID') or os.getenv('RAZORPAY_TEST_KEY_ID')
+        secret = os.getenv('RAZORPAY_KEY_SECRET') or os.getenv('RAZORPAY_TEST_KEY_SECRET')
     else:
-        key = payment_settings.razorpay_key_id or os.getenv('RAZORPAY_KEY_ID')
-        secret = payment_settings.razorpay_key_secret or os.getenv('RAZORPAY_KEY_SECRET')
+        if payment_settings.test_mode:
+            key = payment_settings.razorpay_test_key or os.getenv('RAZORPAY_TEST_KEY_ID')
+            secret = payment_settings.razorpay_test_secret or os.getenv('RAZORPAY_TEST_KEY_SECRET')
+        else:
+            key = payment_settings.razorpay_key_id or os.getenv('RAZORPAY_KEY_ID')
+            secret = payment_settings.razorpay_key_secret or os.getenv('RAZORPAY_KEY_SECRET')
     if not key or not secret:
         raise ValueError("Razorpay credentials not configured")
     return razorpay.Client(auth=(key, secret))
