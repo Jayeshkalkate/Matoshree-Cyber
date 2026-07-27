@@ -138,7 +138,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 static_dir = BASE_DIR / 'static'
 STATICFILES_DIRS = [static_dir] if static_dir.exists() else []
-
+    
 if not DEBUG:
     INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
     import cloudinary

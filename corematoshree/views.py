@@ -7,7 +7,6 @@ import tempfile
 import logging
 from datetime import timedelta
 from io import BytesIO
-
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.contrib import messages
@@ -785,20 +784,29 @@ def services(request):
 
 
 def gallery(request):
-    images = Gallery.objects.all().order_by('-id').only('id', 'title', 'image')
-    paginator = Paginator(images, 12)
+    # Get all gallery items
+    all_images = Gallery.objects.all().order_by('-id')
+    
+    # Keep only those that have an actual file
+    valid_images = [
+        img for img in all_images
+        if img.image and default_storage.exists(img.image.name)
+    ]
+    
+    paginator = Paginator(valid_images, 12)
     page = request.GET.get('page')
+    
     try:
         images_page = paginator.page(page)
     except PageNotAnInteger:
         images_page = paginator.page(1)
     except EmptyPage:
         images_page = paginator.page(paginator.num_pages)
+    
     return render(request, 'gallery.html', {
         'business': get_business(),
         'images': images_page,
     })
-
 
 def contact(request):
     if request.method == 'POST':

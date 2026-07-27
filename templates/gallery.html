@@ -898,20 +898,23 @@
       </span>
     </div>
 
-    <!-- Gallery Grid (DYNAMIC) -->
-    <div class="gallery-grid" id="galleryGrid">
-      {% for image in images %}
+<!-- Gallery Grid (DYNAMIC) -->
+<div class="gallery-grid" id="galleryGrid">
+  {% for image in images %}
+    {# Only render if the image field has a file #}
+    {% if image.image and image.image.url %}
       <div class="gallery-card" data-caption="{{ image.title }}">
         <img src="{{ image.image.url }}" alt="{{ image.title }}" loading="lazy" />
         <div class="caption">{{ image.title }}</div>
       </div>
-      {% empty %}
-      <p style="grid-column: 1/-1; text-align: center; color: var(--text-muted, #94a3b8); padding: 3rem 0;">
-        <i class="fas fa-images" style="font-size: clamp(2rem, 5vw, 3rem); display: block; margin-bottom: 0.5rem; opacity: 0.3;" aria-hidden="true"></i>
-        {% trans "No images have been uploaded yet." %}
-      </p>
-      {% endfor %}
-    </div>
+    {% endif %}
+  {% empty %}
+    <p style="grid-column: 1/-1; text-align: center; color: var(--text-muted, #94a3b8); padding: 3rem 0;">
+      <i class="fas fa-images" style="font-size: clamp(2rem, 5vw, 3rem); display: block; margin-bottom: 0.5rem; opacity: 0.3;" aria-hidden="true"></i>
+      {% trans "No images have been uploaded yet." %}
+    </p>
+  {% endfor %}
+</div>
 
     <!-- Pagination Controls (corrected) -->
     {% if images.has_other_pages %}

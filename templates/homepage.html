@@ -1041,11 +1041,13 @@
         </div>
         <div class="gallery-grid">
             {% for img in gallery %}
-            <div class="gallery-item" style="background-image: url('{{ img.image.url }}');" aria-label="{{ img.title }}">
-                <div class="caption">{{ img.title }}</div>
-            </div>
+                {% if img.image %}
+                <div class="gallery-item" style="background-image: url('{{ img.image.url }}');" aria-label="{{ img.title }}">
+                    <div class="caption">{{ img.title }}</div>
+                </div>
+                {% endif %}
             {% empty %}
-            <p class="no-data">{% trans "No images in the gallery yet." %}</p>
+                <p class="no-data">{% trans "No images in the gallery yet." %}</p>
             {% endfor %}
         </div>
     </div>

@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
     <title>{% if user.role == 'superadmin' %}{% trans "Super Admin Dashboard" %}{% else %}{% trans "Admin Dashboard" %}{% endif %} – Cyber Café</title>
 
+    <link rel="icon" type="image/x-icon" href="{% static 'images/matoshreelogo.png' %}">
+
     <!-- Google Fonts & Font Awesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -1731,7 +1733,8 @@
                             <span class="title">{{ scheme.title }}</span>
                             <span class="sub">{% blocktrans with desc=scheme.description|truncatechars:80 elig=scheme.eligibility|default:"N/A" %}{{ desc }} – Eligibility: {{ elig }}{% endblocktrans %}</span>
                             {% if scheme.image %}
-                                <img src="{{ scheme.image.url }}" alt="{{ scheme.title }}">
+                                <img src="{{ scheme.image.url }}" alt="{{ scheme.title }}"
+                                    onerror="this.onerror=null; this.src='{{ STATIC_URL }}images/placeholder.png';">
                             {% endif %}
                         </div>
                         <div class="list-actions">
@@ -2216,7 +2219,9 @@
 
                 {% if payment_settings and payment_settings.qr_code %}
                     <div class="mt-2" style="text-align:center; grid-column:1/-1;">
-                        <img src="{{ payment_settings.qr_code.url }}" alt="QR Code" style="max-width:200px; border:1px solid var(--border-soft); border-radius:8px; padding:4px;">
+                        {% if payment_settings and payment_settings.qr_code and payment_settings.qr_code.url %}
+                            <img src="{{ payment_settings.qr_code.url }}" alt="QR Code">
+                        {% endif %}
                     </div>
                 {% endif %}
             </div>
