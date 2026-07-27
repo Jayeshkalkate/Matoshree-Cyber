@@ -5,6 +5,8 @@ from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from corematoshree import views
 
+# app_name = 'corematoshree'  # Add namespace to avoid conflicts
+
 urlpatterns = [
      
     # ==========================
@@ -103,8 +105,8 @@ urlpatterns = [
     path('create-razorpay-order/<int:app_id>/', views.create_razorpay_order, name='create_razorpay_order'),
 
     # ---- Razorpay verification (login required) ----
+    # Only one entry: under /payment/ for consistency
     path('payment/verify-payment/', views.verify_razorpay_payment, name='verify_payment'),
-    path('verify-razorpay-payment/', views.verify_razorpay_payment, name='verify_razorpay_payment'),
 
     # ---- Manual UPI confirmation (login required) ----
     # For pending (app_id=0) or existing (app_id>0)
@@ -120,3 +122,4 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    

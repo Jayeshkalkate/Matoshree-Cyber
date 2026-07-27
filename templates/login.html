@@ -1,10 +1,10 @@
-{% extends "base.html" %} {% load i18n %} {% block title %}{% trans "Login –
-Cyber Café" %}{% endblock %} {% block extra_head %}
-<style>
-  /* ================================================================
-     PAGE-SPECIFIC STYLES – Login
-     ================================================================ */
+{% extends "base.html" %}
+{% load i18n %}
 
+{% block title %}{% trans "Login – Cyber Café" %}{% endblock %}
+
+{% block extra_head %}
+<style>
   .login-section {
     padding: 60px 0 70px;
     background: var(--bg-secondary);
@@ -12,7 +12,6 @@ Cyber Café" %}{% endblock %} {% block extra_head %}
     display: flex;
     align-items: center;
   }
-
   .login-card {
     background: var(--bg-card);
     border-radius: var(--radius);
@@ -27,7 +26,6 @@ Cyber Café" %}{% endblock %} {% block extra_head %}
     border-color: var(--neon-cyan);
     box-shadow: var(--shadow-card), var(--glow-cyan);
   }
-
   .login-card .card-header {
     text-align: center;
     margin-bottom: 1.5rem;
@@ -53,8 +51,6 @@ Cyber Café" %}{% endblock %} {% block extra_head %}
     font-size: 0.95rem;
     margin: 0.2rem 0 0;
   }
-
-  /* Form elements */
   .login-card .form-group {
     margin-bottom: 1.2rem;
   }
@@ -68,7 +64,6 @@ Cyber Café" %}{% endblock %} {% block extra_head %}
   .login-card .form-group label .required {
     color: var(--neon-orange);
   }
-
   .input-wrapper {
     display: flex;
     align-items: center;
@@ -79,9 +74,7 @@ Cyber Café" %}{% endblock %} {% block extra_head %}
   }
   .input-wrapper:focus-within {
     border-color: var(--neon-cyan);
-    box-shadow:
-      0 0 0 4px rgba(0, 240, 255, 0.08),
-      var(--glow-cyan);
+    box-shadow: 0 0 0 4px rgba(0, 240, 255, 0.08), var(--glow-cyan);
     background: rgba(0, 240, 255, 0.04);
   }
   .input-wrapper .input-icon {
@@ -127,8 +120,6 @@ Cyber Café" %}{% endblock %} {% block extra_head %}
   .input-wrapper .toggle-password:hover {
     color: var(--text-white);
   }
-
-  /* Error messages */
   .alert-error {
     background: rgba(255, 45, 149, 0.08);
     color: var(--neon-magenta);
@@ -143,15 +134,12 @@ Cyber Café" %}{% endblock %} {% block extra_head %}
   .alert-error i {
     font-size: 1.2rem;
   }
-
   .invalid-feedback {
     font-size: 0.8rem;
     color: var(--neon-orange);
     margin-top: 0.3rem;
     display: block;
   }
-
-  /* Form actions row */
   .form-actions-row {
     display: flex;
     justify-content: space-between;
@@ -192,8 +180,6 @@ Cyber Café" %}{% endblock %} {% block extra_head %}
     color: #00e5ff;
     text-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
   }
-
-  /* Submit button */
   .btn-login {
     display: inline-flex;
     align-items: center;
@@ -220,14 +206,12 @@ Cyber Café" %}{% endblock %} {% block extra_head %}
   .btn-login:active {
     transform: scale(0.98);
   }
-
   .login-card hr {
     border: 0;
     height: 1px;
     background: rgba(255, 255, 255, 0.06);
     margin: 1.5rem 0;
   }
-
   .login-card .signup-link {
     text-align: center;
     color: var(--text-muted);
@@ -242,42 +226,6 @@ Cyber Café" %}{% endblock %} {% block extra_head %}
   .login-card .signup-link a:hover {
     text-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
   }
-
-  /* Social buttons (optional) */
-  .social-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-  }
-  .btn-social {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.6rem 0.5rem;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--text-white);
-    background: rgba(255, 255, 255, 0.04);
-    border: 1.5px solid rgba(255, 255, 255, 0.06);
-    border-radius: var(--radius-pill);
-    cursor: pointer;
-    transition: var(--transition);
-    text-decoration: none;
-  }
-  .btn-social:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: var(--neon-cyan);
-  }
-  .btn-social .fa-google {
-    color: #ea4335;
-  }
-  .btn-social .fa-github {
-    color: #f0f4ff;
-  }
-
-  /* Responsive */
   @media (max-width: 576px) {
     .login-card {
       padding: 1.8rem 1.2rem 2rem;
@@ -290,30 +238,24 @@ Cyber Café" %}{% endblock %} {% block extra_head %}
       font-size: 2.2rem;
       padding: 0.6rem;
     }
-    .social-grid {
-      grid-template-columns: 1fr;
-    }
     .form-actions-row {
       flex-direction: column;
       align-items: flex-start;
     }
   }
 </style>
-{% endblock %} {% block content %}
-<!-- ================================================================
-     LOGIN SECTION
-     ================================================================ -->
+{% endblock %}
+
+{% block content %}
 <section class="login-section">
   <div class="container">
     <div class="login-card">
-      <!-- Header -->
       <div class="card-header">
         <i class="fas fa-sign-in-alt"></i>
         <h2>{% trans "Welcome Back" %}</h2>
         <p>{% trans "Sign in to your account" %}</p>
       </div>
 
-      <!-- Non-field errors -->
       {% if form.non_field_errors %}
       <div class="alert-error">
         <i class="fas fa-exclamation-circle"></i>
@@ -321,72 +263,42 @@ Cyber Café" %}{% endblock %} {% block extra_head %}
       </div>
       {% endif %}
 
-      <!-- Form -->
       <form method="post" novalidate>
         {% csrf_token %}
 
-        <!-- Username -->
         <div class="form-group">
-          <label for="id_username"
-            >{% trans "Username" %} <span class="required">*</span></label
-          >
+          <label for="id_username">{% trans "Username" %} <span class="required">*</span></label>
           <div class="input-wrapper">
             <span class="input-icon"><i class="fas fa-user"></i></span>
-            <input
-              type="text"
-              name="username"
-              id="id_username"
-              placeholder="{% trans 'Enter your username' %}"
-              required
-            />
+            <input type="text" name="username" id="id_username" placeholder="{% trans 'Enter your username' %}" required autocomplete="username" />
           </div>
           {% if form.username.errors %}
-          <span class="invalid-feedback">
-            {% for error in form.username.errors %}{{ error }}{% endfor %}
-          </span>
+          <span class="invalid-feedback">{% for error in form.username.errors %}{{ error }}{% endfor %}</span>
           {% endif %}
         </div>
 
-        <!-- Password -->
         <div class="form-group">
-          <label for="id_password"
-            >{% trans "Password" %} <span class="required">*</span></label
-          >
+          <label for="id_password">{% trans "Password" %} <span class="required">*</span></label>
           <div class="input-wrapper">
             <span class="input-icon"><i class="fas fa-lock"></i></span>
-            <input
-              type="password"
-              name="password"
-              id="id_password"
-              placeholder="{% trans '••••••••' %}"
-              required
-            />
-            <button
-              class="toggle-password"
-              type="button"
-              data-target="id_password"
-              aria-label="{% trans 'Toggle password visibility' %}"
-            >
+            <input type="password" name="password" id="id_password" placeholder="{% trans '••••••••' %}" required autocomplete="current-password" />
+            <button class="toggle-password" type="button" data-target="id_password" aria-label="{% trans 'Toggle password visibility' %}">
               <i class="fas fa-eye"></i>
             </button>
           </div>
           {% if form.password.errors %}
-          <span class="invalid-feedback">
-            {% for error in form.password.errors %}{{ error }}{% endfor %}
-          </span>
+          <span class="invalid-feedback">{% for error in form.password.errors %}{{ error }}{% endfor %}</span>
           {% endif %}
         </div>
 
-        <!-- Remember + Forgot -->
         <div class="form-actions-row">
           <label class="checkbox-wrapper">
             <input type="checkbox" name="remember" id="remember" />
             {% trans "Remember me" %}
           </label>
-          <a href="#" class="forgot-link">{% trans "Forgot password?" %}</a>
+          <a href="{% url 'password_reset' %}" class="forgot-link">{% trans "Forgot password?" %}</a>
         </div>
 
-        <!-- Submit -->
         <button type="submit" class="btn-login">
           <i class="fas fa-arrow-right-to-bracket"></i> {% trans "Sign In" %}
         </button>
@@ -394,7 +306,6 @@ Cyber Café" %}{% endblock %} {% block extra_head %}
 
       <hr />
 
-      <!-- Sign up link -->
       <div class="signup-link">
         {% trans "Don't have an account?" %}
         <a href="{% url 'register' %}">{% trans "Sign up" %}</a>
@@ -402,21 +313,20 @@ Cyber Café" %}{% endblock %} {% block extra_head %}
     </div>
   </div>
 </section>
-{% endblock %} {% block extra_js %}
-<script>
-  (function () {
-    "use strict";
+{% endblock %}
 
-    // ---- Password toggle ----
-    document.querySelectorAll(".toggle-password").forEach(function (button) {
-      button.addEventListener("click", function () {
-        const targetId = this.getAttribute("data-target");
-        const input = document.getElementById(targetId);
+{% block extra_js %}
+<script>
+  (function() {
+    "use strict";
+    document.querySelectorAll(".toggle-password").forEach(function(button) {
+      button.addEventListener("click", function() {
+        var targetId = this.getAttribute("data-target");
+        var input = document.getElementById(targetId);
         if (input) {
-          const type =
-            input.getAttribute("type") === "password" ? "text" : "password";
+          var type = input.getAttribute("type") === "password" ? "text" : "password";
           input.setAttribute("type", type);
-          const icon = this.querySelector("i");
+          var icon = this.querySelector("i");
           icon.classList.toggle("fa-eye");
           icon.classList.toggle("fa-eye-slash");
         }

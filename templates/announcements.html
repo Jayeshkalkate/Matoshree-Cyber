@@ -723,11 +723,11 @@
      ================================================================ -->
 <section class="page-hero reveal">
   <div class="container">
-    <div class="breadcrumb">
+    <nav class="breadcrumb" aria-label="{% trans 'Breadcrumb' %}">
       <a href="{% url 'home' %}">{% trans "Home" %}</a>
-      <i class="fas fa-chevron-right" style="font-size: 0.6rem"></i>
-      <span class="current">{% trans "Announcements" %}</span>
-    </div>
+      <i class="fas fa-chevron-right" style="font-size: 0.6rem" aria-hidden="true"></i>
+      <span class="current" aria-current="page">{% trans "Announcements" %}</span>
+    </nav>
     <h1><span>{% trans "Announcements" %}</span></h1>
     <p>{% trans "Stay informed with the latest updates from our centre." %}</p>
   </div>
@@ -738,25 +738,50 @@
      ================================================================ -->
 <section class="announcements-section reveal">
   <div class="container">
-    <!-- Filter Bar -->
-    <div class="filter-bar" id="filterBar">
-      <button class="filter-btn active" data-filter="all">
-        <i class="fas fa-list"></i> {% trans "All" %}
+    <!-- Filter Bar – server‑side generated with translated category names -->
+    <div class="filter-bar" id="filterBar" role="tablist" aria-label="{% trans 'Filter announcements by category' %}">
+      <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true">
+        <i class="fas fa-list" aria-hidden="true"></i> {% trans "All" %}
       </button>
-      <!-- Additional filter buttons added by JavaScript -->
+      {% regroup announcements by category as category_list %}
+      {% for cat_group in category_list %}
+        {% with cat=cat_group.grouper %}
+          {% if cat %}
+            <button class="filter-btn" data-filter="{{ cat|lower }}" role="tab" aria-selected="false">
+              <i class="fas fa-tag" aria-hidden="true"></i>
+              {# Translate category names using gettext – assumes category choices are defined in models #}
+              {% if cat == "General" %}
+                {% trans "General" %}
+              {% elif cat == "Government Scheme" %}
+                {% trans "Government Scheme" %}
+              {% elif cat == "Recruitment" %}
+                {% trans "Recruitment" %}
+              {% elif cat == "Scholarship" %}
+                {% trans "Scholarship" %}
+              {% elif cat == "Holiday" %}
+                {% trans "Holiday" %}
+              {% elif cat == "Notice" %}
+                {% trans "Notice" %}
+              {% else %}
+                {{ cat }}
+              {% endif %}
+            </button>
+          {% endif %}
+        {% endwith %}
+      {% endfor %}
     </div>
 
-    <!-- Announcements -->
-    <div class="announcements-list" id="announcementList">
+    <!-- Announcements list with aria-live for dynamic updates -->
+    <div class="announcements-list" id="announcementList" aria-live="polite" aria-relevant="additions removals">
       {% for announcement in announcements %}
       <div class="announcement-card {% if announcement.is_urgent %}urgent{% endif %}" data-category="{{ announcement.category|lower }}">
-        <div class="announcement-icon">
+        <div class="announcement-icon" aria-hidden="true">
           <i class="fas fa-bullhorn"></i>
         </div>
         <div class="announcement-content">
           <div class="announcement-meta">
             <span class="announcement-date">
-              <i class="far fa-calendar-alt"></i> {{ announcement.created_at|date:"d M Y" }}
+              <i class="far fa-calendar-alt" aria-hidden="true"></i> {{ announcement.created_at|date:"d M Y" }}
             </span>
             <span class="category-badge {% if announcement.category %}{{ announcement.category|lower }}{% endif %}">
               {{ announcement.category|default:_("General") }}
@@ -779,39 +804,39 @@
     </div>
 
     <!-- No results (filter) -->
-    <div class="no-results" id="noResults">
-      <i class="fas fa-inbox"></i>
+    <div class="no-results" id="noResults" role="status">
+      <i class="fas fa-inbox" aria-hidden="true"></i>
       <p>{% trans "No announcements match the selected filter." %}</p>
     </div>
 
-    <!-- Pagination (corrected) -->
+    <!-- Pagination -->
     {% if announcements.has_other_pages %}
-    <div class="pagination-wrap">
+    <div class="pagination-wrap" role="navigation" aria-label="{% trans 'Announcements pagination' %}">
       {% if announcements.has_previous %}
-        <a href="?page={{ announcements.previous_page_number }}" class="page-link">
-          <i class="fas fa-chevron-left"></i> {% trans "Prev" %}
+        <a href="?page={{ announcements.previous_page_number }}" class="page-link" aria-label="{% trans 'Previous page' %}">
+          <i class="fas fa-chevron-left" aria-hidden="true"></i> {% trans "Prev" %}
         </a>
       {% else %}
-        <span class="page-link disabled">
-          <i class="fas fa-chevron-left"></i> {% trans "Prev" %}
+        <span class="page-link disabled" aria-disabled="true">
+          <i class="fas fa-chevron-left" aria-hidden="true"></i> {% trans "Prev" %}
         </span>
       {% endif %}
 
       {% for num in announcements.paginator.page_range %}
         {% if announcements.number == num %}
-          <span class="page-link active">{{ num }}</span>
+          <span class="page-link active" aria-current="page">{{ num }}</span>
         {% elif num > announcements.number|add:'-3' and num < announcements.number|add:'3' %}
-          <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+          <a href="?page={{ num }}" class="page-link" aria-label="{% trans 'Page' %} {{ num }}">{{ num }}</a>
         {% endif %}
       {% endfor %}
 
       {% if announcements.has_next %}
-        <a href="?page={{ announcements.next_page_number }}" class="page-link">
-          {% trans "Next" %} <i class="fas fa-chevron-right"></i>
+        <a href="?page={{ announcements.next_page_number }}" class="page-link" aria-label="{% trans 'Next page' %}">
+          {% trans "Next" %} <i class="fas fa-chevron-right" aria-hidden="true"></i>
         </a>
       {% else %}
-        <span class="page-link disabled">
-          {% trans "Next" %} <i class="fas fa-chevron-right"></i>
+        <span class="page-link disabled" aria-disabled="true">
+          {% trans "Next" %} <i class="fas fa-chevron-right" aria-hidden="true"></i>
         </span>
       {% endif %}
     </div>
@@ -820,10 +845,10 @@
     <!-- Footer note -->
     <div class="footer-note">
       <span>
-        <i class="fas fa-bell"></i> {% trans "Stay updated with our latest announcements." %}
+        <i class="fas fa-bell" aria-hidden="true"></i> {% trans "Stay updated with our latest announcements." %}
       </span>
       <span class="badge" id="countBadge">
-        <i class="far fa-bell"></i>
+        <i class="far fa-bell" aria-hidden="true"></i>
         {% with total=announcements.paginator.count %}
           {% if total > 0 %}
             {% blocktrans count counter=total trimmed %}
@@ -850,12 +875,12 @@
       {% trans "We're here to help with any of your digital service needs." %}
     </p>
     <div class="cta-buttons">
-      <a href="{% url 'contact' %}" class="btn-primary">
-        <i class="fas fa-phone"></i> {% trans "Contact Us" %}
+      <a href="{% url 'contact' %}" class="btn-primary" aria-label="{% trans 'Contact us' %}">
+        <i class="fas fa-phone" aria-hidden="true"></i> {% trans "Contact Us" %}
       </a>
       {% with whatsapp_number=business.whatsapp|default:"919876543210" %}
-      <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20have%20a%20question%20about%20your%20announcements." target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
-        <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
+      <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20have%20a%20question%20about%20your%20announcements." target="_blank" rel="noopener noreferrer" class="btn-whatsapp" aria-label="{% trans 'Chat on WhatsApp' %}">
+        <i class="fab fa-whatsapp" aria-hidden="true"></i> {% trans "Chat on WhatsApp" %}
       </a>
       {% endwith %}
     </div>
@@ -887,7 +912,7 @@
       revealElements.forEach((el) => el.classList.add("visible"));
     }
 
-    // ---- Client-side filter by category ----
+    // ---- Client‑side filter by category ----
     const announcementCards = document.querySelectorAll(".announcement-card");
     const filterBar = document.getElementById("filterBar");
     const noResults = document.getElementById("noResults");
@@ -898,23 +923,6 @@
       filterBar.style.display = "none";
       return;
     }
-
-    // Gather unique categories from data-category
-    const categoriesSet = new Set();
-    announcementCards.forEach((card) => {
-      const cat = card.dataset.category || "general";
-      categoriesSet.add(cat);
-    });
-
-    // Add filter buttons for each category (excluding 'all')
-    categoriesSet.forEach((cat) => {
-      if (cat === "all" || cat === "") return;
-      const btn = document.createElement("button");
-      btn.className = "filter-btn";
-      btn.dataset.filter = cat;
-      btn.innerHTML = `<i class="fas fa-tag"></i> ${cat.charAt(0).toUpperCase() + cat.slice(1)}`;
-      filterBar.appendChild(btn);
-    });
 
     // Filter function
     function filterAnnouncements(category) {
@@ -932,27 +940,29 @@
 
       noResults.style.display = visibleCount === 0 ? "block" : "none";
 
-      // Update active button
+      // Update active button and ARIA state
       document.querySelectorAll(".filter-btn").forEach((btn) => {
-        btn.classList.toggle("active", btn.dataset.filter === category);
+        const isActive = btn.dataset.filter === category;
+        btn.classList.toggle("active", isActive);
+        btn.setAttribute("aria-selected", isActive ? "true" : "false");
       });
 
       // Update count badge (visible on current page)
       if (countSpan) countSpan.textContent = visibleCount;
       if (countBadge) {
         const label = visibleCount === 1 ? "active notice" : "active notices";
-        countBadge.innerHTML = `<i class="far fa-bell"></i> ${visibleCount} ${label}`;
+        countBadge.innerHTML = `<i class="far fa-bell" aria-hidden="true"></i> ${visibleCount} ${label}`;
       }
     }
 
-    // Attach click listeners
+    // Attach click listeners to filter buttons
     document.querySelectorAll(".filter-btn").forEach((btn) => {
       btn.addEventListener("click", function () {
         filterAnnouncements(this.dataset.filter);
       });
     });
 
-    // Initial: show all
+    // Initial: show all (ensure All button is active)
     filterAnnouncements("all");
   })();
 </script>

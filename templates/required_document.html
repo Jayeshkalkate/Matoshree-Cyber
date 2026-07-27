@@ -4,6 +4,8 @@
 
 {% block title %}{% trans "Required Documents" %}{% endblock %}
 
+{% block meta_description %}{% trans "List of required documents for our services – know what to bring before you visit." %}{% endblock %}
+
 {% block extra_head %}
 <style>
   /* ================================================================
@@ -266,7 +268,7 @@
     margin: 0;
   }
 
-  /* ---- Pricing Cards (reuse) ---- */
+  /* ---- Pricing Cards (dynamic) ---- */
   .pricing-section {
     padding: 70px 0 80px;
     background: var(--bg-secondary);
@@ -336,6 +338,24 @@
       var(--glow-cyan),
       0 0 60px rgba(0, 240, 255, 0.05);
   }
+  .pricing-card.popular {
+    border-color: var(--neon-cyan);
+    box-shadow: var(--glow-cyan);
+  }
+  .pricing-card .badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--gradient-cyan);
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: var(--radius-pill);
+    letter-spacing: 0.5px;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
+  }
   .pricing-card .plan-name {
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -379,6 +399,14 @@
   .pricing-card .btn-primary {
     width: 100%;
     justify-content: center;
+  }
+  .no-data {
+    color: var(--text-muted);
+    text-align: center;
+    padding: 30px 0;
+    grid-column: 1 / -1;
+    font-size: 1rem;
+    opacity: 0.6;
   }
 
   /* ---- CTA Banner (reuse) ---- */
@@ -547,7 +575,7 @@
     </div>
     {% endif %}
 
-    <!-- Pagination (corrected) -->
+    <!-- Pagination -->
     {% if documents_page.has_other_pages %}
     <div class="pagination-wrap">
       {% if documents_page.has_previous %}
@@ -597,7 +625,7 @@
 </section>
 
 <!-- ================================================================
-     PRICING SECTION (optional, matches about page)
+     PRICING SECTION – DYNAMIC
      ================================================================ -->
 <section class="pricing-section">
   <div class="container">
@@ -608,42 +636,25 @@
       </p>
     </div>
     <div class="pricing-grid">
-      <div class="pricing-card">
-        <div class="plan-name">{% trans "Basic" %}</div>
-        <div class="price">₹99 <span>/ {% trans "session" %}</span></div>
+      {% for plan in pricing_plans %}
+      <div class="pricing-card {% if plan.is_popular %}popular{% endif %}">
+        {% if plan.is_popular %}
+        <span class="badge">🔥 {% trans "Popular" %}</span>
+        {% endif %}
+        <div class="plan-name">{{ plan.name }}</div>
+        <div class="price">{{ plan.currency }}{{ plan.price }} <span>/ {{ plan.per_label }}</span></div>
         <ul class="features">
-          <li><i class="fas fa-check"></i> {% trans "Document checklist consultation" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Photocopy & scanning (up to 10 pages)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Email & internet access (30 min)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Basic form filling assistance" %}</li>
+          {% for feature in plan.features %}
+          <li><i class="fas fa-check"></i> {{ feature }}</li>
+          {% empty %}
+          <li>{% trans "No features listed" %}</li>
+          {% endfor %}
         </ul>
-        <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Get Started" %}</a>
+        <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Book Now" %}</a>
       </div>
-      <div class="pricing-card" style="border-color: rgba(0, 240, 255, 0.15)">
-        <div class="plan-name">{% trans "Standard" %}</div>
-        <div class="price">₹199 <span>/ {% trans "session" %}</span></div>
-        <ul class="features">
-          <li><i class="fas fa-check"></i> {% trans "Complete document pre-check" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Photocopy & scanning (up to 30 pages)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Email & internet access (60 min)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Passport-size photo printing (4 copies)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Priority assistance" %}</li>
-        </ul>
-        <a href="{% url 'appointment' %}" class="btn-primary pulse">{% trans "Choose Plan" %}</a>
-      </div>
-      <div class="pricing-card">
-        <div class="plan-name">{% trans "Premium" %}</div>
-        <div class="price">₹299 <span>/ {% trans "session" %}</span></div>
-        <ul class="features">
-          <li><i class="fas fa-check"></i> {% trans "Full document verification & attestation" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Photocopy & scanning (unlimited pages)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Email & internet access (90 min)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Passport-size photo printing (8 copies)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Dedicated service expert" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Same-day processing" %}</li>
-        </ul>
-        <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Go Premium" %}</a>
-      </div>
+      {% empty %}
+      <p class="no-data">{% trans "Pricing plans coming soon." %}</p>
+      {% endfor %}
     </div>
   </div>
 </section>
@@ -659,7 +670,7 @@
       <a href="{% url 'home' %}#contact" class="btn-primary">
         <i class="fas fa-phone"></i> {% trans "Contact Us" %}
       </a>
-      <a href="https://wa.me/919876543210?text=Hello%2C%20I%20need%20to%20know%20the%20required%20documents%20for%20a%20service." target="_blank" class="btn-whatsapp">
+      <a href="https://wa.me/{{ SITE_SETTINGS.whatsapp_number|default:'919876543210' }}?text=Hello%2C%20I%20need%20to%20know%20the%20required%20documents%20for%20a%20service." target="_blank" class="btn-whatsapp">
         <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
       </a>
     </div>

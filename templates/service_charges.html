@@ -1,5 +1,12 @@
-{% extends "base.html" %} {% load i18n %} {% load static %} {% block title %}{%
-trans "Service Charges" %}{% endblock %} {% block extra_head %}
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Service Charges" %}{% endblock %}
+
+{% block meta_description %}{% trans "Transparent pricing for all our services – know the cost before you visit." %}{% endblock %}
+
+{% block extra_head %}
 <style>
   /* ================================================================
      PAGE-SPECIFIC STYLES – Service Charges
@@ -198,7 +205,7 @@ trans "Service Charges" %}{% endblock %} {% block extra_head %}
     text-shadow: 0 0 20px rgba(255, 45, 149, 0.3);
   }
 
-  /* Pricing Cards (same as about) */
+  /* ---- Dynamic Pricing Cards (shared with required_document) ---- */
   .pricing-section {
     padding: 70px 0 80px;
     background: var(--bg-primary);
@@ -249,6 +256,24 @@ trans "Service Charges" %}{% endblock %} {% block extra_head %}
       var(--glow-cyan),
       0 0 60px rgba(0, 240, 255, 0.05);
   }
+  .pricing-card.popular {
+    border-color: var(--neon-cyan);
+    box-shadow: var(--glow-cyan);
+  }
+  .pricing-card .badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--gradient-cyan);
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: var(--radius-pill);
+    letter-spacing: 0.5px;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
+  }
   .pricing-card .plan-name {
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -293,23 +318,13 @@ trans "Service Charges" %}{% endblock %} {% block extra_head %}
     width: 100%;
     justify-content: center;
   }
-  .pricing-card.popular {
-    border-color: var(--neon-cyan);
-    box-shadow: var(--glow-cyan);
-  }
-  .pricing-card .badge {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: var(--gradient-cyan);
-    color: #fff;
-    font-size: 0.65rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    padding: 4px 14px;
-    border-radius: var(--radius-pill);
-    letter-spacing: 0.5px;
-    box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
+  .no-data {
+    color: var(--text-muted);
+    text-align: center;
+    padding: 30px 0;
+    grid-column: 1 / -1;
+    font-size: 1rem;
+    opacity: 0.6;
   }
 
   .charges-notes {
@@ -394,14 +409,9 @@ trans "Service Charges" %}{% endblock %} {% block extra_head %}
     flex-wrap: wrap;
     gap: 18px;
   }
-
-  .no-data {
-    color: var(--text-muted);
-    text-align: center;
-    padding: 30px 0;
-    grid-column: 1 / -1;
-    font-size: 1rem;
-    opacity: 0.6;
+  .cta-buttons .btn-primary,
+  .cta-buttons .btn-whatsapp {
+    min-width: 180px;
   }
 
   @media (max-width: 1024px) {
@@ -459,7 +469,12 @@ trans "Service Charges" %}{% endblock %} {% block extra_head %}
     }
   }
 </style>
-{% endblock %} {% block content %}
+{% endblock %}
+
+{% block content %}
+<!-- ================================================================
+     PAGE HERO
+     ================================================================ -->
 <section class="page-hero">
   <div class="container">
     <div class="breadcrumb">
@@ -469,19 +484,20 @@ trans "Service Charges" %}{% endblock %} {% block extra_head %}
     </div>
     <h1>{% trans "Service" %} <span>{% trans "Charges" %}</span></h1>
     <p>
-      {% trans "Transparent pricing for all our services. Know the cost before
-      you come in." %}
+      {% trans "Transparent pricing for all our services. Know the cost before you come in." %}
     </p>
   </div>
 </section>
 
+<!-- ================================================================
+     CHARGES TABLE
+     ================================================================ -->
 <section class="charges-section">
   <div class="container">
     <div class="section-header">
       <h2>{% trans "Our" %} <span>{% trans "Price List" %}</span></h2>
       <p>
-        {% trans "All charges are inclusive of service fees unless stated
-        otherwise." %}
+        {% trans "All charges are inclusive of service fees unless stated otherwise." %}
       </p>
     </div>
     <div class="table-wrapper">
@@ -505,14 +521,7 @@ trans "Service Charges" %}{% endblock %} {% block extra_head %}
           </tr>
           {% empty %}
           <tr>
-            <td
-              colspan="2"
-              style="
-                text-align: center;
-                padding: 30px;
-                color: var(--text-muted);
-              "
-            >
+            <td colspan="2" style="text-align: center; padding: 30px; color: var(--text-muted);">
               {% trans "No service charges available." %}
             </td>
           </tr>
@@ -523,6 +532,9 @@ trans "Service Charges" %}{% endblock %} {% block extra_head %}
   </div>
 </section>
 
+<!-- ================================================================
+     PRICING PLANS – DYNAMIC (shared with required_document)
+     ================================================================ -->
 <section class="pricing-section">
   <div class="container">
     <div class="section-header">
@@ -532,67 +544,63 @@ trans "Service Charges" %}{% endblock %} {% block extra_head %}
       </p>
     </div>
     <div class="pricing-grid">
-      {% for charge in charges %}
-      <div class="pricing-card {% if forloop.counter == 2 %}popular{% endif %}">
-        {% if forloop.counter == 2 %}
+      {% for plan in pricing_plans %}
+      <div class="pricing-card {% if plan.is_popular %}popular{% endif %}">
+        {% if plan.is_popular %}
         <span class="badge">🔥 {% trans "Popular" %}</span>
         {% endif %}
-        <div class="plan-name">{{ charge.service.name }}</div>
-        <div class="price">
-          ₹{{ charge.charge }} <span> / {% trans "session" %}</span>
-        </div>
+        <div class="plan-name">{{ plan.name }}</div>
+        <div class="price">{{ plan.currency }}{{ plan.price }} <span>/ {{ plan.per_label }}</span></div>
         <ul class="features">
-          <li>
-            <i class="fas fa-check"></i> {% trans "Professional service" %}
-          </li>
-          <li><i class="fas fa-check"></i> {% trans "Quick turnaround" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Expert assistance" %}</li>
+          {% for feature in plan.features %}
+          <li><i class="fas fa-check"></i> {{ feature }}</li>
+          {% empty %}
+          <li>{% trans "No features listed" %}</li>
+          {% endfor %}
         </ul>
-        <a href="{% url 'appointment' %}" class="btn-primary"
-          >{% trans "Book Now" %}</a
-        >
+        <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Book Now" %}</a>
       </div>
       {% empty %}
-      <p class="no-data">{% trans "Pricing information coming soon." %}</p>
+      <p class="no-data">{% trans "Pricing plans coming soon." %}</p>
       {% endfor %}
     </div>
   </div>
 </section>
 
+<!-- ================================================================
+     NOTES
+     ================================================================ -->
 <section class="charges-notes">
   <div class="container">
     <div class="note-box">
       <h4><i class="fas fa-info-circle"></i> {% trans "Important Notes" %}</h4>
       <p>
-        <i class="fas fa-check-circle"></i> {% trans "Prices are subject to
-        change without prior notice." %}<br />
-        <i class="fas fa-check-circle"></i> {% trans "GST (if applicable) will
-        be added to the final bill." %}<br />
-        <i class="fas fa-check-circle"></i> {% trans "Discounts may be available
-        for bulk orders or regular customers." %}<br />
-        <i class="fas fa-check-circle"></i> {% trans "For exact pricing, please
-        contact our support team." %}
+        <i class="fas fa-check-circle"></i> {% trans "Prices are subject to change without prior notice." %}<br />
+        <i class="fas fa-check-circle"></i> {% trans "GST (if applicable) will be added to the final bill." %}<br />
+        <i class="fas fa-check-circle"></i> {% trans "Discounts may be available for bulk orders or regular customers." %}<br />
+        <i class="fas fa-check-circle"></i> {% trans "For exact pricing, please contact our support team." %}
       </p>
     </div>
   </div>
 </section>
 
+<!-- ================================================================
+     CTA BANNER
+     ================================================================ -->
 <section class="cta-banner">
   <div class="container">
     <h2>
-      {% trans "Need" %} <span>{% trans "clarification" %}</span> {% trans "on
-      pricing?" %}
+      {% trans "Need" %} <span>{% trans "clarification" %}</span> {% trans "on pricing?" %}
     </h2>
     <p>
-      {% trans "We're here to help. Reach out to us for any questions about our
-      charges or services." %}
+      {% trans "We're here to help. Reach out to us for any questions about our charges or services." %}
     </p>
     <div class="cta-buttons">
       <a href="{% url 'home' %}#contact" class="btn-primary">
         <i class="fas fa-phone-alt"></i> {% trans "Contact Us" %}
       </a>
       <a
-        href="https://wa.me/919876543210?text=Hello%2C%20I%20want%20to%20know%20the%20charges%20for%20a%20service."
+        href="https://wa.me/{{ SITE_SETTINGS.whatsapp_number|default:'919876543210' }}?text=Hello%2C%20I%20want%20to%20know%20the%20charges%20for%20a%20service."
         target="_blank"
         class="btn-whatsapp"
       >

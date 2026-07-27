@@ -348,6 +348,12 @@
         color: var(--text-dim, #5c6a8c);
         margin-top: 0.5rem;
     }
+    .app-detail .payment-section .help-text {
+        display: block;
+        font-size: clamp(0.7rem, 0.8vw, 0.8rem);
+        color: var(--text-dim, #5c6a8c);
+        margin-top: 0.2rem;
+    }
 
     /* ---- Back link ---- */
     .app-detail .back-link {
@@ -396,6 +402,69 @@
     }
 
     /* ================================================================
+       TOAST NOTIFICATION (fixed, non‑blocking)
+       ================================================================ */
+    #notification-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 400px;
+        width: 100%;
+        pointer-events: none;
+    }
+    .toast-notification {
+        background: var(--bg-card, rgba(10, 14, 26, 0.95));
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius-sm, 8px);
+        padding: 1rem 1.2rem;
+        color: var(--text-white, #f0f4ff);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        pointer-events: auto;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.8rem;
+        animation: slideIn 0.3s ease;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .toast-notification .toast-icon {
+        flex-shrink: 0;
+        font-size: 1.3rem;
+        margin-top: 2px;
+    }
+    .toast-notification .toast-icon.success { color: var(--neon-green, #22d3ee); }
+    .toast-notification .toast-icon.error { color: var(--neon-magenta, #ff2d95); }
+    .toast-notification .toast-icon.info { color: var(--neon-cyan, #00f0ff); }
+    .toast-notification .toast-icon.warning { color: var(--neon-orange, #f97316); }
+    .toast-notification .toast-content {
+        flex: 1;
+        font-size: clamp(0.9rem, 1vw, 1rem);
+        line-height: 1.5;
+    }
+    .toast-notification .toast-close {
+        background: none;
+        border: none;
+        color: var(--text-muted, #94a3b8);
+        cursor: pointer;
+        font-size: 1.2rem;
+        padding: 0 0.2rem;
+        transition: color 0.3s ease;
+        flex-shrink: 0;
+    }
+    .toast-notification .toast-close:hover {
+        color: var(--text-white, #f0f4ff);
+    }
+    @keyframes slideIn {
+        from { opacity: 0; transform: translateX(40px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ================================================================
        RESPONSIVE BREAKPOINTS
        ================================================================ */
 
@@ -429,6 +498,11 @@
         }
         .app-detail .payment-section .upi-payment img {
             max-width: 150px;
+        }
+        #notification-container {
+            top: 10px;
+            right: 10px;
+            max-width: calc(100% - 20px);
         }
     }
 
@@ -491,6 +565,9 @@
         .app-detail .table-wrap {
             background: rgba(10, 14, 26, 0.95);
         }
+        .toast-notification {
+            background: rgba(10, 14, 26, 0.98);
+        }
     }
 
     @media (hover: none) and (pointer: coarse) {
@@ -518,6 +595,9 @@
         .app-detail .btn-sm,
         .app-detail .back-link {
             transition: none !important;
+        }
+        .toast-notification {
+            animation: none !important;
         }
     }
 
@@ -587,6 +667,9 @@
         }
         .app-detail .payment-section .payment-done i {
             color: #000 !important;
+        }
+        #notification-container {
+            display: none !important;
         }
     }
 </style>
@@ -748,19 +831,20 @@
 
                                             <div style="margin-top: 0.8rem;">
                                                 <label for="payment_app">{% trans "Payment App" %} *</label>
-                                                <select name="payment_app" id="payment_app" required style="width:100%; padding:0.5rem; background:var(--bg-input); color:var(--text-bright); border:1px solid var(--border-soft); border-radius:8px;">
+                                                <select name="payment_app" id="payment_app" required aria-describedby="payment_app_help" style="width:100%; padding:0.5rem; background:var(--bg-input); color:var(--text-bright); border:1px solid var(--border-soft); border-radius:8px;">
                                                     <option value="gpay">Google Pay</option>
                                                     <option value="phonepe">PhonePe</option>
                                                     <option value="paytm">Paytm</option>
                                                     <option value="bhim">BHIM</option>
                                                     <option value="upi" selected>Other UPI App</option>
                                                 </select>
+                                                <span id="payment_app_help" class="help-text">{% trans "Select the UPI app you used for payment." %}</span>
                                             </div>
 
                                             <div style="margin-top: 0.8rem;">
                                                 <label for="utr_number">{% trans "UTR Number" %}</label>
-                                                <input type="text" name="utr_number" id="utr_number" placeholder="{% trans 'e.g. 123456789012' %}" style="width:100%; padding:0.5rem; background:var(--bg-input); color:var(--text-bright); border:1px solid var(--border-soft); border-radius:8px;">
-                                                <small style="color:var(--text-dim); display:block; margin-top:0.2rem;">{% trans "Optional, but helps admin verify your payment." %}</small>
+                                                <input type="text" name="utr_number" id="utr_number" placeholder="{% trans 'e.g. 123456789012' %}" aria-describedby="utr_help" style="width:100%; padding:0.5rem; background:var(--bg-input); color:var(--text-bright); border:1px solid var(--border-soft); border-radius:8px;">
+                                                <span id="utr_help" class="help-text">{% trans "Optional, but helps admin verify your payment." %}</span>
                                             </div>
 
                                             <button type="submit" class="btn-success" style="margin-top:0.8rem;">
@@ -813,14 +897,72 @@
     </div> <!-- /container -->
 </section>
 
+<!-- Toast notification container -->
+<div id="notification-container" role="status" aria-live="polite"></div>
+
 {% endblock %}
 
 {% block extra_scripts %}
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js" crossorigin="anonymous" referrerpolicy="origin"></script>
 <script>
     (function() {
         "use strict";
 
+        // ============================================================
+        // TOAST NOTIFICATION SYSTEM (replaces alert())
+        // ============================================================
+        function showNotification(message, type) {
+            type = type || 'info';
+            var container = document.getElementById('notification-container');
+            if (!container) return;
+
+            var icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                warning: 'fa-exclamation-triangle',
+                info: 'fa-info-circle'
+            };
+            var iconClass = icons[type] || icons.info;
+
+            var toast = document.createElement('div');
+            toast.className = 'toast-notification';
+            toast.setAttribute('role', 'alert');
+
+            toast.innerHTML = `
+                <span class="toast-icon ${type}"><i class="fas ${iconClass}"></i></span>
+                <span class="toast-content">${message}</span>
+                <button class="toast-close" aria-label="Close notification">&times;</button>
+            `;
+
+            container.appendChild(toast);
+
+            // Auto-close after 6 seconds
+            var timer = setTimeout(function() {
+                if (toast.parentNode) {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateX(40px)';
+                    setTimeout(function() {
+                        if (toast.parentNode) toast.remove();
+                    }, 300);
+                }
+            }, 6000);
+
+            // Close button
+            toast.querySelector('.toast-close').addEventListener('click', function() {
+                clearTimeout(timer);
+                if (toast.parentNode) {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateX(40px)';
+                    setTimeout(function() {
+                        if (toast.parentNode) toast.remove();
+                    }, 300);
+                }
+            });
+        }
+
+        // ============================================================
+        // RAZORPAY PAYMENT FLOW
+        // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             var payBtn = document.getElementById('razorpay-pay-btn');
             if (!payBtn) return;
@@ -844,7 +986,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.error) {
-                        alert('Error: ' + data.error);
+                        showNotification('Error: ' + data.error, 'error');
                         payBtn.disabled = false;
                         payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
                         return;
@@ -876,22 +1018,23 @@
                             .then(res => res.json())
                             .then(data => {
                                 if (data.success) {
+                                    showNotification('Payment successful! Redirecting...', 'success');
                                     window.location.href = data.receipt_url || '/my-applications/';
                                 } else {
-                                    alert('Payment verification failed: ' + (data.error || 'Unknown error'));
+                                    showNotification('Payment verification failed: ' + (data.error || 'Unknown error'), 'error');
                                     payBtn.disabled = false;
                                     payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
                                 }
                             })
                             .catch(err => {
-                                alert('Verification error: ' + err.message);
+                                showNotification('Verification error: ' + err.message, 'error');
                                 payBtn.disabled = false;
                                 payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
                             });
                         },
                         modal: {
                             ondismiss: function() {
-                                alert('Payment cancelled. You can try again later.');
+                                showNotification('Payment cancelled. You can try again later.', 'warning');
                                 payBtn.disabled = false;
                                 payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
                             }
@@ -905,7 +1048,7 @@
                             color: '#00e6ff',
                         },
                         onError: function(error) {
-                            alert('Payment failed: ' + (error.description || 'Unknown error'));
+                            showNotification('Payment failed: ' + (error.description || 'Unknown error'), 'error');
                             payBtn.disabled = false;
                             payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
                         }
@@ -914,12 +1057,15 @@
                     rzp.open();
                 })
                 .catch(err => {
-                    alert('Error creating order: ' + err.message);
+                    showNotification('Error creating order: ' + err.message, 'error');
                     payBtn.disabled = false;
                     payBtn.innerHTML = '<i class="fas fa-credit-card"></i> {% trans "Pay with Razorpay" %}';
                 });
             });
         });
+
+        // Expose notification globally in case any inline script needs it
+        window.showNotification = showNotification;
     })();
 </script>
 {% endblock %}

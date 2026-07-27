@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import RegexValidator
@@ -262,8 +263,12 @@ class DocumentUploadForm(forms.ModelForm):
     def clean_file(self):
         file = self.cleaned_data.get("file")
         if file:
-            if file.size > 10 * 1024 * 1024:  # 10 MB
-                raise forms.ValidationError(_("File size must be under 10 MB."))
+            # Use configurable max upload size, fallback to 10 MB
+            max_size = getattr(settings, 'MAX_UPLOAD_SIZE', 10 * 1024 * 1024)
+            if file.size > max_size:
+                raise forms.ValidationError(
+                    _("File size must be under %(size)s MB.") % {'size': max_size // (1024 * 1024)}
+                )
             ext = file.name.split(".")[-1].lower()
             if ext not in ("pdf", "jpg", "jpeg", "png"):
                 raise forms.ValidationError(_("Only PDF, JPG, JPEG, and PNG files are allowed."))
@@ -320,7 +325,7 @@ class PaymentSettingsForm(forms.ModelForm):
             'is_active',
             'razorpay_enabled', 'cash_enabled', 'upi_enabled',
             'test_mode',
-            'razorpay_key_id', 'razorpay_key_secret',      # <-- ADDED live keys
+            'razorpay_key_id', 'razorpay_key_secret',
             'razorpay_test_key', 'razorpay_test_secret',
         )
         widgets = {
@@ -373,20 +378,21 @@ class PaymentSettingsForm(forms.ModelForm):
                     _("UPI is enabled but neither UPI ID nor QR Code is provided.")
                 )
 
-            # Razorpay validation
+            # Razorpay validation – add field-specific errors for clarity
             if razorpay_enabled:
                 if test_mode:
-                    # Test mode: test keys required
-                    if not cleaned_data.get('razorpay_test_key') or not cleaned_data.get('razorpay_test_secret'):
-                        raise forms.ValidationError(
-                            _("Test mode requires both Razorpay Test Key and Test Secret.")
-                        )
+                    test_key = cleaned_data.get('razorpay_test_key')
+                    test_secret = cleaned_data.get('razorpay_test_secret')
+                    if not test_key:
+                        self.add_error('razorpay_test_key', _("This field is required when Razorpay is enabled in test mode."))
+                    if not test_secret:
+                        self.add_error('razorpay_test_secret', _("This field is required when Razorpay is enabled in test mode."))
                 else:
-                    # Live mode: live keys required
-                    if not cleaned_data.get('razorpay_key_id') or not cleaned_data.get('razorpay_key_secret'):
-                        raise forms.ValidationError(
-                            _("Live Razorpay keys are required when Razorpay is enabled and Test Mode is off.")
-                        )
+                    live_key = cleaned_data.get('razorpay_key_id')
+                    live_secret = cleaned_data.get('razorpay_key_secret')
+                    if not live_key:
+                        self.add_error('razorpay_key_id', _("This field is required when Razorpay is enabled in live mode."))
+                    if not live_secret:
+                        self.add_error('razorpay_key_secret', _("This field is required when Razorpay is enabled in live mode."))
 
         return cleaned_data
-    

@@ -1,5 +1,9 @@
-{% extends "base.html" %} {% load i18n %} {% block title %}{% trans "Split PDF"
-%}{% endblock %} {% block extra_head %}
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Split PDF" %}{% endblock %}
+
+{% block extra_head %}
 <style>
   /* ================================================================
      PAGE-SPECIFIC STYLES – Split PDF
@@ -100,6 +104,7 @@
   }
   .split-card .doc-info span {
     color: var(--text-muted);
+    word-break: break-all;
   }
 
   /* Error alert */
@@ -138,6 +143,7 @@
     width: 100%;
     transition: var(--transition);
     font-size: 0.95rem;
+    min-height: 48px;
   }
   .split-card .form-control::placeholder {
     color: var(--text-muted) !important;
@@ -148,6 +154,10 @@
     box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.12);
     outline: none;
     background: rgba(0, 240, 255, 0.04) !important;
+  }
+  .split-card .form-control.is-invalid {
+    border-color: var(--neon-magenta) !important;
+    box-shadow: 0 0 0 3px rgba(255, 45, 149, 0.15);
   }
 
   .split-card .helper-text {
@@ -185,11 +195,18 @@
     transition: var(--transition);
     box-shadow: var(--glow-cyan);
     font-family: var(--font-body);
+    min-height: 48px;
   }
   .btn-split:hover {
     background: #00e5ff;
     transform: translateY(-2px) scale(1.02);
     box-shadow: 0 0 40px rgba(0, 240, 255, 0.5);
+  }
+  .btn-split:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
   }
   .btn-split i {
     font-size: 1.1rem;
@@ -205,12 +222,21 @@
     transition: var(--transition);
     margin-top: 1.5rem;
     font-size: 0.95rem;
+    padding: 0.4rem 0;
   }
   .back-link:hover {
     color: var(--neon-cyan);
   }
   .back-link i {
     font-size: 0.9rem;
+  }
+
+  .actions-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
   }
 
   /* Responsive */
@@ -231,6 +257,13 @@
       width: 100%;
       justify-content: center;
     }
+    .actions-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .back-link {
+      justify-content: center;
+    }
   }
   @media (max-width: 480px) {
     .split-card {
@@ -248,7 +281,9 @@
     }
   }
 </style>
-{% endblock %} {% block content %}
+{% endblock %}
+
+{% block content %}
 <!-- ================================================================
      PAGE HERO
      ================================================================ -->
@@ -279,18 +314,22 @@
 
       <!-- Error Message -->
       {% if error %}
-      <div class="alert-error">
-        <i class="fas fa-exclamation-circle"></i>
+      <div class="alert-error" role="alert">
+        <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
         {{ error }}
       </div>
       {% endif %}
 
       <!-- Form -->
-      <form method="post">
+      <form method="post" id="splitForm" novalidate>
         {% csrf_token %}
 
         <div class="form-group">
-          <label for="pagesInput">{% trans "Pages" %}</label>
+          <label for="pagesInput">
+            <i class="fas fa-hashtag" aria-hidden="true"></i>
+            {% trans "Pages" %}
+            <span class="required-star" style="color: var(--neon-orange);">*</span>
+          </label>
           <input
             type="text"
             name="pages"
@@ -298,9 +337,11 @@
             class="form-control"
             placeholder='{% trans "e.g. 1-3,5,7-10" %}'
             required
+            aria-describedby="pagesHelp"
+            autofocus
           />
-          <span class="helper-text">
-            <i class="fas fa-info-circle"></i>
+          <span class="helper-text" id="pagesHelp">
+            <i class="fas fa-info-circle" aria-hidden="true"></i>
             {% trans "Examples:" %}
             <code>1-5</code>
             <span class="sep">|</span>
@@ -308,21 +349,109 @@
             <span class="sep">|</span>
             <code>1-3,7,9-10</code>
           </span>
+          <div class="invalid-feedback" id="pagesFeedback" style="display:none; color: var(--neon-magenta); font-size: 0.85rem; margin-top: 0.3rem;">
+            {% trans "Please enter a valid page range (e.g., 1-3,5,7-10)." %}
+          </div>
         </div>
 
-        <button type="submit" class="btn-split">
-          <i class="fas fa-cut"></i> {% trans "Split PDF" %}
-        </button>
-      </form>
+        <div class="actions-row">
+          <button type="submit" class="btn-split" id="splitBtn">
+            <i class="fas fa-cut" aria-hidden="true"></i> {% trans "Split PDF" %}
+          </button>
 
-      <!-- Back Link -->
-      <a
-        href="{% url 'application_admin_detail' app.id %}"
-        class="btn-primary btn-sm"
-      >
-        <i class="fas fa-eye"></i> {% trans "View" %}
-      </a>
+          <a href="{% url 'application_admin_detail' app.id %}" class="back-link">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+            {% trans "Back to Application" %}
+          </a>
+        </div>
+      </form>
     </div>
   </div>
 </section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  (function() {
+    "use strict";
+
+    var form = document.getElementById('splitForm');
+    var pagesInput = document.getElementById('pagesInput');
+    var feedback = document.getElementById('pagesFeedback');
+    var submitBtn = document.getElementById('splitBtn');
+
+    // Client-side validation for page range format
+    function validatePageRange(value) {
+      // Allow: numbers, commas, hyphens, spaces
+      // Pattern: 1-5, 3, 7-10, 1,2,3
+      var trimmed = value.trim();
+      if (trimmed === '') return false;
+      // Check for valid characters
+      if (!/^[\d,\-\s]+$/.test(trimmed)) return false;
+      // Split by comma and check each part
+      var parts = trimmed.split(',');
+      for (var i = 0; i < parts.length; i++) {
+        var part = parts[i].trim();
+        if (part === '') return false;
+        if (part.indexOf('-') !== -1) {
+          var range = part.split('-');
+          if (range.length !== 2) return false;
+          var start = parseInt(range[0].trim(), 10);
+          var end = parseInt(range[1].trim(), 10);
+          if (isNaN(start) || isNaN(end) || start < 1 || end < start) return false;
+        } else {
+          var num = parseInt(part, 10);
+          if (isNaN(num) || num < 1) return false;
+        }
+      }
+      return true;
+    }
+
+    function validateInput() {
+      var val = pagesInput.value;
+      var isValid = validatePageRange(val);
+      if (!isValid && val.trim() !== '') {
+        pagesInput.classList.add('is-invalid');
+        feedback.style.display = 'block';
+      } else {
+        pagesInput.classList.remove('is-invalid');
+        feedback.style.display = 'none';
+      }
+      return isValid;
+    }
+
+    // Real-time validation on input
+    pagesInput.addEventListener('input', function() {
+      validateInput();
+    });
+
+    // On blur, revalidate
+    pagesInput.addEventListener('blur', function() {
+      validateInput();
+    });
+
+    // Form submission: validate before submit
+    form.addEventListener('submit', function(e) {
+      if (!validateInput()) {
+        e.preventDefault();
+        // Focus the input and show feedback
+        pagesInput.focus();
+        pagesInput.classList.add('is-invalid');
+        feedback.style.display = 'block';
+        // Scroll to the input
+        pagesInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        // Disable button to prevent double submission
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {% trans "Processing..." %}';
+      }
+    });
+
+    // If there was a server error, the page will reload with error message, so we re-validate
+    if (pagesInput.value.trim() !== '') {
+      validateInput();
+    }
+
+  })();
+</script>
 {% endblock %}

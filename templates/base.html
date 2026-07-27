@@ -1198,8 +1198,15 @@
             const metaViewport = document.querySelector('meta[name="viewport"]');
             if (!metaViewport || !toggleBtn) return;
 
-            // Load stored preference
-            const isDesktop = localStorage.getItem('desktopMode') === 'true';
+            // Load stored preference with try-catch to avoid errors in older browsers
+            let isDesktop = false;
+            try {
+                isDesktop = localStorage.getItem('desktopMode') === 'true';
+            } catch (e) {
+                // localStorage not available – fallback to default (mobile view)
+                isDesktop = false;
+            }
+
             if (isDesktop) {
                 metaViewport.content = 'width=1024, initial-scale=1.0';
                 if (labelSpan) labelSpan.textContent = '{% trans "Mobile View" %}';
@@ -1207,7 +1214,12 @@
 
             toggleBtn.addEventListener('click', function(e) {
                 e.preventDefault();
-                const current = localStorage.getItem('desktopMode') === 'true';
+                let current = false;
+                try {
+                    current = localStorage.getItem('desktopMode') === 'true';
+                } catch (e) {
+                    // ignore
+                }
                 const newMode = !current;
                 if (newMode) {
                     metaViewport.content = 'width=1024, initial-scale=1.0';
@@ -1217,7 +1229,11 @@
                         'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes';
                     if (labelSpan) labelSpan.textContent = '{% trans "Desktop View" %}';
                 }
-                localStorage.setItem('desktopMode', newMode);
+                try {
+                    localStorage.setItem('desktopMode', newMode);
+                } catch (e) {
+                    // storage not available – just toggle UI
+                }
             });
 
         })();

@@ -24,6 +24,7 @@ from .models import (
     BusinessInfo,
     Application,
     DocumentUpload,
+    PaymentLog,
 )
 
 
@@ -252,24 +253,35 @@ class ApplicationAdmin(admin.ModelAdmin):
         ('Timestamps', {'fields': ('created_at', 'updated_at')}),
     )
     ordering = ('-created_at',)
-    list_editable = ('status', 'payment_status')   # Quick inline updates
+    list_editable = ('status', 'payment_status')
     actions = ['mark_paid', 'generate_receipts']
 
     @admin.action(description="Mark selected applications as Paid")
     def mark_paid(self, request, queryset):
-        updated = queryset.update(
-            payment_status='paid',
-            payment_date=timezone.now()
-        )
-        # Generate receipt numbers if missing
+        updated = 0
         for app in queryset:
+            if app.payment_status == 'paid':
+                continue
+            app.payment_status = 'paid'
+            app.payment_date = timezone.now()
             if not app.receipt_number:
                 app.receipt_number = app.generate_receipt_number()
-                app.save(update_fields=['receipt_number'])
+                app.save()
+            charge = app.service.servicecharge_set.first()
+            amount = charge.charge if charge else 0
+            PaymentLog.objects.create(
+                application=app,
+                event_type='manual_confirmed',   # valid choice
+                amount=amount,
+                razorpay_payment_id=app.payment_transaction_id or '',
+                razorpay_order_id='',
+                webhook_data={},
+            )
+            updated += 1 
         self.message_user(
             request,
-            f"{updated} application(s) marked as paid and receipt(s) generated.",
-            messages.SUCCESS
+            f"{updated} application(s) marked as paid and receipt(s) generated with logs.",
+            messages.SUCCESS if updated else messages.WARNING
         )
 
     @admin.action(description="Generate receipts for selected applications")
@@ -339,9 +351,23 @@ class PaymentSettingsAdmin(admin.ModelAdmin):
     )
 
     def get_readonly_fields(self, request, obj=None):
-        # If obj exists and test_mode is False, make test keys read-only.
-        # Live keys are always editable.
         if obj and not obj.test_mode:
             return ('razorpay_test_key', 'razorpay_test_secret')
-        # When test_mode is True, test keys are editable; live keys might be hidden, but we keep them editable anyway.
         return ()
+
+
+# ==========================
+# PaymentLog Admin (Corrected)
+# ==========================
+@admin.register(PaymentLog)
+class PaymentLogAdmin(admin.ModelAdmin):
+    list_display = ('application', 'event_type', 'amount', 'razorpay_payment_id', 'created_at')
+    list_filter = ('event_type', 'created_at')
+    search_fields = ('application__full_name', 'application__email', 'razorpay_payment_id', 'razorpay_order_id')
+    readonly_fields = ('created_at',)
+    ordering = ('-created_at',)
+    fields = (
+        'application', 'event_type', 'amount',
+        'razorpay_payment_id', 'razorpay_order_id',
+        'webhook_data', 'ip_address', 'user_agent', 'created_at'
+    )

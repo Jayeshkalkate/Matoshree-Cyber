@@ -246,6 +246,7 @@
     user-select: none;
     -webkit-user-select: none;
     min-height: 56px;
+    position: relative;
   }
   .faq-item summary::-webkit-details-marker {
     display: none;
@@ -337,7 +338,7 @@
     white-space: nowrap;
   }
 
-  /* ---- Pricing Cards (reuse from base, but ensure style) ---- */
+  /* ---- Pricing Cards (DYNAMIC) ---- */
   .pricing-section {
     padding: clamp(40px, 8vw, 70px) 0 clamp(40px, 8vw, 80px);
     background: var(--bg-primary, #0a0e1a);
@@ -800,12 +801,12 @@
      ================================================================ -->
 <section class="page-hero reveal">
   <div class="container">
-    <div class="breadcrumb">
+    <nav class="breadcrumb" aria-label="{% trans 'Breadcrumb' %}">
       <a href="{% url 'home' %}">{% trans "Home" %}</a>
-      <i class="fas fa-chevron-right" style="font-size: 0.6rem"></i>
-      <span class="current">{% trans "FAQ" %}</span>
-    </div>
-    <h1><i class="fas fa-question-circle"></i> {% trans "Frequently Asked" %} <span>{% trans "Questions" %}</span></h1>
+      <i class="fas fa-chevron-right" style="font-size: 0.6rem" aria-hidden="true"></i>
+      <span class="current" aria-current="page">{% trans "FAQ" %}</span>
+    </nav>
+    <h1><i class="fas fa-question-circle" aria-hidden="true"></i> {% trans "Frequently Asked" %} <span>{% trans "Questions" %}</span></h1>
     <p class="subhead">{% trans "Find quick answers to common questions about our services, documents, and charges." %}</p>
   </div>
 </section>
@@ -817,7 +818,7 @@
   <div class="container">
     <!-- Search Bar -->
     <div class="search-container" role="search">
-      <i class="fas fa-search"></i>
+      <i class="fas fa-search" aria-hidden="true"></i>
       <input
         type="text"
         id="searchInput"
@@ -826,10 +827,10 @@
         autocomplete="off"
       />
       <button type="button" class="clear-btn" id="clearSearch" aria-label="{% trans "Clear search" %}">
-        <i class="fas fa-times-circle"></i>
+        <i class="fas fa-times-circle" aria-hidden="true"></i>
       </button>
       <button type="submit" id="searchSubmit" aria-label="{% trans "Submit search" %}">
-        <i class="fas fa-arrow-right"></i>
+        <i class="fas fa-arrow-right" aria-hidden="true"></i>
       </button>
     </div>
 
@@ -837,18 +838,18 @@
     <div class="faq-list" id="faqList">
       {% for faq in faqs %}
       <details class="faq-item" data-question="{{ faq.question|lower }}" data-answer="{{ faq.answer|lower|striptags }}">
-        <summary>
+        <summary aria-expanded="false" role="button" tabindex="0">
           <span>
-            <i class="fas fa-question-circle question-icon"></i>
+            <i class="fas fa-question-circle question-icon" aria-hidden="true"></i>
             {{ faq.question }}
           </span>
-          <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
+          <span class="toggle-icon" aria-hidden="true"><i class="fas fa-chevron-down"></i></span>
         </summary>
         <div class="answer">{{ faq.answer|linebreaksbr }}</div>
       </details>
       {% empty %}
       <div class="faq-item" style="text-align: center; padding: 2rem; color: var(--text-muted, #94a3b8); border: none; box-shadow: none;">
-        <i class="fas fa-comment-slash" style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
+        <i class="fas fa-comment-slash" style="font-size: 2rem; display: block; margin-bottom: 0.5rem;" aria-hidden="true"></i>
         <p>{% trans "No FAQs have been added yet. Please check back later." %}</p>
       </div>
       {% endfor %}
@@ -856,18 +857,18 @@
 
     <!-- No Results -->
     <div class="no-results" id="noResults">
-      <i class="fas fa-search-minus"></i>
+      <i class="fas fa-search-minus" aria-hidden="true"></i>
       <p>{% trans "No questions match your search. Try a different keyword." %}</p>
     </div>
 
     <!-- Footer -->
     <div class="faq-footer">
       <span>
-        <i class="fas fa-lightbulb"></i> {% trans "Can't find what you need?" %}
+        <i class="fas fa-lightbulb" aria-hidden="true"></i> {% trans "Can't find what you need?" %}
         <a href="{% url 'contact' %}">{% trans "Contact us" %}</a>
       </span>
       <span class="badge">
-        <i class="fas fa-file-alt"></i>
+        <i class="fas fa-file-alt" aria-hidden="true"></i>
         {% blocktrans count counter=faqs|length %}
           {{ counter }} answer
         {% plural %}
@@ -879,7 +880,7 @@
 </section>
 
 <!-- ================================================================
-     PRICING CARDS
+     PRICING CARDS (DYNAMIC from ServiceCharge)
      ================================================================ -->
 <section class="pricing-section reveal">
   <div class="container">
@@ -888,45 +889,62 @@
       <p>{% trans "Get the most out of our services with these convenient packages." %}</p>
     </div>
     <div class="pricing-grid">
-      <!-- Basic -->
-      <div class="pricing-card">
-        <div class="plan-name">{% trans "Starter" %}</div>
-        <div class="price">₹99 <span>/ {% trans "session" %}</span></div>
-        <ul class="features">
-          <li><i class="fas fa-check"></i> {% trans "Printing (10 pages B&W)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Photocopy (10 pages)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Email & Internet (30 min)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Document Scanning (5 pages)" %}</li>
-        </ul>
-        <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Get Started" %}</a>
-      </div>
-      <!-- Pro (highlighted) -->
-      <div class="pricing-card" style="border-color: rgba(0, 240, 255, 0.15);">
-        <div class="plan-name">{% trans "Pro" %}</div>
-        <div class="price">₹199 <span>/ {% trans "session" %}</span></div>
-        <ul class="features">
-          <li><i class="fas fa-check"></i> {% trans "Printing (30 pages B&W / 10 color)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Photocopy (30 pages)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Email & Internet (60 min)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Document Scanning (15 pages)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Passport-size photos (4 copies)" %}</li>
-        </ul>
-        <a href="{% url 'appointment' %}" class="btn-primary pulse">{% trans "Choose Plan" %}</a>
-      </div>
-      <!-- Enterprise -->
-      <div class="pricing-card">
-        <div class="plan-name">{% trans "Enterprise" %}</div>
-        <div class="price">₹299 <span>/ {% trans "session" %}</span></div>
-        <ul class="features">
-          <li><i class="fas fa-check"></i> {% trans "Printing (50 pages B&W / 20 color)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Photocopy (50 pages)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Email & Internet (90 min)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Document Scanning (30 pages)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Passport-size photos (8 copies)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Priority support & assistance" %}</li>
-        </ul>
-        <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Go Premium" %}</a>
-      </div>
+      {% if service_charges %}
+        {# Loop through up to 3 service charges (or as many as available) #}
+        {% for charge in service_charges|slice:":3" %}
+          <div class="pricing-card {% if forloop.counter == 2 %}style="border-color: rgba(0, 240, 255, 0.15);"{% endif %}">
+            <div class="plan-name">{{ charge.service.name }}</div>
+            <div class="price">₹{{ charge.charge }} <span>/ {% trans "service" %}</span></div>
+            <ul class="features">
+              {# You can customize features per service; for now we show generic #}
+              <li><i class="fas fa-check" aria-hidden="true"></i> {% trans "Full service" %}</li>
+              <li><i class="fas fa-check" aria-hidden="true"></i> {% trans "Expert assistance" %}</li>
+              <li><i class="fas fa-check" aria-hidden="true"></i> {% trans "Quick turnaround" %}</li>
+            </ul>
+            <a href="{% url 'apply_service' charge.service.id %}" class="btn-primary {% if forloop.counter == 2 %}pulse{% endif %}">
+              {% trans "Apply Now" %}
+            </a>
+          </div>
+        {% endfor %}
+      {% else %}
+        <!-- Fallback static pricing if no service_charges in context -->
+        <div class="pricing-card">
+          <div class="plan-name">{% trans "Starter" %}</div>
+          <div class="price">₹99 <span>/ {% trans "session" %}</span></div>
+          <ul class="features">
+            <li><i class="fas fa-check" aria-hidden="true"></i> {% trans "Printing (10 pages B&W)" %}</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> {% trans "Photocopy (10 pages)" %}</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> {% trans "Email & Internet (30 min)" %}</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> {% trans "Document Scanning (5 pages)" %}</li>
+          </ul>
+          <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Get Started" %}</a>
+        </div>
+        <div class="pricing-card" style="border-color: rgba(0, 240, 255, 0.15);">
+          <div class="plan-name">{% trans "Pro" %}</div>
+          <div class="price">₹199 <span>/ {% trans "session" %}</span></div>
+          <ul class="features">
+            <li><i class="fas fa-check" aria-hidden="true"></i> {% trans "Printing (30 pages B&W / 10 color)" %}</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> {% trans "Photocopy (30 pages)" %}</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> {% trans "Email & Internet (60 min)" %}</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> {% trans "Document Scanning (15 pages)" %}</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> {% trans "Passport-size photos (4 copies)" %}</li>
+          </ul>
+          <a href="{% url 'appointment' %}" class="btn-primary pulse">{% trans "Choose Plan" %}</a>
+        </div>
+        <div class="pricing-card">
+          <div class="plan-name">{% trans "Enterprise" %}</div>
+          <div class="price">₹299 <span>/ {% trans "session" %}</span></div>
+          <ul class="features">
+            <li><i class="fas fa-check" aria-hidden="true"></i> {% trans "Printing (50 pages B&W / 20 color)" %}</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> {% trans "Photocopy (50 pages)" %}</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> {% trans "Email & Internet (90 min)" %}</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> {% trans "Document Scanning (30 pages)" %}</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> {% trans "Passport-size photos (8 copies)" %}</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> {% trans "Priority support & assistance" %}</li>
+          </ul>
+          <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Go Premium" %}</a>
+        </div>
+      {% endif %}
     </div>
   </div>
 </section>
@@ -1038,8 +1056,7 @@
       if (noResults) noResults.style.display = 'none';
     }
 
-    // ---- Details/Summary polyfill for unsupported browsers (IE, older Edge) ----
-    // Check if <details> is supported
+    // ---- Details/Summary polyfill with ARIA support ----
     var detailsSupported = (function() {
       var test = document.createElement('details');
       return typeof test.open !== 'undefined';
@@ -1055,20 +1072,59 @@
           summary.addEventListener('click', function(e) {
             var parent = this.parentNode;
             if (parent.tagName.toLowerCase() === 'details') {
-              if (parent.hasAttribute('open')) {
+              var isOpen = parent.hasAttribute('open');
+              if (isOpen) {
                 parent.removeAttribute('open');
+                this.setAttribute('aria-expanded', 'false');
               } else {
                 parent.setAttribute('open', 'open');
+                this.setAttribute('aria-expanded', 'true');
               }
               e.preventDefault();
             }
           });
+          // Set initial ARIA state
+          if (detail.hasAttribute('open')) {
+            summary.setAttribute('aria-expanded', 'true');
+          } else {
+            summary.setAttribute('aria-expanded', 'false');
+          }
+        }
+      }
+    } else {
+      // Native details: add ARIA attributes for accessibility
+      var nativeDetails = document.querySelectorAll('details');
+      for (var n = 0; n < nativeDetails.length; n++) {
+        var detail = nativeDetails[n];
+        var sum = detail.querySelector('summary');
+        if (sum) {
+          sum.setAttribute('role', 'button');
+          // Listen to toggle event to update aria-expanded
+          detail.addEventListener('toggle', function(e) {
+            var summary = this.querySelector('summary');
+            if (summary) {
+              summary.setAttribute('aria-expanded', this.open ? 'true' : 'false');
+            }
+          });
+          // Initial state
+          sum.setAttribute('aria-expanded', detail.open ? 'true' : 'false');
         }
       }
     }
 
-    // Also handle CSS for open state in fallback: we rely on attribute
-    // We already style based on [open] attribute.
+    // ---- Keyboard support for summary (Enter/Space) handled natively in modern browsers ----
+    // but we add a fallback for polyfill
+    if (!detailsSupported) {
+      var summaries = document.querySelectorAll('summary');
+      for (var s = 0; s < summaries.length; s++) {
+        summaries[s].addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            this.click();
+          }
+        });
+      }
+    }
 
   })();
 </script>

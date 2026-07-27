@@ -1,12 +1,14 @@
-{% extends "base.html" %} {% load i18n %} {% load static %} {% block title %}{%
-trans "About Us" %}{% endblock %} {% block extra_head %}
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "About Us" %}{% endblock %}
+
+{% block extra_head %}
 <!-- ============================================================
      META – viewport & compatibility (already in header, but safe)
      ============================================================ -->
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"
-/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="theme-color" content="#0a0e1a" />
 
@@ -1092,22 +1094,22 @@ trans "About Us" %}{% endblock %} {% block extra_head %}
     }
   }
 </style>
-{% endblock %} {% block content %}
+{% endblock %}
+
+{% block content %}
 <!-- ================================================================
      PAGE HERO – Futuristic cyber header
      ================================================================ -->
 <section class="page-hero">
   <div class="container">
-    <div class="breadcrumb">
+    <nav class="breadcrumb" aria-label="{% trans 'Breadcrumb' %}">
       <a href="{% url 'home' %}">{% trans "Home" %}</a>
-      <i class="fas fa-chevron-right" style="font-size: 0.6rem"></i>
-      <span class="current">{% trans "About Us" %}</span>
-    </div>
+      <i class="fas fa-chevron-right" style="font-size: 0.6rem" aria-hidden="true"></i>
+      <span class="current" aria-current="page">{% trans "About Us" %}</span>
+    </nav>
     <h1>{% trans "About" %} <span>{% trans "CyberTech" %}</span></h1>
     <p>
-      {% trans "Your trusted partner for digital services, government
-      applications, and document solutions — built on experience, integrity, and
-      customer care." %}
+      {% trans "Your trusted partner for digital services, government applications, and document solutions — built on experience, integrity, and customer care." %}
     </p>
   </div>
 </section>
@@ -1123,29 +1125,24 @@ trans "About Us" %}{% endblock %} {% block extra_head %}
         {% trans "Trusted Cyber Café &amp; Digital Service Center" %}
       </div>
       <p>
-        <strong>{{ business.business_name|default:"Matoshree" }}</strong>
-        {% trans "is a trusted cyber café and digital service center dedicated
-        to providing fast, reliable, and affordable online services. We help
-        customers with government applications, printing, scanning, document
-        services, and various digital solutions under one roof." %}
+        <strong>{{ business.business_name|default:_("Matoshree") }}</strong>
+        {% trans "is a trusted cyber café and digital service center dedicated to providing fast, reliable, and affordable online services. We help customers with government applications, printing, scanning, document services, and various digital solutions under one roof." %}
       </p>
       <p>
-        {% trans "Our mission is to bridge the digital divide by making
-        essential online services accessible to everyone — from students and job
-        seekers to business owners and senior citizens." %}
+        {% trans "Our mission is to bridge the digital divide by making essential online services accessible to everyone — from students and job seekers to business owners and senior citizens." %}
       </p>
     </div>
     <div class="about-intro-stats">
-      <div class="stat-box">
-        <span class="number">8+</span>
+      <div class="stat-box" role="article" aria-label="{% trans 'Years of Excellence' %}">
+        <span class="number" aria-hidden="true">8+</span>
         <span class="label">{% trans "Years of Excellence" %}</span>
       </div>
-      <div class="stat-box">
-        <span class="number">500+</span>
+      <div class="stat-box" role="article" aria-label="{% trans 'Happy Customers' %}">
+        <span class="number" aria-hidden="true">500+</span>
         <span class="label">{% trans "Happy Customers" %}</span>
       </div>
-      <div class="stat-box">
-        <span class="number">50+</span>
+      <div class="stat-box" role="article" aria-label="{% trans 'Services Offered' %}">
+        <span class="number" aria-hidden="true">50+</span>
         <span class="label">{% trans "Services Offered" %}</span>
       </div>
     </div>
@@ -1159,36 +1156,25 @@ trans "About Us" %}{% endblock %} {% block extra_head %}
   <div class="container">
     <div class="experience-content">
       <div class="exp-badge">
-        <i class="fas fa-award" style="margin-right: 6px"></i> {% trans "8+
-        Years of Experience" %}
+        <i class="fas fa-award" style="margin-right: 6px" aria-hidden="true"></i>
+        {% trans "8+ Years of Experience" %}
       </div>
       <h2>
-        {% trans "Decades of" %} <span>{% trans "Digital Service" %}</span> {%
-        trans "Excellence" %}
+        {% trans "Decades of" %} <span>{% trans "Digital Service" %}</span> {% trans "Excellence" %}
       </h2>
       <p>
-        {% trans "We have over 8 years of experience in providing digital and
-        online services. Our experienced staff ensures every service is
-        completed accurately and efficiently. From government form submissions
-        to document processing, we've handled thousands of applications with
-        precision." %}
+        {% trans "We have over 8 years of experience in providing digital and online services. Our experienced staff ensures every service is completed accurately and efficiently. From government form submissions to document processing, we've handled thousands of applications with precision." %}
       </p>
       <p>
-        {% trans "Our team stays updated with the latest government portals,
-        application procedures, and digital tools to ensure you get the best
-        possible service every time." %}
+        {% trans "Our team stays updated with the latest government portals, application procedures, and digital tools to ensure you get the best possible service every time." %}
       </p>
-      <div class="highlight-text">
-        <i
-          class="fas fa-check-circle"
-          style="color: var(--neon-cyan, #00f0ff); margin-right: 10px"
-        ></i>
-        {% trans "We combine technical expertise with a customer-first approach
-        to deliver results you can count on." %}
+      <div class="highlight-text" role="note">
+        <i class="fas fa-check-circle" style="color: var(--neon-cyan, #00f0ff); margin-right: 10px" aria-hidden="true"></i>
+        {% trans "We combine technical expertise with a customer-first approach to deliver results you can count on." %}
       </div>
     </div>
-    <div class="experience-image">
-      <div class="big-icon"><i class="fas fa-users-cog"></i></div>
+    <div class="experience-image" role="img" aria-label="{% trans 'Your Trusted Digital Partner' %}">
+      <div class="big-icon" aria-hidden="true"><i class="fas fa-users-cog"></i></div>
       <h3>{% trans "Your Trusted Digital Partner" %}</h3>
       <p>{% trans "Reliable · Fast · Transparent · Secure" %}</p>
     </div>
@@ -1202,28 +1188,20 @@ trans "About Us" %}{% endblock %} {% block extra_head %}
   <div class="container">
     <div class="section-header">
       <h2>
-        {% trans "Our" %} <span>{% trans "Complete" %}</span> {% trans "Service
-        List" %}
+        {% trans "Our" %} <span>{% trans "Complete" %}</span> {% trans "Service List" %}
       </h2>
       <p>
-        {% trans "Everything you need, all under one roof — from government
-        applications to document services." %}
+        {% trans "Everything you need, all under one roof — from government applications to document services." %}
       </p>
     </div>
     <div class="services-grid-about">
       {% for service in services %}
-      <div class="service-about-item">
-        <i class="fas fa-{{ service.icon|default:'cog' }}"></i>
+      <div class="service-about-item" role="listitem">
+        <i class="fas fa-{{ service.icon|default:'cog' }}" aria-hidden="true"></i>
         <span>{{ service.name }}</span>
       </div>
       {% empty %}
-      <p
-        style="
-          grid-column: 1 / -1;
-          text-align: center;
-          color: var(--text-muted, #94a3b8);
-        "
-      >
+      <p style="grid-column: 1 / -1; text-align: center; color: var(--text-muted, #94a3b8);">
         {% trans "No services available at the moment." %}
       </p>
       {% endfor %}
@@ -1239,57 +1217,50 @@ trans "About Us" %}{% endblock %} {% block extra_head %}
     <div class="section-header">
       <h2>{% trans "Why" %} <span>{% trans "Trust Us" %}</span></h2>
       <p>
-        {% trans "We are committed to providing honest, secure, and
-        customer-friendly services." %}
+        {% trans "We are committed to providing honest, secure, and customer-friendly services." %}
       </p>
     </div>
     <div class="trust-grid">
-      <div class="trust-card">
-        <div class="icon"><i class="fas fa-user-tie"></i></div>
+      <div class="trust-card" role="article" aria-label="{% trans 'Experienced Staff' %}">
+        <div class="icon" aria-hidden="true"><i class="fas fa-user-tie"></i></div>
         <h4>{% trans "Experienced Staff" %}</h4>
         <p>
-          {% trans "Our team has deep knowledge of government portals and
-          digital tools to handle every application with care." %}
+          {% trans "Our team has deep knowledge of government portals and digital tools to handle every application with care." %}
         </p>
       </div>
-      <div class="trust-card">
-        <div class="icon"><i class="fas fa-bolt"></i></div>
+      <div class="trust-card" role="article" aria-label="{% trans 'Fast &amp; Accurate Service' %}">
+        <div class="icon" aria-hidden="true"><i class="fas fa-bolt"></i></div>
         <h4>{% trans "Fast &amp; Accurate Service" %}</h4>
         <p>
-          {% trans "We value your time. Our processes are optimized for speed
-          without compromising on accuracy or quality." %}
+          {% trans "We value your time. Our processes are optimized for speed without compromising on accuracy or quality." %}
         </p>
       </div>
-      <div class="trust-card">
-        <div class="icon"><i class="fas fa-tag"></i></div>
+      <div class="trust-card" role="article" aria-label="{% trans 'Transparent Pricing' %}">
+        <div class="icon" aria-hidden="true"><i class="fas fa-tag"></i></div>
         <h4>{% trans "Transparent Pricing" %}</h4>
         <p>
-          {% trans "No hidden charges, no surprise fees. We believe in clear,
-          upfront pricing so you know exactly what to expect." %}
+          {% trans "No hidden charges, no surprise fees. We believe in clear, upfront pricing so you know exactly what to expect." %}
         </p>
       </div>
-      <div class="trust-card">
-        <div class="icon"><i class="fas fa-smile"></i></div>
+      <div class="trust-card" role="article" aria-label="{% trans 'Customer Satisfaction' %}">
+        <div class="icon" aria-hidden="true"><i class="fas fa-smile"></i></div>
         <h4>{% trans "Customer Satisfaction" %}</h4>
         <p>
-          {% trans "Your happiness is our priority. We go the extra mile to
-          ensure every customer walks away satisfied." %}
+          {% trans "Your happiness is our priority. We go the extra mile to ensure every customer walks away satisfied." %}
         </p>
       </div>
-      <div class="trust-card">
-        <div class="icon"><i class="fas fa-lock"></i></div>
+      <div class="trust-card" role="article" aria-label="{% trans 'Data Privacy &amp; Security' %}">
+        <div class="icon" aria-hidden="true"><i class="fas fa-lock"></i></div>
         <h4>{% trans "Data Privacy &amp; Security" %}</h4>
         <p>
-          {% trans "We treat your personal information with the utmost
-          confidentiality. Your data is safe with us." %}
+          {% trans "We treat your personal information with the utmost confidentiality. Your data is safe with us." %}
         </p>
       </div>
-      <div class="trust-card">
-        <div class="icon"><i class="fas fa-headset"></i></div>
+      <div class="trust-card" role="article" aria-label="{% trans 'Friendly Customer Support' %}">
+        <div class="icon" aria-hidden="true"><i class="fas fa-headset"></i></div>
         <h4>{% trans "Friendly Customer Support" %}</h4>
         <p>
-          {% trans "From the moment you walk in to the completion of your
-          service, we offer warm, helpful support at every step." %}
+          {% trans "From the moment you walk in to the completion of your service, we offer warm, helpful support at every step." %}
         </p>
       </div>
     </div>
@@ -1302,8 +1273,8 @@ trans "About Us" %}{% endblock %} {% block extra_head %}
 {% if business %}
 <section class="authorized">
   <div class="container">
-    <div class="authorized-badge">
-      <div class="badge-icon"><i class="fas fa-certificate"></i></div>
+    <div class="authorized-badge" role="note" aria-label="{% trans 'Authorized Service Provider' %}">
+      <div class="badge-icon" aria-hidden="true"><i class="fas fa-certificate"></i></div>
       <h3>
         {% trans "Authorized" %} <span>{% trans "Service Provider" %}</span>
       </h3>
@@ -1313,20 +1284,22 @@ trans "About Us" %}{% endblock %} {% block extra_head %}
       <div class="auth-list">
         {% if business.registration_number %}
         <div class="item">
-          <i class="fas fa-check-circle"></i>
+          <i class="fas fa-check-circle" aria-hidden="true"></i>
           {% trans "Registration No.:" %} {{ business.registration_number }}
         </div>
-        {% endif %} {% if certifications %} {% for cert in certifications %}
-        <div class="item">
-          <i class="fas fa-check-circle"></i>
-          {{ cert }}
-        </div>
-        {% endfor %} {% endif %}
+        {% endif %}
+        {% if certifications %}
+          {% for cert in certifications %}
+          <div class="item">
+            <i class="fas fa-check-circle" aria-hidden="true"></i>
+            {{ cert }}
+          </div>
+          {% endfor %}
+        {% endif %}
       </div>
       <div class="note">
-        <i class="fas fa-info-circle"></i>
-        {% trans "This section is displayed only when official authorization is
-        valid and verifiable." %}
+        <i class="fas fa-info-circle" aria-hidden="true"></i>
+        {% trans "This section is displayed only when official authorization is valid and verifiable." %}
       </div>
     </div>
   </div>
@@ -1344,23 +1317,27 @@ trans "About Us" %}{% endblock %} {% block extra_head %}
     </div>
     <div class="team-grid">
       {% for member in team_members|slice:":6" %}
-      <div class="team-card">
+      <div class="team-card" role="article" aria-label="{{ member.name }} - {{ member.designation }}">
         {% if member.photo %}
         <img src="{{ member.photo.url }}" alt="{{ member.name }}" loading="lazy" />
         {% else %}
-        <div class="team-placeholder"><i class="fas fa-user-circle"></i></div>
+        <div class="team-placeholder" aria-hidden="true"><i class="fas fa-user-circle"></i></div>
         {% endif %}
         <h3>{{ member.name }}</h3>
         <p class="designation">{{ member.designation }}</p>
         <p class="bio">{{ member.bio|truncatechars:80 }}</p>
       </div>
       {% empty %}
-      <p class="no-data">{% trans "No team members listed yet." %}</p>
+      <p class="no-data" style="grid-column: 1 / -1; text-align: center; color: var(--text-muted);">
+        {% trans "No team members listed yet." %}
+      </p>
       {% endfor %}
     </div>
     {% if team_members|length > 6 %}
     <div class="text-center mt-4">
-      <a href="{% url 'team' %}" class="btn-primary">{% trans "View Full Team" %} <i class="fas fa-arrow-right"></i></a>
+      <a href="{% url 'team' %}" class="btn-primary" aria-label="{% trans 'View full team' %}">
+        {% trans "View Full Team" %} <i class="fas fa-arrow-right" aria-hidden="true"></i>
+      </a>
     </div>
     {% endif %}
   </div>
@@ -1372,24 +1349,18 @@ trans "About Us" %}{% endblock %} {% block extra_head %}
 <section class="cta-banner">
   <div class="container">
     <h2>
-      {% trans "Ready to" %} <span>{% trans "Experience" %}</span> {% trans "the
-      Difference?" %}
+      {% trans "Ready to" %} <span>{% trans "Experience" %}</span> {% trans "the Difference?" %}
     </h2>
     <p>
-      {% trans "Visit us today or reach out to get started with any of our
-      services." %}
+      {% trans "Visit us today or reach out to get started with any of our services." %}
     </p>
     <div class="cta-buttons">
-      <a href="{% url 'home' %}#contact" class="btn-primary">
-        <i class="fas fa-phone"></i> {% trans "Contact Us" %}
+      <a href="{% url 'home' %}#contact" class="btn-primary" aria-label="{% trans 'Contact us' %}">
+        <i class="fas fa-phone" aria-hidden="true"></i> {% trans "Contact Us" %}
       </a>
-      <a
-        href="https://wa.me/919876543210?text=Hello%2C%20I%20would%20like%20to%20know%20more%20about%20your%20services."
-        target="_blank"
-        rel="noopener noreferrer"
-        class="btn-whatsapp"
-      >
-        <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
+      <a href="https://wa.me/919876543210?text=Hello%2C%20I%20would%20like%20to%20know%20more%20about%20your%20services."
+         target="_blank" rel="noopener noreferrer" class="btn-whatsapp" aria-label="{% trans 'Chat on WhatsApp' %}">
+        <i class="fab fa-whatsapp" aria-hidden="true"></i> {% trans "Chat on WhatsApp" %}
       </a>
     </div>
   </div>
@@ -1399,17 +1370,18 @@ trans "About Us" %}{% endblock %} {% block extra_head %}
 <section class="developer-credit" style="padding: 40px 0; background: var(--bg-secondary);">
   <div class="container" style="text-align: center; max-width: 700px;">
     <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--text-white);">
-      <i class="fas fa-code" style="color: var(--neon-cyan);"></i>
-      About the Developer
+      <i class="fas fa-code" style="color: var(--neon-cyan);" aria-hidden="true"></i>
+      {% trans "About the Developer" %}
     </h3>
     <p style="color: var(--text-muted); font-size: 1rem; line-height: 1.7;">
+      {% blocktrans with portfolio_url="https://devjayesh-portfolio.netlify.app/" linkedin_url="https://www.linkedin.com/in/jayesh-kalkate-31a250242/" %}
       This website was built by <strong>Jayesh Kalkate</strong>, a passionate full-stack developer.
       You can explore more of his work on his
-      <a href="https://devjayesh-portfolio.netlify.app/" target="_blank" rel="noopener noreferrer" style="color: var(--neon-cyan);">portfolio</a>
+      <a href="{{ portfolio_url }}" target="_blank" rel="noopener noreferrer" style="color: var(--neon-cyan);">portfolio</a>
       or connect with him on
-      <a href="https://www.linkedin.com/in/jayesh-kalkate-31a250242/" target="_blank" rel="noopener noreferrer" style="color: var(--neon-cyan);">LinkedIn</a>.
+      <a href="{{ linkedin_url }}" target="_blank" rel="noopener noreferrer" style="color: var(--neon-cyan);">LinkedIn</a>.
+      {% endblocktrans %}
     </p>
   </div>
 </section>
-
 {% endblock %}

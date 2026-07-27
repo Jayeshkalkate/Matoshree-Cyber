@@ -488,47 +488,63 @@
     min-height: 80px;
   }
 
-  /* Star Select */
+  /* ---- Star Select (radio + label progressive enhancement) ---- */
   .star-select {
     display: flex;
-    gap: 6px;
-    align-items: center;
-    padding: 4px 0;
     flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 0;
   }
-  .star-select .star-option {
-    font-size: clamp(1.6rem, 3vw, 2rem);
+  .star-select .star-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+  .star-select .star-label {
+    font-size: clamp(1.8rem, 3.5vw, 2.2rem);
     cursor: pointer;
     color: var(--text-muted, #94a3b8);
-    transition: all 0.3s ease;
-    background: none;
-    border: none;
-    padding: 0 2px;
-    font-family: var(--font-body, "Inter", sans-serif);
-    line-height: 1;
-    opacity: 0.3;
-    touch-action: manipulation;
-    min-width: 44px;
-    min-height: 44px;
+    transition: all 0.2s ease;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    opacity: 0.35;
+    background: transparent;
+    border: 2px solid transparent;
+    line-height: 1;
+    touch-action: manipulation;
+    user-select: none;
   }
-  .star-select .star-option:hover,
-  .star-select .star-option.active {
+  .star-select .star-label:hover,
+  .star-select .star-label:hover ~ .star-label {
     color: var(--neon-yellow, #ffe600);
-    transform: scale(1.15);
-    text-shadow: 0 0 20px rgba(255, 230, 0, 0.3);
     opacity: 1;
   }
-  .star-select .star-option:hover ~ .star-option {
-    opacity: 0.3;
+  .star-select .star-input:checked + .star-label {
+    color: var(--neon-yellow, #ffe600);
+    opacity: 1;
   }
-  .star-select .star-label {
-    font-size: clamp(0.85rem, 1vw, 0.9rem);
+  .star-select .star-input:checked + .star-label ~ .star-label {
     color: var(--text-muted, #94a3b8);
-    margin-left: 6px;
+    opacity: 0.35;
+  }
+  .star-select .star-input:focus-visible + .star-label {
+    outline: 2px solid var(--neon-cyan);
+    outline-offset: 2px;
+  }
+  /* Rating text label (with JS enhancement) */
+  .star-select .star-rating-label {
+    font-size: clamp(0.9rem, 1.1vw, 1rem);
+    color: var(--text-muted, #94a3b8);
+    margin-left: 8px;
     font-weight: 500;
+    min-width: 80px;
   }
 
   .btn-submit {
@@ -820,6 +836,11 @@
     .footer-note .badge {
       white-space: normal;
     }
+    .star-select .star-label {
+      width: 38px;
+      height: 38px;
+      font-size: 1.6rem;
+    }
   }
 
   @media (max-width: 480px) {
@@ -838,10 +859,14 @@
     .review-card .review-text {
       font-size: clamp(0.85rem, 2vw, 0.9rem);
     }
-    .star-select .star-option {
-      font-size: clamp(1.4rem, 4vw, 1.6rem);
-      min-width: 36px;
-      min-height: 36px;
+    .star-select .star-label {
+      width: 34px;
+      height: 34px;
+      font-size: 1.4rem;
+    }
+    .star-select .star-rating-label {
+      font-size: 0.85rem;
+      min-width: 60px;
     }
     .sort-btn {
       font-size: 0.7rem;
@@ -879,10 +904,10 @@
       font-size: 0.85rem;
       padding: 0.6rem;
     }
-    .star-select .star-option {
+    .star-select .star-label {
+      width: 30px;
+      height: 30px;
       font-size: 1.2rem;
-      min-width: 32px;
-      min-height: 32px;
     }
   }
 
@@ -950,12 +975,9 @@
     .star-select {
       display: inline-block;
     }
-    .star-select .star-option {
-      display: inline-block;
-    }
     .star-select .star-label {
       display: inline-block;
-      margin-left: 10px;
+      margin: 0 2px;
     }
   }
 
@@ -1061,7 +1083,7 @@
       color: var(--text-muted, #94a3b8);
       box-shadow: none;
     }
-    .star-select .star-option {
+    .star-select .star-label {
       min-width: 48px;
       min-height: 48px;
     }
@@ -1186,6 +1208,9 @@
     .footer-note .badge {
       border: 1px solid #000 !important;
     }
+    .star-select .star-label {
+      color: #000 !important;
+    }
   }
 </style>
 {% endblock %}
@@ -1257,12 +1282,12 @@
             {% endfor %}
           {% endwith %}
         {% else %}
-          <!-- Fallback static bars -->
-          <div class="rating-bar-row"><span class="star-label">5 ★</span><div class="bar-track"><div class="bar-fill" style="width: 78%"></div></div><span class="bar-percent">78%</span></div>
-          <div class="rating-bar-row"><span class="star-label">4 ★</span><div class="bar-track"><div class="bar-fill" style="width: 15%"></div></div><span class="bar-percent">15%</span></div>
-          <div class="rating-bar-row"><span class="star-label">3 ★</span><div class="bar-track"><div class="bar-fill" style="width: 5%"></div></div><span class="bar-percent">5%</span></div>
-          <div class="rating-bar-row"><span class="star-label">2 ★</span><div class="bar-track"><div class="bar-fill" style="width: 1.5%"></div></div><span class="bar-percent">1.5%</span></div>
-          <div class="rating-bar-row"><span class="star-label">1 ★</span><div class="bar-track"><div class="bar-fill" style="width: 0.5%"></div></div><span class="bar-percent">0.5%</span></div>
+          <!-- Fallback static bars (only shown if no reviews) -->
+          <div class="rating-bar-row"><span class="star-label">5 ★</span><div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div><span class="bar-percent">0%</span></div>
+          <div class="rating-bar-row"><span class="star-label">4 ★</span><div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div><span class="bar-percent">0%</span></div>
+          <div class="rating-bar-row"><span class="star-label">3 ★</span><div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div><span class="bar-percent">0%</span></div>
+          <div class="rating-bar-row"><span class="star-label">2 ★</span><div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div><span class="bar-percent">0%</span></div>
+          <div class="rating-bar-row"><span class="star-label">1 ★</span><div class="bar-track"><div class="bar-fill" style="width: 0%"></div></div><span class="bar-percent">0%</span></div>
         {% endif %}
       </div>
     </div>
@@ -1373,15 +1398,14 @@
 
         <div class="full-width">
           <label>{% trans "Rating" %} <span class="required">*</span></label>
-          <div class="star-select" id="starSelect">
-            <button type="button" class="star-option" data-value="1">★</button>
-            <button type="button" class="star-option" data-value="2">★</button>
-            <button type="button" class="star-option" data-value="3">★</button>
-            <button type="button" class="star-option" data-value="4">★</button>
-            <button type="button" class="star-option" data-value="5">★</button>
-            <span class="star-label" id="starLabel">{% trans "Select a rating" %}</span>
+          <!-- Star selection with radio fallback -->
+          <div class="star-select" id="starSelect" role="radiogroup" aria-label="{% trans 'Rating' %}">
+            {% for value in "12345"|make_list %}
+              <input type="radio" name="rating" id="star_{{ value }}" value="{{ value }}" class="star-input" required />
+              <label for="star_{{ value }}" class="star-label" role="radio" aria-checked="false" tabindex="0">★</label>
+            {% endfor %}
+            <span class="star-rating-label" id="starLabel">{% trans "Select a rating" %}</span>
           </div>
-          <input type="hidden" name="rating" id="ratingValue" value="" />
         </div>
 
         <div class="full-width">
@@ -1431,30 +1455,45 @@
   (function() {
     "use strict";
 
-    // ---- Star selection ----
-    var starOptions = document.querySelectorAll('.star-option');
+    // ---- Star rating: enhance radio inputs with dynamic label text ----
+    var starRadios = document.querySelectorAll('.star-input');
     var starLabel = document.getElementById('starLabel');
-    var ratingInput = document.getElementById('ratingValue');
     var ratingLabels = ["", "{% trans "Terrible" %}", "{% trans "Poor" %}", "{% trans "Average" %}", "{% trans "Good" %}", "{% trans "Excellent" %}"];
 
-    for (var i = 0; i < starOptions.length; i++) {
-      starOptions[i].addEventListener('click', function() {
-        var val = parseInt(this.dataset.value);
-        for (var j = 0; j < starOptions.length; j++) {
-          starOptions[j].classList.remove('active');
-        }
-        this.classList.add('active');
+    // Update label text when a radio is checked
+    function updateStarLabel() {
+      var checked = document.querySelector('.star-input:checked');
+      if (checked) {
+        var val = parseInt(checked.value);
         starLabel.textContent = ratingLabels[val] || '{% trans "Select a rating" %}';
-        ratingInput.value = val;
-      });
+        // Update aria-checked for accessibility
+        document.querySelectorAll('.star-label').forEach(function(label) {
+          var forId = label.getAttribute('for');
+          var radio = document.getElementById(forId);
+          if (radio) {
+            label.setAttribute('aria-checked', radio.checked ? 'true' : 'false');
+          }
+        });
+      } else {
+        starLabel.textContent = '{% trans "Select a rating" %}';
+      }
     }
+
+    // Listen to change events on radio inputs
+    starRadios.forEach(function(radio) {
+      radio.addEventListener('change', updateStarLabel);
+      // Also handle keyboard/click on labels – change event will fire
+    });
+
+    // Initial sync: if a radio is pre-checked (unlikely), update label
+    updateStarLabel();
 
     // ---- Form validation (client-side) ----
     var form = document.getElementById('reviewForm');
     form.addEventListener('submit', function(e) {
       var name = document.getElementById('id_customer_name').value.trim();
       var email = document.getElementById('id_email').value.trim();
-      var rating = document.getElementById('ratingValue').value;
+      var rating = document.querySelector('.star-input:checked');
       var comment = document.getElementById('id_review').value.trim();
 
       var errors = [];

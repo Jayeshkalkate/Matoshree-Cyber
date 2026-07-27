@@ -4,6 +4,8 @@
 
 {% block title %}{% trans "Our Services" %}{% endblock %}
 
+{% block meta_description %}{% trans "Explore our full range of digital services – from government applications to document processing, all under one roof." %}{% endblock %}
+
 {% block extra_head %}
 <style>
   /* ================================================================
@@ -37,6 +39,29 @@
     position: relative;
     z-index: 1;
   }
+
+  /* Breadcrumb (added for consistency) */
+  .page-hero .breadcrumb {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 16px;
+    letter-spacing: 0.3px;
+  }
+  .page-hero .breadcrumb a {
+    color: var(--text-muted);
+    transition: var(--transition);
+  }
+  .page-hero .breadcrumb a:hover {
+    color: var(--neon-cyan);
+  }
+  .page-hero .breadcrumb .current {
+    color: var(--neon-cyan);
+  }
+
   .page-hero h1 {
     font-size: 3rem;
     font-weight: 900;
@@ -222,6 +247,12 @@
      ================================================================ -->
 <section class="page-hero">
   <div class="container">
+    <!-- Breadcrumb for consistency -->
+    <div class="breadcrumb">
+      <a href="{% url 'home' %}"><i class="fas fa-home"></i> {% trans "Home" %}</a>
+      <i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5;"></i>
+      <span class="current">{% trans "Our Services" %}</span>
+    </div>
     <h1>{% trans "Our" %} <span>{% trans "Services" %}</span></h1>
     <div class="sub">
       {% trans "Explore the full range of digital services we offer — from government applications to document processing, all under one roof." %}
@@ -256,7 +287,7 @@
       {% endfor %}
     </div>
 
-    <!-- Pagination Controls (corrected) -->
+    <!-- Pagination Controls -->
     {% if services.has_other_pages %}
     <div class="pagination-wrap">
       {% if services.has_previous %}

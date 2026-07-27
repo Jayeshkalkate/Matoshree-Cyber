@@ -1,12 +1,14 @@
-{% extends "base.html" %} {% load i18n %} {% load static %} {% block title %}{%
-trans "Contact Us" %}{% endblock %} {% block extra_head %}
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Contact Us" %}{% endblock %}
+
+{% block extra_head %}
 <!-- ============================================================
      META – viewport & compatibility
      ============================================================ -->
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"
-/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
 <style>
@@ -426,7 +428,7 @@ trans "Contact Us" %}{% endblock %} {% block extra_head %}
     line-height: 1.8;
   }
 
-  /* ---- Map Block ---- */
+  /* ---- Map Block (secure) ---- */
   .map-block {
     border-radius: var(--radius, 12px);
     overflow: hidden;
@@ -467,6 +469,9 @@ trans "Contact Us" %}{% endblock %} {% block extra_head %}
     margin-right: 8px;
     opacity: 0.4;
     flex-shrink: 0;
+  }
+  .map-block .map-placeholder .error-icon {
+    color: var(--neon-orange, #f97316);
   }
 
   /* ---- CTA Banner (reuses base styles) ---- */
@@ -832,28 +837,22 @@ trans "Contact Us" %}{% endblock %} {% block extra_head %}
     }
   }
 </style>
-{% endblock %} {% block content %}
+{% endblock %}
+
+{% block content %}
 <!-- ================================================================
      PAGE HERO
      ================================================================ -->
 <section class="page-hero">
   <div class="container">
-    <div class="breadcrumb">
-      <a href="{% url 'home' %}"
-        ><i class="fas fa-home"></i> {% trans "Home" %}</a
-      >
-      <span
-        ><i
-          class="fas fa-chevron-right"
-          style="font-size: 0.6rem; opacity: 0.5"
-        ></i
-      ></span>
-      <span class="current">{% trans "Contact Us" %}</span>
-    </div>
+    <nav class="breadcrumb" aria-label="{% trans 'Breadcrumb' %}">
+      <a href="{% url 'home' %}"><i class="fas fa-home" aria-hidden="true"></i> {% trans "Home" %}</a>
+      <span><i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5" aria-hidden="true"></i></span>
+      <span class="current" aria-current="page">{% trans "Contact Us" %}</span>
+    </nav>
     <h1>{% trans "Get in" %} <span>{% trans "Touch" %}</span></h1>
     <p>
-      {% trans "We're here to help. Send us a message and we'll get back to you
-      promptly." %}
+      {% trans "We're here to help. Send us a message and we'll get back to you promptly." %}
     </p>
     <div class="glow-line"></div>
   </div>
@@ -867,73 +866,53 @@ trans "Contact Us" %}{% endblock %} {% block extra_head %}
     <div class="contact-grid">
       <!-- Left: Form -->
       <div class="contact-form-wrapper">
-        <h2><i class="fas fa-paper-plane"></i> {% trans "Send a Message" %}</h2>
+        <h2><i class="fas fa-paper-plane" aria-hidden="true"></i> {% trans "Send a Message" %}</h2>
 
-        <form
-          class="contact-form"
-          method="post"
-          action="{% url 'contact' %}"
-          novalidate
-        >
+        <form class="contact-form" method="post" action="{% url 'contact' %}" novalidate>
           {% csrf_token %}
 
           <div class="form-group">
-            <label for="{{ form.name.id_for_label }}"
-              >{{ form.name.label }} <span class="required">*</span></label
-            >
-            {{ form.name }} {% if form.name.errors %}
-            <ul class="errorlist">
-              {{ form.name.errors }}
-            </ul>
+            <label for="{{ form.name.id_for_label }}">{{ form.name.label }} <span class="required">*</span></label>
+            {{ form.name }}
+            {% if form.name.errors %}
+            <ul class="errorlist">{{ form.name.errors }}</ul>
             {% endif %}
           </div>
 
           <div class="form-group">
-            <label for="{{ form.email.id_for_label }}"
-              >{{ form.email.label }} <span class="required">*</span></label
-            >
-            {{ form.email }} {% if form.email.errors %}
-            <ul class="errorlist">
-              {{ form.email.errors }}
-            </ul>
+            <label for="{{ form.email.id_for_label }}">{{ form.email.label }} <span class="required">*</span></label>
+            {{ form.email }}
+            {% if form.email.errors %}
+            <ul class="errorlist">{{ form.email.errors }}</ul>
             {% endif %}
           </div>
 
           <div class="form-group">
-            <label for="{{ form.phone.id_for_label }}"
-              >{{ form.phone.label }} <span class="required">*</span></label
-            >
-            {{ form.phone }} {% if form.phone.errors %}
-            <ul class="errorlist">
-              {{ form.phone.errors }}
-            </ul>
+            <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }} <span class="required">*</span></label>
+            {{ form.phone }}
+            {% if form.phone.errors %}
+            <ul class="errorlist">{{ form.phone.errors }}</ul>
             {% endif %}
           </div>
 
           <div class="form-group">
-            <label for="{{ form.subject.id_for_label }}"
-              >{{ form.subject.label }} <span class="required">*</span></label
-            >
-            {{ form.subject }} {% if form.subject.errors %}
-            <ul class="errorlist">
-              {{ form.subject.errors }}
-            </ul>
+            <label for="{{ form.subject.id_for_label }}">{{ form.subject.label }} <span class="required">*</span></label>
+            {{ form.subject }}
+            {% if form.subject.errors %}
+            <ul class="errorlist">{{ form.subject.errors }}</ul>
             {% endif %}
           </div>
 
           <div class="form-group">
-            <label for="{{ form.message.id_for_label }}"
-              >{{ form.message.label }} <span class="required">*</span></label
-            >
-            {{ form.message }} {% if form.message.errors %}
-            <ul class="errorlist">
-              {{ form.message.errors }}
-            </ul>
+            <label for="{{ form.message.id_for_label }}">{{ form.message.label }} <span class="required">*</span></label>
+            {{ form.message }}
+            {% if form.message.errors %}
+            <ul class="errorlist">{{ form.message.errors }}</ul>
             {% endif %}
           </div>
 
           <button type="submit" class="btn-submit">
-            <i class="fas fa-paper-plane"></i> {% trans "Send Message" %}
+            <i class="fas fa-paper-plane" aria-hidden="true"></i> {% trans "Send Message" %}
           </button>
         </form>
       </div>
@@ -942,7 +921,7 @@ trans "Contact Us" %}{% endblock %} {% block extra_head %}
       <div class="contact-info">
         <!-- Address -->
         <div class="info-block">
-          <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
+          <div class="icon"><i class="fas fa-map-marker-alt" aria-hidden="true"></i></div>
           <div class="content">
             <h4>{% trans "Address" %}</h4>
             <p>{{ business.address|default:_("Not provided")|linebreaksbr }}</p>
@@ -951,28 +930,22 @@ trans "Contact Us" %}{% endblock %} {% block extra_head %}
 
         <!-- Phone -->
         <div class="info-block">
-          <div class="icon"><i class="fas fa-phone-alt"></i></div>
+          <div class="icon"><i class="fas fa-phone-alt" aria-hidden="true"></i></div>
           <div class="content">
             <h4>{% trans "Phone" %}</h4>
-            <a href="tel:{{ business.phone }}"
-              >{{ business.phone|default:_("Not provided") }}</a
-            >
+            <a href="tel:{{ business.phone }}">{{ business.phone|default:_("Not provided") }}</a>
           </div>
         </div>
 
         <!-- WhatsApp -->
         {% if business.whatsapp %}
         <div class="info-block">
-          <div class="icon"><i class="fab fa-whatsapp"></i></div>
+          <div class="icon"><i class="fab fa-whatsapp" aria-hidden="true"></i></div>
           <div class="content">
             <h4>{% trans "WhatsApp" %}</h4>
-            <a
-              href="https://wa.me/{{ business.whatsapp|cut:'+' }}?text={% trans 'Hello, I would like to know about your services.' %}"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="whatsapp-link"
-            >
-              <i class="fab fa-whatsapp"></i> {% trans "Chat with Us" %}
+            <a href="https://wa.me/{{ business.whatsapp|cut:'+' }}?text={% trans 'Hello, I would like to know about your services.' %}"
+               target="_blank" rel="noopener noreferrer" class="whatsapp-link">
+              <i class="fab fa-whatsapp" aria-hidden="true"></i> {% trans "Chat with Us" %}
             </a>
           </div>
         </div>
@@ -980,18 +953,16 @@ trans "Contact Us" %}{% endblock %} {% block extra_head %}
 
         <!-- Email -->
         <div class="info-block">
-          <div class="icon"><i class="fas fa-envelope"></i></div>
+          <div class="icon"><i class="fas fa-envelope" aria-hidden="true"></i></div>
           <div class="content">
             <h4>{% trans "Email" %}</h4>
-            <a href="mailto:{{ business.email }}"
-              >{{ business.email|default:_("Not provided") }}</a
-            >
+            <a href="mailto:{{ business.email }}">{{ business.email|default:_("Not provided") }}</a>
           </div>
         </div>
 
         <!-- Business Hours -->
         <div class="hours-block">
-          <h3><i class="fas fa-clock"></i> {% trans "Business Hours" %}</h3>
+          <h3><i class="fas fa-clock" aria-hidden="true"></i> {% trans "Business Hours" %}</h3>
           {% if business.business_hours %}
           <div>{{ business.business_hours|linebreaksbr }}</div>
           {% else %}
@@ -1001,13 +972,22 @@ trans "Contact Us" %}{% endblock %} {% block extra_head %}
       </div>
     </div>
 
-    <!-- Map -->
+    <!-- Map – secured: only allow iframe from google.com/maps -->
     <div class="map-block">
-      {% if business.google_map %} {{ business.google_map|safe }} {% else %}
-      <div class="map-placeholder">
-        <i class="fas fa-map-marked-alt"></i>
-        {% trans "Map location not configured." %}
-      </div>
+      {% if business.google_map %}
+        {% if "google.com/maps" in business.google_map %}
+          {{ business.google_map|safe }}
+        {% else %}
+          <div class="map-placeholder">
+            <i class="fas fa-exclamation-triangle error-icon" aria-hidden="true"></i>
+            {% trans "Invalid map source. Only Google Maps embed is allowed." %}
+          </div>
+        {% endif %}
+      {% else %}
+        <div class="map-placeholder">
+          <i class="fas fa-map-marked-alt" aria-hidden="true"></i>
+          {% trans "Map location not configured." %}
+        </div>
       {% endif %}
     </div>
   </div>
@@ -1018,36 +998,29 @@ trans "Contact Us" %}{% endblock %} {% block extra_head %}
      ================================================================ -->
 <section class="cta-banner">
   <div class="container">
-    <h2>
-      {% trans "We're just a" %} <span>{% trans "click" %}</span> {% trans
-      "away!" %}
-    </h2>
+    <h2>{% trans "We're just a" %} <span>{% trans "click" %}</span> {% trans "away!" %}</h2>
     <p>
-      {% trans "Reach out to us for any queries or to book a service. We respond
-      promptly." %}
+      {% trans "Reach out to us for any queries or to book a service. We respond promptly." %}
     </p>
     <div class="cta-buttons">
       <a href="tel:{{ business.phone }}" class="btn-primary">
-        <i class="fas fa-phone"></i> {% trans "Call Now" %}
+        <i class="fas fa-phone" aria-hidden="true"></i> {% trans "Call Now" %}
       </a>
       {% if business.whatsapp %}
-      <a
-        href="https://wa.me/{{ business.whatsapp|cut:'+' }}?text={% trans 'Hello, I would like to know about your services.' %}"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="btn-whatsapp"
-      >
-        <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
+      <a href="https://wa.me/{{ business.whatsapp|cut:'+' }}?text={% trans 'Hello, I would like to know about your services.' %}"
+         target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
+        <i class="fab fa-whatsapp" aria-hidden="true"></i> {% trans "Chat on WhatsApp" %}
       </a>
       {% endif %}
     </div>
   </div>
 </section>
-{% endblock %} {% block extra_scripts %}
+{% endblock %}
+
+{% block extra_scripts %}
 <script>
   (function () {
     "use strict";
-    // Optional: any client-side enhancements
     console.log("📞 Contact page loaded with responsive enhancements.");
   })();
 </script>

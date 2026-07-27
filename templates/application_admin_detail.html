@@ -142,6 +142,19 @@
     font-size: clamp(0.85rem, 1vw, 0.95rem);
     word-break: break-word;
   }
+  .detail-card .info-row .value ul {
+    margin: 0.2rem 0;
+    padding-left: 1.2rem;
+    list-style: none;
+  }
+  .detail-card .info-row .value ul li {
+    padding: 0.1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  }
+  .detail-card .info-row .value ul li strong {
+    color: var(--neon-cyan, #00f0ff);
+    margin-right: 0.3rem;
+  }
 
   /* ---- Status badge ---- */
   .status-badge {
@@ -246,18 +259,19 @@
     box-shadow: 0 0 40px rgba(0, 240, 255, 0.3);
   }
 
-  /* ---- Extra data ---- */
-  .extra-data-pre {
+  /* ---- Extra data (human‑readable) ---- */
+  .extra-data-list {
+    list-style: none;
+    padding: 0;
     margin: 0;
-    color: var(--text-muted, #94a3b8);
-    background: rgba(255, 255, 255, 0.04);
-    padding: 0.4rem 0.8rem;
-    border-radius: var(--radius-sm, 8px);
-    overflow-x: auto;
-    font-size: clamp(0.8rem, 0.9vw, 0.9rem);
-    max-width: 100%;
-    word-break: break-all;
-    white-space: pre-wrap;
+  }
+  .extra-data-list li {
+    padding: 0.2rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  }
+  .extra-data-list li strong {
+    color: var(--neon-cyan, #00f0ff);
+    margin-right: 0.5rem;
   }
 
   /* ---- Document list ---- */
@@ -353,6 +367,16 @@
   }
   .doc-list li .doc-actions .verified-badge i {
     margin-right: 0.15rem;
+  }
+  .doc-list li .doc-actions .btn-delete {
+    background: rgba(255, 45, 149, 0.08);
+    color: var(--neon-magenta, #ff2d95);
+    border-color: rgba(255, 45, 149, 0.1);
+  }
+  .doc-list li .doc-actions .btn-delete:hover {
+    background: var(--neon-magenta, #ff2d95);
+    color: var(--bg-primary, #0a0e1a);
+    box-shadow: 0 0 20px rgba(255, 45, 149, 0.2);
   }
 
   .no-docs {
@@ -819,12 +843,18 @@
         <span class="value">{{ application.address|linebreaksbr }}</span>
       </div>
 
-      <!-- Extra Data - SAFELY escaped (no |safe) -->
+      <!-- Extra Data – Human‑readable -->
       {% if application.extra_data %}
       <div class="info-row">
         <span class="label">{% trans "Extra Data" %}:</span>
         <div class="value">
-          <pre class="extra-data-pre">{{ application.extra_data|escape }}</pre>
+          <ul class="extra-data-list">
+            {% for key, value in application.extra_data.items %}
+              <li><strong>{{ key }}:</strong> {{ value }}</li>
+            {% empty %}
+              <li>{% trans "No extra details provided." %}</li>
+            {% endfor %}
+          </ul>
         </div>
       </div>
       {% endif %}
@@ -876,8 +906,8 @@
             <a href="{{ doc.file.url }}" download class="btn-download">
               <i class="fas fa-download"></i> {% trans "Download" %}
             </a>
-            <!-- Split -->
-            <a href="{% url 'split_pdf' doc.id %}" class="btn-view" title="{% trans 'Split PDF' %}">
+            <!-- Split PDF -->
+            <a href="{% url 'split_pdf' doc.id %}" class="btn-view" title="{% trans 'Split PDF into pages' %}">
               <i class="fas fa-cut"></i>
             </a>
             <!-- Verification toggle -->
@@ -895,7 +925,7 @@
               {% csrf_token %}
               <input type="hidden" name="action" value="delete_document">
               <input type="hidden" name="doc_id" value="{{ doc.id }}">
-              <button type="submit" class="btn-view" style="background:rgba(255,45,149,0.08); color:var(--neon-magenta); border-color:rgba(255,45,149,0.1);">
+              <button type="submit" class="btn-delete" aria-label="{% trans 'Delete document' %}">
                 <i class="fas fa-trash"></i>
               </button>
             </form>

@@ -317,6 +317,11 @@
   .btn-merge:hover i {
     color: var(--bg-primary, #0a0e1a);
   }
+  .btn-merge .external-note {
+    font-size: 0.7rem;
+    opacity: 0.6;
+    margin-left: 4px;
+  }
 
   /* ---- Submit Button ---- */
   .apply-card .btn-primary {
@@ -342,6 +347,12 @@
   .apply-card .btn-primary:hover {
     transform: translateY(-2px);
     box-shadow: 0 0 40px rgba(0, 240, 255, 0.35);
+  }
+  .apply-card .btn-primary:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
   }
 
   /* ---- Success / Payment Section ---- */
@@ -958,8 +969,8 @@
         </ul>
         <hr />
 
-        <!-- Form -->
-        <form method="post" enctype="multipart/form-data" novalidate>
+        <!-- Form with submit handling -->
+        <form method="post" enctype="multipart/form-data" novalidate onsubmit="disableSubmitButton(this)">
           {% csrf_token %}
 
           <!-- Personal Details -->
@@ -1008,9 +1019,11 @@
             {% trans "💡 You can merge your PDFs using an online tool before uploading." %}
           </p>
 
+          <!-- Merge link with external site note -->
           <a href="https://www.ilovepdf.com/" target="_blank" rel="noopener noreferrer" class="btn-merge">
             <i class="fas fa-heart" style="color: var(--neon-magenta, #ff2d95);"></i>
             {% trans "Merge PDFs with iLovePDF" %}
+            <span class="external-note">{% trans "(opens external site)" %}</span>
           </a>
           <br /><br />
 
@@ -1033,8 +1046,8 @@
           </div>
           {% endfor %}
 
-          <button type="submit" class="btn-primary">
-            <i class="fas fa-paper-plane"></i> {% trans "Submit Application" %}
+          <button type="submit" class="btn-primary" id="submitBtn">
+            <i class="fas fa-paper-plane"></i> <span id="submitText">{% trans "Submit Application" %}</span>
           </button>
         </form>
       {% endif %}
@@ -1044,14 +1057,34 @@
 {% endblock %}
 
 {% block extra_scripts %}
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js" crossorigin="anonymous" referrerpolicy="origin"></script>
 <script>
   (function() {
     "use strict";
 
-    document.addEventListener('DOMContentLoaded', function() {
+    // ----- Disable submit button on form submission (prevent double-click) -----
+    window.disableSubmitButton = function(form) {
+      var btn = document.getElementById('submitBtn');
+      if (!btn) return true;
+      // Only if button exists and isn't already disabled
+      if (btn.disabled) return false;
+      btn.disabled = true;
+      var textSpan = document.getElementById('submitText');
+      if (textSpan) {
+        textSpan.textContent = '{% trans "Submitting..." %}';
+      }
+      // Re-enable after 10 seconds in case of network failure (fallback)
+      setTimeout(function() {
+        btn.disabled = false;
+        if (textSpan) {
+          textSpan.textContent = '{% trans "Submit Application" %}';
+        }
+      }, 10000);
+      return true;
+    };
 
-      // ---- Razorpay payment ----
+    // ----- Razorpay payment -----
+    document.addEventListener('DOMContentLoaded', function() {
       var payBtn = document.getElementById('razorpay-pay-btn');
       if (!payBtn) return;
 

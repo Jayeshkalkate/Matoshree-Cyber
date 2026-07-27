@@ -7,7 +7,8 @@ import tempfile
 import logging
 from datetime import timedelta
 from io import BytesIO
-
+import time
+from .utils import get_business, get_payment_settings, is_admin, is_superadmin
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.contrib import messages
@@ -58,40 +59,6 @@ logger = logging.getLogger(__name__)
 # =============================================================================
 # HELPERS (with caching)
 # =============================================================================
-
-def get_business():
-    """Cache BusinessInfo to avoid repeated DB hits."""
-    cache_key = 'business_info'
-    business = cache.get(cache_key)
-    if business is None:
-        try:
-            business = BusinessInfo.objects.first()
-        except Exception:
-            business = None
-        cache.set(cache_key, business, 60 * 60)  # 1 hour
-    return business
-
-
-def get_payment_settings():
-    """Cache PaymentSettings to avoid repeated DB hits."""
-    cache_key = 'payment_settings'
-    settings_obj = cache.get(cache_key)
-    if settings_obj is None:
-        settings_obj = PaymentSettings.objects.filter(is_active=True).first()
-        if not settings_obj:
-            # Create a default inactive instance if none exists
-            settings_obj = PaymentSettings.objects.create(is_active=False)
-        cache.set(cache_key, settings_obj, 60 * 60)
-    return settings_obj
-
-
-def is_admin(user):
-    return user.is_authenticated and user.role in ('admin', 'superadmin')
-
-
-def is_superadmin(user):
-    return user.is_authenticated and user.role == 'superadmin'
-
 
 def send_admin_notification(subject, message, recipient_list=None):
     """Send email to admin(s)."""
@@ -262,22 +229,23 @@ def _get_dashboard_common_data():
     else:
         data = {
             'services': Service.objects.all().only('id', 'name', 'category', 'active', 'icon', 'icon_color'),
+            # Limit large tables to recent 100 to avoid memory issues
             'appointments': Appointment.objects.select_related('service').only(
                 'id', 'full_name', 'phone', 'email', 'service__name',
                 'appointment_date', 'appointment_time', 'status', 'created_at'
-            ).order_by('-appointment_date')[:50],
-            'contacts': Contact.objects.all().only('id', 'name', 'email', 'phone', 'subject', 'message', 'reply', 'replied', 'created_at'),
-            'announcements': Announcement.objects.all().only('id', 'title', 'category', 'description', 'created_at'),
-            'jobs': JobNotification.objects.all().only('id', 'title', 'organization', 'last_date', 'apply_link', 'description', 'icon'),
-            'schemes': GovernmentScheme.objects.all().only('id', 'title', 'description', 'eligibility', 'last_date', 'image'),
-            'forms_list': DownloadForm.objects.all().only('id', 'title', 'category', 'pdf', 'uploaded_at'),
+            ).order_by('-appointment_date')[:100],
+            'contacts': Contact.objects.all().only('id', 'name', 'email', 'phone', 'subject', 'message', 'reply', 'replied', 'created_at')[:100],
+            'announcements': Announcement.objects.all().only('id', 'title', 'category', 'description', 'created_at')[:100],
+            'jobs': JobNotification.objects.all().only('id', 'title', 'organization', 'last_date', 'apply_link', 'description', 'icon')[:100],
+            'schemes': GovernmentScheme.objects.all().only('id', 'title', 'description', 'eligibility', 'last_date', 'image')[:100],
+            'forms_list': DownloadForm.objects.all().only('id', 'title', 'category', 'pdf', 'uploaded_at')[:100],
             'servicecharges': ServiceCharge.objects.select_related('service').only('id', 'service__name', 'charge'),
-            'gallery_images': Gallery.objects.all().only('id', 'title', 'category', 'image'),
+            'gallery_images': Gallery.objects.all().only('id', 'title', 'category', 'image')[:100],
             'business_info': BusinessInfo.objects.first(),
             'applications': Application.objects.select_related('user', 'service').only(
                 'id', 'user__username', 'service__name', 'full_name', 'phone',
                 'email', 'address', 'status', 'created_at'
-            ).order_by('-created_at')[:50],
+            ).order_by('-created_at')[:100],
             'required_docs': RequiredDocument.objects.select_related('service').only(
                 'id', 'service__name', 'document_name'
             ).order_by('service__name'),
@@ -308,12 +276,29 @@ def _get_dashboard_common_data():
 # Dashboard POST helpers
 # -----------------------------------------------------------------------------
 
+def _clear_section_cache(section):
+    """Delete the cached data for a specific dashboard section."""
+    cache.delete(f'dashboard_section_{section}')
+
+def _clear_all_section_caches():
+    """Clear all dashboard section caches (used after major updates)."""
+    # This is a simple approach; we could also delete keys by pattern if needed.
+    # For now, we'll use a list of known sections.
+    sections = [
+        'services', 'appointments', 'contacts', 'announcements', 'jobs',
+        'schemes', 'forms', 'servicecharges', 'gallery', 'requireddocs',
+        'applications', 'users'
+    ]
+    for section in sections:
+        cache.delete(f'dashboard_section_{section}')
+
 def _handle_add(model_type, request, is_super):
     if model_type == 'service':
         form = ServiceForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, _('Service added.'))
+            _clear_section_cache('services')
         else:
             messages.error(request, _('Error adding service.'))
     elif model_type == 'requireddoc':
@@ -337,11 +322,13 @@ def _handle_add(model_type, request, is_super):
         messages.success(request, _('{count} document(s) added for “{service}”.').format(
             count=created, service=service.name
         ))
+        _clear_section_cache('requireddocs')
     elif model_type == 'teammember':
         form = TeamMemberForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             messages.success(request, _('Team member added.'))
+            _clear_section_cache('teammembers')
         else:
             messages.error(request, _('Error adding team member.'))
     elif model_type == 'announcement':
@@ -349,6 +336,7 @@ def _handle_add(model_type, request, is_super):
         if form.is_valid():
             form.save()
             messages.success(request, _('Announcement added.'))
+            _clear_section_cache('announcements')
         else:
             messages.error(request, _('Error adding announcement.'))
     elif model_type == 'job':
@@ -356,6 +344,7 @@ def _handle_add(model_type, request, is_super):
         if form.is_valid():
             form.save()
             messages.success(request, _('Job notification added.'))
+            _clear_section_cache('jobs')
         else:
             messages.error(request, _('Error adding job.'))
     elif model_type == 'scheme':
@@ -363,6 +352,7 @@ def _handle_add(model_type, request, is_super):
         if form.is_valid():
             form.save()
             messages.success(request, _('Scheme added.'))
+            _clear_section_cache('schemes')
         else:
             messages.error(request, _('Error adding scheme.'))
     elif model_type == 'appointment':
@@ -370,6 +360,7 @@ def _handle_add(model_type, request, is_super):
         if form.is_valid():
             form.save()
             messages.success(request, _('Appointment added.'))
+            _clear_section_cache('appointments')
         else:
             messages.error(request, _('Error adding appointment.'))
     elif model_type == 'contact':
@@ -377,6 +368,7 @@ def _handle_add(model_type, request, is_super):
         if form.is_valid():
             form.save()
             messages.success(request, _('Contact added.'))
+            _clear_section_cache('contacts')
         else:
             messages.error(request, _('Error adding contact.'))
     elif model_type == 'form':
@@ -384,6 +376,7 @@ def _handle_add(model_type, request, is_super):
         if form.is_valid():
             form.save()
             messages.success(request, _('Download form uploaded.'))
+            _clear_section_cache('forms')
         else:
             messages.error(request, _('Error uploading form.'))
     elif model_type == 'servicecharge':
@@ -391,6 +384,7 @@ def _handle_add(model_type, request, is_super):
         if form.is_valid():
             form.save()
             messages.success(request, _('Service charge added.'))
+            _clear_section_cache('servicecharges')
         else:
             messages.error(request, _('Error adding service charge.'))
     elif model_type == 'gallery':
@@ -398,6 +392,7 @@ def _handle_add(model_type, request, is_super):
         if form.is_valid():
             form.save()
             messages.success(request, _('Gallery image uploaded.'))
+            _clear_section_cache('gallery')
         else:
             messages.error(request, _('Error uploading gallery image.'))
     else:
@@ -411,6 +406,7 @@ def _handle_edit(model_type, obj_id, request):
         if form.is_valid():
             form.save()
             messages.success(request, _('Service updated.'))
+            _clear_section_cache('services')
         else:
             messages.error(request, _('Error updating service.'))
     elif model_type == 'requireddoc':
@@ -419,6 +415,7 @@ def _handle_edit(model_type, obj_id, request):
         if form.is_valid():
             form.save()
             messages.success(request, _('Required document updated.'))
+            _clear_section_cache('requireddocs')
         else:
             messages.error(request, _('Error updating required document.'))
     elif model_type == 'teammember':
@@ -427,6 +424,7 @@ def _handle_edit(model_type, obj_id, request):
         if form.is_valid():
             form.save()
             messages.success(request, _('Team member updated.'))
+            _clear_section_cache('teammembers')
         else:
             messages.error(request, _('Error updating team member.'))
     elif model_type == 'announcement':
@@ -435,6 +433,7 @@ def _handle_edit(model_type, obj_id, request):
         if form.is_valid():
             form.save()
             messages.success(request, _('Announcement updated.'))
+            _clear_section_cache('announcements')
         else:
             messages.error(request, _('Error updating announcement.'))
     elif model_type == 'job':
@@ -443,6 +442,7 @@ def _handle_edit(model_type, obj_id, request):
         if form.is_valid():
             form.save()
             messages.success(request, _('Job updated.'))
+            _clear_section_cache('jobs')
         else:
             messages.error(request, _('Error updating job.'))
     elif model_type == 'scheme':
@@ -451,6 +451,7 @@ def _handle_edit(model_type, obj_id, request):
         if form.is_valid():
             form.save()
             messages.success(request, _('Scheme updated.'))
+            _clear_section_cache('schemes')
         else:
             messages.error(request, _('Error updating scheme.'))
     elif model_type == 'appointment':
@@ -459,39 +460,26 @@ def _handle_edit(model_type, obj_id, request):
         if form.is_valid():
             form.save()
             messages.success(request, _('Appointment updated.'))
+            _clear_section_cache('appointments')
         else:
             messages.error(request, _('Error updating appointment.'))
     elif model_type == 'contact':
         instance = get_object_or_404(Contact, id=obj_id)
-        if 'reply' in request.POST:
-            reply_text = request.POST.get('reply')
-            instance.reply = reply_text
-            instance.replied = True
-            instance.save()
-            try:
-                send_mail(
-                    subject=_("Reply to your inquiry"),
-                    message=_(f"Dear {instance.name},\n\nThank you for contacting us. Here is our reply:\n\n{reply_text}\n\nBest regards,\n{get_business().business_name if get_business() else 'Team'}"),
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[instance.email],
-                    fail_silently=True,
-                )
-            except Exception as e:
-                logger.error(f"Failed to send reply email: {e}")
-            messages.success(request, _('Reply saved and email sent to customer.'))
+        # Use form for consistency
+        form = ContactFormDashboard(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+            messages.success(request, _('Contact updated.'))
+            _clear_section_cache('contacts')
         else:
-            form = ContactFormDashboard(request.POST, instance=instance)
-            if form.is_valid():
-                form.save()
-                messages.success(request, _('Contact updated.'))
-            else:
-                messages.error(request, _('Error updating contact.'))
+            messages.error(request, _('Error updating contact.'))
     elif model_type == 'form':
         instance = get_object_or_404(DownloadForm, id=obj_id)
         form = DownloadFormForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             form.save()
             messages.success(request, _('Form updated.'))
+            _clear_section_cache('forms')
         else:
             messages.error(request, _('Error updating form.'))
     elif model_type == 'servicecharge':
@@ -500,55 +488,72 @@ def _handle_edit(model_type, obj_id, request):
         if form.is_valid():
             form.save()
             messages.success(request, _('Service charge updated.'))
+            _clear_section_cache('servicecharges')
         else:
             messages.error(request, _('Error updating service charge.'))
     elif model_type == 'businessinfo':
-        instance = get_object_or_404(BusinessInfo, id=obj_id)
+        # Handle missing ID – use the first BusinessInfo or create a new one
+        if not obj_id:
+            instance = BusinessInfo.objects.first()
+            if not instance:
+                instance = BusinessInfo()
+        else:
+            instance = get_object_or_404(BusinessInfo, id=obj_id)
         form = BusinessInfoForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             form.save()
             messages.success(request, _('Business info updated.'))
             cache.delete('business_info')
+            _clear_all_section_caches()
         else:
             messages.error(request, _('Error updating business info.'))
-    else:
-        messages.error(request, _('Unknown model type for edit.'))
 
 
 def _handle_delete(model_type, obj_id, request):
     if model_type == 'service':
         get_object_or_404(Service, id=obj_id).delete()
         messages.success(request, _('Service deleted.'))
+        _clear_section_cache('services')
     elif model_type == 'announcement':
         get_object_or_404(Announcement, id=obj_id).delete()
         messages.success(request, _('Announcement deleted.'))
+        _clear_section_cache('announcements')
     elif model_type == 'teammember':
         get_object_or_404(TeamMember, id=obj_id).delete()
         messages.success(request, _('Team member deleted.'))
+        _clear_section_cache('teammembers')
     elif model_type == 'requireddoc':
         get_object_or_404(RequiredDocument, id=obj_id).delete()
         messages.success(request, _('Required document deleted.'))
+        _clear_section_cache('requireddocs')
     elif model_type == 'job':
         get_object_or_404(JobNotification, id=obj_id).delete()
         messages.success(request, _('Job deleted.'))
+        _clear_section_cache('jobs')
     elif model_type == 'scheme':
         get_object_or_404(GovernmentScheme, id=obj_id).delete()
         messages.success(request, _('Scheme deleted.'))
+        _clear_section_cache('schemes')
     elif model_type == 'appointment':
         get_object_or_404(Appointment, id=obj_id).delete()
         messages.success(request, _('Appointment deleted.'))
+        _clear_section_cache('appointments')
     elif model_type == 'contact':
         get_object_or_404(Contact, id=obj_id).delete()
         messages.success(request, _('Contact deleted.'))
+        _clear_section_cache('contacts')
     elif model_type == 'form':
         get_object_or_404(DownloadForm, id=obj_id).delete()
         messages.success(request, _('Form deleted.'))
+        _clear_section_cache('forms')
     elif model_type == 'servicecharge':
         get_object_or_404(ServiceCharge, id=obj_id).delete()
         messages.success(request, _('Service charge deleted.'))
+        _clear_section_cache('servicecharges')
     elif model_type == 'gallery':
         get_object_or_404(Gallery, id=obj_id).delete()
         messages.success(request, _('Gallery image deleted.'))
+        _clear_section_cache('gallery')
     else:
         messages.error(request, _('Unknown model type for delete.'))
 
@@ -558,17 +563,21 @@ def _handle_payment_settings(request):
     form = PaymentSettingsForm(request.POST, request.FILES, instance=instance)
     if form.is_valid():
         payment_settings = form.save(commit=False)
-        payment_settings.is_active = True
+        # REMOVE this line: payment_settings.is_active = True
         payment_settings.save()
         messages.success(request, _('Payment settings updated.'))
         cache.delete('payment_settings')
     else:
+        # Log errors for debugging
         logger.error(f"PaymentSettings form errors: {form.errors.as_json()}")
+        # Show each error to the user
         for field, errors in form.errors.items():
             for error in errors:
                 messages.error(request, f"{field}: {error}")
         messages.error(request, _('Please correct the errors below.'))
+
     cache.delete(DASHBOARD_CACHE_KEY)
+    _clear_all_section_caches()  # Payment settings affect payment-related sections
 
 
 def _handle_user_role_edit(request):
@@ -580,6 +589,7 @@ def _handle_user_role_edit(request):
         user.save()
         messages.success(request, _('User role updated.'))
     cache.delete(DASHBOARD_CACHE_KEY)
+    _clear_section_cache('users')
 
 
 # -----------------------------------------------------------------------------
@@ -596,6 +606,11 @@ def _handle_dashboard_post(request, is_super=False):
         cache.delete(DASHBOARD_CACHE_KEY)
         return redirect('superadmin_dashboard' if is_super else 'admin_dashboard')
 
+    # ✅ Check paymentsettings BEFORE edit to prevent "Unknown model type"
+    elif model_type == 'paymentsettings':
+        _handle_payment_settings(request)
+        return redirect('superadmin_dashboard' if is_super else 'admin_dashboard')
+
     elif action == 'edit':
         _handle_edit(model_type, obj_id, request)
         cache.delete(DASHBOARD_CACHE_KEY)
@@ -606,10 +621,6 @@ def _handle_dashboard_post(request, is_super=False):
     elif action == 'delete':
         _handle_delete(model_type, obj_id, request)
         cache.delete(DASHBOARD_CACHE_KEY)
-        return redirect('superadmin_dashboard' if is_super else 'admin_dashboard')
-
-    elif model_type == 'paymentsettings':
-        _handle_payment_settings(request)
         return redirect('superadmin_dashboard' if is_super else 'admin_dashboard')
 
     elif is_super and action == 'edit_user':
@@ -633,7 +644,6 @@ def admin_dashboard(request):
             return response
     context['business'] = get_business()
     return render(request, 'dashboard.html', context)
-    # return render(request, 'admindashboard.html', context)
 
 
 @login_required
@@ -647,47 +657,52 @@ def superadmin_dashboard(request):
             return response
     context['business'] = get_business()
     return render(request, 'dashboard.html', context)
-    # return render(request, 'superadmindashboard.html', context)
 
+
+# Cache for section data (5 minutes)
+SECTION_CACHE_TTL = 300
 
 @login_required
 @user_passes_test(is_admin)
 def dashboard_section_data(request, section):
-    data = {}
-    if section == 'services':
-        data['services'] = list(Service.objects.values('id', 'name', 'category', 'active', 'icon', 'icon_color'))
-    elif section == 'appointments':
-        data['appointments'] = list(Appointment.objects.select_related('service').values(
-            'id', 'full_name', 'phone', 'email', 'service__name',
-            'appointment_date', 'appointment_time', 'status', 'created_at'
-        ).order_by('-appointment_date'))
-    elif section == 'contacts':
-        data['contacts'] = list(Contact.objects.values('id', 'name', 'email', 'phone', 'subject', 'message', 'reply', 'replied', 'created_at'))
-    elif section == 'announcements':
-        data['announcements'] = list(Announcement.objects.values('id', 'title', 'category', 'description', 'created_at'))
-    elif section == 'jobs':
-        data['jobs'] = list(JobNotification.objects.values('id', 'title', 'organization', 'last_date', 'apply_link', 'description', 'icon'))
-    elif section == 'schemes':
-        data['schemes'] = list(GovernmentScheme.objects.values('id', 'title', 'description', 'eligibility', 'last_date', 'image'))
-    elif section == 'forms':
-        data['forms'] = list(DownloadForm.objects.values('id', 'title', 'category', 'pdf', 'uploaded_at'))
-    elif section == 'servicecharges':
-        data['servicecharges'] = list(ServiceCharge.objects.select_related('service').values(
-            'id', 'service__name', 'charge'))
-    elif section == 'gallery':
-        data['gallery'] = list(Gallery.objects.values('id', 'title', 'category', 'image'))
-    elif section == 'requireddocs':
-        data['requireddocs'] = list(RequiredDocument.objects.select_related('service').values(
-            'id', 'service__name', 'document_name'))
-    elif section == 'applications':
-        data['applications'] = list(Application.objects.select_related('user', 'service').values(
-            'id', 'user__username', 'service__name', 'full_name', 'phone',
-            'email', 'address', 'status', 'created_at'
-        ).order_by('-created_at'))
-    elif section == 'users' and request.user.role == 'superadmin':
-        data['users'] = list(User.objects.values('id', 'username', 'email', 'role', 'is_staff'))
-    else:
-        data['error'] = _('Invalid section.')
+    cache_key = f'dashboard_section_{section}'
+    data = cache.get(cache_key)
+    if data is None:
+        if section == 'services':
+            data = {'services': list(Service.objects.values('id', 'name', 'category', 'active', 'icon', 'icon_color'))}
+        elif section == 'appointments':
+            data = {'appointments': list(Appointment.objects.select_related('service').values(
+                'id', 'full_name', 'phone', 'email', 'service__name',
+                'appointment_date', 'appointment_time', 'status', 'created_at'
+            ).order_by('-appointment_date'))}
+        elif section == 'contacts':
+            data = {'contacts': list(Contact.objects.values('id', 'name', 'email', 'phone', 'subject', 'message', 'reply', 'replied', 'created_at'))}
+        elif section == 'announcements':
+            data = {'announcements': list(Announcement.objects.values('id', 'title', 'category', 'description', 'created_at'))}
+        elif section == 'jobs':
+            data = {'jobs': list(JobNotification.objects.values('id', 'title', 'organization', 'last_date', 'apply_link', 'description', 'icon'))}
+        elif section == 'schemes':
+            data = {'schemes': list(GovernmentScheme.objects.values('id', 'title', 'description', 'eligibility', 'last_date', 'image'))}
+        elif section == 'forms':
+            data = {'forms': list(DownloadForm.objects.values('id', 'title', 'category', 'pdf', 'uploaded_at'))}
+        elif section == 'servicecharges':
+            data = {'servicecharges': list(ServiceCharge.objects.select_related('service').values(
+                'id', 'service__name', 'charge'))}
+        elif section == 'gallery':
+            data = {'gallery': list(Gallery.objects.values('id', 'title', 'category', 'image'))}
+        elif section == 'requireddocs':
+            data = {'requireddocs': list(RequiredDocument.objects.select_related('service').values(
+                'id', 'service__name', 'document_name'))}
+        elif section == 'applications':
+            data = {'applications': list(Application.objects.select_related('user', 'service').values(
+                'id', 'user__username', 'service__name', 'full_name', 'phone',
+                'email', 'address', 'status', 'created_at'
+            ).order_by('-created_at'))}
+        elif section == 'users' and request.user.role == 'superadmin':
+            data = {'users': list(User.objects.values('id', 'username', 'email', 'role', 'is_staff'))}
+        else:
+            data = {'error': _('Invalid section.')}
+        cache.set(cache_key, data, SECTION_CACHE_TTL)
     return JsonResponse(data)
 
 
@@ -746,6 +761,7 @@ def team(request):
     })
 
 
+@login_required
 def services(request):
     services_qs = Service.objects.filter(active=True).order_by('name').only('id', 'name', 'description', 'icon', 'icon_color')
     paginator = Paginator(services_qs, 12)
@@ -802,6 +818,7 @@ def contact(request):
     })
 
 
+@login_required
 def appointment(request):
     if request.method == 'POST':
         form = AppointmentForm(request.POST)
@@ -889,6 +906,7 @@ def charges(request):
     })
 
 
+# Public reviews (no login required)
 def reviews(request):
     all_reviews = Review.objects.filter(approved=True).order_by('-created_at').only(
         'id', 'customer_name', 'review', 'rating', 'created_at'
@@ -923,6 +941,7 @@ def reviews(request):
 
 
 def submit_review(request):
+    """Allow both authenticated and anonymous users to submit a review."""
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
@@ -935,6 +954,7 @@ def submit_review(request):
     return redirect('reviews')
 
 
+@login_required
 def announcements(request):
     announcements_qs = Announcement.objects.all().order_by('-created_at').only(
         'id', 'title', 'category', 'description', 'created_at'
@@ -953,6 +973,7 @@ def announcements(request):
     })
 
 
+@login_required
 def government_schemes(request):
     schemes_qs = GovernmentScheme.objects.all().order_by('-last_date').only(
         'id', 'title', 'description', 'eligibility', 'last_date', 'image'
@@ -971,6 +992,7 @@ def government_schemes(request):
     })
 
 
+@login_required
 def jobs(request):
     jobs_qs = JobNotification.objects.order_by('last_date').only(
         'id', 'title', 'organization', 'last_date', 'apply_link', 'description', 'icon'
@@ -1150,10 +1172,20 @@ def _create_application_from_session_data(pending_data, request):
     """
     Internal helper to create an Application from session data.
     Returns the created Application object.
+    Raises: Exception if duplicate application already exists.
     """
     service = get_object_or_404(Service, id=pending_data['service_id'])
     form_data = pending_data['form_data']
     temp_files = pending_data['temp_files']
+
+    # Check for duplicate pending application for same user/service
+    existing = Application.objects.filter(
+        user=request.user,
+        service=service,
+        status__in=['pending', 'review']
+    ).first()
+    if existing:
+        raise Exception(_("You already have a pending application for this service."))
 
     # Read payment details from session (set by mark_payment_done or verify_razorpay_payment)
     payment_method = pending_data.get('payment_method', 'upi')
@@ -1182,19 +1214,26 @@ def _create_application_from_session_data(pending_data, request):
     application.save(update_fields=['receipt_number'])
 
     # Save documents from temp files
+    # FIX: Use chunked reading to avoid memory issues with large files
     from django.core.files import File
     for temp in temp_files:
         try:
-            with open(temp['temp_path'], 'rb') as f:
+            with default_storage.open(temp['temp_path'], 'rb') as f:
+                # Read in chunks to avoid memory bloat
+                file_content = b''
+                chunk = f.read(8192)
+                while chunk:
+                    file_content += chunk
+                    chunk = f.read(8192)
                 doc = DocumentUpload(
                     application=application,
                     document_name=temp['document_name'],
-                    file=File(f, name=temp['original_name']),
+                    file=ContentFile(file_content, name=temp['original_name']),
                     is_mandatory=True,
                 )
                 doc.save()
             # Clean up temp file
-            os.remove(temp['temp_path'])
+            default_storage.delete(temp['temp_path'])
         except Exception as e:
             logger.error(f"Failed to save document {temp['document_name']}: {e}")
 
@@ -1220,10 +1259,14 @@ def create_application_from_session(request):
         messages.error(request, _('No pending application found.'))
         return redirect('services')
 
-    application = _create_application_from_session_data(pending_data, request)
-
-    messages.success(request, _('Your application has been submitted and payment confirmed.'))
-    return redirect('application_detail', app_id=application.id)
+    try:
+        application = _create_application_from_session_data(pending_data, request)
+        messages.success(request, _('Your application has been submitted and payment confirmed.'))
+        return redirect('application_detail', app_id=application.id)
+    except Exception as e:
+        logger.error(f"Application creation failed: {e}")
+        messages.error(request, str(e) or _('Failed to create application. Please contact support.'))
+        return redirect('services')
 
 
 def get_pending_application_from_session(request):
@@ -1317,10 +1360,12 @@ def application_admin_detail(request, app_id):
                 application.receipt_number = application.generate_receipt_number()
                 application.payment_method = 'manual'
                 application.save()
+                # FIX: Check if service charge exists before accessing
+                charge = application.service.servicecharge_set.first()
                 PaymentLog.objects.create(
                     application=application,
                     event_type='manual_confirmed',
-                    amount=application.service.servicecharge_set.first().charge,
+                    amount=charge.charge if charge else 0,
                 )
                 send_payment_confirmation(application)
                 messages.success(request, _('Payment marked as paid manually.'))
@@ -1361,44 +1406,47 @@ def split_pdf(request, pk):
             })
 
         try:
-            reader = PdfReader(document.file.path)
-            writer = PdfWriter()
-            total_pages = len(reader.pages)
+            # Use default_storage to read file content
+            with default_storage.open(document.file.name, 'rb') as f:
+                reader = PdfReader(f)
+                writer = PdfWriter()
+                total_pages = len(reader.pages)
 
-            selected_pages = []
-            parts = pages_input.split(',')
-            for part in parts:
-                part = part.strip()
-                if '-' in part:
-                    start, end = part.split('-')
-                    start = int(start)
-                    end = int(end)
-                    if start < 1 or end > total_pages or start > end:
-                        raise ValueError
-                    for p in range(start, end + 1):
+                selected_pages = []
+                parts = pages_input.split(',')
+                for part in parts:
+                    part = part.strip()
+                    if '-' in part:
+                        start, end = part.split('-')
+                        start = int(start)
+                        end = int(end)
+                        if start < 1 or end > total_pages or start > end:
+                            raise ValueError
+                        for p in range(start, end + 1):
+                            selected_pages.append(p)
+                    else:
+                        p = int(part)
+                        if p < 1 or p > total_pages:
+                            raise ValueError
                         selected_pages.append(p)
-                else:
-                    p = int(part)
-                    if p < 1 or p > total_pages:
-                        raise ValueError
-                    selected_pages.append(p)
 
-            selected_pages = sorted(set(selected_pages))
+                selected_pages = sorted(set(selected_pages))
 
-            for page_num in selected_pages:
-                writer.add_page(reader.pages[page_num - 1])
+                for page_num in selected_pages:
+                    writer.add_page(reader.pages[page_num - 1])
 
-            with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp:
-                writer.write(tmp)
-                tmp_path = tmp.name
-
-            response = FileResponse(
-                open(tmp_path, 'rb'),
-                as_attachment=True,
-                filename=f'split_{os.path.basename(document.file.name)}',
-            )
-            response._resource_closers = [lambda: os.unlink(tmp_path)]
-            return response
+                # Write to temporary file and stream response
+                with tempfile.NamedTemporaryFile(suffix='.pdf', delete=True) as tmp:
+                    writer.write(tmp)
+                    tmp.seek(0)
+                    response = FileResponse(
+                        tmp,
+                        as_attachment=True,
+                        filename=f'split_{os.path.basename(document.file.name)}',
+                    )
+                    # Keep file open until response ends
+                    response._resource_closers = [lambda: tmp.close()]
+                    return response
 
         except (ValueError, IndexError, Exception) as e:
             logger.warning(f"PDF split error: {e}")
@@ -1419,9 +1467,17 @@ def split_pdf(request, pk):
 # PAYMENT GATEWAY – ENHANCED
 # =============================================================================
 
+def _create_razorpay_client(payment_settings):
+    key = payment_settings.razorpay_test_key if payment_settings.test_mode else payment_settings.razorpay_key_id
+    secret = payment_settings.razorpay_test_secret if payment_settings.test_mode else payment_settings.razorpay_key_secret
+    if not key or not secret:
+        raise ValueError("Razorpay credentials not configured")
+    return razorpay.Client(auth=(key, secret))
+
+
 @login_required
 def create_razorpay_order(request, app_id, retry_count=0):
-    """Create a Razorpay order for an existing application."""
+    """Create a Razorpay order for an existing application with exponential backoff."""
     app = get_object_or_404(Application, id=app_id, user=request.user)
 
     if app.payment_status == 'paid':
@@ -1440,9 +1496,7 @@ def create_razorpay_order(request, app_id, retry_count=0):
         return JsonResponse({'error': 'Amount must be at least ₹1'}, status=400)
 
     try:
-        key = payment_settings.razorpay_test_key if payment_settings.test_mode else payment_settings.razorpay_key_id
-        secret = payment_settings.razorpay_test_secret if payment_settings.test_mode else payment_settings.razorpay_key_secret
-        client = razorpay.Client(auth=(key, secret))
+        client = _create_razorpay_client(payment_settings)
         order_data = {
             'amount': amount,
             'currency': 'INR',
@@ -1453,6 +1507,9 @@ def create_razorpay_order(request, app_id, retry_count=0):
     except Exception as e:
         logger.error(f"Razorpay order creation failed (attempt {retry_count+1}): {e}")
         if retry_count < 3:
+            # Exponential backoff: wait 1s, 2s, 4s
+            sleep_time = 2 ** retry_count
+            time.sleep(sleep_time)
             return create_razorpay_order(request, app_id, retry_count + 1)
         return JsonResponse({'error': 'Payment gateway temporarily unavailable. Please try again later.'}, status=503)
 
@@ -1466,6 +1523,7 @@ def create_razorpay_order(request, app_id, retry_count=0):
         razorpay_order_id=order['id'],
     )
 
+    key = payment_settings.razorpay_test_key if payment_settings.test_mode else payment_settings.razorpay_key_id
     return JsonResponse({
         'order_id': order['id'],
         'amount': amount,
@@ -1496,9 +1554,7 @@ def create_razorpay_order_pending(request, service_id, retry_count=0):
         return JsonResponse({'error': 'Amount must be at least ₹1'}, status=400)
 
     try:
-        key = payment_settings.razorpay_test_key if payment_settings.test_mode else payment_settings.razorpay_key_id
-        secret = payment_settings.razorpay_test_secret if payment_settings.test_mode else payment_settings.razorpay_key_secret
-        client = razorpay.Client(auth=(key, secret))
+        client = _create_razorpay_client(payment_settings)
         order_data = {
             'amount': amount,
             'currency': 'INR',
@@ -1509,12 +1565,14 @@ def create_razorpay_order_pending(request, service_id, retry_count=0):
     except Exception as e:
         logger.error(f"Razorpay order creation failed (pending): {e}")
         if retry_count < 3:
+            time.sleep(2 ** retry_count)
             return create_razorpay_order_pending(request, service_id, retry_count + 1)
         return JsonResponse({'error': 'Payment gateway temporarily unavailable.'}, status=503)
 
     pending_data['razorpay_order_id'] = order['id']
     request.session['pending_application'] = pending_data
 
+    key = payment_settings.razorpay_test_key if payment_settings.test_mode else payment_settings.razorpay_key_id
     return JsonResponse({
         'order_id': order['id'],
         'amount': amount,
@@ -1537,6 +1595,15 @@ def verify_razorpay_payment(request):
     if not all([payment_id, order_id, signature, app_id]):
         return JsonResponse({'error': 'Missing parameters'}, status=400)
 
+    payment_settings = get_payment_settings()
+    if not payment_settings or not payment_settings.razorpay_enabled:
+        return JsonResponse({'error': 'Razorpay not enabled'}, status=400)
+
+    try:
+        client = _create_razorpay_client(payment_settings)
+    except ValueError as e:
+        return JsonResponse({'error': str(e)}, status=400)
+
     # --- Pending application (app_id is "pending" or "0") ---
     if app_id == 'pending' or app_id == '0':
         pending_data = request.session.get('pending_application', None)
@@ -1544,10 +1611,6 @@ def verify_razorpay_payment(request):
             return JsonResponse({'error': 'No matching pending application'}, status=400)
 
         # Verify signature
-        payment_settings = get_payment_settings()
-        key = payment_settings.razorpay_test_key if payment_settings.test_mode else payment_settings.razorpay_key_id
-        secret = payment_settings.razorpay_test_secret if payment_settings.test_mode else payment_settings.razorpay_key_secret
-        client = razorpay.Client(auth=(key, secret))
         params_dict = {
             'razorpay_order_id': order_id,
             'razorpay_payment_id': payment_id,
@@ -1563,12 +1626,17 @@ def verify_razorpay_payment(request):
         pending_data['razorpay_payment_id'] = payment_id
         request.session['pending_application'] = pending_data
 
-        # Create the application using the helper
-        application = _create_application_from_session_data(pending_data, request)
+        try:
+            application = _create_application_from_session_data(pending_data, request)
+        except Exception as e:
+            logger.error(f"Application creation failed: {e}")
+            # Clear session to avoid reuse
+            request.session.pop('pending_application', None)
+            return JsonResponse({'error': str(e) or 'Failed to create application'}, status=500)
+
         # Remove session now that application is created
         request.session.pop('pending_application', None)
 
-        # Return JSON response with receipt URL (as expected by AJAX)
         return JsonResponse({
             'success': True,
             'receipt_url': reverse('download_receipt', args=[application.id])
@@ -1577,11 +1645,6 @@ def verify_razorpay_payment(request):
     # --- Existing application (app_id > 0) ---
     app = get_object_or_404(Application, id=app_id, user=request.user)
 
-    payment_settings = get_payment_settings()
-    key = payment_settings.razorpay_test_key if payment_settings.test_mode else payment_settings.razorpay_key_id
-    secret = payment_settings.razorpay_test_secret if payment_settings.test_mode else payment_settings.razorpay_key_secret
-
-    client = razorpay.Client(auth=(key, secret))
     params_dict = {
         'razorpay_order_id': order_id,
         'razorpay_payment_id': payment_id,
@@ -1649,10 +1712,15 @@ def mark_payment_done(request, app_id):
         pending_data['payment_app'] = payment_app
         request.session['pending_application'] = pending_data
 
-        # Create the application
-        application = _create_application_from_session_data(pending_data, request)
-        request.session.pop('pending_application', None)
+        try:
+            application = _create_application_from_session_data(pending_data, request)
+        except Exception as e:
+            logger.error(f"Application creation failed: {e}")
+            request.session.pop('pending_application', None)
+            messages.error(request, str(e) or _('Failed to create application.'))
+            return redirect('services')
 
+        request.session.pop('pending_application', None)
         messages.success(request, _('Your application has been submitted and payment confirmed.'))
         return redirect('application_detail', app_id=application.id)
 
@@ -1703,7 +1771,7 @@ def mark_payment_done(request, app_id):
 
 @login_required
 def download_receipt(request, app_id):
-    """Download receipt as PDF."""
+    """Download receipt as PDF with improved layout."""
     application = get_object_or_404(Application, id=app_id, user=request.user)
     if application.payment_status != 'paid':
         messages.error(request, _('No payment record found.'))
@@ -1712,39 +1780,71 @@ def download_receipt(request, app_id):
     buffer = BytesIO()
     c = canvas.Canvas(buffer, pagesize=A4)
     width, height = A4
+    margin = 1 * inch
+    top = height - margin
+    left = margin
 
     # Header
-    c.setFont("Helvetica-Bold", 16)
-    c.drawString(1*inch, height-1*inch, "PAYMENT RECEIPT")
+    c.setFont("Helvetica-Bold", 18)
+    c.drawString(left, top, "PAYMENT RECEIPT")
     c.setFont("Helvetica", 8)
-    c.drawString(1*inch, height-1.3*inch, "System-Generated Receipt")
+    c.drawString(left, top - 0.3*inch, "System-Generated Receipt")
 
     # Payment details
-    c.setFont("Helvetica", 12)
-    y = height - 1.8*inch
-    c.drawString(1*inch, y, f"Receipt No: {application.receipt_number}")
-    c.drawString(1*inch, y-0.3*inch, f"Date: {application.payment_date.strftime('%d %b %Y, %H:%M')}")
-    c.drawString(1*inch, y-0.6*inch, f"Transaction ID: {application.payment_transaction_id or 'N/A'}")
-    c.drawString(1*inch, y-0.9*inch, f"UTR: {application.utr_number or 'N/A'}")
-    c.drawString(1*inch, y-1.2*inch, f"Payment App: {application.get_payment_app_display() or 'N/A'}")
-    c.drawString(1*inch, y-1.5*inch, f"Payment Method: {application.get_payment_method_display()}")
+    c.setFont("Helvetica", 11)
+    y = top - 0.8*inch
+    line_height = 0.25 * inch
+    details = [
+        (f"Receipt No: {application.receipt_number}", ""),
+        (f"Date: {application.payment_date.strftime('%d %b %Y, %H:%M')}", ""),
+        (f"Transaction ID: {application.payment_transaction_id or 'N/A'}", ""),
+        (f"UTR: {application.utr_number or 'N/A'}", ""),
+        (f"Payment App: {application.get_payment_app_display() or 'N/A'}", ""),
+        (f"Payment Method: {application.get_payment_method_display()}", ""),
+    ]
+    for label, _ in details:
+        c.drawString(left, y, label)
+        y -= line_height
+
+    y -= 0.2 * inch
 
     # Customer details
-    c.drawString(1*inch, y-2.0*inch, "Customer Details")
-    c.drawString(1*inch, y-2.3*inch, f"Name: {application.full_name}")
-    c.drawString(1*inch, y-2.6*inch, f"Phone: {application.phone}")
-    c.drawString(1*inch, y-2.9*inch, f"Email: {application.email}")
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(left, y, "Customer Details")
+    y -= 0.3 * inch
+    c.setFont("Helvetica", 11)
+    customer_lines = [
+        f"Name: {application.full_name}",
+        f"Phone: {application.phone}",
+        f"Email: {application.email}",
+    ]
+    for line in customer_lines:
+        c.drawString(left, y, line)
+        y -= line_height
+
+    y -= 0.2 * inch
 
     # Service details
-    c.drawString(1*inch, y-3.4*inch, "Service Details")
-    c.drawString(1*inch, y-3.7*inch, f"Service: {application.service.name}")
-    charge = application.service.servicecharge_set.first().charge if application.service.servicecharge_set.exists() else 0
-    c.drawString(1*inch, y-4.0*inch, f"Amount: ₹{charge}")
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(left, y, "Service Details")
+    y -= 0.3 * inch
+    c.setFont("Helvetica", 11)
+    charge = application.service.servicecharge_set.first()
+    amount = charge.charge if charge else 0
+    service_lines = [
+        f"Service: {application.service.name}",
+        f"Amount: ₹{amount:.2f}",
+    ]
+    for line in service_lines:
+        c.drawString(left, y, line)
+        y -= line_height
 
     # Footer
     c.setFont("Helvetica-Oblique", 8)
-    c.drawString(1*inch, 0.5*inch, "Thank you for your payment. This is a system-generated receipt.")
-    c.drawString(1*inch, 0.3*inch, f"Verified on: {timezone.now().strftime('%d %b %Y %H:%M:%S')}")
+    y = 0.8 * inch
+    c.drawString(left, y, "Thank you for your payment. This is a system-generated receipt.")
+    y -= line_height
+    c.drawString(left, y, f"Verified on: {timezone.now().strftime('%d %b %Y %H:%M:%S')}")
 
     c.save()
     buffer.seek(0)
@@ -1753,19 +1853,28 @@ def download_receipt(request, app_id):
 
 @csrf_exempt
 def razorpay_webhook(request):
-    """Handle Razorpay webhook for payment confirmation."""
+    """Handle Razorpay webhook for payment confirmation with signature verification and amount check."""
     if request.method != 'POST':
         return JsonResponse({'error': 'Method not allowed'}, status=405)
 
-    try:
-        webhook_secret = getattr(settings, 'RAZORPAY_WEBHOOK_SECRET', None)
-        if webhook_secret:
+    # Verify webhook signature if secret is configured
+    webhook_secret = getattr(settings, 'RAZORPAY_WEBHOOK_SECRET', None)
+    if webhook_secret:
+        try:
             from razorpay.utility import verify_webhook_signature
             signature = request.headers.get('X-Razorpay-Signature')
             if not signature:
                 return JsonResponse({'status': 'missing signature'}, status=400)
             verify_webhook_signature(request.body, signature, webhook_secret)
+        except Exception as e:
+            logger.error(f"Webhook signature verification failed: {e}")
+            return JsonResponse({'status': 'invalid signature'}, status=400)
+    else:
+        # If no secret configured, reject for security
+        logger.warning("Webhook secret not configured, rejecting webhook")
+        return JsonResponse({'status': 'webhook secret missing'}, status=400)
 
+    try:
         payload = json.loads(request.body)
         event = payload.get('event')
 
@@ -1776,6 +1885,13 @@ def razorpay_webhook(request):
 
             app = Application.objects.filter(payment_transaction_id=order_id).first()
             if app and app.payment_status == 'pending':
+                # Validate amount
+                charge = app.service.servicecharge_set.first()
+                expected_amount = charge.charge if charge else 0
+                if abs(amount - expected_amount) > 0.01:
+                    logger.error(f"Amount mismatch for order {order_id}: expected {expected_amount}, got {amount}")
+                    return JsonResponse({'status': 'amount mismatch'}, status=400)
+
                 app.payment_status = 'paid'
                 app.payment_date = timezone.now()
                 app.receipt_number = app.generate_receipt_number()
@@ -1852,7 +1968,7 @@ def reports_dashboard(request):
             'weekly_users': list(weekly_users),
             'payment_status': list(payment_status_counts),
         }
-        cache.set(cache_key, data, 60*60)
+        cache.set(cache_key, data, 300)  # 5 minutes TTL
 
     context = {
         'data': data,

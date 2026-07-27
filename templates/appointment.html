@@ -1,12 +1,14 @@
-{% extends "base.html" %} {% load i18n %} {% load static %} {% block title %}{%
-trans "Book Appointment" %}{% endblock %} {% block extra_head %}
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Book Appointment" %}{% endblock %}
+
+{% block extra_head %}
 <!-- ============================================================
      META – viewport & compatibility
      ============================================================ -->
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"
-/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
 <style>
@@ -564,7 +566,9 @@ trans "Book Appointment" %}{% endblock %} {% block extra_head %}
     }
   }
 </style>
-{% endblock %} {% block content %}
+{% endblock %}
+
+{% block content %}
 <!-- ================================================================
      APPOINTMENT SECTION
      ================================================================ -->
@@ -576,8 +580,7 @@ trans "Book Appointment" %}{% endblock %} {% block extra_head %}
       <h1>{% trans "Book an Appointment" %}</h1>
     </div>
     <div class="subhead">
-      {% trans "Select your service, choose a date &amp; time, and we'll confirm
-      your visit." %}
+      {% trans "Select your service, choose a date &amp; time, and we'll confirm your visit." %}
     </div>
 
     <!-- Form -->
@@ -587,7 +590,8 @@ trans "Book Appointment" %}{% endblock %} {% block extra_head %}
       novalidate
       id="appointmentForm"
     >
-      {% csrf_token %} {% if form.non_field_errors %}
+      {% csrf_token %}
+      {% if form.non_field_errors %}
       <div class="alert-error">
         <i class="fas fa-exclamation-circle"></i>
         {% for error in form.non_field_errors %} {{ error }} {% endfor %}
@@ -600,7 +604,8 @@ trans "Book Appointment" %}{% endblock %} {% block extra_head %}
           <i class="fas fa-user"></i> {% trans "Full Name" %}
           <span class="required-star">*</span>
         </label>
-        {{ form.full_name }} {% if form.full_name.errors %}
+        {{ form.full_name }}
+        {% if form.full_name.errors %}
         <div class="error-message">{{ form.full_name.errors }}</div>
         {% endif %}
       </div>
@@ -615,6 +620,10 @@ trans "Book Appointment" %}{% endblock %} {% block extra_head %}
           <span class="country-code">+91</span>
           {{ form.phone }}
         </div>
+        <span class="helper-text">
+          <i class="fas fa-info-circle"></i>
+          {% trans "Enter 10‑15 digit mobile number (without country code)" %}
+        </span>
         {% if form.phone.errors %}
         <div class="error-message">{{ form.phone.errors }}</div>
         {% endif %}
@@ -625,7 +634,8 @@ trans "Book Appointment" %}{% endblock %} {% block extra_head %}
         <label for="{{ form.email.id_for_label }}">
           <i class="fas fa-envelope"></i> {% trans "Email Address" %}
         </label>
-        {{ form.email }} {% if form.email.errors %}
+        {{ form.email }}
+        {% if form.email.errors %}
         <div class="error-message">{{ form.email.errors }}</div>
         {% endif %}
       </div>
@@ -636,7 +646,8 @@ trans "Book Appointment" %}{% endblock %} {% block extra_head %}
           <i class="fas fa-concierge-bell"></i> {% trans "Service" %}
           <span class="required-star">*</span>
         </label>
-        {{ form.service }} {% if form.service.errors %}
+        {{ form.service }}
+        {% if form.service.errors %}
         <div class="error-message">{{ form.service.errors }}</div>
         {% endif %}
       </div>
@@ -647,7 +658,12 @@ trans "Book Appointment" %}{% endblock %} {% block extra_head %}
           <i class="fas fa-calendar-day"></i> {% trans "Appointment Date" %}
           <span class="required-star">*</span>
         </label>
-        {{ form.appointment_date }} {% if form.appointment_date.errors %}
+        {{ form.appointment_date }}
+        <span class="helper-text">
+          <i class="fas fa-info-circle"></i>
+          {% trans "Please select a future date." %}
+        </span>
+        {% if form.appointment_date.errors %}
         <div class="error-message">{{ form.appointment_date.errors }}</div>
         {% endif %}
       </div>
@@ -663,6 +679,10 @@ trans "Book Appointment" %}{% endblock %} {% block extra_head %}
           <i class="fas fa-info-circle"></i>
           {% trans "Available slots: 9:00 AM – 5:00 PM (15‑minute intervals)" %}
         </span>
+        <span class="helper-text" style="opacity:0.5; margin-top:0.1rem;">
+          <i class="fas fa-hourglass-half"></i>
+          {% trans "Slots are subject to availability. We will confirm your appointment by email/phone." %}
+        </span>
         {% if form.appointment_time.errors %}
         <div class="error-message">{{ form.appointment_time.errors }}</div>
         {% endif %}
@@ -673,7 +693,8 @@ trans "Book Appointment" %}{% endblock %} {% block extra_head %}
         <label for="{{ form.message.id_for_label }}">
           <i class="fas fa-comment"></i> {% trans "Additional Message" %}
         </label>
-        {{ form.message }} {% if form.message.errors %}
+        {{ form.message }}
+        {% if form.message.errors %}
         <div class="error-message">{{ form.message.errors }}</div>
         {% endif %}
       </div>
@@ -691,7 +712,9 @@ trans "Book Appointment" %}{% endblock %} {% block extra_head %}
     </div>
   </div>
 </section>
-{% endblock %} {% block extra_scripts %}
+{% endblock %}
+
+{% block extra_scripts %}
 <script>
   (function () {
     "use strict";
@@ -757,9 +780,9 @@ trans "Book Appointment" %}{% endblock %} {% block extra_head %}
         isValid = false;
       }
 
-      // 2. Phone: exactly 10 digits
+      // 2. Phone: 10‑15 digits (allowing only digits – country code is separate)
       var phoneVal = phone.value.trim();
-      if (!/^[0-9]{10}$/.test(phoneVal)) {
+      if (!/^[0-9]{10,15}$/.test(phoneVal)) {
         setError(phoneGroup);
         isValid = false;
       }
@@ -806,12 +829,12 @@ trans "Book Appointment" %}{% endblock %} {% block extra_head %}
       return isValid;
     }
 
-    // ---- Phone input: only digits, max 10 ----
+    // ---- Phone input: only digits, max 15 ----
     phone.addEventListener("input", function () {
-      this.value = this.value.replace(/\D/g, "").slice(0, 10);
+      this.value = this.value.replace(/\D/g, "").slice(0, 15);
       if (
         phoneGroup.classList.contains("error") &&
-        /^[0-9]{10}$/.test(this.value)
+        /^[0-9]{10,15}$/.test(this.value)
       ) {
         phoneGroup.classList.remove("error");
       }

@@ -934,10 +934,10 @@
                 future.
             </p>
             <div class="hero-buttons">
-                <a href="#services" class="btn-primary">
+                <a href="#services" class="btn-primary" aria-label="{% trans 'Explore services' %}">
                     <i class="fas fa-arrow-right" aria-hidden="true"></i> Explore
                 </a>
-                <a href="#contact" class="btn-outline">
+                <a href="#contact" class="btn-outline" aria-label="{% trans 'Contact us' %}">
                     <i class="fas fa-phone" aria-hidden="true"></i> Contact
                 </a>
             </div>
@@ -1017,7 +1017,7 @@
                     <li><i class="fas fa-check" aria-hidden="true"></i> Quick turnaround</li>
                     <li><i class="fas fa-check" aria-hidden="true"></i> Expert assistance</li>
                 </ul>
-                <a href="{% url 'appointment' %}" class="btn-primary">Book Now</a>
+                <a href="{% url 'appointment' %}" class="btn-primary" aria-label="{% trans 'Book now' %}">Book Now</a>
             </div>
             {% empty %}
             <p class="no-data">{% trans "Pricing information coming soon." %}</p>
@@ -1039,7 +1039,7 @@
         </div>
         <div class="gallery-grid">
             {% for img in gallery %}
-            <div class="gallery-item" style="background-image: url('{{ img.image.url }}');">
+            <div class="gallery-item" style="background-image: url('{{ img.image.url }}');" aria-label="{{ img.title }}">
                 <div class="caption">{{ img.title }}</div>
             </div>
             {% empty %}
@@ -1098,9 +1098,9 @@
             </div>
             {% else %}
             <div class="timings-block">
-                <strong>Monday – Saturday:</strong> 9:00 AM – 8:00 PM<br />
-                <strong>Sunday:</strong> 10:00 AM – 2:00 PM<br />
-                <strong>Holidays:</strong> Closed
+                <strong>{% trans "Monday – Saturday:" %}</strong> 9:00 AM – 8:00 PM<br />
+                <strong>{% trans "Sunday:" %}</strong> 10:00 AM – 2:00 PM<br />
+                <strong>{% trans "Holidays:" %}</strong> {% trans "Closed" %}
             </div>
             {% endif %}
         </div>
@@ -1109,17 +1109,17 @@
             <h3><i class="fas fa-phone-alt" aria-hidden="true"></i> Get in Touch</h3>
             <div class="phone">
                 <i class="fas fa-mobile-alt" aria-hidden="true"></i>
-                <a href="tel:{{ business.phone|default:'+919876543210' }}">
+                <a href="tel:{{ business.phone|default:'+919876543210' }}" aria-label="{% trans 'Call us' %}">
                     {{ business.phone|default:"+91 98765 43210" }}
                 </a>
             </div>
-            <div class="sub">Call or WhatsApp for quick support.</div>
+            <div class="sub">{% trans "Call or WhatsApp for quick support." %}</div>
             <div class="contact-buttons">
-                <a href="tel:{{ business.phone|default:'+919876543210' }}" class="btn-primary">
+                <a href="tel:{{ business.phone|default:'+919876543210' }}" class="btn-primary" aria-label="{% trans 'Call now' %}">
                     <i class="fas fa-phone" aria-hidden="true"></i> Call Now
                 </a>
                 {% with whatsapp_number=business.whatsapp|default:"919876543210" %}
-                <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20need%20assistance." target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
+                <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20need%20assistance." target="_blank" rel="noopener noreferrer" class="btn-whatsapp" aria-label="{% trans 'Chat on WhatsApp' %}">
                     <i class="fab fa-whatsapp" aria-hidden="true"></i> WhatsApp
                 </a>
                 {% endwith %}
@@ -1132,17 +1132,17 @@
             </h3>
             
             <div class="sub">
-                Stay connected with us! Join our WhatsApp community to receive the latest updates,
-                important announcements, exclusive opportunities, and instant support—all in one place.
+                {% trans "Stay connected with us! Join our WhatsApp community to receive the latest updates, important announcements, exclusive opportunities, and instant support—all in one place." %}
             </div>
             
             <div class="contact-buttons">
                 <a href="https://chat.whatsapp.com/BjIk12GVsYn85tW0RKu9qJ"
                    target="_blank"
                    rel="noopener noreferrer"
-                   class="btn-whatsapp">
+                   class="btn-whatsapp"
+                   aria-label="{% trans 'Join WhatsApp community' %}">
                     <i class="fab fa-whatsapp" aria-hidden="true"></i>
-                    Join WhatsApp Community
+                    {% trans "Join WhatsApp Community" %}
                 </a>
             </div>
         </div>
@@ -1162,22 +1162,33 @@
             <div class="address">
                 <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
                 {% if business.address %} {{ business.address|linebreaksbr }} {% else %}
-                CyberTech Digital Hub<br />
-                देऊबाई कॉम्प्लेक्स, साईबाबा चौक,<br />
-                Ranale, Maharashtra 425411 {% endif %}
+                {% trans "CyberTech Digital Hub" %}<br />
+                {% trans "देऊबाई कॉम्प्लेक्स, साईबाबा चौक," %}<br />
+                {% trans "Ranale, Maharashtra 425411" %}
+                {% endif %}
             </div>
             {% with address_url=business.address|urlencode %}
-            <a href="https://www.google.com/maps/dir/?api=1&destination={{ address_url|default:'CyberTech+Digital+Hub,+Ranale,+Maharashtra' }}" target="_blank" rel="noopener noreferrer" class="btn-primary">
-                <i class="fas fa-directions" aria-hidden="true"></i> Get Directions
+            <a href="https://www.google.com/maps/dir/?api=1&destination={{ address_url|default:'CyberTech+Digital+Hub,+Ranale,+Maharashtra' }}" target="_blank" rel="noopener noreferrer" class="btn-primary" aria-label="{% trans 'Get directions' %}">
+                <i class="fas fa-directions" aria-hidden="true"></i> {% trans "Get Directions" %}
             </a>
             {% endwith %}
         </div>
         <div class="map-container">
-            {% if business.google_map %} {{ business.google_map|safe }} {% else %}
-            <div class="map-placeholder">
-                <i class="fas fa-map-marked-alt" aria-hidden="true"></i>
-                {% trans "Map location not configured." %}
-            </div>
+            {% if business.google_map %}
+                {# Security: only allow iframe from google.com/maps #}
+                {% if "google.com/maps" in business.google_map %}
+                    {{ business.google_map|safe }}
+                {% else %}
+                    <div class="map-placeholder">
+                        <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                        {% trans "Invalid map source. Only Google Maps embed is allowed." %}
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="map-placeholder">
+                    <i class="fas fa-map-marked-alt" aria-hidden="true"></i>
+                    {% trans "Map location not configured." %}
+                </div>
             {% endif %}
         </div>
     </div>

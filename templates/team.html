@@ -3,6 +3,8 @@
 
 {% block title %}{% trans "Our Team" %}{% endblock %}
 
+{% block meta_description %}{% trans "Meet the dedicated professionals who make our services exceptional – our experienced team is here to help you." %}{% endblock %}
+
 {% block extra_head %}
 <style>
     /* ---- Hero ---- */
@@ -293,7 +295,7 @@
             {% endfor %}
         </div>
 
-        <!-- Pagination (corrected) -->
+        <!-- Pagination -->
         {% if members.has_other_pages %}
         <div class="pagination-wrap">
             {% if members.has_previous %}

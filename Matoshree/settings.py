@@ -166,8 +166,26 @@ EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
+
+# Ensure DEFAULT_FROM_EMAIL is set to a meaningful value – fallback to a generic address.
+# In production, this must be set in the environment.
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@example.com')
+# CONTACT_EMAIL is used for admin notifications; fallback to DEFAULT_FROM_EMAIL if not set.
 CONTACT_EMAIL = os.getenv('CONTACT_EMAIL', DEFAULT_FROM_EMAIL)
+
+# Optionally define ADMINS for error reporting (not required but recommended)
+ADMINS = []
+admin_list = os.getenv('ADMINS', '')
+if admin_list:
+    # Format: "Name <email>, Name2 <email2>"
+    for part in admin_list.split(','):
+        part = part.strip()
+        if part:
+            # crude split – better to use a proper parser
+            if '<' in part and '>' in part:
+                name = part[:part.index('<')].strip()
+                email = part[part.index('<')+1:part.index('>')].strip()
+                ADMINS.append((name, email))
 
 # ------------------------------------------------------------------
 # SECURITY SETTINGS (production only)
@@ -257,7 +275,16 @@ LOGGING = {
 # ------------------------------------------------------------------
 RAZORPAY_KEY_ID = os.getenv('RAZORPAY_KEY_ID', '')
 RAZORPAY_KEY_SECRET = os.getenv('RAZORPAY_KEY_SECRET', '')
+
+# CRITICAL: Webhook secret must be set in production to verify incoming webhooks.
+# In development, you may set it to a dummy value, but it should be defined.
+# The views.razorpay_webhook will reject requests if this secret is missing.
 RAZORPAY_WEBHOOK_SECRET = os.getenv('RAZORPAY_WEBHOOK_SECRET', '')
+
+# Warning if not set – log during startup
+if not RAZORPAY_WEBHOOK_SECRET and not DEBUG:
+    import warnings
+    warnings.warn("RAZORPAY_WEBHOOK_SECRET is not set. Webhook verification will fail.", RuntimeWarning)
 
 PAYMENT_TIMEOUT_MINUTES = int(os.getenv('PAYMENT_TIMEOUT_MINUTES', '15'))
 PAYMENT_MAX_RETRY = int(os.getenv('PAYMENT_MAX_RETRY', '3'))

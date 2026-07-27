@@ -1,10 +1,16 @@
+# =============================================================================
+# MODELS – Core data models for the Cyber Café application
+# =============================================================================
+
 from django.db import models
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, MinValueValidator
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.core.cache import cache
+from django.utils.crypto import get_random_string
+import random
 
 
 # ==========================
@@ -20,6 +26,7 @@ phone_validator = RegexValidator(
 # User Model (Custom)
 # ==========================
 class User(AbstractUser):
+    """Custom user model with role and additional fields."""
     ROLE_CHOICES = (
         ("user", _("User")),
         ("admin", _("Admin")),
@@ -57,6 +64,7 @@ class User(AbstractUser):
 # Service
 # ==========================
 class Service(models.Model):
+    """Service offered by the cyber café."""
     name = models.CharField(_("Name"), max_length=200, db_index=True)
     category = models.CharField(_("Category"), max_length=100, db_index=True)
     description = models.TextField(_("Description"), blank=True)
@@ -93,6 +101,7 @@ class Service(models.Model):
 # Appointment
 # ==========================
 class Appointment(models.Model):
+    """Appointment booking for a service."""
     STATUS = (
         ("Pending", _("Pending")),
         ("Confirmed", _("Confirmed")),
@@ -150,6 +159,7 @@ class Appointment(models.Model):
 # Contact
 # ==========================
 class Contact(models.Model):
+    """Contact form submission from users."""
     name = models.CharField(_("Name"), max_length=150, db_index=True)
     email = models.EmailField(_("Email"), db_index=True)
     phone = models.CharField(_("Phone"), max_length=15, validators=[phone_validator], db_index=True)
@@ -176,6 +186,7 @@ class Contact(models.Model):
 # Review
 # ==========================
 class Review(models.Model):
+    """Customer review with rating."""
     customer_name = models.CharField(_("Customer Name"), max_length=100, db_index=True)
     email = models.EmailField(_("Email"), blank=True, null=True, db_index=True)
     review = models.TextField(_("Review"))
@@ -201,6 +212,7 @@ class Review(models.Model):
 # Announcement
 # ==========================
 class Announcement(models.Model):
+    """Announcements/news displayed on the site."""
     CATEGORY = (
         ("General", _("General")),
         ("Government Scheme", _("Government Scheme")),
@@ -233,6 +245,7 @@ class Announcement(models.Model):
 # Gallery
 # ==========================
 class Gallery(models.Model):
+    """Gallery images."""
     CATEGORY = (
         ("Cyber Cafe", _("Cyber Cafe")),
         ("Customers", _("Customers")),
@@ -260,12 +273,19 @@ class Gallery(models.Model):
 # Service Charge
 # ==========================
 class ServiceCharge(models.Model):
+    """Pricing for a service."""
     service = models.ForeignKey(
         Service,
         on_delete=models.CASCADE,
         verbose_name=_("Service"),
     )
-    charge = models.DecimalField(_("Charge"), max_digits=8, decimal_places=2)
+    charge = models.DecimalField(
+        _("Charge"),
+        max_digits=8,
+        decimal_places=2,
+        validators=[MinValueValidator(0)],
+        help_text=_("Must be greater than or equal to 0.")
+    )
 
     class Meta:
         verbose_name = _("Service Charge")
@@ -273,6 +293,7 @@ class ServiceCharge(models.Model):
         indexes = [
             models.Index(fields=['service']),
         ]
+        ordering = ['service__name']
 
     def __str__(self):
         return f"{self.service.name} - ₹{self.charge}"
@@ -282,6 +303,7 @@ class ServiceCharge(models.Model):
 # Required Document
 # ==========================
 class RequiredDocument(models.Model):
+    """Documents required for a service."""
     service = models.ForeignKey(
         Service,
         on_delete=models.CASCADE,
@@ -296,6 +318,7 @@ class RequiredDocument(models.Model):
             models.Index(fields=['service', 'document_name']),
         ]
         unique_together = [['service', 'document_name']]
+        ordering = ['service__name', 'document_name']
 
     def __str__(self):
         return f"{self.service.name} - {self.document_name}"
@@ -305,6 +328,7 @@ class RequiredDocument(models.Model):
 # Download Form (PDF)
 # ==========================
 class DownloadForm(models.Model):
+    """Uploaded PDF forms available for download."""
     title = models.CharField(_("Title"), max_length=200, db_index=True)
     category = models.CharField(_("Category"), max_length=100, db_index=True)
     pdf = models.FileField(_("PDF"), upload_to="forms/")
@@ -325,6 +349,7 @@ class DownloadForm(models.Model):
 # Government Scheme
 # ==========================
 class GovernmentScheme(models.Model):
+    """Government schemes information."""
     title = models.CharField(_("Title"), max_length=200, db_index=True)
     description = models.TextField(_("Description"))
     eligibility = models.TextField(_("Eligibility"), blank=True)
@@ -346,6 +371,7 @@ class GovernmentScheme(models.Model):
 # Job Notification
 # ==========================
 class JobNotification(models.Model):
+    """Job openings and notifications."""
     title = models.CharField(_("Title"), max_length=200, db_index=True)
     organization = models.CharField(_("Organization"), max_length=200, db_index=True)
     last_date = models.DateField(_("Last Date"), db_index=True)
@@ -374,6 +400,7 @@ class JobNotification(models.Model):
 # FAQ
 # ==========================
 class FAQ(models.Model):
+    """Frequently asked questions."""
     question = models.CharField(_("Question"), max_length=300, db_index=True)
     answer = models.TextField(_("Answer"))
 
@@ -392,6 +419,7 @@ class FAQ(models.Model):
 # Business Info (Singleton)
 # ==========================
 class BusinessInfo(models.Model):
+    """Business information – singleton model."""
     business_name = models.CharField(_("Business Name"), max_length=200)
     welcome_message = models.TextField(_("Welcome Message"))
     address = models.TextField(_("Address"))
@@ -432,6 +460,7 @@ class BusinessInfo(models.Model):
 # Application
 # ==========================
 class Application(models.Model):
+    """User application for a service."""
     PAYMENT_APP_CHOICES = (
         ('gpay', 'Google Pay'),
         ('phonepe', 'PhonePe'),
@@ -510,9 +539,18 @@ class Application(models.Model):
     receipt_number = models.CharField(max_length=50, blank=True, null=True, unique=True)
 
     def generate_receipt_number(self):
+        """
+        Generates a receipt number. If the instance already has an ID, uses that.
+        Otherwise, falls back to a random 8-character alphanumeric string.
+        """
         from django.utils import timezone
         now = timezone.now()
-        return f"RCP-{now.strftime('%Y%m%d')}-{self.id:04d}"
+        base = f"RCP-{now.strftime('%Y%m%d')}"
+        if self.id:
+            return f"{base}-{self.id:04d}"
+        else:
+            # Safer fallback using random alphanumeric string
+            return f"{base}-{get_random_string(8, allowed_chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')}"
 
     def clean(self):
         if self.payment_app and not self.utr_number:
@@ -539,6 +577,7 @@ class Application(models.Model):
 # Document Upload
 # ==========================
 class DocumentUpload(models.Model):
+    """Uploaded documents for an application."""
     application = models.ForeignKey(
         Application,
         on_delete=models.CASCADE,
@@ -567,6 +606,7 @@ class DocumentUpload(models.Model):
 # Team Member
 # ==========================
 class TeamMember(models.Model):
+    """Team member profile."""
     name = models.CharField(_("Name"), max_length=100, db_index=True)
     designation = models.CharField(_("Designation"), max_length=200)
     bio = models.TextField(_("Bio"), blank=True)
@@ -591,7 +631,7 @@ class TeamMember(models.Model):
 # Payment Settings (Singleton)
 # ==========================
 class PaymentSettings(models.Model):
-    # Existing fields
+    """Payment gateway configuration – singleton."""
     upi_id = models.CharField("UPI ID", max_length=100, blank=True, help_text="e.g. example@upi")
     upi_mobile = models.CharField("UPI Mobile", max_length=15, blank=True)
     qr_code = models.ImageField("QR Code", upload_to="payments/", blank=True, null=True)
@@ -618,10 +658,10 @@ class PaymentSettings(models.Model):
             PaymentSettings.objects.exclude(pk=self.pk).delete()
         else:
             PaymentSettings.objects.all().delete()
+        # Ensure only one active setting
         if self.is_active:
             PaymentSettings.objects.filter(is_active=True).exclude(pk=self.pk).update(is_active=False)
         super().save(*args, **kwargs)
-        # Invalidate cached payment settings
         cache.delete('payment_settings')
 
     def __str__(self):
@@ -636,6 +676,7 @@ class PaymentSettings(models.Model):
 # Payment Log (for audit trail)
 # ==========================
 class PaymentLog(models.Model):
+    """Audit trail for payment events."""
     application = models.ForeignKey(Application, on_delete=models.CASCADE, related_name="payment_logs")
     event_type = models.CharField(
         max_length=50,
@@ -653,6 +694,9 @@ class PaymentLog(models.Model):
     razorpay_payment_id = models.CharField(max_length=100, blank=True)
     razorpay_order_id = models.CharField(max_length=100, blank=True)
     webhook_data = models.JSONField(default=dict, blank=True)
+    # Audit fields
+    ip_address = models.GenericIPAddressField(_("IP Address"), blank=True, null=True)
+    user_agent = models.CharField(_("User Agent"), max_length=512, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
 
     class Meta:
@@ -666,4 +710,3 @@ class PaymentLog(models.Model):
 
     def __str__(self):
         return f"{self.application.full_name} – {self.event_type} – {self.created_at.strftime('%Y-%m-%d %H:%M')}"
-

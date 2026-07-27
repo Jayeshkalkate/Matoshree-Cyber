@@ -839,11 +839,11 @@
      ================================================================ -->
 <section class="page-hero">
   <div class="container">
-    <div class="breadcrumb">
-      <a href="{% url 'home' %}"><i class="fas fa-home"></i> {% trans "Home" %}</a>
-      <span><i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5;"></i></span>
-      <span class="current">{% trans "Download Forms" %}</span>
-    </div>
+    <nav class="breadcrumb" aria-label="{% trans 'Breadcrumb' %}">
+      <a href="{% url 'home' %}"><i class="fas fa-home" aria-hidden="true"></i> {% trans "Home" %}</a>
+      <span><i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5;" aria-hidden="true"></i></span>
+      <span class="current" aria-current="page">{% trans "Download Forms" %}</span>
+    </nav>
     <h1>{% trans "Download" %} <span>{% trans "Government Forms" %}</span></h1>
     <p>{% trans "Access and download official forms for various services — fast, secure, and always up-to-date." %}</p>
     <div class="glow-line"></div>
@@ -858,7 +858,7 @@
 
     <!-- Search Bar -->
     <div class="search-wrap" id="searchWrap">
-      <i class="fas fa-search"></i>
+      <i class="fas fa-search" aria-hidden="true"></i>
       <input
         type="text"
         id="searchInput"
@@ -866,35 +866,35 @@
         aria-label="{% trans "Search forms" %}"
       />
       <button class="clear-btn" id="searchClear" aria-label="{% trans "Clear search" %}">
-        <i class="fas fa-times"></i> {% trans "Clear" %}
+        <i class="fas fa-times" aria-hidden="true"></i> {% trans "Clear" %}
       </button>
     </div>
 
-    <!-- Form Grid (DYNAMIC) -->
-    <div class="form-grid">
+    <!-- Form Grid with aria-live region for dynamic updates -->
+    <div class="form-grid" id="formGrid" aria-live="polite" aria-relevant="additions removals">
       {% for form in forms %}
       <div class="form-card" data-form="{{ form.title|lower }}">
         <div class="form-info">
-          <i class="fas fa-file-pdf"></i>
+          <i class="fas fa-file-pdf" aria-hidden="true"></i>
           <span class="form-name">{{ form.title }}</span>
         </div>
         <span class="form-category">{{ form.category|default:_("General") }}</span>
         {% if form.pdf %}
           <a href="{{ form.pdf.url }}" target="_blank" class="btn-download" download>
-            <i class="fas fa-download"></i> {% trans "PDF" %}
+            <i class="fas fa-download" aria-hidden="true"></i> {% trans "PDF" %}
           </a>
         {% else %}
           <span class="btn-download disabled">
-            <i class="fas fa-times"></i> {% trans "No file" %}
+            <i class="fas fa-times" aria-hidden="true"></i> {% trans "No file" %}
           </span>
         {% endif %}
       </div>
       {% endfor %}
     </div>
 
-    <!-- No Results (filter) -->
+    <!-- No Results (filter) – also included in aria-live region -->
     <div class="no-results" id="noResults">
-      <i class="fas fa-file-alt"></i>
+      <i class="fas fa-file-alt" aria-hidden="true"></i>
       <p>{% trans "No forms match your search." %}</p>
     </div>
 
@@ -925,12 +925,12 @@
     <h2>{% trans "Need Assistance with" %} <span>{% trans "Forms?" %}</span></h2>
     <p>{% trans "We're here to help you fill, print, and submit your documents with ease." %}</p>
     <div class="cta-buttons">
-      <a href="{% url 'home' %}#contact" class="btn-primary">
-        <i class="fas fa-phone"></i> {% trans "Contact Us" %}
+      <a href="{% url 'home' %}#contact" class="btn-primary" aria-label="{% trans 'Contact us' %}">
+        <i class="fas fa-phone" aria-hidden="true"></i> {% trans "Contact Us" %}
       </a>
       {% with whatsapp_number=business.whatsapp|default:"919876543210" %}
-      <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20need%20help%20with%20government%20forms." target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
-        <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
+      <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20need%20help%20with%20government%20forms." target="_blank" rel="noopener noreferrer" class="btn-whatsapp" aria-label="{% trans 'Chat on WhatsApp' %}">
+        <i class="fab fa-whatsapp" aria-hidden="true"></i> {% trans "Chat on WhatsApp" %}
       </a>
       {% endwith %}
     </div>
@@ -940,7 +940,7 @@
 
 {% block extra_js %}
 <!-- ================================================================
-     SEARCH / FILTER FUNCTIONALITY
+     SEARCH / FILTER FUNCTIONALITY (with accent folding)
      ================================================================ -->
 <script>
   (function() {
@@ -957,19 +957,25 @@
       if (searchWrap) searchWrap.style.display = 'none';
       if (noResults) {
         noResults.style.display = 'block';
-        noResults.innerHTML = '<i class="fas fa-file-alt"></i><p>{% trans "No forms available at the moment."|escapejs %}</p>';
+        noResults.innerHTML = '<i class="fas fa-file-alt" aria-hidden="true"></i><p>{% trans "No forms available at the moment."|escapejs %}</p>';
       }
       return;
     }
 
+    // Helper to normalize strings (remove diacritics) for accent-insensitive search
+    function normalize(str) {
+      return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+
     function filterForms(query) {
-      var q = query.trim().toLowerCase();
+      var q = normalize(query.trim().toLowerCase());
       var visibleCount = 0;
 
       for (var i = 0; i < formCards.length; i++) {
         var card = formCards[i];
         var formData = card.getAttribute('data-form') || '';
-        var matches = !q || formData.indexOf(q) !== -1;
+        var normalizedData = normalize(formData);
+        var matches = !q || normalizedData.indexOf(q) !== -1;
         if (matches) {
           card.classList.remove('hidden-item');
           visibleCount++;

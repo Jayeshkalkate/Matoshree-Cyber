@@ -10,7 +10,11 @@
         <div class="brand-small">
           <div class="icon"><i class="fas fa-laptop-code"></i></div>
           <div class="name">
-            {{ business.business_name|default:"Cyber<span>Tech</span>"|safe }}
+            {% if business.business_name %}
+              {{ business.business_name }}
+            {% else %}
+              {% trans "CyberTech" %}
+            {% endif %}
           </div>
         </div>
         <p class="footer-address">
@@ -63,17 +67,22 @@
     <!-- Social Icons Row -->
     <div class="footer-socials">
       <div class="socials">
+        <!-- Valid WhatsApp group link -->
         <a href="https://chat.whatsapp.com/BjIk12GVsYn85tW0RKu9qJ"
            target="_blank"
            rel="noopener noreferrer"
-           aria-label="Join our WhatsApp Group">
+           aria-label="{% trans 'Join our WhatsApp Group' %}">
           <i class="fab fa-whatsapp"></i>
         </a>
+        <!-- Placeholder social links – replace with actual URLs when available -->
+        <!--
         <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
         <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
         <a href="#" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
         <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
         <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        -->
+        <!-- Only WhatsApp is active; others can be added later -->
       </div>
     </div>
 
@@ -81,12 +90,12 @@
     <div class="footer-copy">
       <p>
         {% now "Y" as current_year %}
-        {% blocktrans with year=current_year name=business.business_name|default:"Matoshree Cyber Cafe" trimmed %}
+        {% blocktrans with year=current_year name=business.business_name|default:_("Matoshree Cyber Cafe") trimmed %}
           &copy; {{ year }} {{ name }}. All rights reserved.
         {% endblocktrans %}
       </p>
       <p class="developer-credit">
-        Developed with ❤️ by
+        {% trans "Developed with ❤️ by" %}
         <a href="https://devjayesh-portfolio.netlify.app/"
            target="_blank"
            rel="noopener noreferrer">
