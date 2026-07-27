@@ -139,22 +139,21 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 static_dir = BASE_DIR / 'static'
 STATICFILES_DIRS = [static_dir] if static_dir.exists() else []
+
+if not DEBUG:
+    INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
+    import cloudinary
+    cloudinary.config(
+        cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
+        api_key=os.getenv('CLOUDINARY_API_KEY'),
+        api_secret=os.getenv('CLOUDINARY_API_SECRET')
+    )
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-
-# (Optional) Cloudinary configuration for production – uncomment when ready
-# if not DEBUG:
-#     INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
-#     import cloudinary
-#     cloudinary.config(
-#         cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
-#         api_key=os.getenv('CLOUDINARY_API_KEY'),
-#         api_secret=os.getenv('CLOUDINARY_API_SECRET')
-#     )
-#     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ------------------------------------------------------------------

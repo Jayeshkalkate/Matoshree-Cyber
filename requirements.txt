@@ -1,7 +1,8 @@
 # =============================================================================
 # CORE DJANGO & DEPLOYMENT
 # =============================================================================
-Django==5.1.4                    # Latest stable release (5.1.x series)
+
+Django==6.0.7                    # Latest stable release (5.1.x series)
 setuptools==75.8.0               # Provides pkg_resources (needed by razorpay)
 gunicorn==23.0.0                 # Production WSGI server
 whitenoise==6.9.0                # Static file serving (no external server needed)
