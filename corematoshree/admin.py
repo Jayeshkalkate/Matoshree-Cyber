@@ -3,6 +3,7 @@ Django Admin Configuration for the core application.
 """
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.core.cache import cache
 from django.contrib import messages
 from django.utils import timezone
 from .models import PaymentSettings
@@ -357,7 +358,7 @@ class PaymentSettingsAdmin(admin.ModelAdmin):
     
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
-        cache.delete('payment_settings')  # force clear
+        cache.delete('payment_settings')
 
 
 # ==========================
