@@ -45,6 +45,7 @@
         <h4>{% trans "Our Services" %}</h4>
         <ul>
           <li><a href="{% url 'services' %}">{% trans "All Services" %}</a></li>
+          <li><a href="{% url 'announcements' %}">{% trans "Announcements" %}</a></li>
           <li><a href="{% url 'documents' %}">{% trans "Required Documents" %}</a></li>
           <li><a href="{% url 'downloads' %}">{% trans "Download Forms" %}</a></li>
           <li><a href="{% url 'charges' %}">{% trans "Service Charges" %}</a></li>
@@ -55,10 +56,11 @@
       <div class="footer-col">
         <h4>{% trans "Resources" %}</h4>
         <ul>
-          <li><a href="{% url 'announcements' %}">{% trans "Announcements" %}</a></li>
           <li><a href="{% url 'government_schemes' %}">{% trans "Government Schemes" %}</a></li>
           <li><a href="{% url 'jobs' %}">{% trans "Job Notifications" %}</a></li>
           <li><a href="{% url 'appointment' %}">{% trans "Book Appointment" %}</a></li>
+          <li><a href="{% url 'terms' %}">{% trans "Terms & Conditions" %}</a></li>
+          <li><a href="{% url 'privacy' %}">{% trans "Privacy Policy" %}</a></li>
         </ul>
       </div>
       

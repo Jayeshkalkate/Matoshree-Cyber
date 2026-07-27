@@ -1783,3 +1783,20 @@ def reports_dashboard(request):
         'business': get_business(),
     }
     return render(request, 'reports_dashboard.html', context)
+
+# =============================================================================
+# STATIC PAGES – Terms & Privacy
+# =============================================================================
+
+def terms(request):
+    """Terms and Conditions page."""
+    return render(request, 'terms.html', {
+        'business': get_business(),
+    })
+
+def privacy(request):
+    """Privacy Policy page."""
+    return render(request, 'privacy.html', {
+        'business': get_business(),
+    })
+

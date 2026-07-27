@@ -84,6 +84,9 @@ urlpatterns = [
 
     # ---- Receipt download (login required) ----
     path('download-receipt/<int:app_id>/', views.download_receipt, name='download_receipt'),
+    
+    path('terms/', views.terms, name='terms'),
+    path('privacy/', views.privacy, name='privacy'),
 ]
 
 # Serve media & static in development only
