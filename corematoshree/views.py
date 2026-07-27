@@ -1468,8 +1468,12 @@ def split_pdf(request, pk):
 # =============================================================================
 
 def _create_razorpay_client(payment_settings):
-    key = payment_settings.razorpay_test_key if payment_settings.test_mode else payment_settings.razorpay_key_id
-    secret = payment_settings.razorpay_test_secret if payment_settings.test_mode else payment_settings.razorpay_key_secret
+    if payment_settings.test_mode:
+        key = payment_settings.razorpay_test_key or os.getenv('RAZORPAY_TEST_KEY_ID')
+        secret = payment_settings.razorpay_test_secret or os.getenv('RAZORPAY_TEST_KEY_SECRET')
+    else:
+        key = payment_settings.razorpay_key_id or os.getenv('RAZORPAY_KEY_ID')
+        secret = payment_settings.razorpay_key_secret or os.getenv('RAZORPAY_KEY_SECRET')
     if not key or not secret:
         raise ValueError("Razorpay credentials not configured")
     return razorpay.Client(auth=(key, secret))

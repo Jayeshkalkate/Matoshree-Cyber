@@ -821,6 +821,14 @@
         </div>
       {% endif %}
 
+      {% if payment_settings.qr_code %}
+          <img src="{{ payment_settings.qr_code.url }}" alt="UPI QR Code">
+      {% else %}
+          <div class="qr-placeholder">
+              <i class="fas fa-qrcode"></i> QR Code not available
+          </div>
+      {% endif %}
+      
       <!-- ============================================================
            SUCCESS / PAYMENT SECTION (after application creation)
            ============================================================ -->
