@@ -1,0 +1,57 @@
+# ============================================================================
+# DJANGO CORE
+# ============================================================================
+
+SECRET_KEY=
+
+# For local development – set to True
+DEBUG=True
+
+# For production (Render) – set to False (Render overrides this via env)
+# DEBUG=False
+
+ALLOWED_HOSTS=matoshree-cyber.onrender.com,localhost,127.0.0.1
+
+# ============================================================================
+# DATABASE – Neon PostgreSQL (replace with YOUR actual string)
+# ============================================================================
+DATABASE_URL=postgresql://neondb_owner:npg_DBeEb
+
+# ============================================================================
+# BASE URL (for links, emails, etc.)
+# ============================================================================
+BASE_URL=https://matoshree-cyber.onrender.com
+
+# ============================================================================
+# EMAIL (Gmail or other SMTP)
+# ============================================================================
+EMAIL_HOST_PASSWORD=
+EMAIL_HOST_USER=jayeshkalkate432@gmail.com
+CONTACT_EMAIL=jayeshkalkate432@gmail.com
+DEFAULT_FROM_EMAIL=jayeshkalkate432@gmail.com
+
+# ============================================================================
+# PAYMENT (if used)
+# ============================================================================
+
+# Payment limits (optional, defaults already fine)
+PAYMENT_TIMEOUT_MINUTES=15
+PAYMENT_MAX_RETRY=3
+PAYMENT_AMOUNT_MIN=1
+PAYMENT_AMOUNT_MAX=100000
+
+# CSRF (for custom domain)
+CSRF_TRUSTED_ORIGINS=https://matoshree-cyber.onrender.com
+
+# ============================================================================
+# CLOUDINARY CLOUD STORAGE
+# ============================================================================
+
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+
+# =============================================================================
+# OPTIONAL: Django Admin notifications (if you want error emails)
+# =============================================================================
+# ADMINS=Your Name <admin@example.com>
