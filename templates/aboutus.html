@@ -1181,33 +1181,6 @@
   </div>
 </section>
 
-<!-- ================================================================
-     SERVICES OVERVIEW – Grid of offered services (DYNAMIC)
-     ================================================================ -->
-<section class="services-list">
-  <div class="container">
-    <div class="section-header">
-      <h2>
-        {% trans "Our" %} <span>{% trans "Complete" %}</span> {% trans "Service List" %}
-      </h2>
-      <p>
-        {% trans "Everything you need, all under one roof — from government applications to document services." %}
-      </p>
-    </div>
-    <div class="services-grid-about">
-      {% for service in services %}
-      <div class="service-about-item" role="listitem">
-        <i class="fas fa-{{ service.icon|default:'cog' }}" aria-hidden="true"></i>
-        <span>{{ service.name }}</span>
-      </div>
-      {% empty %}
-      <p style="grid-column: 1 / -1; text-align: center; color: var(--text-muted, #94a3b8);">
-        {% trans "No services available at the moment." %}
-      </p>
-      {% endfor %}
-    </div>
-  </div>
-</section>
 
 <!-- ================================================================
      TRUST SECTION – Why choose us
@@ -1385,3 +1358,31 @@
   </div>
 </section>
 {% endblock %}
+
+<!-- ================================================================
+     SERVICES OVERVIEW – Grid of offered services (DYNAMIC)
+     ================================================================ -->
+<section class="services-list">
+  <div class="container">
+    <div class="section-header">
+      <h2>
+        {% trans "Our" %} <span>{% trans "Complete" %}</span> {% trans "Service List" %}
+      </h2>
+      <p>
+        {% trans "Everything you need, all under one roof — from government applications to document services." %}
+      </p>
+    </div>
+    <div class="services-grid-about">
+      {% for service in services %}
+      <div class="service-about-item" role="listitem">
+        <i class="fas fa-{{ service.icon|default:'cog' }}" aria-hidden="true"></i>
+        <span>{{ service.name }}</span>
+      </div>
+      {% empty %}
+      <p style="grid-column: 1 / -1; text-align: center; color: var(--text-muted, #94a3b8);">
+        {% trans "No services available at the moment." %}
+      </p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
