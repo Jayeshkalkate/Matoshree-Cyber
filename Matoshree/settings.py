@@ -1,10 +1,9 @@
 import os
 from pathlib import Path
-from dotenv import load_dotenv
+from decouple import config
 import dj_database_url
-
-# Load environment variables from .env file
-load_dotenv()
+import cloudinary
+from cloudinary import config as cloudinary_config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -17,24 +16,26 @@ if not os.path.exists(LOG_DIR):
 # ------------------------------------------------------------------
 # SECURITY & DEBUG
 # ------------------------------------------------------------------
+SECRET_KEY = config('SECRET_KEY')
 
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-# Secret key – use a strong, random value in production
-if DEBUG:
-    SECRET_KEY = os.getenv(
-        "DJANGO_SECRET_KEY",
-        "django-insecure-dev-key-only"   # fallback for development
+ALLOWED_HOSTS = config(
+    'ALLOWED_HOSTS',
+    default='localhost,127.0.0.1',
+    cast=lambda v: [s.strip() for s in v.split(',')]
+)
+
+# ------------------------------------------------------------------
+# DATABASE (single, clean definition – like Lavkush)
+# ------------------------------------------------------------------
+DATABASES = {
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL', default='sqlite:///db.sqlite3'),
+        conn_max_age=600,
+        ssl_require=True
     )
-else:
-    SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]  # must be set
-
-# Allowed hosts – in production, set ALLOWED_HOSTS as comma-separated list
-if DEBUG:
-    ALLOWED_HOSTS = ["127.0.0.1", "localhost", "testserver"]
-else:
-    hosts = os.getenv("ALLOWED_HOSTS", "")
-    ALLOWED_HOSTS = [h.strip() for h in hosts.split(",") if h.strip()]
+}
 
 # ------------------------------------------------------------------
 # APPLICATION DEFINITION
@@ -46,7 +47,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'corematoshree',  # your app
+    'corematoshree',
+    'cloudinary_storage',
+    'cloudinary'
 ]
 
 MIDDLEWARE = [
@@ -86,22 +89,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Matoshree.wsgi.application'
 
 # ------------------------------------------------------------------
-# DATABASE
-# ------------------------------------------------------------------
-DATABASE_URL = os.getenv('DATABASE_URL')
-if DATABASE_URL:
-    DATABASES = {
-        'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=600, ssl_require=True)
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
-
-# ------------------------------------------------------------------
 # SESSIONS
 # ------------------------------------------------------------------
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
@@ -136,51 +123,55 @@ USE_TZ = True
 # ------------------------------------------------------------------
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-static_dir = BASE_DIR / 'static'
-STATICFILES_DIRS = [static_dir] if static_dir.exists() else []
-    
-# ------------------------------------------------------------------
-# CLOUDINARY STORAGE (always enabled if credentials are set)
-# ------------------------------------------------------------------
-
-CLOUDINARY_CREDENTIALS = all([
-    os.getenv('CLOUDINARY_CLOUD_NAME'),
-    os.getenv('CLOUDINARY_API_KEY'),
-    os.getenv('CLOUDINARY_API_SECRET')
-])
-
-if CLOUDINARY_CREDENTIALS:
-    INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
-    import cloudinary
-    cloudinary.config(
-        cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
-        api_key=os.getenv('CLOUDINARY_API_KEY'),
-        api_secret=os.getenv('CLOUDINARY_API_SECRET')
-    )
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-    print("✅ Cloudinary storage is ACTIVE")  # Temporary – you'll see this in logs
-    
+STATICFILES_DIRS = [BASE_DIR / 'static']   # no existence check needed
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ------------------------------------------------------------------
+# CLOUDINARY STORAGE (unconditional – like Lavkush Furniture)
+# ------------------------------------------------------------------
+# Add cloudinary apps to INSTALLED_APPS
+INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
+
+# Configure Cloudinary with environment variables (using decouple.config)
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': config('CLOUDINARY_API_KEY'),
+    'API_SECRET': config('CLOUDINARY_API_SECRET'),
+}
+
+# Set the default file storage to Cloudinary
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# Initialize the Cloudinary SDK
+cloudinary.config(
+    cloud_name=config('CLOUDINARY_CLOUD_NAME'),
+    api_key=config('CLOUDINARY_API_KEY'),
+    api_secret=config('CLOUDINARY_API_SECRET'),
+)
+
+# (Optional) Print confirmation – you'll see this in the console
+print("✅ Cloudinary storage is ACTIVE (unconditional)")
 
 # ------------------------------------------------------------------
 # EMAIL SETTINGS
 # ------------------------------------------------------------------
-EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
-EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
-EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
-EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
+EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
+EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
+EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@example.com')
-CONTACT_EMAIL = os.getenv('CONTACT_EMAIL', DEFAULT_FROM_EMAIL)
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='noreply@example.com')
+CONTACT_EMAIL = config('CONTACT_EMAIL', default=DEFAULT_FROM_EMAIL)
 
 ADMINS = []
-admin_list = os.getenv('ADMINS', '')
+admin_list = config('ADMINS', default='')
 if admin_list:
     for part in admin_list.split(','):
         part = part.strip()
@@ -212,7 +203,7 @@ else:
 if DEBUG:
     CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1:8000']
 else:
-    origins = os.getenv('CSRF_TRUSTED_ORIGINS', '')
+    origins = config('CSRF_TRUSTED_ORIGINS', default='')
     CSRF_TRUSTED_ORIGINS = [o.strip() for o in origins.split(',') if o.strip()]
 
 # ------------------------------------------------------------------
@@ -272,8 +263,7 @@ LOGGING = {
 # ------------------------------------------------------------------
 # PAYMENT – UPI & Cash only (Razorpay removed)
 # ------------------------------------------------------------------
-
-PAYMENT_TIMEOUT_MINUTES = int(os.getenv('PAYMENT_TIMEOUT_MINUTES', '15'))
-PAYMENT_MAX_RETRY = int(os.getenv('PAYMENT_MAX_RETRY', '3'))
-PAYMENT_AMOUNT_MIN = int(os.getenv('PAYMENT_AMOUNT_MIN', '1'))
-PAYMENT_AMOUNT_MAX = int(os.getenv('PAYMENT_AMOUNT_MAX', '100000'))
+PAYMENT_TIMEOUT_MINUTES = config('PAYMENT_TIMEOUT_MINUTES', default=15, cast=int)
+PAYMENT_MAX_RETRY = config('PAYMENT_MAX_RETRY', default=3, cast=int)
+PAYMENT_AMOUNT_MIN = config('PAYMENT_AMOUNT_MIN', default=1, cast=int)
+PAYMENT_AMOUNT_MAX = config('PAYMENT_AMOUNT_MAX', default=100000, cast=int)

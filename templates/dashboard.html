@@ -2018,7 +2018,8 @@
             <div class="gallery-grid">
                 {% for img in gallery_images %}
                     <div class="gallery-item">
-                        <img src="{{ img.image.url }}" alt="{{ img.title }}">
+                        <img src="{{ img.image.url }}" alt="{{ img.title }}" 
+                        onerror="this.src='{% static 'images/placeholder.png' %}'">
                         <div class="caption">{{ img.title }}</div>
                         <form method="post" class="delete-btn">
                             {% csrf_token %}

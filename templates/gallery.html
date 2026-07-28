@@ -904,7 +904,7 @@
     {# Only render if the image field has a file #}
     {% if image.image and image.image.url %}
       <div class="gallery-card" data-caption="{{ image.title }}">
-        <img src="{{ image.image.url }}" alt="{{ image.title }}" loading="lazy" />
+        <img src="{{ image.image.url }}" alt="{{ image.title }}" loading="lazy" onerror="this.src='{% static 'images/placeholder.png' %}'" />
         <div class="caption">{{ image.title }}</div>
       </div>
     {% endif %}

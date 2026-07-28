@@ -715,14 +715,18 @@ def dashboard_section_data(request, section):
 # PUBLIC VIEWS
 # =============================================================================
 
-@cache_page(60 * 5)
 def home(request):
+    all_gallery = Gallery.objects.all().order_by('-id')
+    valid_gallery = [
+        img for img in all_gallery
+        if img.image and default_storage.exists(img.image.name)
+    ]
     context = {
         'business': get_business(),
         'services': Service.objects.filter(active=True)[:8].only('name', 'description', 'icon', 'icon_color'),
         'announcements': Announcement.objects.all()[:5].only('title', 'category', 'description', 'created_at'),
         'reviews': Review.objects.filter(approved=True)[:6].only('customer_name', 'review', 'rating', 'created_at'),
-        'gallery': Gallery.objects.all()[:8].only('title', 'image'),
+        'gallery': valid_gallery[:8],
         'charges': ServiceCharge.objects.select_related('service').all()[:3].only('service__name', 'charge'),
     }
     return render(request, 'homepage.html', context)
@@ -784,15 +788,11 @@ def services(request):
 
 
 def gallery(request):
-    # Get all gallery items
     all_images = Gallery.objects.all().order_by('-id')
-    
-    # Keep only those that have an actual file
     valid_images = [
         img for img in all_images
         if img.image and default_storage.exists(img.image.name)
     ]
-    
     paginator = Paginator(valid_images, 12)
     page = request.GET.get('page')
     

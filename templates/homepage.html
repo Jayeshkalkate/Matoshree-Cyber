@@ -1042,7 +1042,9 @@
         <div class="gallery-grid">
             {% for img in gallery %}
                 {% if img.image %}
-                <div class="gallery-item" style="background-image: url('{{ img.image.url }}');" aria-label="{{ img.title }}">
+                <div class="gallery-item" 
+                    style="background-image: url('{{ img.image.url }}');"
+                    onerror="this.style.backgroundImage='url({% static 'images/placeholder.png' %})';">
                     <div class="caption">{{ img.title }}</div>
                 </div>
                 {% endif %}
