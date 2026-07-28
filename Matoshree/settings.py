@@ -5,7 +5,7 @@ import dj_database_url
 import cloudinary
 from cloudinary import config as cloudinary_config
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Create logs directory if it doesn't exist
@@ -17,9 +17,7 @@ if not os.path.exists(LOG_DIR):
 # SECURITY & DEBUG
 # ------------------------------------------------------------------
 SECRET_KEY = config('SECRET_KEY')
-
 DEBUG = config('DEBUG', default=False, cast=bool)
-
 ALLOWED_HOSTS = config(
     'ALLOWED_HOSTS',
     default='localhost,127.0.0.1',
@@ -27,7 +25,7 @@ ALLOWED_HOSTS = config(
 )
 
 # ------------------------------------------------------------------
-# DATABASE (single, clean definition – like Lavkush)
+# DATABASE (single, clean)
 # ------------------------------------------------------------------
 DATABASES = {
     'default': dj_database_url.config(
@@ -38,7 +36,7 @@ DATABASES = {
 }
 
 # ------------------------------------------------------------------
-# APPLICATION DEFINITION
+# APPLICATION DEFINITION – Cloudinary included directly, no duplicate
 # ------------------------------------------------------------------
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -48,8 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corematoshree',
-    'cloudinary_storage',
-    'cloudinary'
+    'cloudinary',               # added directly
+    'cloudinary_storage',       # added directly – no duplicate
 ]
 
 MIDDLEWARE = [
@@ -123,38 +121,30 @@ USE_TZ = True
 # ------------------------------------------------------------------
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [BASE_DIR / 'static']   # no existence check needed
+STATICFILES_DIRS = [BASE_DIR / 'static']
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ------------------------------------------------------------------
-# CLOUDINARY STORAGE (unconditional – like Lavkush Furniture)
+# CLOUDINARY STORAGE (unconditional – like Lavkush)
 # ------------------------------------------------------------------
-# Add cloudinary apps to INSTALLED_APPS
-INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
-
-# Configure Cloudinary with environment variables (using decouple.config)
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
     'API_KEY': config('CLOUDINARY_API_KEY'),
     'API_SECRET': config('CLOUDINARY_API_SECRET'),
 }
 
-# Set the default file storage to Cloudinary
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-# Initialize the Cloudinary SDK
 cloudinary.config(
     cloud_name=config('CLOUDINARY_CLOUD_NAME'),
     api_key=config('CLOUDINARY_API_KEY'),
     api_secret=config('CLOUDINARY_API_SECRET'),
 )
 
-# (Optional) Print confirmation – you'll see this in the console
 print("✅ Cloudinary storage is ACTIVE (unconditional)")
 
 # ------------------------------------------------------------------
@@ -187,7 +177,7 @@ if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    SECURE_HSTS_SECONDS = 31536000          # 1 year
+    SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
