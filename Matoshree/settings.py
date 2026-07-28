@@ -7,7 +7,7 @@ from cloudinary import config as cloudinary_config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Logs directory
+# Logs
 LOG_DIR = os.path.join(BASE_DIR, 'logs')
 if not os.path.exists(LOG_DIR):
     os.makedirs(LOG_DIR)
@@ -35,7 +35,7 @@ DATABASES = {
 }
 
 # ------------------------------------------------------------------
-# APPLICATION DEFINITION – Cloudinary included directly, no duplicate
+# APPLICATION DEFINITION
 # ------------------------------------------------------------------
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corematoshree',
     'cloudinary',
-    'cloudinary_storage',      # only once
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -108,26 +108,32 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-MEDIA_URL = '/media/'
+# Media settings – Cloudinary will override the storage
+MEDIA_URL = '/media/'  # Not used when Cloudinary is active, but kept for safety
 MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ------------------------------------------------------------------
-# CLOUDINARY – unconditional (like Lavkush)
+# CLOUDINARY – UNCONDITIONAL
 # ------------------------------------------------------------------
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
     'API_KEY': config('CLOUDINARY_API_KEY'),
     'API_SECRET': config('CLOUDINARY_API_SECRET'),
 }
+
+# Force Cloudinary as the default file storage
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
+# Initialize Cloudinary SDK
 cloudinary.config(
     cloud_name=config('CLOUDINARY_CLOUD_NAME'),
     api_key=config('CLOUDINARY_API_KEY'),
     api_secret=config('CLOUDINARY_API_SECRET'),
 )
-print("✅ Cloudinary storage is ACTIVE (unconditional)")
+
+# Print confirmation (you'll see this in Render logs)
+print("✅ Cloudinary storage is ACTIVE with cloud_name:", config('CLOUDINARY_CLOUD_NAME'))
 
 # ------------------------------------------------------------------
 # EMAIL
