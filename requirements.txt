@@ -12,6 +12,7 @@ dj-database-url==3.1.2
 
 # Environment
 python-dotenv==1.2.2
+python-decouple==3.8          # <-- ADDED (was missing)
 
 # Media storage (Cloudinary)
 cloudinary==1.44.2
@@ -30,15 +31,9 @@ charset-normalizer==3.4.5
 idna==2.10
 six==1.17.0
 
-# Django admin enhancements (optional but useful)
-django-debug-toolbar==7.0.0  # optional, remove if not needed
+# Django admin enhancements (optional)
+django-debug-toolbar==7.0.0
 
-# Keep cryptography if needed (for email or security)
+# Security & QR
 cryptography==49.0.0
-
 qrcode>=7.4.2
-
-# Optional: if you use Celery/Redis, add them; otherwise remove
-# celery==5.6.2
-# redis==7.3.0
-# django-celery-beat==2.9.0

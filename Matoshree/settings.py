@@ -5,10 +5,9 @@ import dj_database_url
 import cloudinary
 from cloudinary import config as cloudinary_config
 
-# Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Create logs directory if it doesn't exist
+# Logs directory
 LOG_DIR = os.path.join(BASE_DIR, 'logs')
 if not os.path.exists(LOG_DIR):
     os.makedirs(LOG_DIR)
@@ -25,7 +24,7 @@ ALLOWED_HOSTS = config(
 )
 
 # ------------------------------------------------------------------
-# DATABASE (single, clean)
+# DATABASE
 # ------------------------------------------------------------------
 DATABASES = {
     'default': dj_database_url.config(
@@ -46,8 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corematoshree',
-    'cloudinary',               # added directly
-    'cloudinary_storage',       # added directly – no duplicate
+    'cloudinary',
+    'cloudinary_storage',      # only once
 ]
 
 MIDDLEWARE = [
@@ -63,9 +62,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'Matoshree.urls'
 
-# ------------------------------------------------------------------
-# TEMPLATES
-# ------------------------------------------------------------------
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -86,14 +82,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Matoshree.wsgi.application'
 
-# ------------------------------------------------------------------
-# SESSIONS
-# ------------------------------------------------------------------
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
-# ------------------------------------------------------------------
-# PASSWORD VALIDATION
-# ------------------------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -101,23 +91,17 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# ------------------------------------------------------------------
-# CUSTOM USER MODEL & AUTH
-# ------------------------------------------------------------------
 AUTH_USER_MODEL = 'corematoshree.User'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'login'
 
-# ------------------------------------------------------------------
-# INTERNATIONALIZATION
-# ------------------------------------------------------------------
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Kolkata'
 USE_I18N = True
 USE_TZ = True
 
 # ------------------------------------------------------------------
-# STATIC & MEDIA FILES
+# STATIC & MEDIA
 # ------------------------------------------------------------------
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
@@ -129,14 +113,13 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ------------------------------------------------------------------
-# CLOUDINARY STORAGE (unconditional – like Lavkush)
+# CLOUDINARY – unconditional (like Lavkush)
 # ------------------------------------------------------------------
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
     'API_KEY': config('CLOUDINARY_API_KEY'),
     'API_SECRET': config('CLOUDINARY_API_SECRET'),
 }
-
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 cloudinary.config(
@@ -144,11 +127,10 @@ cloudinary.config(
     api_key=config('CLOUDINARY_API_KEY'),
     api_secret=config('CLOUDINARY_API_SECRET'),
 )
-
 print("✅ Cloudinary storage is ACTIVE (unconditional)")
 
 # ------------------------------------------------------------------
-# EMAIL SETTINGS
+# EMAIL
 # ------------------------------------------------------------------
 EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
 EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
@@ -156,7 +138,6 @@ EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
-
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='noreply@example.com')
 CONTACT_EMAIL = config('CONTACT_EMAIL', default=DEFAULT_FROM_EMAIL)
 
@@ -171,7 +152,7 @@ if admin_list:
             ADMINS.append((name, email))
 
 # ------------------------------------------------------------------
-# SECURITY SETTINGS (production only)
+# SECURITY (production)
 # ------------------------------------------------------------------
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
@@ -187,14 +168,7 @@ else:
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
 
-# ------------------------------------------------------------------
-# CSRF TRUSTED ORIGINS
-# ------------------------------------------------------------------
-if DEBUG:
-    CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1:8000']
-else:
-    origins = config('CSRF_TRUSTED_ORIGINS', default='')
-    CSRF_TRUSTED_ORIGINS = [o.strip() for o in origins.split(',') if o.strip()]
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='').split(',') if not DEBUG else ['http://localhost:8000', 'http://127.0.0.1:8000']
 
 # ------------------------------------------------------------------
 # LOGGING
@@ -251,7 +225,7 @@ LOGGING = {
 }
 
 # ------------------------------------------------------------------
-# PAYMENT – UPI & Cash only (Razorpay removed)
+# PAYMENT – UPI & Cash only
 # ------------------------------------------------------------------
 PAYMENT_TIMEOUT_MINUTES = config('PAYMENT_TIMEOUT_MINUTES', default=15, cast=int)
 PAYMENT_MAX_RETRY = config('PAYMENT_MAX_RETRY', default=3, cast=int)
