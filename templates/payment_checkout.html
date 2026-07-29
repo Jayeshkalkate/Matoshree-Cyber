@@ -365,4 +365,92 @@
 </section>
 {% endblock %}
 
-{% block extra_scripts %}{% endblock %}
+{% block extra_scripts %}
+<script>
+  (function() {
+    "use strict";
+
+    var form = document.querySelector('form[action*="mark_payment_done"]');
+    if (!form) return;
+
+    var paymentApp = document.getElementById('payment_app');
+    var utrInput = document.getElementById('utr_number');
+    var submitBtn = form.querySelector('button[type="submit"]');
+
+    // Create error containers
+    function createErrorContainer(inputId) {
+      var input = document.getElementById(inputId);
+      if (!input) return;
+      var parent = input.parentNode;
+      var existing = parent.querySelector('.error-feedback');
+      if (existing) return;
+      var errDiv = document.createElement('div');
+      errDiv.className = 'error-feedback';
+      errDiv.style.color = 'var(--neon-orange, #f97316)';
+      errDiv.style.fontSize = '0.85rem';
+      errDiv.style.marginTop = '0.3rem';
+      errDiv.style.display = 'none';
+      parent.appendChild(errDiv);
+      return errDiv;
+    }
+
+    var utrError = createErrorContainer('utr_number');
+    var appError = createErrorContainer('payment_app');
+
+    function validateUTR() {
+      var val = utrInput.value.trim();
+      if (paymentApp.value && !val) {
+        utrError.textContent = '{% trans "UTR number is required when a payment app is selected." %}';
+        utrError.style.display = 'block';
+        return false;
+      }
+      if (val && !/^[A-Za-z0-9]{12,16}$/.test(val)) {
+        utrError.textContent = '{% trans "UTR must be 12–16 alphanumeric characters." %}';
+        utrError.style.display = 'block';
+        return false;
+      }
+      utrError.style.display = 'none';
+      return true;
+    }
+
+    function validateApp() {
+      if (paymentApp.value) {
+        appError.style.display = 'none';
+        return true;
+      }
+      appError.textContent = '{% trans "Please select a payment app." %}';
+      appError.style.display = 'block';
+      return false;
+    }
+
+    // Real-time validation on change/input
+    paymentApp.addEventListener('change', function() {
+      validateApp();
+      if (this.value) {
+        // if UTR was empty, re-validate
+        validateUTR();
+      }
+    });
+
+    utrInput.addEventListener('input', function() {
+      validateUTR();
+    });
+
+    // On form submit
+    form.addEventListener('submit', function(e) {
+      var isAppValid = validateApp();
+      var isUtrValid = validateUTR();
+      if (!isAppValid || !isUtrValid) {
+        e.preventDefault();
+        // Focus first error field
+        if (!isAppValid) {
+          paymentApp.focus();
+        } else {
+          utrInput.focus();
+        }
+      }
+    });
+
+  })();
+</script>
+{% endblock %}

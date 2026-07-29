@@ -12,6 +12,13 @@ from django.core.cache import cache
 from django.utils.crypto import get_random_string
 import random
 
+# ==========================
+# UTR NO Validator
+# ==========================
+utr_validator = RegexValidator(
+    regex=r'^[A-Za-z0-9]{12,16}$',
+    message=_('UTR number must be 12–16 alphanumeric characters.')
+)
 
 # ==========================
 # Phone Validator
@@ -487,8 +494,10 @@ class Application(models.Model):
         _("UTR Number"),
         max_length=50,
         blank=True,
+        validators=[utr_validator],
         help_text=_("Unique Transaction Reference (if available)")
     )
+
     payment_app = models.CharField(
         _("Payment App"),
         max_length=20,

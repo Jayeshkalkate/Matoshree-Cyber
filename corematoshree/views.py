@@ -59,6 +59,7 @@ from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import cache_page
+import re 
 
 # ---- Local Application ----
 from .models import (
@@ -1486,6 +1487,19 @@ def split_pdf(request, pk):
 @login_required
 def mark_payment_done(request, app_id):
     """Manual payment confirmation (UPI or Cash)."""
+    # Helper to validate UPI details
+    def validate_upi_details(method, payment_app, utr):
+        if method != 'upi':
+            return True, None
+        if not payment_app:
+            return False, _('Please select a payment app.')
+        if not utr:
+            return False, _('UTR number is required for UPI payments.')
+        # Validate UTR format: 12–16 alphanumeric characters
+        if not re.match(r'^[A-Za-z0-9]{12,16}$', utr):
+            return False, _('Invalid UTR format. It must be 12–16 alphanumeric characters.')
+        return True, None
+
     # Check if this is a pending application (app_id == 0)
     if app_id == 0:
         pending_data = request.session.get('pending_application', None)
@@ -1504,7 +1518,14 @@ def mark_payment_done(request, app_id):
             return redirect('payment_checkout', service_id=service.id)
 
         utr = request.POST.get('utr_number', '').strip()
-        payment_app = request.POST.get('payment_app', 'upi')
+        payment_app = request.POST.get('payment_app', '').strip()
+
+        # --- VALIDATION ---
+        valid, error_msg = validate_upi_details(method, payment_app, utr)
+        if not valid:
+            messages.error(request, error_msg)
+            # If payment method is UPI, redirect back to payment_checkout with the same service
+            return redirect('payment_checkout', service_id=service.id)
 
         pending_data['payment_method'] = method
         pending_data['utr_number'] = utr
@@ -1545,7 +1566,13 @@ def mark_payment_done(request, app_id):
         return redirect('application_detail', app_id=app_id)
 
     utr = request.POST.get('utr_number', '').strip()
-    payment_app = request.POST.get('payment_app', 'upi')
+    payment_app = request.POST.get('payment_app', '').strip()
+
+    # --- VALIDATION (same for existing applications) ---
+    valid, error_msg = validate_upi_details(method, payment_app, utr)
+    if not valid:
+        messages.error(request, error_msg)
+        return redirect('application_detail', app_id=app_id)
 
     application.payment_status = 'paid'
     application.payment_date = timezone.now()
@@ -1565,7 +1592,6 @@ def mark_payment_done(request, app_id):
     messages.success(request, _('Payment confirmed. Your receipt is ready.'))
     cache.delete('reports_data')
     return redirect('application_detail', app_id=app_id)
-
 
 # Register Unicode font (DejaVu Sans) – adjust path as needed
 FONT_PATH = os.path.join(settings.BASE_DIR, 'corematoshree', 'static', 'fonts', 'DejaVuSans.ttf')
