@@ -1,14 +1,41 @@
 # =============================================================================
 # IMPORTS
 # =============================================================================
+
+# ---- Standard Library ----
 import os
 import json
-import tempfile
 import logging
+import tempfile
+from decimal import Decimal
 from datetime import timedelta
 from io import BytesIO
-from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
+
+# ---- Third-Party Libraries ----
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.units import inch
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import (
+    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle,
+    HRFlowable, Image
+)
+from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
+from pypdf import PdfReader, PdfWriter
+
+# QR code (optional)
+try:
+    import qrcode
+    from io import BytesIO as qrBytesIO
+    QRCODE_AVAILABLE = True
+except ImportError:
+    QRCODE_AVAILABLE = False
+
+# ---- Django Core ----
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -19,39 +46,20 @@ from django.contrib.auth.views import (
 from django.core.cache import cache
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 from django.db import models
 from django.db.models import Count, Q
 from django.db.models.functions import ExtractWeek, TruncDate
 from django.forms import formset_factory
 from django.http import FileResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
-from django.conf import settings
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import cache_page
 
-# PDF libraries
-from pypdf import PdfReader, PdfWriter
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A4
-from reportlab.lib.units import inch
-from reportlab.lib import colors
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import (
-    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle,
-    HRFlowable, Image
-)
-from reportlab.lib.enums import TA_CENTER, TA_RIGHT, TA_LEFT
-
-# QR code (optional)
-try:
-    import qrcode
-    from io import BytesIO as qrBytesIO
-    QRCODE_AVAILABLE = True
-except ImportError:
-    QRCODE_AVAILABLE = False
-
+# ---- Local Application ----
 from .models import (
     User, Appointment, Review, Service, Announcement, JobNotification,
     GovernmentScheme, DownloadForm, ServiceCharge, Gallery, BusinessInfo,
@@ -68,6 +76,7 @@ from .forms import (
 )
 from .utils import get_business, get_payment_settings, is_admin, is_superadmin
 
+# ---- Logger ----
 logger = logging.getLogger(__name__)
 
 # =============================================================================
@@ -1546,6 +1555,14 @@ def mark_payment_done(request, app_id):
     cache.delete('reports_data')
     return redirect('application_detail', app_id=app_id)
 
+# Register Unicode font (DejaVu Sans) – adjust path as needed
+FONT_PATH = os.path.join(settings.BASE_DIR, 'corematoshree', 'static', 'fonts', 'DejaVuSans.ttf')
+if os.path.exists(FONT_PATH):
+    pdfmetrics.registerFont(TTFont('DejaVuSans', FONT_PATH))
+else:
+    # Fallback to Helvetica if font not found
+    pass
+
 @login_required
 def download_receipt(request, app_id):
     application = get_object_or_404(Application, id=app_id, user=request.user)
@@ -1553,18 +1570,23 @@ def download_receipt(request, app_id):
         messages.error(request, _('No payment record found.'))
         return redirect('application_detail', app_id=app_id)
 
-    # Prepare data
+    # ---- Data ----
     charge = application.service.servicecharge_set.first()
-    amount = charge.charge if charge else 0
-    business_name = get_business().business_name if get_business() else 'Matoshree Cyber Cafe'
-    
-    # Generate QR code (optional) – we'll include it if qrcode is installed
+    amount = charge.charge if charge else Decimal('0.00')
+    business = get_business()
+
+    tax_rate = Decimal(str(getattr(settings, 'GST_RATE', 0.18)))
+    tax_amount = amount * tax_rate
+    total_amount = amount + tax_amount
+
+    # ---- QR Code ----
     qr_img = None
     try:
         import qrcode
-        qr_data = f"Receipt: {application.receipt_number}\nAmount: ₹{amount}\nDate: {application.payment_date.strftime('%d %b %Y')}"
+        from io import BytesIO as qrBytesIO
+        verification_url = f"{request.build_absolute_uri('/')}verify/receipt/{application.receipt_number}/"
         qr = qrcode.QRCode(box_size=4, border=2)
-        qr.add_data(qr_data)
+        qr.add_data(verification_url)
         qr.make(fit=True)
         img = qr.make_image(fill_color="black", back_color="white")
         qr_buffer = qrBytesIO()
@@ -1574,153 +1596,222 @@ def download_receipt(request, app_id):
     except ImportError:
         qr_img = None
 
-    # Create PDF
+    # ---- Find and register the font ----
+    # Look for DejaVuSans.ttf in your static/fonts directory
+    possible_font_paths = [
+        os.path.join(settings.BASE_DIR, 'static', 'fonts', 'dejavu-fonts-ttf-2.37', 'ttf', 'DejaVuSans.ttf'),
+        os.path.join(settings.BASE_DIR, 'static', 'fonts', 'dejavu-fonts-ttf-2.37', 'DejaVuSans.ttf'),
+        os.path.join(settings.BASE_DIR, 'static', 'fonts', 'DejaVuSans.ttf'),
+        os.path.join(settings.BASE_DIR, 'corematoshree', 'static', 'fonts', 'DejaVuSans.ttf'),
+    ]
+    font_name = 'Helvetica'  # fallback
+    for font_path in possible_font_paths:
+        if os.path.exists(font_path):
+            try:
+                pdfmetrics.registerFont(TTFont('DejaVuSans', font_path))
+                font_name = 'DejaVuSans'
+                logger.info(f"Loaded font from {font_path}")
+                break
+            except Exception as e:
+                logger.warning(f"Failed to load font from {font_path}: {e}")
+    if font_name == 'Helvetica':
+        logger.warning("DejaVuSans not found, using Helvetica. ₹ sign may not display correctly.")
+
+    # ---- PDF setup ----
     buffer = BytesIO()
     doc = SimpleDocTemplate(
         buffer,
         pagesize=A4,
-        rightMargin=0.8*inch,
-        leftMargin=0.8*inch,
-        topMargin=0.8*inch,
-        bottomMargin=0.8*inch,
+        rightMargin=0.6*inch,
+        leftMargin=0.6*inch,
+        topMargin=0.6*inch,
+        bottomMargin=0.6*inch,
     )
+
     styles = getSampleStyleSheet()
-    
-    # Custom styles
-    title_style = ParagraphStyle(
-        'TitleStyle',
-        parent=styles['Heading1'],
-        fontSize=18,
-        textColor=colors.HexColor('#1a1a2e'),
-        alignment=TA_CENTER,
-        spaceAfter=6,
-    )
-    success_style = ParagraphStyle(
-        'SuccessStyle',
-        parent=styles['Heading2'],
-        fontSize=14,
-        textColor=colors.HexColor('#2e7d32'),
-        alignment=TA_CENTER,
-        spaceAfter=10,
-    )
-    amount_style = ParagraphStyle(
-        'AmountStyle',
-        parent=styles['Heading1'],
-        fontSize=28,
-        textColor=colors.HexColor('#0d47a1'),
-        alignment=TA_CENTER,
-        spaceAfter=12,
-    )
-    section_title = ParagraphStyle(
-        'SectionTitle',
-        parent=styles['Heading4'],
-        fontSize=12,
-        textColor=colors.HexColor('#37474f'),
-        alignment=TA_LEFT,
-        spaceAfter=4,
-        spaceBefore=8,
-        fontName='Helvetica-Bold',
-    )
-    normal_text = ParagraphStyle(
-        'NormalText',
-        parent=styles['Normal'],
-        fontSize=10,
-        textColor=colors.HexColor('#455a64'),
-        alignment=TA_LEFT,
-        spaceAfter=2,
-    )
-    label_style = ParagraphStyle(
-        'LabelStyle',
-        parent=styles['Normal'],
-        fontSize=10,
-        textColor=colors.HexColor('#78909c'),
-        alignment=TA_LEFT,
-        spaceAfter=2,
-        fontName='Helvetica-Bold',
-    )
-    value_style = ParagraphStyle(
-        'ValueStyle',
-        parent=styles['Normal'],
-        fontSize=10,
-        textColor=colors.HexColor('#263238'),
-        alignment=TA_LEFT,
-        spaceAfter=2,
-    )
-    
-    # Build elements
+
+    def create_style(name, parent, **kwargs):
+        return ParagraphStyle(name, parent=styles[parent], fontName=font_name, **kwargs)
+
+    # ---- Styles (same as before) ----
+    brand_style = create_style('BrandStyle', 'Heading1', fontSize=22, textColor=colors.HexColor('#1a1a2e'), alignment=TA_LEFT, spaceAfter=2)
+    sub_style = create_style('SubStyle', 'Normal', fontSize=9, textColor=colors.HexColor('#64748b'), alignment=TA_LEFT, spaceAfter=1)
+    receipt_title_style = create_style('ReceiptTitle', 'Heading2', fontSize=16, textColor=colors.HexColor('#0f172a'), alignment=TA_CENTER, spaceAfter=4)
+    success_style = create_style('SuccessStyle', 'Heading2', fontSize=14, textColor=colors.HexColor('#16a34a'), alignment=TA_CENTER, spaceAfter=6)
+    amount_style = create_style('AmountStyle', 'Heading1', fontSize=32, textColor=colors.HexColor('#2563eb'), alignment=TA_CENTER, spaceAfter=8)
+    section_title = create_style('SectionTitle', 'Heading4', fontSize=11, textColor=colors.HexColor('#334155'), alignment=TA_LEFT, spaceAfter=4, spaceBefore=8)
+    label_style = create_style('LabelStyle', 'Normal', fontSize=9, textColor=colors.HexColor('#94a3b8'), alignment=TA_LEFT, spaceAfter=2)
+    value_style = create_style('ValueStyle', 'Normal', fontSize=9, textColor=colors.HexColor('#0f172a'), alignment=TA_LEFT, spaceAfter=2)
+    total_style = create_style('TotalStyle', 'Normal', fontSize=12, textColor=colors.HexColor('#0f172a'), alignment=TA_RIGHT, spaceAfter=2)
+    footer_style = create_style('FooterStyle', 'Normal', fontSize=8, textColor=colors.HexColor('#94a3b8'), alignment=TA_CENTER, spaceAfter=2)
+    normal_style = create_style('NormalStyle', 'Normal', fontSize=9, textColor=colors.HexColor('#0f172a'), alignment=TA_LEFT)
+
     story = []
 
-    # --- Brand header ---
-    story.append(Paragraph(f"<b>{business_name}</b>", title_style))
-    story.append(Paragraph("Digital Payment Receipt", styles['Normal']))
-    story.append(Spacer(1, 0.2*inch))
-    story.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor('#e0e0e0'), spaceBefore=4, spaceAfter=4))
-    
-    # --- Status & Amount ---
-    story.append(Paragraph("✅ Payment Successful", success_style))
-    story.append(Paragraph(f"₹ {amount:.2f}", amount_style))
-    story.append(HRFlowable(width="60%", thickness=1, color=colors.HexColor('#4caf50'), spaceBefore=4, spaceAfter=8))
+    # ---- Header ----
+    logo_img = None
+    if business and business.logo:
+        try:
+            logo_path = business.logo.path
+            if os.path.exists(logo_path):
+                logo_img = Image(logo_path, width=1.2*inch, height=1.2*inch)
+        except Exception:
+            logo_img = None
 
-    # --- Transaction Details (two columns) ---
-    data = [
-        [Paragraph("<b>Receipt No.</b>", label_style), Paragraph(application.receipt_number or 'N/A', value_style)],
-        [Paragraph("<b>Date & Time</b>", label_style), Paragraph(application.payment_date.strftime('%d %b %Y, %I:%M %p') if application.payment_date else 'N/A', value_style)],
-        [Paragraph("<b>UTR Number</b>", label_style), Paragraph(application.utr_number or 'N/A', value_style)],
-        [Paragraph("<b>Payment App</b>", label_style), Paragraph(application.get_payment_app_display() or 'N/A', value_style)],
-        [Paragraph("<b>Payment Method</b>", label_style), Paragraph(application.get_payment_method_display() or 'N/A', value_style)],
-        [Paragraph("<b>Transaction ID</b>", label_style), Paragraph(application.payment_transaction_id or 'N/A', value_style)],
-    ]
-    table = Table(data, colWidths=[2.2*inch, 3.5*inch])
-    table.setStyle(TableStyle([
-        ('FONTNAME', (0,0), (-1,-1), 'Helvetica'),
-        ('FONTSIZE', (0,0), (-1,-1), 9),
-        ('BACKGROUND', (0,0), (0,-1), colors.HexColor('#f5f7fa')),
-        ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor('#e8eaf6')),
+    if logo_img:
+        header_data = [[logo_img, Paragraph(f"<b>{business.business_name}</b>", brand_style)]]
+        header_table = Table(header_data, colWidths=[1.5*inch, 4.5*inch])
+    else:
+        header_data = [[Paragraph(f"<b>{business.business_name}</b>", brand_style)]]
+        header_table = Table(header_data, colWidths=[6*inch])
+    header_table.setStyle(TableStyle([
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-        ('PADDING', (0,0), (-1,-1), 6),
+        ('LEFTPADDING', (0,0), (-1,-1), 0),
+        ('RIGHTPADDING', (0,0), (-1,-1), 0),
     ]))
-    story.append(table)
-    story.append(Spacer(1, 0.2*inch))
-    story.append(HRFlowable(width="100%", thickness=0.5, color=colors.HexColor('#e0e0e0'), spaceBefore=4, spaceAfter=4))
+    story.append(header_table)
 
-    # --- Customer & Service Details (two columns) ---
-    # Left: Customer
+    # Business details
+    details = []
+    if business and business.address:
+        details.append(f"Address: {business.address}")
+    if business and business.phone:
+        details.append(f"Phone: {business.phone}")
+    if business and business.email:
+        details.append(f"Email: {business.email}")
+    if business and business.gstin:
+        details.append(f"GSTIN: {business.gstin}")
+    elif business and business.registration_number:
+        details.append(f"Reg. No.: {business.registration_number}")
+
+    if details:
+        story.append(Paragraph("  |  ".join(details), sub_style))
+
+    story.append(Spacer(1, 0.15*inch))
+    story.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor('#e2e8f0'), spaceBefore=2, spaceAfter=2))
+
+    # ---- Title ----
+    story.append(Paragraph("PAYMENT RECEIPT", receipt_title_style))
+    story.append(Spacer(1, 0.1*inch))
+    story.append(HRFlowable(width="60%", thickness=1, color=colors.HexColor('#3b82f6'), spaceBefore=2, spaceAfter=4))
+
+    # ---- Status & Amount ----
+    story.append(Paragraph("Payment Successful", success_style))
+    story.append(Paragraph(f"₹ {total_amount:,.2f}", amount_style))
+    story.append(HRFlowable(width="40%", thickness=1, color=colors.HexColor('#22c55e'), spaceBefore=2, spaceAfter=6))
+
+    # ---- Transaction Details ----
+    trans_data = [
+        ["Receipt No.", application.receipt_number or 'N/A'],
+        ["Date & Time", application.payment_date.strftime('%d %b %Y, %I:%M %p') if application.payment_date else 'N/A'],
+        ["UTR Number", application.utr_number or 'N/A'],
+        ["Payment App", application.get_payment_app_display() or 'N/A'],
+        ["Payment Method", application.get_payment_method_display() or 'N/A'],
+    ]
+    trans_table = Table([[Paragraph(f"<b>{label}</b>", label_style), Paragraph(value, value_style)] for label, value in trans_data],
+                        colWidths=[2.2*inch, 3.8*inch])
+    trans_table.setStyle(TableStyle([
+        ('FONTNAME', (0,0), (-1,-1), font_name),
+        ('FONTSIZE', (0,0), (-1,-1), 9),
+        ('BACKGROUND', (0,0), (0,-1), colors.HexColor('#f8fafc')),
+        ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor('#e2e8f0')),
+        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+        ('PADDING', (0,0), (-1,-1), 5),
+    ]))
+    story.append(trans_table)
+    story.append(Spacer(1, 0.15*inch))
+    story.append(HRFlowable(width="100%", thickness=0.5, color=colors.HexColor('#e2e8f0'), spaceBefore=2, spaceAfter=2))
+
+    # ---- Itemised Breakdown ----
+    item_headers = ['#', 'Service', 'Qty', 'Unit Price', f'GST ({tax_rate*100:.0f}%)', 'Total']
+    item_row = [
+        '1',
+        application.service.name,
+        '1',
+        f'₹{amount:,.2f}',
+        f'₹{tax_amount:,.2f}',
+        f'₹{total_amount:,.2f}'
+    ]
+    item_table = Table([item_headers, item_row],
+                       colWidths=[0.5*inch, 2.5*inch, 0.7*inch, 1.2*inch, 1.2*inch, 1.2*inch])
+    item_table.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#1e293b')),
+        ('TEXTCOLOR', (0,0), (-1,0), colors.white),
+        ('FONTNAME', (0,0), (-1,-1), font_name),
+        ('FONTSIZE', (0,0), (-1,-1), 9),
+        ('ALIGN', (0,0), (-1,-1), 'CENTER'),
+        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+        ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor('#e2e8f0')),
+        ('PADDING', (0,0), (-1,-1), 4),
+        ('BACKGROUND', (0,1), (-1,-1), colors.HexColor('#f8fafc')),
+        ('FONTNAME', (0,1), (-1,-1), font_name),
+    ]))
+    story.append(item_table)
+    story.append(Spacer(1, 0.1*inch))
+
+    # ---- Totals ----
+    totals = [
+        ("Subtotal:", f"₹{amount:,.2f}"),
+        (f"Tax (GST {tax_rate*100:.0f}%):", f"₹{tax_amount:,.2f}"),
+        ("Grand Total:", f"₹{total_amount:,.2f}"),
+    ]
+    totals_table = Table([[Paragraph(f"<b>{label}</b>", total_style), Paragraph(value, total_style)] for label, value in totals],
+                         colWidths=[4.5*inch, 1.5*inch])
+    totals_table.setStyle(TableStyle([
+        ('ALIGN', (0,0), (-1,-1), 'RIGHT'),
+        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+        ('PADDING', (0,0), (-1,-1), 3),
+        ('FONTSIZE', (0,0), (-1,-1), 10),
+        ('LINEABOVE', (0,-1), (-1,-1), 1, colors.HexColor('#0f172a')),
+        ('FONTNAME', (0,-1), (-1,-1), font_name),
+    ]))
+    story.append(totals_table)
+    story.append(Spacer(1, 0.15*inch))
+    story.append(HRFlowable(width="100%", thickness=0.5, color=colors.HexColor('#e2e8f0'), spaceBefore=2, spaceAfter=2))
+
+    # ---- Customer & Service Details ----
     customer_data = [
         [Paragraph("<b>Customer Details</b>", section_title)],
-        [Paragraph(f"<b>Name:</b> {application.full_name}", normal_text)],
-        [Paragraph(f"<b>Phone:</b> {application.phone}", normal_text)],
-        [Paragraph(f"<b>Email:</b> {application.email}", normal_text)],
+        [Paragraph(f"Name: {application.full_name}", value_style)],
+        [Paragraph(f"Phone: {application.phone}", value_style)],
+        [Paragraph(f"Email: {application.email}", value_style)],
+        [Paragraph(f"Address: {application.address}", value_style)],
     ]
-    customer_table = Table(customer_data, colWidths=[3*inch])
-    customer_table.setStyle(TableStyle([
+    cust_table = Table(customer_data, colWidths=[3*inch])
+    cust_table.setStyle(TableStyle([
         ('ALIGN', (0,0), (-1,-1), 'LEFT'),
         ('VALIGN', (0,0), (-1,-1), 'TOP'),
-        ('PADDING', (0,0), (-1,-1), 4),
+        ('PADDING', (0,0), (-1,-1), 3),
+        ('FONTNAME', (0,0), (-1,-1), font_name),
     ]))
-    # Right: Service
+
     service_data = [
         [Paragraph("<b>Service Details</b>", section_title)],
-        [Paragraph(f"<b>Service:</b> {application.service.name}", normal_text)],
-        [Paragraph(f"<b>Amount:</b> ₹{amount:.2f}", normal_text)],
-        [Paragraph(f"<b>Status:</b> Paid", normal_text)],
+        [Paragraph(f"Service: {application.service.name}", value_style)],
+        [Paragraph(f"Amount: ₹{amount:,.2f}", value_style)],
+        [Paragraph(f"Tax: ₹{tax_amount:,.2f}", value_style)],
+        [Paragraph(f"Total: ₹{total_amount:,.2f}", value_style)],
+        [Paragraph("Status: Paid", value_style)],
     ]
-    service_table = Table(service_data, colWidths=[3*inch])
-    service_table.setStyle(TableStyle([
+    serv_table = Table(service_data, colWidths=[3*inch])
+    serv_table.setStyle(TableStyle([
         ('ALIGN', (0,0), (-1,-1), 'LEFT'),
         ('VALIGN', (0,0), (-1,-1), 'TOP'),
-        ('PADDING', (0,0), (-1,-1), 4),
+        ('PADDING', (0,0), (-1,-1), 3),
+        ('FONTNAME', (0,0), (-1,-1), font_name),
     ]))
-    # Combine side by side
-    combined = Table([[customer_table, service_table]], colWidths=[3*inch, 3*inch])
+
+    combined = Table([[cust_table, serv_table]], colWidths=[3*inch, 3*inch])
     combined.setStyle(TableStyle([
         ('VALIGN', (0,0), (-1,-1), 'TOP'),
         ('LEFTPADDING', (0,0), (-1,-1), 0),
         ('RIGHTPADDING', (0,0), (-1,-1), 0),
     ]))
     story.append(combined)
-    story.append(Spacer(1, 0.2*inch))
+    story.append(Spacer(1, 0.15*inch))
+    story.append(HRFlowable(width="100%", thickness=0.5, color=colors.HexColor('#e2e8f0'), spaceBefore=2, spaceAfter=2))
 
-    # --- QR Code (if available) and Footer ---
+    # ---- QR Code ----
     if qr_img:
         qr_table = Table([[qr_img]], colWidths=[1.5*inch])
         qr_table.setStyle(TableStyle([
@@ -1728,21 +1819,26 @@ def download_receipt(request, app_id):
             ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
         ]))
         story.append(qr_table)
-        story.append(Paragraph("Scan to verify", styles['Normal']))
-        story.append(Spacer(1, 0.2*inch))
+        story.append(Paragraph("Scan to verify", normal_style))
+        story.append(Spacer(1, 0.1*inch))
 
-    # --- Footer note ---
-    story.append(HRFlowable(width="100%", thickness=0.5, color=colors.HexColor('#e0e0e0'), spaceBefore=4, spaceAfter=4))
-    story.append(Paragraph("Thank you for your payment. This is a system-generated receipt.", styles['Normal']))
-    story.append(Paragraph(f"Verified on: {timezone.now().strftime('%d %b %Y %I:%M %p')}", styles['Normal']))
-    story.append(Paragraph("For support, contact us at support@matoshree.com", styles['Normal']))
+    # ---- Footer ----
+    story.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor('#e2e8f0'), spaceBefore=4, spaceAfter=4))
+    story.append(Paragraph("Thank you for your payment. This is a system-generated receipt.", footer_style))
+    story.append(Paragraph(f"Verified on: {timezone.now().strftime('%d %b %Y %I:%M %p')}", footer_style))
+    support_email = business.email if business and business.email else 'support@matoshree.com'
+    story.append(Paragraph(f"For support, contact us at {support_email}", footer_style))
+    story.append(Paragraph(f"© {timezone.now().year} {business.business_name if business else 'Matoshree Cyber Cafe'}. All rights reserved.", footer_style))
 
-    # Build PDF
+    # ---- Build PDF ----
     doc.build(story)
     buffer.seek(0)
-    return FileResponse(buffer, as_attachment=True, filename=f"receipt_{application.receipt_number}.pdf")
-
-
+    return FileResponse(
+        buffer,
+        as_attachment=True,
+        filename=f"receipt_{application.receipt_number}.pdf"
+    )
+    
 # =============================================================================
 # DASHBOARD REPORT
 # =============================================================================

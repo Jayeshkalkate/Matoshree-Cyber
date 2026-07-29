@@ -442,6 +442,19 @@ class BusinessInfo(models.Model):
         blank=True,
         help_text=_("Enter each certification on a new line."),
     )
+    logo = models.ImageField(
+        _("Logo"),
+        upload_to="business/",
+        blank=True,
+        null=True,
+        help_text=_("Business logo for receipts and branding.")
+    )
+    gstin = models.CharField(
+        _("GSTIN"),
+        max_length=20,
+        blank=True,
+        help_text=_("GST Identification Number (if applicable)")
+    )
 
     def save(self, *args, **kwargs):
         if self.pk:

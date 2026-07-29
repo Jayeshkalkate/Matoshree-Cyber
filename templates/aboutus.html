@@ -23,7 +23,8 @@
   .pricing-section,
   .trust,
   .authorized,
-  .cta-banner {
+  .cta-banner,
+  .services-list-bottom {
     width: 100%;
     overflow-x: hidden;
   }
@@ -320,26 +321,34 @@
   }
 
   /* ---- Services Overview (grid cards) ---- */
-  .services-list {
+  .services-list,
+  .services-list-bottom {
     padding: clamp(40px, 8vw, 80px) 0 clamp(30px, 6vw, 70px);
     background: var(--bg-secondary, rgba(10, 14, 26, 0.6));
   }
-  .services-list .section-header {
+  .services-list-bottom {
+    background: var(--bg-primary, #0a0e1a);
+  }
+  .services-list .section-header,
+  .services-list-bottom .section-header {
     text-align: center;
     margin-bottom: clamp(30px, 5vw, 48px);
   }
-  .services-list .section-header h2 {
+  .services-list .section-header h2,
+  .services-list-bottom .section-header h2 {
     font-size: clamp(1.8rem, 4vw, 2.6rem);
     font-weight: 800;
     font-family: var(--font-display, "Inter", sans-serif);
     color: var(--text-white, #f0f4ff);
     letter-spacing: -0.5px;
   }
-  .services-list .section-header h2 span {
+  .services-list .section-header h2 span,
+  .services-list-bottom .section-header h2 span {
     color: var(--neon-cyan, #00f0ff);
     text-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
   }
-  .services-list .section-header p {
+  .services-list .section-header p,
+  .services-list-bottom .section-header p {
     color: var(--text-muted, #94a3b8);
     font-size: clamp(0.95rem, 1.2vw, 1.1rem);
     max-width: 560px;
@@ -700,7 +709,8 @@
     .experience-image h3 {
       font-size: clamp(1.1rem, 2.5vw, 1.4rem);
     }
-    .services-list .section-header h2 {
+    .services-list .section-header h2,
+    .services-list-bottom .section-header h2 {
       font-size: clamp(1.6rem, 5vw, 2rem);
     }
     .services-grid-about {
@@ -886,6 +896,7 @@
     .about-intro-text h2 span,
     .experience-content h2 span,
     .services-list .section-header h2 span,
+    .services-list-bottom .section-header h2 span,
     .trust .section-header h2 span,
     .authorized-badge h3 span,
     .cta-banner h2 span {
@@ -952,6 +963,7 @@
     .about-intro-text h2 span,
     .experience-content h2 span,
     .services-list .section-header h2 span,
+    .services-list-bottom .section-header h2 span,
     .trust .section-header h2 span,
     .authorized-badge h3 span,
     .cta-banner h2 span {
@@ -1354,6 +1366,32 @@
          target="_blank" rel="noopener noreferrer" class="btn-whatsapp" aria-label="{% trans 'Chat on WhatsApp' %}">
         <i class="fab fa-whatsapp" aria-hidden="true"></i> {% trans "Chat on WhatsApp" %}
       </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     NEW: OUR COMPLETE SERVICE LIST (at the very bottom)
+     ================================================================ -->
+<section class="services-list-bottom">
+  <div class="container">
+    <div class="section-header">
+      <h2>{% trans "Our" %} <span>{% trans "Complete" %}</span> {% trans "Service List" %}</h2>
+      <p>
+        {% trans "Everything you need, all under one roof — from government applications to document services." %}
+      </p>
+    </div>
+    <div class="services-grid-about">
+      {% for service in services %}
+      <div class="service-about-item" role="listitem">
+        <i class="fas fa-{{ service.icon|default:'cog' }}" aria-hidden="true"></i>
+        <span>{{ service.name }}</span>
+      </div>
+      {% empty %}
+      <p style="grid-column: 1 / -1; text-align: center; color: var(--text-muted, #94a3b8);">
+        {% trans "No services available at the moment." %}
+      </p>
+      {% endfor %}
     </div>
   </div>
 </section>
