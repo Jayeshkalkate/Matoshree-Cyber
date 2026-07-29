@@ -105,8 +105,11 @@ USE_TZ = True
 # ------------------------------------------------------------------
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+STATICFILES_DIRS = [BASE_DIR / 'static']   # make sure this folder exists
 
+# ------------------------------------------------------------------
+# STORAGES – Django 4.2+ (Cloudinary for media, WhiteNoise for static)
+# ------------------------------------------------------------------
 STORAGES = {
     'default': {
         'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
@@ -115,17 +118,6 @@ STORAGES = {
         'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
     },
 }
-
-# Remove these two lines (they are now ignored)
-# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-CLOUDINARY_URL=config('CLOUDINARY_CLOUD_NAME'),
-
-# Media settings – Cloudinary will override the storage
-MEDIA_URL = '/media/'  # Not used when Cloudinary is active, but kept for safety
-MEDIA_ROOT = BASE_DIR / 'media'
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ------------------------------------------------------------------
 # CLOUDINARY – UNCONDITIONAL
@@ -136,15 +128,24 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': config('CLOUDINARY_API_SECRET'),
 }
 
-# Initialize Cloudinary SDK
+# Initialize Cloudinary SDK (using the same credentials)
 cloudinary.config(
     cloud_name=config('CLOUDINARY_CLOUD_NAME'),
     api_key=config('CLOUDINARY_API_KEY'),
     api_secret=config('CLOUDINARY_API_SECRET'),
 )
 
-# Print confirmation (you'll see this in Render logs)
+# Optional: If you want to use the unified CLOUDINARY_URL variable (some libs need it)
+# CLOUDINARY_URL = config('CLOUDINARY_URL', default='')
+
 print("✅ Cloudinary storage is ACTIVE with cloud_name:", config('CLOUDINARY_CLOUD_NAME'))
+
+# ------------------------------------------------------------------
+# MEDIA (fallback – not used when Cloudinary is active)
+# ------------------------------------------------------------------
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ------------------------------------------------------------------
 # EMAIL
