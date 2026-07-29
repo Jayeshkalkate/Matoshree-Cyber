@@ -1843,39 +1843,59 @@ def download_receipt(request, app_id):
 # DASHBOARD REPORT
 # =============================================================================
 
+import json
+from django.db.models.functions import TruncWeek
+
 @login_required
 @user_passes_test(is_admin)
 def reports_dashboard(request):
     cache_key = 'reports_data'
     data = cache.get(cache_key)
+    
     if not data:
-        app_status_counts = Application.objects.values('status').annotate(count=Count('id'))
+        # Application status counts
+        app_status_counts = list(Application.objects.values('status').annotate(count=Count('id')))
+
+        # Daily applications (last 30 days)
         end_date = timezone.now().date()
         start_date = end_date - timedelta(days=30)
-        daily_apps = Application.objects.filter(created_at__date__gte=start_date) \
-            .annotate(day=TruncDate('created_at')) \
-            .values('day') \
-            .annotate(count=Count('id')) \
+        daily_apps = list(
+            Application.objects.filter(created_at__date__gte=start_date)
+            .annotate(day=TruncDate('created_at'))
+            .values('day')
+            .annotate(count=Count('id'))
             .order_by('day')
-        appt_status_counts = Appointment.objects.values('status').annotate(count=Count('id'))
-        weekly_users = User.objects.filter(date_joined__gte=timezone.now() - timedelta(days=90)) \
-            .annotate(week=ExtractWeek('date_joined')) \
-            .values('week') \
-            .annotate(count=Count('id')) \
+        )
+
+        # Appointment status counts
+        appt_status_counts = list(Appointment.objects.values('status').annotate(count=Count('id')))
+
+        # Weekly users (last 90 days) – use TruncWeek for SQLite compatibility
+        weekly_users = list(
+            User.objects.filter(date_joined__gte=timezone.now() - timedelta(days=90))
+            .annotate(week=TruncWeek('date_joined'))
+            .values('week')
+            .annotate(count=Count('id'))
             .order_by('week')
-        payment_status_counts = Application.objects.values('payment_status').annotate(count=Count('id'))
+        )
+
+        # Payment status counts
+        payment_status_counts = list(Application.objects.values('payment_status').annotate(count=Count('id')))
 
         data = {
-            'app_status': list(app_status_counts),
-            'daily_apps': list(daily_apps),
-            'appt_status': list(appt_status_counts),
-            'weekly_users': list(weekly_users),
-            'payment_status': list(payment_status_counts),
+            'app_status': app_status_counts,
+            'daily_apps': daily_apps,
+            'appt_status': appt_status_counts,
+            'weekly_users': weekly_users,
+            'payment_status': payment_status_counts,
         }
         cache.set(cache_key, data, 300)
 
+    # Serialize to JSON with default=str to handle date objects
+    data_json = json.dumps(data, default=str)
+
     context = {
-        'data': data,
+        'data_json': data_json,
         'business': get_business(),
     }
     return render(request, 'reports_dashboard.html', context)

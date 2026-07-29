@@ -63,12 +63,14 @@
     </div>
   </div>
 </div>
+{% endblock %}
 
+{% block extra_js %}
 <script>
   (function() {
     "use strict";
 
-    const data = {{ data|safe }};
+    const data = {{ data_json|safe }};
 
     // ---- Applications by Status ----
     const appStatusLabels = data.app_status.map(item => item.status);
