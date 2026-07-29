@@ -30,6 +30,7 @@ DATABASES = {
     'default': dj_database_url.config(
         default=config('DATABASE_URL', default='sqlite:///db.sqlite3'),
         conn_max_age=600,
+        # ssl_require=True is fine for PostgreSQL; SQLite ignores it.
         ssl_require=True
     )
 }
@@ -131,17 +132,16 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': config('CLOUDINARY_API_SECRET'),
 }
 
-# Initialize Cloudinary SDK (using the same credentials)
+# Initialize Cloudinary SDK
 cloudinary.config(
     cloud_name=config('CLOUDINARY_CLOUD_NAME'),
     api_key=config('CLOUDINARY_API_KEY'),
     api_secret=config('CLOUDINARY_API_SECRET'),
 )
 
-# Optional: If you want to use the unified CLOUDINARY_URL variable (some libs need it)
-# CLOUDINARY_URL = config('CLOUDINARY_URL', default='')
-
-print("✅ Cloudinary storage is ACTIVE with cloud_name:", config('CLOUDINARY_CLOUD_NAME'))
+# (Optional) Remove this print or keep only for debugging
+if DEBUG:
+    print("✅ Cloudinary storage is ACTIVE with cloud_name:", config('CLOUDINARY_CLOUD_NAME'))
 
 # ------------------------------------------------------------------
 # MEDIA (fallback – not used when Cloudinary is active)
@@ -189,7 +189,28 @@ else:
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
 
-CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='').split(',') if not DEBUG else ['http://localhost:8000', 'http://127.0.0.1:8000']
+# CSRF_TRUSTED_ORIGINS – properly handle empty string
+_csrf_origins = config('CSRF_TRUSTED_ORIGINS', default='')
+if _csrf_origins:
+    CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in _csrf_origins.split(',') if origin.strip()]
+else:
+    CSRF_TRUSTED_ORIGINS = []
+if DEBUG:
+    CSRF_TRUSTED_ORIGINS += ['http://localhost:8000', 'http://127.0.0.1:8000']
+
+# ------------------------------------------------------------------
+# CACHING (production recommendation)
+# ------------------------------------------------------------------
+# For production, use a shared cache like Redis or Memcached.
+# Uncomment and configure as needed:
+#
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+#         'LOCATION': config('REDIS_URL', default='redis://127.0.0.1:6379/1'),
+#     }
+# }
+# If you don't set this, Django uses local memory cache (per process).
 
 # ------------------------------------------------------------------
 # LOGGING

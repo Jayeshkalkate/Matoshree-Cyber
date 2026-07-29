@@ -513,6 +513,7 @@ class Application(models.Model):
     PAYMENT_METHOD_CHOICES = (
         ("upi", "UPI"),
         ("cash", "Cash"),
+        ("manual", "Manual"),
     )
 
     # --- Core fields ---

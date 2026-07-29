@@ -26,13 +26,13 @@ from reportlab.platypus import (
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
 from pypdf import PdfReader, PdfWriter
 
-# QR code (optional)
-try:
-    import qrcode
-    from io import BytesIO as qrBytesIO
-    QRCODE_AVAILABLE = True
-except ImportError:
-    QRCODE_AVAILABLE = False
+# QR code (optional) – disabled because verification URL does not exist
+# try:
+#     import qrcode
+#     from io import BytesIO as qrBytesIO
+#     QRCODE_AVAILABLE = True
+# except ImportError:
+#     QRCODE_AVAILABLE = False
 
 # ---- Django Core ----
 from django.conf import settings
@@ -48,9 +48,10 @@ from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
+from django.core.files import File
 from django.db import models
 from django.db.models import Count, Q
-from django.db.models.functions import ExtractWeek, TruncDate
+from django.db.models.functions import ExtractWeek, TruncDate, TruncWeek
 from django.forms import formset_factory
 from django.http import FileResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
@@ -84,7 +85,7 @@ logger = logging.getLogger(__name__)
 # =============================================================================
 
 def send_admin_notification(subject, message, recipient_list=None):
-    """Send email to admin(s)."""
+    """Send email to admin(s) with error handling."""
     if recipient_list is None:
         recipient_list = [getattr(settings, 'CONTACT_EMAIL', settings.DEFAULT_FROM_EMAIL)]
     try:
@@ -218,7 +219,7 @@ class CustomPasswordResetCompleteView(PasswordResetCompleteView):
 
 
 # -----------------------------------------------------------------------------
-# Password Change Views (added)
+# Password Change Views
 # -----------------------------------------------------------------------------
 class CustomPasswordChangeView(PasswordChangeView):
     template_name = 'password_change.html'
@@ -234,47 +235,46 @@ class CustomPasswordChangeDoneView(PasswordChangeDoneView):
 # =============================================================================
 
 DASHBOARD_CACHE_KEY = 'dashboard_data_v2'
-DASHBOARD_CACHE_TTL = 120  # 2 minutes
-
+DASHBOARD_CACHE_TTL = 120
 
 def _get_dashboard_common_data():
     cache_key = DASHBOARD_CACHE_KEY
     cached = cache.get(cache_key)
+    if cached is not None:
+        data = cached
+    else:
+        # Build serializable data (lists of dicts) – safe for cache
+        data = {
+            'services': list(Service.objects.values('id', 'name', 'category', 'active', 'icon', 'icon_color')),
+            'appointments': list(Appointment.objects.select_related('service').values(
+                'id', 'full_name', 'phone', 'email', 'service__name',
+                'appointment_date', 'appointment_time', 'status', 'created_at'
+            ).order_by('-appointment_date')[:100]),
+            'contacts': list(Contact.objects.values('id', 'name', 'email', 'phone', 'subject', 'message', 'reply', 'replied', 'created_at')[:100]),
+            'announcements': list(Announcement.objects.values('id', 'title', 'category', 'description', 'created_at')[:100]),
+            'jobs': list(JobNotification.objects.values('id', 'title', 'organization', 'last_date', 'apply_link', 'description', 'icon')[:100]),
+            'schemes': list(GovernmentScheme.objects.values('id', 'title', 'description', 'eligibility', 'last_date', 'image')[:100]),
+            'forms_list': list(DownloadForm.objects.values('id', 'title', 'category', 'pdf', 'uploaded_at')[:100]),
+            'servicecharges': list(ServiceCharge.objects.select_related('service').values('id', 'service__name', 'charge')),
+            'gallery_images': list(Gallery.objects.values('id', 'title', 'category', 'image')[:100]),
+            'business_info': BusinessInfo.objects.first(),  # model instance, pickleable
+            'applications': list(Application.objects.select_related('user', 'service').values(
+                'id', 'user__username', 'service__name', 'full_name', 'phone',
+                'email', 'address', 'status', 'created_at'
+            ).order_by('-created_at')[:100]),
+            'required_docs': list(RequiredDocument.objects.select_related('service').values(
+                'id', 'service__name', 'document_name'
+            ).order_by('service__name')),
+            'team_members': list(TeamMember.objects.values('id', 'name', 'designation', 'bio', 'photo', 'order', 'is_active')),
+        }
+        cache.set(cache_key, data, DASHBOARD_CACHE_TTL)
 
+    # Add forms (not cached)
     payment_settings_instance = PaymentSettings.objects.filter(is_active=True).first()
     if not payment_settings_instance:
         payment_settings_instance = PaymentSettings.objects.first()
         if not payment_settings_instance:
             payment_settings_instance = PaymentSettings.objects.create(is_active=False)
-
-    if cached is not None:
-        data = cached
-    else:
-        data = {
-            'services': Service.objects.all().only('id', 'name', 'category', 'active', 'icon', 'icon_color'),
-            # Limit large tables to recent 100 to avoid memory issues
-            'appointments': Appointment.objects.select_related('service').only(
-                'id', 'full_name', 'phone', 'email', 'service__name',
-                'appointment_date', 'appointment_time', 'status', 'created_at'
-            ).order_by('-appointment_date')[:100],
-            'contacts': Contact.objects.all().only('id', 'name', 'email', 'phone', 'subject', 'message', 'reply', 'replied', 'created_at')[:100],
-            'announcements': Announcement.objects.all().only('id', 'title', 'category', 'description', 'created_at')[:100],
-            'jobs': JobNotification.objects.all().only('id', 'title', 'organization', 'last_date', 'apply_link', 'description', 'icon')[:100],
-            'schemes': GovernmentScheme.objects.all().only('id', 'title', 'description', 'eligibility', 'last_date', 'image')[:100],
-            'forms_list': DownloadForm.objects.all().only('id', 'title', 'category', 'pdf', 'uploaded_at')[:100],
-            'servicecharges': ServiceCharge.objects.select_related('service').only('id', 'service__name', 'charge'),
-            'gallery_images': Gallery.objects.all().only('id', 'title', 'category', 'image')[:100],
-            'business_info': BusinessInfo.objects.first(),
-            'applications': Application.objects.select_related('user', 'service').only(
-                'id', 'user__username', 'service__name', 'full_name', 'phone',
-                'email', 'address', 'status', 'created_at'
-            ).order_by('-created_at')[:100],
-            'required_docs': RequiredDocument.objects.select_related('service').only(
-                'id', 'service__name', 'document_name'
-            ).order_by('service__name'),
-            'team_members': TeamMember.objects.all().order_by('order', 'name'),
-        }
-        cache.set(cache_key, data, DASHBOARD_CACHE_TTL)
 
     data.update({
         'service_form': ServiceForm(),
@@ -804,18 +804,17 @@ def gallery(request):
     ]
     paginator = Paginator(valid_images, 12)
     page = request.GET.get('page')
-    
     try:
         images_page = paginator.page(page)
     except PageNotAnInteger:
         images_page = paginator.page(1)
     except EmptyPage:
         images_page = paginator.page(paginator.num_pages)
-    
     return render(request, 'gallery.html', {
         'business': get_business(),
         'images': images_page,
     })
+
 
 def contact(request):
     if request.method == 'POST':
@@ -1055,17 +1054,34 @@ def apply_service(request, service_id):
         formset = DocumentFormSet(request.POST, request.FILES)
         if form.is_valid() and formset.is_valid():
             if service.payment_required:
-                # Save uploaded files temporarily
+                # Save uploaded files temporarily using chunked writing
                 temp_files = []
                 for doc_form in formset.cleaned_data:
                     if doc_form and 'file' in doc_form:
-                        f = doc_form['file']
-                        temp_path = default_storage.save(f'temp/{f.name}', ContentFile(f.read()))
-                        temp_files.append({
-                            'document_name': doc_form.get('document_name', 'Other'),
-                            'temp_path': temp_path,
-                            'original_name': f.name,
-                        })
+                        uploaded_file = doc_form['file']
+                        temp_path = default_storage.save(f'temp/{uploaded_file.name}', ContentFile(b''))
+                        try:
+                            with default_storage.open(temp_path, 'wb') as dest:
+                                for chunk in uploaded_file.chunks():
+                                    dest.write(chunk)
+                            temp_files.append({
+                                'document_name': doc_form.get('document_name', 'Other'),
+                                'temp_path': temp_path,
+                                'original_name': uploaded_file.name,
+                            })
+                        except Exception as e:
+                            logger.error(f"Failed to save temporary file {uploaded_file.name}: {e}")
+                            messages.error(request, _('Error uploading file. Please try again.'))
+                            default_storage.delete(temp_path)
+                            return render(request, 'apply_service.html', {
+                                'service': service,
+                                'required_docs': required_docs,
+                                'form': form,
+                                'formset': formset,
+                                'business': get_business(),
+                                'payment_settings': get_payment_settings(),
+                                'payment_required': service.payment_required,
+                            })
                 request.session['pending_application'] = {
                     'service_id': service.id,
                     'form_data': form.cleaned_data,
@@ -1226,22 +1242,17 @@ def _create_application_from_session_data(pending_data, request):
     application.receipt_number = application.generate_receipt_number()
     application.save(update_fields=['receipt_number'])
 
-    # Save documents from temp files
-    from django.core.files import File
+    # Save documents from temp files using streaming
     for temp in temp_files:
         try:
             with default_storage.open(temp['temp_path'], 'rb') as f:
-                file_content = b''
-                chunk = f.read(8192)
-                while chunk:
-                    file_content += chunk
-                    chunk = f.read(8192)
                 doc = DocumentUpload(
                     application=application,
                     document_name=temp['document_name'],
-                    file=ContentFile(file_content, name=temp['original_name']),
                     is_mandatory=True,
                 )
+                # Save using File wrapper to stream chunks
+                doc.file.save(temp['original_name'], File(f), save=False)
                 doc.save()
             default_storage.delete(temp['temp_path'])
         except Exception as e:
@@ -1555,13 +1566,17 @@ def mark_payment_done(request, app_id):
     cache.delete('reports_data')
     return redirect('application_detail', app_id=app_id)
 
+
 # Register Unicode font (DejaVu Sans) – adjust path as needed
 FONT_PATH = os.path.join(settings.BASE_DIR, 'corematoshree', 'static', 'fonts', 'DejaVuSans.ttf')
 if os.path.exists(FONT_PATH):
-    pdfmetrics.registerFont(TTFont('DejaVuSans', FONT_PATH))
+    try:
+        pdfmetrics.registerFont(TTFont('DejaVuSans', FONT_PATH))
+    except Exception as e:
+        logger.warning(f"Failed to load font {FONT_PATH}: {e}")
 else:
-    # Fallback to Helvetica if font not found
-    pass
+    logger.warning("DejaVuSans not found, using Helvetica. Rs. sign may not display correctly.")
+
 
 @login_required
 def download_receipt(request, app_id):
@@ -1579,25 +1594,25 @@ def download_receipt(request, app_id):
     tax_amount = amount * tax_rate
     total_amount = amount + tax_amount
 
-    # ---- QR Code ----
+    # ---- QR Code (disabled – verification endpoint does not exist) ----
     qr_img = None
-    try:
-        import qrcode
-        from io import BytesIO as qrBytesIO
-        verification_url = f"{request.build_absolute_uri('/')}verify/receipt/{application.receipt_number}/"
-        qr = qrcode.QRCode(box_size=4, border=2)
-        qr.add_data(verification_url)
-        qr.make(fit=True)
-        img = qr.make_image(fill_color="black", back_color="white")
-        qr_buffer = qrBytesIO()
-        img.save(qr_buffer, format='PNG')
-        qr_buffer.seek(0)
-        qr_img = Image(qr_buffer, width=1.2*inch, height=1.2*inch)
-    except ImportError:
-        qr_img = None
+    # If you implement a verification view, you can uncomment the following:
+    # try:
+    #     import qrcode
+    #     from io import BytesIO as qrBytesIO
+    #     verification_url = f"{request.build_absolute_uri('/')}verify/receipt/{application.receipt_number}/"
+    #     qr = qrcode.QRCode(box_size=4, border=2)
+    #     qr.add_data(verification_url)
+    #     qr.make(fit=True)
+    #     img = qr.make_image(fill_color="black", back_color="white")
+    #     qr_buffer = qrBytesIO()
+    #     img.save(qr_buffer, format='PNG')
+    #     qr_buffer.seek(0)
+    #     qr_img = Image(qr_buffer, width=1.2*inch, height=1.2*inch)
+    # except ImportError:
+    #     qr_img = None
 
     # ---- Find and register the font ----
-    # Look for DejaVuSans.ttf in your static/fonts directory
     possible_font_paths = [
         os.path.join(settings.BASE_DIR, 'static', 'fonts', 'dejavu-fonts-ttf-2.37', 'ttf', 'DejaVuSans.ttf'),
         os.path.join(settings.BASE_DIR, 'static', 'fonts', 'dejavu-fonts-ttf-2.37', 'DejaVuSans.ttf'),
@@ -1615,7 +1630,7 @@ def download_receipt(request, app_id):
             except Exception as e:
                 logger.warning(f"Failed to load font from {font_path}: {e}")
     if font_name == 'Helvetica':
-        logger.warning("DejaVuSans not found, using Helvetica. ₹ sign may not display correctly.")
+        logger.warning("DejaVuSans not found, using Helvetica. Rs. sign may not display correctly.")
 
     # ---- PDF setup ----
     buffer = BytesIO()
@@ -1633,7 +1648,7 @@ def download_receipt(request, app_id):
     def create_style(name, parent, **kwargs):
         return ParagraphStyle(name, parent=styles[parent], fontName=font_name, **kwargs)
 
-    # ---- Styles (same as before) ----
+    # ---- Styles ----
     brand_style = create_style('BrandStyle', 'Heading1', fontSize=22, textColor=colors.HexColor('#1a1a2e'), alignment=TA_LEFT, spaceAfter=2)
     sub_style = create_style('SubStyle', 'Normal', fontSize=9, textColor=colors.HexColor('#64748b'), alignment=TA_LEFT, spaceAfter=1)
     receipt_title_style = create_style('ReceiptTitle', 'Heading2', fontSize=16, textColor=colors.HexColor('#0f172a'), alignment=TA_CENTER, spaceAfter=4)
@@ -1652,10 +1667,12 @@ def download_receipt(request, app_id):
     logo_img = None
     if business and business.logo:
         try:
-            logo_path = business.logo.path
-            if os.path.exists(logo_path):
-                logo_img = Image(logo_path, width=1.2*inch, height=1.2*inch)
-        except Exception:
+            # Use default_storage to support S3 and other backends
+            if default_storage.exists(business.logo.name):
+                with default_storage.open(business.logo.name, 'rb') as f:
+                    logo_img = Image(f, width=1.2*inch, height=1.2*inch)
+        except Exception as e:
+            logger.warning(f"Could not load logo: {e}")
             logo_img = None
 
     if logo_img:
@@ -1811,7 +1828,7 @@ def download_receipt(request, app_id):
     story.append(Spacer(1, 0.15*inch))
     story.append(HRFlowable(width="100%", thickness=0.5, color=colors.HexColor('#e2e8f0'), spaceBefore=2, spaceAfter=2))
 
-    # ---- QR Code ----
+    # ---- QR Code (disabled) ----
     if qr_img:
         qr_table = Table([[qr_img]], colWidths=[1.5*inch])
         qr_table.setStyle(TableStyle([
@@ -1838,13 +1855,11 @@ def download_receipt(request, app_id):
         as_attachment=True,
         filename=f"receipt_{application.receipt_number}.pdf"
     )
-    
+
+
 # =============================================================================
 # DASHBOARD REPORT
 # =============================================================================
-
-import json
-from django.db.models.functions import TruncWeek
 
 @login_required
 @user_passes_test(is_admin)
@@ -1855,6 +1870,8 @@ def reports_dashboard(request):
     if not data:
         # Application status counts
         app_status_counts = list(Application.objects.values('status').annotate(count=Count('id')))
+        if not app_status_counts:
+            app_status_counts = [{'status': 'No Data', 'count': 0}]
 
         # Daily applications (last 30 days)
         end_date = timezone.now().date()
@@ -1866,11 +1883,15 @@ def reports_dashboard(request):
             .annotate(count=Count('id'))
             .order_by('day')
         )
+        if not daily_apps:
+            daily_apps = [{'day': start_date, 'count': 0}]
 
         # Appointment status counts
         appt_status_counts = list(Appointment.objects.values('status').annotate(count=Count('id')))
+        if not appt_status_counts:
+            appt_status_counts = [{'status': 'No Data', 'count': 0}]
 
-        # Weekly users (last 90 days) – use TruncWeek for SQLite compatibility
+        # Weekly users (last 90 days)
         weekly_users = list(
             User.objects.filter(date_joined__gte=timezone.now() - timedelta(days=90))
             .annotate(week=TruncWeek('date_joined'))
@@ -1878,9 +1899,13 @@ def reports_dashboard(request):
             .annotate(count=Count('id'))
             .order_by('week')
         )
+        if not weekly_users:
+            weekly_users = [{'week': timezone.now().date() - timedelta(days=7), 'count': 0}]
 
         # Payment status counts
         payment_status_counts = list(Application.objects.values('payment_status').annotate(count=Count('id')))
+        if not payment_status_counts:
+            payment_status_counts = [{'payment_status': 'No Data', 'count': 0}]
 
         data = {
             'app_status': app_status_counts,
@@ -1915,4 +1940,3 @@ def privacy(request):
     return render(request, 'privacy.html', {
         'business': get_business(),
     })
-

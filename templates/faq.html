@@ -880,7 +880,7 @@
 </section>
 
 <!-- ================================================================
-     PRICING CARDS (DYNAMIC from ServiceCharge)
+     PRICING CARDS (DYNAMIC from ServiceCharge – with fallback)
      ================================================================ -->
 <section class="pricing-section reveal">
   <div class="container">
@@ -889,8 +889,9 @@
       <p>{% trans "Get the most out of our services with these convenient packages." %}</p>
     </div>
     <div class="pricing-grid">
+
+      {# ---- Dynamic pricing if service_charges is available ---- #}
       {% if service_charges %}
-        {# Loop through up to 3 service charges (or as many as available) #}
         {% for charge in service_charges|slice:":3" %}
           <div class="pricing-card {% if forloop.counter == 2 %}style="border-color: rgba(0, 240, 255, 0.15);"{% endif %}">
             <div class="plan-name">{{ charge.service.name }}</div>
@@ -906,8 +907,9 @@
             </a>
           </div>
         {% endfor %}
+
+      {# ---- Fallback static pricing ---- #}
       {% else %}
-        <!-- Fallback static pricing if no service_charges in context -->
         <div class="pricing-card">
           <div class="plan-name">{% trans "Starter" %}</div>
           <div class="price">₹99 <span>/ {% trans "session" %}</span></div>

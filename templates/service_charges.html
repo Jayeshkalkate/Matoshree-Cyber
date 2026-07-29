@@ -205,128 +205,6 @@
     text-shadow: 0 0 20px rgba(255, 45, 149, 0.3);
   }
 
-  /* ---- Dynamic Pricing Cards (shared with required_document) ---- */
-  .pricing-section {
-    padding: 70px 0 80px;
-    background: var(--bg-primary);
-    border-top: 1px solid rgba(0, 240, 255, 0.04);
-  }
-  .pricing-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-  .pricing-card {
-    background: var(--bg-card);
-    border-radius: var(--radius);
-    padding: 36px 24px 30px;
-    text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    transition: var(--transition);
-    box-shadow: var(--shadow-card);
-    position: relative;
-    overflow: hidden;
-  }
-  .pricing-card::before {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(
-      circle at 30% 20%,
-      rgba(0, 240, 255, 0.02),
-      transparent 70%
-    );
-    pointer-events: none;
-    opacity: 0;
-    transition: var(--transition);
-  }
-  .pricing-card:hover::before {
-    opacity: 1;
-  }
-  .pricing-card:hover {
-    transform: scale(1.04) translateY(-8px);
-    border-color: var(--neon-cyan);
-    box-shadow:
-      var(--shadow-card),
-      var(--glow-cyan),
-      0 0 60px rgba(0, 240, 255, 0.05);
-  }
-  .pricing-card.popular {
-    border-color: var(--neon-cyan);
-    box-shadow: var(--glow-cyan);
-  }
-  .pricing-card .badge {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: var(--gradient-cyan);
-    color: #fff;
-    font-size: 0.65rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    padding: 4px 14px;
-    border-radius: var(--radius-pill);
-    letter-spacing: 0.5px;
-    box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
-  }
-  .pricing-card .plan-name {
-    font-family: var(--font-display);
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--text-white);
-    margin-bottom: 4px;
-  }
-  .pricing-card .price {
-    font-family: var(--font-display);
-    font-size: 2.8rem;
-    font-weight: 900;
-    color: var(--neon-cyan);
-    text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
-    margin: 12px 0;
-  }
-  .pricing-card .price span {
-    font-size: 1rem;
-    font-weight: 400;
-    color: var(--text-muted);
-  }
-  .pricing-card .features {
-    list-style: none;
-    padding: 0;
-    margin: 20px 0 24px;
-    text-align: left;
-  }
-  .pricing-card .features li {
-    padding: 6px 0;
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-  }
-  .pricing-card .features li i {
-    color: var(--neon-cyan);
-    width: 20px;
-    font-size: 0.9rem;
-  }
-  .pricing-card .btn-primary {
-    width: 100%;
-    justify-content: center;
-  }
-  .no-data {
-    color: var(--text-muted);
-    text-align: center;
-    padding: 30px 0;
-    grid-column: 1 / -1;
-    font-size: 1rem;
-    opacity: 0.6;
-  }
-
   .charges-notes {
     padding: 40px 0 60px;
     background: var(--bg-secondary);
@@ -414,11 +292,6 @@
     min-width: 180px;
   }
 
-  @media (max-width: 1024px) {
-    .pricing-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
   @media (max-width: 768px) {
     .page-hero h1 {
       font-size: 2.4rem;
@@ -437,11 +310,6 @@
     .service-name i {
       display: none;
     }
-    .pricing-grid {
-      grid-template-columns: 1fr;
-      max-width: 400px;
-      margin: 0 auto;
-    }
     .cta-banner h2 {
       font-size: 2rem;
     }
@@ -456,9 +324,6 @@
     }
   }
   @media (max-width: 480px) {
-    .pricing-card .price {
-      font-size: 2.2rem;
-    }
     .charges-table th,
     .charges-table td {
       padding: 0.5rem 0.6rem;
@@ -533,41 +398,6 @@
 </section>
 
 <!-- ================================================================
-     PRICING PLANS – DYNAMIC (shared with required_document)
-     ================================================================ -->
-<section class="pricing-section">
-  <div class="container">
-    <div class="section-header">
-      <h2>{% trans "Choose Your" %} <span>{% trans "Plan" %}</span></h2>
-      <p>
-        {% trans "Flexible pricing for every need — hover to feel the power" %}
-      </p>
-    </div>
-    <div class="pricing-grid">
-      {% for plan in pricing_plans %}
-      <div class="pricing-card {% if plan.is_popular %}popular{% endif %}">
-        {% if plan.is_popular %}
-        <span class="badge">🔥 {% trans "Popular" %}</span>
-        {% endif %}
-        <div class="plan-name">{{ plan.name }}</div>
-        <div class="price">{{ plan.currency }}{{ plan.price }} <span>/ {{ plan.per_label }}</span></div>
-        <ul class="features">
-          {% for feature in plan.features %}
-          <li><i class="fas fa-check"></i> {{ feature }}</li>
-          {% empty %}
-          <li>{% trans "No features listed" %}</li>
-          {% endfor %}
-        </ul>
-        <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Book Now" %}</a>
-      </div>
-      {% empty %}
-      <p class="no-data">{% trans "Pricing plans coming soon." %}</p>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-
-<!-- ================================================================
      NOTES
      ================================================================ -->
 <section class="charges-notes">
@@ -600,7 +430,7 @@
         <i class="fas fa-phone-alt"></i> {% trans "Contact Us" %}
       </a>
       <a
-        href="https://wa.me/{{ SITE_SETTINGS.whatsapp_number|default:'919876543210' }}?text=Hello%2C%20I%20want%20to%20know%20the%20charges%20for%20a%20service."
+        href="https://wa.me/{{ business.whatsapp|default:'919876543210' }}?text=Hello%2C%20I%20want%20to%20know%20the%20charges%20for%20a%20service."
         target="_blank"
         class="btn-whatsapp"
       >

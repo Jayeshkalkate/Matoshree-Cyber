@@ -373,6 +373,49 @@
     box-shadow: 0 0 20px rgba(0, 240, 255, 0.06);
   }
 
+  /* ---- Pagination (added) ---- */
+  .pagination-wrap {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 2.5rem;
+    flex-wrap: wrap;
+  }
+  .pagination-wrap .page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: var(--text-muted, #94a3b8);
+    font-weight: 600;
+    font-size: clamp(0.8rem, 0.9vw, 0.9rem);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    min-width: 44px;
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+  .pagination-wrap .page-link:hover {
+    background: rgba(0, 240, 255, 0.08);
+    border-color: var(--neon-cyan, #00f0ff);
+    color: var(--text-white, #f0f4ff);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.06);
+    transform: translateY(-2px);
+  }
+  .pagination-wrap .page-link.active {
+    background: var(--neon-cyan, #00f0ff);
+    color: var(--bg-primary, #0a0e1a);
+    border-color: var(--neon-cyan, #00f0ff);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
+  }
+  .pagination-wrap .page-link.disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
   /* ---- CTA Banner (reuses base styles) ---- */
   .cta-banner {
     padding: clamp(40px, 8vw, 70px) 0;
@@ -898,6 +941,39 @@
       <p>{% trans "No forms match your search." %}</p>
     </div>
 
+    <!-- Pagination (added) -->
+    {% if forms.has_other_pages %}
+    <div class="pagination-wrap" role="navigation" aria-label="{% trans 'Forms pagination' %}">
+      {% if forms.has_previous %}
+        <a href="?page={{ forms.previous_page_number }}" class="page-link" aria-label="{% trans 'Previous page' %}">
+          <i class="fas fa-chevron-left" aria-hidden="true"></i> {% trans "Prev" %}
+        </a>
+      {% else %}
+        <span class="page-link disabled" aria-disabled="true">
+          <i class="fas fa-chevron-left" aria-hidden="true"></i> {% trans "Prev" %}
+        </span>
+      {% endif %}
+
+      {% for num in forms.paginator.page_range %}
+        {% if forms.number == num %}
+          <span class="page-link active" aria-current="page">{{ num }}</span>
+        {% elif num > forms.number|add:'-3' and num < forms.number|add:'3' %}
+          <a href="?page={{ num }}" class="page-link" aria-label="{% trans 'Page' %} {{ num }}">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if forms.has_next %}
+        <a href="?page={{ forms.next_page_number }}" class="page-link" aria-label="{% trans 'Next page' %}">
+          {% trans "Next" %} <i class="fas fa-chevron-right" aria-hidden="true"></i>
+        </a>
+      {% else %}
+        <span class="page-link disabled" aria-disabled="true">
+          {% trans "Next" %} <i class="fas fa-chevron-right" aria-hidden="true"></i>
+        </span>
+      {% endif %}
+    </div>
+    {% endif %}
+
     <!-- Footer Note -->
     <div class="footer-note">
       <span>
@@ -906,7 +982,7 @@
       </span>
       <span class="badge">
         <i class="far fa-clock"></i>
-        {% blocktrans count counter=forms|length trimmed %}
+        {% blocktrans count counter=forms.paginator.count trimmed %}
           {{ counter }} form available
         {% plural %}
           {{ counter }} forms available

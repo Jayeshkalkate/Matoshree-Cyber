@@ -12,7 +12,6 @@ from .models import (
     TeamMember, PaymentSettings,
 )
 
-
 # ==========================
 # User Forms (unchanged)
 # ==========================
@@ -285,14 +284,11 @@ class RequiredDocumentForm(forms.ModelForm):
             "document_name": forms.TextInput(
                 attrs={
                     "class": "form-control",
-                    "placeholder": _("e.g. PAN Card, Aadhar Card, Birth Certificate"),
+                    "placeholder": _("e.g. PAN Card, Aadhar Card"),
                 }
             ),
         }
-        help_texts = {
-            "document_name": _("Separate multiple documents with commas."),
-        }
-
+        
 
 class TeamMemberForm(forms.ModelForm):
     class Meta:

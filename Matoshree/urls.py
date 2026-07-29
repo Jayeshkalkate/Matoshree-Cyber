@@ -15,8 +15,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # All application URLs (home, about, services, payment, etc.)
-    # This includes everything defined in corematoshree/urls.py,
-    # including public pages, dashboards, applications, and UPI payment.
     path('', include('corematoshree.urls')),
 
     # Language selection (i18n) – enables language switching via /i18n/setlang/
@@ -27,3 +25,7 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+# Optional: custom error pages
+# handler404 = 'your_app.views.custom_404'
+# handler500 = 'your_app.views.custom_500'

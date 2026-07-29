@@ -1042,3 +1042,39 @@
   </div>
 </section>
 {% endblock %}
+
+{% block extra_scripts %}
+<script>
+  (function() {
+    "use strict";
+
+    // ---- Disable submit button after first click to prevent double submission ----
+    window.disableSubmitButton = function(form) {
+      var btn = form.querySelector('#submitBtn');
+      if (btn) {
+        btn.disabled = true;
+        var textSpan = document.getElementById('submitText');
+        if (textSpan) {
+          textSpan.textContent = '{% trans "Submitting..." %}';
+        }
+        // Also change the icon
+        var icon = btn.querySelector('i');
+        if (icon) {
+          icon.className = 'fas fa-spinner fa-spin';
+        }
+      }
+      // Return true to allow the form to submit
+      return true;
+    };
+
+    // ---- Client-side validation for phone (only digits, 10-15) ----
+    var phoneField = document.querySelector('input[name="phone"]');
+    if (phoneField) {
+      phoneField.addEventListener('input', function() {
+        this.value = this.value.replace(/\D/g, '').slice(0, 15);
+      });
+    }
+
+  })();
+</script>
+{% endblock %}
