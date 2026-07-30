@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'corematoshree',
     'cloudinary',
     'cloudinary_storage',
+    # 'django.contrib.sitemaps',
 ]
 
 MIDDLEWARE = [

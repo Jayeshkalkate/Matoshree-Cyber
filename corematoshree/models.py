@@ -76,6 +76,7 @@ class Service(models.Model):
     category = models.CharField(_("Category"), max_length=100, db_index=True)
     description = models.TextField(_("Description"), blank=True)
     active = models.BooleanField(_("Active"), default=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True)
     payment_required = models.BooleanField(
         _("Payment Required"),
         default=False,
@@ -234,6 +235,7 @@ class Announcement(models.Model):
     description = models.TextField(_("Description"))
     is_urgent = models.BooleanField(_("Urgent"), default=False, db_index=True)
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ["-created_at"]

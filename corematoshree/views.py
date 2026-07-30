@@ -11,6 +11,9 @@ from decimal import Decimal
 from datetime import timedelta
 from io import BytesIO
 
+from django.contrib.sitemaps import Sitemap
+from .models import Service, Announcement
+
 # ---- Third-Party Libraries ----
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
@@ -53,14 +56,16 @@ from django.db import models
 from django.db.models import Count, Q
 from django.db.models.functions import ExtractWeek, TruncDate, TruncWeek
 from django.forms import formset_factory
-from django.http import FileResponse, JsonResponse
+from django.http import FileResponse, JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import cache_page
 import re 
-
+from django.http import HttpResponse
+from django.contrib.sitemaps import Sitemap
+from .models import Service, Announcement
 # ---- Local Application ----
 from .models import (
     User, Appointment, Review, Service, Announcement, JobNotification,
@@ -81,6 +86,58 @@ from .utils import get_business, get_payment_settings, is_admin, is_superadmin
 # ---- Logger ----
 logger = logging.getLogger(__name__)
 
+# =============================================================================
+# ERRORS 404 and 500
+# =============================================================================
+def custom_404(request, exception):
+    """Custom 404 error page."""
+    return render(request, '404.html', {
+        'business': get_business(),
+    }, status=404)
+
+def custom_500(request):
+    """Custom 500 error page."""
+    return render(request, '500.html', {
+        'business': get_business(),
+    }, status=500)
+
+
+# =============================================================================
+# ERRORS 404 and 500
+# =============================================================================
+
+def robots_txt(request):
+    lines = [
+        "User-agent: *",
+        "Disallow: /admin/",
+        "Disallow: /dashboard/",
+        "Disallow: /payment-checkout/",
+        "Allow: /",
+        f"Sitemap: {request.build_absolute_uri('/sitemap.xml')}"
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
+
+class ServiceSitemap(Sitemap):
+    changefreq = 'weekly'
+    priority = 0.8
+
+    def items(self):
+        return Service.objects.filter(active=True)
+
+    # If you haven't added updated_at yet, comment out the next two lines:
+    # def lastmod(self, obj):
+    #     return obj.updated_at
+
+class AnnouncementSitemap(Sitemap):
+    changefreq = 'weekly'
+    priority = 0.6
+
+    def items(self):
+        return Announcement.objects.all()
+
+    # def lastmod(self, obj):
+    #     return obj.updated_at
+    
 # =============================================================================
 # HELPERS (with caching)
 # =============================================================================

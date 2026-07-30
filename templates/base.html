@@ -9,12 +9,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="theme-color" content="#0a0e1a" />
     <title>{% block title %}{% trans "Cyber Services" %}{% endblock %}</title>
-    <link rel="icon" type="image/x-icon" href="{% static 'images/matoshreelogo.png' %}">
+
+    <meta name="description" content="{% block description %}Matoshree Cyber Cafe offers digital services, appointments, government schemes, and more.{% endblock %}">
+    <meta property="og:title" content="{{ business.business_name }}">
+    <meta property="og:description" content="Your trusted cyber cafe in {{ business.city }}.">
+    <meta property="og:image" content="{{ business.logo.url }}">
+    <meta name="robots" content="index, follow">
+    
+    <-- Canonical URLs (Prevent Duplicate Content) -->
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+    <link rel="alternate" hreflang="en" href="?language=en">
+    <link rel="alternate" hreflang="hi" href="?language=hi">
+    <link rel="alternate" hreflang="mr" href="?language=mr">
 
     <!-- Google Fonts (Inter) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+
+    <!-- Add Icon and Logo -->
+    <link rel="icon" type="image/x-icon" href="{% static 'images/matoshreelogo.png' %}">
 
     <!-- Font Awesome (CDN) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
@@ -1238,6 +1253,23 @@
 
         })();
     </script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "{{ business.business_name }}",
+  "address": "{{ business.address }}",
+  "telephone": "{{ business.phone }}",
+  "email": "{{ business.email }}",
+  "url": "{{ request.build_absolute_uri }}",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "{{ rating_avg }}",
+    "reviewCount": "{{ total_reviews }}"
+  }
+}
+</script>
 
 </body>
 </html>

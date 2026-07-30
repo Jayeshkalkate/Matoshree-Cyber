@@ -4,6 +4,19 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from corematoshree import views
+from django.contrib.sitemaps.views import sitemap
+from .sitemaps import ServiceSitemap, AnnouncementSitemap
+from django.views.generic import TemplateView 
+from .views import robots_txt
+
+sitemaps = {
+    'services': ServiceSitemap,
+    'announcements': AnnouncementSitemap,
+    
+}
+
+handler404 = views.custom_404
+handler500 = views.custom_500
 
 urlpatterns = [
     # ==========================
@@ -87,6 +100,11 @@ urlpatterns = [
     
     path('terms/', views.terms, name='terms'),
     path('privacy/', views.privacy, name='privacy'),
+    
+    # ---- SEO Optimization and other stuff ----
+    path('googleb2111897b41dceb9.html', TemplateView.as_view(template_name='googleb2111897b41dceb9.html'), name='google_verify'),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('robots.txt', robots_txt, name='robots'),
 ]
 
 # Serve media & static in development only

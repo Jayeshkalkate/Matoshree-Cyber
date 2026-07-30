@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Server Error" %}{% endblock %}
+
+{% block extra_head %}
+<style>
+  .error-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 70vh;
+    text-align: center;
+    background: var(--bg-secondary);
+  }
+  .error-page .error-code {
+    font-size: 6rem;
+    font-weight: 900;
+    color: var(--neon-magenta);
+    text-shadow: 0 0 60px rgba(255, 45, 149, 0.2);
+    line-height: 1.1;
+  }
+  .error-page h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-white);
+    margin: 1rem 0 0.5rem;
+  }
+  .error-page p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    max-width: 500px;
+    margin: 0 auto 2rem;
+  }
+  .error-page .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.8rem 2rem;
+    border-radius: var(--radius-pill);
+    font-weight: 700;
+    background: var(--gradient-cyan);
+    color: var(--bg-primary);
+    text-decoration: none;
+    transition: var(--transition);
+    box-shadow: 0 0 24px rgba(0, 240, 255, 0.2);
+  }
+  .error-page .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 40px rgba(0, 240, 255, 0.35);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="error-page">
+  <div class="container">
+    <div class="error-code">500</div>
+    <h2>{% trans "Something went wrong." %}</h2>
+    <p>{% trans "We're working on it. Please try again later." %}</p>
+    <a href="{% url 'home' %}" class="btn-primary">
+      <i class="fas fa-home"></i> {% trans "Go Home" %}
+    </a>
+  </div>
+</section>
+{% endblock %}
