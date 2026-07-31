@@ -13,10 +13,10 @@
     <meta name="description" content="{% block description %}Matoshree Cyber Cafe offers digital services, appointments, government schemes, and more.{% endblock %}">
     <meta property="og:title" content="{{ business.business_name }}">
     <meta property="og:description" content="Your trusted cyber cafe in {{ business.city }}.">
-    <meta property="og:image" content="{{ business.logo.url }}">
+    <meta property="og:image" content="{% if logo_url %}{{ logo_url }}{% else %}{% static 'images/default-og-image.png' %}{% endif %}">
     <meta name="robots" content="index, follow">
     
-    <-- Canonical URLs (Prevent Duplicate Content) -->
+    <!-- Canonical URLs (Prevent Duplicate Content) -->
     <link rel="canonical" href="{{ request.build_absolute_uri }}">
 
     <link rel="alternate" hreflang="en" href="?language=en">

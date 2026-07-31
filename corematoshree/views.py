@@ -11,13 +11,9 @@ from decimal import Decimal
 from datetime import timedelta
 from io import BytesIO
 
-from django.contrib.sitemaps import Sitemap
-from .models import Service, Announcement
-
 # ---- Third-Party Libraries ----
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import inch
 from reportlab.lib import colors
@@ -28,14 +24,6 @@ from reportlab.platypus import (
 )
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
 from pypdf import PdfReader, PdfWriter
-
-# QR code (optional) – disabled because verification URL does not exist
-# try:
-#     import qrcode
-#     from io import BytesIO as qrBytesIO
-#     QRCODE_AVAILABLE = True
-# except ImportError:
-#     QRCODE_AVAILABLE = False
 
 # ---- Django Core ----
 from django.conf import settings
@@ -52,7 +40,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.core.files import File
-from django.db import models
+from django.db import models, transaction
 from django.db.models import Count, Q
 from django.db.models.functions import ExtractWeek, TruncDate, TruncWeek
 from django.forms import formset_factory
@@ -62,10 +50,8 @@ from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import cache_page
-import re 
-from django.http import HttpResponse
-from django.contrib.sitemaps import Sitemap
-from .models import Service, Announcement
+import re
+
 # ---- Local Application ----
 from .models import (
     User, Appointment, Review, Service, Announcement, JobNotification,
@@ -103,9 +89,8 @@ def custom_500(request):
 
 
 # =============================================================================
-# ERRORS 404 and 500
+# ROBOTS.TXT
 # =============================================================================
-
 def robots_txt(request):
     lines = [
         "User-agent: *",
@@ -117,27 +102,7 @@ def robots_txt(request):
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
 
-class ServiceSitemap(Sitemap):
-    changefreq = 'weekly'
-    priority = 0.8
 
-    def items(self):
-        return Service.objects.filter(active=True)
-
-    # If you haven't added updated_at yet, comment out the next two lines:
-    # def lastmod(self, obj):
-    #     return obj.updated_at
-
-class AnnouncementSitemap(Sitemap):
-    changefreq = 'weekly'
-    priority = 0.6
-
-    def items(self):
-        return Announcement.objects.all()
-
-    # def lastmod(self, obj):
-    #     return obj.updated_at
-    
 # =============================================================================
 # HELPERS (with caching)
 # =============================================================================
@@ -955,7 +920,8 @@ def documents(request):
 
 
 def downloads(request):
-    forms_qs = DownloadForm.objects.all().only('id', 'title', 'category', 'pdf')
+    # Fix: Add order_by to avoid UnorderedObjectListWarning
+    forms_qs = DownloadForm.objects.all().order_by('-uploaded_at').only('id', 'title', 'category', 'pdf')
     paginator = Paginator(forms_qs, 20)
     page = request.GET.get('page')
     try:
@@ -1096,6 +1062,17 @@ def jobs(request):
 @login_required
 def apply_service(request, service_id):
     service = get_object_or_404(Service, id=service_id, active=True)
+
+    # ---- DUPLICATE APPLICATION PREVENTION ----
+    existing = Application.objects.filter(
+        user=request.user,
+        service=service,
+        status__in=['pending', 'review']
+    ).exists()
+    if existing:
+        messages.error(request, _('You already have a pending application for this service.'))
+        return redirect('my_applications')
+
     required_docs = RequiredDocument.objects.filter(service=service).only('id', 'document_name')
 
     initial_data = {
@@ -1112,41 +1089,49 @@ def apply_service(request, service_id):
         formset = DocumentFormSet(request.POST, request.FILES)
         if form.is_valid() and formset.is_valid():
             if service.payment_required:
-                # Save uploaded files temporarily using chunked writing
+                # ---- FIX: use local temporary files (not Cloudinary) ----
                 temp_files = []
-                for doc_form in formset.cleaned_data:
-                    if doc_form and 'file' in doc_form:
-                        uploaded_file = doc_form['file']
-                        temp_path = default_storage.save(f'temp/{uploaded_file.name}', ContentFile(b''))
-                        try:
-                            with default_storage.open(temp_path, 'wb') as dest:
+                try:
+                    for doc_form in formset.cleaned_data:
+                        if doc_form and 'file' in doc_form:
+                            uploaded_file = doc_form['file']
+                            # Create a local temp file (on the server's disk)
+                            with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp:
                                 for chunk in uploaded_file.chunks():
-                                    dest.write(chunk)
+                                    tmp.write(chunk)
+                                temp_path = tmp.name
                             temp_files.append({
                                 'document_name': doc_form.get('document_name', 'Other'),
                                 'temp_path': temp_path,
                                 'original_name': uploaded_file.name,
                             })
-                        except Exception as e:
-                            logger.error(f"Failed to save temporary file {uploaded_file.name}: {e}")
-                            messages.error(request, _('Error uploading file. Please try again.'))
-                            default_storage.delete(temp_path)
-                            return render(request, 'apply_service.html', {
-                                'service': service,
-                                'required_docs': required_docs,
-                                'form': form,
-                                'formset': formset,
-                                'business': get_business(),
-                                'payment_settings': get_payment_settings(),
-                                'payment_required': service.payment_required,
-                            })
-                request.session['pending_application'] = {
-                    'service_id': service.id,
-                    'form_data': form.cleaned_data,
-                    'temp_files': temp_files,
-                }
-                return redirect('payment_checkout', service_id=service.id)
+                    # Store the list of temp files in session
+                    request.session['pending_application'] = {
+                        'service_id': service.id,
+                        'form_data': form.cleaned_data,
+                        'temp_files': temp_files,
+                    }
+                    return redirect('payment_checkout', service_id=service.id)
+                except Exception as e:
+                    logger.error(f"Failed to store temp files: {e}")
+                    # Clean up any partial temp files
+                    for temp in temp_files:
+                        try:
+                            os.unlink(temp['temp_path'])
+                        except OSError:
+                            pass
+                    messages.error(request, _('Error uploading files. Please try again.'))
+                    return render(request, 'apply_service.html', {
+                        'service': service,
+                        'required_docs': required_docs,
+                        'form': form,
+                        'formset': formset,
+                        'business': get_business(),
+                        'payment_settings': get_payment_settings(),
+                        'payment_required': service.payment_required,
+                    })
             else:
+                # Non-payment services – create immediately
                 application = form.save(commit=False)
                 application.user = request.user
                 application.service = service
@@ -1258,6 +1243,7 @@ def payment_checkout(request, service_id):
     })
 
 
+@transaction.atomic
 def _create_application_from_session_data(pending_data, request):
     """
     Internal helper to create an Application from session data.
@@ -1300,10 +1286,10 @@ def _create_application_from_session_data(pending_data, request):
     application.receipt_number = application.generate_receipt_number()
     application.save(update_fields=['receipt_number'])
 
-    # Save documents from temp files using streaming
+    # Save documents from local temp files
     for temp in temp_files:
         try:
-            with default_storage.open(temp['temp_path'], 'rb') as f:
+            with open(temp['temp_path'], 'rb') as f:
                 doc = DocumentUpload(
                     application=application,
                     document_name=temp['document_name'],
@@ -1312,9 +1298,12 @@ def _create_application_from_session_data(pending_data, request):
                 # Save using File wrapper to stream chunks
                 doc.file.save(temp['original_name'], File(f), save=False)
                 doc.save()
-            default_storage.delete(temp['temp_path'])
+            # Delete the local temp file after successful save
+            os.unlink(temp['temp_path'])
         except Exception as e:
             logger.error(f"Failed to save document {temp['document_name']}: {e}")
+            # Re-raise to trigger rollback
+            raise
 
     send_admin_notification(
         subject=f'New Application for {service.name} from {application.full_name} (Paid)',
@@ -1344,6 +1333,12 @@ def create_application_from_session(request):
         return redirect('application_detail', app_id=application.id)
     except Exception as e:
         logger.error(f"Application creation failed: {e}")
+        # Clean up any leftover temp files
+        for temp in pending_data.get('temp_files', []):
+            try:
+                os.unlink(temp['temp_path'])
+            except OSError:
+                pass
         messages.error(request, str(e) or _('Failed to create application. Please contact support.'))
         return redirect('services')
 
@@ -1581,7 +1576,6 @@ def mark_payment_done(request, app_id):
         valid, error_msg = validate_upi_details(method, payment_app, utr)
         if not valid:
             messages.error(request, error_msg)
-            # If payment method is UPI, redirect back to payment_checkout with the same service
             return redirect('payment_checkout', service_id=service.id)
 
         pending_data['payment_method'] = method
@@ -1649,6 +1643,7 @@ def mark_payment_done(request, app_id):
     messages.success(request, _('Payment confirmed. Your receipt is ready.'))
     cache.delete('reports_data')
     return redirect('application_detail', app_id=app_id)
+
 
 # Register Unicode font (DejaVu Sans) – adjust path as needed
 FONT_PATH = os.path.join(settings.BASE_DIR, 'corematoshree', 'static', 'fonts', 'DejaVuSans.ttf')
@@ -2008,6 +2003,7 @@ def reports_dashboard(request):
     }
     return render(request, 'reports_dashboard.html', context)
 
+
 # =============================================================================
 # STATIC PAGES – Terms & Privacy
 # =============================================================================
@@ -2018,8 +2014,10 @@ def terms(request):
         'business': get_business(),
     })
 
+
 def privacy(request):
     """Privacy Policy page."""
     return render(request, 'privacy.html', {
         'business': get_business(),
     })
+    
