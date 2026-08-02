@@ -12,7 +12,7 @@ dj-database-url==3.1.2
 
 # Environment
 python-dotenv==1.2.2
-python-decouple==3.8          # <-- ADDED (was missing)
+python-decouple==3.8
 
 # Media storage (Cloudinary)
 cloudinary==1.44.2
@@ -31,7 +31,7 @@ charset-normalizer==3.4.5
 idna==2.10
 six==1.17.0
 
-# Django admin enhancements (optional)
+# Django admin enhancements
 django-debug-toolbar==7.0.0
 
 # Security & QR
