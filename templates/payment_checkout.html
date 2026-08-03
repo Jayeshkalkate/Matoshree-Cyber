@@ -33,10 +33,65 @@
     color: var(--text-muted);
     font-size: 1.1rem;
   }
-  .payment-wrapper .btn-pay {
+
+  .payment-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin: 1.5rem 0;
+  }
+  .payment-option {
+    flex: 1 1 200px;
+    padding: 1rem;
+    border: 2px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: transparent;
+    color: var(--text-white);
+  }
+  .payment-option:hover {
+    border-color: var(--neon-cyan);
+    background: rgba(0,240,255,0.04);
+  }
+  .payment-option.selected {
+    border-color: var(--neon-cyan);
+    background: rgba(0,240,255,0.08);
+    box-shadow: 0 0 30px rgba(0,240,255,0.1);
+  }
+  .payment-option i {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.3rem;
+    color: var(--neon-cyan);
+  }
+  .payment-option .label {
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+  .payment-option .desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .payment-method-panel {
+    display: none;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: rgba(255,255,255,0.02);
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+  .payment-method-panel.active {
+    display: block;
+  }
+
+  /* Razorpay button */
+  .btn-pay {
     display: inline-block;
     padding: 0.9rem 2.5rem;
-    margin-top: 1.5rem;
+    margin-top: 1rem;
     background: var(--gradient-cyan);
     color: var(--bg-primary);
     font-weight: 700;
@@ -47,37 +102,91 @@
     transition: var(--transition);
     box-shadow: 0 0 30px rgba(0,240,255,0.3);
   }
-  .payment-wrapper .btn-pay:hover {
+  .btn-pay:hover {
     transform: scale(1.05);
     box-shadow: 0 0 50px rgba(0,240,255,0.5);
   }
-  .payment-wrapper .btn-pay:disabled {
+  .btn-pay:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     transform: none !important;
   }
-  .payment-wrapper .back-link {
+
+  /* UPI form */
+  .upi-form label {
+    display: block;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin: 0.8rem 0 0.2rem;
+    font-size: 0.9rem;
+    text-align: left;
+  }
+  .upi-form select,
+  .upi-form input[type="text"] {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-sm);
+    color: var(--text-white);
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+  }
+  .upi-form select:focus,
+  .upi-form input[type="text"]:focus {
+    border-color: var(--neon-cyan);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0,240,255,0.12);
+  }
+  .upi-form .btn-success {
+    display: inline-block;
+    padding: 0.7rem 1.8rem;
+    margin-top: 1rem;
+    background: var(--neon-green, #22d3ee);
+    color: var(--bg-primary);
+    font-weight: 700;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-shadow: 0 0 20px rgba(34,211,238,0.2);
+  }
+  .upi-form .btn-success:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 40px rgba(34,211,238,0.4);
+  }
+  .upi-qr img {
+    max-width: 200px;
+    margin: 0.5rem auto;
+    display: block;
+    border-radius: 8px;
+    background: #fff;
+    padding: 4px;
+  }
+  .upi-details p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin: 0.2rem 0;
+  }
+
+  .back-link {
     display: inline-block;
     margin-top: 1.5rem;
     color: var(--text-muted);
     text-decoration: none;
     transition: var(--transition);
   }
-  .payment-wrapper .back-link:hover {
+  .back-link:hover {
     color: var(--neon-cyan);
   }
+
   #payment-error {
     color: var(--neon-magenta);
     margin-top: 1rem;
     display: none;
   }
-  .breakdown-box {
-    text-align: left;
-    margin: 1rem 0;
-    padding: 0.5rem 1rem;
-    background: rgba(255,255,255,0.05);
-    border-radius: 8px;
-  }
+
   @media (max-width: 480px) {
     .payment-wrapper {
       padding: 1.2rem;
@@ -86,9 +195,11 @@
     .payment-wrapper .amount {
       font-size: 2rem;
     }
-    .payment-wrapper .btn-pay {
+    .payment-option {
+      flex: 1 1 100%;
+    }
+    .btn-pay {
       width: 100%;
-      padding: 0.8rem;
     }
   }
 </style>
@@ -101,7 +212,7 @@
     <div class="service-name">{{ application.service.name }}</div>
     <div class="amount">₹{{ breakdown.total|floatformat:2 }}</div>
 
-    <div class="breakdown-box">
+    <div class="breakdown-box" style="text-align:left; margin:1rem 0; padding:0.5rem 1rem; background:rgba(255,255,255,0.05); border-radius:8px;">
       <p><strong>Service Charge:</strong> ₹{{ breakdown.service_amount|floatformat:2 }}</p>
       <p><strong>Razorpay Fee:</strong> ₹{{ breakdown.fee|floatformat:2 }}</p>
       <p><strong>GST on Fee (18%):</strong> ₹{{ breakdown.gst_on_fee|floatformat:2 }}</p>
@@ -109,8 +220,72 @@
       <p><strong>Total Payable:</strong> <span style="color: var(--neon-cyan); font-size: 1.4rem;">₹{{ breakdown.total|floatformat:2 }}</span></p>
     </div>
 
-    <button id="rzp-button1" class="btn-pay">Pay Now</button>
-    <div id="payment-error"></div>
+    <!-- Payment Options -->
+    <div class="payment-options" id="paymentOptions">
+      <div class="payment-option selected" data-method="razorpay">
+        <i class="fas fa-credit-card"></i>
+        <div class="label">Pay with Razorpay</div>
+        <div class="desc">Instant online payment</div>
+      </div>
+      <div class="payment-option" data-method="upi">
+        <i class="fas fa-qrcode"></i>
+        <div class="label">Pay via UPI (Manual)</div>
+        <div class="desc">Scan QR or use UPI ID</div>
+      </div>
+    </div>
+
+    <!-- Razorpay Panel -->
+    <div id="razorpayPanel" class="payment-method-panel active">
+      <p style="color:var(--text-muted); margin-bottom: 0.5rem;">You will be redirected to Razorpay to complete the payment.</p>
+      <button id="rzp-button1" class="btn-pay">Pay Now</button>
+      <div id="payment-error"></div>
+    </div>
+
+    <!-- UPI Panel -->
+    <div id="upiPanel" class="payment-method-panel">
+      <div class="upi-qr">
+        {% if payment_settings and payment_settings.qr_code %}
+          <img src="{{ payment_settings.qr_code.url }}" alt="UPI QR Code">
+        {% else %}
+          <p style="color:var(--text-muted);">QR Code not configured. Please use UPI ID below.</p>
+        {% endif %}
+      </div>
+      <div class="upi-details">
+        <p><strong>UPI ID:</strong> {{ payment_settings.upi_id|default:"Not set" }}</p>
+        <p><strong>Mobile:</strong> {{ payment_settings.upi_mobile|default:"Not set" }}</p>
+        <p>{{ payment_settings.payment_instructions|default:"Scan QR or pay using any UPI app." }}</p>
+      </div>
+
+      <form class="upi-form" method="post" action="{% url 'mark_payment_done' application.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="payment_method" value="upi">
+
+        <div>
+          <label for="payment_app">Payment App *</label>
+          <select name="payment_app" id="payment_app" required>
+            <option value="gpay">Google Pay</option>
+            <option value="phonepe">PhonePe</option>
+            <option value="paytm">Paytm</option>
+            <option value="bhim">BHIM</option>
+            <option value="upi" selected>Other UPI App</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="utr_number">UTR Number</label>
+          <input type="text" name="utr_number" id="utr_number" placeholder="e.g. 123456789012" />
+          <small style="color:var(--text-dim); display:block; margin-top:0.2rem;">Optional, but helps admin verify your payment.</small>
+        </div>
+
+        <button type="submit" class="btn-success">
+          <i class="fas fa-check-circle"></i> I have paid
+        </button>
+        <p class="text-muted" style="margin-top:0.5rem; font-size:0.8rem; color:var(--text-dim);">
+          After payment, click the button to confirm. Admin will verify.
+        </p>
+      </form>
+    </div>
+
     <br>
     <a href="{% url 'application_detail' app_id=application.id %}" class="back-link">
       <i class="fas fa-arrow-left"></i> Cancel and go back
@@ -123,6 +298,28 @@
 <script>
   (function() {
     "use strict";
+
+    // ---- Toggle between payment methods ----
+    const options = document.querySelectorAll('.payment-option');
+    const razorpayPanel = document.getElementById('razorpayPanel');
+    const upiPanel = document.getElementById('upiPanel');
+
+    options.forEach(opt => {
+      opt.addEventListener('click', function() {
+        options.forEach(o => o.classList.remove('selected'));
+        this.classList.add('selected');
+        const method = this.dataset.method;
+        if (method === 'razorpay') {
+          razorpayPanel.classList.add('active');
+          upiPanel.classList.remove('active');
+        } else {
+          upiPanel.classList.add('active');
+          razorpayPanel.classList.remove('active');
+        }
+      });
+    });
+
+    // ---- Razorpay flow (only if razorpay panel is active) ----
     const appId = {{ application.id }};
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const button = document.getElementById('rzp-button1');
