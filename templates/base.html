@@ -7,7 +7,8 @@
     <!-- Mobile viewport – dynamically adjusted by desktop toggle -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="theme-color" content="#0a0e1a" />
+    <!-- Theme color is updated dynamically via JavaScript -->
+    <meta name="theme-color" content="#f8fafc" id="themeColorMeta" />
     <title>{% block title %}{% trans "Cyber Services" %}{% endblock %}</title>
 
     <meta name="description" content="{% block description %}Matoshree Cyber Cafe offers digital services, appointments, government schemes, and more.{% endblock %}">
@@ -22,6 +23,8 @@
     <link rel="alternate" hreflang="en" href="?language=en">
     <link rel="alternate" hreflang="hi" href="?language=hi">
     <link rel="alternate" hreflang="mr" href="?language=mr">
+
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
 
     <!-- Google Fonts (Inter) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,21 +41,95 @@
 
     <style>
         /* ============================================================
-               GLOBAL BASE STYLES – Clean, accessible, responsive
-               ============================================================ */
+           GLOBAL BASE STYLES – Clean, accessible, responsive
+           ============================================================ */
 
         /* ----- Reset & base ----- */
-        *,
-        *::before,
-        *::after {
+        *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
+        /* ================================================================
+           THEME TRANSITIONS — Smooth, non‑jarring
+           ================================================================ */
         :root {
-            /* Colours – high contrast */
+            --theme-transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html,
+        html *,
+        html *::before,
+        html *::after {
+            transition: background-color var(--theme-transition),
+                border-color var(--theme-transition),
+                color var(--theme-transition),
+                box-shadow var(--theme-transition),
+                fill var(--theme-transition),
+                stroke var(--theme-transition),
+                opacity var(--theme-transition);
+        }
+
+        /* Disable transitions on page load to prevent flash */
+        html.no-transition,
+        html.no-transition *,
+        html.no-transition *::before,
+        html.no-transition *::after {
+            transition: none !important;
+        }
+
+        /* ----- Light theme (default) ----- */
+        :root {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #f1f5f9;
+            --bg-card: rgba(255, 255, 255, 0.8);
+            --bg-card-hover: rgba(255, 255, 255, 0.95);
+            --text-white: #0f172a;
+            --text-muted: #475569;
+            --text-muted-hover: #1e293b;
+            --neon-cyan: #0ea5e9;
+            --neon-magenta: #db2777;
+            --neon-purple: #8b5cf6;
+            --neon-orange: #f97316;
+            --gradient-cyan: linear-gradient(135deg, #0ea5e9, #3b82f6);
+            --gradient-cyber: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.08);
+            --border-soft: rgba(0, 0, 0, 0.06);
+            --glow-cyan: 0 0 6px rgba(14, 165, 233, 0.4), 0 0 22px rgba(14, 165, 233, 0.2);
+            --glow-purple: 0 0 6px rgba(139, 92, 246, 0.4), 0 0 22px rgba(139, 92, 246, 0.2);
+            --glow-magenta: 0 0 6px rgba(219, 39, 119, 0.4), 0 0 22px rgba(219, 39, 119, 0.2);
+            --glow-red: 0 0 6px rgba(220, 38, 38, 0.4), 0 0 18px rgba(220, 38, 38, 0.2);
+            --glow-green: 0 0 6px rgba(34, 197, 94, 0.4), 0 0 18px rgba(34, 197, 94, 0.2);
+            --bg-input: #ffffff;
+            --bg-panel: rgba(255, 255, 255, 0.7);
+            --bg-panel-solid: #ffffff;
+            --bg-sidebar: #f1f5f9;
+            --text-soft: #334155;
+            --text-dim: #94a3b8;
+            --text-bright: #0f172a;
+            --border-glow: rgba(14, 165, 233, 0.25);
+            /* ----- Header specific ----- */
+            --bg-header: rgba(255, 255, 255, 0.92);
+            --border-header: rgba(0, 0, 0, 0.08);
+            --header-text: #0f172a;
+            --header-text-muted: #475569;
+            --header-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
+            /* Scrollbar */
+            --bg-scrollbar: #e2e8f0;
+            --scrollbar-thumb: #94a3b8;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* ----- Dark theme ----- */
+        html.dark-mode {
             --bg-primary: #0a0e1a;
+            --bg-secondary: rgba(10, 14, 26, 0.6);
             --bg-card: rgba(255, 255, 255, 0.04);
             --bg-card-hover: rgba(255, 255, 255, 0.09);
             --text-white: #f0f4ff;
@@ -65,24 +142,29 @@
             --gradient-cyan: linear-gradient(135deg, #00f0ff, #0ea5e9);
             --gradient-cyber: linear-gradient(135deg, #00f0ff, #a855f7);
             --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.5);
-            --radius: 16px;
-            --radius-sm: 10px;
-            --radius-pill: 50px;
-            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            --font-body: 'Inter', system-ui, -apple-system, sans-serif;
-            --font-display: 'Inter', system-ui, -apple-system, sans-serif;
-            --fluid-h1: clamp(1.8rem, 5vw, 3.6rem);
-            --fluid-h2: clamp(1.6rem, 4vw, 2.8rem);
-            --fluid-h3: clamp(1.1rem, 2.5vw, 1.4rem);
-            --fluid-body: clamp(0.88rem, 1.2vw, 1.05rem);
-            --fluid-small: clamp(0.7rem, 0.9vw, 0.88rem);
-            --nav-height: 72px;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            -webkit-text-size-adjust: 100%;
-            -webkit-tap-highlight-color: transparent;
+            --border-soft: rgba(148, 163, 199, 0.14);
+            --glow-cyan: 0 0 6px rgba(0, 230, 255, 0.55), 0 0 22px rgba(0, 230, 255, 0.25);
+            --glow-purple: 0 0 6px rgba(168, 85, 247, 0.55), 0 0 22px rgba(168, 85, 247, 0.25);
+            --glow-magenta: 0 0 6px rgba(255, 46, 154, 0.55), 0 0 22px rgba(255, 46, 154, 0.25);
+            --glow-red: 0 0 6px rgba(255, 61, 95, 0.55), 0 0 18px rgba(255, 61, 95, 0.25);
+            --glow-green: 0 0 6px rgba(57, 255, 158, 0.55), 0 0 18px rgba(57, 255, 158, 0.25);
+            --bg-input: #0b1120;
+            --bg-panel: rgba(18, 24, 44, 0.72);
+            --bg-panel-solid: #0e1424;
+            --bg-sidebar: #05060e;
+            --text-soft: #9fb0d4;
+            --text-dim: #5c6a8c;
+            --text-bright: #eef4ff;
+            --border-glow: rgba(0, 230, 255, 0.22);
+            /* ----- Header specific (dark) ----- */
+            --bg-header: rgba(10, 14, 26, 0.85);
+            --border-header: rgba(255, 255, 255, 0.06);
+            --header-text: #f0f4ff;
+            --header-text-muted: #94a3b8;
+            --header-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+            /* Scrollbar */
+            --bg-scrollbar: #0a0e1a;
+            --scrollbar-thumb: #1e293b;
         }
 
         body {
@@ -110,6 +192,26 @@
             border-radius: 4px;
         }
 
+        /* ----- Scrollbar ----- */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-scrollbar);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-cyan);
+        }
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--scrollbar-thumb) var(--bg-scrollbar);
+        }
+
         /* ----- Container ----- */
         .container {
             max-width: 1200px;
@@ -126,10 +228,11 @@
 
         /* ----- Header / Navbar (sticky, glassmorphism) ----- */
         .header {
-            background: rgba(10, 14, 26, 0.85);
+            background: var(--bg-header);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            border-bottom: 1px solid var(--border-header);
+            box-shadow: var(--header-shadow);
             padding: 12px 0;
             position: sticky;
             top: 0;
@@ -138,11 +241,12 @@
             min-height: var(--nav-height);
             display: flex;
             align-items: center;
+            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         @supports not (backdrop-filter: blur(12px)) {
             .header {
-                background: rgba(10, 14, 26, 0.96);
+                background: var(--bg-header);
             }
         }
 
@@ -166,7 +270,7 @@
         .nav-brand a {
             font-size: 1.4rem;
             font-weight: 800;
-            color: var(--text-white);
+            color: var(--header-text);
             letter-spacing: -0.5px;
             display: flex;
             align-items: center;
@@ -206,7 +310,7 @@
             display: block;
             width: 28px;
             height: 3px;
-            background: var(--text-white);
+            background: var(--header-text);
             border-radius: 10px;
             transition: all 0.3s ease;
             transform-origin: center;
@@ -246,7 +350,7 @@
         }
         .nav-links>li>a,
         .nav-links>li>.dropdown-trigger {
-            color: var(--text-muted);
+            color: var(--header-text-muted);
             font-size: 0.92rem;
             font-weight: 500;
             transition: color 0.2s, border-color 0.2s, background 0.2s;
@@ -309,17 +413,124 @@
         }
         .desktop-toggle-btn {
             background: transparent;
-            color: var(--text-muted) !important;
+            color: var(--header-text-muted) !important;
             box-shadow: none;
-            border: 2px solid rgba(255, 255, 255, 0.08);
+            border: 2px solid var(--border-soft);
             background: rgba(255, 255, 255, 0.02);
         }
         .desktop-toggle-btn:hover {
             background: rgba(0, 240, 255, 0.08);
             border-color: var(--neon-cyan);
-            color: var(--text-white) !important;
+            color: var(--header-text) !important;
             box-shadow: 0 0 20px rgba(0, 240, 255, 0.08);
             transform: scale(1.02);
+        }
+
+        /* ================================================================
+           THEME TOGGLE BUTTON — Enhanced UI/UX
+           ================================================================ */
+        .theme-toggle-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 18px 8px 12px;
+            border-radius: 50px;
+            border: 2px solid var(--border-soft);
+            background: var(--bg-card);
+            color: var(--header-text-muted);
+            cursor: pointer;
+            font-family: var(--font-body, "Inter", sans-serif);
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all var(--theme-transition);
+            touch-action: manipulation;
+            min-height: 42px;
+            min-width: 42px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            animation: togglePulse 4s ease-in-out infinite;
+        }
+
+        .theme-toggle-btn:hover {
+            border-color: var(--neon-cyan);
+            color: var(--header-text);
+            box-shadow: var(--glow-cyan), 0 4px 20px rgba(0, 0, 0, 0.05);
+            transform: translateY(-1px) scale(1.02);
+        }
+
+        .theme-toggle-btn:focus-visible {
+            outline: 2px solid var(--neon-cyan);
+            outline-offset: 2px;
+        }
+
+        .theme-toggle-btn .toggle-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            line-height: 1;
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            width: 1.4rem;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        /* Animated sun/moon colors */
+        .theme-toggle-btn .toggle-icon .fa-sun {
+            color: var(--neon-yellow, #eab308);
+        }
+        .theme-toggle-btn .toggle-icon .fa-moon {
+            color: var(--neon-cyan);
+        }
+
+        .theme-toggle-btn .toggle-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+        }
+
+        /* Light mode → show moon icon + "Dark" label */
+        .theme-toggle-btn .toggle-icon .fa-moon {
+            display: inline-block;
+        }
+        .theme-toggle-btn .toggle-icon .fa-sun {
+            display: none;
+        }
+        .theme-toggle-btn .toggle-label[data-label="dark"] {
+            display: inline;
+        }
+        .theme-toggle-btn .toggle-label[data-label="light"] {
+            display: none;
+        }
+
+        /* Dark mode → show sun icon + "Light" label */
+        html.dark-mode .theme-toggle-btn .toggle-icon .fa-moon {
+            display: none;
+        }
+        html.dark-mode .theme-toggle-btn .toggle-icon .fa-sun {
+            display: inline-block;
+        }
+        html.dark-mode .theme-toggle-btn .toggle-label[data-label="dark"] {
+            display: none;
+        }
+        html.dark-mode .theme-toggle-btn .toggle-label[data-label="light"] {
+            display: inline;
+        }
+
+        @keyframes togglePulse {
+            0%, 100% { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); }
+            50% { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), 0 0 12px rgba(0, 240, 255, 0.06); }
+        }
+        html.dark-mode .theme-toggle-btn {
+            animation: togglePulseDark 4s ease-in-out infinite;
+        }
+        @keyframes togglePulseDark {
+            0%, 100% { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); }
+            50% { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 230, 255, 0.08); }
         }
 
         /* ----- Dropdown menus (desktop) ----- */
@@ -329,13 +540,13 @@
             top: calc(100% + 6px);
             left: 0;
             min-width: 210px;
-            background: rgba(10, 14, 26, 0.96);
+            background: var(--bg-panel-solid);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.07);
+            border: 1px solid var(--border-soft);
             border-radius: var(--radius-sm);
             padding: 6px 0;
-            box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.03);
+            box-shadow: var(--shadow-card);
             z-index: 1000;
             flex-direction: column;
             gap: 0;
@@ -356,7 +567,7 @@
         }
         .dropdown-menu li {
             padding: 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            border-bottom: 1px solid var(--border-soft);
             list-style: none;
         }
         .dropdown-menu li:last-child {
@@ -437,16 +648,16 @@
                 top: calc(100% + 0px);
                 left: 0;
                 right: 0;
-                background: rgba(10, 14, 26, 0.97);
+                background: var(--bg-panel-solid);
                 backdrop-filter: blur(20px);
                 -webkit-backdrop-filter: blur(20px);
                 flex-direction: column;
                 align-items: stretch;
                 gap: 0;
                 padding: 8px 0 16px;
-                border-top: 1px solid rgba(255, 255, 255, 0.06);
-                border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-                box-shadow: 0 24px 48px rgba(0, 0, 0, 0.7);
+                border-top: 1px solid var(--border-soft);
+                border-bottom: 1px solid var(--border-soft);
+                box-shadow: var(--shadow-card);
                 transform: scaleY(0);
                 transform-origin: top center;
                 opacity: 0;
@@ -464,7 +675,7 @@
                 visibility: visible;
             }
             .nav-links>li {
-                border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+                border-bottom: 1px solid var(--border-soft);
                 position: static;
                 list-style: none;
             }
@@ -517,7 +728,7 @@
                 display: flex;
             }
             .dropdown-menu li {
-                border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+                border-bottom: 1px solid var(--border-soft);
             }
             .dropdown-menu li:last-child {
                 border-bottom: none;
@@ -570,14 +781,15 @@
             }
             /* Mobile: buttons as full-width list items */
             .install-btn,
-            .desktop-toggle-btn {
+            .desktop-toggle-btn,
+            .theme-toggle-btn {
                 display: flex;
                 width: 100%;
                 justify-content: flex-start;
                 border-radius: 0;
                 padding: 14px 20px;
                 background: transparent !important;
-                color: var(--text-muted) !important;
+                color: var(--header-text-muted) !important;
                 box-shadow: none !important;
                 border-left: 3px solid transparent;
                 font-weight: 500;
@@ -585,15 +797,19 @@
                 min-height: auto;
                 border: none;
                 gap: 10px;
+                animation: none !important;
+                border-bottom: 1px solid var(--border-soft);
             }
             .install-btn i,
-            .desktop-toggle-btn i {
+            .desktop-toggle-btn i,
+            .theme-toggle-btn .toggle-icon {
                 width: 1.6rem;
                 text-align: center;
                 font-size: 1.1rem;
             }
             .install-btn:hover,
-            .desktop-toggle-btn:hover {
+            .desktop-toggle-btn:hover,
+            .theme-toggle-btn:hover {
                 background: rgba(0, 240, 255, 0.06) !important;
                 border-left-color: var(--neon-cyan);
                 color: var(--neon-cyan) !important;
@@ -601,16 +817,17 @@
                 box-shadow: none !important;
             }
             .nav-links>li>.install-btn,
-            .nav-links>li>.desktop-toggle-btn {
+            .nav-links>li>.desktop-toggle-btn,
+            .nav-links>li>.theme-toggle-btn {
                 padding: 14px 20px;
                 border-radius: 0;
             }
-            .desktop-toggle-btn {
-                border: none;
-                background: transparent !important;
+            .theme-toggle-btn .toggle-label {
+                font-size: 0.92rem;
             }
-            .desktop-toggle-btn:hover {
-                border: none;
+            .theme-toggle-btn .toggle-icon .fa-sun,
+            .theme-toggle-btn .toggle-icon .fa-moon {
+                font-size: 1.2rem;
             }
         }
 
@@ -639,7 +856,8 @@
             .nav-links>li>a,
             .nav-links>li>.dropdown-trigger,
             .install-btn,
-            .desktop-toggle-btn {
+            .desktop-toggle-btn,
+            .theme-toggle-btn {
                 font-size: 0.92rem;
                 padding: 12px 16px;
             }
@@ -648,6 +866,10 @@
             .dropdown-menu li .lang-option {
                 padding: 10px 16px 10px 36px;
                 font-size: 0.88rem;
+            }
+            .theme-toggle-btn .toggle-icon {
+                width: 1.2rem;
+                font-size: 1rem;
             }
         }
 
@@ -696,7 +918,7 @@
         }
         hr {
             border: none;
-            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            border-top: 1px solid var(--border-soft);
             margin: 0;
         }
         /* Responsive section headers */
@@ -796,9 +1018,7 @@
                REDUCED MOTION
                ============================================================ */
         @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
+            *, *::before, *::after {
                 animation-duration: 0.01ms !important;
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
@@ -818,18 +1038,16 @@
             .dropdown-menu {
                 transition: none !important;
             }
+            .theme-toggle-btn {
+                animation: none !important;
+            }
         }
 
         /* ============================================================
                PRINT STYLES
                ============================================================ */
         @media print {
-            .header,
-            .footer,
-            .install-btn,
-            .desktop-toggle-btn,
-            #installModal,
-            .hamburger {
+            .header, .footer, .install-btn, .desktop-toggle-btn, .theme-toggle-btn, #installModal, .hamburger {
                 display: none !important;
             }
             body {
@@ -880,10 +1098,15 @@
                     <li role="none"><a href="{% url 'reviews' %}" role="menuitem"><i class="fas fa-star" aria-hidden="true"></i> {% trans "Reviews" %}</a></li>
                     <li role="none"><a href="{% url 'contact' %}" role="menuitem"><i class="fas fa-envelope" aria-hidden="true"></i> {% trans "Contact" %}</a></li>
 
-                    <!-- Install App Button -->
+                    <!-- Dark / Light Mode Toggle (Enhanced) -->
                     <li role="none">
-                        <button id="installAppBtn" class="install-btn" role="menuitem" aria-label="{% trans 'Install App' %}">
-                            <i class="fas fa-download" aria-hidden="true"></i> <span>{% trans "Install App" %}</span>
+                        <button id="themeToggleBtn" class="theme-toggle-btn" role="menuitem" aria-label="{% trans 'Toggle theme' %}" title="{% trans 'Switch between dark and light mode' %}">
+                            <span class="toggle-icon" aria-hidden="true">
+                                <i class="fas fa-moon"></i>
+                                <i class="fas fa-sun"></i>
+                            </span>
+                            <span class="toggle-label" data-label="dark">{% trans "Dark" %}</span>
+                            <span class="toggle-label" data-label="light">{% trans "Light" %}</span>
                         </button>
                     </li>
 
@@ -895,7 +1118,7 @@
                         </button>
                     </li>
 
-                    {% comment %} {# ─── Language Dropdown ─── #}
+                    {# ─── Language Dropdown ─── #}
                     <li class="lang-dropdown" role="none">
                         <button class="dropdown-trigger" aria-haspopup="true" aria-expanded="false" aria-label="{% trans 'Select language' %}" role="menuitem" type="button">
                             <i class="fas fa-globe" aria-hidden="true"></i>
@@ -930,7 +1153,7 @@
                                 </form>
                             </li>
                         </ul>
-                    </li> {% endcomment %}
+                    </li>
 
                     {# ─── User / Auth Dropdown ─── #}
                     {% if user.is_authenticated %}
@@ -986,8 +1209,6 @@
 
     <!-- ============================== EXTRA SCRIPTS ============================== -->
     {% block extra_js %}{% endblock %}
-
-    <!-- ============================== EXTRA SCRIPTS (legacy) ============================== -->
     {% block extra_scripts %}{% endblock %}
 
     <!-- ============================== DROPDOWN & HAMBURGER TOGGLE ============================== -->
@@ -1004,7 +1225,6 @@
                     const isOpen = navLinks.classList.toggle('open');
                     hamburger.classList.toggle('active');
                     hamburger.setAttribute('aria-expanded', isOpen);
-                    // Trap focus inside menu when open (optional enhancement)
                 }
 
                 function closeMenu() {
@@ -1015,25 +1235,22 @@
 
                 hamburger.addEventListener('click', toggleMenu);
 
-                // Close when a link/button inside is clicked (except dropdown triggers)
                 navLinks.addEventListener('click', function(e) {
                     const target = e.target.closest('a, button');
                     if (!target) return;
-                    // Don't close if it's a dropdown trigger or inside a dropdown
                     if (target.closest('.dropdown-trigger') || target.closest('.dropdown-menu')) {
                         return;
                     }
-                    // Close for regular links, logout, lang-option, install, desktop toggle
                     if (target.tagName === 'A' ||
                         target.classList.contains('logout-btn') ||
                         target.closest('.lang-option') ||
                         target.closest('.install-btn') ||
-                        target.closest('.desktop-toggle-btn')) {
+                        target.closest('.desktop-toggle-btn') ||
+                        target.closest('.theme-toggle-btn')) {
                         closeMenu();
                     }
                 });
 
-                // Close on resize to desktop
                 let resizeTimer;
                 window.addEventListener('resize', function() {
                     clearTimeout(resizeTimer);
@@ -1044,7 +1261,6 @@
                     }, 150);
                 }, { passive: true });
 
-                // Close on Escape
                 document.addEventListener('keydown', function(e) {
                     if (e.key === 'Escape' && navLinks.classList.contains('open')) {
                         closeMenu();
@@ -1053,7 +1269,7 @@
                 });
             }
 
-            // ---- Dropdown toggles (desktop & mobile) ----
+            // ---- Dropdown toggles ----
             const dropdownTriggers = document.querySelectorAll('.dropdown-trigger');
             dropdownTriggers.forEach(function(trigger) {
                 trigger.addEventListener('click', function(e) {
@@ -1063,12 +1279,10 @@
                     const menu = parentLi.querySelector('.dropdown-menu');
                     if (!menu) return;
 
-                    // Close other open dropdowns
                     document.querySelectorAll('.dropdown-menu.open').forEach(function(otherMenu) {
                         if (otherMenu !== menu) {
                             otherMenu.classList.remove('open');
-                            const otherTrigger = otherMenu.closest('li')?.querySelector(
-                            '.dropdown-trigger');
+                            const otherTrigger = otherMenu.closest('li')?.querySelector('.dropdown-trigger');
                             if (otherTrigger) otherTrigger.setAttribute('aria-expanded', 'false');
                         }
                     });
@@ -1078,7 +1292,6 @@
                 });
             });
 
-            // Close dropdowns on outside click
             document.addEventListener('click', function(e) {
                 document.querySelectorAll('.dropdown-menu.open').forEach(function(menu) {
                     const parentLi = menu.closest('li');
@@ -1090,7 +1303,6 @@
                 });
             });
 
-            // Close dropdowns on Escape
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     document.querySelectorAll('.dropdown-menu.open').forEach(function(menu) {
@@ -1101,7 +1313,7 @@
                 }
             });
 
-            // Language form auto-submit – close dropdown after submit
+            // ---- Language form auto-submit – close dropdown after submit ----
             document.querySelectorAll('.lang-form').forEach(function(form) {
                 form.addEventListener('submit', function() {
                     const parentLi = form.closest('li');
@@ -1119,92 +1331,6 @@
         })();
     </script>
 
-    <!-- ============================== INSTALL APP LOGIC ============================== -->
-    <script>
-        (function() {
-            let deferredPrompt;
-            const installBtn = document.getElementById('installAppBtn');
-            const modal = document.getElementById('installModal');
-            const modalClose = document.getElementById('installModalClose');
-
-            // Initially hide the button (will show if beforeinstallprompt fires)
-            if (installBtn) installBtn.style.display = 'none';
-
-            // Show install prompt if supported
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                if (installBtn) {
-                    installBtn.style.display = 'inline-flex';
-                    // Ensure it's visible on mobile too
-                    if (window.innerWidth <= 820) {
-                        installBtn.style.display = 'flex';
-                    }
-                }
-            });
-
-            // Install button click
-            installBtn?.addEventListener('click', async function(e) {
-                e.preventDefault();
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    const result = await deferredPrompt.userChoice;
-                    console.log('User choice:', result.outcome);
-                    deferredPrompt = null;
-                    installBtn.style.display = 'none';
-                } else {
-                    // Fallback: show iOS instructions modal
-                    showInstallModal();
-                }
-            });
-
-            // Hide button if already installed
-            if (window.matchMedia('(display-mode: standalone)').matches) {
-                if (installBtn) installBtn.style.display = 'none';
-            }
-
-            // Modal controls
-            function showInstallModal() {
-                if (modal) {
-                    modal.setAttribute('aria-hidden', 'false');
-                    modal.style.display = 'flex';
-                    // Small delay for transition
-                    requestAnimationFrame(() => {
-                        modal.style.opacity = '1';
-                    });
-                    // Focus trap: focus first focusable element
-                    const firstFocusable = modal.querySelector('button, a, input');
-                    if (firstFocusable) setTimeout(() => firstFocusable.focus(), 100);
-                }
-            }
-
-            function hideInstallModal() {
-                if (modal) {
-                    modal.setAttribute('aria-hidden', 'true');
-                    modal.style.opacity = '0';
-                    setTimeout(() => {
-                        modal.style.display = 'none';
-                    }, 250);
-                }
-            }
-
-            modalClose?.addEventListener('click', hideInstallModal);
-            modal?.addEventListener('click', function(e) {
-                if (e.target === this) hideInstallModal();
-            });
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && modal && modal.style.display === 'flex') {
-                    hideInstallModal();
-                }
-            });
-
-            // Expose for global use (if needed)
-            window.showInstallModal = showInstallModal;
-            window.hideInstallModal = hideInstallModal;
-
-        })();
-    </script>
-
     <!-- ============================== DESKTOP TOGGLE ============================== -->
     <script>
         (function() {
@@ -1213,12 +1339,10 @@
             const metaViewport = document.querySelector('meta[name="viewport"]');
             if (!metaViewport || !toggleBtn) return;
 
-            // Load stored preference with try-catch to avoid errors in older browsers
             let isDesktop = false;
             try {
                 isDesktop = localStorage.getItem('desktopMode') === 'true';
             } catch (e) {
-                // localStorage not available – fallback to default (mobile view)
                 isDesktop = false;
             }
 
@@ -1240,8 +1364,7 @@
                     metaViewport.content = 'width=1024, initial-scale=1.0';
                     if (labelSpan) labelSpan.textContent = '{% trans "Mobile View" %}';
                 } else {
-                    metaViewport.content =
-                        'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes';
+                    metaViewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes';
                     if (labelSpan) labelSpan.textContent = '{% trans "Desktop View" %}';
                 }
                 try {
@@ -1254,22 +1377,206 @@
         })();
     </script>
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "{{ business.business_name }}",
-  "address": "{{ business.address }}",
-  "telephone": "{{ business.phone }}",
-  "email": "{{ business.email }}",
-  "url": "{{ request.build_absolute_uri }}",
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "{{ rating_avg }}",
-    "reviewCount": "{{ total_reviews }}"
-  }
-}
-</script>
+    <!-- ============================== THEME TOGGLE (Enhanced) ============================== -->
+    <script>
+        (function() {
+            "use strict";
 
+            // ─── CONFIG ───
+            const STORAGE_KEY = 'matoshree_theme';
+            const DARK_CLASS = 'dark-mode';
+            const TOGGLE_BTN_ID = 'themeToggleBtn';
+
+            // ─── DOM REFS ───
+            const htmlEl = document.documentElement;
+            const toggleBtn = document.getElementById(TOGGLE_BTN_ID);
+
+            // ─── HELPERS ───
+
+            /** Check if dark mode is currently active */
+            function isDarkMode() {
+                return htmlEl.classList.contains(DARK_CLASS);
+            }
+
+            /** Apply theme: dark = true/false */
+            function setTheme(dark, savePreference) {
+                // Prevent transitions during class change to avoid flash
+                htmlEl.classList.add('no-transition');
+
+                if (dark) {
+                    htmlEl.classList.add(DARK_CLASS);
+                } else {
+                    htmlEl.classList.remove(DARK_CLASS);
+                }
+
+                // Force reflow to apply the class before removing the no-transition class
+                void htmlEl.offsetHeight;
+
+                // Re-enable transitions after a tiny delay
+                requestAnimationFrame(function() {
+                    htmlEl.classList.remove('no-transition');
+                });
+
+                // Update button ARIA state
+                if (toggleBtn) {
+                    toggleBtn.setAttribute('aria-pressed', dark ? 'true' : 'false');
+                }
+
+                // Update theme-color meta tag
+                const meta = document.getElementById('themeColorMeta');
+                if (meta) {
+                    meta.content = dark ? '#0a0e1a' : '#f8fafc';
+                }
+
+                // Save preference
+                if (savePreference !== false) {
+                    try {
+                        localStorage.setItem(STORAGE_KEY, dark ? 'dark' : 'light');
+                    } catch (e) {
+                        // localStorage not available — ignore
+                    }
+                }
+
+                // Dispatch custom event for other scripts to listen
+                document.dispatchEvent(new CustomEvent('themeChanged', {
+                    detail: { darkMode: dark }
+                }));
+            }
+
+            /** Toggle between dark and light */
+            function toggleTheme() {
+                setTheme(!isDarkMode(), true);
+            }
+
+            /** Detect system preference */
+            function getSystemPreference() {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    return 'dark';
+                }
+                return 'light';
+            }
+
+            /** Load saved preference or fallback to system */
+            function loadTheme() {
+                let saved = null;
+                try {
+                    saved = localStorage.getItem(STORAGE_KEY);
+                } catch (e) {
+                    // ignore
+                }
+
+                if (saved === 'dark') {
+                    setTheme(true, false);
+                    return true;
+                } else if (saved === 'light') {
+                    setTheme(false, false);
+                    return false;
+                }
+
+                // Fallback: system preference
+                const systemPref = getSystemPreference();
+                const isDark = systemPref === 'dark';
+                setTheme(isDark, false);
+                return isDark;
+            }
+
+            // ─── INIT ───
+
+            // Disable transitions on page load to prevent flash
+            htmlEl.classList.add('no-transition');
+
+            // Load theme on DOM ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function() {
+                    loadTheme();
+                });
+            } else {
+                loadTheme();
+            }
+
+            // Re-enable transitions after load (safety)
+            window.addEventListener('load', function() {
+                htmlEl.classList.remove('no-transition');
+            });
+
+            // ─── EVENT LISTENERS ───
+
+            // Toggle button click
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    toggleTheme();
+                    // Haptic feedback (optional)
+                    if (navigator.vibrate) navigator.vibrate(10);
+                });
+
+                // Keyboard support: Enter / Space
+                toggleBtn.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleTheme();
+                    }
+                });
+            }
+
+            // ─── SYSTEM PREFERENCE CHANGE DETECTION ───
+            if (window.matchMedia) {
+                const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+                if (mediaQuery.addEventListener) {
+                    mediaQuery.addEventListener('change', function(e) {
+                        try {
+                            const saved = localStorage.getItem(STORAGE_KEY);
+                            if (saved === null) {
+                                setTheme(e.matches, false);
+                            }
+                        } catch (err) {
+                            setTheme(e.matches, false);
+                        }
+                    });
+                } else if (mediaQuery.addListener) {
+                    mediaQuery.addListener(function(e) {
+                        try {
+                            const saved = localStorage.getItem(STORAGE_KEY);
+                            if (saved === null) {
+                                setTheme(e.matches, false);
+                            }
+                        } catch (err) {
+                            setTheme(e.matches, false);
+                        }
+                    });
+                }
+            }
+
+            // ─── EXPOSE FOR CONSOLE DEBUGGING ───
+            window.__theme = {
+                isDark: isDarkMode,
+                set: setTheme,
+                toggle: toggleTheme,
+                load: loadTheme,
+            };
+
+            console.log('🌓 Theme system initialized. Current:', isDarkMode() ? 'Dark' : 'Light');
+
+        })();
+    </script>
+
+    <!-- ============================== STRUCTURED DATA ============================== -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "{{ business.business_name }}",
+      "address": "{{ business.address }}",
+      "telephone": "{{ business.phone }}",
+      "email": "{{ business.email }}",
+      "url": "{{ request.build_absolute_uri }}",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "{{ rating_avg }}",
+        "reviewCount": "{{ total_reviews }}"
+      }
+    }
+    </script>
 </body>
 </html>

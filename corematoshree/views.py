@@ -11,6 +11,10 @@ from decimal import Decimal
 from datetime import timedelta
 from io import BytesIO
 
+from datetime import datetime
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from .utils import fetch_external_jobs
+
 # ---- Third-Party Libraries ----
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
@@ -1035,13 +1039,51 @@ def government_schemes(request):
         'schemes': schemes_page,
     })
 
-
 @login_required
 def jobs(request):
-    jobs_qs = JobNotification.objects.order_by('last_date').only(
-        'id', 'title', 'organization', 'last_date', 'apply_link', 'description', 'icon'
+    # ----- 1. Fetch external jobs (cached) -----
+    external_jobs = fetch_external_jobs()
+
+    # ----- 2. Fetch manual jobs from database -----
+    manual_jobs = JobNotification.objects.order_by('-last_date')
+
+    # ----- 3. Combine into a single list of dicts -----
+    combined = []
+    for job in manual_jobs:
+        combined.append({
+            'title': job.title,
+            'organization': job.organization,
+            'description': job.description,
+            'apply_link': job.apply_link,
+            'last_date': job.last_date,       # date object
+            'source': 'manual',
+        })
+
+    for job in external_jobs:
+        combined.append({
+            'title': job.get('title', ''),
+            'organization': job.get('organization', 'Various'),
+            'description': job.get('description', ''),
+            'apply_link': job.get('apply_link', '#'),
+            'last_date': job.get('last_date'),   # could be datetime or date
+            'source': 'external',
+        })
+
+    # ----- 4. Normalize all dates to datetime.date (convert datetime -> date) -----
+    for job in combined:
+        if job.get('last_date') is not None:
+            if isinstance(job['last_date'], datetime):
+                job['last_date'] = job['last_date'].date()
+
+    # ----- 5. Sort by last_date descending (newest first) -----
+    # Use datetime.min.date() as fallback for None values
+    combined.sort(
+        key=lambda x: x.get('last_date') or datetime.min.date(),
+        reverse=True
     )
-    paginator = Paginator(jobs_qs, 10)
+
+    # ----- 6. Paginate (10 items per page) -----
+    paginator = Paginator(combined, 10)
     page = request.GET.get('page')
     try:
         jobs_page = paginator.page(page)
@@ -1049,6 +1091,7 @@ def jobs(request):
         jobs_page = paginator.page(1)
     except EmptyPage:
         jobs_page = paginator.page(paginator.num_pages)
+
     return render(request, 'jobs.html', {
         'business': get_business(),
         'jobs': jobs_page,
