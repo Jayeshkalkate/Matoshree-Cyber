@@ -30,7 +30,6 @@ DATABASES = {
     'default': dj_database_url.config(
         default=config('DATABASE_URL', default='sqlite:///db.sqlite3'),
         conn_max_age=600,
-        # ssl_require=True is fine for PostgreSQL; SQLite ignores it.
         ssl_require=True
     )
 }
@@ -97,28 +96,21 @@ AUTH_USER_MODEL = 'corematoshree.User'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'login'
 
-# MULTI LANGUAGES SUPPORT
+# ---------- LANGUAGE & TIME (i18n disabled) ----------
 LANGUAGE_CODE = 'en-us'
-LANGUAGES = [
-    ('en', ('English')),
-]
-
 TIME_ZONE = 'Asia/Kolkata'
-USE_I18N = True
+USE_I18N = False          # Disable internationalization
 USE_TZ = True
 
-EXTERNAL_JOBS_RSS_URL = 'https://majhinaukri.in/feed/'   # confirm the actual feed URL
+EXTERNAL_JOBS_RSS_URL = 'https://majhinaukri.in/feed/'
 
 # ------------------------------------------------------------------
 # STATIC & MEDIA
 # ------------------------------------------------------------------
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [BASE_DIR / 'static']   # make sure this folder exists
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
-# ------------------------------------------------------------------
-# STORAGES – Django 4.2+ (Cloudinary for media, WhiteNoise for static)
-# ------------------------------------------------------------------
 STORAGES = {
     'default': {
         'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
@@ -128,11 +120,10 @@ STORAGES = {
     },
 }
 
-# Tax rate (e.g., 18% = 0.18)
 GST_RATE = config('GST_RATE', default=0.18, cast=float)
 
 # ------------------------------------------------------------------
-# CLOUDINARY – UNCONDITIONAL
+# CLOUDINARY
 # ------------------------------------------------------------------
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
@@ -140,20 +131,15 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': config('CLOUDINARY_API_SECRET'),
 }
 
-# Initialize Cloudinary SDK
 cloudinary.config(
     cloud_name=config('CLOUDINARY_CLOUD_NAME'),
     api_key=config('CLOUDINARY_API_KEY'),
     api_secret=config('CLOUDINARY_API_SECRET'),
 )
 
-# (Optional) Remove this print or keep only for debugging
 if DEBUG:
     print("✅ Cloudinary storage is ACTIVE with cloud_name:", config('CLOUDINARY_CLOUD_NAME'))
 
-# ------------------------------------------------------------------
-# MEDIA (fallback – not used when Cloudinary is active)
-# ------------------------------------------------------------------
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -197,7 +183,6 @@ else:
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
 
-# CSRF_TRUSTED_ORIGINS – properly handle empty string
 _csrf_origins = config('CSRF_TRUSTED_ORIGINS', default='')
 if _csrf_origins:
     CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in _csrf_origins.split(',') if origin.strip()]
