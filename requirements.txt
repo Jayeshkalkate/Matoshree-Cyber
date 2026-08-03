@@ -1,3 +1,7 @@
+# Build tools (required for pkg_resources)
+setuptools==78.1.0
+wheel==0.45.1
+
 # Django core
 Django==6.0.7
 asgiref==3.11.1
