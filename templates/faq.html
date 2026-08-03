@@ -861,7 +861,7 @@
       <p>No questions match your search. Try a different keyword.</p>
     </div>
 
-    <!-- Footer -->
+        <!-- Footer -->
     <div class="faq-footer">
       <span>
         <i class="fas fa-lightbulb" aria-hidden="true"></i> Can't find what you need?
@@ -869,11 +869,13 @@
       </span>
       <span class="badge">
         <i class="fas fa-file-alt" aria-hidden="true"></i>
-        
-          {{ counter }} answer
-        {% plural %}
-          {{ counter }} answers
-        {% endblocktrans %}
+        {% with count=faqs|length %}
+          {% if count == 1 %}
+            1 answer
+          {% else %}
+            {{ count }} answers
+          {% endif %}
+        {% endwith %}
       </span>
     </div>
   </div>

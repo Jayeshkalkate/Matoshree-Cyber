@@ -411,11 +411,11 @@
       {% if jobs.paginator.count > 0 %}
       <div class="total-badge">
         <i class="fas fa-briefcase"></i>
-        
-          {{ counter }} job
-        {% plural %}
-          {{ counter }} jobs
-        {% endblocktrans %}
+        {% if jobs.paginator.count == 1 %}
+          1 job
+        {% else %}
+          {{ jobs.paginator.count }} jobs
+        {% endif %}
       </div>
       {% endif %}
     </div>

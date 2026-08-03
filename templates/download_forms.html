@@ -974,7 +974,7 @@
     </div>
     {% endif %}
 
-    <!-- Footer Note -->
+        <!-- Footer Note -->
     <div class="footer-note">
       <span>
         <i class="fas fa-check-circle" style="color: var(--neon-green, #22d3ee);"></i>
@@ -982,11 +982,13 @@
       </span>
       <span class="badge">
         <i class="far fa-clock"></i>
-        
-          {{ counter }} form available
-        {% plural %}
-          {{ counter }} forms available
-        {% endblocktrans %}
+        {% with count=forms.paginator.count %}
+          {% if count == 1 %}
+            1 form available
+          {% else %}
+            {{ count }} forms available
+          {% endif %}
+        {% endwith %}
       </span>
     </div>
 

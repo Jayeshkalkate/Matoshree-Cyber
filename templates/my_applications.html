@@ -334,11 +334,11 @@
     {% if applications.paginator.count > 0 %}
       <div class="total-badge" role="status" aria-label="Total applications count">
         <i class="fas fa-file-alt" aria-hidden="true"></i>
-        
-          {{ counter }} application
-        {% plural %}
-          {{ counter }} applications
-        {% endblocktrans %}
+        {% if applications.paginator.count == 1 %}
+          1 application
+        {% else %}
+          {{ applications.paginator.count }} applications
+        {% endif %}
       </div>
     {% endif %}
   </div>
