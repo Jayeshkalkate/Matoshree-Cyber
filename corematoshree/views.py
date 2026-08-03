@@ -13,13 +13,8 @@ from io import BytesIO
 from datetime import datetime
 import re
 
-import razorpay
-from django.conf import settings
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
-
 # ---- Third-Party Libraries ----
+import razorpay
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.pagesizes import A4
@@ -46,17 +41,18 @@ from django.core.cache import cache
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
 from django.core.files import File
 from django.db import models, transaction
-from django.db.models import Count, Q
-from django.db.models.functions import ExtractWeek, TruncDate, TruncWeek
+from django.db.models import Count
+from django.db.models.functions import TruncDate, TruncWeek
 from django.forms import formset_factory
 from django.http import FileResponse, JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.decorators.cache import cache_page
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 
 # ---- Local Application ----
 from .models import (
@@ -73,7 +69,10 @@ from .forms import (
     BusinessInfoForm, RequiredDocumentForm, ApplicationForm, DocumentUploadForm,
     PaymentSettingsForm,
 )
-from .utils import get_business, get_payment_settings, is_admin, is_superadmin, fetch_external_jobs
+from .utils import (
+    get_business, get_payment_settings, is_admin, is_superadmin,
+    fetch_external_jobs, compute_payment_breakdown
+)
 
 # ---- Logger ----
 logger = logging.getLogger(__name__)
@@ -276,7 +275,7 @@ def _get_dashboard_common_data():
             'forms_list': list(DownloadForm.objects.values('id', 'title', 'category', 'pdf', 'uploaded_at')[:100]),
             'servicecharges': list(ServiceCharge.objects.select_related('service').values('id', 'service__name', 'charge')),
             'gallery_images': list(Gallery.objects.values('id', 'title', 'category', 'image')[:100]),
-            'business_info': BusinessInfo.objects.first(),  # model instance, pickleable
+            'business_info': BusinessInfo.objects.first(),
             'applications': list(Application.objects.select_related('user', 'service').values(
                 'id', 'user__username', 'service__name', 'full_name', 'phone',
                 'email', 'address', 'status', 'created_at'
@@ -319,11 +318,9 @@ def _get_dashboard_common_data():
 # -----------------------------------------------------------------------------
 
 def _clear_section_cache(section):
-    """Delete the cached data for a specific dashboard section."""
     cache.delete(f'dashboard_section_{section}')
 
 def _clear_all_section_caches():
-    """Clear all dashboard section caches (used after major updates)."""
     sections = [
         'services', 'appointments', 'contacts', 'announcements', 'jobs',
         'schemes', 'forms', 'servicecharges', 'gallery', 'requireddocs',
@@ -608,7 +605,6 @@ def _handle_payment_settings(request):
             for error in errors:
                 messages.error(request, f"{field}: {error}")
         messages.error(request, "Please correct the errors below.")
-
     cache.delete(DASHBOARD_CACHE_KEY)
     _clear_all_section_caches()
 
@@ -1044,7 +1040,7 @@ def jobs(request):
             'organization': job.organization,
             'description': job.description,
             'apply_link': job.apply_link,
-            'last_date': job.last_date,       # date object
+            'last_date': job.last_date,
             'source': 'manual',
         })
 
@@ -1054,7 +1050,7 @@ def jobs(request):
             'organization': job.get('organization', 'Various'),
             'description': job.get('description', ''),
             'apply_link': job.get('apply_link', '#'),
-            'last_date': job.get('last_date'),   # could be datetime or date
+            'last_date': job.get('last_date'),
             'source': 'external',
         })
 
@@ -1175,6 +1171,7 @@ def apply_service(request, service_id):
 
 
 @login_required
+@require_POST
 def create_razorpay_order(request):
     app_id = request.POST.get('app_id')
     if not app_id:
@@ -1184,23 +1181,34 @@ def create_razorpay_order(request):
     if application.payment_status == 'paid':
         return JsonResponse({'error': 'Payment already completed'}, status=400)
 
-    # Get amount
     charge = application.service.servicecharge_set.first()
     if not charge:
         return JsonResponse({'error': 'No charge defined for this service'}, status=400)
 
-    amount = int(charge.charge * 100)  # in paise
+    # Compute breakdown
+    breakdown = compute_payment_breakdown(
+        charge.charge,
+        gst_rate=getattr(settings, 'GST_RATE', 0.18),
+        fee_percent=getattr(settings, 'RAZORPAY_FEE_PERCENT', 2.0),
+        fee_fixed=getattr(settings, 'RAZORPAY_FEE_FIXED', 0.0)
+    )
+    total_amount = breakdown['total']
+    amount_in_paise = int(total_amount * 100)
 
     # Create Razorpay order
     client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
     order_data = {
-        'amount': amount,
+        'amount': amount_in_paise,
         'currency': 'INR',
         'receipt': f'app_{application.id}',
-        'payment_capture': 1,  # auto capture
+        'payment_capture': 1,
         'notes': {
             'application_id': application.id,
             'user_id': application.user.id,
+            'service_amount': str(breakdown['service_amount']),
+            'fee': str(breakdown['fee']),
+            'gst_on_fee': str(breakdown['gst_on_fee']),
+            'total': str(breakdown['total']),
         }
     }
     try:
@@ -1209,16 +1217,21 @@ def create_razorpay_order(request):
         logger.error(f"Razorpay order creation failed: {e}")
         return JsonResponse({'error': 'Failed to create order. Please try again.'}, status=500)
 
-    # Save order ID to application
     application.razorpay_order_id = order['id']
     application.save(update_fields=['razorpay_order_id'])
 
     return JsonResponse({
         'order_id': order['id'],
-        'amount': amount,
+        'amount': amount_in_paise,
         'currency': 'INR',
         'key': settings.RAZORPAY_KEY_ID,
         'app_id': application.id,
+        'breakdown': {
+            'service_amount': str(breakdown['service_amount']),
+            'fee': str(breakdown['fee']),
+            'gst_on_fee': str(breakdown['gst_on_fee']),
+            'total': str(breakdown['total']),
+        }
     })
 
 
@@ -1254,6 +1267,26 @@ def payment_success(request):
         messages.error(request, "Payment verification failed. Please contact support.")
         return redirect('application_detail', app_id=application.id)
 
+    # --- Compute and store breakdown ---
+    charge = application.service.servicecharge_set.first()
+    if charge:
+        breakdown = compute_payment_breakdown(
+            charge.charge,
+            gst_rate=getattr(settings, 'GST_RATE', 0.18),
+            fee_percent=getattr(settings, 'RAZORPAY_FEE_PERCENT', 2.0),
+            fee_fixed=getattr(settings, 'RAZORPAY_FEE_FIXED', 0.0)
+        )
+        application.service_amount = breakdown['service_amount']
+        application.razorpay_fee = breakdown['fee']
+        application.gst_on_fee = breakdown['gst_on_fee']
+        application.total_paid = breakdown['total']
+    else:
+        # Fallback if no charge (should not happen)
+        application.service_amount = Decimal('0.00')
+        application.razorpay_fee = Decimal('0.00')
+        application.gst_on_fee = Decimal('0.00')
+        application.total_paid = Decimal('0.00')
+
     # Update application
     application.razorpay_payment_id = razorpay_payment_id
     application.razorpay_signature = razorpay_signature
@@ -1261,16 +1294,13 @@ def payment_success(request):
     application.payment_date = timezone.now()
     application.payment_method = 'razorpay'
     application.receipt_number = application.generate_receipt_number()
-    application.save(update_fields=['razorpay_payment_id', 'razorpay_signature',
-                                    'payment_status', 'payment_date', 'payment_method',
-                                    'receipt_number'])
+    application.save()
 
     # Create payment log
-    charge = application.service.servicecharge_set.first()
     PaymentLog.objects.create(
         application=application,
         event_type='captured',
-        amount=charge.charge if charge else 0,
+        amount=application.total_paid or 0,
     )
 
     # Send confirmation email
@@ -1288,11 +1318,10 @@ def payment_failure(request):
         return redirect('services')
 
     application = get_object_or_404(Application, id=app_id, user=request.user)
-    # Optionally log failure
     PaymentLog.objects.create(
         application=application,
         event_type='failed',
-        amount=0,  # no amount captured
+        amount=0,
     )
     messages.error(request, "Payment was unsuccessful. You can try again from your applications.")
     return redirect('application_detail', app_id=application.id)
@@ -1305,11 +1334,24 @@ def payment_checkout(request, app_id):
         messages.warning(request, "This application has already been paid.")
         return redirect('application_detail', app_id=app_id)
 
+    charge = application.service.servicecharge_set.first()
+    if not charge:
+        messages.error(request, "No charge defined for this service.")
+        return redirect('application_detail', app_id=app_id)
+
+    breakdown = compute_payment_breakdown(
+        charge.charge,
+        gst_rate=getattr(settings, 'GST_RATE', 0.18),
+        fee_percent=getattr(settings, 'RAZORPAY_FEE_PERCENT', 2.0),
+        fee_fixed=getattr(settings, 'RAZORPAY_FEE_FIXED', 0.0)
+    )
+
     context = {
         'application': application,
         'business': get_business(),
         'payment_settings': get_payment_settings(),
         'razorpay_key': settings.RAZORPAY_KEY_ID,
+        'breakdown': breakdown,
     }
     return render(request, 'payment_checkout.html', context)
 
@@ -1317,9 +1359,7 @@ def payment_checkout(request, app_id):
 @csrf_exempt
 @require_POST
 def razorpay_webhook(request):
-    # Verify webhook signature using RAZORPAY_WEBHOOK_SECRET
-    # Parse payload and update application
-    # ... (stub for future use)
+    # Stub for webhook – implement if needed
     return JsonResponse({'status': 'ok'})
 
 
@@ -1559,7 +1599,6 @@ def mark_payment_done(request, app_id):
             return False, "Please select a payment app."
         if not utr:
             return False, "UTR number is required for UPI payments."
-        # Validate UTR format: 12-16 alphanumeric characters
         if not re.match(r'^[A-Za-z0-9]{12,16}$', utr):
             return False, "Invalid UTR format. It must be 12-16 alphanumeric characters."
         return True, None
@@ -1584,7 +1623,6 @@ def mark_payment_done(request, app_id):
         utr = request.POST.get('utr_number', '').strip()
         payment_app = request.POST.get('payment_app', '').strip()
 
-        # --- VALIDATION ---
         valid, error_msg = validate_upi_details(method, payment_app, utr)
         if not valid:
             messages.error(request, error_msg)
@@ -1631,7 +1669,6 @@ def mark_payment_done(request, app_id):
     utr = request.POST.get('utr_number', '').strip()
     payment_app = request.POST.get('payment_app', '').strip()
 
-    # --- VALIDATION (same for existing applications) ---
     valid, error_msg = validate_upi_details(method, payment_app, utr)
     if not valid:
         messages.error(request, error_msg)
@@ -1658,19 +1695,112 @@ def mark_payment_done(request, app_id):
 
 
 # =============================================================================
-# RECEIPT DOWNLOAD
+# HELPER: create application from session (used for UPI fallback)
 # =============================================================================
 
-# Register Unicode font (DejaVu Sans) - adjust path as needed
-FONT_PATH = os.path.join(settings.BASE_DIR, 'corematoshree', 'static', 'fonts', 'DejaVuSans.ttf')
-if os.path.exists(FONT_PATH):
-    try:
-        pdfmetrics.registerFont(TTFont('DejaVuSans', FONT_PATH))
-    except Exception as e:
-        logger.warning(f"Failed to load font {FONT_PATH}: {e}")
-else:
-    logger.warning("DejaVuSans not found, using Helvetica. Rs. sign may not display correctly.")
+@transaction.atomic
+def _create_application_from_session_data(pending_data, request):
+    """
+    Internal helper to create an Application from session data.
+    Returns the created Application object.
+    Raises: Exception if duplicate application already exists.
+    """
+    service = get_object_or_404(Service, id=pending_data['service_id'])
+    form_data = pending_data['form_data']
+    temp_files = pending_data['temp_files']
 
+    existing = Application.objects.filter(
+        user=request.user,
+        service=service,
+        status__in=['pending', 'review']
+    ).first()
+    if existing:
+        raise Exception("You already have a pending application for this service.")
+
+    payment_method = pending_data.get('payment_method', 'upi')
+    payment_app = pending_data.get('payment_app', '')
+    utr_number = pending_data.get('utr_number', '')
+
+    application = Application(
+        user=request.user,
+        service=service,
+        full_name=form_data['full_name'],
+        phone=form_data['phone'],
+        email=form_data['email'],
+        address=form_data['address'],
+        extra_data=form_data.get('extra_data', {}),
+        status='pending',
+        payment_status='paid',
+        payment_date=timezone.now(),
+        payment_method=payment_method,
+        payment_app=payment_app,
+        utr_number=utr_number,
+        payment_transaction_id='',
+    )
+    application.save()
+    application.receipt_number = application.generate_receipt_number()
+    application.save(update_fields=['receipt_number'])
+
+    # Save documents from local temp files
+    for temp in temp_files:
+        try:
+            with open(temp['temp_path'], 'rb') as f:
+                doc = DocumentUpload(
+                    application=application,
+                    document_name=temp['document_name'],
+                    is_mandatory=True,
+                )
+                doc.file.save(temp['original_name'], File(f), save=False)
+                doc.save()
+            os.unlink(temp['temp_path'])
+        except Exception as e:
+            logger.error(f"Failed to save document {temp['document_name']}: {e}")
+            raise
+
+    send_admin_notification(
+        subject=f"New Application for {service.name} from {application.full_name} (Paid)",
+        message=(
+            f'Name: {application.full_name}\n'
+            f'Phone: {application.phone}\n'
+            f'Email: {application.email}\n'
+            f'Service: {service.name}\n'
+            f'Address: {application.address}\n'
+            f'Receipt: {application.receipt_number}'
+        )
+    )
+
+    return application
+
+
+@login_required
+def create_application_from_session(request):
+    pending_data = request.session.pop('pending_application', None)
+    if not pending_data:
+        messages.error(request, "No pending application found.")
+        return redirect('services')
+
+    try:
+        application = _create_application_from_session_data(pending_data, request)
+        messages.success(request, "Your application has been submitted and payment confirmed.")
+        return redirect('application_detail', app_id=application.id)
+    except Exception as e:
+        logger.error(f"Application creation failed: {e}")
+        for temp in pending_data.get('temp_files', []):
+            try:
+                os.unlink(temp['temp_path'])
+            except OSError:
+                pass
+        messages.error(request, str(e) or "Failed to create application. Please contact support.")
+        return redirect('services')
+
+
+def get_pending_application_from_session(request):
+    return request.session.get('pending_application', None)
+
+
+# =============================================================================
+# RECEIPT DOWNLOAD
+# =============================================================================
 
 @login_required
 def download_receipt(request, app_id):
@@ -1681,30 +1811,26 @@ def download_receipt(request, app_id):
 
     # ---- Data ----
     charge = application.service.servicecharge_set.first()
-    amount = charge.charge if charge else Decimal('0.00')
+    if not charge:
+        messages.error(request, "Service charge missing.")
+        return redirect('application_detail', app_id=app_id)
+
+    # Compute breakdown using the helper
+    breakdown = compute_payment_breakdown(
+        charge.charge,
+        gst_rate=getattr(settings, 'GST_RATE', 0.18),
+        fee_percent=getattr(settings, 'RAZORPAY_FEE_PERCENT', 2.0),
+        fee_fixed=getattr(settings, 'RAZORPAY_FEE_FIXED', 0.0)
+    )
+    service_amount = breakdown['service_amount']
+    fee = breakdown['fee']
+    gst_on_fee = breakdown['gst_on_fee']
+    total_amount = breakdown['total']
+
     business = get_business()
 
-    tax_rate = Decimal(str(getattr(settings, 'GST_RATE', 0.18)))
-    tax_amount = amount * tax_rate
-    total_amount = amount + tax_amount
-
-    # ---- QR Code (disabled - verification endpoint does not exist) ----
+    # ---- QR Code (disabled) ----
     qr_img = None
-    # If you implement a verification view, you can uncomment the following:
-    # try:
-    #     import qrcode
-    #     from io import BytesIO as qrBytesIO
-    #     verification_url = f"{request.build_absolute_uri('/')}verify/receipt/{application.receipt_number}/"
-    #     qr = qrcode.QRCode(box_size=4, border=2)
-    #     qr.add_data(verification_url)
-    #     qr.make(fit=True)
-    #     img = qr.make_image(fill_color="black", back_color="white")
-    #     qr_buffer = qrBytesIO()
-    #     img.save(qr_buffer, format='PNG')
-    #     qr_buffer.seek(0)
-    #     qr_img = Image(qr_buffer, width=1.2*inch, height=1.2*inch)
-    # except ImportError:
-    #     qr_img = None
 
     # ---- Find and register the font ----
     possible_font_paths = [
@@ -1713,7 +1839,7 @@ def download_receipt(request, app_id):
         os.path.join(settings.BASE_DIR, 'static', 'fonts', 'DejaVuSans.ttf'),
         os.path.join(settings.BASE_DIR, 'corematoshree', 'static', 'fonts', 'DejaVuSans.ttf'),
     ]
-    font_name = 'Helvetica'  # fallback
+    font_name = 'Helvetica'
     for font_path in possible_font_paths:
         if os.path.exists(font_path):
             try:
@@ -1742,7 +1868,6 @@ def download_receipt(request, app_id):
     def create_style(name, parent, **kwargs):
         return ParagraphStyle(name, parent=styles[parent], fontName=font_name, **kwargs)
 
-    # ---- Styles ----
     brand_style = create_style('BrandStyle', 'Heading1', fontSize=22, textColor=colors.HexColor('#1a1a2e'), alignment=TA_LEFT, spaceAfter=2)
     sub_style = create_style('SubStyle', 'Normal', fontSize=9, textColor=colors.HexColor('#64748b'), alignment=TA_LEFT, spaceAfter=1)
     receipt_title_style = create_style('ReceiptTitle', 'Heading2', fontSize=16, textColor=colors.HexColor('#0f172a'), alignment=TA_CENTER, spaceAfter=4)
@@ -1761,7 +1886,6 @@ def download_receipt(request, app_id):
     logo_img = None
     if business and business.logo:
         try:
-            # Use default_storage to support S3 and other backends
             if default_storage.exists(business.logo.name):
                 with default_storage.open(business.logo.name, 'rb') as f:
                     logo_img = Image(f, width=1.2*inch, height=1.2*inch)
@@ -1811,12 +1935,11 @@ def download_receipt(request, app_id):
     story.append(Paragraph(f"₹ {total_amount:,.2f}", amount_style))
     story.append(HRFlowable(width="40%", thickness=1, color=colors.HexColor('#22c55e'), spaceBefore=2, spaceAfter=6))
 
-    # ---- Transaction Details ----
+    # ---- Transaction Details (Razorpay specific) ----
     trans_data = [
         ["Receipt No.", application.receipt_number or 'N/A'],
         ["Date & Time", application.payment_date.strftime('%d %b %Y, %I:%M %p') if application.payment_date else 'N/A'],
-        ["UTR Number", application.utr_number or 'N/A'],
-        ["Payment App", application.get_payment_app_display() or 'N/A'],
+        ["Razorpay Payment ID", application.razorpay_payment_id or 'N/A'],
         ["Payment Method", application.get_payment_method_display() or 'N/A'],
     ]
     trans_table = Table([[Paragraph(f"<b>{label}</b>", label_style), Paragraph(value, value_style)] for label, value in trans_data],
@@ -1833,50 +1956,28 @@ def download_receipt(request, app_id):
     story.append(Spacer(1, 0.15*inch))
     story.append(HRFlowable(width="100%", thickness=0.5, color=colors.HexColor('#e2e8f0'), spaceBefore=2, spaceAfter=2))
 
-    # ---- Itemised Breakdown ----
-    item_headers = ['#', 'Service', 'Qty', 'Unit Price', f'GST ({tax_rate*100:.0f}%)', 'Total']
-    item_row = [
-        '1',
-        application.service.name,
-        '1',
-        f'₹{amount:,.2f}',
-        f'₹{tax_amount:,.2f}',
-        f'₹{total_amount:,.2f}'
+    # ---- Breakdown Table (replaces old GST tax logic) ----
+    breakdown_rows = [
+        ['Service Charge', f'₹{service_amount:,.2f}'],
+        ['Razorpay Fee', f'₹{fee:,.2f}'],
+        ['GST on Fee (18%)', f'₹{gst_on_fee:,.2f}'],
+        ['Total', f'₹{total_amount:,.2f}'],
     ]
-    item_table = Table([item_headers, item_row],
-                       colWidths=[0.5*inch, 2.5*inch, 0.7*inch, 1.2*inch, 1.2*inch, 1.2*inch])
-    item_table.setStyle(TableStyle([
-        ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#1e293b')),
-        ('TEXTCOLOR', (0,0), (-1,0), colors.white),
+    breakdown_table = Table(breakdown_rows, colWidths=[4*inch, 2*inch])
+    breakdown_table.setStyle(TableStyle([
         ('FONTNAME', (0,0), (-1,-1), font_name),
-        ('FONTSIZE', (0,0), (-1,-1), 9),
-        ('ALIGN', (0,0), (-1,-1), 'CENTER'),
-        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-        ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor('#e2e8f0')),
-        ('PADDING', (0,0), (-1,-1), 4),
-        ('BACKGROUND', (0,1), (-1,-1), colors.HexColor('#f8fafc')),
-        ('FONTNAME', (0,1), (-1,-1), font_name),
-    ]))
-    story.append(item_table)
-    story.append(Spacer(1, 0.1*inch))
-
-    # ---- Totals ----
-    totals = [
-        ("Subtotal:", f"₹{amount:,.2f}"),
-        (f"Tax (GST {tax_rate*100:.0f}%):", f"₹{tax_amount:,.2f}"),
-        ("Grand Total:", f"₹{total_amount:,.2f}"),
-    ]
-    totals_table = Table([[Paragraph(f"<b>{label}</b>", total_style), Paragraph(value, total_style)] for label, value in totals],
-                         colWidths=[4.5*inch, 1.5*inch])
-    totals_table.setStyle(TableStyle([
-        ('ALIGN', (0,0), (-1,-1), 'RIGHT'),
-        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-        ('PADDING', (0,0), (-1,-1), 3),
         ('FONTSIZE', (0,0), (-1,-1), 10),
+        ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor('#e2e8f0')),
+        ('BACKGROUND', (0,0), (0,-1), colors.HexColor('#f8fafc')),
+        ('ALIGN', (1,0), (1,-1), 'RIGHT'),
+        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+        ('PADDING', (0,0), (-1,-1), 5),
         ('LINEABOVE', (0,-1), (-1,-1), 1, colors.HexColor('#0f172a')),
         ('FONTNAME', (0,-1), (-1,-1), font_name),
+        ('TEXTCOLOR', (0,-1), (-1,-1), colors.HexColor('#0f172a')),
+        ('FONTSIZE', (0,-1), (-1,-1), 12),
     ]))
-    story.append(totals_table)
+    story.append(breakdown_table)
     story.append(Spacer(1, 0.15*inch))
     story.append(HRFlowable(width="100%", thickness=0.5, color=colors.HexColor('#e2e8f0'), spaceBefore=2, spaceAfter=2))
 
@@ -1899,9 +2000,8 @@ def download_receipt(request, app_id):
     service_data = [
         [Paragraph("<b>Service Details</b>", section_title)],
         [Paragraph(f"Service: {application.service.name}", value_style)],
-        [Paragraph(f"Amount: ₹{amount:,.2f}", value_style)],
-        [Paragraph(f"Tax: ₹{tax_amount:,.2f}", value_style)],
-        [Paragraph(f"Total: ₹{total_amount:,.2f}", value_style)],
+        [Paragraph(f"Service Charge: ₹{service_amount:,.2f}", value_style)],
+        [Paragraph(f"Total Paid: ₹{total_amount:,.2f}", value_style)],
         [Paragraph("Status: Paid", value_style)],
     ]
     serv_table = Table(service_data, colWidths=[3*inch])
@@ -1941,7 +2041,6 @@ def download_receipt(request, app_id):
     story.append(Paragraph(f"For support, contact us at {support_email}", footer_style))
     story.append(Paragraph(f"© {timezone.now().year} {business.business_name if business else 'Matoshree Cyber Cafe'}. All rights reserved.", footer_style))
 
-    # ---- Build PDF ----
     doc.build(story)
     buffer.seek(0)
     return FileResponse(
@@ -1960,14 +2059,12 @@ def download_receipt(request, app_id):
 def reports_dashboard(request):
     cache_key = 'reports_data'
     data = cache.get(cache_key)
-    
+
     if not data:
-        # Application status counts
         app_status_counts = list(Application.objects.values('status').annotate(count=Count('id')))
         if not app_status_counts:
             app_status_counts = [{'status': 'No Data', 'count': 0}]
 
-        # Daily applications (last 30 days)
         end_date = timezone.now().date()
         start_date = end_date - timedelta(days=30)
         daily_apps = list(
@@ -1980,12 +2077,10 @@ def reports_dashboard(request):
         if not daily_apps:
             daily_apps = [{'day': start_date, 'count': 0}]
 
-        # Appointment status counts
         appt_status_counts = list(Appointment.objects.values('status').annotate(count=Count('id')))
         if not appt_status_counts:
             appt_status_counts = [{'status': 'No Data', 'count': 0}]
 
-        # Weekly users (last 90 days)
         weekly_users = list(
             User.objects.filter(date_joined__gte=timezone.now() - timedelta(days=90))
             .annotate(week=TruncWeek('date_joined'))
@@ -1996,7 +2091,6 @@ def reports_dashboard(request):
         if not weekly_users:
             weekly_users = [{'week': timezone.now().date() - timedelta(days=7), 'count': 0}]
 
-        # Payment status counts
         payment_status_counts = list(Application.objects.values('payment_status').annotate(count=Count('id')))
         if not payment_status_counts:
             payment_status_counts = [{'payment_status': 'No Data', 'count': 0}]
@@ -2010,7 +2104,6 @@ def reports_dashboard(request):
         }
         cache.set(cache_key, data, 300)
 
-    # Serialize to JSON with default=str to handle date objects
     data_json = json.dumps(data, default=str)
 
     context = {
@@ -2025,14 +2118,13 @@ def reports_dashboard(request):
 # =============================================================================
 
 def terms(request):
-    """Terms and Conditions page."""
     return render(request, 'terms.html', {
         'business': get_business(),
     })
 
 
 def privacy(request):
-    """Privacy Policy page."""
     return render(request, 'privacy.html', {
         'business': get_business(),
     })
+

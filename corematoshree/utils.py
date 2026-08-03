@@ -145,3 +145,31 @@ def fetch_external_jobs():
         # Cache empty list to avoid hammering the feed on every request
         cache.set(cache_key, [], 60 * 5)   # shorter cache for errors
         return []
+
+# utils.py
+
+def compute_payment_breakdown(service_amount, gst_rate=0.18, fee_percent=2.0, fee_fixed=0.0):
+    """
+    Returns dict with breakdown:
+    {
+        'service_amount': Decimal,
+        'fee': Decimal,
+        'gst_on_fee': Decimal,
+        'total': Decimal
+    }
+    """
+    from decimal import Decimal, ROUND_HALF_UP
+    service_amount = Decimal(str(service_amount))
+    fee = (service_amount * Decimal(str(fee_percent)) / 100) + Decimal(str(fee_fixed))
+    fee = fee.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+    gst_on_fee = fee * Decimal(str(gst_rate))
+    gst_on_fee = gst_on_fee.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+    total = service_amount + fee + gst_on_fee
+    total = total.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+    return {
+        'service_amount': service_amount,
+        'fee': fee,
+        'gst_on_fee': gst_on_fee,
+        'total': total,
+    }
+    

@@ -492,7 +492,12 @@ class Application(models.Model):
         ('upi', 'Other UPI App'),
         ('other', 'Other'),
     )
-
+    
+    service_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    razorpay_fee = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    gst_on_fee = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    total_paid = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    
     # Razorpay fields
     razorpay_order_id = models.CharField(
         max_length=100,

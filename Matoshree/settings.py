@@ -253,8 +253,10 @@ RAZORPAY_KEY_ID = config('RAZORPAY_KEY_ID', default='')
 RAZORPAY_KEY_SECRET = config('RAZORPAY_KEY_SECRET', default='')
 RAZORPAY_WEBHOOK_SECRET = config('RAZORPAY_WEBHOOK_SECRET', default='')  # optional
 
-# Timeout for pending payments (minutes)
 PAYMENT_TIMEOUT_MINUTES = config('PAYMENT_TIMEOUT_MINUTES', default=15, cast=int)
+
+RAZORPAY_FEE_PERCENT = config('RAZORPAY_FEE_PERCENT', default=2.0, cast=float)
+RAZORPAY_FEE_FIXED = config('RAZORPAY_FEE_FIXED', default=0, cast=float)
 
 # (Optional) legacy settings – kept for reference, not used in Razorpay flow
 # PAYMENT_MAX_RETRY = config('PAYMENT_MAX_RETRY', default=3, cast=int)
