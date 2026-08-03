@@ -480,8 +480,10 @@ class BusinessInfo(models.Model):
 # ==========================
 # Application
 # ==========================
+
 class Application(models.Model):
     """User application for a service."""
+
     PAYMENT_APP_CHOICES = (
         ('gpay', 'Google Pay'),
         ('phonepe', 'PhonePe'),
@@ -489,6 +491,28 @@ class Application(models.Model):
         ('bhim', 'BHIM'),
         ('upi', 'Other UPI App'),
         ('other', 'Other'),
+    )
+
+    # Razorpay fields
+    razorpay_order_id = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        verbose_name="Razorpay Order ID",
+        db_index=True
+    )
+    razorpay_payment_id = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        verbose_name="Razorpay Payment ID",
+        db_index=True
+    )
+    razorpay_signature = models.CharField(
+        max_length=200,
+        blank=True,
+        null=True,
+        verbose_name="Razorpay Signature"
     )
 
     utr_number = models.CharField(
@@ -520,10 +544,12 @@ class Application(models.Model):
         ("failed", "Failed"),
         ("refunded", "Refunded"),
     )
+
     PAYMENT_METHOD_CHOICES = (
         ("upi", "UPI"),
         ("cash", "Cash"),
         ("manual", "Manual"),
+        ("razorpay", "Razorpay"),   # Added Razorpay method
     )
 
     # --- Core fields ---
@@ -688,7 +714,7 @@ class PaymentSettings(models.Model):
 
 
 # ==========================
-# Payment Log (for audit trail) – Razorpay fields removed
+# Payment Log (for audit trail)
 # ==========================
 class PaymentLog(models.Model):
     """Audit trail for payment events."""
@@ -722,3 +748,4 @@ class PaymentLog(models.Model):
 
     def __str__(self):
         return f"{self.application.full_name} – {self.event_type} – {self.created_at.strftime('%Y-%m-%d %H:%M')}"
+    

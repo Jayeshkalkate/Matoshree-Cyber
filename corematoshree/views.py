@@ -13,6 +13,12 @@ from io import BytesIO
 from datetime import datetime
 import re
 
+import razorpay
+from django.conf import settings
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+
 # ---- Third-Party Libraries ----
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
@@ -1088,7 +1094,7 @@ def jobs(request):
 def apply_service(request, service_id):
     service = get_object_or_404(Service, id=service_id, active=True)
 
-    # ---- DUPLICATE APPLICATION PREVENTION ----
+    # Check existing pending application
     existing = Application.objects.filter(
         user=request.user,
         service=service,
@@ -1098,7 +1104,7 @@ def apply_service(request, service_id):
         messages.error(request, "You already have a pending application for this service.")
         return redirect('my_applications')
 
-    required_docs = RequiredDocument.objects.filter(service=service).only('id', 'document_name')
+    required_docs = RequiredDocument.objects.filter(service=service)
 
     initial_data = {
         'full_name': request.user.get_full_name() or request.user.username,
@@ -1113,65 +1119,31 @@ def apply_service(request, service_id):
         form = ApplicationForm(request.POST)
         formset = DocumentFormSet(request.POST, request.FILES)
         if form.is_valid() and formset.is_valid():
+            # Create application (with payment pending if required)
+            application = form.save(commit=False)
+            application.user = request.user
+            application.service = service
+            application.status = 'pending'
+            application.payment_status = 'pending'
+            application.save()
+
+            # Save documents
+            for i, doc_form in enumerate(formset.cleaned_data):
+                if doc_form:
+                    doc_name = required_docs[i].document_name if i < len(required_docs) else 'Other'
+                    DocumentUpload.objects.create(
+                        application=application,
+                        document_name=doc_name,
+                        file=doc_form['file'],
+                        is_mandatory=True,
+                    )
+
+            # If payment is required, redirect to checkout
             if service.payment_required:
-                # ---- FIX: use local temporary files (not Cloudinary) ----
-                temp_files = []
-                try:
-                    for doc_form in formset.cleaned_data:
-                        if doc_form and 'file' in doc_form:
-                            uploaded_file = doc_form['file']
-                            # Create a local temp file (on the server's disk)
-                            with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp:
-                                for chunk in uploaded_file.chunks():
-                                    tmp.write(chunk)
-                                temp_path = tmp.name
-                            temp_files.append({
-                                'document_name': doc_form.get('document_name', 'Other'),
-                                'temp_path': temp_path,
-                                'original_name': uploaded_file.name,
-                            })
-                    # Store the list of temp files in session
-                    request.session['pending_application'] = {
-                        'service_id': service.id,
-                        'form_data': form.cleaned_data,
-                        'temp_files': temp_files,
-                    }
-                    return redirect('payment_checkout', service_id=service.id)
-                except Exception as e:
-                    logger.error(f"Failed to store temp files: {e}")
-                    # Clean up any partial temp files
-                    for temp in temp_files:
-                        try:
-                            os.unlink(temp['temp_path'])
-                        except OSError:
-                            pass
-                    messages.error(request, "Error uploading files. Please try again.")
-                    return render(request, 'apply_service.html', {
-                        'service': service,
-                        'required_docs': required_docs,
-                        'form': form,
-                        'formset': formset,
-                        'business': get_business(),
-                        'payment_settings': get_payment_settings(),
-                        'payment_required': service.payment_required,
-                    })
+                request.session['pending_app_id'] = application.id
+                return redirect('payment_checkout', app_id=application.id)
             else:
-                # Non-payment services - create immediately
-                application = form.save(commit=False)
-                application.user = request.user
-                application.service = service
-                application.save()
-
-                for i, doc_form in enumerate(formset.cleaned_data):
-                    if doc_form:
-                        doc_name = required_docs[i].document_name if i < len(required_docs) else 'Other'
-                        DocumentUpload.objects.create(
-                            application=application,
-                            document_name=doc_name,
-                            file=doc_form['file'],
-                            is_mandatory=True,
-                        )
-
+                # No payment required – success
                 send_admin_notification(
                     subject=f"New Application for {service.name} from {application.full_name}",
                     message=(
@@ -1179,21 +1151,11 @@ def apply_service(request, service_id):
                         f'Phone: {application.phone}\n'
                         f'Email: {application.email}\n'
                         f'Service: {service.name}\n'
-                        f'Address: {application.address}\n'
-                        f'Documents uploaded: {len(required_docs)}'
+                        f'Address: {application.address}'
                     )
                 )
-
                 messages.success(request, "Your application has been submitted successfully.")
-                return render(request, 'apply_service.html', {
-                    'service': service,
-                    'required_docs': required_docs,
-                    'form': form,
-                    'formset': formset,
-                    'application': application,
-                    'business': get_business(),
-                    'payment_settings': get_payment_settings(),
-                })
+                return redirect('application_detail', app_id=application.id)
         else:
             messages.error(request, "Please correct the errors below.")
     else:
@@ -1210,6 +1172,155 @@ def apply_service(request, service_id):
         'payment_settings': get_payment_settings(),
         'payment_required': service.payment_required,
     })
+
+
+@login_required
+def create_razorpay_order(request):
+    app_id = request.POST.get('app_id')
+    if not app_id:
+        return JsonResponse({'error': 'Application ID missing'}, status=400)
+
+    application = get_object_or_404(Application, id=app_id, user=request.user)
+    if application.payment_status == 'paid':
+        return JsonResponse({'error': 'Payment already completed'}, status=400)
+
+    # Get amount
+    charge = application.service.servicecharge_set.first()
+    if not charge:
+        return JsonResponse({'error': 'No charge defined for this service'}, status=400)
+
+    amount = int(charge.charge * 100)  # in paise
+
+    # Create Razorpay order
+    client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+    order_data = {
+        'amount': amount,
+        'currency': 'INR',
+        'receipt': f'app_{application.id}',
+        'payment_capture': 1,  # auto capture
+        'notes': {
+            'application_id': application.id,
+            'user_id': application.user.id,
+        }
+    }
+    try:
+        order = client.order.create(data=order_data)
+    except Exception as e:
+        logger.error(f"Razorpay order creation failed: {e}")
+        return JsonResponse({'error': 'Failed to create order. Please try again.'}, status=500)
+
+    # Save order ID to application
+    application.razorpay_order_id = order['id']
+    application.save(update_fields=['razorpay_order_id'])
+
+    return JsonResponse({
+        'order_id': order['id'],
+        'amount': amount,
+        'currency': 'INR',
+        'key': settings.RAZORPAY_KEY_ID,
+        'app_id': application.id,
+    })
+
+
+@login_required
+def payment_success(request):
+    app_id = request.GET.get('app_id')
+    if not app_id:
+        messages.error(request, "Application ID missing.")
+        return redirect('services')
+
+    application = get_object_or_404(Application, id=app_id, user=request.user)
+
+    # Get Razorpay response from POST (Razorpay sends as POST)
+    razorpay_payment_id = request.POST.get('razorpay_payment_id')
+    razorpay_order_id = request.POST.get('razorpay_order_id')
+    razorpay_signature = request.POST.get('razorpay_signature')
+
+    if not all([razorpay_payment_id, razorpay_order_id, razorpay_signature]):
+        messages.error(request, "Incomplete payment verification data.")
+        return redirect('application_detail', app_id=application.id)
+
+    # Verify signature
+    client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+    params_dict = {
+        'razorpay_order_id': razorpay_order_id,
+        'razorpay_payment_id': razorpay_payment_id,
+        'razorpay_signature': razorpay_signature
+    }
+    try:
+        client.utility.verify_payment_signature(params_dict)
+    except razorpay.errors.SignatureVerificationError:
+        logger.warning(f"Payment signature verification failed for app {app_id}")
+        messages.error(request, "Payment verification failed. Please contact support.")
+        return redirect('application_detail', app_id=application.id)
+
+    # Update application
+    application.razorpay_payment_id = razorpay_payment_id
+    application.razorpay_signature = razorpay_signature
+    application.payment_status = 'paid'
+    application.payment_date = timezone.now()
+    application.payment_method = 'razorpay'
+    application.receipt_number = application.generate_receipt_number()
+    application.save(update_fields=['razorpay_payment_id', 'razorpay_signature',
+                                    'payment_status', 'payment_date', 'payment_method',
+                                    'receipt_number'])
+
+    # Create payment log
+    charge = application.service.servicecharge_set.first()
+    PaymentLog.objects.create(
+        application=application,
+        event_type='captured',
+        amount=charge.charge if charge else 0,
+    )
+
+    # Send confirmation email
+    send_payment_confirmation(application)
+
+    messages.success(request, "Payment successful! Your application is now confirmed.")
+    return redirect('application_detail', app_id=application.id)
+
+
+@login_required
+def payment_failure(request):
+    app_id = request.GET.get('app_id')
+    if not app_id:
+        messages.error(request, "Application ID missing.")
+        return redirect('services')
+
+    application = get_object_or_404(Application, id=app_id, user=request.user)
+    # Optionally log failure
+    PaymentLog.objects.create(
+        application=application,
+        event_type='failed',
+        amount=0,  # no amount captured
+    )
+    messages.error(request, "Payment was unsuccessful. You can try again from your applications.")
+    return redirect('application_detail', app_id=application.id)
+
+
+@login_required
+def payment_checkout(request, app_id):
+    application = get_object_or_404(Application, id=app_id, user=request.user)
+    if application.payment_status == 'paid':
+        messages.warning(request, "This application has already been paid.")
+        return redirect('application_detail', app_id=app_id)
+
+    context = {
+        'application': application,
+        'business': get_business(),
+        'payment_settings': get_payment_settings(),
+        'razorpay_key': settings.RAZORPAY_KEY_ID,
+    }
+    return render(request, 'payment_checkout.html', context)
+
+
+@csrf_exempt
+@require_POST
+def razorpay_webhook(request):
+    # Verify webhook signature using RAZORPAY_WEBHOOK_SECRET
+    # Parse payload and update application
+    # ... (stub for future use)
+    return JsonResponse({'status': 'ok'})
 
 
 @login_required
@@ -1246,130 +1357,6 @@ def application_detail(request, app_id):
         'payment_settings': get_payment_settings(),
         'payment_required': application.service.payment_required,
     })
-
-
-# =============================================================================
-# PAYMENT CHECKOUT & SESSION HANDLING
-# =============================================================================
-
-@login_required
-def payment_checkout(request, service_id):
-    service = get_object_or_404(Service, id=service_id, active=True)
-    pending_data = request.session.get('pending_application', None)
-    if not pending_data or pending_data.get('service_id') != service.id:
-        messages.error(request, "No pending application found.")
-        return redirect('apply_service', service_id=service.id)
-
-    return render(request, 'payment_checkout.html', {
-        'service': service,
-        'business': get_business(),
-        'payment_settings': get_payment_settings(),
-        'pending_application': pending_data,
-    })
-
-
-@transaction.atomic
-def _create_application_from_session_data(pending_data, request):
-    """
-    Internal helper to create an Application from session data.
-    Returns the created Application object.
-    Raises: Exception if duplicate application already exists.
-    """
-    service = get_object_or_404(Service, id=pending_data['service_id'])
-    form_data = pending_data['form_data']
-    temp_files = pending_data['temp_files']
-
-    existing = Application.objects.filter(
-        user=request.user,
-        service=service,
-        status__in=['pending', 'review']
-    ).first()
-    if existing:
-        raise Exception("You already have a pending application for this service.")
-
-    payment_method = pending_data.get('payment_method', 'upi')
-    payment_app = pending_data.get('payment_app', '')
-    utr_number = pending_data.get('utr_number', '')
-
-    application = Application(
-        user=request.user,
-        service=service,
-        full_name=form_data['full_name'],
-        phone=form_data['phone'],
-        email=form_data['email'],
-        address=form_data['address'],
-        extra_data=form_data.get('extra_data', {}),
-        status='pending',
-        payment_status='paid',
-        payment_date=timezone.now(),
-        payment_method=payment_method,
-        payment_app=payment_app,
-        utr_number=utr_number,
-        payment_transaction_id='',  # No Razorpay transaction ID
-    )
-    application.save()
-    application.receipt_number = application.generate_receipt_number()
-    application.save(update_fields=['receipt_number'])
-
-    # Save documents from local temp files
-    for temp in temp_files:
-        try:
-            with open(temp['temp_path'], 'rb') as f:
-                doc = DocumentUpload(
-                    application=application,
-                    document_name=temp['document_name'],
-                    is_mandatory=True,
-                )
-                # Save using File wrapper to stream chunks
-                doc.file.save(temp['original_name'], File(f), save=False)
-                doc.save()
-            # Delete the local temp file after successful save
-            os.unlink(temp['temp_path'])
-        except Exception as e:
-            logger.error(f"Failed to save document {temp['document_name']}: {e}")
-            # Re-raise to trigger rollback
-            raise
-
-    send_admin_notification(
-        subject=f"New Application for {service.name} from {application.full_name} (Paid)",
-        message=(
-            f'Name: {application.full_name}\n'
-            f'Phone: {application.phone}\n'
-            f'Email: {application.email}\n'
-            f'Service: {service.name}\n'
-            f'Address: {application.address}\n'
-            f'Receipt: {application.receipt_number}'
-        )
-    )
-
-    return application
-
-
-@login_required
-def create_application_from_session(request):
-    pending_data = request.session.pop('pending_application', None)
-    if not pending_data:
-        messages.error(request, "No pending application found.")
-        return redirect('services')
-
-    try:
-        application = _create_application_from_session_data(pending_data, request)
-        messages.success(request, "Your application has been submitted and payment confirmed.")
-        return redirect('application_detail', app_id=application.id)
-    except Exception as e:
-        logger.error(f"Application creation failed: {e}")
-        # Clean up any leftover temp files
-        for temp in pending_data.get('temp_files', []):
-            try:
-                os.unlink(temp['temp_path'])
-            except OSError:
-                pass
-        messages.error(request, str(e) or "Failed to create application. Please contact support.")
-        return redirect('services')
-
-
-def get_pending_application_from_session(request):
-    return request.session.get('pending_application', None)
 
 
 # =============================================================================
@@ -1558,12 +1545,12 @@ def split_pdf(request, pk):
 
 
 # =============================================================================
-# PAYMENT GATEWAY - UPI ONLY
+# PAYMENT GATEWAY - UPI ONLY (Manual fallback)
 # =============================================================================
 
 @login_required
 def mark_payment_done(request, app_id):
-    """Manual payment confirmation (UPI or Cash)."""
+    """Manual payment confirmation (UPI or Cash) – kept for admin override."""
     # Helper to validate UPI details
     def validate_upi_details(method, payment_app, utr):
         if method != 'upi':
@@ -1669,6 +1656,10 @@ def mark_payment_done(request, app_id):
     cache.delete('reports_data')
     return redirect('application_detail', app_id=app_id)
 
+
+# =============================================================================
+# RECEIPT DOWNLOAD
+# =============================================================================
 
 # Register Unicode font (DejaVu Sans) - adjust path as needed
 FONT_PATH = os.path.join(settings.BASE_DIR, 'corematoshree', 'static', 'fonts', 'DejaVuSans.ttf')

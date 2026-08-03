@@ -12,7 +12,6 @@ from .views import robots_txt
 sitemaps = {
     'services': ServiceSitemap,
     'announcements': AnnouncementSitemap,
-    
 }
 
 handler404 = views.custom_404
@@ -73,10 +72,9 @@ urlpatterns = [
     path('application/<int:app_id>/', views.application_detail, name='application_detail'),
 
     # ==========================
-    # PAYMENT CHECKOUT (pending application)
+    # PAYMENT CHECKOUT (using app_id)
     # ==========================
-    path('payment-checkout/<int:service_id>/', views.payment_checkout, name='payment_checkout'),
-    path('create-application-from-session/', views.create_application_from_session, name='create_application_from_session'),
+    path('payment-checkout/<int:app_id>/', views.payment_checkout, name='payment_checkout'),
 
     # ==========================
     # APPLICATIONS (Admin)
@@ -90,18 +88,25 @@ urlpatterns = [
     path('split-pdf/<int:pk>/', views.split_pdf, name='split_pdf'),
 
     # ==========================
-    # PAYMENT GATEWAY – UPI ONLY
+    # PAYMENT GATEWAY – Razorpay
     # ==========================
-    # ---- Manual UPI confirmation (login required) ----
+    path('create-razorpay-order/', views.create_razorpay_order, name='create_razorpay_order'),
+    path('payment-success/', views.payment_success, name='payment_success'),
+    path('payment-failure/', views.payment_failure, name='payment_failure'),
+    # Webhook (optional, for future use)
+    path('razorpay-webhook/', views.razorpay_webhook, name='razorpay_webhook'),
+
+    # ---- Manual UPI/Cash confirmation (admin override) ----
     path('mark-payment-done/<int:app_id>/', views.mark_payment_done, name='mark_payment_done'),
 
     # ---- Receipt download (login required) ----
     path('download-receipt/<int:app_id>/', views.download_receipt, name='download_receipt'),
-    
+
+    # ==========================
+    # STATIC PAGES & SEO
+    # ==========================
     path('terms/', views.terms, name='terms'),
     path('privacy/', views.privacy, name='privacy'),
-    
-    # ---- SEO Optimization and other stuff ----
     path('googleb2111897b41dceb9.html', TemplateView.as_view(template_name='googleb2111897b41dceb9.html'), name='google_verify'),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('robots.txt', robots_txt, name='robots'),

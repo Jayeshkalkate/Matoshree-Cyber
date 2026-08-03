@@ -59,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Note: csrf_exempt is a decorator, not middleware – removed.
 ]
 
 ROOT_URLCONF = 'Matoshree.urls'
@@ -246,9 +247,16 @@ LOGGING = {
 }
 
 # ------------------------------------------------------------------
-# PAYMENT – UPI & Cash only
+# PAYMENT – Razorpay (replaces old UPI/Cash flow)
 # ------------------------------------------------------------------
+RAZORPAY_KEY_ID = config('RAZORPAY_KEY_ID', default='')
+RAZORPAY_KEY_SECRET = config('RAZORPAY_KEY_SECRET', default='')
+RAZORPAY_WEBHOOK_SECRET = config('RAZORPAY_WEBHOOK_SECRET', default='')  # optional
+
+# Timeout for pending payments (minutes)
 PAYMENT_TIMEOUT_MINUTES = config('PAYMENT_TIMEOUT_MINUTES', default=15, cast=int)
-PAYMENT_MAX_RETRY = config('PAYMENT_MAX_RETRY', default=3, cast=int)
-PAYMENT_AMOUNT_MIN = config('PAYMENT_AMOUNT_MIN', default=1, cast=int)
-PAYMENT_AMOUNT_MAX = config('PAYMENT_AMOUNT_MAX', default=100000, cast=int)
+
+# (Optional) legacy settings – kept for reference, not used in Razorpay flow
+# PAYMENT_MAX_RETRY = config('PAYMENT_MAX_RETRY', default=3, cast=int)
+# PAYMENT_AMOUNT_MIN = config('PAYMENT_AMOUNT_MIN', default=1, cast=int)
+# PAYMENT_AMOUNT_MAX = config('PAYMENT_AMOUNT_MAX', default=100000, cast=int)
