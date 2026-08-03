@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% load i18n %}
 
-{% block title %}{% trans "Apply for" %} {{ service.name }}{% endblock %}
+
+{% block title %}Apply for {{ service.name }}{% endblock %}
 
 {% block extra_head %}
 <!-- ============================================================
@@ -791,8 +791,8 @@
      ================================================================ -->
 <section class="page-hero">
   <div class="container">
-    <h1>{% trans "Apply for" %} {{ service.name }}</h1>
-    <p>{% trans "Please fill in your details and upload the required documents." %}</p>
+    <h1>Apply for {{ service.name }}</h1>
+    <p>Please fill in your details and upload the required documents.</p>
   </div>
 </section>
 
@@ -808,8 +808,8 @@
            ============================================================ -->
       {% if not application and service.payment_required and payment_settings and payment_settings.upi_enabled and payment_settings.qr_code %}
         <div class="payment-info">
-          <h5>{% trans "Payment Required" %}</h5>
-          <p>{% trans "This service requires a payment. Please pay now using the details below." %}</p>
+          <h5>Payment Required</h5>
+          <p>This service requires a payment. Please pay now using the details below.</p>
           <div class="upi-details">
             <img src="{{ payment_settings.qr_code.url }}" alt="UPI QR Code">
             <div class="details">
@@ -828,16 +828,16 @@
         <!-- Application created successfully -->
         <div class="success-message">
           <i class="fas fa-check-circle"></i>
-          <h4>{% trans "Application submitted successfully!" %}</h4>
-          <p>{% trans "Your application number is" %} <strong>#{{ application.id }}</strong>.</p>
+          <h4>Application submitted successfully!</h4>
+          <p>Your application number is <strong>#{{ application.id }}</strong>.</p>
         </div>
 
         <!-- If payment is required for this service, show payment details with action -->
         {% if service.payment_required %}
           <div class="payment-section">
-            <h5>{% trans "Payment" %}</h5>
+            <h5>Payment</h5>
             <p>
-              <strong>{% trans "Status" %}:</strong>
+              <strong>Status:</strong>
               <span class="badge-status {{ application.payment_status|default:'pending'|lower }}">
                 {{ application.get_payment_status_display|default:"Pending" }}
               </span>
@@ -848,7 +848,7 @@
               <!-- UPI Payment Option (if configured and enabled) -->
               {% if payment_settings and payment_settings.upi_enabled and payment_settings.qr_code %}
                 <div class="upi-payment">
-                  <h5>{% trans "Pay via UPI" %}</h5>
+                  <h5>Pay via UPI</h5>
                   <img src="{{ payment_settings.qr_code.url }}" alt="UPI QR Code">
                   <p><strong>UPI ID:</strong> {{ payment_settings.upi_id }}</p>
                   <p><strong>Mobile:</strong> {{ payment_settings.upi_mobile }}</p>
@@ -859,7 +859,7 @@
                     <input type="hidden" name="payment_method" value="upi">
 
                     <div style="margin-top: 0.8rem;">
-                      <label for="payment_app">{% trans "Payment App" %} *</label>
+                      <label for="payment_app">Payment App *</label>
                       <select name="payment_app" id="payment_app" required style="width:100%; padding:0.5rem; background:var(--bg-input); color:var(--text-bright); border:1px solid var(--border-soft); border-radius:8px;">
                         <option value="gpay">Google Pay</option>
                         <option value="phonepe">PhonePe</option>
@@ -870,32 +870,32 @@
                     </div>
 
                     <div style="margin-top: 0.8rem;">
-                      <label for="utr_number">{% trans "UTR Number" %}</label>
-                      <input type="text" name="utr_number" id="utr_number" placeholder="{% trans 'e.g. 123456789012' %}" style="width:100%; padding:0.5rem; background:var(--bg-input); color:var(--text-bright); border:1px solid var(--border-soft); border-radius:8px;">
-                      <small style="color:var(--text-dim); display:block; margin-top:0.2rem;">{% trans "Optional, but helps admin verify your payment." %}</small>
+                      <label for="utr_number">UTR Number</label>
+                      <input type="text" name="utr_number" id="utr_number" placeholder="e.g. 123456789012" style="width:100%; padding:0.5rem; background:var(--bg-input); color:var(--text-bright); border:1px solid var(--border-soft); border-radius:8px;">
+                      <small style="color:var(--text-dim); display:block; margin-top:0.2rem;">Optional, but helps admin verify your payment.</small>
                     </div>
 
                     <button type="submit" class="btn-success" style="margin-top:0.8rem;">
-                      <i class="fas fa-check-circle"></i> {% trans "I have paid" %}
+                      <i class="fas fa-check-circle"></i> I have paid
                     </button>
                   </form>
                   <p class="text-muted" style="margin-top:0.5rem;">
-                    {% trans "After payment, click the button to confirm. Admin will verify." %}
+                    After payment, click the button to confirm. Admin will verify.
                   </p>
                 </div>
               {% endif %}
 
               <!-- If no online method is enabled, show a message -->
               {% if not payment_settings.upi_enabled %}
-                <p class="text-muted">{% trans "No online payment methods are currently enabled. Please contact the admin to complete your payment." %}</p>
+                <p class="text-muted">No online payment methods are currently enabled. Please contact the admin to complete your payment.</p>
               {% endif %}
 
               <!-- Link to application detail for later payment -->
               <div style="margin-top: 1.5rem; text-align:center;">
                 <p class="text-muted">
                   <i class="fas fa-clock" style="color: var(--neon-orange);"></i>
-                  {% trans "You can also pay later from your" %}
-                  <a href="{% url 'application_detail' application.id %}">{% trans "application detail page" %}</a>.
+                  You can also pay later from your
+                  <a href="{% url 'application_detail' application.id %}">application detail page</a>.
                 </p>
               </div>
 
@@ -903,12 +903,12 @@
               <div class="payment-done">
                 <p>
                   <i class="fas fa-check-circle" style="color: var(--neon-green);"></i>
-                  {% trans "Payment completed." %}
+                  Payment completed.
                 </p>
-                <p><strong>{% trans "Receipt No." %}:</strong> {{ application.receipt_number|default:"—" }}</p>
-                <p><strong>{% trans "Payment Date" %}:</strong> {{ application.payment_date|date:"d M Y, H:i"|default:"—" }}</p>
+                <p><strong>Receipt No.:</strong> {{ application.receipt_number|default:"—" }}</p>
+                <p><strong>Payment Date:</strong> {{ application.payment_date|date:"d M Y, H:i"|default:"—" }}</p>
                 <a href="{% url 'download_receipt' application.id %}" class="btn-primary" style="max-width:200px;">
-                  <i class="fas fa-file-pdf"></i> {% trans "Download Receipt" %}
+                  <i class="fas fa-file-pdf"></i> Download Receipt
                 </a>
               </div>
             {% endif %}
@@ -917,18 +917,18 @@
           <!-- Link to application detail -->
           <div style="text-align:center; margin-top: 1.5rem;">
             <a href="{% url 'application_detail' application.id %}" class="btn-primary" style="max-width: 200px; display: inline-flex;">
-              <i class="fas fa-eye"></i> {% trans "View Application" %}
+              <i class="fas fa-eye"></i> View Application
             </a>
           </div>
 
         {% else %}
           <!-- Payment not required – show simple success -->
           <p class="text-muted" style="text-align:center; margin-top: 1rem;">
-            {% trans "No payment is required for this service. Your application is being processed." %}
+            No payment is required for this service. Your application is being processed.
           </p>
           <div style="text-align:center; margin-top: 1.5rem;">
             <a href="{% url 'application_detail' application.id %}" class="btn-primary" style="max-width: 200px; display: inline-flex;">
-              <i class="fas fa-eye"></i> {% trans "View Application" %}
+              <i class="fas fa-eye"></i> View Application
             </a>
           </div>
         {% endif %}
@@ -937,21 +937,21 @@
         <!-- ============================================================
              FORM (shown only when no application is created yet)
              ============================================================ -->
-        <h4>{% trans "Service" %}: {{ service.name }}</h4>
+        <h4>Service: {{ service.name }}</h4>
         <p>{{ service.description }}</p>
         <hr />
 
         <!-- Required Documents -->
-        <h5>{% trans "Required Documents" %}</h5>
+        <h5>Required Documents</h5>
         <ul class="required-docs-list">
           {% for doc in required_docs %}
           <li>
             <i class="fas fa-file-alt"></i>
             {{ doc.document_name }}
-            <span class="badge">{% trans "Mandatory" %}</span>
+            <span class="badge">Mandatory</span>
           </li>
           {% empty %}
-          <li>{% trans "No specific documents required." %}</li>
+          <li>No specific documents required.</li>
           {% endfor %}
         </ul>
         <hr />
@@ -961,7 +961,7 @@
           {% csrf_token %}
 
           <!-- Personal Details -->
-          <h5>{% trans "Personal Details" %}</h5>
+          <h5>Personal Details</h5>
 
           <div class="form-group">
             <label for="{{ form.full_name.id_for_label }}">{{ form.full_name.label }}</label>
@@ -998,19 +998,19 @@
           <hr />
 
           <!-- Document Uploads -->
-          <h5>{% trans "Upload Documents" %}</h5>
+          <h5>Upload Documents</h5>
           <p class="text-muted">
-            {% trans "📄 Please upload a merged PDF containing all the required documents." %}
+            📄 Please upload a merged PDF containing all the required documents.
           </p>
           <p>
-            {% trans "💡 You can merge your PDFs using an online tool before uploading." %}
+            💡 You can merge your PDFs using an online tool before uploading.
           </p>
 
           <!-- Merge link with external site note -->
           <a href="https://www.ilovepdf.com/" target="_blank" rel="noopener noreferrer" class="btn-merge">
             <i class="fas fa-heart" style="color: var(--neon-magenta, #ff2d95);"></i>
-            {% trans "Merge PDFs with iLovePDF" %}
-            <span class="external-note">{% trans "(opens external site)" %}</span>
+            Merge PDFs with iLovePDF
+            <span class="external-note">(opens external site)</span>
           </a>
           <br /><br />
 
@@ -1021,11 +1021,11 @@
             <div class="doc-label">
               <i class="fas fa-upload"></i>
               {{ doc_form.document_name.value }}
-              <span class="badge">{% trans "Required" %}</span>
+              <span class="badge">Required</span>
             </div>
             {{ doc_form.file }}
             <small class="text-muted">
-              {% trans "Allowed: PDF, JPG, JPEG, PNG" %}
+              Allowed: PDF, JPG, JPEG, PNG
             </small>
             {% if doc_form.file.errors %}
             <div class="text-danger mt-2">{{ doc_form.file.errors }}</div>
@@ -1034,7 +1034,7 @@
           {% endfor %}
 
           <button type="submit" class="btn-primary" id="submitBtn">
-            <i class="fas fa-paper-plane"></i> <span id="submitText">{% trans "Submit Application" %}</span>
+            <i class="fas fa-paper-plane"></i> <span id="submitText">Submit Application</span>
           </button>
         </form>
       {% endif %}
@@ -1055,7 +1055,7 @@
         btn.disabled = true;
         var textSpan = document.getElementById('submitText');
         if (textSpan) {
-          textSpan.textContent = '{% trans "Submitting..." %}';
+          textSpan.textContent = 'Submitting...';
         }
         // Also change the icon
         var icon = btn.querySelector('i');

@@ -7,7 +7,6 @@ from django.core.validators import RegexValidator, MinValueValidator
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
-from django.utils.translation import gettext_lazy as _
 from django.core.cache import cache
 from django.utils.crypto import get_random_string
 import random
@@ -17,7 +16,7 @@ import random
 # ==========================
 utr_validator = RegexValidator(
     regex=r'^[A-Za-z0-9]{12,16}$',
-    message=_('UTR number must be 12–16 alphanumeric characters.')
+    message="UTR number must be 12-16 alphanumeric characters."
 )
 
 # ==========================
@@ -25,7 +24,7 @@ utr_validator = RegexValidator(
 # ==========================
 phone_validator = RegexValidator(
     regex=r"^\+?1?\d{10,15}$",
-    message=_("Enter a valid phone number (10–15 digits)."),
+    message="Enter a valid phone number (10–15 digits).",
 )
 
 
@@ -35,25 +34,25 @@ phone_validator = RegexValidator(
 class User(AbstractUser):
     """Custom user model with role and additional fields."""
     ROLE_CHOICES = (
-        ("user", _("User")),
-        ("admin", _("Admin")),
-        ("superadmin", _("Super Admin")),
+        ("user", "User"),
+        ("admin", "Admin"),
+        ("superadmin", "Super Admin"),
     )
     role = models.CharField(
-        _("Role"),
+        "Role",
         max_length=20,
         choices=ROLE_CHOICES,
         default="user",
         db_index=True,
     )
     phone = models.CharField(
-        _("Phone"),
+        "Phone",
         max_length=15,
         blank=True,
         validators=[phone_validator],
     )
     address = models.TextField(
-        _("Address"),
+        "Address",
         blank=True,
     )
 
@@ -72,27 +71,27 @@ class User(AbstractUser):
 # ==========================
 class Service(models.Model):
     """Service offered by the cyber café."""
-    name = models.CharField(_("Name"), max_length=200, db_index=True)
-    category = models.CharField(_("Category"), max_length=100, db_index=True)
-    description = models.TextField(_("Description"), blank=True)
-    active = models.BooleanField(_("Active"), default=True, db_index=True)
+    name = models.CharField("Name", max_length=200, db_index=True)
+    category = models.CharField("Category", max_length=100, db_index=True)
+    description = models.TextField("Description", blank=True)
+    active = models.BooleanField("Active", default=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
     payment_required = models.BooleanField(
-        _("Payment Required"),
+        "Payment Required",
         default=False,
-        help_text=_("If enabled, users will be prompted to pay after application submission.")
+        help_text="If enabled, users will be prompted to pay after application submission."
     )
     icon = models.CharField(
-        _("Icon"),
+        "Icon",
         max_length=50,
         default="cog",
-        help_text=_("Font Awesome icon class (e.g., 'fa-print')"),
+        help_text="Font Awesome icon class (e.g., 'fa-print')",
     )
     icon_color = models.CharField(
-        _("Icon Color"),
+        "Icon Color",
         max_length=7,
         default="#00d4ff",
-        help_text=_("Hex color for the icon circle (e.g., #ff6b35)"),
+        help_text="Hex color for the icon circle (e.g., #ff6b35)",
     )
 
     def __str__(self):
@@ -111,36 +110,36 @@ class Service(models.Model):
 class Appointment(models.Model):
     """Appointment booking for a service."""
     STATUS = (
-        ("Pending", _("Pending")),
-        ("Confirmed", _("Confirmed")),
-        ("Completed", _("Completed")),
-        ("Cancelled", _("Cancelled")),
+        ("Pending", "Pending"),
+        ("Confirmed", "Confirmed"),
+        ("Completed", "Completed"),
+        ("Cancelled", "Cancelled"),
     )
 
-    full_name = models.CharField(_("Full Name"), max_length=150, db_index=True)
-    phone = models.CharField(_("Phone"), max_length=15, validators=[phone_validator], db_index=True)
-    email = models.EmailField(_("Email"), blank=True, db_index=True)
+    full_name = models.CharField("Full Name", max_length=150, db_index=True)
+    phone = models.CharField("Phone", max_length=15, validators=[phone_validator], db_index=True)
+    email = models.EmailField("Email", blank=True, db_index=True)
     service = models.ForeignKey(
         Service,
         on_delete=models.CASCADE,
-        verbose_name=_("Service"),
+        verbose_name="Service",
     )
-    appointment_date = models.DateField(_("Appointment Date"), db_index=True)
-    appointment_time = models.TimeField(_("Appointment Time"))
-    message = models.TextField(_("Message"), blank=True)
+    appointment_date = models.DateField("Appointment Date", db_index=True)
+    appointment_time = models.TimeField("Appointment Time")
+    message = models.TextField("Message", blank=True)
     status = models.CharField(
-        _("Status"),
+        "Status",
         max_length=20,
         choices=STATUS,
         default="Pending",
         db_index=True,
     )
-    created_at = models.DateTimeField(_("Created At"), auto_now_add=True, db_index=True)
+    created_at = models.DateTimeField("Created At", auto_now_add=True, db_index=True)
 
     class Meta:
         ordering = ["-created_at"]
-        verbose_name = _("Appointment")
-        verbose_name_plural = _("Appointments")
+        verbose_name = "Appointment"
+        verbose_name_plural = "Appointments"
         indexes = [
             models.Index(fields=['status', 'appointment_date']),
             models.Index(fields=['service', 'appointment_date']),
@@ -150,13 +149,13 @@ class Appointment(models.Model):
     def clean(self):
         if self.appointment_date and self.appointment_date < timezone.localdate():
             raise ValidationError(
-                {"appointment_date": _("Appointment date cannot be in the past.")}
+                {"appointment_date": "Appointment date cannot be in the past."}
             )
         if self.appointment_time:
             minutes = self.appointment_time.hour * 60 + self.appointment_time.minute
             if minutes < 9 * 60 or minutes > 17 * 60:
                 raise ValidationError(
-                    {"appointment_time": _("Appointment time must be between 09:00 AM and 05:00 PM.")}
+                    {"appointment_time": "Appointment time must be between 09:00 AM and 05:00 PM."}
                 )
 
     def __str__(self):
@@ -168,19 +167,19 @@ class Appointment(models.Model):
 # ==========================
 class Contact(models.Model):
     """Contact form submission from users."""
-    name = models.CharField(_("Name"), max_length=150, db_index=True)
-    email = models.EmailField(_("Email"), db_index=True)
-    phone = models.CharField(_("Phone"), max_length=15, validators=[phone_validator], db_index=True)
-    subject = models.CharField(_("Subject"), max_length=200)
-    message = models.TextField(_("Message"))
-    reply = models.TextField(_("Reply"), blank=True, null=True)
-    replied = models.BooleanField(_("Replied"), default=False, db_index=True)
-    created_at = models.DateTimeField(_("Created At"), auto_now_add=True, db_index=True)
+    name = models.CharField("Name", max_length=150, db_index=True)
+    email = models.EmailField("Email", db_index=True)
+    phone = models.CharField("Phone", max_length=15, validators=[phone_validator], db_index=True)
+    subject = models.CharField("Subject", max_length=200)
+    message = models.TextField("Message")
+    reply = models.TextField("Reply", blank=True, null=True)
+    replied = models.BooleanField("Replied", default=False, db_index=True)
+    created_at = models.DateTimeField("Created At", auto_now_add=True, db_index=True)
 
     class Meta:
         ordering = ["-created_at"]
-        verbose_name = _("Contact")
-        verbose_name_plural = _("Contacts")
+        verbose_name = "Contact"
+        verbose_name_plural = "Contacts"
         indexes = [
             models.Index(fields=['replied', 'created_at']),
             models.Index(fields=['email']),
@@ -195,17 +194,17 @@ class Contact(models.Model):
 # ==========================
 class Review(models.Model):
     """Customer review with rating."""
-    customer_name = models.CharField(_("Customer Name"), max_length=100, db_index=True)
-    email = models.EmailField(_("Email"), blank=True, null=True, db_index=True)
-    review = models.TextField(_("Review"))
-    rating = models.PositiveSmallIntegerField(_("Rating"), default=5, db_index=True)
-    approved = models.BooleanField(_("Approved"), default=False, db_index=True)
-    created_at = models.DateTimeField(_("Created At"), auto_now_add=True, db_index=True)
+    customer_name = models.CharField("Customer Name", max_length=100, db_index=True)
+    email = models.EmailField("Email", blank=True, null=True, db_index=True)
+    review = models.TextField("Review")
+    rating = models.PositiveSmallIntegerField("Rating", default=5, db_index=True)
+    approved = models.BooleanField("Approved", default=False, db_index=True)
+    created_at = models.DateTimeField("Created At", auto_now_add=True, db_index=True)
 
     class Meta:
         ordering = ["-created_at"]
-        verbose_name = _("Review")
-        verbose_name_plural = _("Reviews")
+        verbose_name = "Review"
+        verbose_name_plural = "Reviews"
         indexes = [
             models.Index(fields=['approved', 'rating']),
             models.Index(fields=['created_at']),
@@ -222,25 +221,25 @@ class Review(models.Model):
 class Announcement(models.Model):
     """Announcements/news displayed on the site."""
     CATEGORY = (
-        ("General", _("General")),
-        ("Government Scheme", _("Government Scheme")),
-        ("Recruitment", _("Recruitment")),
-        ("Scholarship", _("Scholarship")),
-        ("Holiday", _("Holiday")),
-        ("Notice", _("Notice")),
+        ("General", "General"),
+        ("Government Scheme", "Government Scheme"),
+        ("Recruitment", "Recruitment"),
+        ("Scholarship", "Scholarship"),
+        ("Holiday", "Holiday"),
+        ("Notice", "Notice"),
     )
 
-    title = models.CharField(_("Title"), max_length=200, db_index=True)
-    category = models.CharField(_("Category"), max_length=50, choices=CATEGORY, db_index=True)
-    description = models.TextField(_("Description"))
-    is_urgent = models.BooleanField(_("Urgent"), default=False, db_index=True)
-    created_at = models.DateTimeField(_("Created At"), auto_now_add=True, db_index=True)
+    title = models.CharField("Title", max_length=200, db_index=True)
+    category = models.CharField("Category", max_length=50, choices=CATEGORY, db_index=True)
+    description = models.TextField("Description")
+    is_urgent = models.BooleanField("Urgent", default=False, db_index=True)
+    created_at = models.DateTimeField("Created At", auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ["-created_at"]
-        verbose_name = _("Announcement")
-        verbose_name_plural = _("Announcements")
+        verbose_name = "Announcement"
+        verbose_name_plural = "Announcements"
         indexes = [
             models.Index(fields=['category', 'created_at']),
             models.Index(fields=['is_urgent']),
@@ -256,20 +255,20 @@ class Announcement(models.Model):
 class Gallery(models.Model):
     """Gallery images."""
     CATEGORY = (
-        ("Cyber Cafe", _("Cyber Cafe")),
-        ("Customers", _("Customers")),
-        ("Certificates", _("Certificates")),
-        ("Equipment", _("Equipment")),
-        ("Office", _("Office")),
+        ("Cyber Cafe", "Cyber Cafe"),
+        ("Customers", "Customers"),
+        ("Certificates", "Certificates"),
+        ("Equipment", "Equipment"),
+        ("Office", "Office"),
     )
 
-    title = models.CharField(_("Title"), max_length=100)
-    category = models.CharField(_("Category"), max_length=50, choices=CATEGORY, db_index=True)
-    image = models.ImageField(_("Image"), upload_to="gallery/")
+    title = models.CharField("Title", max_length=100)
+    category = models.CharField("Category", max_length=50, choices=CATEGORY, db_index=True)
+    image = models.ImageField("Image", upload_to="gallery/")
 
     class Meta:
-        verbose_name = _("Gallery Image")
-        verbose_name_plural = _("Gallery Images")
+        verbose_name = "Gallery Image"
+        verbose_name_plural = "Gallery Images"
         indexes = [
             models.Index(fields=['category']),
         ]
@@ -286,19 +285,19 @@ class ServiceCharge(models.Model):
     service = models.ForeignKey(
         Service,
         on_delete=models.CASCADE,
-        verbose_name=_("Service"),
+        verbose_name="Service",
     )
     charge = models.DecimalField(
-        _("Charge"),
+        "Charge",
         max_digits=8,
         decimal_places=2,
         validators=[MinValueValidator(0)],
-        help_text=_("Must be greater than or equal to 0.")
+        help_text="Must be greater than or equal to 0."
     )
 
     class Meta:
-        verbose_name = _("Service Charge")
-        verbose_name_plural = _("Service Charges")
+        verbose_name = "Service Charge"
+        verbose_name_plural = "Service Charges"
         indexes = [
             models.Index(fields=['service']),
         ]
@@ -316,13 +315,13 @@ class RequiredDocument(models.Model):
     service = models.ForeignKey(
         Service,
         on_delete=models.CASCADE,
-        verbose_name=_("Service"),
+        verbose_name="Service",
     )
-    document_name = models.CharField(_("Document Name"), max_length=200, db_index=True)
+    document_name = models.CharField("Document Name", max_length=200, db_index=True)
 
     class Meta:
-        verbose_name = _("Required Document")
-        verbose_name_plural = _("Required Documents")
+        verbose_name = "Required Document"
+        verbose_name_plural = "Required Documents"
         indexes = [
             models.Index(fields=['service', 'document_name']),
         ]
@@ -338,14 +337,14 @@ class RequiredDocument(models.Model):
 # ==========================
 class DownloadForm(models.Model):
     """Uploaded PDF forms available for download."""
-    title = models.CharField(_("Title"), max_length=200, db_index=True)
-    category = models.CharField(_("Category"), max_length=100, db_index=True)
-    pdf = models.FileField(_("PDF"), upload_to="forms/")
-    uploaded_at = models.DateTimeField(_("Uploaded At"), auto_now_add=True, db_index=True)
+    title = models.CharField("Title", max_length=200, db_index=True)
+    category = models.CharField("Category", max_length=100, db_index=True)
+    pdf = models.FileField("PDF", upload_to="forms/")
+    uploaded_at = models.DateTimeField("Uploaded At", auto_now_add=True, db_index=True)
 
     class Meta:
-        verbose_name = _("Download Form")
-        verbose_name_plural = _("Download Forms")
+        verbose_name = "Download Form"
+        verbose_name_plural = "Download Forms"
         indexes = [
             models.Index(fields=['category', 'uploaded_at']),
         ]
@@ -359,15 +358,15 @@ class DownloadForm(models.Model):
 # ==========================
 class GovernmentScheme(models.Model):
     """Government schemes information."""
-    title = models.CharField(_("Title"), max_length=200, db_index=True)
-    description = models.TextField(_("Description"))
-    eligibility = models.TextField(_("Eligibility"), blank=True)
-    last_date = models.DateField(_("Last Date"), null=True, blank=True, db_index=True)
-    image = models.ImageField(_("Image"), upload_to="schemes/", blank=True, null=True)
+    title = models.CharField("Title", max_length=200, db_index=True)
+    description = models.TextField("Description")
+    eligibility = models.TextField("Eligibility", blank=True)
+    last_date = models.DateField("Last Date", null=True, blank=True, db_index=True)
+    image = models.ImageField("Image", upload_to="schemes/", blank=True, null=True)
 
     class Meta:
-        verbose_name = _("Government Scheme")
-        verbose_name_plural = _("Government Schemes")
+        verbose_name = "Government Scheme"
+        verbose_name_plural = "Government Schemes"
         indexes = [
             models.Index(fields=['last_date']),
         ]
@@ -381,21 +380,21 @@ class GovernmentScheme(models.Model):
 # ==========================
 class JobNotification(models.Model):
     """Job openings and notifications."""
-    title = models.CharField(_("Title"), max_length=200, db_index=True)
-    organization = models.CharField(_("Organization"), max_length=200, db_index=True)
-    last_date = models.DateField(_("Last Date"), db_index=True)
-    apply_link = models.URLField(_("Apply Link"), blank=True)
-    description = models.TextField(_("Description"))
+    title = models.CharField("Title", max_length=200, db_index=True)
+    organization = models.CharField("Organization", max_length=200, db_index=True)
+    last_date = models.DateField("Last Date", db_index=True)
+    apply_link = models.URLField("Apply Link", blank=True)
+    description = models.TextField("Description")
     icon = models.CharField(
-        _("Icon"),
+        "Icon",
         max_length=50,
         default="briefcase",
-        help_text=_("Font Awesome icon (e.g. 'fa-briefcase')"),
+        help_text="Font Awesome icon (e.g. 'fa-briefcase')",
     )
 
     class Meta:
-        verbose_name = _("Job Notification")
-        verbose_name_plural = _("Job Notifications")
+        verbose_name = "Job Notification"
+        verbose_name_plural = "Job Notifications"
         indexes = [
             models.Index(fields=['last_date']),
             models.Index(fields=['organization']),
@@ -410,12 +409,12 @@ class JobNotification(models.Model):
 # ==========================
 class FAQ(models.Model):
     """Frequently asked questions."""
-    question = models.CharField(_("Question"), max_length=300, db_index=True)
-    answer = models.TextField(_("Answer"))
+    question = models.CharField("Question", max_length=300, db_index=True)
+    answer = models.TextField("Answer")
 
     class Meta:
-        verbose_name = _("FAQ")
-        verbose_name_plural = _("FAQs")
+        verbose_name = "FAQ"
+        verbose_name_plural = "FAQs"
         indexes = [
             models.Index(fields=['question']),
         ]
@@ -429,40 +428,40 @@ class FAQ(models.Model):
 # ==========================
 class BusinessInfo(models.Model):
     """Business information – singleton model."""
-    business_name = models.CharField(_("Business Name"), max_length=200)
-    welcome_message = models.TextField(_("Welcome Message"))
-    address = models.TextField(_("Address"))
-    phone = models.CharField(_("Phone"), max_length=15, validators=[phone_validator])
-    whatsapp = models.CharField(_("WhatsApp"), max_length=15, validators=[phone_validator])
-    email = models.EmailField(_("Email"))
+    business_name = models.CharField("Business Name", max_length=200)
+    welcome_message = models.TextField("Welcome Message")
+    address = models.TextField("Address")
+    phone = models.CharField("Phone", max_length=15, validators=[phone_validator])
+    whatsapp = models.CharField("WhatsApp", max_length=15, validators=[phone_validator])
+    email = models.EmailField("Email")
     google_map = models.TextField(
-        _("Google Map"),
-        help_text=_("Paste Google Maps Embed Code"),
+        "Google Map",
+        help_text="Paste Google Maps Embed Code",
     )
-    business_hours = models.TextField(_("Business Hours"))
+    business_hours = models.TextField("Business Hours")
     registration_number = models.CharField(
-        _("Registration Number"),
+        "Registration Number",
         max_length=100,
         blank=True,
-        help_text=_("e.g. UDYAM-XX-00-0000000"),
+        help_text="e.g. UDYAM-XX-00-0000000",
     )
     certifications = models.TextField(
-        _("Certifications / Authorizations"),
+        "Certifications / Authorizations",
         blank=True,
-        help_text=_("Enter each certification on a new line."),
+        help_text="Enter each certification on a new line.",
     )
     logo = models.ImageField(
-        _("Logo"),
+        "Logo",
         upload_to="business/",
         blank=True,
         null=True,
-        help_text=_("Business logo for receipts and branding.")
+        help_text="Business logo for receipts and branding."
     )
     gstin = models.CharField(
-        _("GSTIN"),
+        "GSTIN",
         max_length=20,
         blank=True,
-        help_text=_("GST Identification Number (if applicable)")
+        help_text="GST Identification Number (if applicable)"
     )
 
     def save(self, *args, **kwargs):
@@ -474,8 +473,8 @@ class BusinessInfo(models.Model):
         cache.delete('business_info')
 
     class Meta:
-        verbose_name = _("Business Information")
-        verbose_name_plural = _("Business Information")
+        verbose_name = "Business Information"
+        verbose_name_plural = "Business Information"
 
 
 # ==========================
@@ -493,15 +492,15 @@ class Application(models.Model):
     )
 
     utr_number = models.CharField(
-        _("UTR Number"),
+        "UTR Number",
         max_length=50,
         blank=True,
         validators=[utr_validator],
-        help_text=_("Unique Transaction Reference (if available)")
+        help_text="Unique Transaction Reference (if available)"
     )
 
     payment_app = models.CharField(
-        _("Payment App"),
+        "Payment App",
         max_length=20,
         choices=PAYMENT_APP_CHOICES,
         blank=True,
@@ -528,39 +527,41 @@ class Application(models.Model):
     )
 
     # --- Core fields ---
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("User"))
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name=_("Service"))
-    full_name = models.CharField(_("Full Name"), max_length=150, db_index=True)
-    phone = models.CharField(_("Phone"), max_length=15, validators=[phone_validator], db_index=True)
-    email = models.EmailField(_("Email"), db_index=True)
-    address = models.TextField(_("Address"))
-    extra_data = models.JSONField(_("Extra Data"), blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="User")
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="Service")
+    full_name = models.CharField("Full Name", max_length=150, db_index=True)
+    phone = models.CharField("Phone", max_length=15, validators=[phone_validator], db_index=True)
+    email = models.EmailField("Email", db_index=True)
+    address = models.TextField("Address")
+    extra_data = models.JSONField("Extra Data", blank=True, null=True)
     status = models.CharField(
-        _("Status"),
+        "Status",
         max_length=20,
         choices=STATUS_CHOICES,
         default="pending",
         db_index=True,
     )
-    created_at = models.DateTimeField(_("Created At"), auto_now_add=True, db_index=True)
-    updated_at = models.DateTimeField(_("Updated At"), auto_now=True, db_index=True)
+    created_at = models.DateTimeField("Created At", auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField("Updated At", auto_now=True, db_index=True)
 
     # --- Payment fields ---
     payment_status = models.CharField(
         max_length=20,
         choices=PAYMENT_STATUS_CHOICES,
         default="pending",
-        db_index=True
+        db_index=True,
+        verbose_name="Payment Status"
     )
-    payment_transaction_id = models.CharField(max_length=100, blank=True)  # can hold UTR or other reference
+    payment_transaction_id = models.CharField(max_length=100, blank=True, verbose_name="Payment Transaction ID")
     payment_method = models.CharField(
         max_length=20,
         choices=PAYMENT_METHOD_CHOICES,
         default="upi",
-        blank=True
+        blank=True,
+        verbose_name="Payment Method"
     )
-    payment_date = models.DateTimeField(null=True, blank=True)
-    receipt_number = models.CharField(max_length=50, blank=True, null=True, unique=True)
+    payment_date = models.DateTimeField(null=True, blank=True, verbose_name="Payment Date")
+    receipt_number = models.CharField(max_length=50, blank=True, null=True, unique=True, verbose_name="Receipt Number")
 
     def generate_receipt_number(self):
         """
@@ -577,15 +578,15 @@ class Application(models.Model):
 
     def clean(self):
         if self.payment_app and not self.utr_number:
-            raise ValidationError({"utr_number": _("UTR number is required when a payment app is selected.")})
+            raise ValidationError({"utr_number": "UTR number is required when a payment app is selected."})
 
     def __str__(self):
         return f"{self.full_name} – {self.service.name}"
 
     class Meta:
         ordering = ["-created_at"]
-        verbose_name = _("Application")
-        verbose_name_plural = _("Applications")
+        verbose_name = "Application"
+        verbose_name_plural = "Applications"
         indexes = [
             models.Index(fields=['user', 'status']),
             models.Index(fields=['service', 'status']),
@@ -605,16 +606,17 @@ class DocumentUpload(models.Model):
         Application,
         on_delete=models.CASCADE,
         related_name="documents",
+        verbose_name="Application"
     )
-    document_name = models.CharField(_("Document Name"), max_length=200, db_index=True)
-    file = models.FileField(_("File"), upload_to="applications/%Y/%m/%d/")
-    is_mandatory = models.BooleanField(_("Mandatory"), default=True, db_index=True)
-    uploaded_at = models.DateTimeField(_("Uploaded At"), auto_now_add=True, db_index=True)
-    verified = models.BooleanField(_("Verified by Admin"), default=False, db_index=True)
+    document_name = models.CharField("Document Name", max_length=200, db_index=True)
+    file = models.FileField("File", upload_to="applications/%Y/%m/%d/")
+    is_mandatory = models.BooleanField("Mandatory", default=True, db_index=True)
+    uploaded_at = models.DateTimeField("Uploaded At", auto_now_add=True, db_index=True)
+    verified = models.BooleanField("Verified by Admin", default=False, db_index=True)
 
     class Meta:
-        verbose_name = _("Document Upload")
-        verbose_name_plural = _("Document Uploads")
+        verbose_name = "Document Upload"
+        verbose_name_plural = "Document Uploads"
         indexes = [
             models.Index(fields=['application', 'verified']),
             models.Index(fields=['document_name']),
@@ -630,18 +632,18 @@ class DocumentUpload(models.Model):
 # ==========================
 class TeamMember(models.Model):
     """Team member profile."""
-    name = models.CharField(_("Name"), max_length=100, db_index=True)
-    designation = models.CharField(_("Designation"), max_length=200)
-    bio = models.TextField(_("Bio"), blank=True)
-    photo = models.ImageField(_("Photo"), upload_to="team/", blank=True, null=True)
-    order = models.PositiveIntegerField(_("Order"), default=0, help_text=_("Lower numbers appear first."))
-    is_active = models.BooleanField(_("Active"), default=True, db_index=True)
-    created_at = models.DateTimeField(_("Created At"), auto_now_add=True)
+    name = models.CharField("Name", max_length=100, db_index=True)
+    designation = models.CharField("Designation", max_length=200)
+    bio = models.TextField("Bio", blank=True)
+    photo = models.ImageField("Photo", upload_to="team/", blank=True, null=True)
+    order = models.PositiveIntegerField("Order", default=0, help_text="Lower numbers appear first.")
+    is_active = models.BooleanField("Active", default=True, db_index=True)
+    created_at = models.DateTimeField("Created At", auto_now_add=True)
 
     class Meta:
         ordering = ['order', 'name']
-        verbose_name = _("Team Member")
-        verbose_name_plural = _("Team Members")
+        verbose_name = "Team Member"
+        verbose_name_plural = "Team Members"
         indexes = [
             models.Index(fields=['is_active', 'order']),
         ]
@@ -690,7 +692,7 @@ class PaymentSettings(models.Model):
 # ==========================
 class PaymentLog(models.Model):
     """Audit trail for payment events."""
-    application = models.ForeignKey(Application, on_delete=models.CASCADE, related_name="payment_logs")
+    application = models.ForeignKey(Application, on_delete=models.CASCADE, related_name="payment_logs", verbose_name="Application")
     event_type = models.CharField(
         max_length=50,
         choices=(
@@ -701,13 +703,14 @@ class PaymentLog(models.Model):
             ('webhook_received', 'Webhook Received'),
             ('manual_confirmed', 'Manually Confirmed'),
         ),
-        db_index=True
+        db_index=True,
+        verbose_name="Event Type"
     )
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Amount")
     # Audit fields
-    ip_address = models.GenericIPAddressField(_("IP Address"), blank=True, null=True)
-    user_agent = models.CharField(_("User Agent"), max_length=512, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    ip_address = models.GenericIPAddressField("IP Address", blank=True, null=True)
+    user_agent = models.CharField("User Agent", max_length=512, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name="Created At")
 
     class Meta:
         ordering = ['-created_at']

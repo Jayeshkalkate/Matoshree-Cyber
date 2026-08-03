@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% load i18n %}
+
 {% load static %}
 
-{% block title %}{% trans "Gallery" %}{% endblock %}
+{% block title %}Gallery{% endblock %}
 
 {% block extra_head %}
 <!-- ============================================================
@@ -869,13 +869,13 @@
      ================================================================ -->
 <section class="page-hero">
   <div class="container">
-    <nav class="breadcrumb" aria-label="{% trans 'Breadcrumb' %}">
-      <a href="{% url 'home' %}"><i class="fas fa-home" aria-hidden="true"></i> {% trans "Home" %}</a>
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="{% url 'home' %}"><i class="fas fa-home" aria-hidden="true"></i> Home</a>
       <span><i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5;" aria-hidden="true"></i></span>
-      <span class="current" aria-current="page">{% trans "Gallery" %}</span>
+      <span class="current" aria-current="page">Gallery</span>
     </nav>
-    <h1>{% trans "Our" %} <span>{% trans "Gallery" %}</span></h1>
-    <p>{% trans "Take a visual tour of our cyber café, facilities, equipment, and achievements." %}</p>
+    <h1>Our <span>Gallery</span></h1>
+    <p>Take a visual tour of our cyber café, facilities, equipment, and achievements.</p>
     <div class="glow-line"></div>
   </div>
 </section>
@@ -888,12 +888,12 @@
     <!-- Category Header -->
     <div class="category-header">
       <div class="icon"><i class="fas fa-images" aria-hidden="true"></i></div>
-      <h2>{% trans "Gallery" %}</h2>
+      <h2>Gallery</h2>
       <span class="badge">
         {% if images.paginator.count > 0 %}
-          {{ images.paginator.count }} {% trans "Images" %}
+          {{ images.paginator.count }} Images
         {% else %}
-          {% trans "No Images" %}
+          No Images
         {% endif %}
       </span>
     </div>
@@ -911,21 +911,21 @@
   {% empty %}
     <p style="grid-column: 1/-1; text-align: center; color: var(--text-muted, #94a3b8); padding: 3rem 0;">
       <i class="fas fa-images" style="font-size: clamp(2rem, 5vw, 3rem); display: block; margin-bottom: 0.5rem; opacity: 0.3;" aria-hidden="true"></i>
-      {% trans "No images have been uploaded yet." %}
+      No images have been uploaded yet.
     </p>
   {% endfor %}
 </div>
 
     <!-- Pagination Controls (corrected) -->
     {% if images.has_other_pages %}
-    <div class="pagination-wrap" role="navigation" aria-label="{% trans 'Gallery pagination' %}">
+    <div class="pagination-wrap" role="navigation" aria-label="Gallery pagination">
       {% if images.has_previous %}
-        <a href="?page={{ images.previous_page_number }}" class="page-link" aria-label="{% trans 'Previous page' %}">
-          <i class="fas fa-chevron-left" aria-hidden="true"></i> {% trans "Prev" %}
+        <a href="?page={{ images.previous_page_number }}" class="page-link" aria-label="Previous page">
+          <i class="fas fa-chevron-left" aria-hidden="true"></i> Prev
         </a>
       {% else %}
         <span class="page-link disabled" aria-disabled="true">
-          <i class="fas fa-chevron-left" aria-hidden="true"></i> {% trans "Prev" %}
+          <i class="fas fa-chevron-left" aria-hidden="true"></i> Prev
         </span>
       {% endif %}
 
@@ -933,17 +933,17 @@
         {% if images.number == num %}
           <span class="page-link active" aria-current="page">{{ num }}</span>
         {% elif num > images.number|add:'-3' and num < images.number|add:'3' %}
-          <a href="?page={{ num }}" class="page-link" aria-label="{% trans 'Page' %} {{ num }}">{{ num }}</a>
+          <a href="?page={{ num }}" class="page-link" aria-label="Page {{ num }}">{{ num }}</a>
         {% endif %}
       {% endfor %}
 
       {% if images.has_next %}
-        <a href="?page={{ images.next_page_number }}" class="page-link" aria-label="{% trans 'Next page' %}">
-          {% trans "Next" %} <i class="fas fa-chevron-right" aria-hidden="true"></i>
+        <a href="?page={{ images.next_page_number }}" class="page-link" aria-label="Next page">
+          Next <i class="fas fa-chevron-right" aria-hidden="true"></i>
         </a>
       {% else %}
         <span class="page-link disabled" aria-disabled="true">
-          {% trans "Next" %} <i class="fas fa-chevron-right" aria-hidden="true"></i>
+          Next <i class="fas fa-chevron-right" aria-hidden="true"></i>
         </span>
       {% endif %}
     </div>
@@ -957,11 +957,11 @@
 <section class="gallery-note">
   <div class="container">
     <div class="note-box">
-      <h4><i class="fas fa-info-circle" aria-hidden="true"></i> {% trans "About Our Gallery" %}</h4>
+      <h4><i class="fas fa-info-circle" aria-hidden="true"></i> About Our Gallery</h4>
       <p>
-        <i class="fas fa-check-circle" aria-hidden="true"></i> {% trans "All images are from our actual cyber café and service center." %}<br />
-        <i class="fas fa-check-circle" aria-hidden="true"></i> {% trans "We regularly update our gallery to showcase our latest facilities and events." %}<br />
-        <i class="fas fa-check-circle" aria-hidden="true"></i> {% trans "Click on any image to view it in full size." %}
+        <i class="fas fa-check-circle" aria-hidden="true"></i> All images are from our actual cyber café and service center.<br />
+        <i class="fas fa-check-circle" aria-hidden="true"></i> We regularly update our gallery to showcase our latest facilities and events.<br />
+        <i class="fas fa-check-circle" aria-hidden="true"></i> Click on any image to view it in full size.
       </p>
     </div>
   </div>
@@ -972,15 +972,15 @@
      ================================================================ -->
 <section class="cta-banner" id="contact">
   <div class="container">
-    <h2>{% trans "Ready to" %} <span>{% trans "Experience" %}</span> {% trans "Our Services?" %}</h2>
-    <p>{% trans "Visit us today or reach out to get started with any of our services." %}</p>
+    <h2>Ready to <span>Experience</span> Our Services?</h2>
+    <p>Visit us today or reach out to get started with any of our services.</p>
     <div class="cta-buttons">
-      <a href="{% url 'home' %}#contact" class="btn-primary" aria-label="{% trans 'Contact us' %}">
-        <i class="fas fa-phone" aria-hidden="true"></i> {% trans "Contact Us" %}
+      <a href="{% url 'home' %}#contact" class="btn-primary" aria-label="Contact us">
+        <i class="fas fa-phone" aria-hidden="true"></i> Contact Us
       </a>
       {% with whatsapp_number=business.whatsapp|default:"919876543210" %}
-      <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20want%20to%20visit%20your%20cyber%20cafe." target="_blank" rel="noopener noreferrer" class="btn-whatsapp" aria-label="{% trans 'Chat on WhatsApp' %}">
-        <i class="fab fa-whatsapp" aria-hidden="true"></i> {% trans "Chat on WhatsApp" %}
+      <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20want%20to%20visit%20your%20cyber%20cafe." target="_blank" rel="noopener noreferrer" class="btn-whatsapp" aria-label="Chat on WhatsApp">
+        <i class="fab fa-whatsapp" aria-hidden="true"></i> Chat on WhatsApp
       </a>
       {% endwith %}
     </div>
@@ -990,11 +990,11 @@
 <!-- ================================================================
      LIGHTBOX
      ================================================================ -->
-<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="{% trans 'Image viewer' %}">
-  <button class="close-btn" id="lightbox-close" aria-label="{% trans 'Close image viewer' %}">&times;</button>
-  <button class="nav-btn prev" id="lightbox-prev" aria-label="{% trans 'Previous image' %}"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <button class="close-btn" id="lightbox-close" aria-label="Close image viewer">&times;</button>
+  <button class="nav-btn prev" id="lightbox-prev" aria-label="Previous image"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
   <img class="lightbox-content" id="lightbox-img" src="" alt="" />
-  <button class="nav-btn next" id="lightbox-next" aria-label="{% trans 'Next image' %}"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
+  <button class="nav-btn next" id="lightbox-next" aria-label="Next image"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
   <div class="lightbox-caption" id="lightbox-caption"></div>
 </div>
 {% endblock %}

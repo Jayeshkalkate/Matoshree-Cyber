@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% load i18n %}
 
-{% block title %}{% trans "My Profile" %}{% endblock %}
+
+{% block title %}My Profile{% endblock %}
 
 {% block extra_head %}
 <style>
@@ -425,14 +425,14 @@
           {% endfor %}
 
           <button type="submit" class="btn-submit">
-            <i class="fas fa-save"></i> {% trans "Update Profile" %}
+            <i class="fas fa-save"></i> Update Profile
           </button>
         </form>
 
         <hr />
 
         <a href="{% url 'password_change' %}" class="action-link">
-          <i class="fas fa-key"></i> {% trans "Change Password" %}
+          <i class="fas fa-key"></i> Change Password
         </a>
       </div>
     </div>
@@ -443,45 +443,45 @@
 <section class="pricing-section reveal">
   <div class="container">
     <div class="section-header">
-      <h2>{% trans "Popular" %} <span>{% trans "Service Packages" %}</span></h2>
-      <p>{% trans "Get the most out of our services with these convenient packages." %}</p>
+      <h2>Popular <span>Service Packages</span></h2>
+      <p>Get the most out of our services with these convenient packages.</p>
     </div>
     <div class="pricing-grid">
       <div class="pricing-card">
-        <div class="plan-name">{% trans "Starter" %}</div>
-        <div class="price">₹99 <span>/ {% trans "session" %}</span></div>
+        <div class="plan-name">Starter</div>
+        <div class="price">₹99 <span>/ session</span></div>
         <ul class="features">
-          <li><i class="fas fa-check"></i> {% trans "Printing (10 pages B&W)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Photocopy (10 pages)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Email & Internet (30 min)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Document Scanning (5 pages)" %}</li>
+          <li><i class="fas fa-check"></i> Printing (10 pages B&W)</li>
+          <li><i class="fas fa-check"></i> Photocopy (10 pages)</li>
+          <li><i class="fas fa-check"></i> Email & Internet (30 min)</li>
+          <li><i class="fas fa-check"></i> Document Scanning (5 pages)</li>
         </ul>
-        <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Get Started" %}</a>
+        <a href="{% url 'appointment' %}" class="btn-primary">Get Started</a>
       </div>
       <div class="pricing-card" style="border-color: rgba(0, 240, 255, 0.15);">
-        <div class="plan-name">{% trans "Pro" %}</div>
-        <div class="price">₹199 <span>/ {% trans "session" %}</span></div>
+        <div class="plan-name">Pro</div>
+        <div class="price">₹199 <span>/ session</span></div>
         <ul class="features">
-          <li><i class="fas fa-check"></i> {% trans "Printing (30 pages B&W / 10 color)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Photocopy (30 pages)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Email & Internet (60 min)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Document Scanning (15 pages)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Passport-size photos (4 copies)" %}</li>
+          <li><i class="fas fa-check"></i> Printing (30 pages B&W / 10 color)</li>
+          <li><i class="fas fa-check"></i> Photocopy (30 pages)</li>
+          <li><i class="fas fa-check"></i> Email & Internet (60 min)</li>
+          <li><i class="fas fa-check"></i> Document Scanning (15 pages)</li>
+          <li><i class="fas fa-check"></i> Passport-size photos (4 copies)</li>
         </ul>
-        <a href="{% url 'appointment' %}" class="btn-primary pulse">{% trans "Choose Plan" %}</a>
+        <a href="{% url 'appointment' %}" class="btn-primary pulse">Choose Plan</a>
       </div>
       <div class="pricing-card">
-        <div class="plan-name">{% trans "Enterprise" %}</div>
-        <div class="price">₹299 <span>/ {% trans "session" %}</span></div>
+        <div class="plan-name">Enterprise</div>
+        <div class="price">₹299 <span>/ session</span></div>
         <ul class="features">
-          <li><i class="fas fa-check"></i> {% trans "Printing (50 pages B&W / 20 color)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Photocopy (50 pages)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Email & Internet (90 min)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Document Scanning (30 pages)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Passport-size photos (8 copies)" %}</li>
-          <li><i class="fas fa-check"></i> {% trans "Priority support & assistance" %}</li>
+          <li><i class="fas fa-check"></i> Printing (50 pages B&W / 20 color)</li>
+          <li><i class="fas fa-check"></i> Photocopy (50 pages)</li>
+          <li><i class="fas fa-check"></i> Email & Internet (90 min)</li>
+          <li><i class="fas fa-check"></i> Document Scanning (30 pages)</li>
+          <li><i class="fas fa-check"></i> Passport-size photos (8 copies)</li>
+          <li><i class="fas fa-check"></i> Priority support & assistance</li>
         </ul>
-        <a href="{% url 'appointment' %}" class="btn-primary">{% trans "Go Premium" %}</a>
+        <a href="{% url 'appointment' %}" class="btn-primary">Go Premium</a>
       </div>
     </div>
   </div>

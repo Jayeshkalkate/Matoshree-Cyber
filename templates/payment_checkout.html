@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% load i18n %}
 
-{% block title %}{% trans "Complete Payment" %}{% endblock %}
+
+{% block title %}Complete Payment{% endblock %}
 
 {% block extra_head %}
 <!-- CSRF token for JavaScript -->
@@ -301,27 +301,27 @@
 {% block content %}
 <section class="page-hero">
   <div class="container">
-    <h1>{% trans "Complete Payment" %}</h1>
-    <p>{% trans "Please pay for your application to submit it." %}</p>
+    <h1>Complete Payment</h1>
+    <p>Please pay for your application to submit it.</p>
   </div>
 </section>
       
 <section class="apply-section">
   <div class="container">
     <div class="apply-card">
-      <h4>{% trans "Service" %}: {{ service.name }}</h4>
+      <h4>Service: {{ service.name }}</h4>
       <p>{{ service.description }}</p>
       <hr>
       <div class="payment-section">
-        <h5>{% trans "Payment Required" %}</h5>
+        <h5>Payment Required</h5>
         {% with charge=service.servicecharge_set.first %}
-          <p><strong>{% trans "Amount" %}:</strong> ₹{{ charge.charge|default:"0" }}</p>
+          <p><strong>Amount:</strong> ₹{{ charge.charge|default:"0" }}</p>
         {% endwith %}
 
         <!-- UPI Payment Option -->
         {% if payment_settings and payment_settings.upi_enabled and payment_settings.qr_code %}
           <div class="upi-payment">
-            <h5>{% trans "Pay via UPI" %}</h5>
+            <h5>Pay via UPI</h5>
             <img src="{{ payment_settings.qr_code.url }}" alt="UPI QR Code">
             <p><strong>UPI ID:</strong> {{ payment_settings.upi_id }}</p>
             <p><strong>Mobile:</strong> {{ payment_settings.upi_mobile }}</p>
@@ -331,7 +331,7 @@
               <input type="hidden" name="payment_method" value="upi">
               <input type="hidden" name="service_id" value="{{ service.id }}">
               <div style="margin-top: 0.8rem;">
-                <label for="payment_app">{% trans "Payment App" %} *</label>
+                <label for="payment_app">Payment App *</label>
                 <select name="payment_app" id="payment_app" required>
                   <option value="gpay">Google Pay</option>
                   <option value="phonepe">PhonePe</option>
@@ -341,22 +341,22 @@
                 </select>
               </div>
               <div style="margin-top: 0.8rem;">
-                <label for="utr_number">{% trans "UTR Number" %}</label>
-                <input type="text" name="utr_number" id="utr_number" placeholder="{% trans 'e.g. 123456789012' %}">
-                <small>{% trans "Optional, but helps admin verify your payment." %}</small>
+                <label for="utr_number">UTR Number</label>
+                <input type="text" name="utr_number" id="utr_number" placeholder="e.g. 123456789012">
+                <small>Optional, but helps admin verify your payment.</small>
               </div>
               <button type="submit" class="btn-success">
-                <i class="fas fa-check-circle"></i> {% trans "I have paid" %}
+                <i class="fas fa-check-circle"></i> I have paid
               </button>
             </form>
-            <p class="text-muted">{% trans "After payment, click the button to confirm. Admin will verify and submit your application." %}</p>
+            <p class="text-muted">After payment, click the button to confirm. Admin will verify and submit your application.</p>
           </div>
         {% endif %}
 
         <!-- Cancel / back link -->
         <div style="margin-top: 1.5rem; text-align: center;">
           <a href="{% url 'apply_service' service.id %}" class="btn-outline">
-            <i class="fas fa-arrow-left"></i> {% trans "Go Back" %}
+            <i class="fas fa-arrow-left"></i> Go Back
           </a>
         </div>
       </div>
@@ -400,12 +400,12 @@
     function validateUTR() {
       var val = utrInput.value.trim();
       if (paymentApp.value && !val) {
-        utrError.textContent = '{% trans "UTR number is required when a payment app is selected." %}';
+        utrError.textContent = 'UTR number is required when a payment app is selected.';
         utrError.style.display = 'block';
         return false;
       }
       if (val && !/^[A-Za-z0-9]{12,16}$/.test(val)) {
-        utrError.textContent = '{% trans "UTR must be 12–16 alphanumeric characters." %}';
+        utrError.textContent = 'UTR must be 12–16 alphanumeric characters.';
         utrError.style.display = 'block';
         return false;
       }
@@ -418,7 +418,7 @@
         appError.style.display = 'none';
         return true;
       }
-      appError.textContent = '{% trans "Please select a payment app." %}';
+      appError.textContent = 'Please select a payment app.';
       appError.style.display = 'block';
       return false;
     }

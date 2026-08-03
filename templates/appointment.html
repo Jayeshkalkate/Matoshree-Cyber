@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% load i18n %}
+
 {% load static %}
 
-{% block title %}{% trans "Book Appointment" %}{% endblock %}
+{% block title %}Book Appointment{% endblock %}
 
 {% block extra_head %}
 <!-- ============================================================
@@ -577,10 +577,10 @@
     <!-- Header -->
     <div class="card-header">
       <i class="fas fa-calendar-check"></i>
-      <h1>{% trans "Book an Appointment" %}</h1>
+      <h1>Book an Appointment</h1>
     </div>
     <div class="subhead">
-      {% trans "Select your service, choose a date &amp; time, and we'll confirm your visit." %}
+      Select your service, choose a date &amp; time, and we'll confirm your visit.
     </div>
 
     <!-- Form -->
@@ -601,7 +601,7 @@
       <!-- Full Name -->
       <div class="form-group" id="nameGroup">
         <label for="{{ form.full_name.id_for_label }}">
-          <i class="fas fa-user"></i> {% trans "Full Name" %}
+          <i class="fas fa-user"></i> Full Name
           <span class="required-star">*</span>
         </label>
         {{ form.full_name }}
@@ -613,7 +613,7 @@
       <!-- Phone -->
       <div class="form-group" id="phoneGroup">
         <label for="{{ form.phone.id_for_label }}">
-          <i class="fas fa-phone"></i> {% trans "Phone Number" %}
+          <i class="fas fa-phone"></i> Phone Number
           <span class="required-star">*</span>
         </label>
         <div class="mobile-input-wrapper">
@@ -622,7 +622,7 @@
         </div>
         <span class="helper-text">
           <i class="fas fa-info-circle"></i>
-          {% trans "Enter 10‑15 digit mobile number (without country code)" %}
+          Enter 10‑15 digit mobile number (without country code)
         </span>
         {% if form.phone.errors %}
         <div class="error-message">{{ form.phone.errors }}</div>
@@ -632,7 +632,7 @@
       <!-- Email -->
       <div class="form-group">
         <label for="{{ form.email.id_for_label }}">
-          <i class="fas fa-envelope"></i> {% trans "Email Address" %}
+          <i class="fas fa-envelope"></i> Email Address
         </label>
         {{ form.email }}
         {% if form.email.errors %}
@@ -643,7 +643,7 @@
       <!-- Service -->
       <div class="form-group" id="serviceGroup">
         <label for="{{ form.service.id_for_label }}">
-          <i class="fas fa-concierge-bell"></i> {% trans "Service" %}
+          <i class="fas fa-concierge-bell"></i> Service
           <span class="required-star">*</span>
         </label>
         {{ form.service }}
@@ -655,13 +655,13 @@
       <!-- Date -->
       <div class="form-group" id="dateGroup">
         <label for="{{ form.appointment_date.id_for_label }}">
-          <i class="fas fa-calendar-day"></i> {% trans "Appointment Date" %}
+          <i class="fas fa-calendar-day"></i> Appointment Date
           <span class="required-star">*</span>
         </label>
         {{ form.appointment_date }}
         <span class="helper-text">
           <i class="fas fa-info-circle"></i>
-          {% trans "Please select a future date." %}
+          Please select a future date.
         </span>
         {% if form.appointment_date.errors %}
         <div class="error-message">{{ form.appointment_date.errors }}</div>
@@ -671,17 +671,17 @@
       <!-- Time -->
       <div class="form-group" id="timeGroup">
         <label for="{{ form.appointment_time.id_for_label }}">
-          <i class="fas fa-clock"></i> {% trans "Appointment Time" %}
+          <i class="fas fa-clock"></i> Appointment Time
           <span class="required-star">*</span>
         </label>
         {{ form.appointment_time }}
         <span class="helper-text">
           <i class="fas fa-info-circle"></i>
-          {% trans "Available slots: 9:00 AM – 5:00 PM (15‑minute intervals)" %}
+          Available slots: 9:00 AM – 5:00 PM (15‑minute intervals)
         </span>
         <span class="helper-text" style="opacity:0.5; margin-top:0.1rem;">
           <i class="fas fa-hourglass-half"></i>
-          {% trans "Slots are subject to availability. We will confirm your appointment by email/phone." %}
+          Slots are subject to availability. We will confirm your appointment by email/phone.
         </span>
         {% if form.appointment_time.errors %}
         <div class="error-message">{{ form.appointment_time.errors }}</div>
@@ -691,7 +691,7 @@
       <!-- Message -->
       <div class="form-group">
         <label for="{{ form.message.id_for_label }}">
-          <i class="fas fa-comment"></i> {% trans "Additional Message" %}
+          <i class="fas fa-comment"></i> Additional Message
         </label>
         {{ form.message }}
         {% if form.message.errors %}
@@ -700,15 +700,15 @@
       </div>
 
       <button type="submit" class="btn-book" id="bookBtn">
-        <i class="fas fa-paper-plane"></i> {% trans "Book Appointment" %}
+        <i class="fas fa-paper-plane"></i> Book Appointment
       </button>
     </form>
 
     <!-- Footer Note -->
     <div class="footer-note">
       <i class="fas fa-shield-alt"></i>
-      {% trans "Your details are secure." %}
-      <span><i class="far fa-clock"></i> {% trans "9:00 AM – 5:00 PM" %}</span>
+      Your details are secure.
+      <span><i class="far fa-clock"></i> 9:00 AM – 5:00 PM</span>
     </div>
   </div>
 </section>
@@ -886,7 +886,7 @@
       // Disable button to prevent double submit
       bookBtn.disabled = true;
       bookBtn.innerHTML =
-        '<i class="fas fa-spinner fa-spin"></i> {% trans "Booking…"|escapejs %}';
+        '<i class="fas fa-spinner fa-spin"></i> ';
     });
 
     // ---- Prevent past dates on blur ----

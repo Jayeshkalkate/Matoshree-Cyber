@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% load i18n %}
+
 {% load static %}
 
-{% block title %}{% trans "Announcements" %}{% endblock %}
+{% block title %}Announcements{% endblock %}
 
 {% block extra_head %}
 <!-- ============================================================
@@ -723,13 +723,13 @@
      ================================================================ -->
 <section class="page-hero reveal">
   <div class="container">
-    <nav class="breadcrumb" aria-label="{% trans 'Breadcrumb' %}">
-      <a href="{% url 'home' %}">{% trans "Home" %}</a>
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="{% url 'home' %}">Home</a>
       <i class="fas fa-chevron-right" style="font-size: 0.6rem" aria-hidden="true"></i>
-      <span class="current" aria-current="page">{% trans "Announcements" %}</span>
+      <span class="current" aria-current="page">Announcements</span>
     </nav>
-    <h1><span>{% trans "Announcements" %}</span></h1>
-    <p>{% trans "Stay informed with the latest updates from our centre." %}</p>
+    <h1><span>Announcements</span></h1>
+    <p>Stay informed with the latest updates from our centre.</p>
   </div>
 </section>
 
@@ -739,9 +739,9 @@
 <section class="announcements-section reveal">
   <div class="container">
     <!-- Filter Bar – server‑side generated with translated category names -->
-    <div class="filter-bar" id="filterBar" role="tablist" aria-label="{% trans 'Filter announcements by category' %}">
+    <div class="filter-bar" id="filterBar" role="tablist" aria-label="Filter announcements by category">
       <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true">
-        <i class="fas fa-list" aria-hidden="true"></i> {% trans "All" %}
+        <i class="fas fa-list" aria-hidden="true"></i> All
       </button>
       {% regroup announcements by category as category_list %}
       {% for cat_group in category_list %}
@@ -751,17 +751,17 @@
               <i class="fas fa-tag" aria-hidden="true"></i>
               {# Translate category names using gettext – assumes category choices are defined in models #}
               {% if cat == "General" %}
-                {% trans "General" %}
+                General
               {% elif cat == "Government Scheme" %}
-                {% trans "Government Scheme" %}
+                Government Scheme
               {% elif cat == "Recruitment" %}
-                {% trans "Recruitment" %}
+                Recruitment
               {% elif cat == "Scholarship" %}
-                {% trans "Scholarship" %}
+                Scholarship
               {% elif cat == "Holiday" %}
-                {% trans "Holiday" %}
+                Holiday
               {% elif cat == "Notice" %}
-                {% trans "Notice" %}
+                Notice
               {% else %}
                 {{ cat }}
               {% endif %}
@@ -784,10 +784,10 @@
               <i class="far fa-calendar-alt" aria-hidden="true"></i> {{ announcement.created_at|date:"d M Y" }}
             </span>
             <span class="category-badge {% if announcement.category %}{{ announcement.category|lower }}{% endif %}">
-              {{ announcement.category|default:_("General") }}
+              {{ announcement.category|default:"General" }}
             </span>
             {% if announcement.is_urgent %}
-            <span class="badge-urgent">{% trans "Urgent" %}</span>
+            <span class="badge-urgent">Urgent</span>
             {% endif %}
           </div>
           <h3 class="announcement-title">{{ announcement.title }}</h3>
@@ -798,7 +798,7 @@
       </div>
       {% empty %}
       <p style="text-align: center; padding: 40px; color: var(--text-muted, #94a3b8);">
-        {% trans "No announcements available at the moment." %}
+        No announcements available at the moment.
       </p>
       {% endfor %}
     </div>
@@ -806,19 +806,19 @@
     <!-- No results (filter) -->
     <div class="no-results" id="noResults" role="status">
       <i class="fas fa-inbox" aria-hidden="true"></i>
-      <p>{% trans "No announcements match the selected filter." %}</p>
+      <p>No announcements match the selected filter.</p>
     </div>
 
     <!-- Pagination -->
     {% if announcements.has_other_pages %}
-    <div class="pagination-wrap" role="navigation" aria-label="{% trans 'Announcements pagination' %}">
+    <div class="pagination-wrap" role="navigation" aria-label="Announcements pagination">
       {% if announcements.has_previous %}
-        <a href="?page={{ announcements.previous_page_number }}" class="page-link" aria-label="{% trans 'Previous page' %}">
-          <i class="fas fa-chevron-left" aria-hidden="true"></i> {% trans "Prev" %}
+        <a href="?page={{ announcements.previous_page_number }}" class="page-link" aria-label="Previous page">
+          <i class="fas fa-chevron-left" aria-hidden="true"></i> Prev
         </a>
       {% else %}
         <span class="page-link disabled" aria-disabled="true">
-          <i class="fas fa-chevron-left" aria-hidden="true"></i> {% trans "Prev" %}
+          <i class="fas fa-chevron-left" aria-hidden="true"></i> Prev
         </span>
       {% endif %}
 
@@ -826,17 +826,17 @@
         {% if announcements.number == num %}
           <span class="page-link active" aria-current="page">{{ num }}</span>
         {% elif num > announcements.number|add:'-3' and num < announcements.number|add:'3' %}
-          <a href="?page={{ num }}" class="page-link" aria-label="{% trans 'Page' %} {{ num }}">{{ num }}</a>
+          <a href="?page={{ num }}" class="page-link" aria-label="Page {{ num }}">{{ num }}</a>
         {% endif %}
       {% endfor %}
 
       {% if announcements.has_next %}
-        <a href="?page={{ announcements.next_page_number }}" class="page-link" aria-label="{% trans 'Next page' %}">
-          {% trans "Next" %} <i class="fas fa-chevron-right" aria-hidden="true"></i>
+        <a href="?page={{ announcements.next_page_number }}" class="page-link" aria-label="Next page">
+          Next <i class="fas fa-chevron-right" aria-hidden="true"></i>
         </a>
       {% else %}
         <span class="page-link disabled" aria-disabled="true">
-          {% trans "Next" %} <i class="fas fa-chevron-right" aria-hidden="true"></i>
+          Next <i class="fas fa-chevron-right" aria-hidden="true"></i>
         </span>
       {% endif %}
     </div>
@@ -845,19 +845,19 @@
     <!-- Footer note -->
     <div class="footer-note">
       <span>
-        <i class="fas fa-bell" aria-hidden="true"></i> {% trans "Stay updated with our latest announcements." %}
+        <i class="fas fa-bell" aria-hidden="true"></i> Stay updated with our latest announcements.
       </span>
       <span class="badge" id="countBadge">
         <i class="far fa-bell" aria-hidden="true"></i>
         {% with total=announcements.paginator.count %}
           {% if total > 0 %}
-            {% blocktrans count counter=total trimmed %}
+            
               <span id="announcementCount">{{ counter }}</span> active notice
             {% plural %}
               <span id="announcementCount">{{ counter }}</span> active notices
             {% endblocktrans %}
           {% else %}
-            {% trans "No notices" %}
+            No notices
           {% endif %}
         {% endwith %}
       </span>
@@ -870,17 +870,17 @@
      ================================================================ -->
 <section class="cta-banner reveal">
   <div class="container">
-    <h2>{% trans "Have Questions?" %} <span>{% trans "Reach Out" %}</span></h2>
+    <h2>Have Questions? <span>Reach Out</span></h2>
     <p>
-      {% trans "We're here to help with any of your digital service needs." %}
+      We're here to help with any of your digital service needs.
     </p>
     <div class="cta-buttons">
-      <a href="{% url 'contact' %}" class="btn-primary" aria-label="{% trans 'Contact us' %}">
-        <i class="fas fa-phone" aria-hidden="true"></i> {% trans "Contact Us" %}
+      <a href="{% url 'contact' %}" class="btn-primary" aria-label="Contact us">
+        <i class="fas fa-phone" aria-hidden="true"></i> Contact Us
       </a>
       {% with whatsapp_number=business.whatsapp|default:"919876543210" %}
-      <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20have%20a%20question%20about%20your%20announcements." target="_blank" rel="noopener noreferrer" class="btn-whatsapp" aria-label="{% trans 'Chat on WhatsApp' %}">
-        <i class="fab fa-whatsapp" aria-hidden="true"></i> {% trans "Chat on WhatsApp" %}
+      <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20have%20a%20question%20about%20your%20announcements." target="_blank" rel="noopener noreferrer" class="btn-whatsapp" aria-label="Chat on WhatsApp">
+        <i class="fab fa-whatsapp" aria-hidden="true"></i> Chat on WhatsApp
       </a>
       {% endwith %}
     </div>

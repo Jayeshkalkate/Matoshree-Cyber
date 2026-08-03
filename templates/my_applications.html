@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% load i18n %}
 
-{% block title %}{% trans "My Applications" %}{% endblock %}
+
+{% block title %}My Applications{% endblock %}
 
 {% block extra_head %}
 <style>
@@ -325,16 +325,16 @@
      ================================================================ -->
 <section class="page-hero">
   <div class="container">
-    <nav class="breadcrumb" aria-label="{% trans 'Breadcrumb' %}">
-      <a href="{% url 'home' %}"><i class="fas fa-home" aria-hidden="true"></i> {% trans "Home" %}</a>
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="{% url 'home' %}"><i class="fas fa-home" aria-hidden="true"></i> Home</a>
       <span><i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5;" aria-hidden="true"></i></span>
-      <span class="current" aria-current="page">{% trans "My Applications" %}</span>
+      <span class="current" aria-current="page">My Applications</span>
     </nav>
-    <h1>{% trans "My Applications" %}</h1>
+    <h1>My Applications</h1>
     {% if applications.paginator.count > 0 %}
-      <div class="total-badge" role="status" aria-label="{% trans 'Total applications count' %}">
+      <div class="total-badge" role="status" aria-label="Total applications count">
         <i class="fas fa-file-alt" aria-hidden="true"></i>
-        {% blocktrans count counter=applications.paginator.count trimmed %}
+        
           {{ counter }} application
         {% plural %}
           {{ counter }} applications
@@ -352,7 +352,7 @@
     {% if applications %}
     <div class="app-grid">
       {% for app in applications %}
-      <a href="{% url 'application_detail' app.id %}" class="app-card" aria-label="{% trans 'View details for' %} {{ app.service.name }}">
+      <a href="{% url 'application_detail' app.id %}" class="app-card" aria-label="View details for {{ app.service.name }}">
         <div class="app-header">
           <span class="service-name">{{ app.service.name }}</span>
           <span class="app-date">{{ app.created_at|date:"d M Y" }}</span>
@@ -369,7 +369,7 @@
         </div>
         <div class="app-footer">
           <span class="btn-detail">
-            <i class="fas fa-arrow-right" aria-hidden="true"></i> {% trans "View Details" %}
+            <i class="fas fa-arrow-right" aria-hidden="true"></i> View Details
           </span>
         </div>
       </a>
@@ -378,14 +378,14 @@
 
     <!-- Pagination (if paginated) -->
     {% if applications.has_other_pages %}
-    <div class="pagination-wrap" role="navigation" aria-label="{% trans 'Applications pagination' %}">
+    <div class="pagination-wrap" role="navigation" aria-label="Applications pagination">
       {% if applications.has_previous %}
-        <a href="?page={{ applications.previous_page_number }}" class="page-link" aria-label="{% trans 'Previous page' %}">
-          <i class="fas fa-chevron-left" aria-hidden="true"></i> {% trans "Prev" %}
+        <a href="?page={{ applications.previous_page_number }}" class="page-link" aria-label="Previous page">
+          <i class="fas fa-chevron-left" aria-hidden="true"></i> Prev
         </a>
       {% else %}
         <span class="page-link disabled" aria-disabled="true">
-          <i class="fas fa-chevron-left" aria-hidden="true"></i> {% trans "Prev" %}
+          <i class="fas fa-chevron-left" aria-hidden="true"></i> Prev
         </span>
       {% endif %}
 
@@ -393,17 +393,17 @@
         {% if applications.number == num %}
           <span class="page-link active" aria-current="page">{{ num }}</span>
         {% elif num > applications.number|add:'-3' and num < applications.number|add:'3' %}
-          <a href="?page={{ num }}" class="page-link" aria-label="{% trans 'Page' %} {{ num }}">{{ num }}</a>
+          <a href="?page={{ num }}" class="page-link" aria-label="Page {{ num }}">{{ num }}</a>
         {% endif %}
       {% endfor %}
 
       {% if applications.has_next %}
-        <a href="?page={{ applications.next_page_number }}" class="page-link" aria-label="{% trans 'Next page' %}">
-          {% trans "Next" %} <i class="fas fa-chevron-right" aria-hidden="true"></i>
+        <a href="?page={{ applications.next_page_number }}" class="page-link" aria-label="Next page">
+          Next <i class="fas fa-chevron-right" aria-hidden="true"></i>
         </a>
       {% else %}
         <span class="page-link disabled" aria-disabled="true">
-          {% trans "Next" %} <i class="fas fa-chevron-right" aria-hidden="true"></i>
+          Next <i class="fas fa-chevron-right" aria-hidden="true"></i>
         </span>
       {% endif %}
     </div>
@@ -412,9 +412,9 @@
     {% else %}
     <div class="empty-state">
       <i class="fas fa-file-alt" aria-hidden="true"></i>
-      <p>{% trans "You have not submitted any applications yet." %}</p>
+      <p>You have not submitted any applications yet.</p>
       <a href="{% url 'services' %}" class="btn-primary">
-        <i class="fas fa-plus" aria-hidden="true"></i> {% trans "Browse Services" %}
+        <i class="fas fa-plus" aria-hidden="true"></i> Browse Services
       </a>
     </div>
     {% endif %}

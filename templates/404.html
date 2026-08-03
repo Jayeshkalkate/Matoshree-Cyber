@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% load i18n %}
 
-{% block title %}{% trans "Page Not Found" %}{% endblock %}
+
+{% block title %}Page Not Found{% endblock %}
 
 {% block extra_head %}
 <style>
@@ -56,10 +56,10 @@
 <section class="error-page">
   <div class="container">
     <div class="error-code">404</div>
-    <h2>{% trans "Oops! Page not found." %}</h2>
-    <p>{% trans "The page you're looking for doesn't exist or has been moved." %}</p>
+    <h2>Oops! Page not found.</h2>
+    <p>The page you're looking for doesn't exist or has been moved.</p>
     <a href="{% url 'home' %}" class="btn-primary">
-      <i class="fas fa-home"></i> {% trans "Go Home" %}
+      <i class="fas fa-home"></i> Go Home
     </a>
   </div>
 </section>

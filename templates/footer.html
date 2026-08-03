@@ -1,4 +1,4 @@
-{% load i18n %}
+
 {% load static %}
 
 <footer class="footer">
@@ -13,12 +13,12 @@
             {% if business.business_name %}
               {{ business.business_name }}
             {% else %}
-              {% trans "CyberTech" %}
+              CyberTech
             {% endif %}
           </div>
         </div>
         <p class="footer-address">
-          {{ business.address|default:_("Digital services at your doorstep.") }}
+          {{ business.address|default:"Digital services at your doorstep." }}
         </p>
         <div class="footer-contact">
           <p><i class="fas fa-phone"></i> {{ business.phone|default:"+91 98765 43210" }}</p>
@@ -28,39 +28,39 @@
 
       <!-- Column 2: Quick Links -->
       <div class="footer-col">
-        <h4>{% trans "Quick Links" %}</h4>
+        <h4>Quick Links</h4>
         <ul>
-          <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
-          <li><a href="{% url 'about' %}">{% trans "About" %}</a></li>
-          <li><a href="{% url 'team' %}">{% trans "Team" %}</a></li>
-          <li><a href="{% url 'contact' %}">{% trans "Contact" %}</a></li>
-          <li><a href="{% url 'services' %}">{% trans "Services" %}</a></li>
-          <li><a href="{% url 'gallery' %}">{% trans "Gallery" %}</a></li>
-          <li><a href="{% url 'reviews' %}">{% trans "Reviews" %}</a></li>
+          <li><a href="{% url 'home' %}">Home</a></li>
+          <li><a href="{% url 'about' %}">About</a></li>
+          <li><a href="{% url 'team' %}">Team</a></li>
+          <li><a href="{% url 'contact' %}">Contact</a></li>
+          <li><a href="{% url 'services' %}">Services</a></li>
+          <li><a href="{% url 'gallery' %}">Gallery</a></li>
+          <li><a href="{% url 'reviews' %}">Reviews</a></li>
         </ul>
       </div>
 
       <!-- Column 4: Our Services -->
       <div class="footer-col">
-        <h4>{% trans "Our Services" %}</h4>
+        <h4>Our Services</h4>
         <ul>
-          <li><a href="{% url 'services' %}">{% trans "All Services" %}</a></li>
-          <li><a href="{% url 'announcements' %}">{% trans "Announcements" %}</a></li>
-          <li><a href="{% url 'documents' %}">{% trans "Required Documents" %}</a></li>
-          <li><a href="{% url 'downloads' %}">{% trans "Download Forms" %}</a></li>
-          <li><a href="{% url 'charges' %}">{% trans "Service Charges" %}</a></li>
+          <li><a href="{% url 'services' %}">All Services</a></li>
+          <li><a href="{% url 'announcements' %}">Announcements</a></li>
+          <li><a href="{% url 'documents' %}">Required Documents</a></li>
+          <li><a href="{% url 'downloads' %}">Download Forms</a></li>
+          <li><a href="{% url 'charges' %}">Service Charges</a></li>
         </ul>
       </div>
 
       <!-- Column 5: Resources -->
       <div class="footer-col">
-        <h4>{% trans "Resources" %}</h4>
+        <h4>Resources</h4>
         <ul>
-          <li><a href="{% url 'government_schemes' %}">{% trans "Government Schemes" %}</a></li>
-          <li><a href="{% url 'jobs' %}">{% trans "Job Notifications" %}</a></li>
-          <li><a href="{% url 'appointment' %}">{% trans "Book Appointment" %}</a></li>
-          <li><a href="{% url 'terms' %}">{% trans "Terms & Conditions" %}</a></li>
-          <li><a href="{% url 'privacy' %}">{% trans "Privacy Policy" %}</a></li>
+          <li><a href="{% url 'government_schemes' %}">Government Schemes</a></li>
+          <li><a href="{% url 'jobs' %}">Job Notifications</a></li>
+          <li><a href="{% url 'appointment' %}">Book Appointment</a></li>
+          <li><a href="{% url 'terms' %}">Terms & Conditions</a></li>
+          <li><a href="{% url 'privacy' %}">Privacy Policy</a></li>
         </ul>
       </div>
       
@@ -73,7 +73,7 @@
         <a href="https://chat.whatsapp.com/BjIk12GVsYn85tW0RKu9qJ"
            target="_blank"
            rel="noopener noreferrer"
-           aria-label="{% trans 'Join our WhatsApp Group' %}">
+           aria-label="Join our WhatsApp Group">
           <i class="fab fa-whatsapp"></i>
         </a>
         <!-- Placeholder social links – replace with actual URLs when available -->
@@ -92,12 +92,12 @@
     <div class="footer-copy">
       <p>
         {% now "Y" as current_year %}
-        {% blocktrans with year=current_year name=business.business_name|default:_("Matoshree Cyber Cafe") trimmed %}
+        
           &copy; {{ year }} {{ name }}. All rights reserved.
-        {% endblocktrans %}
+        
       </p>
       <p class="developer-credit">
-        {% trans "Developed with ❤️ by" %}
+        Developed with ❤️ by
         <a href="https://devjayesh-portfolio.netlify.app/"
            target="_blank"
            rel="noopener noreferrer">

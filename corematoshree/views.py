@@ -10,10 +10,8 @@ import tempfile
 from decimal import Decimal
 from datetime import timedelta
 from io import BytesIO
-
 from datetime import datetime
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .utils import fetch_external_jobs
+import re
 
 # ---- Third-Party Libraries ----
 from reportlab.pdfbase import pdfmetrics
@@ -52,9 +50,7 @@ from django.http import FileResponse, JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
-from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import cache_page
-import re
 
 # ---- Local Application ----
 from .models import (
@@ -71,7 +67,7 @@ from .forms import (
     BusinessInfoForm, RequiredDocumentForm, ApplicationForm, DocumentUploadForm,
     PaymentSettingsForm,
 )
-from .utils import get_business, get_payment_settings, is_admin, is_superadmin
+from .utils import get_business, get_payment_settings, is_admin, is_superadmin, fetch_external_jobs
 
 # ---- Logger ----
 logger = logging.getLogger(__name__)
@@ -117,8 +113,8 @@ def send_admin_notification(subject, message, recipient_list=None):
         recipient_list = [getattr(settings, 'CONTACT_EMAIL', settings.DEFAULT_FROM_EMAIL)]
     try:
         send_mail(
-            subject=subject,
-            message=message,
+            subject,
+            message,
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=recipient_list,
             fail_silently=True,
@@ -131,8 +127,8 @@ def send_welcome_email(user):
     """Send welcome email to new user."""
     try:
         send_mail(
-            subject=_("Welcome to our platform"),
-            message=_(
+            subject="Welcome to our platform",
+            message=(
                 f"Hi {user.username},\n\n"
                 "Thank you for registering. You can now book appointments and apply for services.\n"
                 "Visit our website to get started."
@@ -153,24 +149,14 @@ def send_payment_confirmation(application):
         business_name = get_business().business_name if get_business() else 'Cyber Cafe'
 
         send_mail(
-            subject=_('Payment Confirmed – Application #{}').format(application.id),
-            message=_('''
-Dear {name},
-
-Your payment for {service} has been confirmed.
-Receipt No: {receipt}
-Amount Paid: ₹{amount}
-
-Thank you for choosing our services.
-
-Regards,
-{business}
-            ''').format(
-                name=application.full_name,
-                service=application.service.name,
-                receipt=application.receipt_number,
-                amount=amount,
-                business=business_name
+            subject=f"Payment Confirmed - Application #{application.id}",
+            message=(
+                f"Dear {application.full_name},\n\n"
+                f"Your payment for {application.service.name} has been confirmed.\n"
+                f"Receipt No: {application.receipt_number}\n"
+                f"Amount Paid: ₹{amount}\n\n"
+                f"Thank you for choosing our services.\n\n"
+                f"Regards,\n{business_name}"
             ),
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[application.email],
@@ -178,8 +164,8 @@ Regards,
         )
         # Admin notification
         send_admin_notification(
-            subject=f'Payment Received – {application.full_name}',
-            message=f'Payment of ₹{amount} received for {application.service.name}.\nReceipt: {application.receipt_number}'
+            subject=f"Payment Received - {application.full_name}",
+            message=f"Payment of ₹{amount} received for {application.service.name}.\nReceipt: {application.receipt_number}"
         )
     except Exception as e:
         logger.error(f"Failed to send payment confirmation email: {e}")
@@ -195,7 +181,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, _('Account created successfully!'))
+            messages.success(request, "Account created successfully!")
             send_welcome_email(user)
             return redirect('home')
     else:
@@ -212,7 +198,7 @@ def profile(request):
         form = ProfileUpdateForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Profile updated successfully!'))
+            messages.success(request, "Profile updated successfully!")
             return redirect('profile')
     else:
         form = ProfileUpdateForm(instance=request.user)
@@ -270,7 +256,7 @@ def _get_dashboard_common_data():
     if cached is not None:
         data = cached
     else:
-        # Build serializable data (lists of dicts) – safe for cache
+        # Build serializable data (lists of dicts) - safe for cache
         data = {
             'services': list(Service.objects.values('id', 'name', 'category', 'active', 'icon', 'icon_color')),
             'appointments': list(Appointment.objects.select_related('service').values(
@@ -345,19 +331,19 @@ def _handle_add(model_type, request, is_super):
         form = ServiceForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Service added.'))
+            messages.success(request, "Service added.")
             _clear_section_cache('services')
         else:
-            messages.error(request, _('Error adding service.'))
+            messages.error(request, "Error adding service.")
     elif model_type == 'requireddoc':
         raw_docs = request.POST.get('document_name', '').strip()
         service_id = request.POST.get('service')
         if not service_id:
-            messages.error(request, _('Please select a service.'))
+            messages.error(request, "Please select a service.")
             return
         doc_names = [name.strip() for name in raw_docs.split(',') if name.strip()]
         if not doc_names:
-            messages.error(request, _('Please enter at least one document name.'))
+            messages.error(request, "Please enter at least one document name.")
             return
         service = get_object_or_404(Service, id=service_id)
         created = 0
@@ -367,84 +353,82 @@ def _handle_add(model_type, request, is_super):
             )
             if created_flag:
                 created += 1
-        messages.success(request, _('{count} document(s) added for “{service}”.').format(
-            count=created, service=service.name
-        ))
+        messages.success(request, f"{created} document(s) added for “{service.name}”.")
         _clear_section_cache('requireddocs')
     elif model_type == 'teammember':
         form = TeamMemberForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Team member added.'))
+            messages.success(request, "Team member added.")
             _clear_section_cache('teammembers')
         else:
-            messages.error(request, _('Error adding team member.'))
+            messages.error(request, "Error adding team member.")
     elif model_type == 'announcement':
         form = AnnouncementForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Announcement added.'))
+            messages.success(request, "Announcement added.")
             _clear_section_cache('announcements')
         else:
-            messages.error(request, _('Error adding announcement.'))
+            messages.error(request, "Error adding announcement.")
     elif model_type == 'job':
         form = JobNotificationForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Job notification added.'))
+            messages.success(request, "Job notification added.")
             _clear_section_cache('jobs')
         else:
-            messages.error(request, _('Error adding job.'))
+            messages.error(request, "Error adding job.")
     elif model_type == 'scheme':
         form = GovernmentSchemeForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Scheme added.'))
+            messages.success(request, "Scheme added.")
             _clear_section_cache('schemes')
         else:
-            messages.error(request, _('Error adding scheme.'))
+            messages.error(request, "Error adding scheme.")
     elif model_type == 'appointment':
         form = AppointmentFormDashboard(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Appointment added.'))
+            messages.success(request, "Appointment added.")
             _clear_section_cache('appointments')
         else:
-            messages.error(request, _('Error adding appointment.'))
+            messages.error(request, "Error adding appointment.")
     elif model_type == 'contact':
         form = ContactFormDashboard(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Contact added.'))
+            messages.success(request, "Contact added.")
             _clear_section_cache('contacts')
         else:
-            messages.error(request, _('Error adding contact.'))
+            messages.error(request, "Error adding contact.")
     elif model_type == 'form':
         form = DownloadFormForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Download form uploaded.'))
+            messages.success(request, "Download form uploaded.")
             _clear_section_cache('forms')
         else:
-            messages.error(request, _('Error uploading form.'))
+            messages.error(request, "Error uploading form.")
     elif model_type == 'servicecharge':
         form = ServiceChargeForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Service charge added.'))
+            messages.success(request, "Service charge added.")
             _clear_section_cache('servicecharges')
         else:
-            messages.error(request, _('Error adding service charge.'))
+            messages.error(request, "Error adding service charge.")
     elif model_type == 'gallery':
         form = GalleryForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Gallery image uploaded.'))
+            messages.success(request, "Gallery image uploaded.")
             _clear_section_cache('gallery')
         else:
-            messages.error(request, _('Error uploading gallery image.'))
+            messages.error(request, "Error uploading gallery image.")
     else:
-        messages.error(request, _('Unknown model type for add.'))
+        messages.error(request, "Unknown model type for add.")
 
 
 def _handle_edit(model_type, obj_id, request):
@@ -453,91 +437,91 @@ def _handle_edit(model_type, obj_id, request):
         form = ServiceForm(request.POST, instance=instance)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Service updated.'))
+            messages.success(request, "Service updated.")
             _clear_section_cache('services')
         else:
-            messages.error(request, _('Error updating service.'))
+            messages.error(request, "Error updating service.")
     elif model_type == 'requireddoc':
         instance = get_object_or_404(RequiredDocument, id=obj_id)
         form = RequiredDocumentForm(request.POST, instance=instance)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Required document updated.'))
+            messages.success(request, "Required document updated.")
             _clear_section_cache('requireddocs')
         else:
-            messages.error(request, _('Error updating required document.'))
+            messages.error(request, "Error updating required document.")
     elif model_type == 'teammember':
         instance = get_object_or_404(TeamMember, id=obj_id)
         form = TeamMemberForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Team member updated.'))
+            messages.success(request, "Team member updated.")
             _clear_section_cache('teammembers')
         else:
-            messages.error(request, _('Error updating team member.'))
+            messages.error(request, "Error updating team member.")
     elif model_type == 'announcement':
         instance = get_object_or_404(Announcement, id=obj_id)
         form = AnnouncementForm(request.POST, instance=instance)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Announcement updated.'))
+            messages.success(request, "Announcement updated.")
             _clear_section_cache('announcements')
         else:
-            messages.error(request, _('Error updating announcement.'))
+            messages.error(request, "Error updating announcement.")
     elif model_type == 'job':
         instance = get_object_or_404(JobNotification, id=obj_id)
         form = JobNotificationForm(request.POST, instance=instance)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Job updated.'))
+            messages.success(request, "Job updated.")
             _clear_section_cache('jobs')
         else:
-            messages.error(request, _('Error updating job.'))
+            messages.error(request, "Error updating job.")
     elif model_type == 'scheme':
         instance = get_object_or_404(GovernmentScheme, id=obj_id)
         form = GovernmentSchemeForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Scheme updated.'))
+            messages.success(request, "Scheme updated.")
             _clear_section_cache('schemes')
         else:
-            messages.error(request, _('Error updating scheme.'))
+            messages.error(request, "Error updating scheme.")
     elif model_type == 'appointment':
         instance = get_object_or_404(Appointment, id=obj_id)
         form = AppointmentFormDashboard(request.POST, instance=instance)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Appointment updated.'))
+            messages.success(request, "Appointment updated.")
             _clear_section_cache('appointments')
         else:
-            messages.error(request, _('Error updating appointment.'))
+            messages.error(request, "Error updating appointment.")
     elif model_type == 'contact':
         instance = get_object_or_404(Contact, id=obj_id)
         form = ContactFormDashboard(request.POST, instance=instance)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Contact updated.'))
+            messages.success(request, "Contact updated.")
             _clear_section_cache('contacts')
         else:
-            messages.error(request, _('Error updating contact.'))
+            messages.error(request, "Error updating contact.")
     elif model_type == 'form':
         instance = get_object_or_404(DownloadForm, id=obj_id)
         form = DownloadFormForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Form updated.'))
+            messages.success(request, "Form updated.")
             _clear_section_cache('forms')
         else:
-            messages.error(request, _('Error updating form.'))
+            messages.error(request, "Error updating form.")
     elif model_type == 'servicecharge':
         instance = get_object_or_404(ServiceCharge, id=obj_id)
         form = ServiceChargeForm(request.POST, instance=instance)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Service charge updated.'))
+            messages.success(request, "Service charge updated.")
             _clear_section_cache('servicecharges')
         else:
-            messages.error(request, _('Error updating service charge.'))
+            messages.error(request, "Error updating service charge.")
     elif model_type == 'businessinfo':
         if not obj_id:
             instance = BusinessInfo.objects.first()
@@ -548,60 +532,60 @@ def _handle_edit(model_type, obj_id, request):
         form = BusinessInfoForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             form.save()
-            messages.success(request, _('Business info updated.'))
+            messages.success(request, "Business info updated.")
             cache.delete('business_info')
             _clear_all_section_caches()
         else:
-            messages.error(request, _('Error updating business info.'))
+            messages.error(request, "Error updating business info.")
 
 
 def _handle_delete(model_type, obj_id, request):
     if model_type == 'service':
         get_object_or_404(Service, id=obj_id).delete()
-        messages.success(request, _('Service deleted.'))
+        messages.success(request, "Service deleted.")
         _clear_section_cache('services')
     elif model_type == 'announcement':
         get_object_or_404(Announcement, id=obj_id).delete()
-        messages.success(request, _('Announcement deleted.'))
+        messages.success(request, "Announcement deleted.")
         _clear_section_cache('announcements')
     elif model_type == 'teammember':
         get_object_or_404(TeamMember, id=obj_id).delete()
-        messages.success(request, _('Team member deleted.'))
+        messages.success(request, "Team member deleted.")
         _clear_section_cache('teammembers')
     elif model_type == 'requireddoc':
         get_object_or_404(RequiredDocument, id=obj_id).delete()
-        messages.success(request, _('Required document deleted.'))
+        messages.success(request, "Required document deleted.")
         _clear_section_cache('requireddocs')
     elif model_type == 'job':
         get_object_or_404(JobNotification, id=obj_id).delete()
-        messages.success(request, _('Job deleted.'))
+        messages.success(request, "Job deleted.")
         _clear_section_cache('jobs')
     elif model_type == 'scheme':
         get_object_or_404(GovernmentScheme, id=obj_id).delete()
-        messages.success(request, _('Scheme deleted.'))
+        messages.success(request, "Scheme deleted.")
         _clear_section_cache('schemes')
     elif model_type == 'appointment':
         get_object_or_404(Appointment, id=obj_id).delete()
-        messages.success(request, _('Appointment deleted.'))
+        messages.success(request, "Appointment deleted.")
         _clear_section_cache('appointments')
     elif model_type == 'contact':
         get_object_or_404(Contact, id=obj_id).delete()
-        messages.success(request, _('Contact deleted.'))
+        messages.success(request, "Contact deleted.")
         _clear_section_cache('contacts')
     elif model_type == 'form':
         get_object_or_404(DownloadForm, id=obj_id).delete()
-        messages.success(request, _('Form deleted.'))
+        messages.success(request, "Form deleted.")
         _clear_section_cache('forms')
     elif model_type == 'servicecharge':
         get_object_or_404(ServiceCharge, id=obj_id).delete()
-        messages.success(request, _('Service charge deleted.'))
+        messages.success(request, "Service charge deleted.")
         _clear_section_cache('servicecharges')
     elif model_type == 'gallery':
         get_object_or_404(Gallery, id=obj_id).delete()
-        messages.success(request, _('Gallery image deleted.'))
+        messages.success(request, "Gallery image deleted.")
         _clear_section_cache('gallery')
     else:
-        messages.error(request, _('Unknown model type for delete.'))
+        messages.error(request, "Unknown model type for delete.")
 
 
 def _handle_payment_settings(request):
@@ -610,14 +594,14 @@ def _handle_payment_settings(request):
     if form.is_valid():
         payment_settings = form.save(commit=False)
         payment_settings.save()
-        messages.success(request, _('Payment settings updated.'))
+        messages.success(request, "Payment settings updated.")
         cache.delete('payment_settings')
     else:
         logger.error(f"PaymentSettings form errors: {form.errors.as_json()}")
         for field, errors in form.errors.items():
             for error in errors:
                 messages.error(request, f"{field}: {error}")
-        messages.error(request, _('Please correct the errors below.'))
+        messages.error(request, "Please correct the errors below.")
 
     cache.delete(DASHBOARD_CACHE_KEY)
     _clear_all_section_caches()
@@ -630,7 +614,7 @@ def _handle_user_role_edit(request):
         user = get_object_or_404(User, id=user_id)
         user.role = new_role
         user.save()
-        messages.success(request, _('User role updated.'))
+        messages.success(request, "User role updated.")
     cache.delete(DASHBOARD_CACHE_KEY)
     _clear_section_cache('users')
 
@@ -742,7 +726,7 @@ def dashboard_section_data(request, section):
         elif section == 'users' and request.user.role == 'superadmin':
             data = {'users': list(User.objects.values('id', 'username', 'email', 'role', 'is_staff'))}
         else:
-            data = {'error': _('Invalid section.')}
+            data = {'error': 'Invalid section.'}
         cache.set(cache_key, data, SECTION_CACHE_TTL)
     return JsonResponse(data)
 
@@ -849,7 +833,7 @@ def contact(request):
         if form.is_valid():
             contact = form.save()
             send_admin_notification(
-                subject=f'New Contact Message from {contact.name}',
+                subject=f"New Contact Message from {contact.name}",
                 message=(
                     f'Name: {contact.name}\n'
                     f'Email: {contact.email}\n'
@@ -857,7 +841,7 @@ def contact(request):
                     f'Message:\n{contact.message}'
                 )
             )
-            messages.success(request, _('Your message has been sent successfully.'))
+            messages.success(request, "Your message has been sent successfully.")
             return redirect('contact')
     else:
         form = ContactForm()
@@ -874,7 +858,7 @@ def appointment(request):
         if form.is_valid():
             appointment = form.save()
             send_admin_notification(
-                subject=f'New Appointment from {appointment.full_name}',
+                subject=f"New Appointment from {appointment.full_name}",
                 message=(
                     f'Name: {appointment.full_name}\n'
                     f'Phone: {appointment.phone}\n'
@@ -884,10 +868,10 @@ def appointment(request):
                     f'Message: {appointment.message}'
                 )
             )
-            messages.success(request, _('Appointment booked successfully.'))
+            messages.success(request, "Appointment booked successfully.")
             return redirect('appointment')
         else:
-            messages.error(request, _('Please correct the errors below.'))
+            messages.error(request, "Please correct the errors below.")
     else:
         form = AppointmentForm()
     return render(request, 'appointment.html', {
@@ -924,7 +908,6 @@ def documents(request):
 
 
 def downloads(request):
-    # Fix: Add order_by to avoid UnorderedObjectListWarning
     forms_qs = DownloadForm.objects.all().order_by('-uploaded_at').only('id', 'title', 'category', 'pdf')
     paginator = Paginator(forms_qs, 20)
     page = request.GET.get('page')
@@ -996,9 +979,9 @@ def submit_review(request):
             review = form.save(commit=False)
             review.approved = False
             review.save()
-            messages.success(request, _('Thank you! Your review will appear after admin approval.'))
+            messages.success(request, "Thank you! Your review will appear after admin approval.")
         else:
-            messages.error(request, _('Please correct the errors in the review form.'))
+            messages.error(request, "Please correct the errors in the review form.")
     return redirect('reviews')
 
 
@@ -1076,7 +1059,6 @@ def jobs(request):
                 job['last_date'] = job['last_date'].date()
 
     # ----- 5. Sort by last_date descending (newest first) -----
-    # Use datetime.min.date() as fallback for None values
     combined.sort(
         key=lambda x: x.get('last_date') or datetime.min.date(),
         reverse=True
@@ -1099,7 +1081,7 @@ def jobs(request):
 
 
 # =============================================================================
-# APPLICATION & DOCUMENT VIEWS (User) – updated for mandatory payment
+# APPLICATION & DOCUMENT VIEWS (User) - updated for mandatory payment
 # =============================================================================
 
 @login_required
@@ -1113,7 +1095,7 @@ def apply_service(request, service_id):
         status__in=['pending', 'review']
     ).exists()
     if existing:
-        messages.error(request, _('You already have a pending application for this service.'))
+        messages.error(request, "You already have a pending application for this service.")
         return redirect('my_applications')
 
     required_docs = RequiredDocument.objects.filter(service=service).only('id', 'document_name')
@@ -1163,7 +1145,7 @@ def apply_service(request, service_id):
                             os.unlink(temp['temp_path'])
                         except OSError:
                             pass
-                    messages.error(request, _('Error uploading files. Please try again.'))
+                    messages.error(request, "Error uploading files. Please try again.")
                     return render(request, 'apply_service.html', {
                         'service': service,
                         'required_docs': required_docs,
@@ -1174,7 +1156,7 @@ def apply_service(request, service_id):
                         'payment_required': service.payment_required,
                     })
             else:
-                # Non-payment services – create immediately
+                # Non-payment services - create immediately
                 application = form.save(commit=False)
                 application.user = request.user
                 application.service = service
@@ -1191,7 +1173,7 @@ def apply_service(request, service_id):
                         )
 
                 send_admin_notification(
-                    subject=f'New Application for {service.name} from {application.full_name}',
+                    subject=f"New Application for {service.name} from {application.full_name}",
                     message=(
                         f'Name: {application.full_name}\n'
                         f'Phone: {application.phone}\n'
@@ -1202,7 +1184,7 @@ def apply_service(request, service_id):
                     )
                 )
 
-                messages.success(request, _('Your application has been submitted successfully.'))
+                messages.success(request, "Your application has been submitted successfully.")
                 return render(request, 'apply_service.html', {
                     'service': service,
                     'required_docs': required_docs,
@@ -1213,7 +1195,7 @@ def apply_service(request, service_id):
                     'payment_settings': get_payment_settings(),
                 })
         else:
-            messages.error(request, _('Please correct the errors below.'))
+            messages.error(request, "Please correct the errors below.")
     else:
         form = ApplicationForm(initial=initial_data)
         initial_docs = [{'document_name': doc.document_name} for doc in required_docs]
@@ -1275,7 +1257,7 @@ def payment_checkout(request, service_id):
     service = get_object_or_404(Service, id=service_id, active=True)
     pending_data = request.session.get('pending_application', None)
     if not pending_data or pending_data.get('service_id') != service.id:
-        messages.error(request, _('No pending application found.'))
+        messages.error(request, "No pending application found.")
         return redirect('apply_service', service_id=service.id)
 
     return render(request, 'payment_checkout.html', {
@@ -1303,7 +1285,7 @@ def _create_application_from_session_data(pending_data, request):
         status__in=['pending', 'review']
     ).first()
     if existing:
-        raise Exception(_("You already have a pending application for this service."))
+        raise Exception("You already have a pending application for this service.")
 
     payment_method = pending_data.get('payment_method', 'upi')
     payment_app = pending_data.get('payment_app', '')
@@ -1349,7 +1331,7 @@ def _create_application_from_session_data(pending_data, request):
             raise
 
     send_admin_notification(
-        subject=f'New Application for {service.name} from {application.full_name} (Paid)',
+        subject=f"New Application for {service.name} from {application.full_name} (Paid)",
         message=(
             f'Name: {application.full_name}\n'
             f'Phone: {application.phone}\n'
@@ -1367,12 +1349,12 @@ def _create_application_from_session_data(pending_data, request):
 def create_application_from_session(request):
     pending_data = request.session.pop('pending_application', None)
     if not pending_data:
-        messages.error(request, _('No pending application found.'))
+        messages.error(request, "No pending application found.")
         return redirect('services')
 
     try:
         application = _create_application_from_session_data(pending_data, request)
-        messages.success(request, _('Your application has been submitted and payment confirmed.'))
+        messages.success(request, "Your application has been submitted and payment confirmed.")
         return redirect('application_detail', app_id=application.id)
     except Exception as e:
         logger.error(f"Application creation failed: {e}")
@@ -1382,7 +1364,7 @@ def create_application_from_session(request):
                 os.unlink(temp['temp_path'])
             except OSError:
                 pass
-        messages.error(request, str(e) or _('Failed to create application. Please contact support.'))
+        messages.error(request, str(e) or "Failed to create application. Please contact support.")
         return redirect('services')
 
 
@@ -1434,16 +1416,16 @@ def application_admin_detail(request, app_id):
             if new_status in dict(Application.STATUS_CHOICES):
                 application.status = new_status
                 application.save()
-                messages.success(request, _('Status updated successfully.'))
+                messages.success(request, "Status updated successfully.")
             else:
-                messages.error(request, _('Invalid status.'))
+                messages.error(request, "Invalid status.")
             return redirect('application_admin_detail', app_id=app_id)
 
         elif action == 'delete_document':
             doc_id = request.POST.get('doc_id')
             doc = get_object_or_404(DocumentUpload, id=doc_id, application=application)
             doc.delete()
-            messages.success(request, _('Document deleted.'))
+            messages.success(request, "Document deleted.")
             return redirect('application_admin_detail', app_id=app_id)
 
         elif action == 'add_document':
@@ -1456,9 +1438,9 @@ def application_admin_detail(request, app_id):
                     file=file,
                     is_mandatory=False
                 )
-                messages.success(request, _('Document uploaded.'))
+                messages.success(request, "Document uploaded.")
             else:
-                messages.error(request, _('Please provide both name and file.'))
+                messages.error(request, "Please provide both name and file.")
             return redirect('application_admin_detail', app_id=app_id)
 
         elif action == 'verify_document':
@@ -1466,7 +1448,7 @@ def application_admin_detail(request, app_id):
             doc = get_object_or_404(DocumentUpload, id=doc_id, application=application)
             doc.verified = not doc.verified
             doc.save()
-            messages.success(request, _('Document verification toggled.'))
+            messages.success(request, "Document verification toggled.")
             return redirect('application_admin_detail', app_id=app_id)
 
         elif action == 'mark_payment_paid':
@@ -1483,9 +1465,9 @@ def application_admin_detail(request, app_id):
                     amount=charge.charge if charge else 0,
                 )
                 send_payment_confirmation(application)
-                messages.success(request, _('Payment marked as paid manually.'))
+                messages.success(request, "Payment marked as paid manually.")
             else:
-                messages.warning(request, _('Payment already paid.'))
+                messages.warning(request, "Payment already paid.")
             return redirect('application_admin_detail', app_id=app_id)
 
     payment_settings = get_payment_settings()
@@ -1517,7 +1499,7 @@ def split_pdf(request, pk):
             return render(request, 'split_pdf.html', {
                 'document': document,
                 'app': app,
-                'error': _('Please enter page numbers.'),
+                'error': "Please enter page numbers.",
             })
 
         try:
@@ -1565,7 +1547,7 @@ def split_pdf(request, pk):
             return render(request, 'split_pdf.html', {
                 'document': document,
                 'app': app,
-                'error': _('Invalid page numbers.'),
+                'error': "Invalid page numbers.",
             })
 
     return render(request, 'split_pdf.html', {
@@ -1576,7 +1558,7 @@ def split_pdf(request, pk):
 
 
 # =============================================================================
-# PAYMENT GATEWAY – UPI ONLY
+# PAYMENT GATEWAY - UPI ONLY
 # =============================================================================
 
 @login_required
@@ -1587,29 +1569,29 @@ def mark_payment_done(request, app_id):
         if method != 'upi':
             return True, None
         if not payment_app:
-            return False, _('Please select a payment app.')
+            return False, "Please select a payment app."
         if not utr:
-            return False, _('UTR number is required for UPI payments.')
-        # Validate UTR format: 12–16 alphanumeric characters
+            return False, "UTR number is required for UPI payments."
+        # Validate UTR format: 12-16 alphanumeric characters
         if not re.match(r'^[A-Za-z0-9]{12,16}$', utr):
-            return False, _('Invalid UTR format. It must be 12–16 alphanumeric characters.')
+            return False, "Invalid UTR format. It must be 12-16 alphanumeric characters."
         return True, None
 
     # Check if this is a pending application (app_id == 0)
     if app_id == 0:
         pending_data = request.session.get('pending_application', None)
         if not pending_data:
-            messages.error(request, _('No pending application found.'))
+            messages.error(request, "No pending application found.")
             return redirect('services')
 
         service = get_object_or_404(Service, id=pending_data['service_id'])
         payment_settings = get_payment_settings()
         method = request.POST.get('payment_method', 'upi')
         if method == 'upi' and not payment_settings.upi_enabled:
-            messages.error(request, _('UPI payments are not enabled.'))
+            messages.error(request, "UPI payments are not enabled.")
             return redirect('payment_checkout', service_id=service.id)
         if method == 'cash' and not payment_settings.cash_enabled:
-            messages.error(request, _('Cash payments are not enabled.'))
+            messages.error(request, "Cash payments are not enabled.")
             return redirect('payment_checkout', service_id=service.id)
 
         utr = request.POST.get('utr_number', '').strip()
@@ -1631,32 +1613,32 @@ def mark_payment_done(request, app_id):
         except Exception as e:
             logger.error(f"Application creation failed: {e}")
             request.session.pop('pending_application', None)
-            messages.error(request, str(e) or _('Failed to create application.'))
+            messages.error(request, str(e) or "Failed to create application.")
             return redirect('services')
 
         request.session.pop('pending_application', None)
-        messages.success(request, _('Your application has been submitted and payment confirmed.'))
+        messages.success(request, "Your application has been submitted and payment confirmed.")
         return redirect('application_detail', app_id=application.id)
 
     # --- Existing application (app_id > 0) ---
     application = get_object_or_404(Application, id=app_id, user=request.user)
 
     if application.payment_status == 'paid':
-        messages.warning(request, _('Payment already processed.'))
+        messages.warning(request, "Payment already processed.")
         return redirect('application_detail', app_id=app_id)
 
     payment_settings = get_payment_settings()
     method = request.POST.get('payment_method', 'upi')
     if method == 'upi' and not payment_settings.upi_enabled:
-        messages.error(request, _('UPI payments are not enabled.'))
+        messages.error(request, "UPI payments are not enabled.")
         return redirect('application_detail', app_id=app_id)
     if method == 'cash' and not payment_settings.cash_enabled:
-        messages.error(request, _('Cash payments are not enabled.'))
+        messages.error(request, "Cash payments are not enabled.")
         return redirect('application_detail', app_id=app_id)
 
     time_limit = timezone.now() - timedelta(hours=24)
     if application.created_at < time_limit:
-        messages.error(request, _('Payment window expired. Please contact admin.'))
+        messages.error(request, "Payment window expired. Please contact admin.")
         return redirect('application_detail', app_id=app_id)
 
     utr = request.POST.get('utr_number', '').strip()
@@ -1683,12 +1665,12 @@ def mark_payment_done(request, app_id):
     )
 
     send_payment_confirmation(application)
-    messages.success(request, _('Payment confirmed. Your receipt is ready.'))
+    messages.success(request, "Payment confirmed. Your receipt is ready.")
     cache.delete('reports_data')
     return redirect('application_detail', app_id=app_id)
 
 
-# Register Unicode font (DejaVu Sans) – adjust path as needed
+# Register Unicode font (DejaVu Sans) - adjust path as needed
 FONT_PATH = os.path.join(settings.BASE_DIR, 'corematoshree', 'static', 'fonts', 'DejaVuSans.ttf')
 if os.path.exists(FONT_PATH):
     try:
@@ -1703,7 +1685,7 @@ else:
 def download_receipt(request, app_id):
     application = get_object_or_404(Application, id=app_id, user=request.user)
     if application.payment_status != 'paid':
-        messages.error(request, _('No payment record found.'))
+        messages.error(request, "No payment record found.")
         return redirect('application_detail', app_id=app_id)
 
     # ---- Data ----
@@ -1715,7 +1697,7 @@ def download_receipt(request, app_id):
     tax_amount = amount * tax_rate
     total_amount = amount + tax_amount
 
-    # ---- QR Code (disabled – verification endpoint does not exist) ----
+    # ---- QR Code (disabled - verification endpoint does not exist) ----
     qr_img = None
     # If you implement a verification view, you can uncomment the following:
     # try:
@@ -2048,7 +2030,7 @@ def reports_dashboard(request):
 
 
 # =============================================================================
-# STATIC PAGES – Terms & Privacy
+# STATIC PAGES - Terms & Privacy
 # =============================================================================
 
 def terms(request):
@@ -2063,4 +2045,3 @@ def privacy(request):
     return render(request, 'privacy.html', {
         'business': get_business(),
     })
-    

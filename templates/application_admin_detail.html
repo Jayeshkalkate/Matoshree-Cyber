@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% load i18n %}
 
-{% block title %}{% trans "Application Details" %}{% endblock %}
+
+{% block title %}Application Details{% endblock %}
 
 {% block extra_head %}
 <!-- ============================================================
@@ -786,7 +786,7 @@
      ================================================================ -->
 <section class="page-hero">
   <div class="container">
-    <h1>{% trans "Application Details" %}</h1>
+    <h1>Application Details</h1>
   </div>
 </section>
 
@@ -798,7 +798,7 @@
 
     <!-- Back link -->
     <a href="{% url 'admin_dashboard' %}#section-applications" class="back-link">
-      <i class="fas fa-arrow-left"></i> {% trans "Back to Applications" %}
+      <i class="fas fa-arrow-left"></i> Back to Applications
     </a>
 
     <div class="detail-card">
@@ -806,11 +806,11 @@
       <h5><i class="fas fa-concierge-bell"></i> {{ application.service.name }}</h5>
 
       <div class="info-row">
-        <span class="label">{% trans "User" %}:</span>
+        <span class="label">User:</span>
         <span class="value">{{ application.user.username }}</span>
       </div>
       <div class="info-row">
-        <span class="label">{% trans "Status" %}:</span>
+        <span class="label">Status:</span>
         <span class="value">
           <span class="status-badge {{ application.status }}">
             {{ application.get_status_display }}
@@ -818,41 +818,41 @@
         </span>
       </div>
       <div class="info-row">
-        <span class="label">{% trans "Submitted" %}:</span>
+        <span class="label">Submitted:</span>
         <span class="value">{{ application.created_at|date:"d M Y, H:i" }}</span>
       </div>
 
       <hr />
 
       <!-- Personal Details -->
-      <h5><i class="fas fa-user"></i> {% trans "Personal Details" %}</h5>
+      <h5><i class="fas fa-user"></i> Personal Details</h5>
       <div class="info-row">
-        <span class="label">{% trans "Name" %}:</span>
+        <span class="label">Name:</span>
         <span class="value">{{ application.full_name }}</span>
       </div>
       <div class="info-row">
-        <span class="label">{% trans "Phone" %}:</span>
+        <span class="label">Phone:</span>
         <span class="value">{{ application.phone }}</span>
       </div>
       <div class="info-row">
-        <span class="label">{% trans "Email" %}:</span>
+        <span class="label">Email:</span>
         <span class="value">{{ application.email }}</span>
       </div>
       <div class="info-row">
-        <span class="label">{% trans "Address" %}:</span>
+        <span class="label">Address:</span>
         <span class="value">{{ application.address|linebreaksbr }}</span>
       </div>
 
       <!-- Extra Data – Human‑readable -->
       {% if application.extra_data %}
       <div class="info-row">
-        <span class="label">{% trans "Extra Data" %}:</span>
+        <span class="label">Extra Data:</span>
         <div class="value">
           <ul class="extra-data-list">
             {% for key, value in application.extra_data.items %}
               <li><strong>{{ key }}:</strong> {{ value }}</li>
             {% empty %}
-              <li>{% trans "No extra details provided." %}</li>
+              <li>No extra details provided.</li>
             {% endfor %}
           </ul>
         </div>
@@ -862,12 +862,12 @@
       <hr />
 
       <!-- Status Update Form (Admin) -->
-      <h5><i class="fas fa-tasks"></i> {% trans "Update Status" %}</h5>
+      <h5><i class="fas fa-tasks"></i> Update Status</h5>
       <form method="post" class="status-form">
         {% csrf_token %}
         <input type="hidden" name="action" value="update_status">
         <div class="form-group">
-          <label for="statusSelect">{% trans "Change Status" %}</label>
+          <label for="statusSelect">Change Status</label>
           <select name="status" id="statusSelect" class="form-control">
             {% for value, label in application.STATUS_CHOICES %}
               <option value="{{ value }}" {% if application.status == value %}selected{% endif %}>
@@ -878,7 +878,7 @@
         </div>
         <div class="form-group" style="flex: 0 0 auto; margin-bottom: 0; display: flex; align-items: flex-end;">
           <button type="submit" class="btn-primary">
-            <i class="fas fa-save"></i> {% trans "Update Status" %}
+            <i class="fas fa-save"></i> Update Status
           </button>
         </div>
       </form>
@@ -886,7 +886,7 @@
       <hr />
 
       <!-- Uploaded Documents -->
-      <h5><i class="fas fa-file-alt"></i> {% trans "Uploaded Documents" %}</h5>
+      <h5><i class="fas fa-file-alt"></i> Uploaded Documents</h5>
       <ul class="doc-list">
         {% for doc in documents %}
         <li>
@@ -894,20 +894,20 @@
             <i class="fas fa-file-alt" style="color: var(--neon-cyan, #00f0ff); margin-right: 0.5rem"></i>
             {{ doc.document_name }}
             {% if doc.is_mandatory %}
-              <small style="color: var(--neon-orange);">({% trans "Mandatory" %})</small>
+              <small style="color: var(--neon-orange);">(Mandatory)</small>
             {% endif %}
           </span>
           <span class="doc-actions">
             <!-- View -->
             <a href="{{ doc.file.url }}" target="_blank" rel="noopener noreferrer" class="btn-view">
-              <i class="fas fa-eye"></i> {% trans "View" %}
+              <i class="fas fa-eye"></i> View
             </a>
             <!-- Download -->
             <a href="{{ doc.file.url }}" download class="btn-download">
-              <i class="fas fa-download"></i> {% trans "Download" %}
+              <i class="fas fa-download"></i> Download
             </a>
             <!-- Split PDF -->
-            <a href="{% url 'split_pdf' doc.id %}" class="btn-view" title="{% trans 'Split PDF into pages' %}">
+            <a href="{% url 'split_pdf' doc.id %}" class="btn-view" title="Split PDF into pages">
               <i class="fas fa-cut"></i>
             </a>
             <!-- Verification toggle -->
@@ -915,24 +915,24 @@
               {% csrf_token %}
               <input type="hidden" name="action" value="verify_document">
               <input type="hidden" name="doc_id" value="{{ doc.id }}">
-              <button type="submit" class="btn-verify {% if doc.verified %}verified{% endif %}" title="{% trans "Toggle verification" %}">
+              <button type="submit" class="btn-verify {% if doc.verified %}verified{% endif %}" title="Toggle verification">
                 <i class="fas {% if doc.verified %}fa-check-circle{% else %}fa-circle{% endif %}"></i>
-                {% if doc.verified %}{% trans "Verified" %}{% else %}{% trans "Unverified" %}{% endif %}
+                {% if doc.verified %}Verified{% else %}Unverified{% endif %}
               </button>
             </form>
             <!-- Delete document -->
-            <form method="post" onsubmit="return confirm('{% trans "Delete this document?" %}');" style="display:inline;">
+            <form method="post" onsubmit="return confirm('Delete this document?');" style="display:inline;">
               {% csrf_token %}
               <input type="hidden" name="action" value="delete_document">
               <input type="hidden" name="doc_id" value="{{ doc.id }}">
-              <button type="submit" class="btn-delete" aria-label="{% trans 'Delete document' %}">
+              <button type="submit" class="btn-delete" aria-label="Delete document">
                 <i class="fas fa-trash"></i>
               </button>
             </form>
           </span>
         </li>
         {% empty %}
-        <li class="no-docs">{% trans "No documents uploaded." %}</li>
+        <li class="no-docs">No documents uploaded.</li>
         {% endfor %}
       </ul>
     </div>
@@ -941,11 +941,11 @@
          PAYMENT SECTION – Enhanced with details and admin override
          ================================================================ -->
     <div class="payment-section">
-      <h4><i class="fas fa-credit-card"></i> {% trans "Payment" %}</h4>
+      <h4><i class="fas fa-credit-card"></i> Payment</h4>
 
       <!-- Status and basic info -->
       <p>
-        <strong>{% trans "Payment Status" %}:</strong>
+        <strong>Payment Status:</strong>
         <span class="badge-status {{ application.payment_status|default:'pending'|lower }}">
           {{ application.get_payment_status_display|default:"Pending" }}
         </span>
@@ -954,20 +954,20 @@
       {% if application.payment_status == 'pending' %}
         <!-- Admin override: Mark as paid -->
         <div style="margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 1rem;">
-          <form method="post" onsubmit="return confirm('{% trans "Are you sure you want to manually mark this payment as paid? This will generate a receipt." %}');">
+          <form method="post" onsubmit="return confirm('Are you sure you want to manually mark this payment as paid? This will generate a receipt.');">
             {% csrf_token %}
             <input type="hidden" name="action" value="mark_payment_paid">
             <button type="submit" class="admin-override-btn">
-              <i class="fas fa-check-double"></i> {% trans "Admin – Mark as Paid" %}
+              <i class="fas fa-check-double"></i> Admin – Mark as Paid
             </button>
           </form>
-          <p class="text-muted">{% trans "Use this only if the user has paid offline or if the payment needs manual confirmation." %}</p>
+          <p class="text-muted">Use this only if the user has paid offline or if the payment needs manual confirmation.</p>
         </div>
 
         <!-- UPI Payment Option for admin -->
         {% if payment_settings and payment_settings.qr_code %}
         <div class="upi-payment">
-          <h5>{% trans "Pay via UPI (Manual Confirmation)" %}</h5>
+          <h5>Pay via UPI (Manual Confirmation)</h5>
           <img src="{{ payment_settings.qr_code.url }}" alt="UPI QR Code">
           <p><strong>UPI ID:</strong> {{ payment_settings.upi_id }}</p>
           <p><strong>Mobile:</strong> {{ payment_settings.upi_mobile }}</p>
@@ -975,7 +975,7 @@
             {% csrf_token %}
             <input type="hidden" name="payment_method" value="upi">
             <div style="margin-top: 0.8rem;">
-              <label for="payment_app">{% trans "Payment App" %} *</label>
+              <label for="payment_app">Payment App *</label>
               <select name="payment_app" id="payment_app" required style="width:100%; padding:0.5rem; background:var(--bg-input); color:var(--text-bright); border:1px solid var(--border-soft); border-radius:8px;">
                 <option value="gpay">Google Pay</option>
                 <option value="phonepe">PhonePe</option>
@@ -985,12 +985,12 @@
               </select>
             </div>
             <div style="margin-top: 0.8rem;">
-              <label for="utr_number">{% trans "UTR Number" %}</label>
-              <input type="text" name="utr_number" id="utr_number" placeholder="{% trans 'e.g. 123456789012' %}" style="width:100%; padding:0.5rem; background:var(--bg-input); color:var(--text-bright); border:1px solid var(--border-soft); border-radius:8px;">
-              <small style="color:var(--text-dim);">{% trans "Optional, but helps admin verify your payment." %}</small>
+              <label for="utr_number">UTR Number</label>
+              <input type="text" name="utr_number" id="utr_number" placeholder="e.g. 123456789012" style="width:100%; padding:0.5rem; background:var(--bg-input); color:var(--text-bright); border:1px solid var(--border-soft); border-radius:8px;">
+              <small style="color:var(--text-dim);">Optional, but helps admin verify your payment.</small>
             </div>
             <button type="submit" class="btn-success" style="margin-top:0.8rem;">
-              <i class="fas fa-check-circle"></i> {% trans "I have paid" %}
+              <i class="fas fa-check-circle"></i> I have paid
             </button>
           </form>
         </div>
@@ -999,14 +999,14 @@
       {% elif application.payment_status == 'paid' %}
         <!-- Payment completed -->
         <div class="payment-done">
-          <p><i class="fas fa-check-circle" style="color: var(--neon-green);"></i> {% trans "Payment completed." %}</p>
-          <p><strong>{% trans "Receipt No." %}:</strong> {{ application.receipt_number|default:"—" }}</p>
-          <p><strong>{% trans "Payment Date" %}:</strong> {{ application.payment_date|date:"d M Y, H:i"|default:"—" }}</p>
-          <p><strong>{% trans "Payment Method" %}:</strong> {{ application.get_payment_method_display|default:"—" }}</p>
-          <p><strong>{% trans "UTR Number" %}:</strong> {{ application.utr_number|default:"N/A" }}</p>
-          <p><strong>{% trans "Payment App" %}:</strong> {{ application.get_payment_app_display|default:"N/A" }}</p>
+          <p><i class="fas fa-check-circle" style="color: var(--neon-green);"></i> Payment completed.</p>
+          <p><strong>Receipt No.:</strong> {{ application.receipt_number|default:"—" }}</p>
+          <p><strong>Payment Date:</strong> {{ application.payment_date|date:"d M Y, H:i"|default:"—" }}</p>
+          <p><strong>Payment Method:</strong> {{ application.get_payment_method_display|default:"—" }}</p>
+          <p><strong>UTR Number:</strong> {{ application.utr_number|default:"N/A" }}</p>
+          <p><strong>Payment App:</strong> {{ application.get_payment_app_display|default:"N/A" }}</p>
           <a href="{% url 'download_receipt' application.id %}" class="btn-primary" style="max-width: 200px; margin: 0 auto;">
-            <i class="fas fa-file-pdf"></i> {% trans "Download Receipt" %}
+            <i class="fas fa-file-pdf"></i> Download Receipt
           </a>
         </div>
       {% endif %}

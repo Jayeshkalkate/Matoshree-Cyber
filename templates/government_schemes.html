@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% load i18n %}
+
 {% load static %}
 
-{% block title %}{% trans "Government Schemes" %}{% endblock %}
+{% block title %}Government Schemes{% endblock %}
 
 {% block extra_head %}
 <!-- ============================================================
@@ -691,14 +691,14 @@
      ================================================================ -->
 <section class="page-hero">
   <div class="container">
-    <nav class="breadcrumb" aria-label="{% trans 'Breadcrumb' %}">
-      <a href="{% url 'home' %}"><i class="fas fa-home" aria-hidden="true"></i> {% trans "Home" %}</a>
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="{% url 'home' %}"><i class="fas fa-home" aria-hidden="true"></i> Home</a>
       <span><i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5;" aria-hidden="true"></i></span>
-      <span class="current" aria-current="page">{% trans "Government Schemes" %}</span>
+      <span class="current" aria-current="page">Government Schemes</span>
     </nav>
-    <h1>{% trans "Government" %} <span>{% trans "Schemes" %}</span></h1>
+    <h1>Government <span>Schemes</span></h1>
     <p>
-      {% trans "Explore the latest government schemes and initiatives designed to benefit citizens, businesses, and communities." %}
+      Explore the latest government schemes and initiatives designed to benefit citizens, businesses, and communities.
     </p>
     <div class="glow-line"></div>
   </div>
@@ -725,14 +725,14 @@
         <div class="scheme-meta">
           <div class="meta-item eligibility">
             <i class="fas fa-check-circle" aria-hidden="true"></i>
-            <span class="label">{% trans "Eligibility:" %}</span>
-            <span class="value">{{ scheme.eligibility|default:_("Not specified") }}</span>
+            <span class="label">Eligibility:</span>
+            <span class="value">{{ scheme.eligibility|default:"Not specified" }}</span>
           </div>
           <div class="meta-item">
             <i class="far fa-calendar-alt" aria-hidden="true"></i>
-            <span class="label">{% trans "Last Date:" %}</span>
+            <span class="label">Last Date:</span>
             <span class="value">
-              {% if scheme.last_date %}{{ scheme.last_date|date:"d M Y" }}{% else %}{% trans "Ongoing" %}{% endif %}
+              {% if scheme.last_date %}{{ scheme.last_date|date:"d M Y" }}{% else %}Ongoing{% endif %}
             </span>
           </div>
         </div>
@@ -740,21 +740,21 @@
       {% empty %}
       <div class="no-schemes">
         <i class="fas fa-hand-holding-heart" aria-hidden="true"></i>
-        <p>{% trans "No government schemes available at the moment." %}</p>
+        <p>No government schemes available at the moment.</p>
       </div>
       {% endfor %}
     </div>
 
     <!-- Pagination (corrected) -->
     {% if schemes.has_other_pages %}
-    <div class="pagination-wrap" role="navigation" aria-label="{% trans 'Schemes pagination' %}">
+    <div class="pagination-wrap" role="navigation" aria-label="Schemes pagination">
       {% if schemes.has_previous %}
-        <a href="?page={{ schemes.previous_page_number }}" class="page-link" aria-label="{% trans 'Previous page' %}">
-          <i class="fas fa-chevron-left" aria-hidden="true"></i> {% trans "Prev" %}
+        <a href="?page={{ schemes.previous_page_number }}" class="page-link" aria-label="Previous page">
+          <i class="fas fa-chevron-left" aria-hidden="true"></i> Prev
         </a>
       {% else %}
         <span class="page-link disabled" aria-disabled="true">
-          <i class="fas fa-chevron-left" aria-hidden="true"></i> {% trans "Prev" %}
+          <i class="fas fa-chevron-left" aria-hidden="true"></i> Prev
         </span>
       {% endif %}
 
@@ -762,17 +762,17 @@
         {% if schemes.number == num %}
           <span class="page-link active" aria-current="page">{{ num }}</span>
         {% elif num > schemes.number|add:'-3' and num < schemes.number|add:'3' %}
-          <a href="?page={{ num }}" class="page-link" aria-label="{% trans 'Page' %} {{ num }}">{{ num }}</a>
+          <a href="?page={{ num }}" class="page-link" aria-label="Page {{ num }}">{{ num }}</a>
         {% endif %}
       {% endfor %}
 
       {% if schemes.has_next %}
-        <a href="?page={{ schemes.next_page_number }}" class="page-link" aria-label="{% trans 'Next page' %}">
-          {% trans "Next" %} <i class="fas fa-chevron-right" aria-hidden="true"></i>
+        <a href="?page={{ schemes.next_page_number }}" class="page-link" aria-label="Next page">
+          Next <i class="fas fa-chevron-right" aria-hidden="true"></i>
         </a>
       {% else %}
         <span class="page-link disabled" aria-disabled="true">
-          {% trans "Next" %} <i class="fas fa-chevron-right" aria-hidden="true"></i>
+          Next <i class="fas fa-chevron-right" aria-hidden="true"></i>
         </span>
       {% endif %}
     </div>
@@ -785,17 +785,17 @@
      ================================================================ -->
 <section class="cta-banner" id="contact">
   <div class="container">
-    <h2>{% trans "Need Help Applying for" %} <span>{% trans "Schemes?" %}</span></h2>
+    <h2>Need Help Applying for <span>Schemes?</span></h2>
     <p>
-      {% trans "We assist with scheme applications, document verification, and form filling. Let us guide you through the process." %}
+      We assist with scheme applications, document verification, and form filling. Let us guide you through the process.
     </p>
     <div class="cta-buttons">
-      <a href="{% url 'contact' %}" class="btn-primary" aria-label="{% trans 'Contact us' %}">
-        <i class="fas fa-phone" aria-hidden="true"></i> {% trans "Contact Us" %}
+      <a href="{% url 'contact' %}" class="btn-primary" aria-label="Contact us">
+        <i class="fas fa-phone" aria-hidden="true"></i> Contact Us
       </a>
       {% with whatsapp_number=business.whatsapp|default:"919876543210" %}
-      <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20need%20help%20with%20government%20scheme%20applications." target="_blank" rel="noopener noreferrer" class="btn-whatsapp" aria-label="{% trans 'Chat on WhatsApp' %}">
-        <i class="fab fa-whatsapp" aria-hidden="true"></i> {% trans "Chat on WhatsApp" %}
+      <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20need%20help%20with%20government%20scheme%20applications." target="_blank" rel="noopener noreferrer" class="btn-whatsapp" aria-label="Chat on WhatsApp">
+        <i class="fab fa-whatsapp" aria-hidden="true"></i> Chat on WhatsApp
       </a>
       {% endwith %}
     </div>

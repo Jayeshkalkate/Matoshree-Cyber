@@ -55,7 +55,6 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -102,17 +101,11 @@ LOGIN_URL = 'login'
 LANGUAGE_CODE = 'en-us'
 LANGUAGES = [
     ('en', ('English')),
-    ('hi', ('Hindi')),
-    ('mr', ('Marathi')),
 ]
 
 TIME_ZONE = 'Asia/Kolkata'
 USE_I18N = True
 USE_TZ = True
-
-LOCALE_PATHS = [
-    BASE_DIR / 'locale',
-]
 
 EXTERNAL_JOBS_RSS_URL = 'https://majhinaukri.in/feed/'   # confirm the actual feed URL
 

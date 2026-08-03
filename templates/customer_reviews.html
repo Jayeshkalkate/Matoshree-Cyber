@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% load i18n %}
+
 {% load static %}
 
-{% block title %}{% trans "Customer Reviews" %}{% endblock %}
+{% block title %}Customer Reviews{% endblock %}
 
 {% block extra_head %}
 <!-- ============================================================
@@ -1222,16 +1222,16 @@
 <section class="page-hero">
   <div class="container">
     <div class="breadcrumb">
-      <a href="{% url 'home' %}"><i class="fas fa-home"></i> {% trans "Home" %}</a>
+      <a href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a>
       <span><i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5;"></i></span>
-      <span class="current">{% trans "Customer Reviews" %}</span>
+      <span class="current">Customer Reviews</span>
     </div>
     <h1>
-      <i class="fas fa-star"></i> {% trans "Customer" %}
-      <span>{% trans "Reviews" %}</span>
+      <i class="fas fa-star"></i> Customer
+      <span>Reviews</span>
     </h1>
     <p>
-      {% trans "Real feedback from customers who have used our services. See why they trust us." %}
+      Real feedback from customers who have used our services. See why they trust us.
     </p>
     <div class="glow-line"></div>
   </div>
@@ -1299,13 +1299,13 @@
       </span>
       <div class="sort-options">
         <a href="?sort=newest{% if request.GET.page %}&page={{ request.GET.page }}{% endif %}" class="sort-btn {% if request.GET.sort == 'newest' or not request.GET.sort %}active{% endif %}" data-sort="newest">
-          <i class="far fa-clock"></i> {% trans "Newest" %}
+          <i class="far fa-clock"></i> Newest
         </a>
         <a href="?sort=highest{% if request.GET.page %}&page={{ request.GET.page }}{% endif %}" class="sort-btn {% if request.GET.sort == 'highest' %}active{% endif %}" data-sort="highest">
-          <i class="fas fa-sort-amount-down"></i> {% trans "Highest" %}
+          <i class="fas fa-sort-amount-down"></i> Highest
         </a>
         <a href="?sort=lowest{% if request.GET.page %}&page={{ request.GET.page }}{% endif %}" class="sort-btn {% if request.GET.sort == 'lowest' %}active{% endif %}" data-sort="lowest">
-          <i class="fas fa-sort-amount-up"></i> {% trans "Lowest" %}
+          <i class="fas fa-sort-amount-up"></i> Lowest
         </a>
       </div>
     </div>
@@ -1329,7 +1329,7 @@
               <span class="initials">{{ review.customer_name|slice:":2"|upper }}</span>
               {{ review.customer_name }}
               {% if review.approved %}
-                <span class="verified-badge"><i class="fas fa-check-circle"></i> {% trans "Verified" %}</span>
+                <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>
               {% endif %}
             </span>
             <span class="review-date"><i class="far fa-calendar-alt"></i> {{ review.created_at|date:"d M Y" }}</span>
@@ -1338,7 +1338,7 @@
       {% empty %}
         <div style="grid-column: 1/-1; text-align: center; padding: 3rem 0; color: var(--text-muted, #94a3b8);">
           <i class="fas fa-star" style="font-size: 3rem; display: block; margin-bottom: 0.5rem; opacity: 0.3;"></i>
-          {% trans "No customer reviews yet. Be the first to share your experience!" %}
+          No customer reviews yet. Be the first to share your experience!
         </div>
       {% endfor %}
     </div>
@@ -1348,11 +1348,11 @@
       <div class="pagination-wrap">
         {% if reviews_page.has_previous %}
           <a href="?page={{ reviews_page.previous_page_number }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" class="page-link">
-            <i class="fas fa-chevron-left"></i> {% trans "Prev" %}
+            <i class="fas fa-chevron-left"></i> Prev
           </a>
         {% else %}
           <span class="page-link disabled">
-            <i class="fas fa-chevron-left"></i> {% trans "Prev" %}
+            <i class="fas fa-chevron-left"></i> Prev
           </span>
         {% endif %}
 
@@ -1366,11 +1366,11 @@
 
         {% if reviews_page.has_next %}
           <a href="?page={{ reviews_page.next_page_number }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" class="page-link">
-            {% trans "Next" %} <i class="fas fa-chevron-right"></i>
+            Next <i class="fas fa-chevron-right"></i>
           </a>
         {% else %}
           <span class="page-link disabled">
-            {% trans "Next" %} <i class="fas fa-chevron-right"></i>
+            Next <i class="fas fa-chevron-right"></i>
           </span>
         {% endif %}
       </div>
@@ -1379,43 +1379,43 @@
     <!-- Submit Review Section -->
     <div class="submit-section">
       <h2>
-        <i class="fas fa-pen-fancy"></i> {% trans "Share Your Experience" %}
+        <i class="fas fa-pen-fancy"></i> Share Your Experience
       </h2>
       <p class="form-subhead">
-        {% trans "We value your feedback. Let us know how we did!" %}
+        We value your feedback. Let us know how we did!
       </p>
 
       <form class="review-form" id="reviewForm" action="{% url 'submit_review' %}" method="post" novalidate>
         {% csrf_token %}
         <div>
-          <label for="id_customer_name">{% trans "Full Name" %} <span class="required">*</span></label>
-          <input type="text" name="customer_name" id="id_customer_name" placeholder="{% trans 'Enter your full name' %}" required />
+          <label for="id_customer_name">Full Name <span class="required">*</span></label>
+          <input type="text" name="customer_name" id="id_customer_name" placeholder="Enter your full name" required />
         </div>
         <div>
-          <label for="id_email">{% trans "Email" %} <span class="required">*</span></label>
-          <input type="email" name="email" id="id_email" placeholder="{% trans 'Enter your email' %}" required />
+          <label for="id_email">Email <span class="required">*</span></label>
+          <input type="email" name="email" id="id_email" placeholder="Enter your email" required />
         </div>
 
         <div class="full-width">
-          <label>{% trans "Rating" %} <span class="required">*</span></label>
+          <label>Rating <span class="required">*</span></label>
           <!-- Star selection with radio fallback -->
-          <div class="star-select" id="starSelect" role="radiogroup" aria-label="{% trans 'Rating' %}">
+          <div class="star-select" id="starSelect" role="radiogroup" aria-label="Rating">
             {% for value in "12345"|make_list %}
               <input type="radio" name="rating" id="star_{{ value }}" value="{{ value }}" class="star-input" required />
               <label for="star_{{ value }}" class="star-label" role="radio" aria-checked="false" tabindex="0">★</label>
             {% endfor %}
-            <span class="star-rating-label" id="starLabel">{% trans "Select a rating" %}</span>
+            <span class="star-rating-label" id="starLabel">Select a rating</span>
           </div>
         </div>
 
         <div class="full-width">
-          <label for="id_review">{% trans "Your Review" %} <span class="required">*</span></label>
-          <textarea name="review" id="id_review" placeholder="{% trans 'Tell us about your experience...' %}" rows="4" required></textarea>
+          <label for="id_review">Your Review <span class="required">*</span></label>
+          <textarea name="review" id="id_review" placeholder="Tell us about your experience..." rows="4" required></textarea>
         </div>
 
         <div class="full-width">
           <button type="submit" class="btn-submit">
-            <i class="fas fa-paper-plane"></i> {% trans "Submit Review" %}
+            <i class="fas fa-paper-plane"></i> Submit Review
           </button>
         </div>
       </form>
@@ -1423,7 +1423,7 @@
 
     <!-- Footer Note -->
     <div class="footer-note">
-      <span><i class="fas fa-shield-alt"></i> {% trans "All reviews are from genuine customers." %}</span>
+      <span><i class="fas fa-shield-alt"></i> All reviews are from genuine customers.</span>
       <span class="badge"><i class="far fa-comments"></i> {{ reviews_page.paginator.count }} review{{ reviews_page.paginator.count|pluralize }}</span>
     </div>
   </div>
@@ -1434,15 +1434,15 @@
      ================================================================ -->
 <section class="cta-banner" id="contact">
   <div class="container">
-    <h2>{% trans "Ready to" %} <span>{% trans "Experience" %}</span> {% trans "Our Services?" %}</h2>
-    <p>{% trans "Visit us today or reach out to get started with any of our services." %}</p>
+    <h2>Ready to <span>Experience</span> Our Services?</h2>
+    <p>Visit us today or reach out to get started with any of our services.</p>
     <div class="cta-buttons">
       <a href="{% url 'contact' %}" class="btn-primary">
-        <i class="fas fa-phone"></i> {% trans "Contact Us" %}
+        <i class="fas fa-phone"></i> Contact Us
       </a>
       {% with whatsapp_number=business.whatsapp|default:"919876543210" %}
         <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20want%20to%20visit%20your%20cyber%20cafe." target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
-          <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
+          <i class="fab fa-whatsapp"></i> Chat on WhatsApp
         </a>
       {% endwith %}
     </div>
@@ -1458,14 +1458,14 @@
     // ---- Star rating: enhance radio inputs with dynamic label text ----
     var starRadios = document.querySelectorAll('.star-input');
     var starLabel = document.getElementById('starLabel');
-    var ratingLabels = ["", "{% trans "Terrible" %}", "{% trans "Poor" %}", "{% trans "Average" %}", "{% trans "Good" %}", "{% trans "Excellent" %}"];
+    var ratingLabels = ["", "Terrible", "Poor", "Average", "Good", "Excellent"];
 
     // Update label text when a radio is checked
     function updateStarLabel() {
       var checked = document.querySelector('.star-input:checked');
       if (checked) {
         var val = parseInt(checked.value);
-        starLabel.textContent = ratingLabels[val] || '{% trans "Select a rating" %}';
+        starLabel.textContent = ratingLabels[val] || 'Select a rating';
         // Update aria-checked for accessibility
         document.querySelectorAll('.star-label').forEach(function(label) {
           var forId = label.getAttribute('for');
@@ -1475,7 +1475,7 @@
           }
         });
       } else {
-        starLabel.textContent = '{% trans "Select a rating" %}';
+        starLabel.textContent = 'Select a rating';
       }
     }
 
@@ -1497,10 +1497,10 @@
       var comment = document.getElementById('id_review').value.trim();
 
       var errors = [];
-      if (!name) errors.push('{% trans "Name is required."|escapejs %}');
-      if (!email) errors.push('{% trans "Email is required."|escapejs %}');
-      if (!rating) errors.push('{% trans "Please select a rating."|escapejs %}');
-      if (!comment) errors.push('{% trans "Please write your review."|escapejs %}');
+      if (!name) errors.push('');
+      if (!email) errors.push('');
+      if (!rating) errors.push('');
+      if (!comment) errors.push('');
 
       if (errors.length > 0) {
         e.preventDefault();

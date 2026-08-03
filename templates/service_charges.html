@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% load i18n %}
+
 {% load static %}
 
-{% block title %}{% trans "Service Charges" %}{% endblock %}
+{% block title %}Service Charges{% endblock %}
 
-{% block meta_description %}{% trans "Transparent pricing for all our services – know the cost before you visit." %}{% endblock %}
+{% block meta_description %}Transparent pricing for all our services – know the cost before you visit.{% endblock %}
 
 {% block extra_head %}
 <style>
@@ -343,13 +343,13 @@
 <section class="page-hero">
   <div class="container">
     <div class="breadcrumb">
-      <a href="{% url 'home' %}">{% trans "Home" %}</a>
+      <a href="{% url 'home' %}">Home</a>
       <i class="fas fa-chevron-right" style="font-size: 0.6rem"></i>
-      <span class="current">{% trans "Service Charges" %}</span>
+      <span class="current">Service Charges</span>
     </div>
-    <h1>{% trans "Service" %} <span>{% trans "Charges" %}</span></h1>
+    <h1>Service <span>Charges</span></h1>
     <p>
-      {% trans "Transparent pricing for all our services. Know the cost before you come in." %}
+      Transparent pricing for all our services. Know the cost before you come in.
     </p>
   </div>
 </section>
@@ -360,17 +360,17 @@
 <section class="charges-section">
   <div class="container">
     <div class="section-header">
-      <h2>{% trans "Our" %} <span>{% trans "Price List" %}</span></h2>
+      <h2>Our <span>Price List</span></h2>
       <p>
-        {% trans "All charges are inclusive of service fees unless stated otherwise." %}
+        All charges are inclusive of service fees unless stated otherwise.
       </p>
     </div>
     <div class="table-wrapper">
       <table class="charges-table">
         <thead>
           <tr>
-            <th>{% trans "Service" %}</th>
-            <th>{% trans "Charge (₹)" %}</th>
+            <th>Service</th>
+            <th>Charge (₹)</th>
           </tr>
         </thead>
         <tbody>
@@ -387,7 +387,7 @@
           {% empty %}
           <tr>
             <td colspan="2" style="text-align: center; padding: 30px; color: var(--text-muted);">
-              {% trans "No service charges available." %}
+              No service charges available.
             </td>
           </tr>
           {% endfor %}
@@ -403,12 +403,12 @@
 <section class="charges-notes">
   <div class="container">
     <div class="note-box">
-      <h4><i class="fas fa-info-circle"></i> {% trans "Important Notes" %}</h4>
+      <h4><i class="fas fa-info-circle"></i> Important Notes</h4>
       <p>
-        <i class="fas fa-check-circle"></i> {% trans "Prices are subject to change without prior notice." %}<br />
-        <i class="fas fa-check-circle"></i> {% trans "GST (if applicable) will be added to the final bill." %}<br />
-        <i class="fas fa-check-circle"></i> {% trans "Discounts may be available for bulk orders or regular customers." %}<br />
-        <i class="fas fa-check-circle"></i> {% trans "For exact pricing, please contact our support team." %}
+        <i class="fas fa-check-circle"></i> Prices are subject to change without prior notice.<br />
+        <i class="fas fa-check-circle"></i> GST (if applicable) will be added to the final bill.<br />
+        <i class="fas fa-check-circle"></i> Discounts may be available for bulk orders or regular customers.<br />
+        <i class="fas fa-check-circle"></i> For exact pricing, please contact our support team.
       </p>
     </div>
   </div>
@@ -420,21 +420,21 @@
 <section class="cta-banner">
   <div class="container">
     <h2>
-      {% trans "Need" %} <span>{% trans "clarification" %}</span> {% trans "on pricing?" %}
+      Need <span>clarification</span> on pricing?
     </h2>
     <p>
-      {% trans "We're here to help. Reach out to us for any questions about our charges or services." %}
+      We're here to help. Reach out to us for any questions about our charges or services.
     </p>
     <div class="cta-buttons">
       <a href="{% url 'home' %}#contact" class="btn-primary">
-        <i class="fas fa-phone-alt"></i> {% trans "Contact Us" %}
+        <i class="fas fa-phone-alt"></i> Contact Us
       </a>
       <a
         href="https://wa.me/{{ business.whatsapp|default:'919876543210' }}?text=Hello%2C%20I%20want%20to%20know%20the%20charges%20for%20a%20service."
         target="_blank"
         class="btn-whatsapp"
       >
-        <i class="fab fa-whatsapp"></i> {% trans "Chat on WhatsApp" %}
+        <i class="fab fa-whatsapp"></i> Chat on WhatsApp
       </a>
     </div>
   </div>

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% load i18n %}
 
-{% block title %}{% trans "Split PDF" %}{% endblock %}
+
+{% block title %}Split PDF{% endblock %}
 
 {% block extra_head %}
 <style>
@@ -289,8 +289,8 @@
      ================================================================ -->
 <section class="page-hero">
   <div class="container">
-    <h1>{% trans "Split PDF" %}</h1>
-    <p>{% trans "Extract specific pages from a PDF document." %}</p>
+    <h1>Split PDF</h1>
+    <p>Extract specific pages from a PDF document.</p>
   </div>
 </section>
 
@@ -303,12 +303,12 @@
       <!-- Header -->
       <div class="card-header">
         <i class="fas fa-cut"></i>
-        <h2>{% trans "Split PDF" %}</h2>
+        <h2>Split PDF</h2>
       </div>
 
       <!-- Document Info -->
       <div class="doc-info">
-        <strong>{% trans "Document" %}:</strong>
+        <strong>Document:</strong>
         <span>{{ document.file.name }}</span>
       </div>
 
@@ -327,7 +327,7 @@
         <div class="form-group">
           <label for="pagesInput">
             <i class="fas fa-hashtag" aria-hidden="true"></i>
-            {% trans "Pages" %}
+            Pages
             <span class="required-star" style="color: var(--neon-orange);">*</span>
           </label>
           <input
@@ -335,14 +335,14 @@
             name="pages"
             id="pagesInput"
             class="form-control"
-            placeholder='{% trans "e.g. 1-3,5,7-10" %}'
+            placeholder='e.g. 1-3,5,7-10'
             required
             aria-describedby="pagesHelp"
             autofocus
           />
           <span class="helper-text" id="pagesHelp">
             <i class="fas fa-info-circle" aria-hidden="true"></i>
-            {% trans "Examples:" %}
+            Examples:
             <code>1-5</code>
             <span class="sep">|</span>
             <code>1,3,6</code>
@@ -350,18 +350,18 @@
             <code>1-3,7,9-10</code>
           </span>
           <div class="invalid-feedback" id="pagesFeedback" style="display:none; color: var(--neon-magenta); font-size: 0.85rem; margin-top: 0.3rem;">
-            {% trans "Please enter a valid page range (e.g., 1-3,5,7-10)." %}
+            Please enter a valid page range (e.g., 1-3,5,7-10).
           </div>
         </div>
 
         <div class="actions-row">
           <button type="submit" class="btn-split" id="splitBtn">
-            <i class="fas fa-cut" aria-hidden="true"></i> {% trans "Split PDF" %}
+            <i class="fas fa-cut" aria-hidden="true"></i> Split PDF
           </button>
 
           <a href="{% url 'application_admin_detail' app.id %}" class="back-link">
             <i class="fas fa-arrow-left" aria-hidden="true"></i>
-            {% trans "Back to Application" %}
+            Back to Application
           </a>
         </div>
       </form>
@@ -443,7 +443,7 @@
       } else {
         // Disable button to prevent double submission
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {% trans "Processing..." %}';
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
       }
     });
 

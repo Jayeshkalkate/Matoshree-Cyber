@@ -1,7 +1,6 @@
 from django import forms
 from django.conf import settings
 from django.contrib.auth.forms import UserCreationForm
-from django.utils.translation import gettext_lazy as _
 from django.core.validators import RegexValidator
 import re
 
@@ -16,15 +15,15 @@ from .models import (
 # User Forms (unchanged)
 # ==========================
 class CustomUserCreationForm(UserCreationForm):
-    email = forms.EmailField(label=_("Email"), required=True)
+    email = forms.EmailField(label="Email", required=True)
     phone = forms.CharField(
-        label=_("Phone"),
+        label="Phone",
         max_length=15,
         required=False,
         widget=forms.TextInput(attrs={"class": "form-control"}),
     )
     address = forms.CharField(
-        label=_("Address"),
+        label="Address",
         widget=forms.Textarea(attrs={"class": "form-control", "rows": 3}),
         required=False,
     )
@@ -33,9 +32,9 @@ class CustomUserCreationForm(UserCreationForm):
         model = User
         fields = ("username", "email", "phone", "address", "password1", "password2")
         labels = {
-            "username": _("Username"),
-            "password1": _("Password"),
-            "password2": _("Confirm Password"),
+            "username": "Username",
+            "password1": "Password",
+            "password2": "Confirm Password",
         }
 
     def save(self, commit=True):
@@ -67,12 +66,12 @@ class ContactForm(forms.ModelForm):
         model = Contact
         fields = ("name", "email", "phone", "subject", "message")
         widgets = {
-            "name": forms.TextInput(attrs={"class": "form-control", "placeholder": _("Your Name")}),
-            "email": forms.EmailInput(attrs={"class": "form-control", "placeholder": _("Email Address")}),
-            "phone": forms.TextInput(attrs={"class": "form-control", "placeholder": _("Phone Number")}),
-            "subject": forms.TextInput(attrs={"class": "form-control", "placeholder": _("Subject")}),
+            "name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Your Name"}),
+            "email": forms.EmailInput(attrs={"class": "form-control", "placeholder": "Email Address"}),
+            "phone": forms.TextInput(attrs={"class": "form-control", "placeholder": "Phone Number"}),
+            "subject": forms.TextInput(attrs={"class": "form-control", "placeholder": "Subject"}),
             "message": forms.Textarea(
-                attrs={"class": "form-control", "rows": 5, "placeholder": _("Write your message...")}
+                attrs={"class": "form-control", "rows": 5, "placeholder": "Write your message..."}
             ),
         }
 
@@ -85,7 +84,7 @@ class AppointmentForm(forms.ModelForm):
             minutes = appointment_time.hour * 60 + appointment_time.minute
             if minutes < 9 * 60 or minutes > 17 * 60:
                 raise forms.ValidationError(
-                    _("Appointment time must be between 09:00 AM and 05:00 PM.")
+                    "Appointment time must be between 09:00 AM and 05:00 PM."
                 )
         return cleaned_data
 
@@ -96,14 +95,14 @@ class AppointmentForm(forms.ModelForm):
             "appointment_date", "appointment_time", "message",
         )
         widgets = {
-            "full_name": forms.TextInput(attrs={"class": "form-control", "placeholder": _("Full Name")}),
-            "phone": forms.TextInput(attrs={"class": "form-control", "placeholder": _("Phone Number")}),
-            "email": forms.EmailInput(attrs={"class": "form-control", "placeholder": _("Email Address")}),
+            "full_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Full Name"}),
+            "phone": forms.TextInput(attrs={"class": "form-control", "placeholder": "Phone Number"}),
+            "email": forms.EmailInput(attrs={"class": "form-control", "placeholder": "Email Address"}),
             "service": forms.Select(attrs={"class": "form-select"}),
             "appointment_date": forms.DateInput(attrs={"class": "form-control", "type": "date"}),
             "appointment_time": forms.TimeInput(attrs={"class": "form-control", "type": "time"}),
             "message": forms.Textarea(
-                attrs={"class": "form-control", "rows": 4, "placeholder": _("Additional Message (Optional)")}
+                attrs={"class": "form-control", "rows": 4, "placeholder": "Additional Message (Optional)"}
             ),
         }
 
@@ -113,10 +112,10 @@ class ReviewForm(forms.ModelForm):
         model = Review
         fields = ("customer_name", "email", "review", "rating")
         widgets = {
-            "customer_name": forms.TextInput(attrs={"class": "form-control", "placeholder": _("Your Name")}),
-            "email": forms.EmailInput(attrs={"class": "form-control", "placeholder": _("Email Address")}),
+            "customer_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Your Name"}),
+            "email": forms.EmailInput(attrs={"class": "form-control", "placeholder": "Email Address"}),
             "review": forms.Textarea(
-                attrs={"class": "form-control", "rows": 4, "placeholder": _("Write your review...")}
+                attrs={"class": "form-control", "rows": 4, "placeholder": "Write your review..."}
             ),
             "rating": forms.HiddenInput(),
         }
@@ -124,7 +123,7 @@ class ReviewForm(forms.ModelForm):
     def clean_rating(self):
         rating = self.cleaned_data.get("rating")
         if rating is None or rating < 1 or rating > 5:
-            raise forms.ValidationError(_("Rating must be between 1 and 5."))
+            raise forms.ValidationError("Rating must be between 1 and 5.")
         return rating
 
 
@@ -194,7 +193,7 @@ class GalleryForm(forms.ModelForm):
         model = Gallery
         fields = ("title", "category", "image")
         widgets = {
-            "title": forms.TextInput(attrs={"class": "form-control", "placeholder": _("Image Title")}),
+            "title": forms.TextInput(attrs={"class": "form-control", "placeholder": "Image Title"}),
             "category": forms.Select(attrs={"class": "form-select"}),
             "image": forms.FileInput(attrs={"class": "form-control"}),
         }
@@ -223,10 +222,10 @@ class BusinessInfoForm(forms.ModelForm):
 # ==========================
 class ApplicationForm(forms.ModelForm):
     extra_data = forms.CharField(
-        label=_("Additional Information"),
+        label="Additional Information",
         required=False,
-        widget=forms.Textarea(attrs={"class": "form-control", "rows": 4, "placeholder": _("Any extra details (optional)")}),
-        help_text=_("Provide any additional information relevant to your application.")
+        widget=forms.Textarea(attrs={"class": "form-control", "rows": 4, "placeholder": "Any extra details (optional)"}),
+        help_text="Provide any additional information relevant to your application."
     )
 
     class Meta:
@@ -239,10 +238,10 @@ class ApplicationForm(forms.ModelForm):
             'payment_transaction_id',
         )
         widgets = {
-            "full_name": forms.TextInput(attrs={"class": "form-control", "placeholder": _("Full Name")}),
-            "phone": forms.TextInput(attrs={"class": "form-control", "placeholder": _("Phone Number")}),
-            "email": forms.EmailInput(attrs={"class": "form-control", "placeholder": _("Email Address")}),
-            "address": forms.Textarea(attrs={"class": "form-control", "rows": 3, "placeholder": _("Address")}),
+            "full_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Full Name"}),
+            "phone": forms.TextInput(attrs={"class": "form-control", "placeholder": "Phone Number"}),
+            "email": forms.EmailInput(attrs={"class": "form-control", "placeholder": "Email Address"}),
+            "address": forms.Textarea(attrs={"class": "form-control", "rows": 3, "placeholder": "Address"}),
         }
 
     def clean_extra_data(self):
@@ -265,13 +264,13 @@ class DocumentUploadForm(forms.ModelForm):
             max_size = getattr(settings, 'MAX_UPLOAD_SIZE', 10 * 1024 * 1024)
             if file.size > max_size:
                 raise forms.ValidationError(
-                    _("File size must be under %(size)s MB.") % {'size': max_size // (1024 * 1024)}
+                    f"File size must be under {max_size // (1024 * 1024)} MB."
                 )
             ext = file.name.split(".")[-1].lower()
             if ext not in ("pdf", "jpg", "jpeg", "png"):
-                raise forms.ValidationError(_("Only PDF, JPG, JPEG, and PNG files are allowed."))
+                raise forms.ValidationError("Only PDF, JPG, JPEG, and PNG files are allowed.")
         else:
-            raise forms.ValidationError(_("No file selected."))
+            raise forms.ValidationError("No file selected.")
         return file
 
 
@@ -284,7 +283,7 @@ class RequiredDocumentForm(forms.ModelForm):
             "document_name": forms.TextInput(
                 attrs={
                     "class": "form-control",
-                    "placeholder": _("e.g. PAN Card, Aadhar Card"),
+                    "placeholder": "e.g. PAN Card, Aadhar Card",
                 }
             ),
         }
@@ -329,7 +328,7 @@ class PaymentSettingsForm(forms.ModelForm):
         upi_id = self.cleaned_data.get('upi_id', '').strip()
         if upi_id:
             if not re.match(r'^[\w.-]+@[\w.-]+$', upi_id):
-                raise forms.ValidationError(_("Enter a valid UPI ID (e.g., name@bank)"))
+                raise forms.ValidationError("Enter a valid UPI ID (e.g., name@bank)")
         return upi_id
 
     def clean(self):
@@ -345,11 +344,11 @@ class PaymentSettingsForm(forms.ModelForm):
             has_cash = cash_enabled
             if not (has_upi or has_cash):
                 raise forms.ValidationError(
-                    _("At least one payment method (UPI or Cash) must be enabled "
-                      "when payment settings are active.")
+                    "At least one payment method (UPI or Cash) must be enabled "
+                    "when payment settings are active."
                 )
             if upi_enabled and not upi_id and not qr_code:
                 raise forms.ValidationError(
-                    _("UPI is enabled but neither UPI ID nor QR Code is provided.")
+                    "UPI is enabled but neither UPI ID nor QR Code is provided."
                 )
         return cleaned_data

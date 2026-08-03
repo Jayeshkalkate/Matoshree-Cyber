@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% load i18n %}
+
 {% load static %}
 
-{% block title %}{% trans "Contact Us" %}{% endblock %}
+{% block title %}Contact Us{% endblock %}
 
 {% block extra_head %}
 <!-- ============================================================
@@ -845,14 +845,14 @@
      ================================================================ -->
 <section class="page-hero">
   <div class="container">
-    <nav class="breadcrumb" aria-label="{% trans 'Breadcrumb' %}">
-      <a href="{% url 'home' %}"><i class="fas fa-home" aria-hidden="true"></i> {% trans "Home" %}</a>
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="{% url 'home' %}"><i class="fas fa-home" aria-hidden="true"></i> Home</a>
       <span><i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5" aria-hidden="true"></i></span>
-      <span class="current" aria-current="page">{% trans "Contact Us" %}</span>
+      <span class="current" aria-current="page">Contact Us</span>
     </nav>
-    <h1>{% trans "Get in" %} <span>{% trans "Touch" %}</span></h1>
+    <h1>Get in <span>Touch</span></h1>
     <p>
-      {% trans "We're here to help. Send us a message and we'll get back to you promptly." %}
+      We're here to help. Send us a message and we'll get back to you promptly.
     </p>
     <div class="glow-line"></div>
   </div>
@@ -866,7 +866,7 @@
     <div class="contact-grid">
       <!-- Left: Form -->
       <div class="contact-form-wrapper">
-        <h2><i class="fas fa-paper-plane" aria-hidden="true"></i> {% trans "Send a Message" %}</h2>
+        <h2><i class="fas fa-paper-plane" aria-hidden="true"></i> Send a Message</h2>
 
         <form class="contact-form" method="post" action="{% url 'contact' %}" novalidate>
           {% csrf_token %}
@@ -912,7 +912,7 @@
           </div>
 
           <button type="submit" class="btn-submit">
-            <i class="fas fa-paper-plane" aria-hidden="true"></i> {% trans "Send Message" %}
+            <i class="fas fa-paper-plane" aria-hidden="true"></i> Send Message
           </button>
         </form>
       </div>
@@ -923,8 +923,8 @@
         <div class="info-block">
           <div class="icon"><i class="fas fa-map-marker-alt" aria-hidden="true"></i></div>
           <div class="content">
-            <h4>{% trans "Address" %}</h4>
-            <p>{{ business.address|default:_("Not provided")|linebreaksbr }}</p>
+            <h4>Address</h4>
+            <p>{{ business.address|default:"Not provided"|linebreaksbr }}</p>
           </div>
         </div>
 
@@ -932,8 +932,8 @@
         <div class="info-block">
           <div class="icon"><i class="fas fa-phone-alt" aria-hidden="true"></i></div>
           <div class="content">
-            <h4>{% trans "Phone" %}</h4>
-            <a href="tel:{{ business.phone }}">{{ business.phone|default:_("Not provided") }}</a>
+            <h4>Phone</h4>
+            <a href="tel:{{ business.phone }}">{{ business.phone|default:"Not provided" }}</a>
           </div>
         </div>
 
@@ -942,10 +942,10 @@
         <div class="info-block">
           <div class="icon"><i class="fab fa-whatsapp" aria-hidden="true"></i></div>
           <div class="content">
-            <h4>{% trans "WhatsApp" %}</h4>
-            <a href="https://wa.me/{{ business.whatsapp|cut:'+' }}?text={% trans 'Hello, I would like to know about your services.' %}"
+            <h4>WhatsApp</h4>
+            <a href="https://wa.me/{{ business.whatsapp|cut:'+' }}?text=Hello, I would like to know about your services."
                target="_blank" rel="noopener noreferrer" class="whatsapp-link">
-              <i class="fab fa-whatsapp" aria-hidden="true"></i> {% trans "Chat with Us" %}
+              <i class="fab fa-whatsapp" aria-hidden="true"></i> Chat with Us
             </a>
           </div>
         </div>
@@ -955,18 +955,18 @@
         <div class="info-block">
           <div class="icon"><i class="fas fa-envelope" aria-hidden="true"></i></div>
           <div class="content">
-            <h4>{% trans "Email" %}</h4>
-            <a href="mailto:{{ business.email }}">{{ business.email|default:_("Not provided") }}</a>
+            <h4>Email</h4>
+            <a href="mailto:{{ business.email }}">{{ business.email|default:"Not provided" }}</a>
           </div>
         </div>
 
         <!-- Business Hours -->
         <div class="hours-block">
-          <h3><i class="fas fa-clock" aria-hidden="true"></i> {% trans "Business Hours" %}</h3>
+          <h3><i class="fas fa-clock" aria-hidden="true"></i> Business Hours</h3>
           {% if business.business_hours %}
           <div>{{ business.business_hours|linebreaksbr }}</div>
           {% else %}
-          <p>{% trans "Hours not set." %}</p>
+          <p>Hours not set.</p>
           {% endif %}
         </div>
       </div>
@@ -980,13 +980,13 @@
         {% else %}
           <div class="map-placeholder">
             <i class="fas fa-exclamation-triangle error-icon" aria-hidden="true"></i>
-            {% trans "Invalid map source. Only Google Maps embed is allowed." %}
+            Invalid map source. Only Google Maps embed is allowed.
           </div>
         {% endif %}
       {% else %}
         <div class="map-placeholder">
           <i class="fas fa-map-marked-alt" aria-hidden="true"></i>
-          {% trans "Map location not configured." %}
+          Map location not configured.
         </div>
       {% endif %}
     </div>
@@ -998,18 +998,18 @@
      ================================================================ -->
 <section class="cta-banner">
   <div class="container">
-    <h2>{% trans "We're just a" %} <span>{% trans "click" %}</span> {% trans "away!" %}</h2>
+    <h2>We're just a <span>click</span> away!</h2>
     <p>
-      {% trans "Reach out to us for any queries or to book a service. We respond promptly." %}
+      Reach out to us for any queries or to book a service. We respond promptly.
     </p>
     <div class="cta-buttons">
       <a href="tel:{{ business.phone }}" class="btn-primary">
-        <i class="fas fa-phone" aria-hidden="true"></i> {% trans "Call Now" %}
+        <i class="fas fa-phone" aria-hidden="true"></i> Call Now
       </a>
       {% if business.whatsapp %}
-      <a href="https://wa.me/{{ business.whatsapp|cut:'+' }}?text={% trans 'Hello, I would like to know about your services.' %}"
+      <a href="https://wa.me/{{ business.whatsapp|cut:'+' }}?text=Hello, I would like to know about your services."
          target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
-        <i class="fab fa-whatsapp" aria-hidden="true"></i> {% trans "Chat on WhatsApp" %}
+        <i class="fab fa-whatsapp" aria-hidden="true"></i> Chat on WhatsApp
       </a>
       {% endif %}
     </div>

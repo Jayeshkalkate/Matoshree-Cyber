@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% load i18n %}
 
-{% block title %}{% trans "Analytics Dashboard" %}{% endblock %}
+
+{% block title %}Analytics Dashboard{% endblock %}
 
 {% block extra_head %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -27,18 +27,18 @@
 
 {% block content %}
 <div class="container mt-4">
-  <h1 class="mb-4">{% trans "Analytics Dashboard" %}</h1>
+  <h1 class="mb-4">Analytics Dashboard</h1>
 
   <div class="row">
     <div class="col-md-6">
       <div class="chart-container">
-        <h5>{% trans "Applications by Status" %}</h5>
+        <h5>Applications by Status</h5>
         <canvas id="appStatusChart"></canvas>
       </div>
     </div>
     <div class="col-md-6">
       <div class="chart-container">
-        <h5>{% trans "Daily Applications (Last 30 Days)" %}</h5>
+        <h5>Daily Applications (Last 30 Days)</h5>
         <canvas id="dailyAppsChart"></canvas>
       </div>
     </div>
@@ -47,13 +47,13 @@
   <div class="row">
     <div class="col-md-6">
       <div class="chart-container">
-        <h5>{% trans "Appointments by Status" %}</h5>
+        <h5>Appointments by Status</h5>
         <canvas id="apptStatusChart"></canvas>
       </div>
     </div>
     <div class="col-md-6">
       <div class="chart-container">
-        <h5>{% trans "New Users per Week" %}</h5>
+        <h5>New Users per Week</h5>
         <canvas id="weeklyUsersChart"></canvas>
       </div>
     </div>
@@ -62,7 +62,7 @@
   <div class="row">
     <div class="col-md-6">
       <div class="chart-container">
-        <h5>{% trans "Payment Status Breakdown" %}</h5>
+        <h5>Payment Status Breakdown</h5>
         <canvas id="paymentStatusChart"></canvas>
       </div>
     </div>
@@ -95,7 +95,7 @@
       var container = document.getElementById(containerId).parentNode;
       var msg = document.createElement('div');
       msg.className = 'no-data-msg';
-      msg.textContent = '{% trans "No data available." %}';
+      msg.textContent = 'No data available.';
       container.appendChild(msg);
       // Hide canvas
       var canvas = container.querySelector('canvas');
@@ -111,7 +111,7 @@
         data: {
           labels: appStatusLabels,
           datasets: [{
-            label: '{% trans "Applications" %}',
+            label: 'Applications',
             data: appStatusCounts,
             backgroundColor: 'rgba(0, 230, 255, 0.6)',
             borderColor: 'rgba(0, 230, 255, 1)',
@@ -139,7 +139,7 @@
         data: {
           labels: dailyLabels,
           datasets: [{
-            label: '{% trans "Applications" %}',
+            label: 'Applications',
             data: dailyCounts,
             borderColor: 'rgba(168, 85, 247, 1)',
             backgroundColor: 'rgba(168, 85, 247, 0.2)',
@@ -196,7 +196,7 @@
         data: {
           labels: weekLabels,
           datasets: [{
-            label: '{% trans "New Users" %}',
+            label: 'New Users',
             data: weekCounts,
             backgroundColor: 'rgba(255, 45, 149, 0.6)',
             borderColor: 'rgba(255, 45, 149, 1)',

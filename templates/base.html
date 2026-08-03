@@ -1,4 +1,4 @@
-{% load i18n %}
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <!-- Theme color is updated dynamically via JavaScript -->
     <meta name="theme-color" content="#f8fafc" id="themeColorMeta" />
-    <title>{% block title %}{% trans "Cyber Services" %}{% endblock %}</title>
+    <title>{% block title %}Cyber Services{% endblock %}</title>
 
     <meta name="description" content="{% block description %}Matoshree Cyber Cafe offers digital services, appointments, government schemes, and more.{% endblock %}">
     <meta property="og:title" content="{{ business.business_name }}">
@@ -1072,17 +1072,17 @@
     <!-- ============================== HEADER ============================== -->
     <header class="header" role="banner">
         <div class="container">
-            <nav class="navbar" role="navigation" aria-label="{% trans 'Main navigation' %}">
+            <nav class="navbar" role="navigation" aria-label="Main navigation">
                 <!-- Brand -->
                 <div class="nav-brand">
-                    <a href="{% url 'home' %}" aria-label="{% trans 'Home' %}">
-                        <img src="{% static 'images/matoshreelogo.png' %}" alt="{% trans 'Logo' %}" loading="lazy">
+                    <a href="{% url 'home' %}" aria-label="Home">
+                        <img src="{% static 'images/matoshreelogo.png' %}" alt="Logo" loading="lazy">
                         <span class="brand-highlight">{{ business.business_name|default:"Matoshree Cyber Cafe" }}</span>
                     </a>
                 </div>
 
                 <!-- Hamburger -->
-                <button class="hamburger" id="hamburgerBtn" aria-controls="navLinks" aria-expanded="false" aria-label="{% trans 'Toggle navigation menu' %}" type="button">
+                <button class="hamburger" id="hamburgerBtn" aria-controls="navLinks" aria-expanded="false" aria-label="Toggle navigation menu" type="button">
                     <span class="bar"></span>
                     <span class="bar"></span>
                     <span class="bar"></span>
@@ -1091,98 +1091,61 @@
                 <!-- Navigation -->
                 <ul class="nav-links" id="navLinks" role="menubar">
                     <!-- Public links -->
-                    <li role="none"><a href="{% url 'home' %}" role="menuitem"><i class="fas fa-home" aria-hidden="true"></i> {% trans "Home" %}</a></li>
-                    <li role="none"><a href="{% url 'about' %}" role="menuitem"><i class="fas fa-info-circle" aria-hidden="true"></i> {% trans "About" %}</a></li>
-                    <li role="none"><a href="{% url 'services' %}" role="menuitem"><i class="fas fa-cogs" aria-hidden="true"></i> {% trans "Services" %}</a></li>
-                    <li role="none"><a href="{% url 'gallery' %}" role="menuitem"><i class="fas fa-images" aria-hidden="true"></i> {% trans "Gallery" %}</a></li>
-                    <li role="none"><a href="{% url 'reviews' %}" role="menuitem"><i class="fas fa-star" aria-hidden="true"></i> {% trans "Reviews" %}</a></li>
-                    <li role="none"><a href="{% url 'contact' %}" role="menuitem"><i class="fas fa-envelope" aria-hidden="true"></i> {% trans "Contact" %}</a></li>
+                    <li role="none"><a href="{% url 'home' %}" role="menuitem"><i class="fas fa-home" aria-hidden="true"></i> Home</a></li>
+                    <li role="none"><a href="{% url 'about' %}" role="menuitem"><i class="fas fa-info-circle" aria-hidden="true"></i> About</a></li>
+                    <li role="none"><a href="{% url 'services' %}" role="menuitem"><i class="fas fa-cogs" aria-hidden="true"></i> Services</a></li>
+                    <li role="none"><a href="{% url 'gallery' %}" role="menuitem"><i class="fas fa-images" aria-hidden="true"></i> Gallery</a></li>
+                    <li role="none"><a href="{% url 'reviews' %}" role="menuitem"><i class="fas fa-star" aria-hidden="true"></i> Reviews</a></li>
+                    <li role="none"><a href="{% url 'contact' %}" role="menuitem"><i class="fas fa-envelope" aria-hidden="true"></i> Contact</a></li>
 
                     <!-- Dark / Light Mode Toggle (Enhanced) -->
                     <li role="none">
-                        <button id="themeToggleBtn" class="theme-toggle-btn" role="menuitem" aria-label="{% trans 'Toggle theme' %}" title="{% trans 'Switch between dark and light mode' %}">
+                        <button id="themeToggleBtn" class="theme-toggle-btn" role="menuitem" aria-label="Toggle theme" title="Switch between dark and light mode">
                             <span class="toggle-icon" aria-hidden="true">
                                 <i class="fas fa-moon"></i>
                                 <i class="fas fa-sun"></i>
                             </span>
-                            <span class="toggle-label" data-label="dark">{% trans "Dark" %}</span>
-                            <span class="toggle-label" data-label="light">{% trans "Light" %}</span>
+                            <span class="toggle-label" data-label="dark">Dark</span>
+                            <span class="toggle-label" data-label="light">Light</span>
                         </button>
                     </li>
 
                     <!-- Desktop Toggle -->
                     <li role="none">
-                        <button id="desktopToggleBtn" class="desktop-toggle-btn" role="menuitem" aria-label="{% trans 'Toggle desktop view' %}">
+                        <button id="desktopToggleBtn" class="desktop-toggle-btn" role="menuitem" aria-label="Toggle desktop view">
                             <i class="fas fa-desktop" aria-hidden="true"></i>
-                            <span id="desktopToggleLabel">{% trans "Desktop View" %}</span>
+                            <span id="desktopToggleLabel">Desktop View</span>
                         </button>
-                    </li>
-
-                    {# ─── Language Dropdown ─── #}
-                    <li class="lang-dropdown" role="none">
-                        <button class="dropdown-trigger" aria-haspopup="true" aria-expanded="false" aria-label="{% trans 'Select language' %}" role="menuitem" type="button">
-                            <i class="fas fa-globe" aria-hidden="true"></i>
-                            <i class="fas fa-chevron-down" aria-hidden="true"></i>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li role="none">
-                                <form action="{% url 'set_language' %}" method="post" class="lang-form">
-                                    {% csrf_token %}
-                                    <input name="next" type="hidden" value="{{ request.get_full_path }}" />
-                                    <button type="submit" name="language" value="en" class="lang-option" role="menuitem">
-                                        <i class="fas fa-flag" aria-hidden="true"></i> English
-                                    </button>
-                                </form>
-                            </li>
-                            <li role="none">
-                                <form action="{% url 'set_language' %}" method="post" class="lang-form">
-                                    {% csrf_token %}
-                                    <input name="next" type="hidden" value="{{ request.get_full_path }}" />
-                                    <button type="submit" name="language" value="hi" class="lang-option" role="menuitem">
-                                        <i class="fas fa-flag" aria-hidden="true"></i> हिन्दी
-                                    </button>
-                                </form>
-                            </li>
-                            <li role="none">
-                                <form action="{% url 'set_language' %}" method="post" class="lang-form">
-                                    {% csrf_token %}
-                                    <input name="next" type="hidden" value="{{ request.get_full_path }}" />
-                                    <button type="submit" name="language" value="mr" class="lang-option" role="menuitem">
-                                        <i class="fas fa-flag" aria-hidden="true"></i> मराठी
-                                    </button>
-                                </form>
-                            </li>
-                        </ul>
                     </li>
 
                     {# ─── User / Auth Dropdown ─── #}
                     {% if user.is_authenticated %}
                         <li class="user-dropdown" role="none">
-                            <button class="dropdown-trigger" aria-haspopup="true" aria-expanded="false" aria-label="{% trans 'User menu' %}" role="menuitem" type="button">
+                            <button class="dropdown-trigger" aria-haspopup="true" aria-expanded="false" aria-label="User menu" role="menuitem" type="button">
                                 <i class="fas fa-user-circle" aria-hidden="true"></i>
                                 <span class="username">{{ user.username }}</span>
                                 <i class="fas fa-chevron-down" aria-hidden="true"></i>
                             </button>
                             <ul class="dropdown-menu" role="menu">
-                                <li role="none"><a href="{% url 'profile' %}" role="menuitem"><i class="fas fa-user" aria-hidden="true"></i> {% trans "Profile" %}</a></li>
-                                <li role="none"><a href="{% url 'my_applications' %}" role="menuitem"><i class="fas fa-file-alt" aria-hidden="true"></i> {% trans "My Applications" %}</a></li>
+                                <li role="none"><a href="{% url 'profile' %}" role="menuitem"><i class="fas fa-user" aria-hidden="true"></i> Profile</a></li>
+                                <li role="none"><a href="{% url 'my_applications' %}" role="menuitem"><i class="fas fa-file-alt" aria-hidden="true"></i> My Applications</a></li>
                                 {% if user.role == 'admin' or user.role == 'superadmin' %}
-                                    <li role="none"><a href="{% url 'admin_dashboard' %}" role="menuitem"><i class="fas fa-tachometer-alt" aria-hidden="true"></i> {% trans "Admin Dashboard" %}</a></li>
+                                    <li role="none"><a href="{% url 'admin_dashboard' %}" role="menuitem"><i class="fas fa-tachometer-alt" aria-hidden="true"></i> Admin Dashboard</a></li>
                                 {% endif %}
                                 {% if user.role == 'superadmin' %}
-                                    <li role="none"><a href="{% url 'superadmin_dashboard' %}" role="menuitem"><i class="fas fa-crown" aria-hidden="true"></i> {% trans "Super Admin" %}</a></li>
+                                    <li role="none"><a href="{% url 'superadmin_dashboard' %}" role="menuitem"><i class="fas fa-crown" aria-hidden="true"></i> Super Admin</a></li>
                                 {% endif %}
                                 <li role="none">
                                     <form method="post" action="{% url 'logout' %}" style="display:block; width:100%;">
                                         {% csrf_token %}
-                                        <button type="submit" class="logout-btn" role="menuitem"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> {% trans "Logout" %}</button>
+                                        <button type="submit" class="logout-btn" role="menuitem"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Logout</button>
                                     </form>
                                 </li>
                             </ul>
                         </li>
                     {% else %}
-                        <li role="none"><a href="{% url 'login' %}" role="menuitem"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> {% trans "Login" %}</a></li>
-                        <li role="none"><a href="{% url 'register' %}" role="menuitem"><i class="fas fa-user-plus" aria-hidden="true"></i> {% trans "Register" %}</a></li>
+                        <li role="none"><a href="{% url 'login' %}" role="menuitem"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Login</a></li>
+                        <li role="none"><a href="{% url 'register' %}" role="menuitem"><i class="fas fa-user-plus" aria-hidden="true"></i> Register</a></li>
                     {% endif %}
                 </ul>
             </nav>
@@ -1196,9 +1159,9 @@
             <div id="installModal" role="dialog" aria-modal="true" aria-labelledby="installModalTitle" aria-hidden="true">
                 <div class="modal-content">
                     <i class="fas fa-mobile-alt" aria-hidden="true"></i>
-                    <h3 id="installModalTitle">{% trans "Add to Home Screen" %}</h3>
-                    <p>{% trans "Tap the Share button and select 'Add to Home Screen' to install this app." %}</p>
-                    <button id="installModalClose" class="btn-close-modal" aria-label="{% trans 'Close' %}">{% trans "Close" %}</button>
+                    <h3 id="installModalTitle">Add to Home Screen</h3>
+                    <p>Tap the Share button and select 'Add to Home Screen' to install this app.</p>
+                    <button id="installModalClose" class="btn-close-modal" aria-label="Close">Close</button>
                 </div>
             </div>
         {% endblock %}
@@ -1313,21 +1276,6 @@
                 }
             });
 
-            // ---- Language form auto-submit – close dropdown after submit ----
-            document.querySelectorAll('.lang-form').forEach(function(form) {
-                form.addEventListener('submit', function() {
-                    const parentLi = form.closest('li');
-                    if (parentLi) {
-                        const menu = parentLi.closest('.dropdown-menu');
-                        if (menu) {
-                            menu.classList.remove('open');
-                            const trigger = menu.closest('li')?.querySelector('.dropdown-trigger');
-                            if (trigger) trigger.setAttribute('aria-expanded', 'false');
-                        }
-                    }
-                });
-            });
-
         })();
     </script>
 
@@ -1348,7 +1296,7 @@
 
             if (isDesktop) {
                 metaViewport.content = 'width=1024, initial-scale=1.0';
-                if (labelSpan) labelSpan.textContent = '{% trans "Mobile View" %}';
+                if (labelSpan) labelSpan.textContent = 'Mobile View';
             }
 
             toggleBtn.addEventListener('click', function(e) {
@@ -1362,10 +1310,10 @@
                 const newMode = !current;
                 if (newMode) {
                     metaViewport.content = 'width=1024, initial-scale=1.0';
-                    if (labelSpan) labelSpan.textContent = '{% trans "Mobile View" %}';
+                    if (labelSpan) labelSpan.textContent = 'Mobile View';
                 } else {
                     metaViewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes';
-                    if (labelSpan) labelSpan.textContent = '{% trans "Desktop View" %}';
+                    if (labelSpan) labelSpan.textContent = 'Desktop View';
                 }
                 try {
                     localStorage.setItem('desktopMode', newMode);

@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% load i18n %}
+
 {% load static %}
 
-{% block title %}{% trans "Terms & Conditions" %}{% endblock %}
+{% block title %}Terms & Conditions{% endblock %}
 
 {% block extra_head %}
 <style>
@@ -97,75 +97,75 @@
 {% block content %}
 <section class="legal-page">
     <div class="container">
-        <h1>{% trans "Terms &" %} <span>{% trans "Conditions" %}</span></h1>
+        <h1>Terms & <span>Conditions</span></h1>
         <div class="subhead">
-            {% blocktrans with business_name=business.business_name|default:"Matoshree Cyber Cafe" %}
+            
             Welcome to {{ business_name }}. By using our services, you agree to the following terms and conditions.
-            {% endblocktrans %}
+            
         </div>
         <div class="last-updated">
             <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-            {% trans "Last updated:" %} {% now "d M Y" %}
+            Last updated: {% now "d M Y" %}
         </div>
 
-        <h2>1. {% trans "Acceptance of Terms" %}</h2>
+        <h2>1. Acceptance of Terms</h2>
         <p>
-            {% trans "By accessing or using our website and services, you agree to be bound by these Terms and Conditions. If you do not agree, please do not use our services." %}
+            By accessing or using our website and services, you agree to be bound by these Terms and Conditions. If you do not agree, please do not use our services.
         </p>
 
-        <h2>2. {% trans "Services Provided" %}</h2>
+        <h2>2. Services Provided</h2>
         <p>
-            {% trans "We offer digital services including but not limited to document printing, scanning, photocopying, government form assistance, Aadhaar/PAN card services, passport applications, and other related services. We reserve the right to modify, suspend, or discontinue any service at any time without notice." %}
+            We offer digital services including but not limited to document printing, scanning, photocopying, government form assistance, Aadhaar/PAN card services, passport applications, and other related services. We reserve the right to modify, suspend, or discontinue any service at any time without notice.
         </p>
 
-        <h2>3. {% trans "User Responsibilities" %}</h2>
+        <h2>3. User Responsibilities</h2>
         <ul>
-            <li>{% trans "You must provide accurate and complete information when using our services." %}</li>
-            <li>{% trans "You are responsible for maintaining the confidentiality of your account credentials." %}</li>
-            <li>{% trans "You agree not to use our services for any unlawful or prohibited purpose." %}</li>
-            <li>{% trans "You are solely responsible for any content you submit or upload through our platform." %}</li>
+            <li>You must provide accurate and complete information when using our services.</li>
+            <li>You are responsible for maintaining the confidentiality of your account credentials.</li>
+            <li>You agree not to use our services for any unlawful or prohibited purpose.</li>
+            <li>You are solely responsible for any content you submit or upload through our platform.</li>
         </ul>
 
-        <h2>4. {% trans "Payments and Fees" %}</h2>
+        <h2>4. Payments and Fees</h2>
         <p>
-            {% trans "All charges for services are clearly displayed on our website. Payment must be made in full before the service is delivered unless otherwise agreed. We accept UPI and cash payments. Refunds are handled on a case‑by‑case basis and are subject to our refund policy." %}
+            All charges for services are clearly displayed on our website. Payment must be made in full before the service is delivered unless otherwise agreed. We accept UPI and cash payments. Refunds are handled on a case‑by‑case basis and are subject to our refund policy.
         </p>
 
-        <h2>5. {% trans "Intellectual Property" %}</h2>
+        <h2>5. Intellectual Property</h2>
         <p>
-            {% trans "All content on this website, including text, graphics, logos, and software, is the property of our business or its licensors and is protected by copyright and trademark laws. You may not reproduce, distribute, or create derivative works without our prior written consent." %}
+            All content on this website, including text, graphics, logos, and software, is the property of our business or its licensors and is protected by copyright and trademark laws. You may not reproduce, distribute, or create derivative works without our prior written consent.
         </p>
 
-        <h2>6. {% trans "Limitation of Liability" %}</h2>
+        <h2>6. Limitation of Liability</h2>
         <p>
-            {% trans "To the fullest extent permitted by law, we are not liable for any indirect, incidental, or consequential damages arising out of your use of our services. Our total liability is limited to the amount you paid for the specific service in question." %}
+            To the fullest extent permitted by law, we are not liable for any indirect, incidental, or consequential damages arising out of your use of our services. Our total liability is limited to the amount you paid for the specific service in question.
         </p>
 
-        <h2>7. {% trans "Third‑Party Links" %}</h2>
+        <h2>7. Third‑Party Links</h2>
         <p>
-            {% trans "Our website may contain links to third‑party websites. We are not responsible for the content or practices of those sites. You access them at your own risk." %}
+            Our website may contain links to third‑party websites. We are not responsible for the content or practices of those sites. You access them at your own risk.
         </p>
 
-        <h2>8. {% trans "Changes to These Terms" %}</h2>
+        <h2>8. Changes to These Terms</h2>
         <p>
-            {% trans "We may update these Terms and Conditions from time to time. The latest version will always be posted on this page, and your continued use of our services constitutes acceptance of any changes." %}
+            We may update these Terms and Conditions from time to time. The latest version will always be posted on this page, and your continued use of our services constitutes acceptance of any changes.
         </p>
 
-        <h2>9. {% trans "Governing Law" %}</h2>
+        <h2>9. Governing Law</h2>
         <p>
-            {% trans "These terms are governed by the laws of India. Any disputes shall be subject to the exclusive jurisdiction of the courts in Maharashtra." %}
+            These terms are governed by the laws of India. Any disputes shall be subject to the exclusive jurisdiction of the courts in Maharashtra.
         </p>
 
-        <h2>10. {% trans "Contact Us" %}</h2>
+        <h2>10. Contact Us</h2>
         <p>
-            {% blocktrans with phone=business.phone|default:"+91 98765 43210" email=business.email|default:"info@matoshree.com" %}
+            
             If you have any questions regarding these Terms and Conditions, please contact us at <strong>{{ phone }}</strong> or <strong>{{ email }}</strong>.
-            {% endblocktrans %}
+            
         </p>
 
         <div class="highlight-box">
             <i class="fas fa-info-circle" aria-hidden="true"></i>
-            {% trans "By using our services, you acknowledge that you have read, understood, and agreed to these terms." %}
+            By using our services, you acknowledge that you have read, understood, and agreed to these terms.
         </div>
     </div>
 </section>

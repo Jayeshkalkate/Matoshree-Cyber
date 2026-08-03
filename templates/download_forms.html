@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% load i18n %}
+
 {% load static %}
 
-{% block title %}{% trans "Download Forms" %}{% endblock %}
+{% block title %}Download Forms{% endblock %}
 
 {% block extra_head %}
 <!-- ============================================================
@@ -882,13 +882,13 @@
      ================================================================ -->
 <section class="page-hero">
   <div class="container">
-    <nav class="breadcrumb" aria-label="{% trans 'Breadcrumb' %}">
-      <a href="{% url 'home' %}"><i class="fas fa-home" aria-hidden="true"></i> {% trans "Home" %}</a>
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="{% url 'home' %}"><i class="fas fa-home" aria-hidden="true"></i> Home</a>
       <span><i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5;" aria-hidden="true"></i></span>
-      <span class="current" aria-current="page">{% trans "Download Forms" %}</span>
+      <span class="current" aria-current="page">Download Forms</span>
     </nav>
-    <h1>{% trans "Download" %} <span>{% trans "Government Forms" %}</span></h1>
-    <p>{% trans "Access and download official forms for various services — fast, secure, and always up-to-date." %}</p>
+    <h1>Download <span>Government Forms</span></h1>
+    <p>Access and download official forms for various services — fast, secure, and always up-to-date.</p>
     <div class="glow-line"></div>
   </div>
 </section>
@@ -905,11 +905,11 @@
       <input
         type="text"
         id="searchInput"
-        placeholder="{% trans "Search forms by name..." %}"
-        aria-label="{% trans "Search forms" %}"
+        placeholder="Search forms by name..."
+        aria-label="Search forms"
       />
-      <button class="clear-btn" id="searchClear" aria-label="{% trans "Clear search" %}">
-        <i class="fas fa-times" aria-hidden="true"></i> {% trans "Clear" %}
+      <button class="clear-btn" id="searchClear" aria-label="Clear search">
+        <i class="fas fa-times" aria-hidden="true"></i> Clear
       </button>
     </div>
 
@@ -921,14 +921,14 @@
           <i class="fas fa-file-pdf" aria-hidden="true"></i>
           <span class="form-name">{{ form.title }}</span>
         </div>
-        <span class="form-category">{{ form.category|default:_("General") }}</span>
+        <span class="form-category">{{ form.category|default:"General" }}</span>
         {% if form.pdf %}
           <a href="{{ form.pdf.url }}" target="_blank" class="btn-download" download>
-            <i class="fas fa-download" aria-hidden="true"></i> {% trans "PDF" %}
+            <i class="fas fa-download" aria-hidden="true"></i> PDF
           </a>
         {% else %}
           <span class="btn-download disabled">
-            <i class="fas fa-times" aria-hidden="true"></i> {% trans "No file" %}
+            <i class="fas fa-times" aria-hidden="true"></i> No file
           </span>
         {% endif %}
       </div>
@@ -938,19 +938,19 @@
     <!-- No Results (filter) – also included in aria-live region -->
     <div class="no-results" id="noResults">
       <i class="fas fa-file-alt" aria-hidden="true"></i>
-      <p>{% trans "No forms match your search." %}</p>
+      <p>No forms match your search.</p>
     </div>
 
     <!-- Pagination (added) -->
     {% if forms.has_other_pages %}
-    <div class="pagination-wrap" role="navigation" aria-label="{% trans 'Forms pagination' %}">
+    <div class="pagination-wrap" role="navigation" aria-label="Forms pagination">
       {% if forms.has_previous %}
-        <a href="?page={{ forms.previous_page_number }}" class="page-link" aria-label="{% trans 'Previous page' %}">
-          <i class="fas fa-chevron-left" aria-hidden="true"></i> {% trans "Prev" %}
+        <a href="?page={{ forms.previous_page_number }}" class="page-link" aria-label="Previous page">
+          <i class="fas fa-chevron-left" aria-hidden="true"></i> Prev
         </a>
       {% else %}
         <span class="page-link disabled" aria-disabled="true">
-          <i class="fas fa-chevron-left" aria-hidden="true"></i> {% trans "Prev" %}
+          <i class="fas fa-chevron-left" aria-hidden="true"></i> Prev
         </span>
       {% endif %}
 
@@ -958,17 +958,17 @@
         {% if forms.number == num %}
           <span class="page-link active" aria-current="page">{{ num }}</span>
         {% elif num > forms.number|add:'-3' and num < forms.number|add:'3' %}
-          <a href="?page={{ num }}" class="page-link" aria-label="{% trans 'Page' %} {{ num }}">{{ num }}</a>
+          <a href="?page={{ num }}" class="page-link" aria-label="Page {{ num }}">{{ num }}</a>
         {% endif %}
       {% endfor %}
 
       {% if forms.has_next %}
-        <a href="?page={{ forms.next_page_number }}" class="page-link" aria-label="{% trans 'Next page' %}">
-          {% trans "Next" %} <i class="fas fa-chevron-right" aria-hidden="true"></i>
+        <a href="?page={{ forms.next_page_number }}" class="page-link" aria-label="Next page">
+          Next <i class="fas fa-chevron-right" aria-hidden="true"></i>
         </a>
       {% else %}
         <span class="page-link disabled" aria-disabled="true">
-          {% trans "Next" %} <i class="fas fa-chevron-right" aria-hidden="true"></i>
+          Next <i class="fas fa-chevron-right" aria-hidden="true"></i>
         </span>
       {% endif %}
     </div>
@@ -978,11 +978,11 @@
     <div class="footer-note">
       <span>
         <i class="fas fa-check-circle" style="color: var(--neon-green, #22d3ee);"></i>
-        {% trans "All forms are official and up-to-date." %}
+        All forms are official and up-to-date.
       </span>
       <span class="badge">
         <i class="far fa-clock"></i>
-        {% blocktrans count counter=forms.paginator.count trimmed %}
+        
           {{ counter }} form available
         {% plural %}
           {{ counter }} forms available
@@ -998,15 +998,15 @@
      ================================================================ -->
 <section class="cta-banner" id="contact">
   <div class="container">
-    <h2>{% trans "Need Assistance with" %} <span>{% trans "Forms?" %}</span></h2>
-    <p>{% trans "We're here to help you fill, print, and submit your documents with ease." %}</p>
+    <h2>Need Assistance with <span>Forms?</span></h2>
+    <p>We're here to help you fill, print, and submit your documents with ease.</p>
     <div class="cta-buttons">
-      <a href="{% url 'home' %}#contact" class="btn-primary" aria-label="{% trans 'Contact us' %}">
-        <i class="fas fa-phone" aria-hidden="true"></i> {% trans "Contact Us" %}
+      <a href="{% url 'home' %}#contact" class="btn-primary" aria-label="Contact us">
+        <i class="fas fa-phone" aria-hidden="true"></i> Contact Us
       </a>
       {% with whatsapp_number=business.whatsapp|default:"919876543210" %}
-      <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20need%20help%20with%20government%20forms." target="_blank" rel="noopener noreferrer" class="btn-whatsapp" aria-label="{% trans 'Chat on WhatsApp' %}">
-        <i class="fab fa-whatsapp" aria-hidden="true"></i> {% trans "Chat on WhatsApp" %}
+      <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20need%20help%20with%20government%20forms." target="_blank" rel="noopener noreferrer" class="btn-whatsapp" aria-label="Chat on WhatsApp">
+        <i class="fab fa-whatsapp" aria-hidden="true"></i> Chat on WhatsApp
       </a>
       {% endwith %}
     </div>
@@ -1033,7 +1033,7 @@
       if (searchWrap) searchWrap.style.display = 'none';
       if (noResults) {
         noResults.style.display = 'block';
-        noResults.innerHTML = '<i class="fas fa-file-alt" aria-hidden="true"></i><p>{% trans "No forms available at the moment."|escapejs %}</p>';
+        noResults.innerHTML = '<i class="fas fa-file-alt" aria-hidden="true"></i><p></p>';
       }
       return;
     }

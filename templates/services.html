@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% load i18n %}
+
 {% load static %}
 
-{% block title %}{% trans "Our Services" %}{% endblock %}
+{% block title %}Our Services{% endblock %}
 
-{% block meta_description %}{% trans "Explore our full range of digital services – from government applications to document processing, all under one roof." %}{% endblock %}
+{% block meta_description %}Explore our full range of digital services – from government applications to document processing, all under one roof.{% endblock %}
 
 {% block extra_head %}
 <style>
@@ -249,13 +249,13 @@
   <div class="container">
     <!-- Breadcrumb for consistency -->
     <div class="breadcrumb">
-      <a href="{% url 'home' %}"><i class="fas fa-home"></i> {% trans "Home" %}</a>
+      <a href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a>
       <i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5;"></i>
-      <span class="current">{% trans "Our Services" %}</span>
+      <span class="current">Our Services</span>
     </div>
-    <h1>{% trans "Our" %} <span>{% trans "Services" %}</span></h1>
+    <h1>Our <span>Services</span></h1>
     <div class="sub">
-      {% trans "Explore the full range of digital services we offer — from government applications to document processing, all under one roof." %}
+      Explore the full range of digital services we offer — from government applications to document processing, all under one roof.
     </div>
   </div>
 </section>
@@ -281,12 +281,12 @@
           href="{% url 'apply_service' service.id %}"
           class="btn-primary btn-apply"
         >
-          <i class="fas fa-paper-plane"></i> {% trans "Apply Online" %}
+          <i class="fas fa-paper-plane"></i> Apply Online
         </a>
       </div>
       {% empty %}
       <p class="no-data">
-        {% trans "No services available at the moment. Please check back later." %}
+        No services available at the moment. Please check back later.
       </p>
       {% endfor %}
     </div>
@@ -296,11 +296,11 @@
     <div class="pagination-wrap">
       {% if services.has_previous %}
       <a href="?page={{ services.previous_page_number }}" class="page-link">
-        <i class="fas fa-chevron-left"></i> {% trans "Prev" %}
+        <i class="fas fa-chevron-left"></i> Prev
       </a>
       {% else %}
       <span class="page-link disabled">
-        <i class="fas fa-chevron-left"></i> {% trans "Prev" %}
+        <i class="fas fa-chevron-left"></i> Prev
       </span>
       {% endif %}
 
@@ -314,11 +314,11 @@
 
       {% if services.has_next %}
       <a href="?page={{ services.next_page_number }}" class="page-link">
-        {% trans "Next" %} <i class="fas fa-chevron-right"></i>
+        Next <i class="fas fa-chevron-right"></i>
       </a>
       {% else %}
       <span class="page-link disabled">
-        {% trans "Next" %} <i class="fas fa-chevron-right"></i>
+        Next <i class="fas fa-chevron-right"></i>
       </span>
       {% endif %}
     </div>
