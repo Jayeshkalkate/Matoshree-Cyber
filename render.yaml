@@ -34,11 +34,11 @@ services:
       - key: BASE_URL
         value: "https://matoshree-cyber.onrender.com"
 
-      # Optional – set Python version explicitly (Render uses 3.12 by default)
+      # Python version
       - key: PYTHON_VERSION
         value: "3.12"
 
-      # Cloudinary (if used) – set these manually in the Render dashboard
+      # Cloudinary (if used) – set manually
       - key: CLOUDINARY_CLOUD_NAME
         sync: false
       - key: CLOUDINARY_API_KEY
@@ -60,9 +60,18 @@ services:
       - key: EMAIL_HOST_PASSWORD
         sync: false
       - key: DEFAULT_FROM_EMAIL
-        sync: false          # set to your email (e.g., noreply@yourdomain.com)
+        sync: false
       - key: CONTACT_EMAIL
-        sync: false          # where admin notifications go
+        sync: false
+
+      # ----- RAZORPAY (required for payments) -----
+      - key: RAZORPAY_KEY_ID
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
+        sync: false
+      # Optional webhook secret – set only if you enable webhooks
+      - key: RAZORPAY_WEBHOOK_SECRET
+        sync: false
 
 databases:
   - name: matoshree-db
@@ -70,4 +79,4 @@ databases:
     user: matoshree_db
     plan: free
     region: oregon
-
+  
