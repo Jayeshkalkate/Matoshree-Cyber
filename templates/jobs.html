@@ -1,5 +1,9 @@
-{% extends "base.html" %} {% load static %} {% block title %}Job & Updates
-Notifications{% endblock %} {% block extra_head %}
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Job & Updates Notifications{% endblock %}
+
+{% block extra_head %}
 <style>
   /* ================================================================
      PAGE-SPECIFIC STYLES – Jobs
@@ -362,18 +366,15 @@ Notifications{% endblock %} {% block extra_head %}
     }
   }
 </style>
-{% endblock %} {% block content %}
+{% endblock %}
+
+{% block content %}
 <!-- HERO -->
 <section class="page-hero">
   <div class="container">
     <div class="breadcrumb">
       <a href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a>
-      <span
-        ><i
-          class="fas fa-chevron-right"
-          style="font-size: 0.6rem; opacity: 0.5"
-        ></i
-      ></span>
+      <span><i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5;"></i></span>
       <span class="current">Jobs</span>
     </div>
     <h1>Current <span>Updates & Job Openings</span></h1>
@@ -390,8 +391,7 @@ Notifications{% endblock %} {% block extra_head %}
       {% if jobs.paginator.count > 0 %}
       <div class="total-badge">
         <i class="fas fa-briefcase"></i>
-        {% if jobs.paginator.count == 1 %} 1 job {% else %} {{
-        jobs.paginator.count }} jobs {% endif %}
+        {% if jobs.paginator.count == 1 %} 1 job {% else %} {{ jobs.paginator.count }} jobs {% endif %}
       </div>
       {% endif %}
     </div>
@@ -402,29 +402,22 @@ Notifications{% endblock %} {% block extra_head %}
         <div class="job-org">{{ job.organization }}</div>
         <div class="job-title">{{ job.title }}</div>
 
-        {# Show description if it exists (e.g., vacancy info) #} {% if
-        job.description %}
-        <div
-          class="job-description"
-          style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 8px"
-        >
+        {# Show description if it exists (e.g., vacancy info) #}
+        {% if job.description %}
+        <div class="job-description" style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 8px">
           {{ job.description|truncatechars:150 }}
         </div>
         {% endif %}
 
         <div class="job-footer">
-          {# Only show Last Date if the job has one #} {% if job.last_date %}
+          {# Only show Last Date if the job has one #}
+          {% if job.last_date %}
           <span class="last-date">
             <i class="fas fa-calendar-alt"></i>
             Last Date: {{ job.last_date|date:"d M Y" }}
           </span>
-          {% endif %} {# Fixed typo: lass → class #}
-          <a
-            href="{{ job.apply_link }}"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn-apply"
-          >
+          {% endif %}
+          <a href="{{ job.apply_link }}" target="_blank" rel="noopener noreferrer" class="btn-apply">
             <i class="fas fa-external-link-alt"></i> Apply Now
           </a>
         </div>
@@ -448,12 +441,17 @@ Notifications{% endblock %} {% block extra_head %}
       <span class="page-link disabled">
         <i class="fas fa-chevron-left"></i> Prev
       </span>
-      {% endif %} {% for num in jobs.paginator.page_range %} {% if jobs.number
-      == num %}
-      <span class="page-link active">{{ num }}</span>
-      {% elif num > jobs.number|add:'-3' and num < jobs.number|add:'3' %}
-      <a href="?page={{ num }}" class="page-link">{{ num }}</a>
-      {% endif %} {% endfor %} {% if jobs.has_next %}
+      {% endif %}
+
+      {% for num in jobs.paginator.page_range %}
+        {% if jobs.number == num %}
+          <span class="page-link active">{{ num }}</span>
+        {% elif num > jobs.number|add:'-3' and num < jobs.number|add:'3' %}
+          <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if jobs.has_next %}
       <a href="?page={{ jobs.next_page_number }}" class="page-link">
         Next <i class="fas fa-chevron-right"></i>
       </a>
@@ -471,24 +469,18 @@ Notifications{% endblock %} {% block extra_head %}
 <section class="cta-banner">
   <div class="container">
     <h2>Ready to <span>join</span> our team?</h2>
-    <p>
-      Have questions about a role or want to send us your CV? Reach out to us
-      anytime.
-    </p>
+    <p>Have questions about a role or want to send us your CV? Reach out to us anytime.</p>
     <div class="cta-buttons">
       <a href="{% url 'contact' %}" class="btn-primary">
         <i class="fas fa-phone"></i> Contact Us
       </a>
-      {% with whatsapp_number=business.whatsapp|default:"" %} {% if
-      whatsapp_number %}
-      <a
-        href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20am%20interested%20in%20job%20opportunities."
-        target="_blank"
-        class="btn-whatsapp"
-      >
-        <i class="fab fa-whatsapp"></i> Chat on WhatsApp
-      </a>
-      {% endif %} {% endwith %}
+      {% with whatsapp_number=business.whatsapp|default:"" %}
+        {% if whatsapp_number %}
+          <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20am%20interested%20in%20job%20opportunities." target="_blank" class="btn-whatsapp">
+            <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+          </a>
+        {% endif %}
+      {% endwith %}
     </div>
   </div>
 </section>
