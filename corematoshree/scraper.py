@@ -7,10 +7,16 @@ from datetime import timedelta
 from django.core.cache import cache
 from urllib.parse import urlparse, urljoin
 
+# Import RSS fallback from utils
+from .utils import fetch_external_jobs
+
 logger = logging.getLogger(__name__)
 
+# Add a common user-agent
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+
 # ============================================================
-# 1. MAJHI NAUKRI (already working)
+# 1. MAJHI NAUKRI
 # ============================================================
 
 def fetch_majhinaukri_jobs():
@@ -21,7 +27,7 @@ def fetch_majhinaukri_jobs():
     url = "https://majhinaukri.in/"
     jobs = []
     try:
-        response = requests.get(url, timeout=10)
+        response = requests.get(url, timeout=10, headers={'User-Agent': USER_AGENT})
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -151,7 +157,7 @@ def fetch_govtjobsalert_jobs():
     url = "https://govtjobsalert.in/maharashtra-govt-jobs/"
     jobs = []
     try:
-        response = requests.get(url, timeout=10)
+        response = requests.get(url, timeout=10, headers={'User-Agent': USER_AGENT})
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -229,7 +235,7 @@ def fetch_govtjobsalert_jobs():
 
 
 # ============================================================
-# 3. MH INDGOVTJOBS.NET (New – table-based)
+# 3. MH INDGOVTJOBS.NET (Table-based)
 # ============================================================
 
 def fetch_indgovtjobs_jobs():
@@ -240,7 +246,7 @@ def fetch_indgovtjobs_jobs():
     url = "https://mh.indgovtjobs.net/"
     jobs = []
     try:
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+        headers = {'User-Agent': USER_AGENT}
         response = requests.get(url, timeout=15, headers=headers)
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -341,7 +347,7 @@ def fetch_mahasarkar_jobs():
     url = "https://mahasarkar.co.in/"
     jobs = []
     try:
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+        headers = {'User-Agent': USER_AGENT}
         response = requests.get(url, timeout=15, headers=headers)
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -438,12 +444,13 @@ def fetch_mahasarkar_jobs_with_playwright():
 
 
 # ============================================================
-# 6. MASTER FUNCTION – Combine & Deduplicate
+# 6. MASTER FUNCTION – Combine & Deduplicate with RSS fallback
 # ============================================================
 
 def fetch_all_external_jobs():
     """
     Fetch jobs from ALL external sources and combine them with global deduplication.
+    If fewer than 5 jobs are found, fallback to RSS feed from utils.
     """
     cache_key = 'external_jobs_combined_v2'
     cached = cache.get(cache_key)
@@ -492,10 +499,46 @@ def fetch_all_external_jobs():
         reverse=True
     )
 
+    # ---- Fallback to RSS feed if we have very few jobs ----
+    if len(unique_jobs) < 5:
+        logger.info(f"Primary scrapers returned only {len(unique_jobs)} jobs, falling back to RSS feed.")
+        rss_jobs = fetch_external_jobs()  # returns list of dicts with keys: title, organization, description, apply_link, last_date, source
+        rss_added = 0
+        for job in rss_jobs:
+            # Ensure all required keys exist
+            job_copy = {
+                'title': job.get('title', ''),
+                'organization': job.get('organization', 'Various'),
+                'description': job.get('description', ''),
+                'apply_link': job.get('apply_link', '#'),
+                'last_date': job.get('last_date'),
+                'source': job.get('source', 'rss_fallback'),
+            }
+            # Deduplicate based on link (and title fallback)
+            link = job_copy['apply_link']
+            title_norm = normalize_title(job_copy['title'])
+            if link not in seen_links and title_norm not in seen_titles:
+                seen_links.add(link)
+                seen_titles.add(title_norm)
+                unique_jobs.append(job_copy)
+                rss_added += 1
+        logger.info(f"Added {rss_added} jobs from RSS fallback.")
+
+        # Re-sort after adding RSS jobs
+        unique_jobs.sort(
+            key=lambda x: x.get('last_date') or datetime.min.date(),
+            reverse=True
+        )
+
     logger.info(f"Total unique jobs after deduplication: {len(unique_jobs)} (from {len(all_jobs)} raw)")
 
     cache.set(cache_key, unique_jobs, 3600)
     return unique_jobs
+
+
+# ============================================================
+# 7. CSC JOB (Playwright)
+# ============================================================
 
 def fetch_cscjob_jobs():
     """
@@ -570,7 +613,8 @@ def fetch_cscjob_jobs():
     except Exception as e:
         logger.error(f"Playwright scraping failed for nandurbar1.cscjob.com: {e}")
         return []
-    
+
+
 # ============================================================
 # GOVERNMENT SCHEMES SCRAPER – Maharashtra Focus
 # ============================================================
@@ -589,7 +633,7 @@ def fetch_rdd_schemes():
     
     for url, provider in sources:
         try:
-            response = requests.get(url, timeout=15, headers={'User-Agent': 'Mozilla/5.0'})
+            response = requests.get(url, timeout=15, headers={'User-Agent': USER_AGENT})
             response.raise_for_status()
             soup = BeautifulSoup(response.text, 'html.parser')
             
@@ -646,7 +690,7 @@ def fetch_mahaschemes_schemes():
     url = "https://mahaschemes.in/"
     schemes = []
     try:
-        response = requests.get(url, timeout=15, headers={'User-Agent': 'Mozilla/5.0'})
+        response = requests.get(url, timeout=15, headers={'User-Agent': USER_AGENT})
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'html.parser')
         
@@ -700,7 +744,7 @@ def fetch_plan_district_schemes():
     url = "https://plan.maharashtra.gov.in/en/36-districts/"
     schemes = []
     try:
-        response = requests.get(url, timeout=15, headers={'User-Agent': 'Mozilla/5.0'})
+        response = requests.get(url, timeout=15, headers={'User-Agent': USER_AGENT})
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'html.parser')
         
