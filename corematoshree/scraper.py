@@ -18,7 +18,7 @@ USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 # ------------------------------------------------------------------
 
 def fetch_majhinaukri_jobs():
-    """Scrape genuine job listings from majhinaukri.in."""
+    """Scrape genuine job listings from majhinaukri.in homepage."""
     url = "https://majhinaukri.in/"
     jobs = []
     try:
@@ -110,6 +110,86 @@ def fetch_majhinaukri_jobs():
 
     except Exception as e:
         logger.error(f"Error scraping majhinaukri.in: {e}")
+        return []
+
+
+def fetch_majhinaukri_updates():
+    """
+    Scrape job updates from majhinaukri.in/new-updates/.
+    Extracts date, title, and link to the detailed post.
+    """
+    url = "https://majhinaukri.in/new-updates/"
+    jobs = []
+    try:
+        response = requests.get(url, timeout=10, headers={'User-Agent': USER_AGENT})
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        # Look for list items or entries; this site uses <li> with a specific pattern.
+        # We'll search for any element that contains a date in DD/MM/YYYY format followed by a pipe.
+        # Example: "03/08/2026 | Rojgar Melava 2026 ..."
+        pattern = r'(\d{2}/\d{2}/\d{4})\s*\|\s*([^<\n]+)'
+        # Use regex on the whole text to be safe, but we also want to extract the link if present.
+        # We'll iterate over <li> or <p> tags that contain the pattern.
+        for element in soup.find_all(['li', 'p', 'div']):
+            text = element.get_text(strip=True)
+            match = re.search(pattern, text)
+            if not match:
+                continue
+            date_str, title = match.groups()
+            # Try to find a link within this element
+            link_tag = element.find('a', href=True)
+            link = link_tag['href'] if link_tag else '#'
+            if link and not link.startswith('http'):
+                link = urljoin('https://majhinaukri.in', link)
+
+            try:
+                last_date = datetime.strptime(date_str, '%d/%m/%Y').date()
+            except ValueError:
+                last_date = None
+
+            jobs.append({
+                'title': title.strip(),
+                'organization': 'Majhi Naukri',
+                'description': '',
+                'apply_link': link,
+                'last_date': last_date,
+                'source': 'majhinaukri_updates'
+            })
+
+        # If no jobs found via element scanning, fallback to regex on entire HTML
+        if not jobs:
+            html = response.text
+            matches = re.findall(pattern, html)
+            for date_str, title in matches:
+                # We don't have a link, set to '#'
+                try:
+                    last_date = datetime.strptime(date_str, '%d/%m/%Y').date()
+                except ValueError:
+                    last_date = None
+                jobs.append({
+                    'title': title.strip(),
+                    'organization': 'Majhi Naukri',
+                    'description': '',
+                    'apply_link': '#',
+                    'last_date': last_date,
+                    'source': 'majhinaukri_updates'
+                })
+
+        # Deduplicate by title (since links may be missing)
+        seen = set()
+        unique = []
+        for job in jobs:
+            key = (job['title'], job['last_date'])
+            if key not in seen:
+                seen.add(key)
+                unique.append(job)
+
+        logger.info(f"Scraped {len(unique)} updates from majhinaukri.in/new-updates/")
+        return unique[:30]
+
+    except Exception as e:
+        logger.error(f"Error scraping majhinaukri.in/new-updates/: {e}")
         return []
 
 
@@ -402,10 +482,10 @@ def fetch_rss_jobs_filtered():
 
 def fetch_all_external_jobs():
     """
-    Fetch jobs from all primary sources. If fewer than 5 jobs are found,
-    use the filtered RSS feed as fallback.
+    Fetch jobs from all primary sources, including the new updates page.
+    If fewer than 5 jobs are found, use the filtered RSS feed as fallback.
     """
-    cache_key = 'external_jobs_combined_v3'  # updated key
+    cache_key = 'external_jobs_combined_v4'  # updated key
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
@@ -414,6 +494,7 @@ def fetch_all_external_jobs():
 
     # Primary scrapers
     all_jobs.extend(fetch_majhinaukri_jobs())
+    all_jobs.extend(fetch_majhinaukri_updates())   # <--- NEW
     all_jobs.extend(fetch_govtjobsalert_jobs())
     all_jobs.extend(fetch_indgovtjobs_jobs())
     all_jobs.extend(fetch_mahasarkar_jobs())
@@ -435,11 +516,16 @@ def fetch_all_external_jobs():
         link = job.get('apply_link', '').strip()
         title = job.get('title', '').strip()
         if not link or link == '#':
-            continue
+            # Still allow if link is missing but we have a title? We'll keep it but be careful.
+            # We'll allow if title is not empty.
+            if not title:
+                continue
         norm_title = normalize_title(title)
-        if link in seen_links or norm_title in seen_titles:
+        # Use link if available, else use title as key
+        key = link if link and link != '#' else norm_title
+        if key in seen_links or norm_title in seen_titles:
             continue
-        seen_links.add(link)
+        seen_links.add(key)
         seen_titles.add(norm_title)
         unique_jobs.append(job)
 
@@ -458,8 +544,9 @@ def fetch_all_external_jobs():
             link = job.get('apply_link', '#')
             title = job.get('title', '')
             norm_title = normalize_title(title)
-            if link not in seen_links and norm_title not in seen_titles:
-                seen_links.add(link)
+            key = link if link and link != '#' else norm_title
+            if key not in seen_links and norm_title not in seen_titles:
+                seen_links.add(key)
                 seen_titles.add(norm_title)
                 unique_jobs.append(job)
                 rss_added += 1
