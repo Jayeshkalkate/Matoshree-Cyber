@@ -781,4 +781,3 @@ def fetch_all_external_schemes():
     
     cache.set(cache_key, unique_schemes, 3600)  # Cache for 1 hour
     return unique_schemes
-
