@@ -38,6 +38,7 @@ six==1.17.0
 # Web scraping (required for BeautifulSoup)
 beautifulsoup4==4.13.3
 # soupsieve is a dependency of beautifulsoup4 – no need to pin it
+cloudscraper>=1.2.58
 
 # Django admin enhancements
 django-debug-toolbar==7.0.0
