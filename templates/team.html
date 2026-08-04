@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+{% load static %}
 
 {% block title %}Our Team{% endblock %}
 
@@ -196,6 +197,119 @@
         font-size: 1.1rem;
     }
 
+    /* ---- CTA Banner ---- */
+    .cta-banner {
+        padding: 70px 0;
+        background:
+            radial-gradient(
+                ellipse at 30% 20%,
+                rgba(0, 240, 255, 0.06),
+                transparent 60%
+            ),
+            var(--bg-primary);
+        border-top: 1px solid rgba(0, 240, 255, 0.06);
+        border-bottom: 1px solid rgba(0, 240, 255, 0.06);
+        text-align: center;
+    }
+    .cta-banner .container {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    .cta-banner h2 {
+        font-size: 2.4rem;
+        font-weight: 800;
+        font-family: var(--font-display);
+        color: var(--text-white);
+        letter-spacing: -0.5px;
+        margin-bottom: 8px;
+    }
+    .cta-banner h2 span {
+        color: var(--neon-cyan);
+        text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+    }
+    .cta-banner p {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        margin-bottom: 28px;
+    }
+    .cta-buttons {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 18px;
+    }
+    .btn-primary,
+    .btn-whatsapp {
+        padding: 0.8rem 2rem;
+        font-size: 1rem;
+        min-height: 48px;
+        min-width: 180px;
+        justify-content: center;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        border: none;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
+        transition: var(--transition);
+        text-decoration: none;
+        touch-action: manipulation;
+        cursor: pointer;
+    }
+    .btn-primary {
+        background: var(--gradient-cyan, linear-gradient(135deg, #00f0ff, #0ea5e9));
+        color: var(--bg-primary);
+        box-shadow: 0 0 24px rgba(0, 240, 255, 0.2);
+    }
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 40px rgba(0, 240, 255, 0.35);
+    }
+    .btn-whatsapp {
+        background: #25d366;
+        color: #fff;
+    }
+    .btn-whatsapp:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 30px rgba(37, 211, 102, 0.35);
+    }
+
+    /* ---- Developer Credit ---- */
+    .developer-credit {
+        padding: 40px 0;
+        background: var(--bg-secondary);
+    }
+    .developer-credit .container {
+        text-align: center;
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    .developer-credit h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-white);
+    }
+    .developer-credit h3 i {
+        color: var(--neon-cyan);
+    }
+    .developer-credit p {
+        color: var(--text-muted);
+        font-size: 1rem;
+        line-height: 1.7;
+    }
+    .developer-credit a {
+        color: var(--neon-cyan);
+        text-decoration: none;
+        transition: var(--transition);
+    }
+    .developer-credit a:hover {
+        color: #fff;
+        text-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+    }
+
+    /* ---- Responsive ---- */
     @media (max-width: 768px) {
         .page-hero h1 {
             font-size: 2.4rem;
@@ -214,6 +328,19 @@
         }
         .team-card .team-placeholder {
             font-size: 2.8rem;
+        }
+        .cta-banner h2 {
+            font-size: 2rem;
+        }
+        .cta-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+        .cta-buttons .btn-primary,
+        .cta-buttons .btn-whatsapp {
+            width: 100%;
+            max-width: 280px;
+            justify-content: center;
         }
     }
     @media (max-width: 480px) {
@@ -264,8 +391,8 @@
 <section class="page-hero">
     <div class="container">
         <div class="breadcrumb">
-            <a href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a>
-            <span><i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5;"></i></span>
+            <a href="{% url 'home' %}"><i class="fas fa-home" aria-hidden="true"></i> Home</a>
+            <span><i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5;" aria-hidden="true"></i></span>
             <span class="current">Our Team</span>
         </div>
         <h1>Our <span>Team</span></h1>
@@ -274,59 +401,96 @@
 </section>
 
 <!-- ================================================================
-     TEAM LIST
+     TEAM LISTING (with pagination)
      ================================================================ -->
 <section class="team-section">
     <div class="container">
         <div class="team-grid">
             {% for member in members %}
-            <div class="team-card">
+            <div class="team-card" role="article" aria-label="{{ member.name }} - {{ member.designation }}">
                 {% if member.photo %}
                 <img src="{{ member.photo.url }}" alt="{{ member.name }}" loading="lazy" />
                 {% else %}
-                <div class="team-placeholder"><i class="fas fa-user-circle"></i></div>
+                <div class="team-placeholder" aria-hidden="true"><i class="fas fa-user-circle"></i></div>
                 {% endif %}
                 <h3>{{ member.name }}</h3>
                 <p class="designation">{{ member.designation }}</p>
-                <p class="bio">{{ member.bio }}</p>
+                <p class="bio">{{ member.bio|truncatechars:80 }}</p>
             </div>
             {% empty %}
-            <p class="no-data">No team members available.</p>
+            <p class="no-data">No team members listed yet.</p>
             {% endfor %}
         </div>
 
         <!-- Pagination -->
         {% if members.has_other_pages %}
-        <div class="pagination-wrap">
+        <div class="pagination-wrap" role="navigation" aria-label="Team pagination">
             {% if members.has_previous %}
-            <a href="?page={{ members.previous_page_number }}" class="page-link">
-                <i class="fas fa-chevron-left"></i> Prev
+            <a href="?page={{ members.previous_page_number }}" class="page-link" aria-label="Previous page">
+                <i class="fas fa-chevron-left" aria-hidden="true"></i> Prev
             </a>
             {% else %}
-            <span class="page-link disabled">
-                <i class="fas fa-chevron-left"></i> Prev
+            <span class="page-link disabled" aria-disabled="true">
+                <i class="fas fa-chevron-left" aria-hidden="true"></i> Prev
             </span>
             {% endif %}
 
             {% for num in members.paginator.page_range %}
-            {% if members.number == num %}
-            <span class="page-link active">{{ num }}</span>
-            {% elif num > members.number|add:'-3' and num < members.number|add:'3' %}
-            <a href="?page={{ num }}" class="page-link">{{ num }}</a>
-            {% endif %}
+                {% if members.number == num %}
+                <span class="page-link active" aria-current="page">{{ num }}</span>
+                {% elif num > members.number|add:'-3' and num < members.number|add:'3' %}
+                <a href="?page={{ num }}" class="page-link" aria-label="Page {{ num }}">{{ num }}</a>
+                {% endif %}
             {% endfor %}
 
             {% if members.has_next %}
-            <a href="?page={{ members.next_page_number }}" class="page-link">
-                Next <i class="fas fa-chevron-right"></i>
+            <a href="?page={{ members.next_page_number }}" class="page-link" aria-label="Next page">
+                Next <i class="fas fa-chevron-right" aria-hidden="true"></i>
             </a>
             {% else %}
-            <span class="page-link disabled">
-                Next <i class="fas fa-chevron-right"></i>
+            <span class="page-link disabled" aria-disabled="true">
+                Next <i class="fas fa-chevron-right" aria-hidden="true"></i>
             </span>
             {% endif %}
         </div>
         {% endif %}
+    </div>
+</section>
+
+<!-- ================================================================
+     CTA BANNER
+     ================================================================ -->
+<section class="cta-banner">
+    <div class="container">
+        <h2>Ready to <span>Experience</span> the Difference?</h2>
+        <p>Visit us today or reach out to get started with any of our services.</p>
+        <div class="cta-buttons">
+            <a href="{% url 'contact' %}" class="btn-primary" aria-label="Contact us">
+                <i class="fas fa-phone" aria-hidden="true"></i> Contact Us
+            </a>
+            {% with whatsapp_number=business.whatsapp|default:"919876543210" %}
+            <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20would%20like%20to%20know%20more%20about%20your%20services."
+               target="_blank" rel="noopener noreferrer" class="btn-whatsapp" aria-label="Chat on WhatsApp">
+                <i class="fab fa-whatsapp" aria-hidden="true"></i> Chat on WhatsApp
+            </a>
+            {% endwith %}
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================
+     ABOUT THE DEVELOPER
+     ================================================================ -->
+<section class="developer-credit">
+    <div class="container">
+        <h3><i class="fas fa-code" aria-hidden="true"></i> About the Developer</h3>
+        <p>
+            This website was built by <strong>Jayesh Kalkate</strong>, a passionate full-stack developer.
+            You can explore more of his work on his
+            <a href="https://jayeshkalkate.netlify.app/" target="_blank" rel="noopener noreferrer">portfolio</a>
+            or connect with him on
+            <a href="https://linkedin.com/in/jayeshkalkate" target="_blank" rel="noopener noreferrer">LinkedIn</a>.
+        </p>
     </div>
 </section>
 {% endblock %}

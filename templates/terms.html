@@ -1,9 +1,10 @@
 {% extends "base.html" %}
+
 {% load static %}
 
-{% block title %}Our Team{% endblock %}
+{% block title %}Terms and Conditions{% endblock %}
 
-{% block meta_description %}Meet the dedicated professionals who make our services exceptional – our experienced team is here to help you.{% endblock %}
+{% block meta_description %}Read our terms and conditions – understand your rights and obligations when using our services.{% endblock %}
 
 {% block extra_head %}
 <style>
@@ -75,127 +76,185 @@
         line-height: 1.8;
     }
 
-    /* ---- Team Grid ---- */
-    .team-section {
+    /* ---- Content ---- */
+    .terms-section {
         padding: 60px 0 80px;
         background: var(--bg-secondary);
     }
-    .team-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-        gap: 28px;
+    .terms-section .container {
+        max-width: 820px;
+        margin: 0 auto;
+        padding: 0 20px;
     }
-    .team-card {
-        background: var(--bg-card);
-        border-radius: var(--radius);
-        padding: 24px 18px 20px;
-        text-align: center;
-        border: 1px solid rgba(255, 255, 255, 0.04);
-        transition: var(--transition);
-        box-shadow: var(--shadow-card);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    .terms-section .last-updated {
+        color: var(--text-dim);
+        font-size: 0.9rem;
+        text-align: right;
+        margin-bottom: 30px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        padding-bottom: 10px;
     }
-    .team-card:hover {
-        transform: translateY(-8px) scale(1.02);
-        border-color: var(--neon-cyan);
-        box-shadow: var(--shadow-card), var(--glow-cyan);
-        background: var(--bg-card-hover);
-    }
-    .team-card img,
-    .team-card .team-placeholder {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-bottom: 14px;
-        border: 3px solid rgba(255, 255, 255, 0.08);
-        transition: var(--transition);
-    }
-    .team-card:hover img,
-    .team-card:hover .team-placeholder {
-        border-color: var(--neon-cyan);
-        box-shadow: var(--glow-cyan);
-    }
-    .team-card .team-placeholder {
-        background: var(--bg-card);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 3.5rem;
-        color: var(--text-muted);
-        border: 3px solid rgba(255, 255, 255, 0.08);
-    }
-    .team-card h3 {
-        font-size: 1.2rem;
+    .terms-section h2 {
+        font-size: 1.6rem;
         font-weight: 700;
         color: var(--text-white);
-        margin-bottom: 2px;
+        margin-top: 2rem;
+        margin-bottom: 0.8rem;
+        font-family: var(--font-display);
     }
-    .team-card .designation {
-        font-size: 0.95rem;
+    .terms-section h2:first-of-type {
+        margin-top: 0;
+    }
+    .terms-section h2 i {
         color: var(--neon-cyan);
-        font-weight: 600;
+        margin-right: 10px;
+    }
+    .terms-section p {
+        color: var(--text-soft);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+        font-size: 1rem;
+    }
+    .terms-section ul {
+        padding-left: 1.5rem;
+        color: var(--text-soft);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+    .terms-section ul li {
+        margin-bottom: 0.3rem;
+    }
+    .terms-section ul li::marker {
+        color: var(--neon-cyan);
+    }
+    .terms-section .highlight-box {
+        background: rgba(0, 240, 255, 0.04);
+        border-left: 4px solid var(--neon-cyan);
+        padding: 1.2rem 1.5rem;
+        border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        margin: 1.5rem 0;
+    }
+    .terms-section .highlight-box p {
+        margin-bottom: 0;
+        color: var(--text-bright);
+    }
+    .terms-section .highlight-box strong {
+        color: var(--neon-cyan);
+    }
+
+    /* ---- CTA Banner ---- */
+    .cta-banner {
+        padding: 70px 0;
+        background:
+            radial-gradient(
+                ellipse at 30% 20%,
+                rgba(0, 240, 255, 0.06),
+                transparent 60%
+            ),
+            var(--bg-primary);
+        border-top: 1px solid rgba(0, 240, 255, 0.06);
+        border-bottom: 1px solid rgba(0, 240, 255, 0.06);
+        text-align: center;
+    }
+    .cta-banner .container {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    .cta-banner h2 {
+        font-size: 2.4rem;
+        font-weight: 800;
+        font-family: var(--font-display);
+        color: var(--text-white);
+        letter-spacing: -0.5px;
         margin-bottom: 8px;
     }
-    .team-card .bio {
-        font-size: 0.9rem;
-        color: var(--text-muted);
-        line-height: 1.6;
-        flex-grow: 1;
-        margin: 0;
+    .cta-banner h2 span {
+        color: var(--neon-cyan);
+        text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
     }
-
-    /* ---- Pagination ---- */
-    .pagination-wrap {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        margin-top: 40px;
-        flex-wrap: wrap;
-    }
-    .pagination-wrap .page-link {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 8px 16px;
-        border-radius: 30px;
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        color: var(--text-muted);
-        font-weight: 600;
-        font-size: 0.9rem;
-        transition: var(--transition);
-        text-decoration: none;
-        min-width: 44px;
-    }
-    .pagination-wrap .page-link:hover {
-        background: rgba(0, 240, 255, 0.08);
-        border-color: var(--neon-cyan);
-        color: var(--text-white);
-        box-shadow: var(--glow-cyan);
-        transform: translateY(-2px);
-    }
-    .pagination-wrap .page-link.active {
-        background: var(--neon-cyan);
-        color: var(--bg-primary);
-        border-color: var(--neon-cyan);
-        box-shadow: var(--glow-cyan);
-    }
-    .pagination-wrap .page-link.disabled {
-        opacity: 0.3;
-        pointer-events: none;
-    }
-
-    .no-data {
-        grid-column: 1 / -1;
-        text-align: center;
-        padding: 3rem 0;
+    .cta-banner p {
         color: var(--text-muted);
         font-size: 1.1rem;
+        margin-bottom: 28px;
+    }
+    .cta-buttons {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 18px;
+    }
+    .btn-primary,
+    .btn-whatsapp {
+        padding: 0.8rem 2rem;
+        font-size: 1rem;
+        min-height: 48px;
+        min-width: 180px;
+        justify-content: center;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        border: none;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
+        transition: var(--transition);
+        text-decoration: none;
+        touch-action: manipulation;
+        cursor: pointer;
+    }
+    .btn-primary {
+        background: var(--gradient-cyan, linear-gradient(135deg, #00f0ff, #0ea5e9));
+        color: var(--bg-primary);
+        box-shadow: 0 0 24px rgba(0, 240, 255, 0.2);
+    }
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 40px rgba(0, 240, 255, 0.35);
+    }
+    .btn-whatsapp {
+        background: #25d366;
+        color: #fff;
+    }
+    .btn-whatsapp:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 30px rgba(37, 211, 102, 0.35);
     }
 
+    /* ---- Developer Credit ---- */
+    .developer-credit {
+        padding: 40px 0;
+        background: var(--bg-secondary);
+    }
+    .developer-credit .container {
+        text-align: center;
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    .developer-credit h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-white);
+    }
+    .developer-credit h3 i {
+        color: var(--neon-cyan);
+    }
+    .developer-credit p {
+        color: var(--text-muted);
+        font-size: 1rem;
+        line-height: 1.7;
+    }
+    .developer-credit a {
+        color: var(--neon-cyan);
+        text-decoration: none;
+        transition: var(--transition);
+    }
+    .developer-credit a:hover {
+        color: #fff;
+        text-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+    }
+
+    /* ---- Responsive ---- */
     @media (max-width: 768px) {
         .page-hero h1 {
             font-size: 2.4rem;
@@ -203,55 +262,36 @@
         .page-hero p {
             font-size: 1rem;
         }
-        .team-grid {
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 18px;
+        .terms-section h2 {
+            font-size: 1.4rem;
         }
-        .team-card img,
-        .team-card .team-placeholder {
-            width: 100px;
-            height: 100px;
+        .cta-banner h2 {
+            font-size: 2rem;
         }
-        .team-card .team-placeholder {
-            font-size: 2.8rem;
+        .cta-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+        .cta-buttons .btn-primary,
+        .cta-buttons .btn-whatsapp {
+            width: 100%;
+            max-width: 280px;
+            justify-content: center;
         }
     }
     @media (max-width: 480px) {
-        .team-grid {
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
+        .terms-section {
+            padding: 40px 0 60px;
         }
-        .team-card {
-            padding: 18px 12px 16px;
+        .terms-section h2 {
+            font-size: 1.2rem;
         }
-        .team-card img,
-        .team-card .team-placeholder {
-            width: 80px;
-            height: 80px;
+        .terms-section p,
+        .terms-section ul {
+            font-size: 0.95rem;
         }
-        .team-card .team-placeholder {
-            font-size: 2rem;
-        }
-        .team-card h3 {
-            font-size: 1rem;
-        }
-        .team-card .designation {
-            font-size: 0.8rem;
-        }
-        .team-card .bio {
-            font-size: 0.8rem;
-        }
-        .pagination-wrap .page-link {
-            min-width: 38px;
-            padding: 6px 12px;
-            font-size: 0.8rem;
-        }
-    }
-    @media (max-width: 380px) {
-        .team-grid {
-            grid-template-columns: 1fr;
-            max-width: 280px;
-            margin: 0 auto;
+        .highlight-box {
+            padding: 0.8rem 1rem;
         }
     }
 </style>
@@ -264,69 +304,151 @@
 <section class="page-hero">
     <div class="container">
         <div class="breadcrumb">
-            <a href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a>
-            <span><i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5;"></i></span>
-            <span class="current">Our Team</span>
+            <a href="{% url 'home' %}"><i class="fas fa-home" aria-hidden="true"></i> Home</a>
+            <span><i class="fas fa-chevron-right" style="font-size: 0.6rem; opacity: 0.5;" aria-hidden="true"></i></span>
+            <span class="current">Terms & Conditions</span>
         </div>
-        <h1>Our <span>Team</span></h1>
-        <p>Meet the dedicated professionals who make our services exceptional.</p>
+        <h1>Terms and <span>Conditions</span></h1>
+        <p>Please read these terms carefully before using our services.</p>
     </div>
 </section>
 
 <!-- ================================================================
-     TEAM LIST
+     TERMS CONTENT
      ================================================================ -->
-<section class="team-section">
+<section class="terms-section">
     <div class="container">
-        <div class="team-grid">
-            {% for member in members %}
-            <div class="team-card">
-                {% if member.photo %}
-                <img src="{{ member.photo.url }}" alt="{{ member.name }}" loading="lazy" />
-                {% else %}
-                <div class="team-placeholder"><i class="fas fa-user-circle"></i></div>
-                {% endif %}
-                <h3>{{ member.name }}</h3>
-                <p class="designation">{{ member.designation }}</p>
-                <p class="bio">{{ member.bio|linebreaksbr }}</p>
-            </div>
-            {% empty %}
-            <p class="no-data">No team members available.</p>
-            {% endfor %}
+        <div class="last-updated">
+            <i class="fas fa-clock" aria-hidden="true"></i> Last Updated: 1 August 2026
         </div>
 
-        <!-- Pagination -->
-        {% if members.has_other_pages %}
-        <div class="pagination-wrap">
-            {% if members.has_previous %}
-            <a href="?page={{ members.previous_page_number }}" class="page-link">
-                <i class="fas fa-chevron-left"></i> Prev
-            </a>
-            {% else %}
-            <span class="page-link disabled">
-                <i class="fas fa-chevron-left"></i> Prev
-            </span>
-            {% endif %}
+        <h2><i class="fas fa-check-circle"></i> 1. Acceptance of Terms</h2>
+        <p>
+            By accessing or using the services provided by <strong>{{ business.business_name|default:"Matoshree Cyber Cafe" }}</strong>
+            (hereinafter referred to as "we", "our", or "us"), you agree to be bound by these Terms and Conditions.
+            If you do not agree with any part of these terms, you must not use our services.
+        </p>
 
-            {% for num in members.paginator.page_range %}
-            {% if members.number == num %}
-            <span class="page-link active">{{ num }}</span>
-            {% elif num > members.number|add:'-3' and num < members.number|add:'3' %}
-            <a href="?page={{ num }}" class="page-link">{{ num }}</a>
-            {% endif %}
-            {% endfor %}
+        <h2><i class="fas fa-briefcase"></i> 2. Services Offered</h2>
+        <p>
+            We provide a range of services including, but not limited to:
+        </p>
+        <ul>
+            <li>Cyber café internet access</li>
+            <li>Printing, scanning, and photocopying</li>
+            <li>Application assistance for government schemes and job portals</li>
+            <li>Document verification and form filling</li>
+            <li>Payment processing (UPI, cash, etc.)</li>
+        </ul>
+        <p>
+            All services are subject to availability and may be modified or discontinued at our discretion.
+        </p>
 
-            {% if members.has_next %}
-            <a href="?page={{ members.next_page_number }}" class="page-link">
-                Next <i class="fas fa-chevron-right"></i>
-            </a>
-            {% else %}
-            <span class="page-link disabled">
-                Next <i class="fas fa-chevron-right"></i>
-            </span>
-            {% endif %}
+        <h2><i class="fas fa-user-check"></i> 3. User Obligations</h2>
+        <p>
+            You agree to:
+        </p>
+        <ul>
+            <li>Provide accurate and truthful information when using our services.</li>
+            <li>Use our services only for lawful purposes.</li>
+            <li>Respect the privacy and rights of other users.</li>
+            <li>Not engage in any activity that may harm our systems or reputation.</li>
+        </ul>
+        <div class="highlight-box">
+            <p><strong>Important:</strong> You are solely responsible for the security of your personal data and for any actions taken under your account.</p>
         </div>
-        {% endif %}
+
+        <h2><i class="fas fa-money-bill-wave"></i> 4. Payments and Fees</h2>
+        <p>
+            All service charges are clearly displayed at our premises and on our website. Payment must be made at the time of service delivery unless otherwise agreed.
+        </p>
+        <ul>
+            <li><strong>UPI:</strong> Accepted via the QR code displayed at the counter.</li>
+            <li><strong>Cash:</strong> Accepted at our physical location.</li>
+            <li><strong>Refunds:</strong> Refunds are processed only in exceptional cases and at our sole discretion.</li>
+        </ul>
+
+        <h2><i class="fas fa-shield-alt"></i> 5. Privacy and Data Protection</h2>
+        <p>
+            We take your privacy seriously. Any personal information collected is used solely for service delivery and will not be shared with third parties except where required by law.
+            For more details, please refer to our <a href="{% url 'privacy' %}" style="color: var(--neon-cyan);">Privacy Policy</a>.
+        </p>
+
+        <h2><i class="fas fa-exclamation-triangle"></i> 6. Limitation of Liability</h2>
+        <p>
+            To the fullest extent permitted by law, we shall not be liable for any indirect, incidental, special, or consequential damages arising from the use of our services.
+            Our total liability for any claim shall not exceed the amount paid by you for the specific service in question.
+        </p>
+
+        <h2><i class="fas fa-file-signature"></i> 7. Intellectual Property</h2>
+        <p>
+            All content on this website, including text, graphics, logos, and software, is the property of our company or its content suppliers and is protected by intellectual property laws.
+            Unauthorized use is strictly prohibited.
+        </p>
+
+        <h2><i class="fas fa-gavel"></i> 8. Governing Law</h2>
+        <p>
+            These terms are governed by and construed in accordance with the laws of India.
+            Any disputes arising from these terms shall be subject to the exclusive jurisdiction of the courts in Maharashtra, India.
+        </p>
+
+        <h2><i class="fas fa-edit"></i> 9. Changes to Terms</h2>
+        <p>
+            We reserve the right to update these terms at any time. The revised version will be posted on this page with the updated date.
+            Your continued use of our services constitutes acceptance of the changes.
+        </p>
+
+        <h2><i class="fas fa-envelope"></i> 10. Contact Us</h2>
+        <p>
+            If you have any questions about these terms, please contact us at:
+        </p>
+        <ul>
+            <li><strong>Email:</strong> {{ business.email|default:"support@matoshreecyber.com" }}</li>
+            <li><strong>Phone:</strong> {{ business.phone|default:"+91-9876543210" }}</li>
+            <li><strong>Address:</strong> {{ business.address|default:"Matoshree Cyber Cafe, Maharashtra, India" }}</li>
+        </ul>
+
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.06); text-align: center; color: var(--text-dim); font-size: 0.9rem;">
+            <i class="fas fa-check-circle" style="color: var(--neon-cyan);"></i>
+            By using our services, you acknowledge that you have read, understood, and agree to these Terms and Conditions.
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================
+     CTA BANNER
+     ================================================================ -->
+<section class="cta-banner">
+    <div class="container">
+        <h2>Have Questions About Our <span>Terms</span>?</h2>
+        <p>We're here to help. Reach out to us anytime for clarification.</p>
+        <div class="cta-buttons">
+            <a href="{% url 'contact' %}" class="btn-primary" aria-label="Contact us">
+                <i class="fas fa-phone" aria-hidden="true"></i> Contact Us
+            </a>
+            {% with whatsapp_number=business.whatsapp|default:"919876543210" %}
+            <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20have%20a%20question%20about%20your%20terms%20and%20conditions."
+               target="_blank" rel="noopener noreferrer" class="btn-whatsapp" aria-label="Chat on WhatsApp">
+                <i class="fab fa-whatsapp" aria-hidden="true"></i> Chat on WhatsApp
+            </a>
+            {% endwith %}
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================
+     ABOUT THE DEVELOPER
+     ================================================================ -->
+<section class="developer-credit">
+    <div class="container">
+        <h3><i class="fas fa-code" aria-hidden="true"></i> About the Developer</h3>
+        <p>
+            This website was built by <strong>Jayesh Kalkate</strong>, a passionate full-stack developer.
+            You can explore more of his work on his
+            <a href="https://jayeshkalkate.netlify.app/" target="_blank" rel="noopener noreferrer">portfolio</a>
+            or connect with him on
+            <a href="https://linkedin.com/in/jayeshkalkate" target="_blank" rel="noopener noreferrer">LinkedIn</a>.
+        </p>
     </div>
 </section>
 {% endblock %}
