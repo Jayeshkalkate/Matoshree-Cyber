@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 from django.core.cache import cache
 from urllib.parse import urljoin
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -13,17 +14,37 @@ logger = logging.getLogger(__name__)
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
 
 
-# ------------------------------------------------------------------
-# 1. PRIMARY SCRAPERS (with USER_AGENT)
-# ------------------------------------------------------------------
+# ==================================================================
+# HELPER: HTTP request with retry & exponential backoff
+# ==================================================================
+
+def fetch_with_retry(url, timeout=20, retries=3, headers=None):
+    """Fetch a URL with retries and exponential backoff."""
+    headers = headers or {'User-Agent': USER_AGENT}
+    for attempt in range(retries):
+        try:
+            response = requests.get(url, timeout=timeout, headers=headers)
+            response.raise_for_status()
+            return response
+        except requests.exceptions.RequestException as e:
+            wait = 2 ** attempt  # 1, 2, 4 seconds
+            logger.warning(f"Attempt {attempt+1}/{retries} for {url} failed: {e}. Retrying in {wait}s...")
+            if attempt == retries - 1:
+                raise
+            time.sleep(wait)
+    return None  # should never reach
+
+
+# ==================================================================
+# 1. PRIMARY SCRAPERS (using fetch_with_retry)
+# ==================================================================
 
 def fetch_majhinaukri_jobs():
     """Scrape genuine job listings from majhinaukri.in homepage."""
     url = "https://majhinaukri.in/"
     jobs = []
     try:
-        response = requests.get(url, timeout=10, headers={'User-Agent': USER_AGENT})
-        response.raise_for_status()
+        response = fetch_with_retry(url, timeout=20)
         soup = BeautifulSoup(response.text, 'html.parser')
 
         HEADING_BLACKLIST = {
@@ -121,23 +142,16 @@ def fetch_majhinaukri_updates():
     url = "https://majhinaukri.in/new-updates/"
     jobs = []
     try:
-        response = requests.get(url, timeout=10, headers={'User-Agent': USER_AGENT})
-        response.raise_for_status()
+        response = fetch_with_retry(url, timeout=20)
         soup = BeautifulSoup(response.text, 'html.parser')
 
-        # Look for list items or entries; this site uses <li> with a specific pattern.
-        # We'll search for any element that contains a date in DD/MM/YYYY format followed by a pipe.
-        # Example: "03/08/2026 | Rojgar Melava 2026 ..."
         pattern = r'(\d{2}/\d{2}/\d{4})\s*\|\s*([^<\n]+)'
-        # Use regex on the whole text to be safe, but we also want to extract the link if present.
-        # We'll iterate over <li> or <p> tags that contain the pattern.
         for element in soup.find_all(['li', 'p', 'div']):
             text = element.get_text(strip=True)
             match = re.search(pattern, text)
             if not match:
                 continue
             date_str, title = match.groups()
-            # Try to find a link within this element
             link_tag = element.find('a', href=True)
             link = link_tag['href'] if link_tag else '#'
             if link and not link.startswith('http'):
@@ -157,12 +171,11 @@ def fetch_majhinaukri_updates():
                 'source': 'majhinaukri_updates'
             })
 
-        # If no jobs found via element scanning, fallback to regex on entire HTML
+        # Fallback: regex on entire HTML
         if not jobs:
             html = response.text
             matches = re.findall(pattern, html)
             for date_str, title in matches:
-                # We don't have a link, set to '#'
                 try:
                     last_date = datetime.strptime(date_str, '%d/%m/%Y').date()
                 except ValueError:
@@ -176,7 +189,7 @@ def fetch_majhinaukri_updates():
                     'source': 'majhinaukri_updates'
                 })
 
-        # Deduplicate by title (since links may be missing)
+        # Deduplicate by title
         seen = set()
         unique = []
         for job in jobs:
@@ -198,8 +211,7 @@ def fetch_govtjobsalert_jobs():
     url = "https://govtjobsalert.in/maharashtra-govt-jobs/"
     jobs = []
     try:
-        response = requests.get(url, timeout=10, headers={'User-Agent': USER_AGENT})
-        response.raise_for_status()
+        response = fetch_with_retry(url, timeout=20)
         soup = BeautifulSoup(response.text, 'html.parser')
 
         items = soup.select('article') or soup.select('.job-list, .post, .entry-content ul li')
@@ -273,8 +285,7 @@ def fetch_indgovtjobs_jobs():
     url = "https://mh.indgovtjobs.net/"
     jobs = []
     try:
-        response = requests.get(url, timeout=15, headers={'User-Agent': USER_AGENT})
-        response.raise_for_status()
+        response = fetch_with_retry(url, timeout=20)
         soup = BeautifulSoup(response.text, 'html.parser')
 
         rows = soup.select('table tr')
@@ -364,8 +375,7 @@ def fetch_mahasarkar_jobs():
     url = "https://mahasarkar.co.in/"
     jobs = []
     try:
-        response = requests.get(url, timeout=15, headers={'User-Agent': USER_AGENT})
-        response.raise_for_status()
+        response = fetch_with_retry(url, timeout=20)
         soup = BeautifulSoup(response.text, 'html.parser')
 
         scripts = soup.find_all('script')
@@ -403,9 +413,9 @@ def fetch_mahasarkar_jobs():
         return []
 
 
-# ------------------------------------------------------------------
-# 2. FILTERED RSS FALLBACK – removes Current Affairs & cleans HTML
-# ------------------------------------------------------------------
+# ==================================================================
+# 2. FILTERED RSS FALLBACK – always included
+# ==================================================================
 
 def fetch_rss_jobs_filtered():
     """
@@ -416,23 +426,19 @@ def fetch_rss_jobs_filtered():
     jobs = []
     try:
         feed = feedparser.parse(feed_url)
-        for entry in feed.entries[:50]:  # limit to 50 entries
+        for entry in feed.entries[:50]:
             title = entry.get('title', '').strip()
-            # --- Filter out Current Affairs ---
             if re.search(r'(current affairs|चालू घडामोडी)', title, re.I):
                 continue
 
             link = entry.get('link', '#')
-            # Clean description: remove HTML tags
             raw_desc = entry.get('description', '') or entry.get('summary', '')
             if raw_desc:
-                # Use BeautifulSoup to strip tags
                 soup = BeautifulSoup(raw_desc, 'html.parser')
                 description = soup.get_text(separator=' ').strip()
             else:
                 description = title
 
-            # Extract organization from title (e.g., "Organization: Title")
             org = 'Various'
             if ':' in title:
                 parts = title.split(':', 1)
@@ -443,7 +449,6 @@ def fetch_rss_jobs_filtered():
                 org = parts[0].strip()
                 title = parts[1].strip() if len(parts) > 1 else title
 
-            # Parse published date
             pub_date = entry.get('published', entry.get('pubDate', ''))
             last_date = None
             if pub_date:
@@ -451,7 +456,6 @@ def fetch_rss_jobs_filtered():
                     from dateutil import parser as date_parser
                     last_date = date_parser.parse(pub_date).date()
                 except:
-                    # Fallback to common formats
                     for fmt in ('%a, %d %b %Y %H:%M:%S %z', '%Y-%m-%dT%H:%M:%S%z'):
                         try:
                             last_date = datetime.strptime(pub_date, fmt).date()
@@ -462,7 +466,7 @@ def fetch_rss_jobs_filtered():
             jobs.append({
                 'title': title,
                 'organization': org,
-                'description': description[:200],  # truncate for display
+                'description': description[:200],
                 'apply_link': link,
                 'last_date': last_date,
                 'source': 'rss_fallback'
@@ -476,16 +480,15 @@ def fetch_rss_jobs_filtered():
         return []
 
 
-# ------------------------------------------------------------------
-# 3. MASTER FUNCTION with fallback
-# ------------------------------------------------------------------
+# ==================================================================
+# 3. MASTER FUNCTION – always includes RSS
+# ==================================================================
 
 def fetch_all_external_jobs():
     """
-    Fetch jobs from all primary sources, including the new updates page.
-    If fewer than 5 jobs are found, use the filtered RSS feed as fallback.
+    Fetch jobs from all primary sources, plus RSS feed as a baseline.
     """
-    cache_key = 'external_jobs_combined_v4'  # updated key
+    cache_key = 'external_jobs_combined_v5'  # updated to clear old cache
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
@@ -494,14 +497,16 @@ def fetch_all_external_jobs():
 
     # Primary scrapers
     all_jobs.extend(fetch_majhinaukri_jobs())
-    all_jobs.extend(fetch_majhinaukri_updates())   # <--- NEW
+    all_jobs.extend(fetch_majhinaukri_updates())
     all_jobs.extend(fetch_govtjobsalert_jobs())
     all_jobs.extend(fetch_indgovtjobs_jobs())
     all_jobs.extend(fetch_mahasarkar_jobs())
 
-    # ============================================================
-    # GLOBAL DEDUPLICATION
-    # ============================================================
+    # ---- ALWAYS include RSS feed (fallback + extra entries) ----
+    rss_jobs = fetch_rss_jobs_filtered()
+    all_jobs.extend(rss_jobs)
+
+    # ---- Global deduplication ----
     def normalize_title(title):
         t = title.lower().strip()
         t = re.sub(r'\s*(bharti|recruitment|vacancy|notification|भरती|नोकरी|जागा)\s*', ' ', t)
@@ -515,13 +520,9 @@ def fetch_all_external_jobs():
     for job in all_jobs:
         link = job.get('apply_link', '').strip()
         title = job.get('title', '').strip()
-        if not link or link == '#':
-            # Still allow if link is missing but we have a title? We'll keep it but be careful.
-            # We'll allow if title is not empty.
-            if not title:
-                continue
+        if not title:
+            continue
         norm_title = normalize_title(title)
-        # Use link if available, else use title as key
         key = link if link and link != '#' else norm_title
         if key in seen_links or norm_title in seen_titles:
             continue
@@ -535,31 +536,8 @@ def fetch_all_external_jobs():
         reverse=True
     )
 
-    # If we have very few jobs, use filtered RSS feed
-    if len(unique_jobs) < 5:
-        logger.info(f"Primary scrapers returned {len(unique_jobs)} jobs – falling back to filtered RSS.")
-        rss_jobs = fetch_rss_jobs_filtered()
-        rss_added = 0
-        for job in rss_jobs:
-            link = job.get('apply_link', '#')
-            title = job.get('title', '')
-            norm_title = normalize_title(title)
-            key = link if link and link != '#' else norm_title
-            if key not in seen_links and norm_title not in seen_titles:
-                seen_links.add(key)
-                seen_titles.add(norm_title)
-                unique_jobs.append(job)
-                rss_added += 1
-        logger.info(f"Added {rss_added} jobs from RSS fallback.")
-        # Re-sort after adding
-        unique_jobs.sort(
-            key=lambda x: x.get('last_date') or datetime.min.date(),
-            reverse=True
-        )
-
     logger.info(f"Total unique jobs after deduplication: {len(unique_jobs)}")
-
-    cache.set(cache_key, unique_jobs, 3600)  # cache for 1 hour
+    cache.set(cache_key, unique_jobs, 3600)
     return unique_jobs
 
 
@@ -671,7 +649,7 @@ def fetch_cscjob_jobs():
 
 
 # ------------------------------------------------------------------
-# 5. GOVERNMENT SCHEMES SCRAPERS (unchanged, but with USER_AGENT)
+# 5. GOVERNMENT SCHEMES SCRAPERS (unchanged)
 # ------------------------------------------------------------------
 
 def fetch_rdd_schemes():
@@ -683,8 +661,7 @@ def fetch_rdd_schemes():
     ]
     for url, provider in sources:
         try:
-            response = requests.get(url, timeout=15, headers={'User-Agent': USER_AGENT})
-            response.raise_for_status()
+            response = fetch_with_retry(url, timeout=20)
             soup = BeautifulSoup(response.text, 'html.parser')
             items = soup.select('ul li a, .scheme-list a, .content a')
             for item in items:
@@ -724,8 +701,7 @@ def fetch_mahaschemes_schemes():
     url = "https://mahaschemes.in/"
     schemes = []
     try:
-        response = requests.get(url, timeout=15, headers={'User-Agent': USER_AGENT})
-        response.raise_for_status()
+        response = fetch_with_retry(url, timeout=20)
         soup = BeautifulSoup(response.text, 'html.parser')
         items = soup.select('article, .post, .scheme-item, .yojana-item')
         for item in items:
@@ -763,8 +739,7 @@ def fetch_plan_district_schemes():
     url = "https://plan.maharashtra.gov.in/en/36-districts/"
     schemes = []
     try:
-        response = requests.get(url, timeout=15, headers={'User-Agent': USER_AGENT})
-        response.raise_for_status()
+        response = fetch_with_retry(url, timeout=20)
         soup = BeautifulSoup(response.text, 'html.parser')
         districts = soup.find_all('a', href=True)
         for district in districts:
