@@ -8,10 +8,8 @@
 <style>
   /* ================================================================
      PAGE-SPECIFIC STYLES – Jobs
-     Uses global CSS variables from base.html.
      ================================================================ */
 
-  /* ---- Hero ---- */
   .page-hero {
     padding: 70px 0 50px;
     text-align: center;
@@ -79,7 +77,6 @@
     line-height: 1.8;
   }
 
-  /* ---- Jobs Section ---- */
   .jobs-section {
     padding: 40px 0 70px;
     background: var(--bg-secondary);
@@ -116,7 +113,6 @@
     box-shadow: var(--glow-cyan);
   }
 
-  /* ---- Job Cards ---- */
   .jobs-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -135,7 +131,6 @@
     position: relative;
     overflow: hidden;
   }
-  /* Top neon line */
   .job-card::before {
     content: "";
     position: absolute;
@@ -237,7 +232,6 @@
     box-shadow: var(--glow-cyan);
   }
 
-  /* ---- No jobs ---- */
   .no-jobs {
     grid-column: 1 / -1;
     text-align: center;
@@ -252,7 +246,6 @@
     display: block;
   }
 
-  /* ---- Pagination (reuses base styles, but ensure) ---- */
   .pagination-wrap {
     display: flex;
     justify-content: center;
@@ -293,7 +286,6 @@
     pointer-events: none;
   }
 
-  /* ---- CTA Banner (uses global styles, but ensure) ---- */
   .cta-banner {
     padding: 70px 0;
     background:
@@ -334,9 +326,6 @@
     gap: 18px;
   }
 
-  /* ================================================================
-     RESPONSIVE
-     ================================================================ */
   @media (max-width: 1024px) {
     .jobs-grid {
       grid-template-columns: repeat(2, 1fr);
@@ -381,9 +370,7 @@
 {% endblock %}
 
 {% block content %}
-<!-- ================================================================
-     PAGE HERO
-     ================================================================ -->
+<!-- HERO -->
 <section class="page-hero">
   <div class="container">
     <div class="breadcrumb">
@@ -392,22 +379,16 @@
       <span class="current">Jobs</span>
     </div>
     <h1>Current <span>Job Openings</span></h1>
-    <p>
-      Explore opportunities to work with us or our partner organizations.
-    </p>
+    <p>Explore opportunities to work with us or our partner organizations.</p>
   </div>
 </section>
 
-<!-- ================================================================
-     JOBS LIST
-     ================================================================ -->
+<!-- JOBS LIST -->
 <section class="jobs-section">
   <div class="container">
     <div class="section-header">
       <h2>Available <span>Positions</span></h2>
-      <p>
-        Check out the latest openings and apply before the deadline.
-      </p>
+      <p>Check out the latest openings and apply before the deadline.</p>
       {% if jobs.paginator.count > 0 %}
       <div class="total-badge">
         <i class="fas fa-briefcase"></i>
@@ -425,16 +406,25 @@
       <div class="job-card">
         <div class="job-org">{{ job.organization }}</div>
         <div class="job-title">{{ job.title }}</div>
-        <div class="job-description">
-          {{ job.description|truncatechars:150 }}
-        </div>
+
+        {# Show description if it exists (e.g., vacancy info) #}
+        {% if job.description %}
+          <div class="job-description" style="font-size:0.85rem; color:var(--text-dim); margin-bottom:8px;">
+            {{ job.description|truncatechars:150 }}
+          </div>
+        {% endif %}
+
         <div class="job-footer">
-          <span class="last-date">
-            <i class="fas fa-calendar-alt"></i>
-            Last Date: {{ job.last_date|date:"d M Y" }}
-          </span>
-          <a href="{{ job.apply_link }}" target="_blank" rel="noopener noreferrer" lass="btn-apply">
-              <i class="fas fa-external-link-alt"></i> Apply Now
+          {# Only show Last Date if the job has one #}
+          {% if job.last_date %}
+            <span class="last-date">
+              <i class="fas fa-calendar-alt"></i>
+              Last Date: {{ job.last_date|date:"d M Y" }}
+            </span>
+          {% endif %}
+          {# Fixed typo: lass → class #}
+          <a href="{{ job.apply_link }}" target="_blank" rel="noopener noreferrer" class="btn-apply">
+            <i class="fas fa-external-link-alt"></i> Apply Now
           </a>
         </div>
       </div>
@@ -446,7 +436,7 @@
       {% endfor %}
     </div>
 
-    <!-- Pagination (corrected) -->
+    <!-- Pagination -->
     {% if jobs.has_other_pages %}
     <div class="pagination-wrap">
       {% if jobs.has_previous %}
@@ -481,14 +471,10 @@
   </div>
 </section>
 
-<!-- ================================================================
-     CTA BANNER
-     ================================================================ -->
+<!-- CTA BANNER -->
 <section class="cta-banner">
   <div class="container">
-    <h2>
-      Ready to <span>join</span> our team?
-    </h2>
+    <h2>Ready to <span>join</span> our team?</h2>
     <p>
       Have questions about a role or want to send us your CV? Reach out to us anytime.
     </p>

@@ -717,7 +717,70 @@ class PaymentSettings(models.Model):
         verbose_name = "Payment Setting"
         verbose_name_plural = "Payment Settings"
 
-
+# ==========================
+# Goverment Schemes
+# ==========================
+class GovernmentScheme(models.Model):
+    """Government Scheme – enhanced for Maharashtra focus."""
+    
+    STATUS_CHOICES = (
+        ('active', 'Active'),
+        ('ongoing', 'Ongoing'),
+        ('upcoming', 'Upcoming'),
+        ('closed', 'Closed'),
+        ('expired', 'Expired'),
+    )
+    
+    PROVIDER_CHOICES = (
+        ('central', 'Central Government'),
+        ('state', 'State Government'),
+        ('joint', 'Joint Venture (Central & State)'),
+        ('district', 'District Level'),
+    )
+    
+    # Core fields
+    title = models.CharField("Scheme Title", max_length=300, db_index=True)
+    description = models.TextField("Description")
+    eligibility = models.TextField("Eligibility Criteria", blank=True)
+    
+    # Date fields
+    last_date = models.DateField("Last Date", null=True, blank=True, db_index=True)
+    start_date = models.DateField("Start Date", null=True, blank=True)
+    
+    # Status & Provider
+    status = models.CharField("Status", max_length=20, choices=STATUS_CHOICES, default='active', db_index=True)
+    provider = models.CharField("Provider", max_length=20, choices=PROVIDER_CHOICES, default='state')
+    
+    # Additional info
+    department = models.CharField("Department", max_length=200, blank=True)
+    district = models.CharField("District (if applicable)", max_length=100, blank=True)
+    apply_link = models.URLField("Apply Link", blank=True)
+    official_link = models.URLField("Official Link", blank=True)
+    image = models.ImageField("Banner/Image", upload_to="schemes/", blank=True, null=True)
+    
+    # Metadata
+    source = models.CharField("Source", max_length=100, default='manual')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    # Tags for filtering
+    category = models.CharField("Category", max_length=100, blank=True, db_index=True)
+    benefits = models.TextField("Benefits", blank=True)
+    
+    def __str__(self):
+        return self.title
+    
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = "Government Scheme"
+        verbose_name_plural = "Government Schemes"
+        indexes = [
+            models.Index(fields=['status', 'provider']),
+            models.Index(fields=['last_date']),
+            models.Index(fields=['district']),
+            models.Index(fields=['category']),
+        ]
+        
 # ==========================
 # Payment Log (for audit trail)
 # ==========================

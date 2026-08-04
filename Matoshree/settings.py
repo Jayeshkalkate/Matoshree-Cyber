@@ -100,10 +100,8 @@ LOGIN_URL = 'login'
 # ---------- LANGUAGE & TIME (i18n disabled) ----------
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Kolkata'
-USE_I18N = False          # Disable internationalization
+USE_I18N = False
 USE_TZ = True
-
-EXTERNAL_JOBS_RSS_URL = 'https://majhinaukri.in/feed/'
 
 # ------------------------------------------------------------------
 # STATIC & MEDIA
@@ -262,3 +260,4 @@ RAZORPAY_FEE_FIXED = config('RAZORPAY_FEE_FIXED', default=0, cast=float)
 # PAYMENT_MAX_RETRY = config('PAYMENT_MAX_RETRY', default=3, cast=int)
 # PAYMENT_AMOUNT_MIN = config('PAYMENT_AMOUNT_MIN', default=1, cast=int)
 # PAYMENT_AMOUNT_MAX = config('PAYMENT_AMOUNT_MAX', default=100000, cast=int)
+

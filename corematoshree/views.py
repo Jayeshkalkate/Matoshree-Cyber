@@ -12,6 +12,9 @@ from datetime import timedelta
 from io import BytesIO
 from datetime import datetime
 import re
+from .scraper import fetch_all_external_jobs
+from urllib.parse import quote
+from .scraper import fetch_all_external_schemes
 
 # ---- Third-Party Libraries ----
 import razorpay
@@ -1005,13 +1008,64 @@ def announcements(request):
         'announcements': announcements_page,
     })
 
+def get_apply_link(scheme_dict):
+    """Return direct link or Google search fallback."""
+    link = scheme_dict.get('apply_link', '').strip()
+    if link and link != '#':
+        return link
+    title = scheme_dict.get('title', '').strip()
+    query = f"{title} Maharashtra government scheme"
+    return f"https://www.google.com/search?q={quote(query)}"
 
 @login_required
 def government_schemes(request):
-    schemes_qs = GovernmentScheme.objects.all().order_by('-last_date').only(
-        'id', 'title', 'description', 'eligibility', 'last_date', 'image'
-    )
-    paginator = Paginator(schemes_qs, 10)
+    # ----- 1. Fetch external schemes (cached) -----
+    external_schemes = fetch_all_external_schemes()
+    
+    # ----- 2. Fetch manual schemes from database -----
+    manual_schemes = GovernmentScheme.objects.order_by('-created_at')
+    
+    # ----- 3. Combine -----
+    combined = []
+    
+    for scheme in manual_schemes:
+        scheme_dict = {
+            'title': scheme.title,
+            'description': scheme.description,
+            'eligibility': scheme.eligibility,
+            'last_date': scheme.last_date,
+            'status': scheme.status,
+            'provider': scheme.provider,
+            'department': scheme.department,
+            'image': scheme.image,
+            'apply_link': scheme.apply_link,
+            'official_link': scheme.official_link,
+            'source': 'manual',
+        }
+        # Add the display link (direct or Google search fallback)
+        scheme_dict['apply_link_display'] = get_apply_link(scheme_dict)
+        combined.append(scheme_dict)
+    
+    for scheme in external_schemes:
+        scheme_dict = {
+            'title': scheme.get('title', ''),
+            'description': scheme.get('description', ''),
+            'eligibility': scheme.get('eligibility', ''),
+            'last_date': scheme.get('last_date'),
+            'status': scheme.get('status', 'active'),
+            'provider': scheme.get('provider', 'Government'),
+            'department': scheme.get('department', ''),
+            'image': None,
+            'apply_link': scheme.get('apply_link', '#'),
+            'official_link': scheme.get('official_link', '#'),
+            'source': scheme.get('source', 'external'),
+        }
+        # Add the display link (direct or Google search fallback)
+        scheme_dict['apply_link_display'] = get_apply_link(scheme_dict)
+        combined.append(scheme_dict)
+    
+    # ----- 4. Paginate (9 items per page = 3x3 grid) -----
+    paginator = Paginator(combined, 9)
     page = request.GET.get('page')
     try:
         schemes_page = paginator.page(page)
@@ -1019,15 +1073,16 @@ def government_schemes(request):
         schemes_page = paginator.page(1)
     except EmptyPage:
         schemes_page = paginator.page(paginator.num_pages)
+    
     return render(request, 'government_schemes.html', {
         'business': get_business(),
         'schemes': schemes_page,
     })
-
+    
 @login_required
 def jobs(request):
     # ----- 1. Fetch external jobs (cached) -----
-    external_jobs = fetch_external_jobs()
+    external_jobs = fetch_all_external_jobs()
 
     # ----- 2. Fetch manual jobs from database -----
     manual_jobs = JobNotification.objects.order_by('-last_date')
@@ -1067,7 +1122,7 @@ def jobs(request):
     )
 
     # ----- 6. Paginate (10 items per page) -----
-    paginator = Paginator(combined, 10)
+    paginator = Paginator(combined, 9)
     page = request.GET.get('page')
     try:
         jobs_page = paginator.page(page)

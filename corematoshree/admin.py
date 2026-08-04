@@ -182,12 +182,17 @@ class DownloadFormAdmin(admin.ModelAdmin):
 # ==========================
 # Government Scheme Admin
 # ==========================
+# @admin.register(GovernmentScheme)
+# class GovernmentSchemeAdmin(admin.ModelAdmin):
+#     list_display = ('title', 'last_date')
+#     search_fields = ('title',)
+#     ordering = ('-last_date',)
+
 @admin.register(GovernmentScheme)
 class GovernmentSchemeAdmin(admin.ModelAdmin):
-    list_display = ('title', 'last_date')
-    search_fields = ('title',)
-    ordering = ('-last_date',)
-
+    list_display = ("title", "last_date", "status", "provider", "apply_link")
+    search_fields = ("title",)
+    list_filter = ("status", "provider")
 
 # ==========================
 # Job Notification Admin

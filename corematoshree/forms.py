@@ -151,12 +151,26 @@ class JobNotificationForm(forms.ModelForm):
         fields = ("title", "organization", "last_date", "apply_link", "description", "icon")
 
 
+# class GovernmentSchemeForm(forms.ModelForm):
+#     class Meta:
+#         model = GovernmentScheme
+#         fields = ("title", "description", "eligibility", "last_date", "image")
+
 class GovernmentSchemeForm(forms.ModelForm):
     class Meta:
         model = GovernmentScheme
-        fields = ("title", "description", "eligibility", "last_date", "image")
-
-
+        fields = (
+            "title", "description", "eligibility", "last_date", "start_date",
+            "status", "provider", "department", "district",
+            "apply_link", "official_link", "image",
+            "category", "benefits"
+        )
+        widgets = {
+            "description": forms.Textarea(attrs={"rows": 4}),
+            "eligibility": forms.Textarea(attrs={"rows": 3}),
+            "benefits": forms.Textarea(attrs={"rows": 3}),
+        }
+        
 class AppointmentFormDashboard(forms.ModelForm):
     class Meta:
         model = Appointment

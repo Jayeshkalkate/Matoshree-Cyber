@@ -712,22 +712,31 @@
     <div class="schemes-grid">
       {% for scheme in schemes %}
       <div class="scheme-card">
+        <!-- Image -->
         {% if scheme.image %}
-        <img src="{{ scheme.image.url }}" alt="{{ scheme.title }}" class="scheme-image" loading="lazy" />
+          <img src="{{ scheme.image.url }}" alt="{{ scheme.title }}" class="scheme-image" loading="lazy" />
         {% else %}
-        <!-- Local static placeholder instead of picsum.photos -->
-        <img src="{% static 'images/scheme-placeholder.png' %}" alt="{{ scheme.title }}" class="scheme-image" loading="lazy" />
+          <img src="{% static 'images/scheme-placeholder.png' %}" alt="{{ scheme.title }}" class="scheme-image" loading="lazy" />
         {% endif %}
+
+        <!-- Title -->
         <h3 class="scheme-title">{{ scheme.title }}</h3>
+
+        <!-- Description -->
         <p class="scheme-description">
           {{ scheme.description|truncatechars:150 }}
         </p>
+
+        <!-- Meta info -->
         <div class="scheme-meta">
+          <!-- Eligibility -->
           <div class="meta-item eligibility">
             <i class="fas fa-check-circle" aria-hidden="true"></i>
             <span class="label">Eligibility:</span>
             <span class="value">{{ scheme.eligibility|default:"Not specified" }}</span>
           </div>
+
+          <!-- Last Date -->
           <div class="meta-item">
             <i class="far fa-calendar-alt" aria-hidden="true"></i>
             <span class="label">Last Date:</span>
@@ -735,17 +744,66 @@
               {% if scheme.last_date %}{{ scheme.last_date|date:"d M Y" }}{% else %}Ongoing{% endif %}
             </span>
           </div>
-        </div>
-      </div>
+
+          <!-- Status -->
+          <div class="meta-item">
+            <i class="fas fa-info-circle" aria-hidden="true"></i>
+            <span class="label">Status:</span>
+            <span class="value">
+              {% if scheme.status == 'active' %}
+                <span class="badge-status active" style="background:rgba(57,255,158,0.12); color:#39ff9e; padding:2px 12px; border-radius:20px; font-size:0.75rem;">Active</span>
+              {% elif scheme.status == 'ongoing' %}
+                <span class="badge-status ongoing" style="background:rgba(0,230,255,0.12); color:#00e6ff; padding:2px 12px; border-radius:20px; font-size:0.75rem;">Ongoing</span>
+              {% elif scheme.status == 'upcoming' %}
+                <span class="badge-status upcoming" style="background:rgba(255,194,60,0.12); color:#ffc23c; padding:2px 12px; border-radius:20px; font-size:0.75rem;">Upcoming</span>
+              {% elif scheme.status == 'closed' or scheme.status == 'expired' %}
+                <span class="badge-status closed" style="background:rgba(255,61,95,0.12); color:#ff3d5f; padding:2px 12px; border-radius:20px; font-size:0.75rem;">Closed</span>
+              {% else %}
+                <span style="color:var(--text-dim); font-size:0.75rem;">{{ scheme.status|default:"Active"|title }}</span>
+              {% endif %}
+            </span>
+          </div>
+
+          <!-- Department (if provided) -->
+          {% if scheme.department %}
+          <div class="meta-item" style="flex-basis:100%;">
+            <i class="fas fa-building" aria-hidden="true"></i>
+            <span class="label">Department:</span>
+            <span class="value">{{ scheme.department }}</span>
+          </div>
+          {% endif %}
+
+          <!-- Provider (if provided) -->
+          {% if scheme.provider %}
+          <div class="meta-item" style="flex-basis:100%;">
+            <i class="fas fa-university" aria-hidden="true"></i>
+            <span class="label">Provider:</span>
+            <span class="value">{{ scheme.provider }}</span>
+          </div>
+          {% endif %}
+
+          <!-- Apply Link (if available) -->
+          <div class="meta-item" style="flex-basis:100%; margin-top:4px;">
+              <a href="{{ scheme.apply_link_display }}" target="_blank" rel="noopener noreferrer" class="btn-apply" style="display:inline-flex; align-items:center; gap:6px; padding:6px 18px; border-radius:30px; font-weight:600; font-size:0.85rem; color:#fff; background:var(--neon-cyan); text-decoration:none; transition:all 0.3s ease;">
+                <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                  {% if scheme.apply_link and scheme.apply_link != '#' %}
+                    Apply Now
+                  {% else %}
+                    Read More
+                  {% endif %}
+              </a>
+          </div>
+        </div> <!-- end scheme-meta -->
+      </div> <!-- end scheme-card -->
       {% empty %}
       <div class="no-schemes">
         <i class="fas fa-hand-holding-heart" aria-hidden="true"></i>
         <p>No government schemes available at the moment.</p>
       </div>
       {% endfor %}
-    </div>
+    </div> <!-- end schemes-grid -->
 
-    <!-- Pagination (corrected) -->
+    <!-- Pagination -->
     {% if schemes.has_other_pages %}
     <div class="pagination-wrap" role="navigation" aria-label="Schemes pagination">
       {% if schemes.has_previous %}
@@ -777,7 +835,7 @@
       {% endif %}
     </div>
     {% endif %}
-  </div>
+  </div> <!-- end container -->
 </section>
 
 <!-- ================================================================
