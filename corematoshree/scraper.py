@@ -26,7 +26,7 @@ except ImportError:
     scraper = requests
     logger.warning("⚠️ cloudscraper not installed – using requests (may get 403)")
 
-# ─── Realistic headers (same as before, but consistent) ───
+# ─── Realistic headers ───
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36',
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
@@ -57,7 +57,7 @@ def fetch_with_retry(url, timeout=25, retries=3):
     return None
 
 # ════════════════════════════════════════════════════════════════
-# 1. PRIMARY SCRAPERS – UNCHANGED LOGIC, ONLY NETWORK UPGRADED
+# 1. PRIMARY SCRAPERS
 # ════════════════════════════════════════════════════════════════
 
 def fetch_majhinaukri_jobs():
@@ -223,34 +223,50 @@ def fetch_majhinaukri_updates():
 
 
 def fetch_govtjobsalert_jobs():
-    """Scrape jobs from govtjobsalert.in Maharashtra page."""
+    """
+    Scrape jobs from govtjobsalert.in Maharashtra page.
+    Pattern: Job PostLast Date: DD MMM YYYY ### Job Title (link)
+    """
     url = "https://govtjobsalert.in/maharashtra-govt-jobs/"
     jobs = []
     try:
         response = fetch_with_retry(url, timeout=25)
         soup = BeautifulSoup(response.text, 'html.parser')
 
-        items = soup.select('article') or soup.select('.job-list, .post, .entry-content ul li')
-        for item in items:
-            link_tag = item.find('a')
-            if not link_tag:
+        # Find all job entries using the pattern
+        # The page has links with job titles and dates in the text
+        for a in soup.find_all('a', href=True):
+            href = a.get('href')
+            text = a.text.strip()
+            
+            # Skip if not a job link (govtjobsalert internal links)
+            if not href or not href.startswith('https://govtjobsalert.in/'):
                 continue
-            title = link_tag.text.strip()
-            href = link_tag.get('href')
-            if not href or len(title) < 5:
-                continue
-            if not href.startswith('http'):
-                href = 'https://govtjobsalert.in' + href
-
+            
+            # Look for date pattern in the surrounding text
+            parent = a.parent
+            parent_text = parent.get_text() if parent else ''
+            
+            # Try to find last date in parent or in the link text itself
+            date_match = re.search(r'Last Date:\s*(\d{2}\s+[A-Za-z]{3}\s+\d{4})', parent_text, re.I)
+            if not date_match:
+                date_match = re.search(r'(\d{2}\s+[A-Za-z]{3}\s+\d{4})', parent_text)
+            
             last_date = None
-            item_text = item.get_text()
-            date_match = re.search(r'Last Date:\s*(\d{2}\s+[A-Za-z]{3}\s+\d{4})', item_text, re.I)
             if date_match:
                 try:
                     last_date = datetime.strptime(date_match.group(1), '%d %b %Y').date()
                 except:
                     pass
-
+            
+            # Clean title - remove "Job Post" prefix if present
+            title = text
+            title = re.sub(r'^Job\s+Post\s*', '', title, flags=re.I)
+            title = re.sub(r'^Job\s+Post\s*', '', title, flags=re.I)
+            
+            if len(title) < 5:
+                continue
+            
             jobs.append({
                 'title': title,
                 'organization': 'Govt Jobs Alert',
@@ -260,9 +276,11 @@ def fetch_govtjobsalert_jobs():
                 'source': 'govtjobsalert'
             })
 
+        # If no jobs found via links, try regex fallback on the entire HTML
         if not jobs:
             html = response.text
-            pattern = r'Job Post[^\]]*?Last Date:\s*(\d{2}\s+[A-Za-z]{3}\s+\d{4})[^#]*###\s*([^)]+)\(([^)]+)\)'
+            # Pattern: Job PostLast Date: DD MMM YYYY ### Job Title (link)
+            pattern = r'Job\s+Post[^\]]*?Last\s+Date:\s*(\d{2}\s+[A-Za-z]{3}\s+\d{4})[^#]*###\s*([^)]+)\(([^)]+)\)'
             matches = re.findall(pattern, html)
             for last_date_str, title, link in matches:
                 title = re.sub(r'^\[.*?\]\s*', '', title.strip())
@@ -270,6 +288,8 @@ def fetch_govtjobsalert_jobs():
                     last_date = datetime.strptime(last_date_str, '%d %b %Y').date()
                 except:
                     last_date = None
+                if link and not link.startswith('http'):
+                    link = 'https://govtjobsalert.in' + link
                 jobs.append({
                     'title': title,
                     'organization': 'Govt Jobs Alert',
@@ -295,77 +315,102 @@ def fetch_govtjobsalert_jobs():
 
 
 def fetch_indgovtjobs_jobs():
-    """Scrape jobs from mh.indgovtjobs.net (table format)."""
+    """
+    Scrape jobs from mh.indgovtjobs.net.
+    Extracts from table rows with organization, vacancies, last date, and apply link.
+    """
     url = "https://mh.indgovtjobs.net/"
     jobs = []
     try:
         response = fetch_with_retry(url, timeout=25)
         soup = BeautifulSoup(response.text, 'html.parser')
 
+        # Find all table rows
         rows = soup.select('table tr')
         for row in rows:
-            links = row.find_all('a')
-            if not links:
-                continue
-            job_link = links[0]
-            title = job_link.text.strip()
-            href = job_link.get('href')
-            if not href or len(title) < 5:
-                continue
-            if not href.startswith('http'):
-                href = urljoin(url, href)
-
             cells = row.find_all('td')
+            if len(cells) < 3:
+                continue
+            
+            # Extract organization from first cell
+            org = cells[0].text.strip() if cells[0] else ''
+            if not org or len(org) < 3:
+                continue
+            
+            # Extract vacancies from second cell
+            vacancies = cells[1].text.strip() if len(cells) > 1 else ''
+            
+            # Extract last date from third cell (may contain "Open" or date)
+            last_date_str = cells[2].text.strip() if len(cells) > 2 else ''
             last_date = None
-            vacancies = None
-            for cell in cells:
-                text = cell.text.strip()
-                date_match = re.search(r'(\d{1,2}\s+[A-Za-z]{3}\s+\d{4})', text)
-                if date_match:
-                    try:
+            if last_date_str and last_date_str.lower() not in ['open', '—', '-']:
+                try:
+                    # Try to parse date in various formats
+                    date_match = re.search(r'(\d{1,2}\s+[A-Za-z]{3}\s+\d{4})', last_date_str)
+                    if date_match:
                         last_date = datetime.strptime(date_match.group(1), '%d %b %Y').date()
-                    except:
-                        pass
-                if re.match(r'^\d+$', text):
-                    vacancies = text
-
-            description = ""
-            if vacancies:
-                description += f"Vacancies: {vacancies}"
+                except:
+                    pass
+            
+            # Find apply link in the row
+            link_tag = row.find('a', href=True)
+            apply_link = link_tag.get('href') if link_tag else '#'
+            if apply_link and not apply_link.startswith('http'):
+                apply_link = urljoin(url, apply_link)
+            
+            # Build description
+            description = f"Vacancies: {vacancies}" if vacancies else ''
             if last_date:
                 if description:
                     description += " | "
                 description += f"Last Date: {last_date.strftime('%d %b %Y')}"
-
+            
+            # Try to extract job title from the link text or combine with org
+            title = org
+            if vacancies:
+                title += f" – {vacancies} vacancies"
+            
             jobs.append({
                 'title': title,
-                'organization': 'MH IndGovtJobs',
+                'organization': org,
                 'description': description,
-                'apply_link': href,
+                'apply_link': apply_link,
                 'last_date': last_date,
                 'source': 'indgovtjobs'
             })
 
+        # Fallback: find all "Apply Now" links
         if not jobs:
             for a in soup.find_all('a', href=True):
-                href = a['href']
+                href = a.get('href')
                 text = a.text.strip()
-                if 'apply' in text.lower() or 'bharti' in text.lower():
+                if 'apply' in text.lower() and href and 'mh.indgovtjobs.net' in href:
+                    # Try to find context (parent text)
                     parent = a.parent
-                    if parent:
-                        parent_text = parent.get_text()
-                        title_match = re.search(r'([A-Za-z0-9\s\-–]+?(?:Bharti|Recruitment|Vacancy|भरती))', parent_text, re.I)
-                        if title_match:
-                            title = title_match.group(1).strip()
-                            if len(title) > 5:
-                                jobs.append({
-                                    'title': title,
-                                    'organization': 'MH IndGovtJobs',
-                                    'description': '',
-                                    'apply_link': href if href.startswith('http') else urljoin(url, href),
-                                    'last_date': None,
-                                    'source': 'indgovtjobs'
-                                })
+                    parent_text = parent.get_text() if parent else ''
+                    
+                    # Extract organization from parent text
+                    org_match = re.search(r'^([A-Za-z0-9\s\-–]+?)\s*[|\(]', parent_text)
+                    org = org_match.group(1).strip() if org_match else 'MH IndGovtJobs'
+                    
+                    # Try to find last date
+                    date_match = re.search(r'(\d{1,2}\s+[A-Za-z]{3}\s+\d{4})', parent_text)
+                    last_date = None
+                    if date_match:
+                        try:
+                            last_date = datetime.strptime(date_match.group(1), '%d %b %Y').date()
+                        except:
+                            pass
+                    
+                    title = org
+                    jobs.append({
+                        'title': title,
+                        'organization': org,
+                        'description': '',
+                        'apply_link': href if href.startswith('http') else urljoin(url, href),
+                        'last_date': last_date,
+                        'source': 'indgovtjobs'
+                    })
 
         seen = set()
         unique = []
@@ -383,13 +428,55 @@ def fetch_indgovtjobs_jobs():
 
 
 def fetch_mahasarkar_jobs():
-    """Static fallback for mahasarkar.co.in (limited)."""
+    """
+    Scrape jobs from mahasarkar.co.in.
+    Since the page is mostly static text, we extract from script tags and links.
+    """
     url = "https://mahasarkar.co.in/"
     jobs = []
     try:
         response = fetch_with_retry(url, timeout=25)
         soup = BeautifulSoup(response.text, 'html.parser')
 
+        # Try to find job links in the page
+        for a in soup.find_all('a', href=True):
+            href = a.get('href')
+            text = a.text.strip()
+            
+            # Look for links that might be job-related
+            if not href or not text or len(text) < 5:
+                continue
+            
+            # Check if it's a job-related link (contains keywords)
+            text_lower = text.lower()
+            href_lower = href.lower()
+            if any(kw in text_lower for kw in ['bharti', 'recruitment', 'vacancy', 'job', 'नोकरी', 'भरती']) or \
+               any(kw in href_lower for kw in ['bharti', 'recruitment', 'vacancy']):
+                
+                if href and not href.startswith('http'):
+                    href = urljoin(url, href)
+                
+                # Try to extract date from link or surrounding text
+                parent = a.parent
+                parent_text = parent.get_text() if parent else ''
+                date_match = re.search(r'(\d{1,2}\s+[A-Za-z]{3}\s+\d{4})', parent_text)
+                last_date = None
+                if date_match:
+                    try:
+                        last_date = datetime.strptime(date_match.group(1), '%d %b %Y').date()
+                    except:
+                        pass
+                
+                jobs.append({
+                    'title': text,
+                    'organization': 'Mahasarkar',
+                    'description': '',
+                    'apply_link': href,
+                    'last_date': last_date,
+                    'source': 'mahasarkar'
+                })
+
+        # Also try to extract from script tags (JSON data)
         scripts = soup.find_all('script')
         for script in scripts:
             if script.string and 'job' in script.string.lower():
@@ -416,7 +503,7 @@ def fetch_mahasarkar_jobs():
                 seen.add(key)
                 unique.append(job)
 
-        logger.info(f"Scraped {len(unique)} jobs from mahasarkar.co.in (static fallback)")
+        logger.info(f"Scraped {len(unique)} jobs from mahasarkar.co.in")
         return unique[:20]
 
     except Exception as e:
@@ -499,7 +586,7 @@ def fetch_all_external_jobs():
     """
     Fetch jobs from all primary sources, plus RSS feed as a baseline.
     """
-    cache_key = 'external_jobs_combined_v7'  # updated to clear old cache
+    cache_key = 'external_jobs_combined_v9'  # updated to clear old cache
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
@@ -557,11 +644,11 @@ def fetch_all_external_jobs():
 # ────────────────────────────────────────────────────────────────
 
 def fetch_mahasarkar_jobs_with_playwright():
-    # ... (unchanged, you can keep the existing code)
+    # ... (you can keep the existing code here)
     pass
 
 def fetch_cscjob_jobs():
-    # ... (unchanged)
+    # ... (keep existing code)
     pass
 
 

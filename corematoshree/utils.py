@@ -1,15 +1,56 @@
 import logging
+import re
 from datetime import datetime
 from django.core.cache import cache
 from django.conf import settings
 from .models import BusinessInfo, PaymentSettings
-import requests
-import feedparser
+import time
 
 logger = logging.getLogger(__name__)
 
+# ─── Use cloudscraper if available, else fallback to requests ───
+try:
+    import cloudscraper
+    scraper = cloudscraper.create_scraper(
+        browser={
+            'browser': 'chrome',
+            'platform': 'windows',
+            'desktop': True,
+            'mobile': False
+        }
+    )
+    logger.info("✅ cloudscraper loaded in utils – will bypass 403/Cloudflare")
+except ImportError:
+    import requests
+    scraper = requests
+    logger.warning("⚠️ cloudscraper not installed in utils – using requests (may get 403)")
+
+HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+    'Accept-Language': 'en-US,en;q=0.9',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Connection': 'keep-alive',
+    'Upgrade-Insecure-Requests': '1',
+}
+
+def fetch_with_retry(url, timeout=25, retries=3):
+    """Fetch URL with retries using the selected scraper."""
+    for attempt in range(retries):
+        try:
+            response = scraper.get(url, timeout=timeout, headers=HEADERS)
+            response.raise_for_status()
+            return response
+        except Exception as e:
+            wait = 2 ** attempt
+            logger.warning(f"Attempt {attempt+1}/{retries} for {url} failed: {e}. Retrying in {wait}s...")
+            if attempt == retries - 1:
+                raise
+            time.sleep(wait)
+    return None
+
 # -------------------------------------------------------------------
-# Business & Payment helpers (no changes needed, but kept robust)
+# Business & Payment helpers (unchanged)
 # -------------------------------------------------------------------
 
 def get_business():
@@ -68,9 +109,9 @@ def compute_payment_breakdown(service_amount, gst_rate=0.18, fee_percent=2.0, fe
         'gst_on_fee': gst_on_fee,
         'total': total,
     }
-    
+
 # -------------------------------------------------------------------
-# External jobs feed – completely safe with fallbacks
+# External jobs feed – now using cloudscraper + retry
 # -------------------------------------------------------------------
 
 def fetch_external_jobs():
@@ -87,62 +128,60 @@ def fetch_external_jobs():
 
     api_url = getattr(settings, 'EXTERNAL_JOBS_API_URL', 
                       'http://localhost:3000/freejobalert/gov/other-all-india-exam')
-    timeout = getattr(settings, 'EXTERNAL_JOBS_TIMEOUT', 10)
+    timeout = getattr(settings, 'EXTERNAL_JOBS_TIMEOUT', 25)
     limit = getattr(settings, 'EXTERNAL_JOBS_LIMIT', 50)
 
-    # ---- 1. Try Jobful API ----
+    # ---- 1. Try Jobful API with retry ----
     jobs = []
     try:
-        response = requests.get(api_url, timeout=timeout)
-        response.raise_for_status()
-        data = response.json()
+        response = fetch_with_retry(api_url, timeout=timeout)
+        if response:
+            data = response.json()
+            if isinstance(data, list):
+                for item in data[:limit]:
+                    title = item.get('postName', '').strip()
+                    organization = item.get('postBoard', 'Various').strip()
+                    link = item.get('link', '#')
+                    last_date_str = item.get('lastDate', '').strip()
+                    qualification = item.get('qualification', '').strip()
+                    advt_no = item.get('advtNo', '').strip()
+                    post_date = item.get('postDate', '').strip()
 
-        if isinstance(data, list):
-            for item in data[:limit]:
-                title = item.get('postName', '').strip()
-                organization = item.get('postBoard', 'Various').strip()
-                link = item.get('link', '#')
-                last_date_str = item.get('lastDate', '').strip()
-                qualification = item.get('qualification', '').strip()
-                advt_no = item.get('advtNo', '').strip()
-                post_date = item.get('postDate', '').strip()
+                    # Build description
+                    desc_parts = []
+                    if qualification:
+                        desc_parts.append(f"Qualification: {qualification}")
+                    if advt_no:
+                        desc_parts.append(f"Advt No: {advt_no}")
+                    if post_date:
+                        desc_parts.append(f"Posted: {post_date}")
+                    description = " | ".join(desc_parts) if desc_parts else title
 
-                # Build description
-                desc_parts = []
-                if qualification:
-                    desc_parts.append(f"Qualification: {qualification}")
-                if advt_no:
-                    desc_parts.append(f"Advt No: {advt_no}")
-                if post_date:
-                    desc_parts.append(f"Posted: {post_date}")
-                description = " | ".join(desc_parts) if desc_parts else title
+                    # Parse last_date
+                    last_date = None
+                    if last_date_str:
+                        match = re.search(r'(\d{2}-\d{2}-\d{4})', last_date_str)
+                        if match:
+                            try:
+                                last_date = datetime.strptime(match.group(1), '%d-%m-%Y').date()
+                            except ValueError:
+                                pass
 
-                # Parse last_date
-                last_date = None
-                if last_date_str:
-                    # Try to extract date in DD-MM-YYYY format
-                    import re
-                    match = re.search(r'(\d{2}-\d{2}-\d{4})', last_date_str)
-                    if match:
-                        try:
-                            last_date = datetime.strptime(match.group(1), '%d-%m-%Y').date()
-                        except ValueError:
-                            pass
+                    jobs.append({
+                        'title': title,
+                        'organization': organization,
+                        'description': description,
+                        'apply_link': link,
+                        'last_date': last_date,
+                        'source': 'external'
+                    })
 
-                jobs.append({
-                    'title': title,
-                    'organization': organization,
-                    'description': description,
-                    'apply_link': link,
-                    'last_date': last_date,
-                    'source': 'external'
-                })
-
-            # Cache API results for 1 hour
-            cache.set(cache_key, jobs, 60 * 60)
-            return jobs
+                cache.set(cache_key, jobs, 60 * 60)
+                return jobs
+            else:
+                logger.warning("Jobful API returned non-list data, falling back to RSS.")
         else:
-            logger.warning("Jobful API returned non-list data, falling back to RSS.")
+            logger.warning("Jobful API request failed, falling back to RSS.")
     except Exception as e:
         logger.warning(f"Jobful API failed: {e}, falling back to RSS.")
 
