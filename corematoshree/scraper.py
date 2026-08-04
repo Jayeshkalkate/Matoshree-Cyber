@@ -1,29 +1,24 @@
 import logging
 import re
 import requests
+import feedparser
 from bs4 import BeautifulSoup
-from datetime import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
 from django.core.cache import cache
-from urllib.parse import urlparse, urljoin
-
-# Import RSS fallback from utils
-from .utils import fetch_external_jobs
+from urllib.parse import urljoin
 
 logger = logging.getLogger(__name__)
 
-# Add a common user-agent
+# Common user‑agent to avoid 403 errors
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
 
-# ============================================================
-# 1. MAJHI NAUKRI
-# ============================================================
+
+# ------------------------------------------------------------------
+# 1. PRIMARY SCRAPERS (with USER_AGENT)
+# ------------------------------------------------------------------
 
 def fetch_majhinaukri_jobs():
-    """
-    Scrape genuine job listings from majhinaukri.in homepage.
-    Filters out headings, utilities, and extracts last date if available.
-    """
+    """Scrape genuine job listings from majhinaukri.in."""
     url = "https://majhinaukri.in/"
     jobs = []
     try:
@@ -31,82 +26,54 @@ def fetch_majhinaukri_jobs():
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'html.parser')
 
-        # --- Blacklist for headings / non-job links ---
         HEADING_BLACKLIST = {
             "वर्तमान भरती", "latest jobs", "view more", "prev", "next",
             "«", "»", "←", "→", "previous", "next page",
             "नवीनतम भरती", "ताज्या भरती", "नोकरीच्या जाहिराती",
             "popular departments", "government jobs", "private jobs"
         }
-
-        # --- Job keywords (English + Marathi) ---
         JOB_KEYWORDS = {
             "bharti", "recruitment", "job", "vacancy", "notification",
             "भरती", "मेळावा", "नोकरी", "पद", "जागा", "नियुक्ति",
             "walk-in", "apply", "exam", "admit card", "result"
         }
 
-        # --- Find all anchor tags ---
         for a in soup.find_all('a', href=True):
             href = a['href']
             text = a.text.strip()
             text_lower = text.lower()
 
-            # 1. Must be a full URL under majhinaukri.in
             if not href.startswith('https://majhinaukri.in/'):
                 continue
-
-            # 2. Skip obvious non-job paths
             if any(skip in href for skip in ['/category/', '/tag/', '/page/', '/wp-', '#', '?page=']):
                 continue
-
-            # 3. Skip if title is in heading blacklist (exact match or contains phrase)
             if any(phrase in text_lower for phrase in HEADING_BLACKLIST):
                 continue
-
-            # 4. Skip purely numeric pagination (e.g., "1", "2", "3")
-            if text.isdigit():
+            if text.isdigit() or text_lower in ("prev", "next") or "view more" in text_lower:
                 continue
-
-            # 5. Skip if text is "Prev" or "Next" (case-insensitive)
-            if text_lower in ("prev", "next"):
-                continue
-
-            # 6. Skip if text contains "View More" (case-insensitive)
-            if "view more" in text_lower:
-                continue
-
-            # 7. Skip if title is too short (less than 5 characters)
             if len(text) < 5:
                 continue
 
-            # 8. Strong filter: check for date pattern in URL (e.g., /2026/08/) OR job keyword in title
             has_date = re.search(r'/\d{4}/\d{2}/\d{2}/', href) is not None
             has_keyword = any(kw in text_lower for kw in JOB_KEYWORDS)
             if not (has_date or has_keyword):
                 continue
 
-            # --- Clean up the title ---
-            # Remove common prefixes like "Latest Jobs:", "वर्तमान भरती" etc.
             clean_title = text
             for prefix in ["latest jobs:", "वर्तमान भरती:", "ताज्या भरती:", "नवीनतम भरती:"]:
                 if clean_title.lower().startswith(prefix):
                     clean_title = clean_title[len(prefix):].strip()
                     break
 
-            # --- Extract last date from the surrounding element ---
             last_date = None
-            # Check if the anchor has a parent with text containing date
             parent = a.parent
             if parent:
                 parent_text = parent.get_text()
-                # Look for patterns like "2 days ago", "2d ago", "2d", "2 days"
                 date_match = re.search(r'(\d+)\s*(day|d|days?)\s*ago', parent_text, re.I)
                 if date_match:
                     days_ago = int(date_match.group(1))
                     last_date = datetime.now().date() - timedelta(days=days_ago)
                 else:
-                    # Try exact date format "DD MMM YYYY" or "DD-MM-YYYY"
                     date_match = re.search(r'(\d{1,2}\s+[A-Za-z]{3,}\s+\d{4})', parent_text)
                     if date_match:
                         try:
@@ -130,30 +97,24 @@ def fetch_majhinaukri_jobs():
                 'source': 'majhinaukri'
             })
 
-        # --- Deduplicate by link ---
+        # Deduplicate
         seen = set()
-        unique_jobs = []
+        unique = []
         for job in jobs:
             if job['apply_link'] not in seen:
                 seen.add(job['apply_link'])
-                unique_jobs.append(job)
+                unique.append(job)
 
-        logger.info(f"Scraped {len(unique_jobs)} jobs from majhinaukri.in")
-        return unique_jobs[:30]
+        logger.info(f"Scraped {len(unique)} jobs from majhinaukri.in")
+        return unique[:30]
 
     except Exception as e:
         logger.error(f"Error scraping majhinaukri.in: {e}")
         return []
 
 
-# ============================================================
-# 2. GOVT JOBS ALERT (Maharashtra page)
-# ============================================================
-
 def fetch_govtjobsalert_jobs():
-    """
-    Scrape job listings from govtjobsalert.in Maharashtra page using BeautifulSoup + regex fallback.
-    """
+    """Scrape jobs from govtjobsalert.in Maharashtra page."""
     url = "https://govtjobsalert.in/maharashtra-govt-jobs/"
     jobs = []
     try:
@@ -161,23 +122,17 @@ def fetch_govtjobsalert_jobs():
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'html.parser')
 
-        # Try common selectors
-        items = soup.select('article')
-        if not items:
-            items = soup.select('.job-list, .post, .entry-content ul li')
-
+        items = soup.select('article') or soup.select('.job-list, .post, .entry-content ul li')
         for item in items:
             link_tag = item.find('a')
             if not link_tag:
                 continue
             title = link_tag.text.strip()
             href = link_tag.get('href')
-            if not href:
+            if not href or len(title) < 5:
                 continue
             if not href.startswith('http'):
                 href = 'https://govtjobsalert.in' + href
-            if len(title) < 5:
-                continue
 
             last_date = None
             item_text = item.get_text()
@@ -197,14 +152,13 @@ def fetch_govtjobsalert_jobs():
                 'source': 'govtjobsalert'
             })
 
-        # Fallback regex if no jobs found
+        # Regex fallback if no jobs found
         if not jobs:
             html = response.text
             pattern = r'Job Post[^\]]*?Last Date:\s*(\d{2}\s+[A-Za-z]{3}\s+\d{4})[^#]*###\s*([^)]+)\(([^)]+)\)'
             matches = re.findall(pattern, html)
             for last_date_str, title, link in matches:
-                title = title.strip()
-                title = re.sub(r'^\[.*?\]\s*', '', title)
+                title = re.sub(r'^\[.*?\]\s*', '', title.strip())
                 try:
                     last_date = datetime.strptime(last_date_str, '%d %b %Y').date()
                 except:
@@ -234,20 +188,12 @@ def fetch_govtjobsalert_jobs():
         return []
 
 
-# ============================================================
-# 3. MH INDGOVTJOBS.NET (Table-based)
-# ============================================================
-
 def fetch_indgovtjobs_jobs():
-    """
-    Scrape job listings from mh.indgovtjobs.net.
-    Jobs are in a table format.
-    """
+    """Scrape jobs from mh.indgovtjobs.net (table format)."""
     url = "https://mh.indgovtjobs.net/"
     jobs = []
     try:
-        headers = {'User-Agent': USER_AGENT}
-        response = requests.get(url, timeout=15, headers=headers)
+        response = requests.get(url, timeout=15, headers={'User-Agent': USER_AGENT})
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -259,12 +205,10 @@ def fetch_indgovtjobs_jobs():
             job_link = links[0]
             title = job_link.text.strip()
             href = job_link.get('href')
-            if not href:
+            if not href or len(title) < 5:
                 continue
             if not href.startswith('http'):
                 href = urljoin(url, href)
-            if len(title) < 5:
-                continue
 
             cells = row.find_all('td')
             last_date = None
@@ -280,12 +224,13 @@ def fetch_indgovtjobs_jobs():
                 if re.match(r'^\d+$', text):
                     vacancies = text
 
-            description_parts = []
+            description = ""
             if vacancies:
-                description_parts.append(f"Vacancies: {vacancies}")
+                description += f"Vacancies: {vacancies}"
             if last_date:
-                description_parts.append(f"Last Date: {last_date.strftime('%d %b %Y')}")
-            description = " | ".join(description_parts)
+                if description:
+                    description += " | "
+                description += f"Last Date: {last_date.strftime('%d %b %Y')}"
 
             jobs.append({
                 'title': title,
@@ -334,25 +279,15 @@ def fetch_indgovtjobs_jobs():
         return []
 
 
-# ============================================================
-# 4. MAHASARKAR.CO.IN (Static fallback – limited)
-# ============================================================
-
 def fetch_mahasarkar_jobs():
-    """
-    Scrape job listings from mahasarkar.co.in using static HTML.
-    ⚠️ This site uses client-side rendering, so this returns minimal results.
-    For full data, use fetch_mahasarkar_jobs_with_playwright().
-    """
+    """Static fallback for mahasarkar.co.in (limited)."""
     url = "https://mahasarkar.co.in/"
     jobs = []
     try:
-        headers = {'User-Agent': USER_AGENT}
-        response = requests.get(url, timeout=15, headers=headers)
+        response = requests.get(url, timeout=15, headers={'User-Agent': USER_AGENT})
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'html.parser')
 
-        # Extract from script tags (Next.js initial state)
         scripts = soup.find_all('script')
         for script in scripts:
             if script.string and 'job' in script.string.lower():
@@ -369,7 +304,7 @@ def fetch_mahasarkar_jobs():
                         })
 
         if not jobs:
-            logger.warning("mahasarkar.co.in: No jobs found in static HTML. Consider using Playwright.")
+            logger.warning("mahasarkar.co.in: No jobs found in static HTML.")
 
         # Deduplicate
         seen = set()
@@ -388,15 +323,165 @@ def fetch_mahasarkar_jobs():
         return []
 
 
-# ============================================================
-# 5. MAHASARKAR WITH PLAYWRIGHT (Full JS rendering)
-# ============================================================
+# ------------------------------------------------------------------
+# 2. FILTERED RSS FALLBACK – removes Current Affairs & cleans HTML
+# ------------------------------------------------------------------
+
+def fetch_rss_jobs_filtered():
+    """
+    Fetch jobs from majhinaukri.in RSS feed, filter out 'Current Affairs'
+    entries, and clean HTML tags from descriptions.
+    """
+    feed_url = "https://majhinaukri.in/feed/"
+    jobs = []
+    try:
+        feed = feedparser.parse(feed_url)
+        for entry in feed.entries[:50]:  # limit to 50 entries
+            title = entry.get('title', '').strip()
+            # --- Filter out Current Affairs ---
+            if re.search(r'(current affairs|चालू घडामोडी)', title, re.I):
+                continue
+
+            link = entry.get('link', '#')
+            # Clean description: remove HTML tags
+            raw_desc = entry.get('description', '') or entry.get('summary', '')
+            if raw_desc:
+                # Use BeautifulSoup to strip tags
+                soup = BeautifulSoup(raw_desc, 'html.parser')
+                description = soup.get_text(separator=' ').strip()
+            else:
+                description = title
+
+            # Extract organization from title (e.g., "Organization: Title")
+            org = 'Various'
+            if ':' in title:
+                parts = title.split(':', 1)
+                org = parts[0].strip()
+                title = parts[1].strip()
+            elif ' - ' in title:
+                parts = title.split(' - ', 1)
+                org = parts[0].strip()
+                title = parts[1].strip() if len(parts) > 1 else title
+
+            # Parse published date
+            pub_date = entry.get('published', entry.get('pubDate', ''))
+            last_date = None
+            if pub_date:
+                try:
+                    from dateutil import parser as date_parser
+                    last_date = date_parser.parse(pub_date).date()
+                except:
+                    # Fallback to common formats
+                    for fmt in ('%a, %d %b %Y %H:%M:%S %z', '%Y-%m-%dT%H:%M:%S%z'):
+                        try:
+                            last_date = datetime.strptime(pub_date, fmt).date()
+                            break
+                        except ValueError:
+                            continue
+
+            jobs.append({
+                'title': title,
+                'organization': org,
+                'description': description[:200],  # truncate for display
+                'apply_link': link,
+                'last_date': last_date,
+                'source': 'rss_fallback'
+            })
+
+        logger.info(f"Filtered RSS returned {len(jobs)} job entries (excluded current affairs)")
+        return jobs[:30]
+
+    except Exception as e:
+        logger.error(f"Error fetching RSS feed: {e}")
+        return []
+
+
+# ------------------------------------------------------------------
+# 3. MASTER FUNCTION with fallback
+# ------------------------------------------------------------------
+
+def fetch_all_external_jobs():
+    """
+    Fetch jobs from all primary sources. If fewer than 5 jobs are found,
+    use the filtered RSS feed as fallback.
+    """
+    cache_key = 'external_jobs_combined_v3'  # updated key
+    cached = cache.get(cache_key)
+    if cached is not None:
+        return cached
+
+    all_jobs = []
+
+    # Primary scrapers
+    all_jobs.extend(fetch_majhinaukri_jobs())
+    all_jobs.extend(fetch_govtjobsalert_jobs())
+    all_jobs.extend(fetch_indgovtjobs_jobs())
+    all_jobs.extend(fetch_mahasarkar_jobs())
+
+    # ============================================================
+    # GLOBAL DEDUPLICATION
+    # ============================================================
+    def normalize_title(title):
+        t = title.lower().strip()
+        t = re.sub(r'\s*(bharti|recruitment|vacancy|notification|भरती|नोकरी|जागा)\s*', ' ', t)
+        t = re.sub(r'\s+', ' ', t).strip()
+        return t
+
+    seen_titles = set()
+    seen_links = set()
+    unique_jobs = []
+
+    for job in all_jobs:
+        link = job.get('apply_link', '').strip()
+        title = job.get('title', '').strip()
+        if not link or link == '#':
+            continue
+        norm_title = normalize_title(title)
+        if link in seen_links or norm_title in seen_titles:
+            continue
+        seen_links.add(link)
+        seen_titles.add(norm_title)
+        unique_jobs.append(job)
+
+    # Sort by last_date (newest first)
+    unique_jobs.sort(
+        key=lambda x: x.get('last_date') or datetime.min.date(),
+        reverse=True
+    )
+
+    # If we have very few jobs, use filtered RSS feed
+    if len(unique_jobs) < 5:
+        logger.info(f"Primary scrapers returned {len(unique_jobs)} jobs – falling back to filtered RSS.")
+        rss_jobs = fetch_rss_jobs_filtered()
+        rss_added = 0
+        for job in rss_jobs:
+            link = job.get('apply_link', '#')
+            title = job.get('title', '')
+            norm_title = normalize_title(title)
+            if link not in seen_links and norm_title not in seen_titles:
+                seen_links.add(link)
+                seen_titles.add(norm_title)
+                unique_jobs.append(job)
+                rss_added += 1
+        logger.info(f"Added {rss_added} jobs from RSS fallback.")
+        # Re-sort after adding
+        unique_jobs.sort(
+            key=lambda x: x.get('last_date') or datetime.min.date(),
+            reverse=True
+        )
+
+    logger.info(f"Total unique jobs after deduplication: {len(unique_jobs)}")
+
+    cache.set(cache_key, unique_jobs, 3600)  # cache for 1 hour
+    return unique_jobs
+
+
+# ------------------------------------------------------------------
+# 4. PLACEHOLDER FOR PLAYWRIGHT SCRAPERS (optional)
+# ------------------------------------------------------------------
 
 def fetch_mahasarkar_jobs_with_playwright():
-    """
-    🚀 Use Playwright to scrape client-side rendered jobs from mahasarkar.co.in.
-    Requires: pip install playwright && playwright install
-    """
+    """Playwright version (commented out by default)."""
     try:
         from playwright.sync_api import sync_playwright
     except ImportError:
@@ -427,128 +512,26 @@ def fetch_mahasarkar_jobs_with_playwright():
                     })
             browser.close()
 
-        # Deduplicate
         seen = set()
         unique = []
         for job in jobs:
             if job['apply_link'] not in seen:
                 seen.add(job['apply_link'])
                 unique.append(job)
-
         logger.info(f"Scraped {len(unique)} jobs from mahasarkar.co.in (Playwright)")
         return unique[:30]
 
     except Exception as e:
-        logger.error(f"Playwright scraping failed for mahasarkar.co.in: {e}")
+        logger.error(f"Playwright scraping failed: {e}")
         return []
 
 
-# ============================================================
-# 6. MASTER FUNCTION – Combine & Deduplicate with RSS fallback
-# ============================================================
-
-def fetch_all_external_jobs():
-    """
-    Fetch jobs from ALL external sources and combine them with global deduplication.
-    If fewer than 5 jobs are found, fallback to RSS feed from utils.
-    """
-    cache_key = 'external_jobs_combined_v2'
-    cached = cache.get(cache_key)
-    if cached is not None:
-        return cached
-
-    all_jobs = []
-
-    # 1. Existing sources
-    all_jobs.extend(fetch_majhinaukri_jobs())
-    all_jobs.extend(fetch_govtjobsalert_jobs())
-
-    # 2. New sources
-    all_jobs.extend(fetch_indgovtjobs_jobs())
-    all_jobs.extend(fetch_mahasarkar_jobs())          # static fallback (limited)
-    # all_jobs.extend(fetch_mahasarkar_jobs_with_playwright())  # ← uncomment for full scraping
-
-    # ============================================================
-    # GLOBAL DEDUPLICATION – removes duplicates across all sources
-    # ============================================================
-    
-    def normalize_title(title):
-        t = title.lower().strip()
-        t = re.sub(r'\s*(bharti|recruitment|vacancy|notification|भरती|नोकरी|जागा)\s*', ' ', t)
-        t = re.sub(r'\s+', ' ', t).strip()
-        return t
-
-    seen_titles = set()
-    seen_links = set()
-    unique_jobs = []
-
-    for job in all_jobs:
-        link = job.get('apply_link', '').strip()
-        title = job.get('title', '').strip()
-        if not link or link == '#':
-            continue
-        norm_title = normalize_title(title)
-        if link in seen_links or norm_title in seen_titles:
-            continue
-        seen_links.add(link)
-        seen_titles.add(norm_title)
-        unique_jobs.append(job)
-
-    unique_jobs.sort(
-        key=lambda x: x.get('last_date') or datetime.min.date(),
-        reverse=True
-    )
-
-    # ---- Fallback to RSS feed if we have very few jobs ----
-    if len(unique_jobs) < 5:
-        logger.info(f"Primary scrapers returned only {len(unique_jobs)} jobs, falling back to RSS feed.")
-        rss_jobs = fetch_external_jobs()  # returns list of dicts with keys: title, organization, description, apply_link, last_date, source
-        rss_added = 0
-        for job in rss_jobs:
-            # Ensure all required keys exist
-            job_copy = {
-                'title': job.get('title', ''),
-                'organization': job.get('organization', 'Various'),
-                'description': job.get('description', ''),
-                'apply_link': job.get('apply_link', '#'),
-                'last_date': job.get('last_date'),
-                'source': job.get('source', 'rss_fallback'),
-            }
-            # Deduplicate based on link (and title fallback)
-            link = job_copy['apply_link']
-            title_norm = normalize_title(job_copy['title'])
-            if link not in seen_links and title_norm not in seen_titles:
-                seen_links.add(link)
-                seen_titles.add(title_norm)
-                unique_jobs.append(job_copy)
-                rss_added += 1
-        logger.info(f"Added {rss_added} jobs from RSS fallback.")
-
-        # Re-sort after adding RSS jobs
-        unique_jobs.sort(
-            key=lambda x: x.get('last_date') or datetime.min.date(),
-            reverse=True
-        )
-
-    logger.info(f"Total unique jobs after deduplication: {len(unique_jobs)} (from {len(all_jobs)} raw)")
-
-    cache.set(cache_key, unique_jobs, 3600)
-    return unique_jobs
-
-
-# ============================================================
-# 7. CSC JOB (Playwright)
-# ============================================================
-
 def fetch_cscjob_jobs():
-    """
-    Scrape job listings from nandurbar1.cscjob.com using Playwright.
-    Requires: pip install playwright && playwright install
-    """
+    """Playwright scraper for nandurbar1.cscjob.com."""
     try:
         from playwright.sync_api import sync_playwright
     except ImportError:
-        logger.error("Playwright not installed. Run: pip install playwright && playwright install")
+        logger.error("Playwright not installed.")
         return []
 
     jobs = []
@@ -557,22 +540,14 @@ def fetch_cscjob_jobs():
             browser = p.chromium.launch(headless=True)
             page = browser.new_page()
             page.goto("https://nandurbar1.cscjob.com/jobs", timeout=30000)
-            
-            # Wait for job content to load
             page.wait_for_selector("text=भरती", timeout=10000)
-            
-            # Get all job links/items
-            # You'll need to inspect the page to find the correct selector
-            # Based on visible content, jobs appear as list items with dates
             job_elements = page.query_selector_all("a[href*='job']")
-            
             for element in job_elements[:30]:
                 title = element.text_content().strip()
                 href = element.get_attribute('href')
                 if href and not href.startswith('http'):
                     href = "https://nandurbar1.cscjob.com" + href
                 if title and len(title) > 10:
-                    # Extract date if present (format: "24 Aug, 2026")
                     date_match = re.search(r'(\d{1,2}\s+[A-Za-z]{3,}\s+\d{4})', title)
                     last_date = None
                     if date_match:
@@ -580,14 +555,10 @@ def fetch_cscjob_jobs():
                             last_date = datetime.strptime(date_match.group(1), '%d %b, %Y').date()
                         except:
                             pass
-                    
-                    # Extract organization from title
                     org = "CSC Job"
-                    # Look for patterns like "PNB LBO" or "KONKAN RAILWAY" at start
                     org_match = re.match(r'^([A-Z\s]+)\s*[\(（]', title)
                     if org_match:
                         org = org_match.group(1).strip()
-                    
                     jobs.append({
                         'title': title,
                         'organization': org,
@@ -596,71 +567,53 @@ def fetch_cscjob_jobs():
                         'last_date': last_date,
                         'source': 'cscjob'
                     })
-            
             browser.close()
-            
-        # Deduplicate
+
         seen = set()
         unique = []
         for job in jobs:
             if job['apply_link'] not in seen:
                 seen.add(job['apply_link'])
                 unique.append(job)
-        
         logger.info(f"Scraped {len(unique)} jobs from nandurbar1.cscjob.com")
         return unique[:30]
-        
+
     except Exception as e:
-        logger.error(f"Playwright scraping failed for nandurbar1.cscjob.com: {e}")
+        logger.error(f"Playwright scraping failed for cscjob: {e}")
         return []
 
 
-# ============================================================
-# GOVERNMENT SCHEMES SCRAPER – Maharashtra Focus
-# ============================================================
+# ------------------------------------------------------------------
+# 5. GOVERNMENT SCHEMES SCRAPERS (unchanged, but with USER_AGENT)
+# ------------------------------------------------------------------
 
 def fetch_rdd_schemes():
-    """
-    Scrape schemes from Rural Development Department, Maharashtra.
-    Sources: State, Central, and Joint Venture schemes.
-    """
     schemes = []
     sources = [
         ('https://rdd.maharashtra.gov.in/en/provider/state-government/', 'state'),
         ('https://rdd.maharashtra.gov.in/en/provider/central-government/', 'central'),
         ('https://rdd.maharashtra.gov.in/en/provider/joint-venture-central-state/', 'joint'),
     ]
-    
     for url, provider in sources:
         try:
             response = requests.get(url, timeout=15, headers={'User-Agent': USER_AGENT})
             response.raise_for_status()
             soup = BeautifulSoup(response.text, 'html.parser')
-            
-            # Find scheme listings – adjust selectors based on actual HTML
-            # Look for list items or divs containing scheme info
             items = soup.select('ul li a, .scheme-list a, .content a')
-            
             for item in items:
                 title = item.text.strip()
                 href = item.get('href')
                 if not title or len(title) < 5:
                     continue
-                # Skip navigation links
                 if any(skip in title.lower() for skip in ['home', 'contact', 'about', 'rti', 'faq']):
                     continue
-                    
-                # Build full URL
                 if href and not href.startswith('http'):
                     href = urljoin(url, href)
-                
-                # Determine provider label
                 provider_label = {
                     'state': 'State Government',
                     'central': 'Central Government',
                     'joint': 'Joint Venture (Central & State)'
                 }.get(provider, 'Government')
-                
                 schemes.append({
                     'title': title,
                     'description': '',
@@ -674,47 +627,31 @@ def fetch_rdd_schemes():
                     'source': 'rdd_maharashtra',
                     'category': 'Rural Development'
                 })
-            
             logger.info(f"Scraped {len(items)} schemes from {url}")
-            
         except Exception as e:
             logger.error(f"Error scraping RDD schemes from {url}: {e}")
-    
-    return schemes[:50]  # Limit to avoid duplicates
+    return schemes[:50]
 
 
 def fetch_mahaschemes_schemes():
-    """
-    Scrape schemes from MahaSchemes.in – aggregator for Maharashtra schemes.
-    """
     url = "https://mahaschemes.in/"
     schemes = []
     try:
         response = requests.get(url, timeout=15, headers={'User-Agent': USER_AGENT})
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'html.parser')
-        
-        # Look for scheme cards or list items
-        # The site has categories; we'll extract what's visible
         items = soup.select('article, .post, .scheme-item, .yojana-item')
-        
         for item in items:
-            # Find title
             title_tag = item.find('h2') or item.find('h3') or item.find('a')
             if not title_tag:
                 continue
             title = title_tag.text.strip()
             if len(title) < 5:
                 continue
-            
-            # Find link
             link_tag = item.find('a')
             href = link_tag.get('href') if link_tag else None
-            
-            # Find description
             desc_tag = item.find('p')
             description = desc_tag.text.strip() if desc_tag else ''
-            
             schemes.append({
                 'title': title,
                 'description': description[:500] if description else '',
@@ -728,27 +665,20 @@ def fetch_mahaschemes_schemes():
                 'source': 'mahaschemes',
                 'category': 'Government Scheme'
             })
-        
         logger.info(f"Scraped {len(schemes)} schemes from mahaschemes.in")
         return schemes[:30]
-        
     except Exception as e:
         logger.error(f"Error scraping mahaschemes.in: {e}")
         return []
 
 
 def fetch_plan_district_schemes():
-    """
-    Scrape district-wise schemes from Planning Department.
-    """
     url = "https://plan.maharashtra.gov.in/en/36-districts/"
     schemes = []
     try:
         response = requests.get(url, timeout=15, headers={'User-Agent': USER_AGENT})
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'html.parser')
-        
-        # Extract district names
         districts = soup.find_all('a', href=True)
         for district in districts:
             text = district.text.strip()
@@ -768,49 +698,32 @@ def fetch_plan_district_schemes():
                     'source': 'plan_maharashtra',
                     'category': 'District Schemes'
                 })
-        
         logger.info(f"Scraped {len(schemes)} district schemes from plan.maharashtra.gov.in")
         return schemes
-        
     except Exception as e:
         logger.error(f"Error scraping plan.maharashtra.gov.in: {e}")
         return []
 
 
 def fetch_all_external_schemes():
-    """
-    Fetch schemes from ALL external sources and combine with deduplication.
-    """
     cache_key = 'external_schemes_combined'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
-    
+
     all_schemes = []
-    
-    # 1. RDD Schemes (State, Central, Joint)
     all_schemes.extend(fetch_rdd_schemes())
-    
-    # 2. MahaSchemes
     all_schemes.extend(fetch_mahaschemes_schemes())
-    
-    # 3. District Schemes
     all_schemes.extend(fetch_plan_district_schemes())
-    
-    # ============================================================
-    # DEDUPLICATION – remove duplicates by title
-    # ============================================================
-    
+
     def normalize_title(title):
         t = title.lower().strip()
-        # Remove common prefixes/suffixes
         t = re.sub(r'\s*(scheme|yojana|योजना|पद्धत)\s*', ' ', t)
         t = re.sub(r'\s+', ' ', t).strip()
         return t
-    
+
     seen_titles = set()
     unique_schemes = []
-    
     for scheme in all_schemes:
         title = scheme.get('title', '').strip()
         if not title:
@@ -820,8 +733,7 @@ def fetch_all_external_schemes():
             continue
         seen_titles.add(norm_title)
         unique_schemes.append(scheme)
-    
+
     logger.info(f"Total unique schemes: {len(unique_schemes)} (from {len(all_schemes)} raw)")
-    
-    cache.set(cache_key, unique_schemes, 3600)  # Cache for 1 hour
+    cache.set(cache_key, unique_schemes, 3600)
     return unique_schemes
