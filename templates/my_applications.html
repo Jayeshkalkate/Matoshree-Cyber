@@ -354,7 +354,7 @@
       {% for app in applications %}
       <a href="{% url 'application_detail' app.id %}" class="app-card" aria-label="View details for {{ app.service.name }}">
         <div class="app-header">
-          <span class="service-name">{{ app.service.name }}</span>
+          <span class="service-name">{{ app.service.name }}<small style="display:block;color:var(--text-muted)">{{ app.application_number }}</small></span>
           <span class="app-date">{{ app.created_at|date:"d M Y" }}</span>
         </div>
         <div class="app-status">

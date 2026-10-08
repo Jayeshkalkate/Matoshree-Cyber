@@ -1,5 +1,8 @@
 from django.contrib.sitemaps import Sitemap
-from .models import Service, Announcement
+from django.urls import reverse
+from django.utils.text import slugify
+from .models import Service
+
 
 class ServiceSitemap(Sitemap):
     changefreq = 'weekly'
@@ -8,16 +11,24 @@ class ServiceSitemap(Sitemap):
     def items(self):
         return Service.objects.filter(active=True)
 
-    # Comment out lastmod until you add updated_at to Service model
-    # def lastmod(self, obj):
-    #     return obj.updated_at
+    def location(self, obj):
+        return reverse('service_detail', kwargs={'slug': slugify(obj.name)})
 
-class AnnouncementSitemap(Sitemap):
+    def lastmod(self, obj):
+        return obj.updated_at
+
+
+class StaticPublicSitemap(Sitemap):
+    priority = 0.5
     changefreq = 'weekly'
-    priority = 0.6
+    pages = (
+        'home', 'about', 'team', 'services', 'gallery', 'contact', 'appointment',
+        'faq', 'documents', 'downloads', 'charges', 'reviews', 'announcements',
+        'government_schemes', 'jobs', 'terms', 'privacy', 'track_application',
+    )
 
     def items(self):
-        return Announcement.objects.all()
+        return self.pages
 
-    # def lastmod(self, obj):
-    #     return obj.updated_at
+    def location(self, item):
+        return reverse(item)

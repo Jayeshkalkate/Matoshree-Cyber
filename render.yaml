@@ -14,9 +14,7 @@ services:
     healthCheckPath: /
     envVars:
       - key: DATABASE_URL
-        fromDatabase:
-          name: matoshree-db
-          property: connectionString
+        sync: false
       - key: SECRET_KEY
         generateValue: true
       - key: DEBUG
@@ -35,22 +33,18 @@ services:
         sync: false
       - key: CLOUDINARY_API_SECRET
         sync: false
-      - key: EMAIL_BACKEND
-        value: "django.core.mail.backends.smtp.EmailBackend"
-      - key: EMAIL_HOST
-        value: "smtp.gmail.com"
-      - key: EMAIL_PORT
-        value: "587"
-      - key: EMAIL_USE_TLS
-        value: "True"
-      - key: EMAIL_HOST_USER
+      - key: EMAIL_PROVIDER
+        value: "console"
+      - key: BREVO_API_KEY
         sync: false
-      - key: EMAIL_HOST_PASSWORD
+      - key: RESEND_API_KEY
         sync: false
       - key: DEFAULT_FROM_EMAIL
         sync: false
       - key: CONTACT_EMAIL
         sync: false
+      - key: PAYMENT_GATEWAY
+        value: "manual"
       - key: RAZORPAY_KEY_ID
         sync: false
       - key: RAZORPAY_KEY_SECRET
@@ -58,10 +52,4 @@ services:
       - key: RAZORPAY_WEBHOOK_SECRET
         sync: false
 
-databases:
-  - name: matoshree-db
-    databaseName: matoshree_db
-    user: matoshree_db
-    plan: free
-    region: oregon
-  
+# Use a free external PostgreSQL provider such as Supabase. Set DATABASE_URL in the Render dashboard.

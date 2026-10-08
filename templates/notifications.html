@@ -1,0 +1,3 @@
+{% extends "base.html" %}
+{% block title %}Notifications{% endblock %}
+{% block content %}<div class="container" style="max-width:900px"><h1>Notifications</h1>{% if notifications %}{% for item in notifications %}<div class="card" style="padding:1rem;margin:1rem 0"><strong>{{ item.title }}</strong><p>{{ item.message }}</p><small>{{ item.created_at|date:"d M Y, h:i A" }}</small></div>{% endfor %}{% else %}<p>No notifications yet.</p>{% endif %}</div>{% endblock %}

@@ -324,7 +324,7 @@
 
         <h2><i class="fas fa-check-circle"></i> 1. Acceptance of Terms</h2>
         <p>
-            By accessing or using the services provided by <strong>{{ business.business_name|default:"Cyber Cafe" }}</strong>
+            By accessing or using the services provided by <strong>{{ business.business_name|default:"Matoshree Cyber Center" }}</strong>
             (hereinafter referred to as "we", "our", or "us"), you agree to be bound by these Terms and Conditions.
             If you do not agree with any part of these terms, you must not use our services.
         </p>
@@ -403,9 +403,9 @@
             If you have any questions about these terms, please contact us at:
         </p>
         <ul>
-            <li><strong>Email:</strong> {{ business.email|default:"support@cybercafe.com" }}</li>
-            <li><strong>Phone:</strong> {{ business.phone|default:"+91-9876543210" }}</li>
-            <li><strong>Address:</strong> {{ business.address|default:"Cyber Cafe, Maharashtra, India" }}</li>
+            <li><strong>Email:</strong> {{ business.email }}</li>
+            <li><strong>Phone:</strong> {{ business.phone }}</li>
+            <li><strong>Address:</strong> {{ business.address|default:"Please configure the business address in the admin dashboard." }}</li>
         </ul>
 
         <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.06); text-align: center; color: var(--text-dim); font-size: 0.9rem;">
@@ -426,7 +426,7 @@
             <a href="{% url 'contact' %}" class="btn-primary" aria-label="Contact us">
                 <i class="fas fa-phone" aria-hidden="true"></i> Contact Us
             </a>
-            {% with whatsapp_number=business.whatsapp|default:"919876543210" %}
+            {% with whatsapp_number=business.whatsapp %}
             <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20have%20a%20question%20about%20your%20terms%20and%20conditions."
                target="_blank" rel="noopener noreferrer" class="btn-whatsapp" aria-label="Chat on WhatsApp">
                 <i class="fab fa-whatsapp" aria-hidden="true"></i> Chat on WhatsApp

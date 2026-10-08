@@ -5,15 +5,16 @@ from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from corematoshree import views
 from django.contrib.sitemaps.views import sitemap
-from .sitemaps import ServiceSitemap, AnnouncementSitemap
+from .sitemaps import ServiceSitemap, StaticPublicSitemap
 from django.views.generic import TemplateView 
 from .views import robots_txt
 
 sitemaps = {
     'services': ServiceSitemap,
-    'announcements': AnnouncementSitemap,
+    'static': StaticPublicSitemap,
 }
 
+handler403 = views.custom_403
 handler404 = views.custom_404
 handler500 = views.custom_500
 
@@ -43,6 +44,7 @@ urlpatterns = [
     path('superadmin-dashboard/', views.superadmin_dashboard, name='superadmin_dashboard'),
     path('dashboard-section/<str:section>/', views.dashboard_section_data, name='dashboard_section_data'),
     path('reports/', views.reports_dashboard, name='reports_dashboard'),
+    path('reports/applications.csv', views.export_applications_csv, name='export_applications_csv'),
 
     # ==========================
     # PUBLIC PAGES
@@ -51,6 +53,7 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('team/', views.team, name='team'),
     path('services/', views.services, name='services'),
+    path('services/<slug:slug>/', views.service_detail, name='service_detail'),
     path('gallery/', views.gallery, name='gallery'),
     path('contact/', views.contact, name='contact'),
     path('appointment/', views.appointment, name='appointment'),
@@ -69,6 +72,9 @@ urlpatterns = [
     # ==========================
     path('apply/<int:service_id>/', views.apply_service, name='apply_service'),
     path('my-applications/', views.my_applications, name='my_applications'),
+    path('track-application/', views.track_application, name='track_application'),
+    path('notifications/', views.notifications, name='notifications'),
+    path('document/<int:doc_id>/download/', views.document_download, name='document_download'),
     path('application/<int:app_id>/', views.application_detail, name='application_detail'),
 
     # ==========================

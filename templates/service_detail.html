@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ service.name }}{% endblock %}
+{% block description %}{{ service.description|truncatechars:155 }}{% endblock %}
+{% block content %}
+<div class="container" style="max-width:900px">
+  <p><a href="{% url 'services' %}">← All services</a></p>
+  <div class="card" style="padding:2rem">
+    <h1><i class="fas fa-{{ service.icon }}"></i> {{ service.name }}</h1>
+    <p>{{ service.description|linebreaksbr }}</p>
+    {% if charge %}<h2>₹{{ charge.charge|floatformat:2 }}</h2>{% endif %}
+    <h3>Required documents</h3>
+    {% if required_docs %}<ul>{% for doc in required_docs %}<li>{{ doc.document_name }}</li>{% endfor %}</ul>{% else %}<p>No specific documents have been configured. Contact the center before applying.</p>{% endif %}
+    {% if user.is_authenticated %}<a class="btn btn-primary" href="{% url 'apply_service' service.id %}">Apply for this service</a>{% else %}<a class="btn btn-primary" href="{% url 'login' %}?next={% url 'apply_service' service.id %}">Login to apply</a>{% endif %}
+  </div>
+</div>
+{% endblock %}

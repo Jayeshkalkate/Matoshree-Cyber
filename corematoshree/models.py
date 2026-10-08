@@ -140,6 +140,13 @@ class Appointment(models.Model):
         ordering = ["-created_at"]
         verbose_name = "Appointment"
         verbose_name_plural = "Appointments"
+        constraints = [
+            models.UniqueConstraint(
+                fields=['appointment_date', 'appointment_time'],
+                condition=models.Q(status__in=['Pending', 'Confirmed']),
+                name='unique_active_appointment_slot',
+            ),
+        ]
         indexes = [
             models.Index(fields=['status', 'appointment_date']),
             models.Index(fields=['service', 'appointment_date']),
@@ -354,28 +361,6 @@ class DownloadForm(models.Model):
 
 
 # ==========================
-# Government Scheme
-# ==========================
-class GovernmentScheme(models.Model):
-    """Government schemes information."""
-    title = models.CharField("Title", max_length=200, db_index=True)
-    description = models.TextField("Description")
-    eligibility = models.TextField("Eligibility", blank=True)
-    last_date = models.DateField("Last Date", null=True, blank=True, db_index=True)
-    image = models.ImageField("Image", upload_to="schemes/", blank=True, null=True)
-
-    class Meta:
-        verbose_name = "Government Scheme"
-        verbose_name_plural = "Government Schemes"
-        indexes = [
-            models.Index(fields=['last_date']),
-        ]
-
-    def __str__(self):
-        return self.title
-
-
-# ==========================
 # Job Notification
 # ==========================
 class JobNotification(models.Model):
@@ -385,6 +370,8 @@ class JobNotification(models.Model):
     last_date = models.DateField("Last Date", db_index=True)
     apply_link = models.URLField("Apply Link", blank=True)
     description = models.TextField("Description")
+    source = models.URLField("Source URL", blank=True)
+    verified = models.BooleanField("Verified", default=False, db_index=True)
     icon = models.CharField(
         "Icon",
         max_length=50,
@@ -560,6 +547,10 @@ class Application(models.Model):
     # --- Core fields ---
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="User")
     service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="Service")
+    application_number = models.CharField(
+        "Application Number", max_length=40, unique=True, null=True, blank=True, db_index=True,
+        help_text="Public tracking number shown to the customer."
+    )
     full_name = models.CharField("Full Name", max_length=150, db_index=True)
     phone = models.CharField("Phone", max_length=15, validators=[phone_validator], db_index=True)
     email = models.EmailField("Email", db_index=True)
@@ -611,14 +602,23 @@ class Application(models.Model):
         if self.payment_app and not self.utr_number:
             raise ValidationError({"utr_number": "UTR number is required when a payment app is selected."})
 
+    def save(self, *args, **kwargs):
+        if not self.application_number:
+            super().save(*args, **kwargs)
+            self.application_number = f"MAT-{timezone.now().strftime('%Y%m%d')}-{self.pk:06d}"
+            super().save(update_fields=['application_number'])
+            return
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return f"{self.full_name} – {self.service.name}"
+        return f"{self.application_number or self.pk} – {self.full_name} – {self.service.name}"
 
     class Meta:
         ordering = ["-created_at"]
         verbose_name = "Application"
         verbose_name_plural = "Applications"
         indexes = [
+            models.Index(fields=['application_number']),
             models.Index(fields=['user', 'status']),
             models.Index(fields=['service', 'status']),
             models.Index(fields=['status', 'created_at']),
@@ -643,7 +643,12 @@ class DocumentUpload(models.Model):
     file = models.FileField("File", upload_to="applications/%Y/%m/%d/")
     is_mandatory = models.BooleanField("Mandatory", default=True, db_index=True)
     uploaded_at = models.DateTimeField("Uploaded At", auto_now_add=True, db_index=True)
+    STATUS_CHOICES = (("pending", "Pending"), ("verified", "Verified"), ("rejected", "Rejected"))
+    verification_status = models.CharField("Verification Status", max_length=20, choices=STATUS_CHOICES, default="pending", db_index=True)
     verified = models.BooleanField("Verified by Admin", default=False, db_index=True)
+    verification_note = models.TextField("Verification Note", blank=True)
+    verified_at = models.DateTimeField("Verified At", null=True, blank=True)
+    verified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="verified_documents")
 
     class Meta:
         verbose_name = "Document Upload"
@@ -656,6 +661,55 @@ class DocumentUpload(models.Model):
 
     def __str__(self):
         return f"{self.document_name} – {self.application.full_name}"
+
+
+# ==========================
+# Application Status History
+# ==========================
+class ApplicationStatusHistory(models.Model):
+    application = models.ForeignKey(Application, on_delete=models.CASCADE, related_name='status_history')
+    old_status = models.CharField(max_length=20, blank=True)
+    new_status = models.CharField(max_length=20)
+    changed_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='application_status_changes')
+    note = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created_at']
+
+    def __str__(self):
+        return f"{self.application.application_number or self.application_id}: {self.old_status or 'created'} → {self.new_status}"
+
+
+# ==========================
+# Customer Notification
+# ==========================
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    application = models.ForeignKey(Application, on_delete=models.CASCADE, null=True, blank=True, related_name='notifications')
+    title = models.CharField(max_length=200)
+    message = models.TextField()
+    is_read = models.BooleanField(default=False, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+
+# ==========================
+# Admin Audit Log
+# ==========================
+class AuditLog(models.Model):
+    actor = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='audit_logs')
+    action = models.CharField(max_length=100, db_index=True)
+    model_name = models.CharField(max_length=100, blank=True)
+    object_id = models.CharField(max_length=100, blank=True)
+    details = models.JSONField(default=dict, blank=True)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ['-created_at']
 
 
 # ==========================
@@ -766,6 +820,8 @@ class GovernmentScheme(models.Model):
     # Tags for filtering
     category = models.CharField("Category", max_length=100, blank=True, db_index=True)
     benefits = models.TextField("Benefits", blank=True)
+    verified = models.BooleanField("Verified", default=False, db_index=True)
+    verified_at = models.DateTimeField("Verified At", null=True, blank=True)
     
     def __str__(self):
         return self.title
@@ -795,6 +851,7 @@ class PaymentLog(models.Model):
             ('failed', 'Payment Failed'),
             ('refunded', 'Payment Refunded'),
             ('webhook_received', 'Webhook Received'),
+            ('manual_submitted', 'Manual Payment Submitted'),
             ('manual_confirmed', 'Manually Confirmed'),
         ),
         db_index=True,

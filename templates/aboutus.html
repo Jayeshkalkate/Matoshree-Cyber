@@ -1111,7 +1111,7 @@
       <i class="fas fa-chevron-right" style="font-size: 0.6rem" aria-hidden="true"></i>
       <span class="current" aria-current="page">About Us</span>
     </nav>
-    <h1>About <span>CyberTech</span></h1>
+    <h1>About <span>{{ business.business_name|default:"Matoshree" }}</span></h1>
     <p>
       Your trusted partner for digital services, government applications, and document solutions — built on experience, integrity, and customer care.
     </p>
@@ -1129,7 +1129,7 @@
         Trusted Cyber Café &amp; Digital Service Center
       </div>
       <p>
-        <strong>{{ business.business_name|default:"Cyber Cafe" }}</strong>
+        <strong>{{ business.business_name|default:"Matoshree Cyber Center" }}</strong>
         is a trusted cyber café and digital service center dedicated to providing fast, reliable, and affordable online services. We help customers with government applications, printing, scanning, document services, and various digital solutions under one roof.
       </p>
       <p>
@@ -1334,7 +1334,7 @@
       <a href="{% url 'home' %}#contact" class="btn-primary" aria-label="Contact us">
         <i class="fas fa-phone" aria-hidden="true"></i> Contact Us
       </a>
-      <a href="https://wa.me/919876543210?text=Hello%2C%20I%20would%20like%20to%20know%20more%20about%20your%20services."
+      <a href="https://wa.me/{{ business.whatsapp|cut:"+" }}?text=Hello%2C%20I%20would%20like%20to%20know%20more%20about%20your%20services."
          target="_blank" rel="noopener noreferrer" class="btn-whatsapp" aria-label="Chat on WhatsApp">
         <i class="fab fa-whatsapp" aria-hidden="true"></i> Chat on WhatsApp
       </a>

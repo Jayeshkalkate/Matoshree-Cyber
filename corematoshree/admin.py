@@ -25,7 +25,7 @@ from .models import (
     BusinessInfo,
     Application,
     DocumentUpload,
-    PaymentLog,
+    PaymentLog, ApplicationStatusHistory, Notification, AuditLog,
 )
 
 
@@ -190,17 +190,25 @@ class DownloadFormAdmin(admin.ModelAdmin):
 
 @admin.register(GovernmentScheme)
 class GovernmentSchemeAdmin(admin.ModelAdmin):
-    list_display = ("title", "last_date", "status", "provider", "apply_link")
+    list_display = ("title", "last_date", "status", "provider", "verified", "apply_link")
     search_fields = ("title",)
-    list_filter = ("status", "provider")
+    list_filter = ("status", "provider", "verified")
+
+    def save_model(self, request, obj, form, change):
+        if obj.verified and not obj.verified_at:
+            obj.verified_at = timezone.now()
+        if not obj.verified:
+            obj.verified_at = None
+        super().save_model(request, obj, form, change)
 
 # ==========================
 # Job Notification Admin
 # ==========================
 @admin.register(JobNotification)
 class JobNotificationAdmin(admin.ModelAdmin):
-    list_display = ('title', 'organization', 'last_date')
+    list_display = ('title', 'organization', 'last_date', 'verified')
     search_fields = ('title', 'organization')
+    list_filter = ('verified', 'last_date')
     ordering = ('last_date',)
 
 
@@ -225,7 +233,7 @@ class BusinessInfoAdmin(admin.ModelAdmin):
                 'business_name', 'welcome_message',
                 'address', 'phone', 'whatsapp', 'email',
                 'google_map', 'business_hours',
-                'registration_number', 'certifications'
+                'registration_number', 'certifications', 'logo', 'gstin'
             )
         }),
     )
@@ -237,8 +245,8 @@ class BusinessInfoAdmin(admin.ModelAdmin):
 class DocumentUploadInline(admin.TabularInline):
     model = DocumentUpload
     extra = 0
-    readonly_fields = ('uploaded_at',)
-    fields = ('document_name', 'file', 'is_mandatory', 'verified', 'uploaded_at')
+    readonly_fields = ('uploaded_at', 'verified_at')
+    fields = ('document_name', 'file', 'is_mandatory', 'verified', 'verification_status', 'verification_note', 'verified_by', 'verified_at', 'uploaded_at')
 
 
 @admin.register(Application)
@@ -249,11 +257,11 @@ class ApplicationAdmin(admin.ModelAdmin):
     )
     list_filter = ('status', 'payment_status', 'service', 'created_at')
     search_fields = ('full_name', 'email', 'phone')
-    readonly_fields = ('created_at', 'updated_at')
+    readonly_fields = ('application_number', 'created_at', 'updated_at')
     inlines = [DocumentUploadInline]
     fieldsets = (
-        (None, {'fields': ('user', 'service', 'full_name', 'phone', 'email', 'address', 'extra_data')}),
-        ('Status', {'fields': ('status',)}),
+        (None, {'fields': ('user', 'service', 'application_number', 'full_name', 'phone', 'email', 'address', 'extra_data')}),
+        ('Status', {'fields': ('status', 'admin_note', 'rejection_reason')}),
         ('Payment', {'fields': ('payment_status', 'payment_method', 'payment_transaction_id',
                                 'payment_date', 'receipt_number', 'utr_number', 'payment_app')}),
         ('Timestamps', {'fields': ('created_at', 'updated_at')}),
@@ -270,11 +278,15 @@ class ApplicationAdmin(admin.ModelAdmin):
                 continue
             app.payment_status = 'paid'
             app.payment_date = timezone.now()
+            charge = app.service.servicecharge_set.order_by('id').first()
+            amount = charge.charge if charge else 0
+            app.service_amount = amount
+            app.razorpay_fee = 0
+            app.gst_on_fee = 0
+            app.total_paid = amount
             if not app.receipt_number:
                 app.receipt_number = app.generate_receipt_number()
-                app.save()
-            charge = app.service.servicecharge_set.first()
-            amount = charge.charge if charge else 0
+            app.save()
             PaymentLog.objects.create(
                 application=app,
                 event_type='manual_confirmed',
@@ -344,6 +356,30 @@ class PaymentSettingsAdmin(admin.ModelAdmin):
 # ==========================
 # PaymentLog Admin (audit trail)
 # ==========================
+@admin.register(ApplicationStatusHistory)
+class ApplicationStatusHistoryAdmin(admin.ModelAdmin):
+    list_display = ('application', 'old_status', 'new_status', 'changed_by', 'created_at')
+    list_filter = ('new_status', 'created_at')
+    search_fields = ('application__application_number', 'application__full_name', 'note')
+    readonly_fields = ('created_at',)
+
+
+@admin.register(Notification)
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ('user', 'title', 'is_read', 'created_at')
+    list_filter = ('is_read', 'created_at')
+    search_fields = ('user__username', 'title', 'message')
+    readonly_fields = ('created_at',)
+
+
+@admin.register(AuditLog)
+class AuditLogAdmin(admin.ModelAdmin):
+    list_display = ('actor', 'action', 'model_name', 'object_id', 'created_at')
+    list_filter = ('action', 'model_name', 'created_at')
+    search_fields = ('actor__username', 'action', 'object_id')
+    readonly_fields = ('actor', 'action', 'model_name', 'object_id', 'details', 'ip_address', 'created_at')
+
+
 @admin.register(PaymentLog)
 class PaymentLogAdmin(admin.ModelAdmin):
     list_display = ('application', 'event_type', 'amount', 'created_at')

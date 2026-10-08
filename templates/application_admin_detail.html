@@ -876,6 +876,10 @@
             {% endfor %}
           </select>
         </div>
+        <div class="form-group">
+          <label for="statusNote">Admin note / rejection reason</label>
+          <textarea name="note" id="statusNote" class="form-control" rows="2" placeholder="Optional note shown to the customer">{{ application.admin_note }}</textarea>
+        </div>
         <div class="form-group" style="flex: 0 0 auto; margin-bottom: 0; display: flex; align-items: flex-end;">
           <button type="submit" class="btn-primary">
             <i class="fas fa-save"></i> Update Status
@@ -899,26 +903,29 @@
           </span>
           <span class="doc-actions">
             <!-- View -->
-            <a href="{{ doc.file.url }}" target="_blank" rel="noopener noreferrer" class="btn-view">
+            <a href="{% url 'document_download' doc.id %}" target="_blank" rel="noopener noreferrer" class="btn-view">
               <i class="fas fa-eye"></i> View
             </a>
             <!-- Download -->
-            <a href="{{ doc.file.url }}" download class="btn-download">
+            <a href="{% url 'document_download' doc.id %}" download class="btn-download">
               <i class="fas fa-download"></i> Download
             </a>
             <!-- Split PDF -->
             <a href="{% url 'split_pdf' doc.id %}" class="btn-view" title="Split PDF into pages">
               <i class="fas fa-cut"></i>
             </a>
-            <!-- Verification toggle -->
-            <form method="post" style="display:inline;">
+            <!-- Verification state -->
+            <form method="post" style="display:inline-flex;gap:.3rem;align-items:center;">
               {% csrf_token %}
               <input type="hidden" name="action" value="verify_document">
               <input type="hidden" name="doc_id" value="{{ doc.id }}">
-              <button type="submit" class="btn-verify {% if doc.verified %}verified{% endif %}" title="Toggle verification">
-                <i class="fas {% if doc.verified %}fa-check-circle{% else %}fa-circle{% endif %}"></i>
-                {% if doc.verified %}Verified{% else %}Unverified{% endif %}
-              </button>
+              <select name="verification_status" title="Document status">
+                <option value="pending" {% if doc.verification_status == 'pending' %}selected{% endif %}>Pending</option>
+                <option value="verified" {% if doc.verification_status == 'verified' %}selected{% endif %}>Verified</option>
+                <option value="rejected" {% if doc.verification_status == 'rejected' %}selected{% endif %}>Rejected</option>
+              </select>
+              <input type="text" name="verification_note" value="{{ doc.verification_note }}" placeholder="Note" maxlength="500">
+              <button type="submit" class="btn-verify">Save</button>
             </form>
             <!-- Delete document -->
             <form method="post" onsubmit="return confirm('Delete this document?');" style="display:inline;">

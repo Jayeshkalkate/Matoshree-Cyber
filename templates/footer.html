@@ -13,7 +13,7 @@
             {% if business.business_name %}
               {{ business.business_name }}
             {% else %}
-              CyberTech
+              {{ business.business_name|default:"Matoshree" }}
             {% endif %}
           </div>
         </div>
@@ -21,8 +21,8 @@
           {{ business.address|default:"Digital services at your doorstep." }}
         </p>
         <div class="footer-contact">
-          <p><i class="fas fa-phone"></i> {{ business.phone|default:"+91 98765 43210" }}</p>
-          <p><i class="fas fa-envelope"></i> {{ business.email|default:"info@cybertech.com" }}</p>
+          <p><i class="fas fa-phone"></i> {{ business.phone|default:"" }}</p>
+          <p><i class="fas fa-envelope"></i> {{ business.email|default:"" }}</p>
         </div>
       </div>
 
@@ -37,6 +37,7 @@
           <li><a href="{% url 'services' %}">Services</a></li>
           <li><a href="{% url 'gallery' %}">Gallery</a></li>
           <li><a href="{% url 'reviews' %}">Reviews</a></li>
+          <li><a href="{% url 'track_application' %}">Track Application</a></li>
         </ul>
       </div>
 
@@ -70,7 +71,7 @@
     <div class="footer-socials">
       <div class="socials">
         <!-- Valid WhatsApp group link -->
-        <a href="https://chat.whatsapp.com/BjIk12GVsYn85tW0RKu9qJ"
+        <a href="https://wa.me/{{ business.whatsapp|cut:"+" }}"
            target="_blank"
            rel="noopener noreferrer"
            aria-label="Join our WhatsApp Group">
@@ -93,7 +94,7 @@
       <p>
         {% now "Y" as current_year %}
         
-          &copy; {{ year }} {{ name }}. All rights reserved.
+          &copy; {% now "Y" %} {{ business.business_name|default:"Matoshree" }}. All rights reserved.
         
       </p>
       <p class="developer-credit">

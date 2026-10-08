@@ -2,6 +2,7 @@ from django import forms
 from django.conf import settings
 from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import RegexValidator
+from django.utils import timezone
 import re
 
 from .models import (
@@ -79,13 +80,26 @@ class ContactForm(forms.ModelForm):
 class AppointmentForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
+        appointment_date = cleaned_data.get('appointment_date')
         appointment_time = cleaned_data.get('appointment_time')
+        service = cleaned_data.get('service')
+        if appointment_date and appointment_date < timezone.localdate():
+            raise forms.ValidationError("Appointment date cannot be in the past.")
         if appointment_time:
             minutes = appointment_time.hour * 60 + appointment_time.minute
             if minutes < 9 * 60 or minutes > 17 * 60:
-                raise forms.ValidationError(
-                    "Appointment time must be between 09:00 AM and 05:00 PM."
-                )
+                raise forms.ValidationError("Appointment time must be between 09:00 AM and 05:00 PM.")
+        if appointment_date and appointment_time:
+            from .models import Appointment
+            conflict = Appointment.objects.filter(
+                appointment_date=appointment_date,
+                appointment_time=appointment_time,
+                status__in=['Pending', 'Confirmed'],
+            )
+            if self.instance and self.instance.pk:
+                conflict = conflict.exclude(pk=self.instance.pk)
+            if conflict.exists():
+                raise forms.ValidationError("That appointment slot is already booked. Please choose another time.")
         return cleaned_data
 
     class Meta:
@@ -148,7 +162,7 @@ class AnnouncementForm(forms.ModelForm):
 class JobNotificationForm(forms.ModelForm):
     class Meta:
         model = JobNotification
-        fields = ("title", "organization", "last_date", "apply_link", "description", "icon")
+        fields = ("title", "organization", "last_date", "apply_link", "description", "source", "verified", "icon")
 
 
 # class GovernmentSchemeForm(forms.ModelForm):
@@ -163,7 +177,7 @@ class GovernmentSchemeForm(forms.ModelForm):
             "title", "description", "eligibility", "last_date", "start_date",
             "status", "provider", "department", "district",
             "apply_link", "official_link", "image",
-            "category", "benefits"
+            "category", "benefits", "verified", "verified_at"
         )
         widgets = {
             "description": forms.Textarea(attrs={"rows": 4}),
@@ -171,7 +185,7 @@ class GovernmentSchemeForm(forms.ModelForm):
             "benefits": forms.Textarea(attrs={"rows": 3}),
         }
         
-class AppointmentFormDashboard(forms.ModelForm):
+class AppointmentFormDashboard(AppointmentForm):
     class Meta:
         model = Appointment
         fields = (
@@ -245,12 +259,6 @@ class ApplicationForm(forms.ModelForm):
     class Meta:
         model = Application
         fields = ("full_name", "phone", "email", "address", "extra_data")
-        exclude = (
-            'user', 'service', 'status',
-            'payment_status', 'payment_method', 'payment_app',
-            'utr_number', 'receipt_number', 'payment_date',
-            'payment_transaction_id',
-        )
         widgets = {
             "full_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Full Name"}),
             "phone": forms.TextInput(attrs={"class": "form-control", "placeholder": "Phone Number"}),
@@ -280,9 +288,13 @@ class DocumentUploadForm(forms.ModelForm):
                 raise forms.ValidationError(
                     f"File size must be under {max_size // (1024 * 1024)} MB."
                 )
-            ext = file.name.split(".")[-1].lower()
-            if ext not in ("pdf", "jpg", "jpeg", "png"):
+            ext = file.name.rsplit(".", 1)[-1].lower() if "." in file.name else ""
+            allowed = {"pdf": "application/pdf", "jpg": "image/jpeg", "jpeg": "image/jpeg", "png": "image/png"}
+            if ext not in allowed:
                 raise forms.ValidationError("Only PDF, JPG, JPEG, and PNG files are allowed.")
+            content_type = getattr(file, "content_type", "")
+            if content_type and content_type != allowed[ext]:
+                raise forms.ValidationError("The uploaded file type does not match its extension.")
         else:
             raise forms.ValidationError("No file selected.")
         return file

@@ -11,9 +11,9 @@
     <meta name="theme-color" content="#f8fafc" id="themeColorMeta" />
     <title>{% block title %}Cyber Services{% endblock %}</title>
 
-    <meta name="description" content="{% block description %}Cyber Cafe offers digital services, appointments, government schemes, and more.{% endblock %}">
+    <meta name="description" content="{% block description %}Matoshree provides digital services, appointments, and citizen assistance.{% endblock %}">
     <meta property="og:title" content="{{ business.business_name }}">
-    <meta property="og:description" content="Your trusted cyber cafe in {{ business.city }}.">
+    <meta property="og:description" content="Digital services and citizen assistance from {{ business.business_name|default:"Matoshree Cyber Center" }}.">
     <meta property="og:image" content="{% if logo_url %}{{ logo_url }}{% else %}{% static 'images/default-og-image.png' %}{% endif %}">
     <meta name="robots" content="index, follow">
     
@@ -1077,7 +1077,7 @@
                 <div class="nav-brand">
                     <a href="{% url 'home' %}" aria-label="Home">
                         <img src="{% static 'images/matoshreelogo.png' %}" alt="Logo" loading="lazy">
-                        <span class="brand-highlight">{{ business.business_name|default:"Matoshree Cyber Cafe" }}</span>
+                        <span class="brand-highlight">{{ business.business_name|default:"Matoshree Cyber Center" }}</span>
                     </a>
                 </div>
 
@@ -1094,6 +1094,7 @@
                     <li role="none"><a href="{% url 'home' %}" role="menuitem"><i class="fas fa-home" aria-hidden="true"></i> Home</a></li>
                     <li role="none"><a href="{% url 'about' %}" role="menuitem"><i class="fas fa-info-circle" aria-hidden="true"></i> About</a></li>
                     <li role="none"><a href="{% url 'services' %}" role="menuitem"><i class="fas fa-cogs" aria-hidden="true"></i> Services</a></li>
+                    <li role="none"><a href="{% url 'track_application' %}" role="menuitem"><i class="fas fa-search" aria-hidden="true"></i> Track Application</a></li>
                     <li role="none"><a href="{% url 'gallery' %}" role="menuitem"><i class="fas fa-images" aria-hidden="true"></i> Gallery</a></li>
                     <li role="none"><a href="{% url 'reviews' %}" role="menuitem"><i class="fas fa-star" aria-hidden="true"></i> Reviews</a></li>
                     <li role="none"><a href="{% url 'contact' %}" role="menuitem"><i class="fas fa-envelope" aria-hidden="true"></i> Contact</a></li>
@@ -1129,6 +1130,7 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li role="none"><a href="{% url 'profile' %}" role="menuitem"><i class="fas fa-user" aria-hidden="true"></i> Profile</a></li>
                                 <li role="none"><a href="{% url 'my_applications' %}" role="menuitem"><i class="fas fa-file-alt" aria-hidden="true"></i> My Applications</a></li>
+                                <li role="none"><a href="{% url 'notifications' %}" role="menuitem"><i class="fas fa-bell" aria-hidden="true"></i> Notifications</a></li>
                                 {% if user.role == 'admin' or user.role == 'superadmin' %}
                                     <li role="none"><a href="{% url 'admin_dashboard' %}" role="menuitem"><i class="fas fa-tachometer-alt" aria-hidden="true"></i> Admin Dashboard</a></li>
                                 {% endif %}

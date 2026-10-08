@@ -978,7 +978,7 @@
       <a href="{% url 'home' %}#contact" class="btn-primary" aria-label="Contact us">
         <i class="fas fa-phone" aria-hidden="true"></i> Contact Us
       </a>
-      {% with whatsapp_number=business.whatsapp|default:"919876543210" %}
+      {% with whatsapp_number=business.whatsapp %}
       <a href="https://wa.me/{{ whatsapp_number|cut:'+' }}?text=Hello%2C%20I%20want%20to%20visit%20your%20cyber%20cafe." target="_blank" rel="noopener noreferrer" class="btn-whatsapp" aria-label="Chat on WhatsApp">
         <i class="fab fa-whatsapp" aria-hidden="true"></i> Chat on WhatsApp
       </a>

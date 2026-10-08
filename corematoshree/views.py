@@ -46,12 +46,13 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.files.storage import default_storage
 from django.core.files import File
 from django.db import models, transaction
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.db.models.functions import TruncDate, TruncWeek
 from django.forms import formset_factory
 from django.http import FileResponse, JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
-from django.urls import reverse_lazy
+from django.template.loader import render_to_string
+from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
@@ -62,7 +63,7 @@ from .models import (
     User, Appointment, Review, Service, Announcement, JobNotification,
     GovernmentScheme, DownloadForm, ServiceCharge, Gallery, BusinessInfo,
     RequiredDocument, FAQ, Application, DocumentUpload, Contact, TeamMember,
-    PaymentSettings, PaymentLog,
+    PaymentSettings, PaymentLog, ApplicationStatusHistory, Notification, AuditLog,
 )
 from .forms import (
     TeamMemberForm, CustomUserCreationForm, ProfileUpdateForm, ContactForm,
@@ -80,6 +81,78 @@ from .utils import (
 # ---- Logger ----
 logger = logging.getLogger(__name__)
 
+
+def get_service_charge(service):
+    """Return the current service charge without relying on arbitrary FK ordering."""
+    return service.servicecharge_set.order_by('id').first()
+
+
+def _client_ip(request):
+    forwarded = request.META.get('HTTP_X_FORWARDED_FOR', '')
+    return forwarded.split(',')[0].strip() if forwarded else request.META.get('REMOTE_ADDR')
+
+
+def audit(request, action, obj=None, details=None):
+    try:
+        AuditLog.objects.create(
+            actor=request.user if getattr(request, 'user', None) and request.user.is_authenticated else None,
+            action=action,
+            model_name=obj.__class__.__name__ if obj is not None else '',
+            object_id=str(getattr(obj, 'pk', '')) if obj is not None else '',
+            details=details or {},
+            ip_address=_client_ip(request),
+        )
+    except Exception:
+        logger.exception('Unable to write audit log')
+
+
+def notify_user(user, title, message, application=None):
+    try:
+        Notification.objects.create(user=user, application=application, title=title, message=message)
+    except Exception:
+        logger.exception('Unable to create notification')
+
+
+def send_platform_email(subject, message, recipient_list):
+    """Send email through a free HTTP provider when configured; fall back to Django email."""
+    provider = getattr(settings, 'EMAIL_PROVIDER', 'console').lower()
+    recipients = [r for r in recipient_list if r]
+    if not recipients:
+        return False
+    try:
+        if provider == 'brevo' and getattr(settings, 'BREVO_API_KEY', ''):
+            import requests
+            response = requests.post(
+                'https://api.brevo.com/v3/smtp/email',
+                headers={'api-key': settings.BREVO_API_KEY, 'accept': 'application/json', 'content-type': 'application/json'},
+                json={'sender': {'email': settings.DEFAULT_FROM_EMAIL}, 'to': [{'email': r} for r in recipients], 'subject': subject, 'textContent': message},
+                timeout=15,
+            )
+            response.raise_for_status()
+            return True
+        if provider == 'resend' and getattr(settings, 'RESEND_API_KEY', ''):
+            import requests
+            response = requests.post(
+                'https://api.resend.com/emails',
+                headers={'Authorization': f'Bearer {settings.RESEND_API_KEY}', 'Content-Type': 'application/json'},
+                json={'from': settings.DEFAULT_FROM_EMAIL, 'to': recipients, 'subject': subject, 'text': message},
+                timeout=15,
+            )
+            response.raise_for_status()
+            return True
+        if provider == 'console':
+            logger.info('EMAIL [%s] to %s\n%s', subject, ', '.join(recipients), message)
+            return True
+        if provider in ('brevo', 'resend'):
+            logger.warning('EMAIL_PROVIDER=%s is configured but its API key is missing.', provider)
+            return False
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, recipients, fail_silently=False)
+        return True
+    except Exception:
+        logger.exception('Email delivery failed')
+        return False
+
+
 # =============================================================================
 # ERRORS 404 and 500
 # =============================================================================
@@ -88,6 +161,10 @@ def custom_404(request, exception):
     return render(request, '404.html', {
         'business': get_business(),
     }, status=404)
+
+def custom_403(request, exception=None):
+    return render(request, '403.html', {'business': get_business()}, status=403)
+
 
 def custom_500(request):
     """Custom 500 error page."""
@@ -120,13 +197,7 @@ def send_admin_notification(subject, message, recipient_list=None):
     if recipient_list is None:
         recipient_list = [getattr(settings, 'CONTACT_EMAIL', settings.DEFAULT_FROM_EMAIL)]
     try:
-        send_mail(
-            subject,
-            message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=recipient_list,
-            fail_silently=True,
-        )
+        send_platform_email(subject, message, recipient_list)
     except Exception as e:
         logger.error(f"Failed to send admin notification: {e}")
 
@@ -134,17 +205,7 @@ def send_admin_notification(subject, message, recipient_list=None):
 def send_welcome_email(user):
     """Send welcome email to new user."""
     try:
-        send_mail(
-            subject="Welcome to our platform",
-            message=(
-                f"Hi {user.username},\n\n"
-                "Thank you for registering. You can now book appointments and apply for services.\n"
-                "Visit our website to get started."
-            ),
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[user.email],
-            fail_silently=True,
-        )
+        send_platform_email("Welcome to our platform", (f"Hi {user.username},\n\n" "Thank you for registering. You can now book appointments and apply for services.\n" "Visit our website to get started."), [user.email])
     except Exception as e:
         logger.error(f"Failed to send welcome email: {e}")
 
@@ -152,9 +213,9 @@ def send_welcome_email(user):
 def send_payment_confirmation(application):
     """Send payment confirmation email to user and admin."""
     try:
-        charge = application.service.servicecharge_set.first()
-        amount = charge.charge if charge else 0
-        business_name = get_business().business_name if get_business() else 'Cyber Cafe'
+        charge = get_service_charge(application.service)
+        amount = application.total_paid or (charge.charge if charge else 0)
+        business_name = get_business().business_name if get_business() else 'Matoshree Cyber Center'
 
         send_mail(
             subject=f"Payment Confirmed - Application #{application.id}",
@@ -225,6 +286,11 @@ class CustomPasswordResetView(PasswordResetView):
     subject_template_name = 'registration/password_reset_subject.txt'
     success_url = reverse_lazy('password_reset_done')
 
+    def send_mail(self, subject_template_name, email_template_name, context, from_email, to_email, html_email_template_name=None):
+        subject = render_to_string(subject_template_name, context).strip().replace('\n', ' ')
+        body = render_to_string(email_template_name, context)
+        send_platform_email(subject, body, [to_email])
+
 
 class CustomPasswordResetDoneView(PasswordResetDoneView):
     template_name = 'registration/password_reset_done.html'
@@ -280,8 +346,8 @@ def _get_dashboard_common_data():
             'gallery_images': list(Gallery.objects.values('id', 'title', 'category', 'image')[:100]),
             'business_info': BusinessInfo.objects.first(),
             'applications': list(Application.objects.select_related('user', 'service').values(
-                'id', 'user__username', 'service__name', 'full_name', 'phone',
-                'email', 'address', 'status', 'created_at'
+                'id', 'application_number', 'user__username', 'service__name', 'full_name', 'phone',
+                'email', 'address', 'status', 'payment_status', 'created_at'
             ).order_by('-created_at')[:100]),
             'required_docs': list(RequiredDocument.objects.select_related('service').values(
                 'id', 'service__name', 'document_name'
@@ -528,6 +594,15 @@ def _handle_edit(model_type, obj_id, request):
             _clear_section_cache('servicecharges')
         else:
             messages.error(request, "Error updating service charge.")
+    elif model_type == 'gallery':
+        instance = get_object_or_404(Gallery, id=obj_id)
+        form = GalleryForm(request.POST, request.FILES, instance=instance)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Gallery image updated.")
+            _clear_section_cache('gallery')
+        else:
+            messages.error(request, "Error updating gallery image.")
     elif model_type == 'businessinfo':
         if not obj_id:
             instance = BusinessInfo.objects.first()
@@ -616,9 +691,17 @@ def _handle_user_role_edit(request):
     user_id = request.POST.get('user_id')
     new_role = request.POST.get('new_role')
     if user_id and new_role:
+        if new_role not in dict(User.ROLE_CHOICES):
+            messages.error(request, 'Invalid role.')
+            return
         user = get_object_or_404(User, id=user_id)
+        old_role = user.role
+        if user == request.user and new_role != 'superadmin':
+            messages.error(request, 'You cannot remove your own superadmin role from this screen.')
+            return
         user.role = new_role
-        user.save()
+        user.save(update_fields=['role'])
+        audit(request, 'user_role_changed', user, {'old_role': old_role, 'new_role': new_role})
         messages.success(request, "User role updated.")
     cache.delete(DASHBOARD_CACHE_KEY)
     _clear_section_cache('users')
@@ -725,8 +808,8 @@ def dashboard_section_data(request, section):
                 'id', 'service__name', 'document_name'))}
         elif section == 'applications':
             data = {'applications': list(Application.objects.select_related('user', 'service').values(
-                'id', 'user__username', 'service__name', 'full_name', 'phone',
-                'email', 'address', 'status', 'created_at'
+                'id', 'application_number', 'user__username', 'service__name', 'full_name', 'phone',
+                'email', 'address', 'status', 'payment_status', 'created_at'
             ).order_by('-created_at'))}
         elif section == 'users' and request.user.role == 'superadmin':
             data = {'users': list(User.objects.values('id', 'username', 'email', 'role', 'is_staff'))}
@@ -795,7 +878,6 @@ def team(request):
     })
 
 
-@login_required
 def services(request):
     services_qs = Service.objects.filter(active=True).order_by('name').only('id', 'name', 'description', 'icon', 'icon_color')
     paginator = Paginator(services_qs, 12)
@@ -809,6 +891,16 @@ def services(request):
     return render(request, 'services.html', {
         'business': get_business(),
         'services': services_page,
+    })
+
+
+def service_detail(request, slug):
+    service = get_object_or_404(Service, name__iexact=slug.replace('-', ' '), active=True)
+    return render(request, 'service_detail.html', {
+        'business': get_business(),
+        'service': service,
+        'charge': get_service_charge(service),
+        'required_docs': RequiredDocument.objects.filter(service=service).order_by('document_name'),
     })
 
 
@@ -856,7 +948,6 @@ def contact(request):
     })
 
 
-@login_required
 def appointment(request):
     if request.method == 'POST':
         form = AppointmentForm(request.POST)
@@ -990,7 +1081,6 @@ def submit_review(request):
     return redirect('reviews')
 
 
-@login_required
 def announcements(request):
     announcements_qs = Announcement.objects.all().order_by('-created_at').only(
         'id', 'title', 'category', 'description', 'created_at'
@@ -1017,13 +1107,12 @@ def get_apply_link(scheme_dict):
     query = f"{title} Maharashtra government scheme"
     return f"https://www.google.com/search?q={quote(query)}"
 
-@login_required
 def government_schemes(request):
     # ----- 1. Fetch external schemes (cached) -----
     external_schemes = fetch_all_external_schemes()
     
     # ----- 2. Fetch manual schemes from database -----
-    manual_schemes = GovernmentScheme.objects.order_by('-created_at')
+    manual_schemes = GovernmentScheme.objects.filter(verified=True).order_by('-created_at')
     
     # ----- 3. Combine -----
     combined = []
@@ -1079,13 +1168,12 @@ def government_schemes(request):
         'schemes': schemes_page,
     })
     
-@login_required
 def jobs(request):
     # ----- 1. Fetch external jobs (cached) -----
     external_jobs = fetch_all_external_jobs()
 
     # ----- 2. Fetch manual jobs from database -----
-    manual_jobs = JobNotification.objects.order_by('-last_date')
+    manual_jobs = JobNotification.objects.filter(verified=True).order_by('-last_date')
 
     # ----- 3. Combine into a single list of dicts -----
     combined = []
@@ -1177,6 +1265,8 @@ def apply_service(request, service_id):
             application.status = 'pending'
             application.payment_status = 'pending'
             application.save()
+            ApplicationStatusHistory.objects.create(application=application, old_status='', new_status='pending', changed_by=request.user, note='Application submitted')
+            notify_user(request.user, f"Application {application.application_number} submitted", f"Your {service.name} application has been submitted.", application)
 
             # Save documents
             for i, doc_form in enumerate(formset.cleaned_data):
@@ -1233,10 +1323,12 @@ def create_razorpay_order(request):
         return JsonResponse({'error': 'Application ID missing'}, status=400)
 
     application = get_object_or_404(Application, id=app_id, user=request.user)
+    if getattr(settings, 'PAYMENT_GATEWAY', 'manual') != 'razorpay' or not settings.RAZORPAY_KEY_ID or not settings.RAZORPAY_KEY_SECRET:
+        return JsonResponse({'error': 'Online gateway is not configured. Please use manual UPI or cash.'}, status=503)
     if application.payment_status == 'paid':
         return JsonResponse({'error': 'Payment already completed'}, status=400)
 
-    charge = application.service.servicecharge_set.first()
+    charge = get_service_charge(application.service)
     if not charge:
         return JsonResponse({'error': 'No charge defined for this service'}, status=400)
 
@@ -1323,7 +1415,7 @@ def payment_success(request):
         return redirect('application_detail', app_id=application.id)
 
     # --- Compute and store breakdown ---
-    charge = application.service.servicecharge_set.first()
+    charge = get_service_charge(application.service)
     if charge:
         breakdown = compute_payment_breakdown(
             charge.charge,
@@ -1357,6 +1449,8 @@ def payment_success(request):
         event_type='captured',
         amount=application.total_paid or 0,
     )
+    notify_user(application.user, f"Payment received for {application.application_number}", f"Your payment for {application.service.name} has been received.", application)
+    audit(request, 'razorpay_payment_captured', application, {'payment_id': razorpay_payment_id})
 
     # Send confirmation email
     send_payment_confirmation(application)
@@ -1389,16 +1483,17 @@ def payment_checkout(request, app_id):
         messages.warning(request, "This application has already been paid.")
         return redirect('application_detail', app_id=app_id)
 
-    charge = application.service.servicecharge_set.first()
+    charge = get_service_charge(application.service)
     if not charge:
         messages.error(request, "No charge defined for this service.")
         return redirect('application_detail', app_id=app_id)
 
+    razorpay_enabled = bool(getattr(settings, 'PAYMENT_GATEWAY', 'manual') == 'razorpay' and settings.RAZORPAY_KEY_ID and settings.RAZORPAY_KEY_SECRET)
     breakdown = compute_payment_breakdown(
         charge.charge,
         gst_rate=getattr(settings, 'GST_RATE', 0.18),
-        fee_percent=getattr(settings, 'RAZORPAY_FEE_PERCENT', 2.0),
-        fee_fixed=getattr(settings, 'RAZORPAY_FEE_FIXED', 0.0)
+        fee_percent=getattr(settings, 'RAZORPAY_FEE_PERCENT', 2.0) if razorpay_enabled else 0,
+        fee_fixed=getattr(settings, 'RAZORPAY_FEE_FIXED', 0.0) if razorpay_enabled else 0,
     )
 
     context = {
@@ -1407,6 +1502,7 @@ def payment_checkout(request, app_id):
         'payment_settings': get_payment_settings(),
         'razorpay_key': settings.RAZORPAY_KEY_ID,
         'breakdown': breakdown,
+        'razorpay_enabled': razorpay_enabled,
     }
     return render(request, 'payment_checkout.html', context)
 
@@ -1418,10 +1514,46 @@ def razorpay_webhook(request):
     return JsonResponse({'status': 'ok'})
 
 
+def track_application(request):
+    application = None
+    if request.method == 'POST' or request.GET.get('application_number'):
+        number = (request.POST.get('application_number') or request.GET.get('application_number') or '').strip()
+        phone = (request.POST.get('phone') or request.GET.get('phone') or '').strip()
+        if number and phone:
+            application = Application.objects.filter(application_number__iexact=number, phone=phone).select_related('service').first()
+            if not application:
+                messages.error(request, 'No application matched that application number and phone number.')
+    return render(request, 'track_application.html', {'business': get_business(), 'application': application})
+
+
+@login_required
+def notifications(request):
+    items = Notification.objects.filter(user=request.user).select_related('application')[:50]
+    Notification.objects.filter(user=request.user, is_read=False).update(is_read=True)
+    return render(request, 'notifications.html', {'business': get_business(), 'notifications': items})
+
+
+@login_required
+def document_download(request, doc_id):
+    document = get_object_or_404(DocumentUpload.objects.select_related('application__user'), id=doc_id)
+    if not (request.user.role in ('admin', 'superadmin') or document.application.user_id == request.user.id):
+        from django.core.exceptions import PermissionDenied
+        raise PermissionDenied
+    if not document.file:
+        messages.error(request, 'This document is unavailable.')
+        return redirect('application_detail', app_id=document.application_id)
+    try:
+        response = FileResponse(document.file.open('rb'), as_attachment=True, filename=os.path.basename(document.file.name))
+        return response
+    except Exception:
+        messages.error(request, 'Unable to open this document.')
+        return redirect('application_detail', app_id=document.application_id)
+
+
 @login_required
 def my_applications(request):
     applications = Application.objects.filter(user=request.user).order_by('-created_at').only(
-        'id', 'service__name', 'status', 'created_at'
+        'id', 'application_number', 'service__name', 'status', 'payment_status', 'created_at'
     ).select_related('service')
     paginator = Paginator(applications, 10)
     page = request.GET.get('page')
@@ -1444,10 +1576,11 @@ def application_detail(request, app_id):
         id=app_id,
         user=request.user
     )
-    documents = application.documents.all().only('id', 'document_name', 'file', 'verified')
+    documents = application.documents.all().only('id', 'document_name', 'file', 'verified', 'verification_status', 'verification_note', 'uploaded_at')
     return render(request, 'application_detail.html', {
         'application': application,
         'documents': documents,
+        'status_history': application.status_history.select_related('changed_by').all(),
         'business': get_business(),
         'payment_settings': get_payment_settings(),
         'payment_required': application.service.payment_required,
@@ -1462,7 +1595,7 @@ def application_detail(request, app_id):
 @user_passes_test(is_admin)
 def application_detail_ajax(request, app_id):
     app = get_object_or_404(Application, id=app_id)
-    documents = app.documents.all().only('document_name', 'file', 'verified')
+    documents = app.documents.all().only('id', 'document_name', 'file', 'verified', 'verification_status')
     data = {
         'full_name': app.full_name,
         'phone': app.phone,
@@ -1474,7 +1607,7 @@ def application_detail_ajax(request, app_id):
         'documents': [
             {
                 'name': doc.document_name,
-                'url': doc.file.url,
+                'url': reverse('document_download', kwargs={'doc_id': doc.id}),
                 'verified': doc.verified,
             }
             for doc in documents
@@ -1496,8 +1629,17 @@ def application_admin_detail(request, app_id):
         if action == 'update_status':
             new_status = request.POST.get('status')
             if new_status in dict(Application.STATUS_CHOICES):
+                old_status = application.status
+                note = request.POST.get('note', '').strip()
                 application.status = new_status
+                application.admin_note = note or application.admin_note
+                if new_status == 'rejected':
+                    application.rejection_reason = note
                 application.save()
+                if old_status != new_status:
+                    ApplicationStatusHistory.objects.create(application=application, old_status=old_status, new_status=new_status, changed_by=request.user, note=note)
+                    notify_user(application.user, f"Application {application.application_number} updated", f"Your application status changed from {old_status.title()} to {application.get_status_display()}." + (f" Note: {note}" if note else ''), application)
+                audit(request, 'application_status_changed', application, {'old_status': old_status, 'new_status': new_status})
                 messages.success(request, "Status updated successfully.")
             else:
                 messages.error(request, "Invalid status.")
@@ -1511,26 +1653,34 @@ def application_admin_detail(request, app_id):
             return redirect('application_admin_detail', app_id=app_id)
 
         elif action == 'add_document':
-            doc_name = request.POST.get('document_name')
-            file = request.FILES.get('file')
-            if doc_name and file:
-                DocumentUpload.objects.create(
-                    application=application,
-                    document_name=doc_name,
-                    file=file,
-                    is_mandatory=False
-                )
+            doc_name = request.POST.get('document_name', '').strip()
+            upload_form = DocumentUploadForm({'document_name': doc_name}, request.FILES)
+            if doc_name and upload_form.is_valid():
+                doc = upload_form.save(commit=False)
+                doc.application = application
+                doc.is_mandatory = False
+                doc.save()
+                audit(request, 'admin_document_uploaded', doc)
                 messages.success(request, "Document uploaded.")
             else:
-                messages.error(request, "Please provide both name and file.")
+                messages.error(request, "Please provide a valid document name and PDF/JPG/PNG file under the size limit.")
             return redirect('application_admin_detail', app_id=app_id)
 
         elif action == 'verify_document':
             doc_id = request.POST.get('doc_id')
             doc = get_object_or_404(DocumentUpload, id=doc_id, application=application)
-            doc.verified = not doc.verified
+            new_doc_status = request.POST.get('verification_status', 'pending')
+            if new_doc_status not in ('pending', 'verified', 'rejected'):
+                messages.error(request, 'Invalid document status.')
+                return redirect('application_admin_detail', app_id=app_id)
+            doc.verification_status = new_doc_status
+            doc.verified = new_doc_status == 'verified'
+            doc.verified_by = request.user if doc.verified else None
+            doc.verified_at = timezone.now() if doc.verified else None
+            doc.verification_note = request.POST.get('verification_note', '').strip()
             doc.save()
-            messages.success(request, "Document verification toggled.")
+            audit(request, 'document_verification_changed', doc, {'status': new_doc_status})
+            messages.success(request, "Document verification updated.")
             return redirect('application_admin_detail', app_id=app_id)
 
         elif action == 'mark_payment_paid':
@@ -1538,14 +1688,20 @@ def application_admin_detail(request, app_id):
                 application.payment_status = 'paid'
                 application.payment_date = timezone.now()
                 application.receipt_number = application.generate_receipt_number()
-                application.payment_method = 'manual'
+                application.payment_method = application.payment_method or 'manual'
+                charge = get_service_charge(application.service)
+                application.service_amount = charge.charge if charge else 0
+                application.razorpay_fee = 0
+                application.gst_on_fee = 0
+                application.total_paid = application.service_amount
                 application.save()
-                charge = application.service.servicecharge_set.first()
                 PaymentLog.objects.create(
                     application=application,
                     event_type='manual_confirmed',
                     amount=charge.charge if charge else 0,
                 )
+                notify_user(application.user, f"Payment received for {application.application_number}", f"Your payment for {application.service.name} was marked as paid.", application)
+                audit(request, 'manual_payment_confirmed', application)
                 send_payment_confirmation(application)
                 messages.success(request, "Payment marked as paid manually.")
             else:
@@ -1557,7 +1713,7 @@ def application_admin_detail(request, app_id):
     context = {
         'application': application,
         'documents': application.documents.all().only(
-            'id', 'document_name', 'file', 'is_mandatory', 'verified', 'uploaded_at'
+            'id', 'document_name', 'file', 'is_mandatory', 'verified', 'verification_status', 'verification_note', 'verified_at', 'uploaded_at'
         ),
         'business': get_business(),
         'payment_settings': payment_settings,
@@ -1644,6 +1800,7 @@ def split_pdf(request, pk):
 # =============================================================================
 
 @login_required
+@require_POST
 def mark_payment_done(request, app_id):
     """Manual payment confirmation (UPI or Cash) – kept for admin override."""
     # Helper to validate UPI details
@@ -1729,22 +1886,26 @@ def mark_payment_done(request, app_id):
         messages.error(request, error_msg)
         return redirect('application_detail', app_id=app_id)
 
-    application.payment_status = 'paid'
-    application.payment_date = timezone.now()
-    application.receipt_number = application.generate_receipt_number()
+    application.payment_status = 'pending'
     application.payment_method = method
     application.utr_number = utr
     application.payment_app = payment_app
+    application.payment_transaction_id = utr or ''
     application.save()
 
+    charge = get_service_charge(application.service)
     PaymentLog.objects.create(
         application=application,
-        event_type='manual_confirmed',
-        amount=application.service.servicecharge_set.first().charge,
+        event_type='manual_submitted',
+        amount=charge.charge if charge else 0,
     )
-
-    send_payment_confirmation(application)
-    messages.success(request, "Payment confirmed. Your receipt is ready.")
+    notify_user(application.user, f"Payment submitted for {application.application_number}", "Your payment details were submitted and are awaiting admin verification.", application)
+    audit(request, 'manual_payment_submitted', application, {'method': method, 'utr': utr})
+    send_admin_notification(
+        subject=f"Payment verification required - {application.application_number}",
+        message=f"{application.full_name} submitted {method} payment for {application.service.name}. UTR: {utr or 'Not provided'}."
+    )
+    messages.success(request, "Payment details submitted. The center will verify your payment.")
     cache.delete('reports_data')
     return redirect('application_detail', app_id=app_id)
 
@@ -1785,16 +1946,16 @@ def _create_application_from_session_data(pending_data, request):
         address=form_data['address'],
         extra_data=form_data.get('extra_data', {}),
         status='pending',
-        payment_status='paid',
-        payment_date=timezone.now(),
+        payment_status='pending',
+        payment_date=None,
         payment_method=payment_method,
         payment_app=payment_app,
         utr_number=utr_number,
         payment_transaction_id='',
     )
     application.save()
-    application.receipt_number = application.generate_receipt_number()
-    application.save(update_fields=['receipt_number'])
+    ApplicationStatusHistory.objects.create(application=application, old_status='', new_status='pending', changed_by=request.user, note='Application submitted')
+    notify_user(request.user, f"Application {application.application_number} submitted", f"Your {service.name} application and payment have been recorded.", application)
 
     # Save documents from local temp files
     for temp in temp_files:
@@ -1865,22 +2026,16 @@ def download_receipt(request, app_id):
         return redirect('application_detail', app_id=app_id)
 
     # ---- Data ----
-    charge = application.service.servicecharge_set.first()
+    charge = get_service_charge(application.service)
     if not charge:
         messages.error(request, "Service charge missing.")
         return redirect('application_detail', app_id=app_id)
 
-    # Compute breakdown using the helper
-    breakdown = compute_payment_breakdown(
-        charge.charge,
-        gst_rate=getattr(settings, 'GST_RATE', 0.18),
-        fee_percent=getattr(settings, 'RAZORPAY_FEE_PERCENT', 2.0),
-        fee_fixed=getattr(settings, 'RAZORPAY_FEE_FIXED', 0.0)
-    )
-    service_amount = breakdown['service_amount']
-    fee = breakdown['fee']
-    gst_on_fee = breakdown['gst_on_fee']
-    total_amount = breakdown['total']
+    # Use the amount actually recorded at payment time; manual UPI/cash has no gateway fee.
+    service_amount = application.service_amount or charge.charge
+    fee = application.razorpay_fee or Decimal('0.00')
+    gst_on_fee = application.gst_on_fee or Decimal('0.00')
+    total_amount = application.total_paid or (service_amount + fee + gst_on_fee)
 
     business = get_business()
 
@@ -2092,9 +2247,9 @@ def download_receipt(request, app_id):
     story.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor('#e2e8f0'), spaceBefore=4, spaceAfter=4))
     story.append(Paragraph("Thank you for your payment. This is a system-generated receipt.", footer_style))
     story.append(Paragraph(f"Verified on: {timezone.now().strftime('%d %b %Y %I:%M %p')}", footer_style))
-    support_email = business.email if business and business.email else 'support@matoshree.com'
+    support_email = business.email if business and business.email else 'the center'
     story.append(Paragraph(f"For support, contact us at {support_email}", footer_style))
-    story.append(Paragraph(f"© {timezone.now().year} {business.business_name if business else 'Matoshree Cyber Cafe'}. All rights reserved.", footer_style))
+    story.append(Paragraph(f"© {timezone.now().year} {business.business_name if business else 'Matoshree Cyber Center'}. All rights reserved.", footer_style))
 
     doc.build(story)
     buffer.seek(0)
@@ -2166,6 +2321,20 @@ def reports_dashboard(request):
         'business': get_business(),
     }
     return render(request, 'reports_dashboard.html', context)
+
+
+@login_required
+@user_passes_test(is_admin)
+def export_applications_csv(request):
+    import csv
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="applications.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['Application Number', 'Customer', 'Phone', 'Email', 'Service', 'Status', 'Payment Status', 'Created At'])
+    for app in Application.objects.select_related('service').order_by('-created_at'):
+        writer.writerow([app.application_number, app.full_name, app.phone, app.email, app.service.name, app.get_status_display(), app.get_payment_status_display(), app.created_at.strftime('%Y-%m-%d %H:%M')])
+    audit(request, 'applications_csv_exported')
+    return response
 
 
 # =============================================================================

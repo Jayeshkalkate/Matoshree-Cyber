@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Track Application{% endblock %}
+{% block description %}Track your Matoshree service application status using your application number and phone number.{% endblock %}
+{% block content %}
+<div class="container" style="max-width:850px">
+  <div class="card" style="padding:2rem">
+    <h1><i class="fas fa-search"></i> Track Application</h1>
+    <p>Enter the application number and phone number used when applying.</p>
+    <form method="post">{% csrf_token %}
+      <div class="field"><label>Application Number</label><input class="form-control" name="application_number" required placeholder="MAT-20261008-000123"></div>
+      <div class="field"><label>Phone Number</label><input class="form-control" name="phone" required placeholder="10 digit phone number"></div>
+      <button class="btn btn-primary" type="submit">Check Status</button>
+    </form>
+    {% if application %}
+    <hr><h2>{{ application.application_number }}</h2>
+    <p><strong>Service:</strong> {{ application.service.name }}</p>
+    <p><strong>Application status:</strong> {{ application.get_status_display }}</p>
+    <p><strong>Payment status:</strong> {{ application.get_payment_status_display }}</p>
+    <p><strong>Submitted:</strong> {{ application.created_at|date:"d M Y, h:i A" }}</p>
+    {% if application.rejection_reason %}<div class="notice">Reason: {{ application.rejection_reason }}</div>{% endif %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

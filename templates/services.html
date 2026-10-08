@@ -275,7 +275,7 @@
             <span style="font-size:2rem;">{{ service.icon }}</span>
         {% endif %}
 
-        <h3>{{ service.name }}</h3>
+        <h3><a href="{% url 'service_detail' slug=service.name|slugify %}">{{ service.name }}</a></h3>
         <div class="desc">{{ service.description|truncatechars:80 }}</div>
         <a
           href="{% url 'apply_service' service.id %}"

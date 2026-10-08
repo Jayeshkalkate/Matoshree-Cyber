@@ -109,4 +109,6 @@ celerybeat.pid
 dmypy.json
 .pytype
 *.pytype
-pip-wheel-metadata
+pip-wheel-metadatabackups/
+
+applications/
