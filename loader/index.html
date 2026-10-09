@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Matoshree Cyber Center – Loading…</title>
+<meta name="robots" content="noindex">
+<style>
+  :root{--bg:#0f172a;--fg:#e2e8f0;--accent:#00e6ff;--dim:#94a3b8}
+  @media (prefers-color-scheme: light){:root{--bg:#f8fafc;--fg:#0f172a;--accent:#0891b2;--dim:#475569}}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;text-align:center;padding:1.5rem}
+  .box{max-width:420px}
+  .spinner{width:56px;height:56px;margin:0 auto 1.5rem;border:5px solid color-mix(in srgb,var(--accent) 25%,transparent);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  h1{font-size:1.4rem;margin:0 0 .5rem}
+  p{color:var(--dim);margin:.25rem 0;line-height:1.5}
+  .bar{height:6px;background:color-mix(in srgb,var(--accent) 20%,transparent);border-radius:99px;overflow:hidden;margin:1.25rem 0 .5rem}
+  .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .6s}
+  button,a.btn{display:none;margin-top:1rem;padding:.6rem 1.4rem;border:0;border-radius:99px;background:var(--accent);color:#04202a;font-weight:600;font-size:1rem;cursor:pointer;text-decoration:none}
+</style>
+</head>
+<body>
+<main class="box" role="status" aria-live="polite">
+  <div class="spinner" aria-hidden="true"></div>
+  <h1>Application loading…</h1>
+  <p id="msg">Starting the server. This takes up to a minute the first time.</p>
+  <div class="bar"><i id="fill"></i></div>
+  <p id="timer"></p>
+  <button id="retry" type="button">Try again</button>
+  <a id="open" class="btn" href="#">Open website</a>
+</main>
+<noscript><p style="position:fixed;bottom:1rem;left:0;right:0;text-align:center">JavaScript is needed. <a href="https://matoshree-cyber.onrender.com/">Open the website directly</a>.</p></noscript>
+<script>
+(function () {
+  // >>> Change this if your Render URL is different <<<
+  var SITE = "https://matoshree-cyber.onrender.com";
+  var HEALTH = SITE + "/healthz/";
+  var MAX_WAIT_MS = 120000, started = Date.now(), done = false;
+
+  var msg = document.getElementById("msg"), fill = document.getElementById("fill"),
+      timer = document.getElementById("timer"), retry = document.getElementById("retry"),
+      open = document.getElementById("open");
+  open.href = SITE + "/";
+
+  // Keep the visitor's destination (e.g. /services/) after the wake-up.
+  var path = location.hash ? location.hash.slice(1) : "";
+  if (path.charAt(0) !== "/" || path.indexOf("//") === 0) path = "/";
+  var target = SITE + path;
+
+  var steps = [
+    [0, "Starting the server…"],
+    [10000, "Waking up services…"],
+    [25000, "Almost there, preparing the website…"],
+    [60000, "Taking a bit longer than usual. Please keep this page open."]
+  ];
+
+  function tick() {
+    if (done) return;
+    var el = Date.now() - started;
+    fill.style.width = Math.min(95, (el / 60000) * 100) + "%";
+    timer.textContent = Math.floor(el / 1000) + "s";
+    for (var i = steps.length - 1; i >= 0; i--) { if (el >= steps[i][0]) { msg.textContent = steps[i][1]; break; } }
+    if (el > MAX_WAIT_MS) {
+      done = true;
+      msg.textContent = "The server is not responding yet.";
+      retry.style.display = "inline-block"; open.style.display = "inline-block";
+    }
+  }
+
+  function check() {
+    if (done) return;
+    var ctrl = new AbortController(), t = setTimeout(function () { ctrl.abort(); }, 8000);
+    fetch(HEALTH + "?t=" + Date.now(), { cache: "no-store", signal: ctrl.signal })
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+      .then(function (j) {
+        clearTimeout(t);
+        if (j && j.status === "ok") {
+          done = true; fill.style.width = "100%"; msg.textContent = "Ready! Opening website…";
+          location.replace(target);
+        } else { throw 0; }
+      })
+      .catch(function () { clearTimeout(t); setTimeout(check, 2500); });  // asleep or booting: keep trying
+  }
+
+  retry.addEventListener("click", function () {
+    done = false; started = Date.now(); retry.style.display = "none"; open.style.display = "none"; check();
+  });
+  setInterval(tick, 500); tick(); check();
+})();
+</script>
+</body>
+</html>

@@ -58,7 +58,7 @@ from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_GET, require_POST
 
 # ---- Local Application ----
 from .models import (
@@ -179,6 +179,19 @@ def custom_500(request):
 # =============================================================================
 # ROBOTS.TXT
 # =============================================================================
+@require_GET
+def healthz(request):
+    """Lightweight, DB-free health endpoint used by Render and the wake-up loader page.
+
+    The CORS header lets the static loader page (a different origin) read the response;
+    while the service is asleep Render answers without it, so the loader keeps waiting.
+    """
+    response = JsonResponse({"status": "ok"})
+    response["Access-Control-Allow-Origin"] = "*"
+    response["Cache-Control"] = "no-store"
+    return response
+
+
 def robots_txt(request):
     """Allow public pages, keep private/transactional/admin areas out of search."""
     private = [
@@ -187,7 +200,7 @@ def robots_txt(request):
         "/application-ajax/", "/notifications/", "/payment-checkout/", "/payment-success/",
         "/payment-failure/", "/create-razorpay-order/", "/razorpay-webhook/", "/download-receipt/",
         "/document/", "/split-pdf/", "/mark-payment-done/", "/login/", "/register/", "/logout/",
-        "/auth/", "/password-", "/track-application/", "/apply/",
+        "/auth/", "/password-", "/track-application/", "/apply/", "/healthz/",
     ]
     lines = ["User-agent: *"] + [f"Disallow: {p}" for p in private] + [
         "Allow: /",

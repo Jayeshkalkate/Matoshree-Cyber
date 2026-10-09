@@ -11,7 +11,7 @@ services:
       python manage.py migrate --noinput
       python manage.py collectstatic --noinput
     startCommand: gunicorn Matoshree.wsgi:application --workers 2 --timeout 60
-    healthCheckPath: /
+    healthCheckPath: /healthz/
     envVars:
       - key: DATABASE_URL
         sync: false
@@ -61,5 +61,12 @@ services:
         sync: false
       - key: RAZORPAY_WEBHOOK_SECRET
         sync: false
+
+  # Free static site (never sleeps): shows "Application loading" and wakes the Django service.
+  - type: web
+    name: matoshree-cyber-loader
+    runtime: static
+    staticPublishPath: ./loader
+    pullRequestPreviewsEnabled: false
 
 # Use a free external PostgreSQL provider such as Supabase. Set DATABASE_URL in the Render dashboard.

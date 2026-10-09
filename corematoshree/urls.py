@@ -120,6 +120,7 @@ urlpatterns = [
     path('googleb2111897b41dceb9.html', TemplateView.as_view(template_name='googleb2111897b41dceb9.html'), name='google_verify'),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('robots.txt', robots_txt, name='robots'),
+    path('healthz/', views.healthz, name='healthz'),
 ]
 
 # Serve media & static in development only
