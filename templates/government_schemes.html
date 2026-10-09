@@ -713,11 +713,7 @@
       {% for scheme in schemes %}
       <div class="scheme-card">
         <!-- Image -->
-        {% if scheme.image %}
-          <img src="{{ scheme.image.url }}" alt="{{ scheme.title }}" class="scheme-image" loading="lazy" />
-        {% else %}
-          <img src="{% static 'images/scheme-placeholder.png' %}" alt="{{ scheme.title }}" class="scheme-image" loading="lazy" />
-        {% endif %}
+        <img src="{% if scheme.image_url %}{{ scheme.image_url }}{% else %}{% static 'images/scheme-placeholder.png' %}{% endif %}" alt="{{ scheme.title }}" class="scheme-image" loading="lazy" onerror="this.onerror=null;this.src='{% static 'images/scheme-placeholder.png' %}';" />
 
         <!-- Title -->
         <h3 class="scheme-title">{{ scheme.title }}</h3>
@@ -786,7 +782,7 @@
           <div class="meta-item" style="flex-basis:100%; margin-top:4px;">
               <a href="{{ scheme.apply_link_display }}" target="_blank" rel="noopener noreferrer" class="btn-apply" style="display:inline-flex; align-items:center; gap:6px; padding:6px 18px; border-radius:30px; font-weight:600; font-size:0.85rem; color:#fff; background:var(--neon-cyan); text-decoration:none; transition:all 0.3s ease;">
                 <i class="fas fa-external-link-alt" aria-hidden="true"></i>
-                  {% if scheme.apply_link and scheme.apply_link != '#' %}
+                  {% if scheme.has_direct_link %}
                     Apply Now
                   {% else %}
                     Read More

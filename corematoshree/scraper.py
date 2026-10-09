@@ -656,6 +656,107 @@ def fetch_cscjob_jobs():
 # 5. GOVERNMENT SCHEMES – updated with fetch_with_retry
 # ────────────────────────────────────────────────────────────────
 
+
+# ────────────────────────────────────────────────────────────────
+# Scheme quality filters + curated fallback list
+# ────────────────────────────────────────────────────────────────
+_SCHEME_WORDS = (
+    'yojana', 'yojna', 'scheme', 'abhiyan', 'mission', 'pension', 'subsidy', 'scholarship',
+    'loan', 'awas', 'kisan', 'ladki', 'bahin', 'mudra', 'insurance', 'bima', 'programme',
+    'program', 'योजना', 'अभियान', 'मिशन', 'शिष्यवृत्ती', 'अनुदान', 'पेन्शन', 'निधी',
+)
+_NAV_WORDS = (
+    'accessibility', 'text to speech', 'screen reader', 'skip to', 'sitemap', 'site map', 'login',
+    'sign in', 'register', 'home', 'contact', 'about', 'rti', 'faq', 'introduction', 'vision',
+    'mission statement', 'objectives', 'functions', 'administrative', 'subordinate', 'organisation',
+    'organization', 'gallery', 'feedback', 'disclaimer', 'privacy', 'terms', 'help', 'copyright',
+    'महाराष्ट्र शासन', 'government of maharashtra', 'font size', 'language', 'archive', 'tender',
+    'download', 'circular', 'search', 'main content', 'newsletter', 'follow us', 'read more',
+)
+
+
+def _clean_href(href, base):
+    """Return an absolute http(s) URL or '' for '#', javascript:, mailto: etc."""
+    href = (href or '').strip()
+    if not href or href.startswith(('#', 'javascript:', 'mailto:', 'tel:')):
+        return ''
+    full = urljoin(base, href)
+    if not full.lower().startswith(('http://', 'https://')) or full.rstrip('/').endswith('#'):
+        return ''
+    return full.split('#', 1)[0]
+
+
+def _looks_like_scheme(title, href):
+    """True only for a real scheme link, never for site-navigation items."""
+    t = (title or '').strip()
+    low = t.lower()
+    if len(t) < 8 or len(t) > 160 or not href:
+        return False
+    if any(w in low for w in _NAV_WORDS):
+        return False
+    return any(w in low for w in _SCHEME_WORDS)
+
+
+CURATED_SCHEMES = [
+    {'title': 'PM-KISAN Samman Nidhi', 'provider': 'Central Government', 'department': 'Agriculture & Farmers Welfare',
+     'description': 'Income support scheme for eligible farmer families, paid in instalments directly to the bank account.',
+     'eligibility': 'Landholding farmer families (exclusions apply). Aadhaar-linked bank account needed.',
+     'official_link': 'https://pmkisan.gov.in/'},
+    {'title': 'Pradhan Mantri Awas Yojana (PMAY)', 'provider': 'Central Government', 'department': 'Housing & Urban Affairs / Rural Development',
+     'description': 'Housing assistance for eligible urban and rural families to build or buy a pucca house.',
+     'eligibility': 'Families without a pucca house, as per income and category rules.',
+     'official_link': 'https://pmaymis.gov.in/'},
+    {'title': 'Ayushman Bharat PM-JAY', 'provider': 'Central Government', 'department': 'Health & Family Welfare',
+     'description': 'Cashless hospital treatment cover for eligible families at empanelled hospitals.',
+     'eligibility': 'Families listed under SECC database / state-notified categories.',
+     'official_link': 'https://pmjay.gov.in/'},
+    {'title': 'Mahatma Jyotiba Phule Jan Arogya Yojana', 'provider': 'State Government', 'department': 'Public Health Department, Maharashtra',
+     'description': 'Cashless medical treatment scheme for eligible families in Maharashtra.',
+     'eligibility': 'Eligible Maharashtra families as per ration card / income criteria.',
+     'official_link': 'https://www.jeevandayee.gov.in/'},
+    {'title': 'Majhi Ladki Bahin Yojana', 'provider': 'State Government', 'department': 'Women & Child Development, Maharashtra',
+     'description': 'Monthly financial assistance scheme for eligible women of Maharashtra.',
+     'eligibility': 'Eligible women residents of Maharashtra as per the scheme rules.',
+     'official_link': 'https://ladakibahin.maharashtra.gov.in/'},
+    {'title': 'Pradhan Mantri Ujjwala Yojana', 'provider': 'Central Government', 'department': 'Petroleum & Natural Gas',
+     'description': 'Free LPG connection support for women from eligible low-income households.',
+     'eligibility': 'Adult women from eligible households without an existing LPG connection.',
+     'official_link': 'https://www.pmuy.gov.in/'},
+    {'title': 'PM Mudra Yojana', 'provider': 'Central Government', 'department': 'Finance',
+     'description': 'Collateral-free loans for small and micro businesses (Shishu, Kishore, Tarun).',
+     'eligibility': 'Small business owners and entrepreneurs in non-farm sectors.',
+     'official_link': 'https://www.mudra.org.in/'},
+    {'title': 'PM Vishwakarma Yojana', 'provider': 'Central Government', 'department': 'MSME',
+     'description': 'Skill training, toolkit support and credit for traditional artisans and craftspeople.',
+     'eligibility': 'Artisans working in the trades listed under the scheme.',
+     'official_link': 'https://pmvishwakarma.gov.in/'},
+    {'title': 'Sukanya Samriddhi Yojana', 'provider': 'Central Government', 'department': 'Finance / India Post',
+     'description': 'Small-savings account for the future education and marriage expenses of a girl child.',
+     'eligibility': 'Parents/guardians of a girl child as per the age limit in the scheme rules.',
+     'official_link': 'https://www.indiapost.gov.in/Financial/Pages/Content/Sukanya-Samriddhi-Accounts.aspx'},
+    {'title': 'Atal Pension Yojana', 'provider': 'Central Government', 'department': 'Finance (PFRDA)',
+     'description': 'Pension scheme for unorganised-sector workers with a guaranteed pension after retirement age.',
+     'eligibility': 'Indian citizens within the entry-age range with a bank account.',
+     'official_link': 'https://www.npscra.nsdl.co.in/scheme-details.php'},
+    {'title': 'Digital India Programme', 'provider': 'Central Government', 'department': 'Electronics & IT',
+     'description': 'Umbrella programme for digital services, digital literacy and online access to government services.',
+     'eligibility': 'Open to all citizens.',
+     'official_link': 'https://www.digitalindia.gov.in/'},
+]
+
+
+def _curated_schemes():
+    out = []
+    for c in CURATED_SCHEMES:
+        out.append({
+            'title': c['title'], 'description': c['description'], 'eligibility': c['eligibility'],
+            'last_date': None, 'status': 'ongoing', 'provider': c['provider'], 'department': c['department'],
+            'apply_link': c['official_link'], 'official_link': c['official_link'],
+            'source': 'curated', 'category': 'Government Scheme',
+        })
+    return out
+
+
 def fetch_rdd_schemes():
     schemes = []
     sources = [
@@ -667,16 +768,12 @@ def fetch_rdd_schemes():
         try:
             response = fetch_with_retry(url, timeout=25)
             soup = BeautifulSoup(response.text, 'html.parser')
-            items = soup.select('ul li a, .scheme-list a, .content a')
+            items = soup.select('main a[href], .scheme-list a[href], .content a[href], article a[href]')
             for item in items:
-                title = item.text.strip()
-                href = item.get('href')
-                if not title or len(title) < 5:
+                title = ' '.join(item.get_text(' ', strip=True).split())
+                href = _clean_href(item.get('href'), url)
+                if not _looks_like_scheme(title, href):
                     continue
-                if any(skip in title.lower() for skip in ['home', 'contact', 'about', 'rti', 'faq']):
-                    continue
-                if href and not href.startswith('http'):
-                    href = urljoin(url, href)
                 provider_label = {
                     'state': 'State Government',
                     'central': 'Central Government',
@@ -684,14 +781,14 @@ def fetch_rdd_schemes():
                 }.get(provider, 'Government')
                 schemes.append({
                     'title': title,
-                    'description': '',
+                    'description': 'Rural development scheme listed by the Rural Development & Panchayat Raj Department, Maharashtra.',
                     'eligibility': '',
                     'last_date': None,
                     'status': 'active',
                     'provider': provider_label,
                     'department': 'Rural Development & Panchayat Raj',
-                    'apply_link': href or url,
-                    'official_link': href or url,
+                    'apply_link': href,
+                    'official_link': href,
                     'source': 'rdd_maharashtra',
                     'category': 'Rural Development'
                 })
@@ -712,11 +809,11 @@ def fetch_mahaschemes_schemes():
             title_tag = item.find('h2') or item.find('h3') or item.find('a')
             if not title_tag:
                 continue
-            title = title_tag.text.strip()
-            if len(title) < 5:
-                continue
+            title = ' '.join(title_tag.get_text(' ', strip=True).split())
             link_tag = item.find('a')
-            href = link_tag.get('href') if link_tag else None
+            href = _clean_href(link_tag.get('href'), url) if link_tag else ''
+            if len(title) < 8 or any(w in title.lower() for w in _NAV_WORDS):
+                continue
             desc_tag = item.find('p')
             description = desc_tag.text.strip() if desc_tag else ''
             schemes.append({
@@ -749,7 +846,7 @@ def fetch_plan_district_schemes():
         for district in districts:
             text = district.text.strip()
             href = district.get('href')
-            if text and len(text) > 3 and 'district' in href.lower():
+            if text and len(text) > 3 and 'district' in href.lower() and _clean_href(href, url) and not any(w in text.lower() for w in _NAV_WORDS):
                 schemes.append({
                     'title': f"{text} District Schemes",
                     'description': f"Government schemes available in {text} district, Maharashtra.",
@@ -772,12 +869,12 @@ def fetch_plan_district_schemes():
 
 
 def fetch_all_external_schemes():
-    cache_key = 'external_schemes_combined'
+    cache_key = 'external_schemes_combined_v2'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
 
-    all_schemes = []
+    all_schemes = _curated_schemes()
     all_schemes.extend(fetch_rdd_schemes())
     all_schemes.extend(fetch_mahaschemes_schemes())
     all_schemes.extend(fetch_plan_district_schemes())

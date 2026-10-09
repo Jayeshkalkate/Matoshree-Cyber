@@ -1121,61 +1121,68 @@ def announcements(request):
     })
 
 def get_apply_link(scheme_dict):
-    """Return direct link or Google search fallback."""
-    link = scheme_dict.get('apply_link', '').strip()
-    if link and link != '#':
-        return link
-    title = scheme_dict.get('title', '').strip()
+    """Return a valid http(s) link, or a Google search fallback."""
+    for key in ('apply_link', 'official_link'):
+        link = (scheme_dict.get(key) or '').strip()
+        if link.lower().startswith(('http://', 'https://')):
+            return link
+    title = (scheme_dict.get('title') or '').strip()
     query = f"{title} Maharashtra government scheme"
     return f"https://www.google.com/search?q={quote(query)}"
 
+
+def _scheme_image_url(image):
+    """Safe image URL or '' (a missing/removed file must not break the card)."""
+    try:
+        if image and image.name:
+            return image.url
+    except Exception:
+        pass
+    return ''
+
+
 def government_schemes(request):
-    # ----- 1. Fetch external schemes (cached) -----
-    external_schemes = fetch_all_external_schemes()
-    
-    # ----- 2. Fetch manual schemes from database -----
+    # ----- 1. Fetch external schemes (cached, never raises) -----
+    try:
+        external_schemes = fetch_all_external_schemes()
+    except Exception:
+        logger.exception("External scheme fetch failed")
+        external_schemes = []
+
+    # ----- 2. Manual schemes from database (shown first) -----
     manual_schemes = GovernmentScheme.objects.filter(verified=True).order_by('-created_at')
-    
-    # ----- 3. Combine -----
-    combined = []
-    
+
+    combined, seen = [], set()
+
+    def add(d):
+        key = re.sub(r'[^a-z0-9\u0900-\u097f]+', '', (d.get('title') or '').lower())
+        if not key or key in seen:
+            return
+        seen.add(key)
+        d['apply_link_display'] = get_apply_link(d)
+        d['has_direct_link'] = d['apply_link_display'].startswith(('http://', 'https://')) and 'google.com/search' not in d['apply_link_display']
+        d['eligibility'] = (d.get('eligibility') or '').strip() or 'Check the official website for eligibility'
+        d['description'] = (d.get('description') or '').strip() or 'Open the official page for full details, required documents and how to apply.'
+        combined.append(d)
+
     for scheme in manual_schemes:
-        scheme_dict = {
-            'title': scheme.title,
-            'description': scheme.description,
-            'eligibility': scheme.eligibility,
-            'last_date': scheme.last_date,
-            'status': scheme.status,
-            'provider': scheme.provider,
-            'department': scheme.department,
-            'image': scheme.image,
-            'apply_link': scheme.apply_link,
-            'official_link': scheme.official_link,
-            'source': 'manual',
-        }
-        # Add the display link (direct or Google search fallback)
-        scheme_dict['apply_link_display'] = get_apply_link(scheme_dict)
-        combined.append(scheme_dict)
-    
+        add({
+            'title': scheme.title, 'description': scheme.description, 'eligibility': scheme.eligibility,
+            'last_date': scheme.last_date, 'status': scheme.status, 'provider': scheme.provider,
+            'department': scheme.department, 'image_url': _scheme_image_url(scheme.image),
+            'apply_link': scheme.apply_link, 'official_link': scheme.official_link, 'source': 'manual',
+        })
     for scheme in external_schemes:
-        scheme_dict = {
-            'title': scheme.get('title', ''),
-            'description': scheme.get('description', ''),
-            'eligibility': scheme.get('eligibility', ''),
-            'last_date': scheme.get('last_date'),
-            'status': scheme.get('status', 'active'),
-            'provider': scheme.get('provider', 'Government'),
-            'department': scheme.get('department', ''),
-            'image': None,
-            'apply_link': scheme.get('apply_link', '#'),
-            'official_link': scheme.get('official_link', '#'),
+        add({
+            'title': scheme.get('title', ''), 'description': scheme.get('description', ''),
+            'eligibility': scheme.get('eligibility', ''), 'last_date': scheme.get('last_date'),
+            'status': scheme.get('status', 'active'), 'provider': scheme.get('provider', 'Government'),
+            'department': scheme.get('department', ''), 'image_url': '',
+            'apply_link': scheme.get('apply_link', ''), 'official_link': scheme.get('official_link', ''),
             'source': scheme.get('source', 'external'),
-        }
-        # Add the display link (direct or Google search fallback)
-        scheme_dict['apply_link_display'] = get_apply_link(scheme_dict)
-        combined.append(scheme_dict)
-    
-    # ----- 4. Paginate (9 items per page = 3x3 grid) -----
+        })
+
+    # ----- 3. Paginate (9 items per page = 3x3 grid) -----
     paginator = Paginator(combined, 9)
     page = request.GET.get('page')
     try:
@@ -1184,12 +1191,13 @@ def government_schemes(request):
         schemes_page = paginator.page(1)
     except EmptyPage:
         schemes_page = paginator.page(paginator.num_pages)
-    
+
     return render(request, 'government_schemes.html', {
         'business': get_business(),
         'schemes': schemes_page,
     })
-    
+
+
 def jobs(request):
     # ----- 1. Fetch external jobs (cached) -----
     external_jobs = fetch_all_external_jobs()
