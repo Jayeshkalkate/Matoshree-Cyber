@@ -8,6 +8,8 @@ from django.contrib.sitemaps.views import sitemap
 from .sitemaps import ServiceSitemap, StaticPublicSitemap
 from django.views.generic import TemplateView 
 from .views import robots_txt
+from .authentication import AuditedLoginView, AuditedLogoutView, google_oauth_start, google_oauth_callback
+from .security import rate_limit
 
 sitemaps = {
     'services': ServiceSitemap,
@@ -22,13 +24,15 @@ urlpatterns = [
     # ==========================
     # AUTHENTICATION
     # ==========================
-    path('register/', views.register, name='register'),
-    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
+    path('register/', rate_limit('register', limit=8, window_seconds=3600, identity_fields=('username', 'email'), methods=('POST',))(views.register), name='register'),
+    path('login/', rate_limit('login', limit=10, window_seconds=900, identity_fields=('username',), methods=('POST',))(AuditedLoginView.as_view()), name='login'),
+    path('logout/', AuditedLogoutView.as_view(next_page='home'), name='logout'),
+    path('auth/google/', google_oauth_start, name='google_oauth_start'),
+    path('auth/google/callback/', google_oauth_callback, name='google_oauth_callback'),
     path('profile/', views.profile, name='profile'),
 
     # Password Reset (custom views)
-    path('password-reset/', views.CustomPasswordResetView.as_view(), name='password_reset'),
+    path('password-reset/', rate_limit('password-reset', limit=5, window_seconds=900, identity_fields=('email',), methods=('POST',))(views.CustomPasswordResetView.as_view()), name='password_reset'),
     path('password-reset/done/', views.CustomPasswordResetDoneView.as_view(), name='password_reset_done'),
     path('password-reset/<uidb64>/<token>/', views.CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('password-reset/complete/', views.CustomPasswordResetCompleteView.as_view(), name='password_reset_complete'),
@@ -72,7 +76,7 @@ urlpatterns = [
     # ==========================
     path('apply/<int:service_id>/', views.apply_service, name='apply_service'),
     path('my-applications/', views.my_applications, name='my_applications'),
-    path('track-application/', views.track_application, name='track_application'),
+    path('track-application/', rate_limit('track-application', limit=15, window_seconds=300, identity_fields=('application_number',))(views.track_application), name='track_application'),
     path('notifications/', views.notifications, name='notifications'),
     path('document/<int:doc_id>/download/', views.document_download, name='document_download'),
     path('application/<int:app_id>/', views.application_detail, name='application_detail'),
@@ -96,10 +100,10 @@ urlpatterns = [
     # ==========================
     # PAYMENT GATEWAY – Razorpay
     # ==========================
-    path('create-razorpay-order/', views.create_razorpay_order, name='create_razorpay_order'),
-    path('payment-success/', views.payment_success, name='payment_success'),
+    path('create-razorpay-order/', rate_limit('razorpay-order', limit=6, window_seconds=300, identity_fields=('app_id',), methods=('POST',))(views.create_razorpay_order), name='create_razorpay_order'),
+    path('payment-success/', rate_limit('payment-success', limit=10, window_seconds=300, identity_fields=('razorpay_order_id',), methods=('POST',))(views.payment_success), name='payment_success'),
     path('payment-failure/', views.payment_failure, name='payment_failure'),
-    # Webhook (optional, for future use)
+    # Verified Razorpay webhook (configure its secret before enabling at the provider)
     path('razorpay-webhook/', views.razorpay_webhook, name='razorpay_webhook'),
 
     # ---- Manual UPI/Cash confirmation (admin override) ----

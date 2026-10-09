@@ -434,6 +434,14 @@
         <a href="{% url 'password_change' %}" class="action-link">
           <i class="fas fa-key"></i> Change Password
         </a>
+        <hr />
+        {% if google_linked %}
+          <p class="subhead"><i class="fab fa-google" aria-hidden="true"></i> Google sign-in is connected to this account.</p>
+        {% else %}
+          <a href="{% url 'google_oauth_start' %}" class="action-link">
+            <i class="fab fa-google" aria-hidden="true"></i> Connect Google sign-in
+          </a>
+        {% endif %}
       </div>
     </div>
   </div>

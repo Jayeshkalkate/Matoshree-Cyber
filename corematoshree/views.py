@@ -5,6 +5,7 @@
 # ---- Standard Library ----
 import os
 import json
+import hmac
 import logging
 import tempfile
 from decimal import Decimal
@@ -88,8 +89,9 @@ def get_service_charge(service):
 
 
 def _client_ip(request):
-    forwarded = request.META.get('HTTP_X_FORWARDED_FOR', '')
-    return forwarded.split(',')[0].strip() if forwarded else request.META.get('REMOTE_ADDR')
+    from .security import client_ip
+    ip = client_ip(request)
+    return None if ip == 'unknown' else ip
 
 
 def audit(request, action, obj=None, details=None):
@@ -245,11 +247,14 @@ def send_payment_confirmation(application):
 # =============================================================================
 
 def register(request):
+    if request.user.is_authenticated:
+        return redirect('home')
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
+            audit(request, 'registration_success', user, {'method': 'password'})
             messages.success(request, "Account created successfully!")
             send_welcome_email(user)
             return redirect('home')
@@ -267,6 +272,7 @@ def profile(request):
         form = ProfileUpdateForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
+            audit(request, 'profile_updated', request.user, {'fields': sorted(form.changed_data)})
             messages.success(request, "Profile updated successfully!")
             return redirect('profile')
     else:
@@ -274,6 +280,7 @@ def profile(request):
     return render(request, 'profile.html', {
         'form': form,
         'business': get_business(),
+        'google_linked': request.user.social_identities.filter(provider='google').exists(),
     })
 
 
@@ -811,7 +818,7 @@ def dashboard_section_data(request, section):
                 'id', 'application_number', 'user__username', 'service__name', 'full_name', 'phone',
                 'email', 'address', 'status', 'payment_status', 'created_at'
             ).order_by('-created_at'))}
-        elif section == 'users' and request.user.role == 'superadmin':
+        elif section == 'users' and is_superadmin(request.user):
             data = {'users': list(User.objects.values('id', 'username', 'email', 'role', 'is_staff'))}
         else:
             data = {'error': 'Invalid section.'}
@@ -1365,7 +1372,11 @@ def create_razorpay_order(request):
         return JsonResponse({'error': 'Failed to create order. Please try again.'}, status=500)
 
     application.razorpay_order_id = order['id']
-    application.save(update_fields=['razorpay_order_id'])
+    application.service_amount = breakdown['service_amount']
+    application.razorpay_fee = breakdown['fee']
+    application.gst_on_fee = breakdown['gst_on_fee']
+    application.total_paid = breakdown['total']
+    application.save(update_fields=['razorpay_order_id', 'service_amount', 'razorpay_fee', 'gst_on_fee', 'total_paid'])
 
     return JsonResponse({
         'order_id': order['id'],
@@ -1383,6 +1394,7 @@ def create_razorpay_order(request):
 
 
 @login_required
+@require_POST
 def payment_success(request):
     app_id = request.GET.get('app_id')
     if not app_id:
@@ -1399,6 +1411,18 @@ def payment_success(request):
     if not all([razorpay_payment_id, razorpay_order_id, razorpay_signature]):
         messages.error(request, "Incomplete payment verification data.")
         return redirect('application_detail', app_id=application.id)
+    if not application.razorpay_order_id or not hmac.compare_digest(
+        str(application.razorpay_order_id), str(razorpay_order_id)
+    ):
+        audit(request, 'razorpay_payment_order_mismatch', application, {'order_id': str(razorpay_order_id)[:100]})
+        messages.error(request, "Payment verification failed. Please contact support.")
+        return redirect('application_detail', app_id=application.id)
+    if application.payment_status == 'paid':
+        if application.razorpay_payment_id == razorpay_payment_id:
+            messages.success(request, "This payment has already been confirmed.")
+        else:
+            messages.error(request, "This application is already marked as paid.")
+        return redirect('application_detail', app_id=application.id)
 
     # Verify signature
     client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
@@ -1414,25 +1438,27 @@ def payment_success(request):
         messages.error(request, "Payment verification failed. Please contact support.")
         return redirect('application_detail', app_id=application.id)
 
-    # --- Compute and store breakdown ---
-    charge = get_service_charge(application.service)
-    if charge:
-        breakdown = compute_payment_breakdown(
-            charge.charge,
-            gst_rate=getattr(settings, 'GST_RATE', 0.18),
-            fee_percent=getattr(settings, 'RAZORPAY_FEE_PERCENT', 2.0),
-            fee_fixed=getattr(settings, 'RAZORPAY_FEE_FIXED', 0.0)
-        )
-        application.service_amount = breakdown['service_amount']
-        application.razorpay_fee = breakdown['fee']
-        application.gst_on_fee = breakdown['gst_on_fee']
-        application.total_paid = breakdown['total']
-    else:
-        # Fallback if no charge (should not happen)
-        application.service_amount = Decimal('0.00')
-        application.razorpay_fee = Decimal('0.00')
-        application.gst_on_fee = Decimal('0.00')
-        application.total_paid = Decimal('0.00')
+    # Preserve the expected amount saved when the order was created. This avoids
+    # changes to tax/fee settings between order creation and payment completion
+    # changing the amount used for the receipt.
+    if application.total_paid is None or application.service_amount is None:
+        charge = get_service_charge(application.service)
+        if charge:
+            breakdown = compute_payment_breakdown(
+                charge.charge,
+                gst_rate=getattr(settings, 'GST_RATE', 0.18),
+                fee_percent=getattr(settings, 'RAZORPAY_FEE_PERCENT', 2.0),
+                fee_fixed=getattr(settings, 'RAZORPAY_FEE_FIXED', 0.0)
+            )
+            application.service_amount = breakdown['service_amount']
+            application.razorpay_fee = breakdown['fee']
+            application.gst_on_fee = breakdown['gst_on_fee']
+            application.total_paid = breakdown['total']
+        else:
+            application.service_amount = Decimal('0.00')
+            application.razorpay_fee = Decimal('0.00')
+            application.gst_on_fee = Decimal('0.00')
+            application.total_paid = Decimal('0.00')
 
     # Update application
     application.razorpay_payment_id = razorpay_payment_id
@@ -1510,8 +1536,86 @@ def payment_checkout(request, app_id):
 @csrf_exempt
 @require_POST
 def razorpay_webhook(request):
-    # Stub for webhook – implement if needed
-    return JsonResponse({'status': 'ok'})
+    """Process only signed, captured Razorpay events and make them idempotent."""
+    import hashlib
+    import hmac
+
+    if settings.PAYMENT_GATEWAY != 'razorpay' or not settings.RAZORPAY_WEBHOOK_SECRET:
+        return JsonResponse({'error': 'Webhook is not configured.'}, status=503)
+
+    supplied_signature = request.headers.get('X-Razorpay-Signature', '')
+    expected_signature = hmac.new(
+        settings.RAZORPAY_WEBHOOK_SECRET.encode('utf-8'), request.body, hashlib.sha256
+    ).hexdigest()
+    if not supplied_signature or not hmac.compare_digest(supplied_signature, expected_signature):
+        logger.warning('Rejected Razorpay webhook with an invalid signature')
+        audit(request, 'razorpay_webhook_signature_rejected', details={'provider': 'razorpay'})
+        return JsonResponse({'error': 'Invalid signature.'}, status=401)
+
+    try:
+        event_payload = json.loads(request.body.decode('utf-8'))
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        return JsonResponse({'error': 'Invalid JSON.'}, status=400)
+    if not isinstance(event_payload, dict):
+        return JsonResponse({'error': 'Webhook payload must be a JSON object.'}, status=400)
+
+    event_name = event_payload.get('event', '')
+    if event_name != 'payment.captured':
+        audit(request, 'razorpay_webhook_ignored', details={'event': str(event_name)[:80]})
+        return JsonResponse({'status': 'ignored'})
+
+    payload_wrapper = event_payload.get('payload') or {}
+    payment_wrapper = payload_wrapper.get('payment', {}) if isinstance(payload_wrapper, dict) else {}
+    payment = (payment_wrapper.get('entity') or {}) if isinstance(payment_wrapper, dict) else {}
+    if not isinstance(payment, dict):
+        return JsonResponse({'error': 'Payment payload is invalid.'}, status=400)
+    order_id = payment.get('order_id')
+    payment_id = payment.get('id')
+    if not order_id or not payment_id or payment.get('status') != 'captured':
+        return JsonResponse({'error': 'Captured payment details are missing.'}, status=400)
+
+    try:
+        application = Application.objects.select_related('user', 'service').get(razorpay_order_id=order_id)
+    except Application.DoesNotExist:
+        audit(request, 'razorpay_webhook_unknown_order', details={'order_id': str(order_id)[:100]})
+        return JsonResponse({'error': 'Unknown order.'}, status=404)
+
+    # Verify amount and currency against the server-stored order total. Never
+    # trust the webhook's amount alone to choose the amount recorded as paid.
+    try:
+        incoming_amount = int(payment.get('amount'))
+        expected_amount = int(Decimal(str(application.total_paid)) * 100)
+    except (TypeError, ValueError, ArithmeticError):
+        return JsonResponse({'error': 'Payment amount is invalid.'}, status=400)
+    if payment.get('currency') != 'INR' or incoming_amount != expected_amount:
+        audit(request, 'razorpay_webhook_amount_mismatch', application, {
+            'order_id': str(order_id)[:100], 'currency': str(payment.get('currency', ''))[:8]
+        })
+        return JsonResponse({'error': 'Payment amount did not match the order.'}, status=400)
+
+    with transaction.atomic():
+        application = Application.objects.select_for_update().select_related('user', 'service').get(pk=application.pk)
+        if application.payment_status == 'paid':
+            if application.razorpay_payment_id == payment_id:
+                return JsonResponse({'status': 'already_processed'})
+            audit(request, 'razorpay_webhook_duplicate_payment_rejected', application, {'order_id': str(order_id)[:100]})
+            return JsonResponse({'error': 'Order has already been paid.'}, status=409)
+        application.razorpay_payment_id = payment_id
+        application.payment_status = 'paid'
+        application.payment_date = timezone.now()
+        application.payment_method = 'razorpay'
+        if not application.receipt_number:
+            application.receipt_number = application.generate_receipt_number()
+        application.save(update_fields=[
+            'razorpay_payment_id', 'payment_status', 'payment_date', 'payment_method', 'receipt_number'
+        ])
+        PaymentLog.objects.create(application=application, event_type='captured', amount=application.total_paid or 0)
+
+    audit(request, 'razorpay_payment_captured_webhook', application, {'payment_id': str(payment_id)[:100]})
+    notify_user(application.user, f'Payment received for {application.application_number}',
+                f'Your payment for {application.service.name} has been received.', application)
+    send_payment_confirmation(application)
+    return JsonResponse({'status': 'processed'})
 
 
 def track_application(request):
@@ -1536,14 +1640,24 @@ def notifications(request):
 @login_required
 def document_download(request, doc_id):
     document = get_object_or_404(DocumentUpload.objects.select_related('application__user'), id=doc_id)
-    if not (request.user.role in ('admin', 'superadmin') or document.application.user_id == request.user.id):
+    if not (is_admin(request.user) or document.application.user_id == request.user.id):
         from django.core.exceptions import PermissionDenied
         raise PermissionDenied
     if not document.file:
         messages.error(request, 'This document is unavailable.')
         return redirect('application_detail', app_id=document.application_id)
     try:
-        response = FileResponse(document.file.open('rb'), as_attachment=True, filename=os.path.basename(document.file.name))
+        stored_basename = os.path.basename(document.file.name)
+        if stored_basename.endswith('.enc'):
+            stored_basename = stored_basename[:-4]
+        extension = os.path.splitext(stored_basename)[1].lower()
+        if extension not in {'.pdf', '.png', '.jpg', '.jpeg', '.webp', '.gif', '.bmp', '.tif', '.tiff', '.doc', '.docx', '.xls', '.xlsx', '.odt', '.ods', '.txt', '.csv'}:
+            extension = ''
+        # Use the admin-defined document label rather than exposing the original
+        # user-supplied filename or the random encrypted storage identifier.
+        safe_label = re.sub(r'[^A-Za-z0-9_-]+', '-', document.document_name).strip('-_').lower()[:80]
+        download_name = f"{safe_label or f'document-{document.pk}'}{extension}"
+        response = FileResponse(document.file.open('rb'), as_attachment=True, filename=download_name)
         return response
     except Exception:
         messages.error(request, 'Unable to open this document.')
@@ -1775,7 +1889,7 @@ def split_pdf(request, pk):
                     response = FileResponse(
                         tmp,
                         as_attachment=True,
-                        filename=f'split_{os.path.basename(document.file.name)}',
+                        filename=f"split_{os.path.basename(document.file.name)[:-4] if document.file.name.endswith('.enc') else os.path.basename(document.file.name)}",
                     )
                     response._resource_closers = [lambda: tmp.close()]
                     return response

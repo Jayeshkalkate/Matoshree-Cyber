@@ -80,10 +80,12 @@ def get_payment_settings():
     return settings_obj
 
 def is_admin(user):
-    return user.is_authenticated and user.role in ('admin', 'superadmin')
+    return user.is_authenticated and (user.is_superuser or user.role in ('admin', 'superadmin'))
 
 def is_superadmin(user):
-    return user.is_authenticated and user.role == 'superadmin'
+    # Django's createsuperuser command sets is_superuser but does not prompt for
+    # the application's separate role field. Treat that account as the top role.
+    return user.is_authenticated and (user.is_superuser or user.role == 'superadmin')
 
 def compute_payment_breakdown(service_amount, gst_rate=0.18, fee_percent=2.0, fee_fixed=0.0):
     """

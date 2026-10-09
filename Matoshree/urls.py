@@ -9,6 +9,15 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls.i18n import i18n_patterns
+from corematoshree.security import rate_limit
+
+# Django admin has a separate login endpoint; throttle password POST attempts too.
+if not getattr(admin.site, "_matoshree_login_rate_limited", False):
+    admin.site.login = rate_limit(
+        "django-admin-login", limit=10, window_seconds=900,
+        identity_fields=("username",), methods=("POST",),
+    )(admin.site.login)
+    admin.site._matoshree_login_rate_limited = True
 
 urlpatterns = [
     # Django Admin – keep this if you use the built‑in admin

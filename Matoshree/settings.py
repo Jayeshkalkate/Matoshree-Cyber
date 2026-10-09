@@ -84,6 +84,12 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Matoshree.wsgi.application'
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_COOKIE_AGE = config('SESSION_COOKIE_AGE', default=1209600, cast=int)
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_HTTPONLY = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -171,8 +177,12 @@ if admin_list:
             ADMINS.append((name, email))
 
 # ------------------------------------------------------------------
-# SECURITY (production)
+# SECURITY HEADERS AND TRANSPORT (production)
 # ------------------------------------------------------------------
+X_FRAME_OPTIONS = 'DENY'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_REFERRER_POLICY = 'same-origin'
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
@@ -273,3 +283,13 @@ RAZORPAY_FEE_FIXED = config('RAZORPAY_FEE_FIXED', default=0, cast=float)
 MAX_UPLOAD_SIZE = config('MAX_UPLOAD_SIZE', default=10 * 1024 * 1024, cast=int)
 PASSWORD_RESET_TIMEOUT = config('PASSWORD_RESET_TIMEOUT', default=3600, cast=int)
 DEFAULT_DOMAIN = config('BASE_URL', default='http://localhost:8000')
+
+# Google OAuth is optional; password login remains available without these values.
+GOOGLE_OAUTH_CLIENT_ID = config('GOOGLE_OAUTH_CLIENT_ID', default='')
+GOOGLE_OAUTH_CLIENT_SECRET = config('GOOGLE_OAUTH_CLIENT_SECRET', default='')
+GOOGLE_OAUTH_REDIRECT_URI = config('GOOGLE_OAUTH_REDIRECT_URI', default='')
+
+# Optional independent Fernet key for document encryption. If empty, a stable,
+# domain-separated key is derived from SECRET_KEY by corematoshree.storage.
+FILE_ENCRYPTION_KEY = config('FILE_ENCRYPTION_KEY', default='')
+RATE_LIMIT_TRUST_X_FORWARDED_FOR = config('RATE_LIMIT_TRUST_X_FORWARDED_FOR', default=False, cast=bool)

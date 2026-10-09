@@ -265,6 +265,7 @@
 
       <form method="post" novalidate>
         {% csrf_token %}
+        {% if redirect_field_value %}<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />{% endif %}
 
         <div class="form-group">
           <label for="id_username">Username <span class="required">*</span></label>
@@ -303,6 +304,10 @@
           <i class="fas fa-arrow-right-to-bracket"></i> Sign In
         </button>
       </form>
+
+      <a href="{% url 'google_oauth_start' %}{% if request.GET.next %}?next={{ request.GET.next|urlencode }}{% endif %}" class="btn-login" style="display:flex;gap:.7rem;align-items:center;justify-content:center;text-decoration:none;background:#fff;color:#202124;box-shadow:none;margin-top:1rem;border:1px solid #dadce0;">
+        <i class="fab fa-google" aria-hidden="true"></i> Continue with Google
+      </a>
 
       <hr />
 

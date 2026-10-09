@@ -1193,7 +1193,10 @@
                 </li>
             </ul>
         </nav>
-        <a href="{% url 'logout' %}" class="logout-btn"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Logout</a>
+        <form method="post" action="{% url 'logout' %}" class="dashboard-logout-form">
+            {% csrf_token %}
+            <button type="submit" class="logout-btn"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Logout</button>
+        </form>
     </aside>
 
     <!-- ===== MAIN CONTENT ===== -->

@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 from django.core.cache import cache
 from django.utils.crypto import get_random_string
+from .storage import EncryptedDocumentStorage
 import random
 
 # ==========================
@@ -55,6 +56,16 @@ class User(AbstractUser):
         "Address",
         blank=True,
     )
+
+    def save(self, *args, **kwargs):
+        # A Django superuser must retain top-level privileges in the custom RBAC
+        # layer as well, including accounts created with `createsuperuser`.
+        if self.is_superuser and self.role != "superadmin":
+            self.role = "superadmin"
+            # Preserve the invariant even when callers use save(update_fields=...).
+            if kwargs.get("update_fields") is not None:
+                kwargs["update_fields"] = set(kwargs["update_fields"]) | {"role"}
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.username
@@ -640,7 +651,7 @@ class DocumentUpload(models.Model):
         verbose_name="Application"
     )
     document_name = models.CharField("Document Name", max_length=200, db_index=True)
-    file = models.FileField("File", upload_to="applications/%Y/%m/%d/")
+    file = models.FileField("File", upload_to="applications/%Y/%m/%d/", storage=EncryptedDocumentStorage())
     is_mandatory = models.BooleanField("Mandatory", default=True, db_index=True)
     uploaded_at = models.DateTimeField("Uploaded At", auto_now_add=True, db_index=True)
     STATUS_CHOICES = (("pending", "Pending"), ("verified", "Verified"), ("rejected", "Rejected"))
@@ -874,3 +885,38 @@ class PaymentLog(models.Model):
     def __str__(self):
         return f"{self.application.full_name} – {self.event_type} – {self.created_at.strftime('%Y-%m-%d %H:%M')}"
     
+
+
+class SocialIdentity(models.Model):
+    """An external identity linked after provider-side email verification."""
+    PROVIDER_CHOICES = (("google", "Google"),)
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="social_identities")
+    provider = models.CharField(max_length=30, choices=PROVIDER_CHOICES, default="google")
+    subject = models.CharField(max_length=255, help_text="Stable provider subject; never an access token.")
+    email = models.EmailField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=("provider", "subject"), name="unique_social_provider_subject"),
+        ]
+        indexes = [models.Index(fields=("user", "provider"), name="social_id_user_provider_idx")]
+
+    def __str__(self):
+        return f"{self.provider}:{self.email or self.subject}"
+
+
+class RateLimitBucket(models.Model):
+    """Shared fixed-window throttle counters keyed by a one-way HMAC fingerprint."""
+    key = models.CharField(max_length=64, unique=True)
+    window_started = models.DateTimeField(db_index=True)
+    count = models.PositiveIntegerField(default=0)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        indexes = [models.Index(fields=("window_started", "count"), name="ratelimit_window_count_idx")]
+
+    def __str__(self):
+        return f"Rate-limit bucket ({self.key[:10]}…)"
