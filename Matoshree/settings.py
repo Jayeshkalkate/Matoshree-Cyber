@@ -15,13 +15,24 @@ if not os.path.exists(LOG_DIR):
 # ------------------------------------------------------------------
 # SECURITY & DEBUG
 # ------------------------------------------------------------------
-SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
+SECRET_KEY = config('SECRET_KEY', default='')
+if not SECRET_KEY:
+    if DEBUG:
+        # Local convenience only. Sessions reset on restart; never used when DEBUG=False.
+        SECRET_KEY = 'dev-insecure-' + 'x' * 50
+    else:
+        from django.core.exceptions import ImproperlyConfigured
+        raise ImproperlyConfigured('SECRET_KEY environment variable is required when DEBUG=False.')
 ALLOWED_HOSTS = config(
     'ALLOWED_HOSTS',
     default='localhost,127.0.0.1',
-    cast=lambda v: [s.strip() for s in v.split(',')]
+    cast=lambda v: [s.strip() for s in v.split(',') if s.strip()]
 )
+# Render injects the public hostname automatically.
+_render_host = config('RENDER_EXTERNAL_HOSTNAME', default='')
+if _render_host and _render_host not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(_render_host)
 
 # ------------------------------------------------------------------
 # DATABASE
@@ -76,6 +87,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'corematoshree.context_processors.business_info',
                 'corematoshree.context_processors.payment_settings',
+                'corematoshree.context_processors.seo',
             ],
         },
     },
@@ -204,6 +216,8 @@ if _csrf_origins:
     CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in _csrf_origins.split(',') if origin.strip()]
 else:
     CSRF_TRUSTED_ORIGINS = []
+if _render_host and f'https://{_render_host}' not in CSRF_TRUSTED_ORIGINS:
+    CSRF_TRUSTED_ORIGINS.append(f'https://{_render_host}')
 if DEBUG:
     CSRF_TRUSTED_ORIGINS += ['http://localhost:8000', 'http://127.0.0.1:8000']
 

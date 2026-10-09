@@ -50,7 +50,8 @@ from django.db import models, transaction
 from django.db.models import Count, Q
 from django.db.models.functions import TruncDate, TruncWeek
 from django.forms import formset_factory
-from django.http import FileResponse, JsonResponse, HttpResponse
+from django.http import FileResponse, Http404, JsonResponse, HttpResponse
+from django.utils.text import slugify
 from django.shortcuts import get_object_or_404, render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
@@ -179,13 +180,20 @@ def custom_500(request):
 # ROBOTS.TXT
 # =============================================================================
 def robots_txt(request):
-    lines = [
-        "User-agent: *",
-        "Disallow: /admin/",
-        "Disallow: /dashboard/",
-        "Disallow: /payment-checkout/",
+    """Allow public pages, keep private/transactional/admin areas out of search."""
+    private = [
+        "/admin/", "/admin-dashboard/", "/superadmin-dashboard/", "/dashboard-section/",
+        "/reports/", "/profile/", "/my-applications/", "/application/", "/application-admin/",
+        "/application-ajax/", "/notifications/", "/payment-checkout/", "/payment-success/",
+        "/payment-failure/", "/create-razorpay-order/", "/razorpay-webhook/", "/download-receipt/",
+        "/document/", "/split-pdf/", "/mark-payment-done/", "/login/", "/register/", "/logout/",
+        "/auth/", "/password-", "/track-application/", "/apply/",
+    ]
+    lines = ["User-agent: *"] + [f"Disallow: {p}" for p in private] + [
         "Allow: /",
-        f"Sitemap: {request.build_absolute_uri('/sitemap.xml')}"
+        "",
+        f"Sitemap: {request.build_absolute_uri('/sitemap.xml')}",
+        "",
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
 
@@ -902,7 +910,14 @@ def services(request):
 
 
 def service_detail(request, slug):
-    service = get_object_or_404(Service, name__iexact=slug.replace('-', ' '), active=True)
+    # The sitemap/templates build slugs with slugify(name); names containing
+    # punctuation (e.g. "PAN & Aadhaar") cannot be recovered via name__iexact, so
+    # match on the slugified name instead of 404-ing.
+    service = Service.objects.filter(active=True, name__iexact=slug.replace('-', ' ')).first()
+    if service is None:
+        service = next((s for s in Service.objects.filter(active=True) if slugify(s.name) == slug.lower()), None)
+    if service is None:
+        raise Http404("Service not found")
     return render(request, 'service_detail.html', {
         'business': get_business(),
         'service': service,

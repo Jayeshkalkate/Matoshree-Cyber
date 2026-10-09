@@ -11,18 +11,19 @@
     <meta name="theme-color" content="#f8fafc" id="themeColorMeta" />
     <title>{% block title %}Cyber Services{% endblock %}</title>
 
-    <meta name="description" content="{% block description %}Matoshree provides digital services, appointments, and citizen assistance.{% endblock %}">
-    <meta property="og:title" content="{{ business.business_name }}">
-    <meta property="og:description" content="Digital services and citizen assistance from {{ business.business_name|default:"Matoshree Cyber Center" }}.">
-    <meta property="og:image" content="{% if logo_url %}{{ logo_url }}{% else %}{% static 'images/default-og-image.png' %}{% endif %}">
-    <meta name="robots" content="index, follow">
-    
-    <!-- Canonical URLs (Prevent Duplicate Content) -->
-    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+    <meta name="description" content="{% block description %}{{ seo.site_name }} offers online form filling, government scheme applications, printing, scanning and citizen assistance services.{% endblock %}">
+    <meta name="robots" content="{% if seo.noindex %}noindex, nofollow{% else %}index, follow, max-image-preview:large{% endif %}">
+    <link rel="canonical" href="{{ seo.canonical }}">
 
-    <link rel="alternate" hreflang="en" href="?language=en">
-    <link rel="alternate" hreflang="hi" href="?language=hi">
-    <link rel="alternate" hreflang="mr" href="?language=mr">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="{{ seo.site_name }}">
+    <meta property="og:title" content="{% block og_title %}{{ seo.site_name }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Digital services and citizen assistance from {{ seo.site_name }}.{% endblock %}">
+    <meta property="og:url" content="{{ seo.canonical }}">
+    <meta property="og:image" content="{{ seo.image }}">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{{ seo.site_name }}">
+    <meta name="twitter:image" content="{{ seo.image }}">
 
     <link rel="stylesheet" href="{% static 'css/theme.css' %}">
 
@@ -1512,21 +1513,6 @@
     </script>
 
     <!-- ============================== STRUCTURED DATA ============================== -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "name": "{{ business.business_name }}",
-      "address": "{{ business.address }}",
-      "telephone": "{{ business.phone }}",
-      "email": "{{ business.email }}",
-      "url": "{{ request.build_absolute_uri }}",
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "{{ rating_avg }}",
-        "reviewCount": "{{ total_reviews }}"
-      }
-    }
-    </script>
+    {% if not seo.noindex %}<script type="application/ld+json">{{ seo.jsonld|safe }}</script>{% endif %}
 </body>
 </html>

@@ -10,7 +10,7 @@ services:
       pip install -r requirements.txt
       python manage.py migrate --noinput
       python manage.py collectstatic --noinput
-    startCommand: gunicorn matoshree.wsgi:application
+    startCommand: gunicorn Matoshree.wsgi:application --workers 2 --timeout 60
     healthCheckPath: /
     envVars:
       - key: DATABASE_URL
@@ -26,7 +26,7 @@ services:
       - key: BASE_URL
         value: "https://matoshree-cyber.onrender.com"
       - key: PYTHON_VERSION
-        value: "3.12"   # Use 3.12 instead of 3.14 for better compatibility
+        value: "3.12.3"
       - key: CLOUDINARY_CLOUD_NAME
         sync: false
       - key: CLOUDINARY_API_KEY
@@ -42,6 +42,16 @@ services:
       - key: DEFAULT_FROM_EMAIL
         sync: false
       - key: CONTACT_EMAIL
+        sync: false
+      - key: DB_SSL
+        value: "True"
+      - key: GOOGLE_OAUTH_CLIENT_ID
+        sync: false
+      - key: GOOGLE_OAUTH_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_OAUTH_REDIRECT_URI
+        value: "https://matoshree-cyber.onrender.com/auth/google/callback/"
+      - key: FILE_ENCRYPTION_KEY
         sync: false
       - key: PAYMENT_GATEWAY
         value: "manual"
