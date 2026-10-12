@@ -19,6 +19,11 @@ class CoreWorkflowTests(TestCase):
         self.assertTrue(app.application_number.startswith('MAT-'))
         self.assertEqual(Application.objects.filter(application_number=app.application_number).count(), 1)
 
+    def test_homepage_is_available_without_login(self):
+        """Regression smoke test for the public root route used by uptime monitors."""
+        response = self.client.get(reverse('home'))
+        self.assertEqual(response.status_code, 200)
+
     def test_public_service_page_is_available_without_login(self):
         response = self.client.get(reverse('services'))
         self.assertEqual(response.status_code, 200)

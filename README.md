@@ -67,6 +67,9 @@ Customer identity documents are application-private. Use the protected document 
 
 ## Deployment
 
+**Deployment error triage:** See [`DEPLOYMENT_ERROR_FIX.md`](DEPLOYMENT_ERROR_FIX.md) for the `Cannot resolve keyword 'published' into field` error reported by the Render service and how to verify that Render is deploying this project rather than a different/older repository revision.
+
+
 The included `render.yaml` expects `DATABASE_URL` to be supplied manually. Do not use Render's expiring free Postgres for permanent customer records. Configure Cloudinary and an email provider in the Render environment.
 
 ## Operational checklist
