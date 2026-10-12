@@ -58,7 +58,7 @@ from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_GET, require_POST
+from django.views.decorators.http import require_GET, require_POST, require_safe
 
 # ---- Local Application ----
 from .models import (
@@ -179,7 +179,7 @@ def custom_500(request):
 # =============================================================================
 # ROBOTS.TXT
 # =============================================================================
-@require_GET
+@require_safe  # GET and HEAD: uptime monitors often probe with HEAD
 def healthz(request):
     """Lightweight health endpoint used by Render and the wake-up loader page.
 
