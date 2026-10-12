@@ -181,11 +181,23 @@ def custom_500(request):
 # =============================================================================
 @require_GET
 def healthz(request):
-    """Lightweight, DB-free health endpoint used by Render and the wake-up loader page.
+    """Lightweight health endpoint used by Render and the wake-up loader page.
+
+    Plain GET /healthz/ is DB-free (what Render's healthCheckPath uses).
+    GET /healthz/?deep=1 additionally pings the database so a sleeping/auto-suspended
+    database is already awake by the time the loader redirects the visitor. A failed
+    ping never turns the response into an error: the website itself reports DB problems.
 
     The CORS header lets the static loader page (a different origin) read the response;
     while the service is asleep Render answers without it, so the loader keeps waiting.
     """
+    if request.GET.get("deep") == "1":
+        try:
+            from django.db import connection
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT 1")
+        except Exception as exc:  # noqa: BLE001 - warm-up only, never fail the probe
+            logger.warning("healthz deep DB ping failed: %s", exc)
     response = JsonResponse({"status": "ok"})
     response["Access-Control-Allow-Origin"] = "*"
     response["Cache-Control"] = "no-store"

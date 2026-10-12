@@ -68,5 +68,18 @@ services:
     runtime: static
     staticPublishPath: ./loader
     pullRequestPreviewsEnabled: false
+    # Any path on the loader site (e.g. /services/) serves the loader, which then
+    # forwards the visitor to the same path on the Django site once it is awake.
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache
+      - path: /*
+        name: X-Robots-Tag
+        value: noindex
 
 # Use a free external PostgreSQL provider such as Supabase. Set DATABASE_URL in the Render dashboard.

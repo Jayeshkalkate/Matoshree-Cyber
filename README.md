@@ -124,3 +124,30 @@ The command keeps legacy files in place if encryption fails. Existing legacy doc
 - Configure regular encrypted backups and retain `FILE_ENCRYPTION_KEY` separately from the database/media backup. Restrict staff accounts and audit-log access; use separate named accounts instead of sharing administrator credentials.
 - `RateLimitBucket` uses the database and needs cleanup; the app opportunistically removes expired counters. At high traffic, use edge/WAF limits in addition to application limits.
 - Logs avoid passwords/tokens. Review operational logs and set log retention/access controls. Application-level encryption of documents does not replace disk/database encryption or least-privilege storage controls.
+
+---
+
+## Wake-up loader (hides Render's "Service waking up" page)
+
+Render's free web services sleep after 15 minutes without traffic, and Render shows its own
+wake-up page while they start. That page cannot be customised, so the project ships a tiny
+**static site** (`loader/index.html`, deployed as `matoshree-cyber-loader` via `render.yaml`).
+Static sites never sleep. The loader shows "Application loading…", polls
+`/healthz/?deep=1` on the Django service (which also wakes the database), and redirects the
+visitor as soon as the site answers.
+
+**Use the loader URL as the public address** (e.g. `https://matoshree-cyber-loader.onrender.com`,
+or a custom domain pointed at the static site) for QR codes, social profiles, WhatsApp
+shares and Google Business listings. Deep links work: `…loader…/services/` opens `/services/`
+on the main site after the wake-up.
+
+Notes
+- If the Django service URL differs from `https://matoshree-cyber.onrender.com`, change the
+  `SITE` constant at the top of the script in `loader/index.html`.
+- `/healthz/` must stay reachable without login and keep its `Access-Control-Allow-Origin`
+  header, otherwise the loader cannot read the answer.
+- Someone who opens the Django URL directly (old bookmark, Google result) still gets Render's
+  own page. To avoid that entirely, keep the service awake with a free uptime monitor
+  (e.g. UptimeRobot, 5-minute interval) pinging `https://matoshree-cyber.onrender.com/healthz/`.
+  Render gives 750 free instance hours per workspace per month; one always-on service uses
+  about 744, so this only fits if it is your only free web service.
